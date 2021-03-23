@@ -1,13 +1,6 @@
 package it.polimi.ingsw;
 
-public class LorenzoCardFactory implements CardFactory{
+public interface LorenzoCardFactory extends CardFactory{
 
-    public LorenzoCardFactory(){
-
-    }
-
-
-    public LorenzoCard loadCardFromFile(String fileName){
-        return null;
-    }
+   LorenzoCard loadCardFromFile(String fileName);
 }
