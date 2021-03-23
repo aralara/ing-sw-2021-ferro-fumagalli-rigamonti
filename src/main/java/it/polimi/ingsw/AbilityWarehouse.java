@@ -12,6 +12,25 @@ public class AbilityWarehouse implements SpecialAbility, Storage{
 
     }
 
+    public List<Resource> getList()
+    {
+        return null;
+    }
+
+    public boolean addResources(List<Resource> resources)
+    {
+        return false;
+    }
+
+    public boolean takeResources(List<Resource> resources)
+    {
+        return false;
+    }
+
+    public boolean checkAvailability(List<Resource> resources)
+    {
+        return false;
+    }
 
     public boolean checkAdd(List<Resource> resources){
         return false;
