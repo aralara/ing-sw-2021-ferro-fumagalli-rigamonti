@@ -22,7 +22,7 @@ public class VaticanReport {
     }
 
     /**
-     * Gets the popeValue
+     * Gets the popeValue attribute
      * @return Returns popeValue
      */
     public int getPopeValue() {

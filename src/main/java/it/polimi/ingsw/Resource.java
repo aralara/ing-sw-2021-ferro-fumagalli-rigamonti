@@ -2,31 +2,61 @@ package it.polimi.ingsw;
 
 public class Resource implements Requirement {
 
-    ResourceType resourceType;
-    int quantity;
+    private ResourceType resourceType;
+    private int quantity;
 
-    public Resource()
-    {
+
+    public Resource() {
 
     }
 
-    public ResourceType getResourceType()
-    {
+
+    /**
+     * Adds the quantity of the given resource to the quantity of the current resource if the resource types match
+     * @param r The resource to add
+     */
+    public void add(Resource r){
+
+    }
+
+    /**
+     * Subtracts the quantity of the given resource to the quantity of the current resource if the resource types match
+     * and the result isn't negative
+     * @param r The resource to subtract
+     */
+    public void sub(Resource r){
+
+    }
+
+    /**
+     * Gets the resourceType attribute
+     * @return Returns resourceType
+     */
+    public ResourceType getResourceType() {
         return this.resourceType;
     }
 
-    public int getQuantity()
-    {
+    /**
+     * Gets the quantity attribute
+     * @return Returns quantity
+     */
+    public int getQuantity() {
         return this.quantity;
     }
 
-    public void setResourceType(ResourceType type)
-    {
+    /**
+     * Sets the resourceType attribute
+     * @param type New attribute value
+     */
+    public void setResourceType(ResourceType type) {
         this.resourceType = type;
     }
 
-    public void setQuantity(int quantity)
-    {
+    /**
+     * Sets the quantity attribute
+     * @param quantity New attribute value
+     */
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 }

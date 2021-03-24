@@ -1,8 +1,8 @@
 package it.polimi.ingsw;
 
 public enum CardColors {
-    BLUE,
     YELLOW,
+    BLUE,
     PURPLE,
     GREEN
 }

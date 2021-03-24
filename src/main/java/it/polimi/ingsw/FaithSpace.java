@@ -20,7 +20,7 @@ public class FaithSpace {
     }
 
     /**
-     * Gets the position
+     * Gets the position attribute
      * @return Returns position
      */
     public int getPosition() {

@@ -17,7 +17,7 @@ public class FaithTrack {
 
     /**
      * Loads faithSpaces and vaticanReports from the file given by parameter
-     * @param fileName Path of the file that contains the informations
+     * @param fileName Path of the file that contains the information
      */
     public void loadTrack(String fileName){
 
