@@ -9,4 +9,21 @@ public class FaithSpace {
     public FaithSpace(int VP, int position){
 
     }
+
+
+    /**
+     * Gets the VP amount
+     * @return Returns VP
+     */
+    public int getVP() {
+        return this.VP;
+    }
+
+    /**
+     * Gets the position
+     * @return Returns position
+     */
+    public int getPosition() {
+        return this.position;
+    }
 }
