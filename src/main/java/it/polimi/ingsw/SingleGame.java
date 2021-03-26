@@ -10,24 +10,40 @@ public class SingleGame extends Game{
 
     }
 
-
+    @Override
     void initGame(){
 
     }
 
+    @Override
     public void loadNextTurn(){
 
     }
 
-    private void checkFaith(){
+    @Override
+    void checkFaith(){
 
     }
 
-    private boolean checkEndGame(){
+    //aggiunge a lorenzo la fede per le risorse scartate
+    @Override
+    public void addFaithAll(int quantity){}
+
+    //controlla anche se Lorenzo ha finito il game (faith al massimo o mazzetti finiti)
+    @Override
+    boolean checkEndGame(){
         return false;
     }
 
-    private void calculateWinner(){
+    //solo per il player
+    @Override
+    public int[] calculateTotalVP() {
+        return null;
+    }
 
+    //dice solo se è primo o secondo
+    @Override
+    public int[] calculateFinalPositions() {
+        return null;
     }
 }

@@ -2,15 +2,15 @@ package it.polimi.ingsw;
 
 import java.util.List;
 
-public class Game {
+public abstract class Game {
 
     //names of constants not defined yet
-    final String MARKET_FILE = "market_File.txt";
-    final String DEV_CARD_FILE = "dev_Card_File.txt";
-    final String LEADER_CARD_FILE = "leader_Card_File.txt";
-    final String FAITH_TRACK_FILE = "faith_track_File.txt";
+    final String MARKET_FILE = "Market_File.txt";
+    final String DEV_CARD_FILE = "Dev_Card_File.txt";
+    final String LEADER_CARD_FILE = "Leader_Card_File.txt";
+    final String FAITH_TRACK_FILE = "Faith_Track_File.txt";
 
-    private PlayerBoard playerBoard;
+    private List<PlayerBoard> playerBoards;
     private Market market;
     private List<DevelopmentDeck> developmentDecks;
     private FaithTrack faithTrack;
@@ -20,44 +20,82 @@ public class Game {
 
     }
 
-
+    /**
+     * Initializes a game by calling initMarket, initDevelopment, initFaithTrack, initLeaders in this order
+     */
     void initGame(){
 
     }
 
+    /**
+     * Initializes the market
+     */
     private void initMarket(){
 
     }
 
+    /**
+     * Loads development cards from their file utilizing DevelopmentCardFactory and split them into 12 DevelopmentDeck
+     */
     private void initDevelopment(){
 
     }
 
-    private void initLeaders(){
-
-    }
-
+    /**
+     * Loads faith track information from his file
+     */
     private void initFaithTrack(){
 
     }
 
-    public void loadNextTurn(){
+    /**
+     * Loads leader cards from their file utilizing LeaderCardFactory and sends four random cards to each player
+     */
+    private void initLeaders(){
 
     }
 
-    private void checkFaith(){
+    /**
+     * Method invoked to let the next player play his turn
+     */
+    public abstract void loadNextTurn();
+
+    /**
+     * Method invoked to check if a player have reached a Pope space and handle the eventual vatican report updating
+     * player boards and the faith track
+     */
+    void checkFaith(){
 
     }
 
-    public void addFaithAll(int quantity, PlayerBoard exclude){
+    /**
+     * Method invoked to add faith to the faith counter to every board except for the active one
+     * @param quantity Amount of faith to be added
+     */
+    public abstract void addFaithAll(int quantity);
 
-    }
-
-    private boolean checkEndGame(){
+    /**
+     * Method invoked to check if a player has finished the game by reaching the last Pope space or by buying the 7th
+     * development card
+     * @return Returns true if the game is finished, false otherwise
+     */
+    boolean checkEndGame(){
         return false;
     }
 
-    private void calculateWinner(){
+    /**
+     * Method invoked to calculate the amount of VP earned by each player
+     * @return Returns an array containing the results, parallel to the list of player boards
+     */
+    public int[] calculateTotalVP() {
+        return null;
+    }
 
+    /**
+     * Method invoked to calculate the final position for each player
+     * @return Returns an array containing the positions, parallel to the list of player boards
+     */
+    public int[] calculateFinalPositions() {
+        return null;
     }
 }

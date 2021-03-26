@@ -2,7 +2,7 @@ package it.polimi.ingsw;
 
 public class MultiGame extends Game{
 
-    private int playerNumber, connectedPlayers, currentPlayer;
+    private int playerNumber, currentPlayer;
     private boolean lastTurn;
 
 
@@ -10,40 +10,38 @@ public class MultiGame extends Game{
 
     }
 
-
-    public int getConnectedPlayers(){
-        return 0;
-    }
-
+    /**
+     * Sets the number of players that will play the game
+     * @param playerNumber Number of players
+     */
     public void setPlayerNumber(int playerNumber){
 
     }
 
-    public boolean addPlayer(){
-        return false;
-    }
-
+    @Override
     void initGame(){
 
     }
 
+    /**
+     * Chooses a random player that will start the game
+     */
     private void randomizeStartingPlayer(){
 
     }
 
+    /**
+     * Gives extra resources to each player according to their starting order
+     */
     private void equalizePlayerOrder(){
 
     }
 
+    @Override
     public void loadNextTurn(){
 
     }
 
-    private boolean checkEndGame(){
-        return false;
-    }
-
-    private void calculateWinner(){
-
-    }
+    @Override
+    public void addFaithAll(int quantity){}
 }
