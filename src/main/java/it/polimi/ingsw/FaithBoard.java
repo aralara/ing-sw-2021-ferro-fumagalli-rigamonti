@@ -5,28 +5,41 @@ public class FaithBoard {
     private int faith;
     private boolean[] popeProgression;
 
-    public FaithBoard()
-    {
-        popeProgression = new boolean[3];
+
+    public FaithBoard() {
     }
 
-    public void addFaith(int faith)
-    {
+
+    /**
+     * Adds a set amount of faith to the current player
+     * @param faith Faith quantity to be added
+     */
+    public void addFaith(int faith){
 
     }
 
-    public void turnCard(int position, boolean value)
-    {
+    /**
+     * Method invoked to set a Pope progression value based on the position of the faith marker
+     * @param position Position of the Pope's favor tile to set
+     * @param value Value to give to the Pope's favor tile
+     */
+    public void turnCard(int position, boolean value){
 
     }
 
-    public int getFaith()
-    {
+    /**
+     * Gets the faith attribute
+     * @return Returns faith
+     */
+    public int getFaith(){
         return this.faith;
     }
 
-    public boolean[] getPopeProgression()
-    {
+    /**
+     * Gets the popeProgression attribute
+     * @return Returns popeProgression
+     */
+    public boolean[] getPopeProgression(){
         return this.popeProgression;
     }
 }

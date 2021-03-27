@@ -7,23 +7,29 @@ public class LeaderBoard {
     private Deck hand;
     private Deck board;
 
-    public LeaderBoard()
-    {
+
+    public LeaderBoard(){
 
     }
 
-    public void setLeadHand(Deck hand)
-    {
+
+    /**
+     * Gives to each player a hand of leader cards
+     * @param hand Deck of leader cards
+     */
+    public void setLeadHand(Deck hand){
 
     }
 
-    public void discardLeadHand(int[] position)
-    {
+    /**
+     * Method invoked to discard a given number of leader cards from the hand specifying the position of each card
+     * @param position Positions of the cards to be discarded
+     */
+    public void discardLeadHand(int[] position){
 
     }
 
-    public List<SpecialAbility> getLeadAbilities()
-    {
+    public List<SpecialAbility> getLeadAbilities(){
         return null;
     }
 }

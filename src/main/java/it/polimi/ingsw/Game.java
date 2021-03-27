@@ -75,6 +75,16 @@ public abstract class Game {
     public abstract void addFaithAll(int quantity);
 
     /**
+     * Picks the development card at the top of the deck specified by color and level
+     * @param color Color of the deck to choose from
+     * @param level Level of the deck to choose from (if it's "0", it picks from the lowest)
+     * @return Returns the selected development card
+     */
+    public DevelopmentCard pickDevelopmentCard(CardColors color, int level){
+        return null;
+    }
+
+    /**
      * Method invoked to check if a player has finished the game by reaching the last Pope space or by buying the 7th
      * development card
      * @return Returns true if the game is finished, false otherwise

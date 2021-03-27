@@ -1,21 +1,31 @@
 package it.polimi.ingsw;
 
+import java.util.List;
+
 public class DevelopmentBoard {
 
-    private Deck space1, space2, space3;
+    private List<Deck> spaces;
 
-    public DevelopmentBoard()
-    {
 
-    }
-
-    public void addDevCard(DevelopmentCard card, int space)
-    {
+    public DevelopmentBoard(){
 
     }
 
-    public int[] getPossibleLevels()
-    {
+
+    /**
+     * Puts a development card at the top of one of the spaces specified by the parameter
+     * @param card The development card to be added
+     * @param space Position of the space on the board
+     */
+    public void addDevCard(DevelopmentCard card, int space){
+
+    }
+
+    /**
+     * Gets a parallel array that contains the level of the development cards that can be added to each space
+     * @return Returns the array of possible levels
+     */
+    public int[] getPossibleLevels(){
         return null;
     }
 }
