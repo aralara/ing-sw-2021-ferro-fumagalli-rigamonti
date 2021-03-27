@@ -1,5 +1,7 @@
 package it.polimi.ingsw;
 
+import java.util.List;
+
 public class LorenzoFaithFactory implements LorenzoCardFactory{
 
     public LorenzoFaithFactory(){
@@ -7,7 +9,8 @@ public class LorenzoFaithFactory implements LorenzoCardFactory{
     }
 
 
-    public LorenzoFaith loadCardFromFile(String fileName){
+    @Override
+    public List<Card> loadCardFromFile(String fileName){
         return null;
     }
 }

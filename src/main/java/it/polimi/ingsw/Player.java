@@ -8,4 +8,13 @@ public class Player {
     public Player(String nickname){
 
     }
+
+
+    /**
+     * Gets the nickname attribute
+     * @return Returns nickname
+     */
+    public String getNickname(){
+        return nickname;
+    }
 }

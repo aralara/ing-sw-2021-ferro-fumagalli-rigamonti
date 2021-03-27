@@ -1,5 +1,7 @@
 package it.polimi.ingsw;
 
+import java.util.List;
+
 public class LeaderCardFactory implements CardFactory{
 
     public LeaderCardFactory(){
@@ -7,7 +9,8 @@ public class LeaderCardFactory implements CardFactory{
     }
 
 
-    public LeaderCard loadCardFromFile(String fileName){
+    @Override
+    public List<Card> loadCardFromFile(String fileName){
         return null;
     }
 }

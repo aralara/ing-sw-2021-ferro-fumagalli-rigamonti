@@ -4,26 +4,27 @@ import java.util.List;
 
 public class Production {
 
-    List<Resource> spent, produced;
+    List<Resource> consumed, produced;
 
 
-    public Production()
-    {
-
-    }
-
-    public void loadFromFile(String fileName)
-    {
+    public Production() {
 
     }
 
-    public List<Resource> getSpent()
-    {
+
+    /**
+     * Returns a list of the consumed resources
+     * @return Return the resource list
+     */
+    public List<Resource> getConsumed() {
         return null;
     }
 
-    public List<Resource> getProduced()
-    {
+    /**
+     * Return a list of the produced resources
+     * @return Return the resource list
+     */
+    public List<Resource> getProduced() {
         return null;
     }
 }
