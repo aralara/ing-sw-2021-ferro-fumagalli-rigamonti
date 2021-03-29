@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Warehouse implements Storage{
 
-    private List<Resource> shelf1, shelf2, shelf3;
+    private List<Shelf> shelves;
 
 
     public Warehouse()
@@ -12,18 +12,16 @@ public class Warehouse implements Storage{
 
     }
 
-    public Warehouse(List<Resource> shelf1, List<Resource> shelf2, List<Resource> shelf3) {
-        this.shelf1 = shelf1;
-        this.shelf2 = shelf2;
-        this.shelf3 = shelf3;
+    public Warehouse(List<Shelf> shelves) {
+
     }
 
-    public static boolean validate(Warehouse configuration)
+    public static boolean validate(List<Shelf> configuration)
     {
         return false;
     }
 
-    public boolean changeConfiguration(Warehouse configuration)
+    public boolean changeConfiguration(List<Shelf> configuration)
     {
         return false;
     }

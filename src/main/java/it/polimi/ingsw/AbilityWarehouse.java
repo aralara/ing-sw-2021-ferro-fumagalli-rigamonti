@@ -4,12 +4,15 @@ import java.util.List;
 
 public class AbilityWarehouse implements SpecialAbility, Storage{
 
-    private ResourceType resourceType;
-    private List<Resource> resources;
+    private Shelf shelf;
 
 
     public AbilityWarehouse(){
 
+    }
+
+    public ResourceType getResourceType() {
+        return null;
     }
 
     @Override
