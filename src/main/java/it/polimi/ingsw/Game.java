@@ -4,12 +4,6 @@ import java.util.List;
 
 public abstract class Game {
 
-    //names of constants not defined yet
-    final String MARKET_FILE = "Market_File.txt";
-    final String DEV_CARD_FILE = "Dev_Card_File.txt";
-    final String LEADER_CARD_FILE = "Leader_Card_File.txt";
-    final String FAITH_TRACK_FILE = "Faith_Track_File.txt";
-
     private List<PlayerBoard> playerBoards;
     private Market market;
     private List<DevelopmentDeck> developmentDecks;
@@ -59,6 +53,12 @@ public abstract class Game {
      * Method invoked to let the next player play his turn
      */
     public abstract void loadNextTurn();
+
+    /*
+    private List<Resource> resolveMarketMarbles(List<Resource> resources){
+        return null;
+    }
+    */
 
     /**
      * Method invoked to check if a player have reached a Pope space and handle the eventual vatican report updating

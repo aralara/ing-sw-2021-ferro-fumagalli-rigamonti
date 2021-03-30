@@ -12,15 +12,27 @@ public class RequirementDev implements Requirement {
     }
 
 
-    public CardColors getDevColor(){
+    /**
+     * Gets the devColor attribute
+     * @return Returns devColor value
+     */
+    public CardColors getDevColor() {
         return devColor;
     }
 
-    public int getDevLevel(){
+    /**
+     * Gets the devLevel attribute
+     * @return Returns devLevel value
+     */
+    public int getDevLevel() {
         return devLevel;
     }
 
-    public int getNumber(){
+    /**
+     * Gets the number attribute
+     * @return Returns number value
+     */
+    public int getNumber() {
         return number;
     }
 }

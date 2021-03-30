@@ -11,23 +11,39 @@ public class DevelopmentCard implements Card{
     private List<Resource> cost;
 
 
-    public DevelopmentCard(){
+    DevelopmentCard(){
 
     }
 
 
+    /**
+     * Gets the VP amount
+     * @return Returns VP
+     */
     public int getVP() {
         return VP;
     }
 
+    /**
+     * Gets the cost attribute
+     * @return Returns cost value
+     */
     public List<Resource> getCost(){
         return cost;
     }
 
+    /**
+     * Gets the level attribute
+     * @return Returns level value
+     */
     public int getLevel(){
         return level;
     }
 
+    /**
+     * Gets the color attribute
+     * @return Returns color value
+     */
     public CardColors getColor(){
         return color;
     }

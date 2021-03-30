@@ -6,15 +6,23 @@ public class LorenzoFaith implements LorenzoCard{
     private int amount;
 
 
-    private LorenzoFaith(){
+    LorenzoFaith(){
 
     }
 
 
+    /**
+     * Gets the refresh attribute
+     * @return Returns refresh value
+     */
     public boolean getRefresh(){
         return refresh;
     }
 
+    /**
+     * Gets the amount attribute
+     * @return Returns amount value
+     */
     public int getAmount(){
         return amount;
     }

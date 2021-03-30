@@ -12,6 +12,7 @@ public class PlayerBoard {
     private Warehouse warehouse;
     private Strongbox strongbox;
     private boolean inkwell;
+    private boolean turnPlayed;
     private Production production;
 
 
@@ -20,48 +21,96 @@ public class PlayerBoard {
     }
 
 
-    public Player getPlayer(){
+    /**
+     * Gets the player attribute
+     * @return Returns player value
+     */
+    public Player getPlayer() {
+        return player;
+    }
+
+    /**
+     * Sets the player attribute
+     * @param player New attribute value
+     */
+    public void setPlayer(Player player){
+        this.player = player;
+    }
+
+    /**
+     * Gets the turnPlayed attribute
+     * @return Returns turnPlayed value
+     */
+    public boolean isTurnPlayed() {
+        return turnPlayed;
+    }
+
+    /**
+     * Sets the turnPlayed attribute
+     * @param value New turnPlayed value
+     */
+    public void setTurnPlayed(boolean value){
+        this.turnPlayed = value;
+    }
+
+    /**
+     * Gets all the marble abilities of the active leaders
+     * @return Returns a list of the marble abilities
+     */
+    private List<AbilityMarble> getMarbleAbilities(){
         return null;
     }
 
-    public void setPlayer(Player player){
-
-    }
-
+    /**
+     * Sets the current PlayerBoard as the first playing one
+     */
     public void firstPlayer(){
 
     }
 
+    /**
+     * Adds a set amount of faith to the current FaithBoard
+     * @param faith Faith quantity to be added
+     */
     public void addFaith(int faith){
 
     }
 
+    /**
+     * Creates a list containing all of the player resources
+     * @return Returns a list of resources
+     */
     public List<Resource> createResourceStock(){
         return null;
     }
 
+    /**
+     * Creates a list containing all of the player productions
+     * @return Returns a list of productions
+     */
     public List<Production> createProductionStock(){
         return null;
     }
 
+    /**
+     * Calculates total VPs for the player checking the FaithTrack, leader cards, development cards and resources
+     * @return Returns total VP amount
+     */
     public int calculateVP(){
         return 0;
     }
 
-    public void playTurn(){
-
-    }
-
-    public void getFromMarket(List<Resource> resources){
-
-    }
-
-    private List<Resource> resolveMarketMarbles(List<Resource> resources){
+    /**
+     * Handles the market action by receiving a list of resources directly from the Market and calling
+     * resolveMarketMarbles
+     * @param resources List of resources from the Market
+     */
+    public List<Resource> getFromMarket(List<Resource> resources){
         return null;
     }
 
-    private void chooseWharehouse(List<Resource> resources){
-
+    private boolean changeWarehouse(List<Shelf> shelves){
+        return false;
     }
 
     public boolean buyDevCard(DevelopmentCard card){
