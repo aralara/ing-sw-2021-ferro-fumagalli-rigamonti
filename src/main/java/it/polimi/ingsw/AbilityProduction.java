@@ -2,7 +2,7 @@ package it.polimi.ingsw;
 
 public class AbilityProduction implements SpecialAbility{
 
-    private Production prod;
+    private Production production;
 
 
     public AbilityProduction(){
@@ -10,7 +10,11 @@ public class AbilityProduction implements SpecialAbility{
     }
 
 
-    public Production getProd(){
-        return prod;
+    /**
+     * Gets the production attribute
+     * @return Returns production
+     */
+    public Production getProduction(){
+        return production;
     }
 }

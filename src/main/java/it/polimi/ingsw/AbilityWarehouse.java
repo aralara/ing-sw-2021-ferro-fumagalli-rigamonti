@@ -11,6 +11,11 @@ public class AbilityWarehouse implements SpecialAbility, Storage{
 
     }
 
+
+    /**
+     * Gets the shelf resourceType
+     * @return Returns resourceType
+     */
     public ResourceType getResourceType() {
         return null;
     }
@@ -30,10 +35,6 @@ public class AbilityWarehouse implements SpecialAbility, Storage{
     @Override
     public boolean removeResources(List<Resource> resources)
     {
-        return false;
-    }
-
-    public boolean checkAdd(List<Resource> resources){
         return false;
     }
 }

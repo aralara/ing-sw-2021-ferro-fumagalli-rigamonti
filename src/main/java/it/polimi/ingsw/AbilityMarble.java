@@ -10,7 +10,11 @@ public class AbilityMarble implements SpecialAbility{
     }
 
 
+    /**
+     * Gets the resourceType attribute
+     * @return Returns resourceType
+     */
     public ResourceType getResourceType(){
-        return null;
+        return resourceType;
     }
 }
