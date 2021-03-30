@@ -6,32 +6,24 @@ public class Strongbox implements Storage{
 
     List<Resource> resources;
 
-    public Strongbox()
-    {
+
+    public Strongbox() {
 
     }
 
+
     @Override
-    public List<Resource> getList()
-    {
+    public List<Resource> getList() {
         return null;
     }
 
     @Override
-    public boolean addResources(List<Resource> resources)
-    {
+    public boolean addResources(List<Resource> resources) {
         return false;
     }
 
     @Override
-    public boolean takeResources(List<Resource> resources)
-    {
-        return false;
-    }
-
-    @Override
-    public boolean checkAvailability(List<Resource> resources)
-    {
+    public boolean removeResources(List<Resource> resources) {
         return false;
     }
 }

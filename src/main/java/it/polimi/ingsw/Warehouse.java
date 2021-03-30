@@ -7,46 +7,46 @@ public class Warehouse implements Storage{
     private List<Shelf> shelves;
 
 
-    public Warehouse()
-    {
+    public Warehouse() {
 
     }
+
 
     public Warehouse(List<Shelf> shelves) {
 
     }
 
-    public static boolean validate(List<Shelf> configuration)
-    {
+    /**
+     * Checks if a configuration of shelves is valid in order to be added to a warehouse
+     * @param configuration List of shelves to be validated
+     * @return Returns true if the configuration is valid, false otherwise
+     */
+    public static boolean validate(List<Shelf> configuration) {
         return false;
     }
 
-    public boolean changeConfiguration(List<Shelf> configuration)
-    {
+    /**
+     * Updates the current warehouse configuration to a new list of shelves
+     * @param configuration New list of shelves
+     * @return Returns true if the configuration is updated correctly, false otherwise
+     */
+    public boolean changeConfiguration(List<Shelf> configuration) {
         return false;
     }
 
     @Override
-    public List<Resource> getList()
-    {
+    public List<Resource> getList() {
         return null;
     }
 
     @Override
-    public boolean addResources(List<Resource> resources)
-    {
+    public boolean addResources(List<Resource> resources) {
         return false;
     }
 
     @Override
-    public boolean takeResources(List<Resource> resources)
-    {
+    public boolean removeResources(List<Resource> resources) {
         return false;
     }
 
-    @Override
-    public boolean checkAvailability(List<Resource> resources)
-    {
-        return false;
-    }
 }

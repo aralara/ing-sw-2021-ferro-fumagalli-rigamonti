@@ -28,13 +28,7 @@ public class AbilityWarehouse implements SpecialAbility, Storage{
     }
 
     @Override
-    public boolean takeResources(List<Resource> resources)
-    {
-        return false;
-    }
-
-    @Override
-    public boolean checkAvailability(List<Resource> resources)
+    public boolean removeResources(List<Resource> resources)
     {
         return false;
     }
