@@ -20,15 +20,17 @@ public class DevelopmentBoard {
      * @param card The development card to be added
      * @param space Position of the space on the board
      */
-    public void addDevCard(DevelopmentCard card, int space){
+    public void addDevCard(DevelopmentCard card, int space) {
 
     }
 
     /**
-     * Gets a parallel array that contains the level of the development cards that can be added to each space
-     * @return Returns the array of possible levels
+     * Checks if a DevelopmentCard can be placed in a specific space on the board
+     * @param card The development card to be added
+     * @param space Position of the space on the board
+     * @return Returns true if the card can be added, false otherwise
      */
-    public int[] getPossibleLevels(){
-        return null;
+    public boolean checkDevCardAddable(DevelopmentCard card, int space) {
+        return false;
     }
 }

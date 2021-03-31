@@ -1,5 +1,9 @@
 package it.polimi.ingsw.games;
 
+import it.polimi.ingsw.storage.*;
+
+import java.util.List;
+
 public class MultiGame extends Game{
 
     private int playerNumber, currentPlayer;
@@ -8,6 +12,16 @@ public class MultiGame extends Game{
 
     public MultiGame(){
 
+    }
+
+
+    /**
+     * Gets the nickname of the player at a specified position
+     * @param position Position of the player
+     * @return Returns a String containing the nickname of the player
+     */
+    public String getPlayerNameAt(int position){
+        return null;
     }
 
     /**
@@ -19,22 +33,24 @@ public class MultiGame extends Game{
     }
 
     @Override
-    void initGame(){
+    public void initGame(){
 
     }
 
     /**
      * Chooses a random player that will start the game
      */
-    private void randomizeStartingPlayer(){
+    public void randomizeStartingPlayer(){
 
     }
 
     /**
-     * Gives extra resources to each player according to their starting order
+     * Gets a list that contains a list of resources (wildcards and fatih) for each player that need to be equalized
+     * in the same playing order
+     * @return Returns a list of lists of resources
      */
-    private void equalizePlayerOrder(){
-
+    public List<List<Resource>> getResourcesToEqualize(){
+        return null;
     }
 
     @Override

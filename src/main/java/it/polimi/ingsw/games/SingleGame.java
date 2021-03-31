@@ -13,7 +13,7 @@ public class SingleGame extends Game{
     }
 
     @Override
-    void initGame(){
+    public void initGame(){
 
     }
 

@@ -106,51 +106,63 @@ public class PlayerBoard {
     }
 
     /**
-     * Handles the market action by receiving a list of resources directly from the Market and calling
-     * resolveMarketMarbles
-     * @param resources List of resources from the Market
+     * Changes the current Warehouse configuration
+     * @param shelves New shelves for the Warehouse
+     * @return Returns true if the configuration is valid, false otherwise
      */
-    public List<Resource> getFromMarket(List<Resource> resources){
-        return null;
-    }
-
     private boolean changeWarehouse(List<Shelf> shelves){
         return false;
     }
 
-    public boolean buyDevCard(DevelopmentCard card){
+    /**
+     * Checks if a DevelopmentCard can be placed in a specific space on the board
+     * @param card The development card to be added
+     * @param space Position of the space on the board
+     * @return Returns true if the card can be added, false otherwise
+     */
+    public boolean checkDevCardAddable(DevelopmentCard card, int space){
         return false;
     }
 
-    private boolean canBuyDevCard(DevelopmentCard card){
+    /**
+     * Puts a development card at the top of one of the spaces specified by the parameter
+     * @param card The development card to be added
+     * @param space Position of the space on the board
+     */
+    public void addDevCard(DevelopmentCard card, int space) {
+
+    }
+
+    /**
+     * Takes the resources from the Storages specified by the RequestResources if all the requests are valid
+     * @param requests List of requests containing resource quantity and location for the spent resources
+     * @return Returns true if the resources are taken, false otherwise
+     */
+    private boolean takeFromStorages(List<RequestResources> requests){
         return false;
     }
 
-    private boolean checkStorages(List<RequestResources> request){
-        return false;
-    }
-
-    private boolean takeFromStorages(List<RequestResources> request){
-        return false;
-    }
-
-    public void activateProduction(){
+    /**
+     * Adds a list of resources to the Strongbox
+     * @param resources List of resources to be added
+     */
+    public void addToStrongbox(List<Resource> resources) {
 
     }
 
-    private List<Production> resolveProductionWildcards(List<Production> productions){
-        return null;
+    /**
+     * Plays a LeaderCard from the hand to the board
+     * @param leaderCard LeaderCard to be played
+     */
+    public void playLeaderCard(LeaderCard leaderCard){
+
     }
 
-    public void playLeaderCard(Card leaderCard){
-
-    }
-
-    private boolean checkLeaderRequirements(Card leaderCard){
-        return false;
-    }
-
-    public void discardLeader(Card leaderCard){
+    /**
+     * Discards a LeaderCard from the hand
+     * @param leaderCard LeaderCard to be discarded
+     */
+    public void discardLeader(LeaderCard leaderCard){
 
     }
 }
