@@ -6,8 +6,9 @@ public class FaithSpace {
     private int position;
 
 
-    public FaithSpace(int VP, int position){
-
+    public FaithSpace(int VP, int position) {
+        this.VP = VP;
+        this.position = position;
     }
 
 

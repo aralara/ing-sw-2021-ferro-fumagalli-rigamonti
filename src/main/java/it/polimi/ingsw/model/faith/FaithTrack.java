@@ -1,16 +1,22 @@
 package it.polimi.ingsw.model.faith;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class FaithTrack {
 
     private List<VaticanReport> vaticanReports;
     private List<FaithSpace> faithSpaces;
-    private int lastReportTriggered = -1;
+    private int lastReportTriggered;
 
 
     public FaithTrack(){
-
+        vaticanReports = new ArrayList<>();
+        faithSpaces = new ArrayList<>();
+        lastReportTriggered = -1;
     }
 
 
@@ -19,27 +25,44 @@ public class FaithTrack {
      * @param fileName Path of the file that contains the information
      */
     public void loadTrack(String fileName){
-
+        try {
+            File faithTrackFile = new File(fileName);
+            Scanner fileReader = new Scanner(faithTrackFile);
+            while (fileReader.hasNextLine()) {
+                System.out.println("DA CAMBIARE");
+                //parsing
+            }
+            fileReader.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
-     * Checks if a player has landed or surpassed a Pope space, triggering a vatican report,
-     * if the vatican report is triggered it is also updated
+     * Checks if a player has landed or surpassed a Pope space, triggering a vatican report;
+     * if the vatican report is triggered, it is also updated, as well as the lastReportTriggered
      * @param position Position of the player in the faith track
      * @return Returns true if a vatican report is triggered, false otherwise
      */
     public boolean checkReportActivation(int position){
+        for(int i=vaticanReports.size()-1; i>=0; i--){
+            if(position>=vaticanReports.get(i).getMax() && !vaticanReports.get(i).getTriggered()) {
+                vaticanReports.get(i).setTriggered(true);
+                lastReportTriggered = i;
+                return true;
+            }
+        }
         return false;
     }
 
     /**
-     * Method invoked on a player during a vatican report to check if the current player is in the last triggered
+     * Checks if the current player is in the last triggered
      * report range in order to turn their favor tiles
      * @param position Position of the player in the faith track
      * @return Returns true if the player is in range, false otherwise
      */
     public boolean checkPlayerReportPosition(int position) {
-        return false;
+        return vaticanReports.get(lastReportTriggered).inRange(position);
     }
 
     /**
@@ -49,7 +72,7 @@ public class FaithTrack {
      * @return Returns total VP amount
      */
     public int calculateVP(int position, boolean[] popeProgression) {
-        return -1;
+        return calculateFaithSpaceVP(position) + calculateReportVP(popeProgression);
     }
 
     /**
@@ -58,7 +81,12 @@ public class FaithTrack {
      * @return Returns VP amount
      */
     private int calculateFaithSpaceVP(int position) {
-        return -1;
+        for(int i=faithSpaces.size()-1; i>=0; i--){
+            if(position>=faithSpaces.get(i).getPosition()) {
+                return faithSpaces.get(i).getVP();
+            }
+        }
+        return 0;
     }
 
     /**
@@ -67,6 +95,10 @@ public class FaithTrack {
      * @return Returns VP amount
      */
     private int calculateReportVP(boolean[] popeProgression) {
-        return -1;
+        int sumVP = 0;
+        for(int i=0; i<vaticanReports.size(); i++)
+            if(popeProgression[i])
+                sumVP += vaticanReports.get(i).getPopeValue();
+        return sumVP;
     }
 }

@@ -7,8 +7,11 @@ public class VaticanReport {
     private boolean triggered;
 
 
-    public VaticanReport(int min, int max, int popeValue){
-
+    public VaticanReport(int min, int max, int popeValue) {
+        this.min = min;
+        this.max = max;
+        this.popeValue = popeValue;
+        triggered = false;
     }
 
 
@@ -17,8 +20,8 @@ public class VaticanReport {
      * @param position Player position
      * @return Returns true if it is in range, false otherwise
      */
-    public boolean inRange(int position) {
-        return false;
+    public boolean inRange(int position) { //!!
+        return position >= min;
     }
 
     /**
@@ -43,5 +46,13 @@ public class VaticanReport {
      */
     public boolean getTriggered() {
         return this.triggered;
+    }
+
+    /**
+     * Gets the max attribute
+     * @return Returns max value
+     */
+    public int getMax() {
+        return this.max;
     }
 }
