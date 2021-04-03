@@ -2,17 +2,31 @@ package it.polimi.ingsw.model.cards.deck;
 
 import it.polimi.ingsw.model.cards.card.Card;
 
-import java.util.List;
+import java.util.*;
 
-public class Deck {
+public class Deck implements Iterable<Card>{
 
     private List<Card> cards;
 
 
-    public Deck() {
+    public Deck(){
 
     }
 
+    public Deck(List<Card> cards) {
+        this.cards = new ArrayList<>(cards.size());
+        for(Card card : cards)
+            this.cards.add(card.clone());
+    }
+
+
+    /**
+     * Checks if the deck is empty
+     * @return Returns true if the deck has no cards, false otherwise
+     */
+    public boolean isEmpty() {
+        return cards.size() <= 0;
+    }
 
     /**
      * Gets a card specified by the given position
@@ -20,16 +34,24 @@ public class Deck {
      * @return Returns the requested card
      */
     public Card get(int position) {
-        return null;
+        return cards.get(position);
+    }
+
+    /**
+     * Gets the index of a specified card
+     * @param card Card to get the index
+     * @return Returns the index of the card
+     */
+    public int indexOf(Card card){
+        return cards.indexOf(card);
     }
 
     /**
      * Gets the cards attribute
      * @return Returns cards value
      */
-
     public List<Card> getCards() {
-        return null;
+        return cards;
     }
 
     /**
@@ -38,7 +60,10 @@ public class Deck {
      * @return Returns a list of the selected cards
      */
     public List<Card> extract(int[] positions) {
-        return null;
+        List<Card> retList = new ArrayList<>();
+        for(int i : positions)
+            retList.add(cards.remove(i));
+        return retList;
     }
 
     /**
@@ -46,7 +71,7 @@ public class Deck {
      * @param card Card object to add
      */
     public void add(Card card) {
-
+        cards.add(card);
     }
 
     /**
@@ -54,13 +79,17 @@ public class Deck {
      * @return Returns size value
      */
     public int size() {
-        return -1;
+        return cards.size();
     }
 
     /**
      * Randomizes the cards' positions in the deck
      */
     public void shuffle() {
+        Collections.shuffle(cards);
+    }
 
+    public Iterator<Card> iterator() {
+        return cards.iterator();
     }
 }
