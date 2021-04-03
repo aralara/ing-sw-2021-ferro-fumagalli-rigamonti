@@ -6,7 +6,6 @@ import java.util.List;
 
 public class MultiGame extends Game{
 
-    private int playerNumber, currentPlayer;
     private boolean lastTurn;
 
 

@@ -54,6 +54,22 @@ public class PlayerBoard {
     }
 
     /**
+     * Gets the faith attribute from the FaithBoard
+     * @return Returns faith value
+     */
+    public int getFaithProgression(){
+        return faithBoard.getFaith();
+    }
+
+    /**
+     * Gets the pope's favor tile values from the FaithBoard
+     * @return Returns the pope progression
+     */
+    public boolean[] getPopeProgression(){
+        return faithBoard.getPopeProgression();
+    }
+
+    /**
      * Sets the player attribute
      * @param player New attribute value
      */
@@ -181,6 +197,15 @@ public class PlayerBoard {
     private boolean takeFromStorages(List<RequestResources> requests){
         return false;
     }
+
+    /**
+     * Adds an amount of leader cards to the LeaderBoard
+     * @param leaderCards List of LeaderCard to add
+     */
+    public void addLeaderCards(List<LeaderCard> leaderCards) {
+
+    }
+
 
     /**
      * Discards a LeaderCard from the hand
