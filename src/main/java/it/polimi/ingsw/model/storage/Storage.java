@@ -16,6 +16,7 @@ public interface Storage {
         for (List<Resource> list : lists) {
             temp.addAll(list);
         }
+        Storage.aggregateResources(temp);
         return temp;
     }
 
@@ -27,7 +28,20 @@ public interface Storage {
      */
     static boolean checkContainedResources(List<Resource> container, List<Resource> contained) {
 
-        return container.containsAll(contained);
+        for (Resource resource : contained) {
+            boolean check = false;
+            for (Resource value : container) {
+                if (resource.getResourceType() == value.getResourceType()) {
+                    if (value.getQuantity() > resource.getQuantity()) {
+                        check = true;
+                    }
+                }
+            }
+            if (!check) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**

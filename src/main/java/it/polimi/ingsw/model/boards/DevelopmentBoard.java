@@ -1,8 +1,10 @@
 package it.polimi.ingsw.model.boards;
 
+import it.polimi.ingsw.model.cards.card.Card;
 import it.polimi.ingsw.model.cards.deck.Deck;
 import it.polimi.ingsw.model.cards.card.DevelopmentCard;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DevelopmentBoard {
@@ -14,6 +16,14 @@ public class DevelopmentBoard {
 
     }
 
+
+    public List<Card> getAllCards() {
+        List<Card> temp = new ArrayList<>();
+        for (Deck space : spaces) {
+            temp.addAll(space.getCards());
+        }
+        return temp;
+    }
 
     /**
      * Puts a development card at the top of one of the spaces specified by the parameter
