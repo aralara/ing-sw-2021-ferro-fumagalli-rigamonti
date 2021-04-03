@@ -2,6 +2,10 @@ package it.polimi.ingsw.model.cards.requirement;
 
 import it.polimi.ingsw.model.boards.PlayerBoard;
 import it.polimi.ingsw.model.storage.Resource;
+import it.polimi.ingsw.model.storage.Storage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RequirementRes implements Requirement {
 
@@ -13,6 +17,6 @@ public class RequirementRes implements Requirement {
 
     @Override
     public boolean checkRequirement(PlayerBoard board){
-        return false;
+        return Storage.checkContainedResources(board.createResourceStock(),new ArrayList<>(List.of(resource)));
     }
 }
