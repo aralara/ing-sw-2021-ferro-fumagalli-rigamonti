@@ -2,6 +2,9 @@ package it.polimi.ingsw.model.cards.deck;
 
 import it.polimi.ingsw.model.cards.card.Card;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class Deck {
@@ -9,8 +12,14 @@ public class Deck {
     private List<Card> cards;
 
 
-    public Deck() {
+    public Deck(){
 
+    }
+
+    public Deck(List<Card> cards) {
+        this.cards = new ArrayList<>(cards.size());
+        for(Card card : cards)
+            this.cards.add(card.clone());
     }
 
 
@@ -20,7 +29,7 @@ public class Deck {
      * @return Returns the requested card
      */
     public Card get(int position) {
-        return null;
+        return cards.get(position);
     }
 
     /**
@@ -29,7 +38,7 @@ public class Deck {
      */
 
     public List<Card> getCards() {
-        return null;
+        return cards;
     }
 
     /**
@@ -38,7 +47,10 @@ public class Deck {
      * @return Returns a list of the selected cards
      */
     public List<Card> extract(int[] positions) {
-        return null;
+        List<Card> retList = new ArrayList<>();
+        for(int i : positions)
+            retList.add(cards.remove(i));
+        return retList;
     }
 
     /**
@@ -46,7 +58,7 @@ public class Deck {
      * @param card Card object to add
      */
     public void add(Card card) {
-
+        cards.add(card);
     }
 
     /**
@@ -54,13 +66,13 @@ public class Deck {
      * @return Returns size value
      */
     public int size() {
-        return -1;
+        return cards.size();
     }
 
     /**
      * Randomizes the cards' positions in the deck
      */
     public void shuffle() {
-
+        Collections.shuffle(cards);
     }
 }
