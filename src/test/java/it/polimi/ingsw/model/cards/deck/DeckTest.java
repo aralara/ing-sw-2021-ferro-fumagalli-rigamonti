@@ -4,7 +4,13 @@ import junit.framework.TestCase;
 
 public class DeckTest extends TestCase {
 
+    public void testIsEmpty() {
+    }
+
     public void testGet() {
+    }
+
+    public void testIndexOf() {
     }
 
     public void testGetCards() {
@@ -20,5 +26,8 @@ public class DeckTest extends TestCase {
     }
 
     public void testShuffle() {
+    }
+
+    public void testIterator() {
     }
 }

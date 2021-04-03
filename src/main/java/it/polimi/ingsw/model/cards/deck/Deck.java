@@ -2,12 +2,9 @@ package it.polimi.ingsw.model.cards.deck;
 
 import it.polimi.ingsw.model.cards.card.Card;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
-public class Deck {
+public class Deck implements Iterable<Card>{
 
     private List<Card> cards;
 
@@ -24,6 +21,14 @@ public class Deck {
 
 
     /**
+     * Checks if the deck is empty
+     * @return Returns true if the deck has no cards, false otherwise
+     */
+    public boolean isEmpty() {
+        return cards.size() <= 0;
+    }
+
+    /**
      * Gets a card specified by the given position
      * @param position Position of the card
      * @return Returns the requested card
@@ -33,10 +38,18 @@ public class Deck {
     }
 
     /**
+     * Gets the index of a specified card
+     * @param card Card to get the index
+     * @return Returns the index of the card
+     */
+    public int indexOf(Card card){
+        return cards.indexOf(card);
+    }
+
+    /**
      * Gets the cards attribute
      * @return Returns cards value
      */
-
     public List<Card> getCards() {
         return cards;
     }
@@ -74,5 +87,9 @@ public class Deck {
      */
     public void shuffle() {
         Collections.shuffle(cards);
+    }
+
+    public Iterator<Card> iterator() {
+        return cards.iterator();
     }
 }
