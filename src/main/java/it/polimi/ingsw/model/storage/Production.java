@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.storage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Production {
@@ -8,7 +9,13 @@ public class Production {
 
 
     public Production() {
+        consumed = new ArrayList<>();
+        produced = new ArrayList<>();
+    }
 
+    public Production(List<Resource> consumed, List<Resource> produced) {
+        this.consumed = consumed;
+        this.produced = produced;
     }
 
 
@@ -17,7 +24,8 @@ public class Production {
      * @return Return the resource list
      */
     public List<Resource> getConsumed() {
-        return null;
+
+        return this.consumed;
     }
 
     /**
@@ -25,6 +33,7 @@ public class Production {
      * @return Return the resource list
      */
     public List<Resource> getProduced() {
-        return null;
+
+        return this.produced;
     }
 }
