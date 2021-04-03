@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.storage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface Storage {
@@ -11,7 +12,11 @@ public interface Storage {
      * @return Returns the created list
      */
     static List<Resource> mergeResourceList(List<List<Resource>> lists) {
-        return null;
+        List<Resource> temp = new ArrayList<>();
+        for (List<Resource> list : lists) {
+            temp.addAll(list);
+        }
+        return temp;
     }
 
     /**
@@ -21,7 +26,26 @@ public interface Storage {
      * @return Returns true if all the resources are contained, false otherwise
      */
     static boolean checkContainedResources(List<Resource> container, List<Resource> contained) {
-        return false;
+
+        return container.containsAll(contained);
+    }
+
+    /**
+     * Aggregates the resources in the list that have the same resourceType and return the list
+     * @param resources List to be aggregated
+     * @return Returns the list updated
+     */
+    static List<Resource> aggregateResources(List<Resource> resources) {
+
+        for(int i=0;i<resources.size();i++){
+            for(int j=1;j<resources.size();j++){
+                if((resources.get(i).getResourceType() == resources.get(j).getResourceType()) && i!=j){
+                    resources.get(i).add(resources.get(j));
+                    resources.remove(j);
+                }
+            }
+        }
+        return resources;
     }
 
     /**
