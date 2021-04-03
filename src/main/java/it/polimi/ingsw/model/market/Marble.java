@@ -9,7 +9,8 @@ public class Marble {
 
 
     public Marble(MarbleColors color, ResourceType resourceType) {
-
+        this.color = color;
+        this.resourceType = resourceType;
     }
 
 

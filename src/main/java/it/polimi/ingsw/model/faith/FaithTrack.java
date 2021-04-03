@@ -13,7 +13,7 @@ public class FaithTrack {
     private int lastReportTriggered;
 
 
-    public FaithTrack(){
+    public FaithTrack() {
         vaticanReports = new ArrayList<>();
         faithSpaces = new ArrayList<>();
         lastReportTriggered = -1;
@@ -24,7 +24,7 @@ public class FaithTrack {
      * Loads faithSpaces and vaticanReports from the file given by parameter
      * @param fileName Path of the file that contains the information
      */
-    public void loadTrack(String fileName){
+    public void loadTrack(String fileName) {
         try {
             File faithTrackFile = new File(fileName);
             Scanner fileReader = new Scanner(faithTrackFile);
@@ -44,7 +44,7 @@ public class FaithTrack {
      * @param position Position of the player in the faith track
      * @return Returns true if a vatican report is triggered, false otherwise
      */
-    public boolean checkReportActivation(int position){
+    public boolean checkReportActivation(int position) {
         for(int i=vaticanReports.size()-1; i>=0; i--){
             if(position>=vaticanReports.get(i).getMax() && !vaticanReports.get(i).getTriggered()) {
                 vaticanReports.get(i).setTriggered(true);
