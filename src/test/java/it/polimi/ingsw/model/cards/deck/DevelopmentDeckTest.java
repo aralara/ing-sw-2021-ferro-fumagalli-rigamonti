@@ -1,18 +1,24 @@
 package it.polimi.ingsw.model.cards.deck;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public class DevelopmentDeckTest extends TestCase {
+import static org.junit.Assert.*;
 
+public class DevelopmentDeckTest {
+
+    @Test
     public void testGetDeckColor() {
     }
 
+    @Test
     public void testGetDeckLevel() {
     }
 
+    @Test
     public void testIsEmpty() {
     }
 
+    @Test
     public void testRemoveFirst() {
     }
 }
