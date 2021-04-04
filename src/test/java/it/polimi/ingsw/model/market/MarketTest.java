@@ -29,14 +29,19 @@ public class MarketTest {
 
     @Test
     public void testChooseCoordinates() {
+        //hardly testable with randomized marbles
+        /* maybe simply if it's selected row -> the size of the list is <= 4
+        *  and if it's selected column -> the size of the list is <= 3 */
     }
 
     @Test
     public void testMoveFloatingMarble() {
+        //hardly testable with randomized marbles
     }
 
     @Test
     public void testGetMarbleAt() {
+        //hardly testable with randomized marbles
     }
 
     @Test

@@ -90,13 +90,12 @@ public class FaithTrack {
      * @return Returns true if a vatican report is triggered, false otherwise
      */
     public boolean checkReportActivation(int position) {
-        for(int i=vaticanReports.size()-1; i>=0; i--){
-            if(position>=vaticanReports.get(i).getMax() && !vaticanReports.get(i).getTriggered()) {
+        for(int i=lastReportTriggered+1; i<vaticanReports.size(); i++)
+            if(!vaticanReports.get(i).getTriggered() && position>=vaticanReports.get(i).getMax()) {
                 vaticanReports.get(i).setTriggered(true);
                 lastReportTriggered = i;
                 return true;
             }
-        }
         return false;
     }
 
@@ -107,6 +106,7 @@ public class FaithTrack {
      * @return Returns true if the player is in range, false otherwise
      */
     public boolean checkPlayerReportPosition(int position) {
+        if(lastReportTriggered == -1) return false; //or exception?
         return vaticanReports.get(lastReportTriggered).inRange(position);
     }
 
