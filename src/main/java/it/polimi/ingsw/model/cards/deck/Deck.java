@@ -13,7 +13,7 @@ public class Deck implements Iterable<Card>{
 
     }
 
-    public Deck(List<Card> cards) {
+    public Deck(List<? extends Card> cards) {
         this.cards = new ArrayList<>(cards.size());
         for(Card card : cards)
             this.cards.add(card.clone());
