@@ -17,6 +17,11 @@ public class LeaderCard implements Card {
     }
 
 
+    @Override
+    public Card clone() {
+        return null;
+    }
+
     /**
      * Gets the VP amount
      * @return Returns VP

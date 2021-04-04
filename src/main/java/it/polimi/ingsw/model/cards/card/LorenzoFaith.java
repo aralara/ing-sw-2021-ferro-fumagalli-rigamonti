@@ -14,6 +14,11 @@ public class LorenzoFaith implements LorenzoCard{
 
 
     @Override
+    public Card clone() {
+        return null;
+    }
+
+    @Override
     public void activateLorenzo(LorenzoBoard board){
 
     }
