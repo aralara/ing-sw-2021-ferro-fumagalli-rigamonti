@@ -36,7 +36,7 @@ public abstract class Game {
      * Gets the playerBoards attribute
      * @return Returns playerBoards value
      */
-    List<PlayerBoard> getplayerBoards() {
+    List<PlayerBoard> getPlayerBoards() {
         return playerBoards;
     }
 
