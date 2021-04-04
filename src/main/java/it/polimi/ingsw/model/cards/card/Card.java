@@ -1,10 +1,10 @@
 package it.polimi.ingsw.model.cards.card;
 
-public interface Card {
+public interface Card extends Cloneable{
 
     /**
      * Method to return a cloned instance for a Card
      * @return Returns Card cloned object
      */
-    Card clone();
+    Card makeClone();
 }

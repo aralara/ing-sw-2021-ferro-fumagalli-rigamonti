@@ -12,21 +12,28 @@ public class LeaderCard implements Card {
     private SpecialAbility ability;
 
 
-    LeaderCard(){
+    LeaderCard() {
 
+    }
+
+    LeaderCard(LeaderCard card) {
+        VP = card.getVP();
+        requirements = card.getRequirements();
+        ability = card.getAbility();
+        //TODO: Valutare se far restituire degli oggetti copia ai getter e implementare dei metodi per restituire copie di Requirement e SpecialAbility
     }
 
 
     @Override
-    public Card clone() {
-        return null;
+    public LeaderCard makeClone() {
+        return new LeaderCard(this);
     }
 
     /**
      * Gets the VP amount
      * @return Returns VP
      */
-    public int getVP(){
+    public int getVP() {
         return VP;
     }
 
@@ -34,7 +41,7 @@ public class LeaderCard implements Card {
      * Gets the requirements attribute
      * @return Returns requirements value
      */
-    public List<Requirement> getRequirements(){
+    public List<Requirement> getRequirements() {
         return requirements;
     }
 
@@ -42,7 +49,7 @@ public class LeaderCard implements Card {
      * Gets the ability attribute
      * @return Returns ability value
      */
-    public SpecialAbility getAbility(){
+    public SpecialAbility getAbility() {
         return ability;
     }
 }

@@ -9,17 +9,27 @@ public class DevelopmentCard implements Card {
     private int VP;
     private CardColors color;
     private int level;
-    private Production prod;
+    private Production production;
     private List<Resource> cost;
 
 
-    DevelopmentCard(){
+    DevelopmentCard() {
 
     }
 
+    DevelopmentCard(DevelopmentCard card) {
+        VP = card.getVP();
+        color = card.getColor();
+        level = card.getLevel();
+        production = card.getProduction();
+        cost = card.getCost();
+        //TODO: Valutare se far restituire degli oggetti copia ai getter e implementare dei metodi per restituire copie di Production e Resource
+    }
+
+
     @Override
-    public Card clone() {
-        return null;
+    public DevelopmentCard makeClone() {
+        return new DevelopmentCard(this);
     }
 
     /**
@@ -34,7 +44,7 @@ public class DevelopmentCard implements Card {
      * Gets the cost attribute
      * @return Returns cost value
      */
-    public List<Resource> getCost(){
+    public List<Resource> getCost() {
         return cost;
     }
 
@@ -42,7 +52,7 @@ public class DevelopmentCard implements Card {
      * Gets the level attribute
      * @return Returns level value
      */
-    public int getLevel(){
+    public int getLevel() {
         return level;
     }
 
@@ -50,8 +60,16 @@ public class DevelopmentCard implements Card {
      * Gets the color attribute
      * @return Returns color value
      */
-    public CardColors getColor(){
+    public CardColors getColor() {
         return color;
+    }
+
+    /**
+     * Gets the production attribute
+     * @return Returns production value
+     */
+    public Production getProduction() {
+        return production;
     }
 
 }
