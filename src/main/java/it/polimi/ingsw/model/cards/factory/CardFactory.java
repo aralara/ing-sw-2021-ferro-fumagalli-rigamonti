@@ -11,5 +11,5 @@ public interface CardFactory {
      * @param fileName Name of the file to load the cards from
      * @return Returns the list of loaded cards
      */
-    List<Card> loadCardFromFile(String fileName);
+    List<? extends Card> loadCardFromFile(String fileName);
 }
