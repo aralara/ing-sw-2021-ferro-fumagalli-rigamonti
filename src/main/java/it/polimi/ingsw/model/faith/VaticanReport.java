@@ -55,4 +55,12 @@ public class VaticanReport {
     public int getMax() {
         return this.max;
     }
+
+    /**
+     * Gets the min attribute
+     * @return Returns min value
+     */
+    public int getMin() {
+        return this.min;
+    }
 }

@@ -1,10 +1,13 @@
 package it.polimi.ingsw.model.faith;
 
-import java.io.File;
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
+import it.polimi.ingsw.model.FileNames;
+
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class FaithTrack {
 
@@ -21,18 +24,49 @@ public class FaithTrack {
 
 
     /**
-     * Loads faithSpaces and vaticanReports from the file given by parameter
+     * Loads faithSpaces and vaticanReports from the files calling loadVaticanReports and loadFaithSpaces
+     */
+    public void loadTrack() {
+        loadVaticanReports(FileNames.VATICAN_REPORT_FILE.value());
+        loadFaithSpaces(FileNames.FAITH_SPACE_FILE.value());
+    }
+
+    /**
+     * Loads vaticanReports from the file given by parameter
      * @param fileName Path of the file that contains the information
      */
-    public void loadTrack(String fileName) {
+    private void loadVaticanReports(String fileName){
+        Gson gson = new Gson();
+
         try {
-            File faithTrackFile = new File(fileName);
-            Scanner fileReader = new Scanner(faithTrackFile);
-            while (fileReader.hasNextLine()) {
-                System.out.println("DA CAMBIARE");
-                //parsing
+            VaticanReport[] jsonReports;
+            JsonReader reader = new JsonReader(new FileReader(fileName));
+            jsonReports = gson.fromJson(reader, VaticanReport[].class);
+
+            for (VaticanReport vaticanReport : jsonReports) {
+                this.vaticanReports.add(new VaticanReport(vaticanReport.getMin(), vaticanReport.getMax(),
+                        vaticanReport.getPopeValue()));
             }
-            fileReader.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Loads faithSpaces from the file given by parameter
+     * @param fileName Path of the file that contains the information
+     */
+    private void loadFaithSpaces(String fileName){
+        Gson gson = new Gson();
+
+        try {
+            FaithSpace[] jsonSpaces;
+            JsonReader reader = new JsonReader(new FileReader(fileName));
+            jsonSpaces = gson.fromJson(reader, FaithSpace[].class);
+
+            for (FaithSpace faithSpace : jsonSpaces) {
+                this.faithSpaces.add(new FaithSpace(faithSpace.getVP(), faithSpace.getPosition()));
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
