@@ -1,15 +1,19 @@
 package it.polimi.ingsw.model.storage;
 
-import junit.framework.TestCase;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShelfTest extends TestCase {
+public class ShelfTest{
 
+    @Test
     public void testGetResourceType() {
     }
 
+    @Test
     public void testSetResourceType() {
         Shelf instance = new Shelf();
         instance.setResourceType(ResourceType.FAITH);
@@ -17,16 +21,19 @@ public class ShelfTest extends TestCase {
         assertEquals(ResourceType.COIN, instance.getResourceType());
     }
 
+    @Test
     public void testGetLevel() {
         Shelf instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,false);
         assertEquals(2, instance.getLevel());
     }
 
+    @Test
     public void testGetIsLeader() {
         Shelf instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,false);
         assertFalse(instance.getIsLeader());
     }
 
+    @Test
     public void testCheckAdd() {
 
         Shelf instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,false);
@@ -52,6 +59,7 @@ public class ShelfTest extends TestCase {
 
     }
 
+    @Test
     public void testGetList() {
 
         Shelf instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,false);
@@ -70,6 +78,7 @@ public class ShelfTest extends TestCase {
 
     }
 
+    @Test
     public void testAddResources() {
 
         Shelf instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,0),2,false);
@@ -97,6 +106,7 @@ public class ShelfTest extends TestCase {
         assertFalse(instance.addResources(new Resource(ResourceType.SHIELD, 2)));
     }
 
+    @Test
     public void testTestAddResources() {
         Shelf instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,0),2,false);
         assertTrue(instance.addResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN, 2)))));
@@ -120,6 +130,7 @@ public class ShelfTest extends TestCase {
         assertTrue(instance.addResources(new ArrayList<>(List.of(new Resource(ResourceType.SERVANT, 2)))));
     }
 
+    @Test
     public void testRemoveResources() {
         Shelf instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,0),2,false);
         assertFalse(instance.removeResources(new Resource(ResourceType.COIN, 1)));
@@ -141,6 +152,7 @@ public class ShelfTest extends TestCase {
 
     }
 
+    @Test
     public void testTestRemoveResources() {
         Shelf instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,false);
         assertTrue(instance.removeResources(new Resource(ResourceType.COIN, 1)));

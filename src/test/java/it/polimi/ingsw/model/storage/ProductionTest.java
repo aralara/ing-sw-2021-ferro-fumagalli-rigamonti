@@ -1,12 +1,16 @@
 package it.polimi.ingsw.model.storage;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public class ProductionTest extends TestCase {
+import static org.junit.Assert.*;
 
+public class ProductionTest{
+
+    @Test
     public void testGetConsumed() {
     }
 
+    @Test
     public void testGetProduced() {
     }
 }
