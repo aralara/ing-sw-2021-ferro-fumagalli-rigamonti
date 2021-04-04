@@ -20,7 +20,7 @@ public class Shelf implements Storage{
 
     public Shelf(ResourceType resourceType, Resource resources, int level, boolean isLeader) {
         this.resourceType = resourceType;
-        this.resources = resources;
+        this.resources = new Resource(resources.getResourceType(), resources.getQuantity());
         this.level = level;
         this.isLeader = isLeader;
     }
@@ -64,7 +64,13 @@ public class Shelf implements Storage{
      */
     public boolean checkAdd(Resource resources){
         if(this.resources.getQuantity() == 0) {
-            return resources.getQuantity() <= level;
+            if(!this.isLeader){
+                return resources.getQuantity() <= level;
+            }
+            else
+            {
+                return ((resources.getQuantity() <= level)&&(this.getResourceType() == resources.getResourceType()));
+            }
         }
         else {
             if(this.resources.getQuantity() + resources.getQuantity() > level) {
@@ -99,11 +105,11 @@ public class Shelf implements Storage{
      */
     public boolean addResources(Resource resource) {
         if(checkAdd(resource)) {
-            if (this.resources.getQuantity() == 0) {
-                setResourceType(resources.getResourceType());
+            if (this.resources.getQuantity() == 0 && !isLeader) {
+                this.resourceType = resource.getResourceType();
+                this.resources.setResourceType(this.resourceType);
             }
-            this.resources.add(resource);
-            return  true;
+            return this.resources.add(resource);
         }
         return false;
     }
