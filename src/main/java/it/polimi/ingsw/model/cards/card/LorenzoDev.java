@@ -13,6 +13,11 @@ public class LorenzoDev implements LorenzoCard{
 
 
     @Override
+    public Card clone() {
+        return null;
+    }
+
+    @Override
     public void activateLorenzo(LorenzoBoard board){
 
     }

@@ -22,6 +22,17 @@ public class FaithTrack {
         lastReportTriggered = -1;
     }
 
+    public List<VaticanReport> getVaticanReports() {
+        return vaticanReports;
+    }
+
+    public List<FaithSpace> getFaithSpaces() {
+        return faithSpaces;
+    }
+
+    public int getLastReportTriggered() {
+        return lastReportTriggered;
+    }
 
     /**
      * Loads faithSpaces and vaticanReports from the files calling loadVaticanReports and loadFaithSpaces

@@ -17,6 +17,10 @@ public class DevelopmentCard implements Card {
 
     }
 
+    @Override
+    public Card clone() {
+        return null;
+    }
 
     /**
      * Gets the VP amount
