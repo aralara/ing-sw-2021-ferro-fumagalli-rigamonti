@@ -29,10 +29,10 @@ public class Strongbox implements Storage{
     public boolean removeResources(List<Resource> resources) {
         Storage.aggregateResources(resources);
         if(Storage.checkContainedResources(this.getList(), resources)) {
-            for (int i=0;i<this.resources.size();i++) {
-                for(int j=0;j<this.resources.size();j++) {
-                    if(this.resources.get(i).getResourceType() == resources.get(j).getResourceType()) {
-                        this.resources.get(i).sub(resources.get(j));
+            for (Resource resource : this.resources) {
+                for (Resource value : resources) {
+                    if (resource.getResourceType() == value.getResourceType()) {
+                        resource.sub(value);
                     }
                 }
             }

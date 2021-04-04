@@ -128,6 +128,10 @@ public class ShelfTest{
 
         instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,0),2,false);
         assertTrue(instance.addResources(new ArrayList<>(List.of(new Resource(ResourceType.SERVANT, 2)))));
+
+        instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,0),2,false);
+        assertFalse(instance.addResources(new ArrayList<>(List.of(new Resource(ResourceType.SERVANT, 2),
+                new Resource(ResourceType.COIN, 2)))));
     }
 
     @Test
@@ -155,18 +159,35 @@ public class ShelfTest{
     @Test
     public void testTestRemoveResources() {
         Shelf instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,false);
-        assertTrue(instance.removeResources(new Resource(ResourceType.COIN, 1)));
+        assertTrue(instance.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN, 1)))));
 
         instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,false);
-        assertTrue(instance.removeResources(new Resource(ResourceType.COIN, 2)));
+        assertTrue(instance.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN, 2)))));
 
         instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,false);
-        assertFalse(instance.removeResources(new Resource(ResourceType.COIN, 3)));
+        assertFalse(instance.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN, 3)))));
 
         instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,false);
-        assertFalse(instance.removeResources(new Resource(ResourceType.SHIELD, 1)));
+        assertFalse(instance.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.SHIELD, 1)))));
 
         instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,false);
-        assertFalse(instance.removeResources(new Resource(ResourceType.SERVANT, 3)));
+        assertFalse(instance.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.SERVANT, 3)))));
+
+        instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,false);
+        assertFalse(instance.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.SERVANT, 3),
+                new Resource(ResourceType.COIN, 3)))));
+
+        instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,false);
+        assertFalse(instance.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN, 2),
+                new Resource(ResourceType.COIN, 2)))));
+
+        instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,false);
+        assertFalse(instance.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN, 2),
+                new Resource(ResourceType.SHIELD, 2)))));
+
+        instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,false);
+        assertTrue(instance.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN, 1),
+                new Resource(ResourceType.COIN, 1)))));
+
     }
 }

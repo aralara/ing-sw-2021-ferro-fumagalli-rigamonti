@@ -8,11 +8,6 @@ public class Production {
     List<Resource> consumed, produced;
 
 
-    public Production() {
-        consumed = new ArrayList<>();
-        produced = new ArrayList<>();
-    }
-
     public Production(List<Resource> consumed, List<Resource> produced) {
         this.consumed = consumed;
         this.produced = produced;
