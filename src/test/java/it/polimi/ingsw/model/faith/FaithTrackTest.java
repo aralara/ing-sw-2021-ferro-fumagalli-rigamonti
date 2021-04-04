@@ -49,11 +49,17 @@ public class FaithTrackTest {
         FaithTrack faithTrackBeyond = new FaithTrack(); //to check the activation beyond the cell
         faithTrackBeyond.loadTrack();
 
+        assertEquals(-1, faithTrackCell.getLastReportTriggered());
+        assertEquals(-1, faithTrackBeyond.getLastReportTriggered());
+
         //first report
         assertFalse(faithTrackCell.checkReportActivation(0));
         assertFalse(faithTrackBeyond.checkReportActivation(4));
         assertTrue(faithTrackCell.checkReportActivation(8));
         assertTrue(faithTrackBeyond.checkReportActivation(15));
+
+        assertEquals(0, faithTrackCell.getLastReportTriggered());
+        assertEquals(0, faithTrackBeyond.getLastReportTriggered());
 
         //second report
         assertFalse(faithTrackCell.checkReportActivation(8));
@@ -61,11 +67,17 @@ public class FaithTrackTest {
         assertTrue(faithTrackCell.checkReportActivation(16));
         assertTrue(faithTrackBeyond.checkReportActivation(23));
 
+        assertEquals(1, faithTrackCell.getLastReportTriggered());
+        assertEquals(1, faithTrackBeyond.getLastReportTriggered());
+
         //third report
         assertFalse(faithTrackCell.checkReportActivation(16));
         assertFalse(faithTrackBeyond.checkReportActivation(23));
         assertTrue(faithTrackCell.checkReportActivation(24));
         assertTrue(faithTrackBeyond.checkReportActivation(27)); //out of the faith track range, but still valid
+
+        assertEquals(2, faithTrackCell.getLastReportTriggered());
+        assertEquals(2, faithTrackBeyond.getLastReportTriggered());
     }
 
     @Test
