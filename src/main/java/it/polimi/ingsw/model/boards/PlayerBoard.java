@@ -1,10 +1,14 @@
 package it.polimi.ingsw.model.boards;
 
 import it.polimi.ingsw.model.cards.card.*;
+import it.polimi.ingsw.model.cards.requirement.Requirement;
 import it.polimi.ingsw.model.games.Game;
 import it.polimi.ingsw.model.storage.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PlayerBoard {
 
@@ -24,7 +28,7 @@ public class PlayerBoard {
     private List<ResourceType> activeAbilityDiscounts;
 
 
-    public PlayerBoard(){
+    public PlayerBoard() {
 
     }
 
@@ -41,7 +45,7 @@ public class PlayerBoard {
      * Gets the warehouse attribute
      * @return Returns warehouse value
      */
-    public Warehouse getWarehouse(){
+    public Warehouse getWarehouse() {
         return this.warehouse;
     }
 
@@ -49,7 +53,7 @@ public class PlayerBoard {
      * Gets the leaderBoard attribute
      * @return Returns leaderBoard value
      */
-    public LeaderBoard getLeaderBoard(){
+    public LeaderBoard getLeaderBoard() {
         return null;
     }
 
@@ -57,7 +61,7 @@ public class PlayerBoard {
      * Gets the faith attribute from the FaithBoard
      * @return Returns faith value
      */
-    public int getFaithProgression(){
+    public int getFaithProgression() {
         return faithBoard.getFaith();
     }
 
@@ -65,7 +69,7 @@ public class PlayerBoard {
      * Gets the pope's favor tile values from the FaithBoard
      * @return Returns the pope progression
      */
-    public boolean[] getPopeProgression(){
+    public boolean[] getPopeProgression() {
         return faithBoard.getPopeProgression();
     }
 
@@ -73,7 +77,7 @@ public class PlayerBoard {
      * Sets the player attribute
      * @param player New attribute value
      */
-    public void setPlayer(Player player){
+    public void setPlayer(Player player) {
         this.player = player;
     }
 
@@ -89,7 +93,7 @@ public class PlayerBoard {
      * Sets the turnPlayed attribute
      * @param value New turnPlayed value
      */
-    public void setTurnPlayed(boolean value){
+    public void setTurnPlayed(boolean value) {
         this.turnPlayed = value;
     }
 
@@ -97,47 +101,55 @@ public class PlayerBoard {
      * Gets all the possible ResourceType from the activeAbilityMarbles
      * @return Returns a list of the ResourceType
      */
-    public List<ResourceType> getAbilityMarbles(){
+    public List<ResourceType> getAbilityMarbles() {
         return null;
     }
 
     /**
      * Sets the current PlayerBoard as the first playing one
      */
-    public void firstPlayer(){
-
+    public void firstPlayer() {
+        inkwell = true;
     }
 
     /**
      * Adds a set amount of faith to the current FaithBoard
      * @param faith Faith quantity to be added
      */
-    public void addFaith(int faith){
-
+    public void addFaith(int faith) {
+        faithBoard.addFaith(faith);
     }
 
     /**
      * Creates a list containing all of the player resources
      * @return Returns a list of resources
      */
-    public List<Resource> createResourceStock(){
-        return null;
+    public List<Resource> createResourceStock() {
+        List<List<Resource>> stock = new ArrayList<>();
+        stock.add(warehouse.getList());
+        stock.add(strongbox.getList());
+        return Storage.mergeResourceList(stock);
     }
 
     /**
      * Creates a list containing all of the player productions
      * @return Returns a list of productions
      */
-    public List<Production> createProductionStock(){
-        return null;
+    public List<Production> createProductionStock() {
+        return Stream.of(
+                List.of(basicProduction).stream(),
+                activeAbilityProductions.stream(),
+                developmentBoard.getActiveProductions().stream()
+        ).reduce(Stream::concat).orElseGet(Stream::empty).collect(Collectors.toList());
     }
 
     /**
      * Calculates total VPs for the player checking the FaithTrack, leader cards, development cards and resources
      * @return Returns total VP amount
      */
-    public int calculateVP(){
-        return -1;
+    public int calculateVP() {
+        // TODO: Aggiungere getVP nella FaithBoard, nella LeaderBoard, nella developmentBoard e un metodo statico nello storage
+        return 0;
     }
 
     /**
@@ -145,8 +157,8 @@ public class PlayerBoard {
      * @param shelves New shelves for the Warehouse
      * @return Returns true if the configuration is valid, false otherwise
      */
-    private boolean changeWarehouse(List<Shelf> shelves){
-        return false;
+    private boolean changeWarehouse(List<Shelf> shelves) {
+        return warehouse.changeConfiguration(shelves);
     }
 
     /**
@@ -154,19 +166,22 @@ public class PlayerBoard {
      * @param card The development card to be added
      * @return Returns true if the card can be added, false otherwise
      */
-    public boolean canBuyDevCard(DevelopmentCard card){
-        return false;
+    public boolean canBuyDevCard(DevelopmentCard card) {
+        return developmentBoard.checkDevCardAddable(card);
     }
 
     /**
      * Puts a development card at the top of one of the spaces specified by the parameter
      * @param card The development card to be added
      * @param space Position of the space on the board
-     * @param request List of requests containing resource quantity and location
+     * @param requests List of requests containing resource quantity and location
      * @return Returns true if the card is bought, false otherwise
      */
-    public boolean buyDevCard(DevelopmentCard card, int space, List<RequestResources> request) {
-        return false;
+    public boolean buyDevCard(DevelopmentCard card, int space, List<RequestResources> requests) {
+        boolean bought = takeFromStorages(requests);
+        if(bought)
+            developmentBoard.addDevCard(card, space);
+        return bought;
     }
 
     /**
@@ -174,8 +189,8 @@ public class PlayerBoard {
      * @param consumed The list of resources to be consumed
      * @return Returns true if the productions can be activated, false otherwise
      */
-    public boolean canActivateProductions(List<Resource> consumed){
-        return false;
+    public boolean canActivateProductions(List<Resource> consumed) {
+        return Storage.checkContainedResources(createResourceStock(), consumed);
     }
 
     /**
@@ -185,8 +200,11 @@ public class PlayerBoard {
      * @param requests List of requests containing resource quantity and location for the spent resources
      * @return Returns true if the card is bought, false otherwise
      */
-    public boolean activateProductions(List<Resource> produced, List<RequestResources> requests){
-        return false;
+    public boolean activateProductions(List<Resource> produced, List<RequestResources> requests) {
+        boolean activated = takeFromStorages(requests);
+        if(activated)
+            strongbox.addResources(produced);
+        return activated;
     }
 
     /**
@@ -194,8 +212,19 @@ public class PlayerBoard {
      * @param requests List of requests containing resource quantity and location for the spent resources
      * @return Returns true if the resources are taken, false otherwise
      */
-    private boolean takeFromStorages(List<RequestResources> requests){
-        return false;
+    private boolean takeFromStorages(List<RequestResources> requests) {
+        boolean canTake = false, flag = true;
+        for(RequestResources request : requests){
+            if(flag) {
+                if (request.getStorageType() == StorageType.STRONGBOX)
+                    canTake = strongbox.removeResources(request.getList());
+                else if (request.getStorageType() == StorageType.WAREHOUSE)
+                    canTake = warehouse.removeResources(request.getList());
+                if(!canTake)
+                    flag = false;
+            }
+        }
+        return canTake;
     }
 
     /**
@@ -203,7 +232,7 @@ public class PlayerBoard {
      * @param leaderCards List of LeaderCard to add
      */
     public void addLeaderCards(List<LeaderCard> leaderCards) {
-
+        leaderBoard.setLeaderHand(leaderCards);
     }
 
 
@@ -211,8 +240,8 @@ public class PlayerBoard {
      * Discards a LeaderCard from the hand
      * @param leaderCard LeaderCard to be discarded
      */
-    public void discardLeader(LeaderCard leaderCard){
-
+    public void discardLeader(LeaderCard leaderCard) {
+        leaderBoard.discardLeaderHand(leaderCard);
     }
 
     /**
@@ -220,8 +249,20 @@ public class PlayerBoard {
      * @param leaderCard LeaderCard to be played
      * @return Returns true if the LeaderCard can be played, false otherwise
      */
-    public boolean playLeaderCard(LeaderCard leaderCard){
-        return false;
+    public boolean playLeaderCard(LeaderCard leaderCard) {
+        boolean canPlay = false, flag = true;
+        for(Requirement req : leaderCard.getRequirements()){
+            if(flag) {
+                canPlay = req.checkRequirement(this);
+                if(!canPlay)
+                    flag = false;
+            }
+        }
+        if(canPlay) {
+            leaderCard.getAbility().activateAbility(this);
+            leaderBoard.playLeaderHand(leaderCard);
+        }
+        return canPlay;
     }
 
     /**
@@ -229,7 +270,7 @@ public class PlayerBoard {
      * @param production Production to be added
      */
     public void addAbilityProductions(Production production) {
-
+        activeAbilityProductions.add(production);
     }
 
     /**
@@ -237,7 +278,7 @@ public class PlayerBoard {
      * @param type ResourceType to be added
      */
     public void addAbilityMarbles(ResourceType type){
-
+        activeAbilityMarbles.add(type);
     }
 
     /**
@@ -245,7 +286,7 @@ public class PlayerBoard {
      * @param type ResourceType to be added
      */
     public void addAbilityDiscounts(ResourceType type){
-
+        activeAbilityDiscounts.add(type);
     }
 
     /**
@@ -253,6 +294,6 @@ public class PlayerBoard {
      * @param shelf Shelf to be added
      */
     public void addAbilityWarehouse(Shelf shelf){
-
+        warehouse.addShelf(shelf);
     }
 }

@@ -3,6 +3,8 @@ package it.polimi.ingsw.model.boards;
 import it.polimi.ingsw.model.cards.card.LeaderCard;
 import it.polimi.ingsw.model.cards.deck.Deck;
 
+import java.util.List;
+
 public class LeaderBoard {
 
     private Deck hand;
@@ -15,10 +17,10 @@ public class LeaderBoard {
 
 
     /**
-     * Gives to each player a hand of leader cards
-     * @param hand Deck of leader cards
+     * Gives a hand of leader cards to the player
+     * @param hand List of leader cards
      */
-    public void setLeaderHand(Deck hand) {
+    public void setLeaderHand(List<LeaderCard> hand) {
 
     }
 

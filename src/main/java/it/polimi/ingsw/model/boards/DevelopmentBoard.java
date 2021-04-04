@@ -1,8 +1,8 @@
 package it.polimi.ingsw.model.boards;
 
-import it.polimi.ingsw.model.cards.card.Card;
+import it.polimi.ingsw.model.cards.card.*;
 import it.polimi.ingsw.model.cards.deck.Deck;
-import it.polimi.ingsw.model.cards.card.DevelopmentCard;
+import it.polimi.ingsw.model.storage.Production;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +23,14 @@ public class DevelopmentBoard {
             temp.addAll(space.getCards());
         }
         return temp;
+    }
+
+    /**
+     * Gets all the productions that can be activated from the top card of each deck
+     * @return Returns a list of Production
+     */
+    public List<Production> getActiveProductions() {
+        return null;
     }
 
     /**

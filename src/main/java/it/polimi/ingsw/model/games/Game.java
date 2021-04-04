@@ -245,7 +245,7 @@ public abstract class Game {
      * Method invoked to calculate the amount of VP earned by each player
      * @return Returns an array containing the results, parallel to the list of player boards
      */
-    public int[] calculateTotalVP() {   //TODO: spostare calcolo VP nella PlayerBoard
+    public int[] calculateTotalVP() {
         int[] playersVP = new int[playerNumber];
         for(int i = 0; i < playerNumber; i++) {
             PlayerBoard playerboard = playerBoards.get(i);
