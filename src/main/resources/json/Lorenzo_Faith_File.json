@@ -1,0 +1,14 @@
+[
+	{
+		"refresh": "true",
+		"amount": "1"
+	},
+	{
+		"refresh": "false",
+		"amount": "2"
+	},
+	{
+		"refresh": "false",
+		"amount": "2"
+	}
+]

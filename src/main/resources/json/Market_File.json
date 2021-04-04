@@ -1,0 +1,54 @@
+[
+	{
+		"color": "YELLOW",
+		"resourceType": "COIN"
+	},
+	{
+		"color": "YELLOW",
+		"resourceType": "COIN"
+	},
+	{
+		"color": "BLUE",
+		"resourceType": "SHIELD"
+	},
+	{
+		"color": "BLUE",
+		"resourceType": "SHIELD"
+	},
+	{
+		"color": "PURPLE",
+		"resourceType": "SERVANT"
+	},
+	{
+		"color": "PURPLE",
+		"resourceType": "SERVANT"
+	},
+	{
+		"color": "GREY",
+		"resourceType": "STONE"
+	},
+	{
+		"color": "GREY",
+		"resourceType": "STONE"
+	},
+	{
+		"color": "RED",
+		"resourceType": "FAITH"
+	},
+	{
+		"color": "WHITE",
+		"resourceType": "WILDCARD"
+	},
+	{
+		"color": "WHITE",
+		"resourceType": "WILDCARD"
+	},
+	{
+		"color": "WHITE",
+		"resourceType": "WILDCARD"
+	},
+	{
+		"color": "WHITE",
+		"resourceType": "WILDCARD"
+	}
+]

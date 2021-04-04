@@ -90,7 +90,7 @@ public abstract class Game {
      */
     void initFaithTrack() {
         this.faithTrack = new FaithTrack();
-        faithTrack.loadTrack(FileNames.FAITH_TRACK_FILE.value());
+        faithTrack.loadTrack();
     }
 
     /**

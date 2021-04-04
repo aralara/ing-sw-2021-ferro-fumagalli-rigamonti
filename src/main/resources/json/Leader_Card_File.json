@@ -1,0 +1,366 @@
+[
+	{
+		"VP": "2",
+		"Requirements": [
+			{
+				"RequirementType": "DEVELOPMENT",
+				"devColor": "YELLOW",
+				"devLevel": "1",
+				"number": "1"
+			},
+			{
+				"RequirementType": "DEVELOPMENT",
+				"devColor": "GREEN",
+				"devLevel": "1",
+				"number": "1"
+			}
+		],
+		"SpecialAbility": {
+				"abilityType": "DISCOUNT",
+				"ResourceType": "SERVANT"
+		}
+	},
+	{
+		"VP": "2",
+		"Requirements": [
+			{
+				"RequirementType": "DEVELOPMENT",
+				"devColor": "BLUE",
+				"devLevel": "1",
+				"number": "1"
+			},
+			{
+				"RequirementType": "DEVELOPMENT",
+				"devColor": "PURPLE",
+				"devLevel": "1",
+				"number": "1"
+			}
+		],
+		"SpecialAbility": {
+				"abilityType": "DISCOUNT",
+				"ResourceType": "SHIELD"
+		}
+	},
+	{
+		"VP": "2",
+		"Requirements": [
+			{
+				"RequirementType": "DEVELOPMENT",
+				"devColor": "GREEN",
+				"devLevel": "1",
+				"number": "1"
+			},
+			{
+				"RequirementType": "DEVELOPMENT",
+				"devColor": "BLUE",
+				"devLevel": "1",
+				"number": "1"
+			}
+		],
+		"SpecialAbility": {
+				"abilityType": "DISCOUNT",
+				"ResourceType": "STONE"
+		}
+	},
+	{
+		"VP": "2",
+		"Requirements": [
+			{
+				"RequirementType": "DEVELOPMENT",
+				"devColor": "YELLOW",
+				"devLevel": "1",
+				"number": "1"
+			},
+			{
+				"RequirementType": "DEVELOPMENT",
+				"devColor": "PURPLE",
+				"devLevel": "1",
+				"number": "1"
+			}
+		],
+		"SpecialAbility": {
+				"abilityType": "DISCOUNT",
+				"ResourceType": "COIN"
+		}
+	},
+	{
+		"VP": "3",
+		"Requirements": [
+			{
+				"RequirementType": "RESOURCE",
+				"resourceType": "COIN",
+				"quantity": "5"
+			}
+		],
+		"SpecialAbility": {
+			"abilityType": "WAREHOUSE",
+			"shelf": {
+				"level": "2",
+				"ResourceType": "STONE"
+			}
+		}
+	},
+	{
+		"VP": "3",
+		"Requirements": [
+			{
+				"RequirementType": "RESOURCE",
+				"resourceType": "STONE",
+				"quantity": "5"
+			}
+		],
+		"SpecialAbility": {
+			"abilityType": "WAREHOUSE",
+			"shelf": {
+				"level": "2",
+				"ResourceType": "SERVANT"
+			}
+		}
+	},
+	{
+		"VP": "3",
+		"Requirements": [
+			{
+				"RequirementType": "RESOURCE",
+				"resourceType": "SERVANT",
+				"quantity": "5"
+			}
+		],
+		"SpecialAbility": {
+			"abilityType": "WAREHOUSE",
+			"shelf": {
+				"level": "2",
+				"ResourceType": "SHIELD"
+			}
+		}
+	},
+	{
+		"VP": "3",
+		"Requirements": [
+			{
+				"RequirementType": "RESOURCE",
+				"resourceType": "SHIELD",
+				"quantity": "5"
+			}
+		],
+		"SpecialAbility": {
+			"abilityType": "WAREHOUSE",
+			"shelf": {
+				"level": "2",
+				"ResourceType": "COIN"
+			}
+		}
+	},
+	{
+		"VP": "5",
+		"Requirements": [
+			{
+				"RequirementType": "DEVELOPMENT",
+				"devColor": "YELLOW",
+				"devLevel": "1",
+				"number": "2"
+			},
+			{
+				"RequirementType": "DEVELOPMENT",
+				"devColor": "BLUE",
+				"devLevel": "1",
+				"number": "1"
+			}
+		],
+		"SpecialAbility": {
+			"abilityType": "MARBLE",
+			"ResourceType": "SERVANT"
+		}
+	},
+	{
+		"VP": "5",
+		"Requirements": [
+			{
+				"RequirementType": "DEVELOPMENT",
+				"devColor": "GREEN",
+				"devLevel": "1",
+				"number": "2"
+			},
+			{
+				"RequirementType": "DEVELOPMENT",
+				"devColor": "PURPLE",
+				"devLevel": "1",
+				"number": "1"
+			}
+		],
+		"SpecialAbility": {
+			"abilityType": "MARBLE",
+			"ResourceType": "SHIELD"
+		}
+	},
+	{
+		"VP": "5",
+		"Requirements": [
+			{
+				"RequirementType": "DEVELOPMENT",
+				"devColor": "BLUE",
+				"devLevel": "1",
+				"number": "2"
+			},
+			{
+				"RequirementType": "DEVELOPMENT",
+				"devColor": "YELLOW",
+				"devLevel": "1",
+				"number": "1"
+			}
+		],
+		"SpecialAbility": {
+			"abilityType": "MARBLE",
+			"ResourceType": "STONE"
+		}
+	},
+	{
+		"VP": "5",
+		"Requirements": [
+			{
+				"RequirementType": "DEVELOPMENT",
+				"devColor": "PURPLE",
+				"devLevel": "1",
+				"number": "2"
+			},
+			{
+				"RequirementType": "DEVELOPMENT",
+				"devColor": "GREEN",
+				"devLevel": "1",
+				"number": "1"
+			}
+		],
+		"SpecialAbility": {
+			"abilityType": "MARBLE",
+			"ResourceType": "COIN"
+		}
+	},
+	{
+		"VP": "4",
+		"Requirements": [
+			{
+				"RequirementType": "DEVELOPMENT",
+				"devColor": "YELLOW",
+				"devLevel": "2",
+				"number": "1"
+			}
+		],
+		"SpecialAbility": {
+			"abilityType": "PRODUCTION",
+			"production": {
+				"consumed": [
+					{
+						"resourceType": "SHIELD",
+						"quantity": "1"
+					}
+				],
+				"produced": [
+					{
+						"resourceType": "WILDCARD",
+						"quantity": "1"
+					},
+					{
+						"resourceType": "FAITH",
+						"quantity": "1"
+					}
+				]
+			}
+		}
+	},
+	{
+		"VP": "4",
+		"Requirements": [
+			{
+				"RequirementType": "DEVELOPMENT",
+				"devColor": "BLUE",
+				"devLevel": "2",
+				"number": "1"
+			}
+		],
+		"SpecialAbility": {
+			"abilityType": "PRODUCTION",
+			"production": {
+				"consumed": [
+					{
+						"resourceType": "SERVANT",
+						"quantity": "1"
+					}
+				],
+				"produced": [
+					{
+						"resourceType": "WILDCARD",
+						"quantity": "1"
+					},
+					{
+						"resourceType": "FAITH",
+						"quantity": "1"
+					}
+				]
+			}
+		}
+	},
+	{
+		"VP": "4",
+		"Requirements": [
+			{
+				"RequirementType": "DEVELOPMENT",
+				"devColor": "PURPLE",
+				"devLevel": "2",
+				"number": "1"
+			}
+		],
+		"SpecialAbility": {
+			"abilityType": "PRODUCTION",
+			"production": {
+				"consumed": [
+					{
+						"resourceType": "STONE",
+						"quantity": "1"
+					}
+				],
+				"produced": [
+					{
+						"resourceType": "WILDCARD",
+						"quantity": "1"
+					},
+					{
+						"resourceType": "FAITH",
+						"quantity": "1"
+					}
+				]
+			}
+		}
+	},
+	{
+		"VP": "4",
+		"Requirements": [
+			{
+				"RequirementType": "DEVELOPMENT",
+				"devColor": "GREEN",
+				"devLevel": "2",
+				"number": "1"
+			}
+		],
+		"SpecialAbility": {
+			"abilityType": "PRODUCTION",
+			"production": {
+				"consumed": [
+					{
+						"resourceType": "COIN",
+						"quantity": "1"
+					}
+				],
+				"produced": [
+					{
+						"resourceType": "WILDCARD",
+						"quantity": "1"
+					},
+					{
+						"resourceType": "FAITH",
+						"quantity": "1"
+					}
+				]
+			}
+		}
+	}
+]

@@ -1,10 +1,12 @@
 package it.polimi.ingsw.model.market;
 
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.ResourceType;
 
-import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.*;
 
 public class Market {
@@ -23,23 +25,26 @@ public class Market {
 
 
     /**
-     * Loads marbles from the file given by parameter
+     * Loads marbles from the file given by parameter, then calls randomizeMarbles
      * @param fileName Path of the file that contains the information
      */
     public void loadMarket(String fileName) {
+        Gson gson = new Gson();
+        Stack<Marble> buffer = new Stack<>();
+
         try {
-            File marbleFile = new File(fileName);
-            Scanner fileReader = new Scanner(marbleFile);
-            while (fileReader.hasNextLine()) {
-                System.out.println("DA CAMBIARE");
-                //%%parsing
+            Marble[] marbles;
+            JsonReader reader = new JsonReader(new FileReader(fileName));
+            marbles = gson.fromJson(reader, Marble[].class);
+
+            for (Marble marble : marbles) {
+                buffer.add(new Marble(marble.getColor(), marble.getResourceType()));
             }
-            fileReader.close();
+
+            randomizeMarbles(buffer);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
-        //potrebbe chiamare il randomize creando il parametro da passare dal parsing del file
     }
 
     /**
@@ -78,8 +83,7 @@ public class Market {
 
         for(int i=0; i<resTypeNum; i++)
             if(added[i]>0) {
-                //%%marbleResources.add(new Resource(ResourceType.values()[i], added[i]));
-                System.out.println("DA CAMBIARE");
+                marbleResources.add(new Resource(ResourceType.values()[i], added[i]));
             }
 
         moveFloatingMarble(row, column);
