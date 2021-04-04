@@ -7,18 +7,18 @@ public class LorenzoDev implements LorenzoCard{
     private CardColors color;
 
 
-    LorenzoDev(){
+    LorenzoDev() {
 
     }
 
 
     @Override
-    public Card clone() {
+    public LorenzoDev makeClone() {
         return null;
     }
 
     @Override
-    public void activateLorenzo(LorenzoBoard board){
+    public void activateLorenzo(LorenzoBoard board) {
 
     }
 }

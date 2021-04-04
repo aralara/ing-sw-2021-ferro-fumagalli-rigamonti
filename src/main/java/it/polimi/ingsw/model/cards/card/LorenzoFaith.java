@@ -8,18 +8,18 @@ public class LorenzoFaith implements LorenzoCard{
     private int amount;
 
 
-    LorenzoFaith(){
+    LorenzoFaith() {
 
     }
 
 
     @Override
-    public Card clone() {
+    public LorenzoFaith makeClone() {
         return null;
     }
 
     @Override
-    public void activateLorenzo(LorenzoBoard board){
+    public void activateLorenzo(LorenzoBoard board) {
 
     }
 }

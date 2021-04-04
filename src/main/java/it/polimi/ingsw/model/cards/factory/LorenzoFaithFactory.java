@@ -1,10 +1,10 @@
 package it.polimi.ingsw.model.cards.factory;
 
-import it.polimi.ingsw.model.cards.card.Card;
+import it.polimi.ingsw.model.cards.card.LorenzoFaith;
 
 import java.util.List;
 
-public class LorenzoFaithFactory implements LorenzoCardFactory{
+public class LorenzoFaithFactory implements LorenzoCardFactory {
 
     public LorenzoFaithFactory(){
 
@@ -12,7 +12,7 @@ public class LorenzoFaithFactory implements LorenzoCardFactory{
 
 
     @Override
-    public List<Card> loadCardFromFile(String fileName){
+    public List<LorenzoFaith> loadCardFromFile(String fileName) {
         return null;
     }
 }
