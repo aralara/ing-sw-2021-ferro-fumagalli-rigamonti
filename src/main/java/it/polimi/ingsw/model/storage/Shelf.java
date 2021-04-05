@@ -25,6 +25,10 @@ public class Shelf implements Storage{
         this.isLeader = isLeader;
     }
 
+    public Shelf makeClone() {
+        return new Shelf(this.getResourceType(),new Resource(this.resources.getResourceType(),this.resources.getQuantity()),this.getLevel(),this.isLeader);
+    }
+
     /**
      * Gets the resourceType attribute
      * @return Returns resourceType value

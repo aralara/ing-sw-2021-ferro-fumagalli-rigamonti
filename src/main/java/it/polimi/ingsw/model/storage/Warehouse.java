@@ -20,14 +20,6 @@ public class Warehouse implements Storage , Cloneable{
         this.shelves = shelves;
     }
 
-    public Warehouse makeClone() {
-        return new Warehouse(this.getShelves());
-    }
-
-    public List<Shelf> getShelves() {
-        return shelves;
-    }
-
     /**
      * Checks if a configuration of shelves is valid in order to be added to a warehouse
      * @param configuration List of shelves to be validated
@@ -85,9 +77,8 @@ public class Warehouse implements Storage , Cloneable{
     @Override
     public List<Resource> getList() {
         List<List<Resource>> tempList = new ArrayList<>();
-        Warehouse tempWh = makeClone();
-        for (Shelf shelf : tempWh.getShelves()) {
-            tempList.add(shelf.getList());
+        for (Shelf shelf : shelves) {
+            tempList.add(shelf.makeClone().getList());
         }
         return Storage.aggregateResources(Storage.mergeResourceList(tempList));
     }
@@ -100,13 +91,20 @@ public class Warehouse implements Storage , Cloneable{
 
     @Override
     public boolean removeResources(List<Resource> resources) {
+        Storage.aggregateResources(resources);
         if(Storage.checkContainedResources(this.getList(), resources)) {
             for (Shelf shelf : shelves) {
                 if(!shelf.getIsLeader()) {
-                    shelf.removeResources(resources.stream().filter(k -> k.getResourceType() ==
-                            shelf.getResourceType()).collect(Collectors.toList()));
+                    /*shelf.removeResources(resources.stream().filter(k -> k.getResourceType() ==
+                            shelf.getResourceType()).collect(Collectors.toList()));*/
+                    for (Resource resource : resources) {
+                        if (shelf.getResourceType() == resource.getResourceType()) {
+                            shelf.removeResources(resources.get(0));
+                        }
+                    }
                 }
             }
+            return true;
         }
         return false;
     }
