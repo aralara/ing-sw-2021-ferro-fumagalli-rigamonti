@@ -9,11 +9,6 @@ public class RequestResources implements Storage{
     private StorageType storageType;
 
 
-    public RequestResources() {
-        requestedResources = new ArrayList<>();
-        storageType = null;
-    }
-
     public RequestResources(List<Resource> requestedResources, StorageType storageType) {
         this.requestedResources = requestedResources;
         this.storageType = storageType;
