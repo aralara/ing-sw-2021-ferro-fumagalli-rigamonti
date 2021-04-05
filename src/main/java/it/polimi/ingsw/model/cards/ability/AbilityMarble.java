@@ -8,13 +8,13 @@ public class AbilityMarble implements SpecialAbility {
     private ResourceType resourceType;
 
 
-    public AbilityMarble(){
-
+    public AbilityMarble(ResourceType resourceType){
+        this.resourceType = resourceType;
     }
 
 
     @Override
     public void activateAbility(PlayerBoard board){
-
+        board.addAbilityMarbles(this.resourceType);
     }
 }

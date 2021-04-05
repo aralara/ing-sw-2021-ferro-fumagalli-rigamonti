@@ -8,13 +8,13 @@ public class AbilityProduction implements SpecialAbility {
     private Production production;
 
 
-    public AbilityProduction(){
-
+    public AbilityProduction(Production production){
+        this.production = production;
     }
 
 
     @Override
     public void activateAbility(PlayerBoard board){
-
+        board.addAbilityProductions(this.production);
     }
 }

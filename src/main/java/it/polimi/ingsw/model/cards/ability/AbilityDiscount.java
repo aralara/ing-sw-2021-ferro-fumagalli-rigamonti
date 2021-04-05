@@ -8,13 +8,14 @@ public class AbilityDiscount implements SpecialAbility {
     private ResourceType resourceType;
 
 
-    public AbilityDiscount(){
-
+    public AbilityDiscount(ResourceType resourceType){
+        this.resourceType = resourceType;
     }
 
 
     @Override
     public void activateAbility(PlayerBoard board){
+        board.addAbilityDiscounts(this.resourceType);
 
     }
 }

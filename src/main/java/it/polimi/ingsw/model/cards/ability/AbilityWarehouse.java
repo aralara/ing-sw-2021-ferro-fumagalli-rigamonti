@@ -9,13 +9,13 @@ public class AbilityWarehouse implements SpecialAbility {
     private ResourceType resourceType;
 
 
-    public AbilityWarehouse(){
-
+    public AbilityWarehouse(ResourceType resourceType){
+        this.resourceType = resourceType;
     }
 
 
     @Override
     public void activateAbility(PlayerBoard board){
-
+        //TODO da cambiare (?) per gestire shelf nella playerboard
     }
 }

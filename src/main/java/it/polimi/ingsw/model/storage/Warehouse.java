@@ -1,10 +1,12 @@
 package it.polimi.ingsw.model.storage;
 
+import it.polimi.ingsw.model.cards.card.LorenzoDev;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Warehouse implements Storage{
+public class Warehouse implements Storage , Cloneable{
 
     private List<Shelf> shelves;
 
@@ -18,6 +20,13 @@ public class Warehouse implements Storage{
         this.shelves = shelves;
     }
 
+    public Warehouse makeClone() {
+        return new Warehouse(this.getShelves());
+    }
+
+    public List<Shelf> getShelves() {
+        return shelves;
+    }
 
     /**
      * Checks if a configuration of shelves is valid in order to be added to a warehouse
@@ -53,6 +62,7 @@ public class Warehouse implements Storage{
      * @param shelf Shelf that need to be added
      */
     public void addShelf(Shelf shelf){
+
         shelves.add(shelf);
     }
 
@@ -70,13 +80,16 @@ public class Warehouse implements Storage{
         return false;
     }
 
+    //TODO sistemare getList, non passo per indirizzo perchè atrimenti mi somma le risorse nel merge
+    //     N.B. se gestisco solo shelf normali non ho problemi perche hanno risorse di tipi diversi
     @Override
     public List<Resource> getList() {
-        List<List<Resource>> temp = new ArrayList<>();
-        for (Shelf shelf : shelves) {
-            temp.add(shelf.getList());
+        List<List<Resource>> tempList = new ArrayList<>();
+        Warehouse tempWh = makeClone();
+        for (Shelf shelf : tempWh.getShelves()) {
+            tempList.add(shelf.getList());
         }
-        return Storage.aggregateResources(Storage.mergeResourceList(temp));
+        return Storage.aggregateResources(Storage.mergeResourceList(tempList));
     }
 
     @Override
