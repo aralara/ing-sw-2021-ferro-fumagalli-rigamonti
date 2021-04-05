@@ -18,6 +18,14 @@ public class LorenzoBoard {
 
 
     /**
+     * Gets the faith attribute
+     * @return Returns faith value
+     */
+    public int getFaith(){
+        return faith;
+    }
+
+    /**
      * Adds a set amount of faith to Lorenzo
      * @param faith Faith quantity to be added
      */
@@ -35,9 +43,11 @@ public class LorenzoBoard {
     }
 
     /**
-     * Initializes lorenzoDeck by loading cards from the specified file and randomizes the order by calling refreshDeck
+     * Initializes lorenzoDeck by loading cards from the specified files and randomizes the order by calling refreshDeck
+     * @param fileNameDev File containing the LorenzoDev cards
+     * @param fileNameFaith File containing the LorenzoFaith cards
      */
-    public void initLorenzoDeck(){
+    public void initLorenzoDeck(String fileNameDev, String fileNameFaith){
 
     }
 

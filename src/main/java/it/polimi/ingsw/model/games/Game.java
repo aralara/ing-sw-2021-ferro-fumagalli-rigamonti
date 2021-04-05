@@ -48,6 +48,14 @@ public abstract class Game {
     }
 
     /**
+     * Gets the faithTrack attribute
+     * @return Returns faithTrack value
+     */
+    FaithTrack getFaithTrack() {
+        return this.faithTrack;
+    }
+
+    /**
      * Sets the playerBoards attribute
      * @param playerBoards New attribute value
      */
@@ -249,9 +257,7 @@ public abstract class Game {
     boolean checkEndGame() {
         boolean endGame = false;
         //TODO: Aggiungere un metodo che controlli nella FaithBoard se il giocatore ha raggiunto l'ultimo PopeSpace
-        for(DevelopmentDeck dDeck : developmentDecks)
-            if(dDeck.getDeckLevel() == 3 && dDeck.isEmpty())
-                endGame = true;
+        //TODO: Aggiungere un metodo che restituisca il numero totale di DevelopmentCard nella PLayerBoard -> DevelopmentBoard
         return endGame;
     }
 
