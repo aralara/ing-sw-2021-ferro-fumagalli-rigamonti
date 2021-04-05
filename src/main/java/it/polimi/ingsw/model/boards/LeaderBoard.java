@@ -12,7 +12,8 @@ public class LeaderBoard {
 
 
     public LeaderBoard() {
-
+        hand = new Deck();
+        board = new Deck();
     }
 
 
@@ -21,7 +22,8 @@ public class LeaderBoard {
      * @param hand List of leader cards
      */
     public void setLeaderHand(List<LeaderCard> hand) {
-
+        for(LeaderCard leaderCard : hand)
+            this.hand.add(leaderCard);
     }
 
     /**
@@ -29,7 +31,8 @@ public class LeaderBoard {
      * @param leaderCard LeaderCard to be discarded
      */
     public void discardLeaderHand(LeaderCard leaderCard) {
-
+        int index = hand.indexOf(leaderCard);
+        hand.extract(new int[] {index});
     }
 
     /**
@@ -37,6 +40,7 @@ public class LeaderBoard {
      * @param leaderCard LeaderCard to be played
      */
     public void playLeaderHand(LeaderCard leaderCard){
-
+        int index = hand.indexOf(leaderCard);
+        board.add(hand.extract(new int[] {index}).get(0));
     }
 }
