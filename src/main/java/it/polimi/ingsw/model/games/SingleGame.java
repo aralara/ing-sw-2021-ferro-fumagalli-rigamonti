@@ -1,11 +1,15 @@
 package it.polimi.ingsw.model.games;
 
+import it.polimi.ingsw.model.FileNames;
 import it.polimi.ingsw.model.boards.LorenzoBoard;
+import it.polimi.ingsw.model.boards.PlayerBoard;
+import it.polimi.ingsw.model.cards.deck.DevelopmentDeck;
+import it.polimi.ingsw.model.faith.FaithTrack;
 
 public class SingleGame extends Game{
 
     private LorenzoBoard lorenzoBoard;
-    private boolean isLorenzoTurn;
+    private boolean isLorenzoTurn, isLorenzoWinner;
 
 
     public SingleGame(){
@@ -15,38 +19,77 @@ public class SingleGame extends Game{
 
     @Override
     public void initGame(){
+        super.initGame();
+        initLorenzoBoard();
+        isLorenzoTurn = false;
+        isLorenzoWinner = false;
+    }
 
+    /**
+     * Initializes the LorenzoBoard loading tokens from a file
+     */
+    public void initLorenzoBoard(){
+        lorenzoBoard = new LorenzoBoard();
+        lorenzoBoard.initLorenzoDeck(FileNames.LORENZO_DEV_FILE.value(), FileNames.LORENZO_FAITH_FILE.value());
     }
 
     @Override
     public void loadNextTurn(){
-
+        isLorenzoTurn = !isLorenzoTurn;
+        checkFaith();
+        if(checkEndGame()){
+            calculateTotalVP();
+            calculateFinalPositions();
+        }
     }
 
     @Override
     void checkFaith(){
-
+        FaithTrack faithTrack = getFaithTrack();
+        PlayerBoard playerBoard = getPlayerBoards().get(0);
+        boolean vatReport = getFaithTrack().checkReportActivation(playerBoard.getFaithProgression());
+        if(!vatReport)
+            vatReport = faithTrack.checkReportActivation(lorenzoBoard.getFaith());
+        if(vatReport) {
+            boolean playerInVatReport = faithTrack.checkPlayerReportPosition(playerBoard.getFaithProgression());
+            //TODO: Gestire update PopeProgression PlayerBoard
+        }
     }
 
-    //aggiunge a lorenzo la fede per le risorse scartate
     @Override
-    public void addFaithAll(int quantity){}
+    public void addFaithAll(int playerEx, int quantity){
+        //TODO: Valutare se chiamare super.addFaithAll() per consistenza
+        lorenzoBoard.addFaith(quantity);
+    }
 
-    //controlla anche se Lorenzo ha finito il game (faith al massimo o mazzetti finiti)
     @Override
     boolean checkEndGame(){
-        return false;
+        boolean endGame = super.checkEndGame();
+        //TODO: Aggiungere un metodo che controlli nella FaithBoard se Lorenzo ha raggiunto l'ultimo PopeSpace
+        for(DevelopmentDeck dDeck : getDevelopmentDecks()) {
+            if (dDeck.getDeckLevel() == 3 && dDeck.isEmpty()) {
+                endGame = true;
+                isLorenzoWinner = true;
+            }
+        }
+        return endGame;
     }
 
-    //solo per il player
     @Override
     public int[] calculateTotalVP() {
-        return null;
+        //TODO: Valutare se chiamare super.calculateTotalVP() per consistenza
+        int[] playersVP = new int[1];
+        playersVP[0] = getPlayerBoards().get(0).calculateVP();
+        return playersVP;
     }
 
-    //dice solo se è primo o secondo
     @Override
     public int[] calculateFinalPositions() {
-        return null;
+        int[] playersVP = new int[1];
+        if(!isLorenzoWinner)
+            playersVP[0] = 1;
+        else
+            playersVP[0] = 2;
+        return playersVP;
     }
 }

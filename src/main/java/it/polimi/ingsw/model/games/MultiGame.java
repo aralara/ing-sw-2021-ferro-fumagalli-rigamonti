@@ -58,5 +58,5 @@ public class MultiGame extends Game{
     }
 
     @Override
-    public void addFaithAll(int quantity){}
+    public void addFaithAll(int playerEx, int quantity){}
 }

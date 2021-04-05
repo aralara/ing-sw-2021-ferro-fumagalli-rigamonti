@@ -17,9 +17,9 @@ public class LeaderCard implements Card {
     }
 
     LeaderCard(LeaderCard card) {
-        VP = card.getVP();
-        requirements = card.getRequirements();
-        ability = card.getAbility();
+        this.VP = card.getVP();
+        this.requirements = card.getRequirements();
+        this.ability = card.getAbility();
         //TODO: Valutare se far restituire degli oggetti copia ai getter e implementare dei metodi per restituire copie di Requirement e SpecialAbility
     }
 

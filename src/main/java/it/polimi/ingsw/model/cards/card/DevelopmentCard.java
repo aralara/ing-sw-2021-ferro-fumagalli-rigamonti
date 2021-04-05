@@ -18,11 +18,11 @@ public class DevelopmentCard implements Card {
     }
 
     DevelopmentCard(DevelopmentCard card) {
-        VP = card.getVP();
-        color = card.getColor();
-        level = card.getLevel();
-        production = card.getProduction();
-        cost = card.getCost();
+        this.VP = card.getVP();
+        this.color = card.getColor();
+        this.level = card.getLevel();
+        this.production = card.getProduction();
+        this.cost = card.getCost();
         //TODO: Valutare se far restituire degli oggetti copia ai getter e implementare dei metodi per restituire copie di Production e Resource
     }
 

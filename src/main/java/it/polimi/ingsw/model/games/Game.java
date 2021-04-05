@@ -24,7 +24,6 @@ public abstract class Game {
     private Market market;
     private List<DevelopmentDeck> developmentDecks;
     private FaithTrack faithTrack;
-    private int playerNumber, currentPlayer;
 
 
     public Game() {
@@ -49,11 +48,27 @@ public abstract class Game {
     }
 
     /**
+     * Gets the faithTrack attribute
+     * @return Returns faithTrack value
+     */
+    FaithTrack getFaithTrack() {
+        return this.faithTrack;
+    }
+
+    /**
      * Sets the playerBoards attribute
      * @param playerBoards New attribute value
      */
     void setPlayerBoards (List<PlayerBoard> playerBoards) {
         this.playerBoards = playerBoards;
+    }
+
+    /**
+     * Gets the number of players in a game
+     * @return Returns the number of player boards
+     */
+    public int getPlayerNumber () {
+        return this.playerBoards.size();
     }
 
     /**
@@ -97,7 +112,7 @@ public abstract class Game {
      * Loads leader cards from their file utilizing LeaderCardFactory and sends four random cards to each player
      */
     void initLeaders() {
-        int[] first4 = new int[]{ 0, 1, 2, 3};
+        int[] first4 = new int[]{0, 1, 2, 3};
         LeaderCardFactory leadCardFactory = new LeaderCardFactory();
         Deck leadCardDeck = new Deck(leadCardFactory.loadCardFromFile(FileNames.LEADER_CARD_FILE.value()));
         leadCardDeck.shuffle();
@@ -127,7 +142,7 @@ public abstract class Game {
     public void addResourcesToWarehouse(int player, List<Shelf> shelves, List<Resource> discarded) {
         boolean success = playerBoards.get(player).getWarehouse().changeConfiguration(shelves);
         if(discarded.size() > 0 && success)
-            addFaithAll(discarded.size());
+            addFaithAll(player, discarded.size());
     }
 
     /**
@@ -146,62 +161,68 @@ public abstract class Game {
     }
 
     /**
-     * Checks if a DevelopmentCard can be bought and placed on the board for the current player
+     * Checks if a DevelopmentCard can be bought and placed on the board for the player
+     * @param player Index of the player to check
      * @param card The development card to be added
      * @return Returns true if the card can be added, false otherwise
      */
-    public boolean canBuyDevCard(DevelopmentCard card) {
-        return playerBoards.get(currentPlayer).canBuyDevCard(card);
+    public boolean canBuyDevCard(int player, DevelopmentCard card) {
+        return playerBoards.get(player).canBuyDevCard(card);
     }
 
     /**
-     * If the resources contained in the requests match the actual available resources detained by the current player,
+     * If the resources contained in the requests match the actual available resources detained by the player
      * buys the card for said player and places it
+     * @param player Index of the player to buy for
      * @param card The development card to buy
      * @param space The position where the card will be placed
      * @param requests List of requests containing resource quantity and location
      * @return Returns true if the card is bought, false otherwise
      */
-    public boolean buyDevCard(DevelopmentCard card, int space, List<RequestResources> requests) {
-        return playerBoards.get(currentPlayer).buyDevCard(card, space, requests);
+    public boolean buyDevCard(int player, DevelopmentCard card, int space, List<RequestResources> requests) {
+        return playerBoards.get(player).buyDevCard(card, space, requests);
     }
 
     /**
-     * Checks if a list of productions can be activated for the current player by checking if they own enough resources
+     * Checks if a list of productions can be activated for the player by checking if they own enough resources
+     * @param player Index of the player to check
      * @param consumed The list of resources to be consumed
      * @return Returns true if the productions can be activated, false otherwise
      */
-    public boolean canActivateProductions(List<Resource> consumed) {
-        return playerBoards.get(currentPlayer).canActivateProductions(consumed);
+    public boolean canActivateProductions(int player, List<Resource> consumed) {
+        return playerBoards.get(player).canActivateProductions(consumed);
     }
 
     /**
-     * If the resources contained in the requests match the actual available resources detained by the current player,
-     * activates the productions for said player by adding the produced resources to their Strongbox
+     * If the resources contained in the requests match the actual available resources detained by the player,
+     * activates the productions for said player by adding the produced resources to their
+     * @param player Index of the player to activate productions for
      * @param produced List of resources to produce
      * @param requests List of requests containing resource quantity and location for the spent resources
      * @return Returns true if the card is bought, false otherwise
      */
-    public boolean activateProductions(List<Resource> produced, List<RequestResources> requests) {
-        return playerBoards.get(currentPlayer).activateProductions(produced, requests);
+    public boolean activateProductions(int player, List<Resource> produced, List<RequestResources> requests) {
+        return playerBoards.get(player).activateProductions(produced, requests);
     }
 
     /**
-     * Discards a specified LeaderCard from the hand of the current player calling discardLeaders and adds 1 faith
+     * Discards a specified LeaderCard from the hand of the player calling discardLeaders and adds 1 faith
+     * @param player Index of the player to discard cards
      * @param card LeaderCard to be discarded
      */
-    public void discardExtraLeader(LeaderCard card) {
-        playerBoards.get(currentPlayer).discardLeader(card);
-        playerBoards.get(currentPlayer).addFaith(1);
+    public void discardExtraLeader(int player, LeaderCard card) {
+        playerBoards.get(player).discardLeader(card);
+        playerBoards.get(player).addFaith(1);
     }
 
     /**
-     * Plays the selected LeaderCard if the current player meets its resource requirements
+     * Plays the selected LeaderCard if the player meets its resource requirements
+     * @param player Index of the player to play the Leader card
      * @param card LeaderCard to be played
      * @return Returns true if the card is played, false otherwise
      */
-    public boolean playLeaderCard(LeaderCard card) {
-        return playerBoards.get(currentPlayer).playLeaderCard(card);
+    public boolean playLeaderCard(int player, LeaderCard card) {
+        return playerBoards.get(player).playLeaderCard(card);
     }
 
     /**
@@ -222,10 +243,11 @@ public abstract class Game {
     }
 
     /**
-     * Method invoked to add faith to the faith counter to every board except for the active one
+     * Method invoked to add faith to the faith counter to every board except for the specified one
+     * @param playerEx Index of the player to not add faith to
      * @param quantity Amount of faith to be added
      */
-    public abstract void addFaithAll(int quantity);
+    public abstract void addFaithAll(int playerEx, int quantity);
 
     /**
      * Method invoked to check if a player has finished the game by reaching the last Pope space or by buying the 7th
@@ -235,9 +257,7 @@ public abstract class Game {
     boolean checkEndGame() {
         boolean endGame = false;
         //TODO: Aggiungere un metodo che controlli nella FaithBoard se il giocatore ha raggiunto l'ultimo PopeSpace
-        for(DevelopmentDeck dDeck : developmentDecks)
-            if(dDeck.getDeckLevel() == 3 && dDeck.isEmpty())
-                endGame = true;
+        //TODO: Aggiungere un metodo che restituisca il numero totale di DevelopmentCard nella PLayerBoard -> DevelopmentBoard
         return endGame;
     }
 
@@ -246,12 +266,10 @@ public abstract class Game {
      * @return Returns an array containing the results, parallel to the list of player boards
      */
     public int[] calculateTotalVP() {
+        int playerNumber = getPlayerNumber();
         int[] playersVP = new int[playerNumber];
-        for(int i = 0; i < playerNumber; i++) {
-            PlayerBoard playerboard = playerBoards.get(i);
-            playersVP[i] = faithTrack.calculateVP(playerboard.getFaithProgression(), playerboard.getPopeProgression()) +
-                    playerboard.calculateVP();
-        }
+        for(int i = 0; i < playerNumber; i++)
+            playersVP[i] = playerBoards.get(i).calculateVP();
         return playersVP;
     }
 
@@ -260,6 +278,7 @@ public abstract class Game {
      * @return Returns an array containing the positions, parallel to the list of player boards
      */
     public int[] calculateFinalPositions() {
+        int playerNumber = getPlayerNumber();
         int[] playersVP = calculateTotalVP();
         int[] playersPositions = new int[playerNumber];
         int currentMax = Integer.MAX_VALUE;
