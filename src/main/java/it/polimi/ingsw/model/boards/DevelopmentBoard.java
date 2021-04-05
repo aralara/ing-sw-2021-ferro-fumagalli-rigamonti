@@ -13,7 +13,7 @@ public class DevelopmentBoard {
 
 
     public DevelopmentBoard(){
-
+        spaces = new ArrayList<>();
     }
 
 
@@ -30,7 +30,14 @@ public class DevelopmentBoard {
      * @return Returns a list of Production
      */
     public List<Production> getActiveProductions() {
-        return null;
+        List<Production> activeProductions = new ArrayList<>();
+
+        for(Deck deck : spaces){
+            DevelopmentCard developmentCard = (DevelopmentCard) deck.get(0);
+            activeProductions.add(developmentCard.getProduction());
+        }
+
+        return activeProductions;
     }
 
     /**
@@ -39,7 +46,18 @@ public class DevelopmentBoard {
      * @param space Position of the space on the board
      */
     public void addDevCard(DevelopmentCard card, int space) {
-
+        if(spaces.get(space).isEmpty())
+            spaces.get(space).add(card);
+        else {
+            Deck toChange = new Deck();
+            toChange.add(card);
+            int deckSize = spaces.get(space).size();
+            for (int i=0; i<deckSize; i++){
+                toChange.add(spaces.get(space).extract(new int[] {0}).get(0));
+            }
+            for(Card cardToAdd : toChange)
+                spaces.get(space).add(cardToAdd);
+        }
     }
 
     /**
@@ -48,6 +66,21 @@ public class DevelopmentBoard {
      * @return Returns true if the card can be added, false otherwise
      */
     public boolean checkDevCardAddable(DevelopmentCard card) {
-        return false;
+        if(card.getLevel()==1) {
+            for (Deck deck : spaces)
+                if (deck.isEmpty())
+                    return true;
+            return false;
+        } else if(card.getLevel()==2) {
+            for (Deck deck : spaces)
+                if (!deck.isEmpty() && ((DevelopmentCard)deck.get(0)).getLevel()==1)
+                    return true;
+            return false;
+        } else {
+            for (Deck deck : spaces)
+                if (!deck.isEmpty() && ((DevelopmentCard)deck.get(0)).getLevel()==2)
+                    return true;
+            return false;
+        }
     }
 }
