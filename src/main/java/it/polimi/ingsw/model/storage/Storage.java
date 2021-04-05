@@ -32,7 +32,7 @@ public interface Storage {
             boolean check = false;
             for (Resource value : container) {
                 if (resource.getResourceType() == value.getResourceType()) {
-                    if (value.getQuantity() > resource.getQuantity()) {
+                    if (value.getQuantity() >= resource.getQuantity()) {
                         check = true;
                     }
                 }

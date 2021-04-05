@@ -30,6 +30,7 @@ public class RequestResources implements Storage{
 
     @Override
     public List<Resource> getList() {
+        Storage.aggregateResources(this.requestedResources);
         return this.requestedResources;
     }
 
@@ -45,9 +46,12 @@ public class RequestResources implements Storage{
         Storage.aggregateResources(resources);
         if (Storage.checkContainedResources(this.getList(), resources)) {
             for (int i = 0; i < this.requestedResources.size(); i++) {
-                for (int j = 0; j < this.requestedResources.size(); j++) {
-                    if (this.requestedResources.get(i).getResourceType() == resources.get(j).getResourceType()) {
-                        this.requestedResources.get(i).sub(resources.get(j));
+                for (Resource resource : resources) {
+                    if (this.requestedResources.get(i).getResourceType() == resource.getResourceType()) {
+                        this.requestedResources.get(i).sub(resource);
+                        if (this.requestedResources.get(i).getQuantity() == 0) {
+                            this.requestedResources.remove(i);
+                        }
                     }
                 }
             }
