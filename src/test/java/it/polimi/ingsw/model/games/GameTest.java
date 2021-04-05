@@ -19,6 +19,10 @@ public class GameTest {
     }
 
     @Test
+    public void testGetPlayerNumber() {
+    }
+
+    @Test
     public void testInitGame() {
     }
 

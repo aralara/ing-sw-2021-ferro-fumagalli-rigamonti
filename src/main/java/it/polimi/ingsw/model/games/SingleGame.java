@@ -30,7 +30,7 @@ public class SingleGame extends Game{
 
     //aggiunge a lorenzo la fede per le risorse scartate
     @Override
-    public void addFaithAll(int quantity){}
+    public void addFaithAll(int playerEx, int quantity){}
 
     //controlla anche se Lorenzo ha finito il game (faith al massimo o mazzetti finiti)
     @Override
