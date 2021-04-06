@@ -304,7 +304,7 @@ public abstract class Game {
         int playerNumber = getPlayerNumber();
         int[] playersVP = new int[playerNumber];
         for(int i = 0; i < playerNumber; i++)
-            playersVP[i] = playerBoards.get(i).calculateVP();
+            playersVP[i] = playerBoards.get(i).calculateVP(faithTrack);
         return playersVP;
     }
 

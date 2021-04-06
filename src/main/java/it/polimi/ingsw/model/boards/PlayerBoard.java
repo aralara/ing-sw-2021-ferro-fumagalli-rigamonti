@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.boards;
 
 import it.polimi.ingsw.model.cards.card.*;
 import it.polimi.ingsw.model.cards.requirement.Requirement;
+import it.polimi.ingsw.model.faith.FaithTrack;
 import it.polimi.ingsw.model.games.Game;
 import it.polimi.ingsw.model.storage.*;
 
@@ -160,9 +161,11 @@ public class PlayerBoard {
      * Calculates total VPs for the player checking the FaithTrack, leader cards, development cards and resources
      * @return Returns total VP amount
      */
-    public int calculateVP() {
-        // TODO: Aggiungere getVP nella FaithBoard, nella LeaderBoard, nella developmentBoard e un metodo statico nello storage
-        return 0;
+    public int calculateVP(FaithTrack faithTrack) {
+        return faithBoard.calculateVP(faithTrack) +
+                leaderBoard.calculateVP() +
+        //      developmentBoard.calculateVP() +    // TODO: Aggiungere calculateVP nella developmentBoard
+                createResourceStock().stream().mapToInt(Resource::getQuantity).sum();
     }
 
     /**

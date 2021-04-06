@@ -79,7 +79,7 @@ public class SingleGame extends Game{
     public int[] calculateTotalVP() {
         //TODO: Valutare se chiamare super.calculateTotalVP() per consistenza
         int[] playersVP = new int[1];
-        playersVP[0] = getPlayerBoards().get(0).calculateVP();
+        playersVP[0] = getPlayerBoards().get(0).calculateVP(getFaithTrack());
         return playersVP;
     }
 
