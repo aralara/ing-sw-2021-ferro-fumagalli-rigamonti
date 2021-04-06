@@ -17,14 +17,6 @@ public class DevelopmentBoard {
     }
 
 
-    public List<Card> getAllCards() {
-        List<Card> temp = new ArrayList<>();
-        for (Deck space : spaces) {
-            temp.addAll(space.getCards());
-        }
-        return temp;
-    }
-
     /**
      * Gets all the productions that can be activated from the top card of each deck
      * @return Returns a list of Production
@@ -46,18 +38,7 @@ public class DevelopmentBoard {
      * @param space Position of the space on the board
      */
     public void addDevCard(DevelopmentCard card, int space) {
-        if(spaces.get(space).isEmpty())
-            spaces.get(space).add(card);
-        else {
-            Deck toChange = new Deck();
-            toChange.add(card);
-            int deckSize = spaces.get(space).size();
-            for (int i=0; i<deckSize; i++){
-                toChange.add(spaces.get(space).extract(new int[] {0}).get(0));
-            }
-            for(Card cardToAdd : toChange)
-                spaces.get(space).add(cardToAdd);
-        }
+        spaces.get(space).addOnTop(card);
     }
 
     /**
@@ -82,5 +63,51 @@ public class DevelopmentBoard {
                     return true;
             return false;
         }
+    }
+
+    /**
+     * Checks if a specified card is present at the right quantity
+     * @param color Color of the requested card
+     * @param level Level of the requested card
+     * @param number Quantity of cards requested
+     * @return Returns true if there are at least the correct quantity, false otherwise
+     */
+    public boolean checkRequirement(CardColors color, int level, int number) {
+        int cardRequested=0;
+
+        for (Deck deck : spaces)
+            for(Card card : deck)
+                if ((((DevelopmentCard)card).getColor() == color)
+                        && (((DevelopmentCard)card).getLevel()) == level)
+                    cardRequested++;
+
+        return cardRequested >= number;
+    }
+
+    /**
+     * Gets the total number of cards contained in all the decks of the spaces list
+     * @return Returns the number of cards
+     */
+    public int numberOfCards(){
+        int totalNum = 0;
+
+        for(Deck deck : spaces)
+            totalNum += deck.size();
+
+        return totalNum;
+    }
+
+    /**
+     * Calculates total VPs given by the activated development cards for a player
+     * @return Returns total VP amount
+     */
+    public int calculateVP(){
+        int vpAmount = 0;
+
+        for(Deck deck : spaces)
+            for(Card card : deck)
+                vpAmount += ((DevelopmentCard)card).getVP();
+
+        return vpAmount;
     }
 }
