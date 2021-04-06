@@ -36,10 +36,12 @@ public class FaithTrack {
 
     /**
      * Loads faithSpaces and vaticanReports from the files calling loadVaticanReports and loadFaithSpaces
+     * @param fileNameVaticanReport Path of the file that contains the information of VaticanReport
+     * @param fileNameFaithSpace Path of the file that contains the information of FaithSpace
      */
-    public void loadTrack() {
-        loadVaticanReports(FileNames.VATICAN_REPORT_FILE.value());
-        loadFaithSpaces(FileNames.FAITH_SPACE_FILE.value());
+    public void loadTrack(String fileNameVaticanReport, String fileNameFaithSpace) {
+        loadVaticanReports(fileNameVaticanReport);
+        loadFaithSpaces(fileNameFaithSpace);
     }
 
     /**
@@ -106,7 +108,7 @@ public class FaithTrack {
      * @return Returns true if the player is in range, false otherwise
      */
     public boolean checkPlayerReportPosition(int position) {
-        if(lastReportTriggered == -1) return false; //or exception?
+        //TODO: if(lastReportTriggered == -1) return false; or exception?
         return vaticanReports.get(lastReportTriggered).inRange(position);
     }
 

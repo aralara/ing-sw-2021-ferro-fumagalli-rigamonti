@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.faith;
 
+import it.polimi.ingsw.model.FileNames;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -10,7 +11,7 @@ public class FaithTrackTest {
     public void testLoadTrack() {
         FaithTrack faithTrack = new FaithTrack();
 
-        faithTrack.loadTrack();
+        faithTrack.loadTrack(FileNames.VATICAN_REPORT_FILE.value(), FileNames.FAITH_SPACE_FILE.value());
         assertEquals(3, faithTrack.getVaticanReports().size());
         assertEquals(5, faithTrack.getVaticanReports().get(0).getMin());
         assertEquals(12, faithTrack.getVaticanReports().get(1).getMin());
@@ -44,10 +45,10 @@ public class FaithTrackTest {
     @Test
     public void testCheckReportActivation() {
         FaithTrack faithTrackCell = new FaithTrack(); //to check the exact activation cell
-        faithTrackCell.loadTrack();
+        faithTrackCell.loadTrack(FileNames.VATICAN_REPORT_FILE.value(), FileNames.FAITH_SPACE_FILE.value());
 
         FaithTrack faithTrackBeyond = new FaithTrack(); //to check the activation beyond the cell
-        faithTrackBeyond.loadTrack();
+        faithTrackBeyond.loadTrack(FileNames.VATICAN_REPORT_FILE.value(), FileNames.FAITH_SPACE_FILE.value());
 
         assertEquals(-1, faithTrackCell.getLastReportTriggered());
         assertEquals(-1, faithTrackBeyond.getLastReportTriggered());
@@ -83,7 +84,7 @@ public class FaithTrackTest {
     @Test
     public void testCheckPlayerReportPosition() {
         FaithTrack faithTrack = new FaithTrack();
-        faithTrack.loadTrack();
+        faithTrack.loadTrack(FileNames.VATICAN_REPORT_FILE.value(), FileNames.FAITH_SPACE_FILE.value());
 
         assertFalse(faithTrack.checkPlayerReportPosition(4));
 
@@ -118,7 +119,7 @@ public class FaithTrackTest {
     @Test
     public void testCalculateVP() {
         FaithTrack faithTrack = new FaithTrack();
-        faithTrack.loadTrack();
+        faithTrack.loadTrack(FileNames.VATICAN_REPORT_FILE.value(), FileNames.FAITH_SPACE_FILE.value());
 
         assertEquals(0, faithTrack.calculateVP(0, new boolean[] {false, false, false}));
         assertEquals(2, faithTrack.calculateVP(0, new boolean[] {true, false, false}));

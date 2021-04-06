@@ -105,7 +105,7 @@ public abstract class Game {
      */
     void initFaithTrack() {
         this.faithTrack = new FaithTrack();
-        faithTrack.loadTrack();
+        faithTrack.loadTrack(FileNames.VATICAN_REPORT_FILE.value(), FileNames.FAITH_SPACE_FILE.value());
     }
 
     /**
