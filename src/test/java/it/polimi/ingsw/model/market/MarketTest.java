@@ -1,8 +1,11 @@
 package it.polimi.ingsw.model.market;
 
 import it.polimi.ingsw.model.FileNames;
+import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.ResourceType;
 import org.junit.Test;
+
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -32,6 +35,38 @@ public class MarketTest {
         //hardly testable with randomized marbles
         /* maybe simply if it's selected row -> the size of the list is <= 4
         *  and if it's selected column -> the size of the list is <= 3 */
+
+        Market market = new Market();
+        List<Resource> resources;
+        market.loadMarket(FileNames.MARKET_FILE.value());
+
+        resources = market.chooseCoordinates(2, -1);
+        assertFalse(resources.isEmpty());
+        assertTrue(resources.size()>0 && resources.size()<=4);
+
+        resources = market.chooseCoordinates(1, -1);
+        assertFalse(resources.isEmpty());
+        assertTrue(resources.size()>0 && resources.size()<=4);
+
+        resources = market.chooseCoordinates(0, -1);
+        assertFalse(resources.isEmpty());
+        assertTrue(resources.size()>0 && resources.size()<=4);
+
+        resources = market.chooseCoordinates(-1, 3);
+        assertFalse(resources.isEmpty());
+        assertTrue(resources.size()>0 && resources.size()<=3);
+
+        resources = market.chooseCoordinates(-1, 2);
+        assertFalse(resources.isEmpty());
+        assertTrue(resources.size()>0 && resources.size()<=3);
+
+        resources = market.chooseCoordinates(-1, 1);
+        assertFalse(resources.isEmpty());
+        assertTrue(resources.size()>0 && resources.size()<=3);
+
+        resources = market.chooseCoordinates(-1, 0);
+        assertFalse(resources.isEmpty());
+        assertTrue(resources.size()>0 && resources.size()<=3);
     }
 
     @Test

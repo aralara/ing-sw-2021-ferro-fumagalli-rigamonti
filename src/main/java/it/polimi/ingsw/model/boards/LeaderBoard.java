@@ -43,4 +43,17 @@ public class LeaderBoard {
         int index = hand.indexOf(leaderCard);
         board.add(hand.extract(new int[] {index}).get(0));
     }
+
+    /**
+     * Calculates total VPs given by the activated leader cards for a player
+     * @return Returns total VP amount
+     */
+    public int calculateVP(){
+        int vpAmount = 0;
+
+        for(int i=0; i<board.size(); i++)
+            vpAmount += ((LeaderCard)board.get(i)).getVP();
+
+        return vpAmount;
+    }
 }
