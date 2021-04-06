@@ -21,4 +21,19 @@ public class DevelopmentBoardTest {
     @Test
     public void testCheckDevCardAddable() {
     }
+
+    @Test
+    public void testCheckRequirement() {
+
+    }
+
+    @Test
+    public void testNumberOfCards() {
+
+    }
+
+    @Test
+    public void testCalculateVP() {
+
+    }
 }
