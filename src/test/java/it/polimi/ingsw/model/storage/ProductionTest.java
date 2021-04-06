@@ -18,6 +18,7 @@ public class ProductionTest{
 
         assertEquals(4,temp2.getConsumed().get(0).getQuantity());
         assertEquals(ResourceType.COIN,temp2.getConsumed().get(0).getResourceType());
+        assertNotEquals(temp, temp2);
     }
 
     @Test

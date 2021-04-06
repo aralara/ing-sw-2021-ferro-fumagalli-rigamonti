@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.storage;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Arrays;
 import java.util.List;
 
 public interface Storage {
@@ -51,13 +51,23 @@ public interface Storage {
      * @param resources List to be aggregated
      */
     static void aggregateResources(List<Resource> resources) {
-        //TODO: Attenzione a rimuovere gli oggetti della lista mentre la stai iterando, prova a vedere soluzioni con un iterator
-        for(int i=0;i<resources.size();i++){
-            for(int j=1;j<resources.size();j++){
-                if((resources.get(i).getResourceType() == resources.get(j).getResourceType()) && i!=j){
+
+        boolean[] toRemove = new boolean[resources.size()];
+        Arrays.fill(toRemove, Boolean.FALSE);
+
+
+        for (int i = 0; i < resources.size(); i++) {
+            for (int j = 1; j < resources.size(); j++) {
+                if ((resources.get(i).getResourceType() == resources.get(j).getResourceType()) && i != j && !toRemove[j] && !toRemove[i]) {
                     resources.get(i).add(resources.get(j));
-                    resources.remove(j);
+                    toRemove[j] = true;
                 }
+            }
+        }
+        for(int i=toRemove.length-1;i>0;i--)
+        {
+            if(toRemove[i]){
+                resources.remove(i);
             }
         }
     }
