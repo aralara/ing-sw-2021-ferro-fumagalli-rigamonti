@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.ResourceType;
+import it.polimi.ingsw.model.storage.Storage;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -68,23 +69,19 @@ public class Market {
     public List<Resource> chooseCoordinates(int row, int column) {
         List<Resource> marbleResources = new ArrayList<>();
         int resTypeNum = ResourceType.values().length;
-        int[] added = new int[resTypeNum]; //[coin qt, shield qt, servant qt, stone qt, faith qt, wildcard qt]
 
         if(row>=0){
             for(int resColumn=0; resColumn<COLUMNS; resColumn++) {
-                added[marbleMatrix[row][resColumn].getResourceType().ordinal()]++;
+                marbleResources.add(new Resource(marbleMatrix[row][resColumn].getResourceType(), 1));
             }
         }
         else {
             for(int resRow=0; resRow<ROWS; resRow++) {
-                added[marbleMatrix[resRow][column].getResourceType().ordinal()]++;
+                marbleResources.add(new Resource(marbleMatrix[resRow][column].getResourceType(), 1));
             }
         }
 
-        for(int i=0; i<resTypeNum; i++)
-            if(added[i]>0) {
-                marbleResources.add(new Resource(ResourceType.values()[i], added[i]));
-            }
+        Storage.aggregateResources(marbleResources);
 
         moveFloatingMarble(row, column);
         return marbleResources;

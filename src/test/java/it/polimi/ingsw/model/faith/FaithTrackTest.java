@@ -86,8 +86,6 @@ public class FaithTrackTest {
         FaithTrack faithTrack = new FaithTrack();
         faithTrack.loadTrack(FileNames.VATICAN_REPORT_FILE.value(), FileNames.FAITH_SPACE_FILE.value());
 
-        assertFalse(faithTrack.checkPlayerReportPosition(4));
-
         faithTrack.checkReportActivation(8);
         assertFalse(faithTrack.checkPlayerReportPosition(4));
         assertTrue(faithTrack.checkPlayerReportPosition(5));
