@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model.cards.deck;
 
+import it.polimi.ingsw.model.cards.card.Card;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -24,6 +25,10 @@ public class DeckTest {
 
     @Test
     public void testExtract() {
+    }
+
+    @Test
+    public void testAddOnTop() {
     }
 
     @Test

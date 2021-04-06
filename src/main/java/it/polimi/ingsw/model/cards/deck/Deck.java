@@ -68,6 +68,14 @@ public class Deck implements Iterable<Card>{
     }
 
     /**
+     * Adds a card on top of the deck
+     * @param card Card object to add
+     */
+    public void addOnTop(Card card) {
+        cards.add(0, card);
+    }
+
+    /**
      * Adds a card to the deck in the first free position
      * @param card Card object to add
      */
@@ -90,6 +98,7 @@ public class Deck implements Iterable<Card>{
         Collections.shuffle(cards);
     }
 
+    @Override
     public Iterator<Card> iterator() {
         return cards.iterator();
     }
