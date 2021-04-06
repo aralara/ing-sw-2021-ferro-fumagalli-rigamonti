@@ -11,7 +11,7 @@ public interface Storage {
      * @param lists Lists to be merged
      * @return Returns the created list
      */
-    static List<Resource> mergeResourceList(List<List<Resource>> lists) {
+    static List<Resource> mergeResourceList(List<Resource> ... lists) {
         List<Resource> temp = new ArrayList<>();
         for (List<Resource> list : lists) {
             temp.addAll(list);

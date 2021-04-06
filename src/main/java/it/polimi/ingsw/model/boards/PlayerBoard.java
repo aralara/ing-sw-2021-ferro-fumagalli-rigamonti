@@ -138,10 +138,7 @@ public class PlayerBoard {
      * @return Returns a list of resources
      */
     public List<Resource> createResourceStock() {
-        List<List<Resource>> stock = new ArrayList<>();
-        stock.add(warehouse.getList());
-        stock.add(strongbox.getList());
-        return Storage.mergeResourceList(stock);
+        return Storage.mergeResourceList(warehouse.getList(),strongbox.getList());
     }
 
     /**
