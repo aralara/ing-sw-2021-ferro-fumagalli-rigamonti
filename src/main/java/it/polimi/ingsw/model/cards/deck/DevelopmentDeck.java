@@ -33,7 +33,7 @@ public class DevelopmentDeck {
         int firstLevel = ((DevelopmentCard)deck.get(0)).getLevel();
         for(Card card : deck) {
             DevelopmentCard dCard = (DevelopmentCard)card;
-            if (dCard.getColor() == firstColor && dCard.getLevel() == firstLevel)   //TODO: Può essere semplificato implementando un equals() in DevelopmentCard
+            if (dCard.getColor() == firstColor && dCard.getLevel() == firstLevel)
                 retList.add(deck.extract( new int[]{deck.indexOf(card)} ).get(0));
         }
         Collections.shuffle(retList);

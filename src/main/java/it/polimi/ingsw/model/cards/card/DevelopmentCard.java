@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.cards.card;
 import it.polimi.ingsw.model.storage.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DevelopmentCard implements Card {
 
@@ -23,7 +24,8 @@ public class DevelopmentCard implements Card {
         this.level = card.getLevel();
         this.production = card.getProduction();
         this.cost = card.getCost();
-        //TODO: Valutare se far restituire degli oggetti copia ai getter e implementare dei metodi per restituire copie di Production e Resource
+        this.production = production.makeClone();
+        this.cost = cost.stream().map(Resource::makeClone).collect(Collectors.toList());
     }
 
 
