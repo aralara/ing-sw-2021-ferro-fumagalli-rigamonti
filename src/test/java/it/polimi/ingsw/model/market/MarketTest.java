@@ -35,11 +35,6 @@ public class MarketTest {
     }
 
     @Test
-    public void testMoveFloatingMarble() {
-        //hardly testable with randomized marbles
-    }
-
-    @Test
     public void testGetMarbleAt() {
         //hardly testable with randomized marbles
     }

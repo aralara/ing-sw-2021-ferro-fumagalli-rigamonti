@@ -11,8 +11,8 @@ import java.util.*;
 
 public class Market {
 
-    final public int ROWS = 3;
-    final public int COLUMNS = 4;
+    private static final int ROWS = 3;
+    private static final int COLUMNS = 4;
 
     private Marble[][] marbleMatrix;
     private Marble floatingMarble;
@@ -96,7 +96,7 @@ public class Market {
      * @param row Row chosen by the player, if the player chose a column it is -1
      * @param column Column chosen by the player, if the player chose a row it is -1
      */
-    public void moveFloatingMarble(int row, int column) {
+    private void moveFloatingMarble(int row, int column) {
         Marble newFloatingMarble;
 
         if(row>=0){
