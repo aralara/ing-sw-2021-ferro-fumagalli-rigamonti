@@ -139,7 +139,7 @@ public class PlayerBoard {
      * @return Returns a list of resources
      */
     public List<Resource> createResourceStock() {
-        return Storage.mergeResourceList(warehouse.getList(),strongbox.getList());
+        return Storage.mergeResourceList(warehouse.getList(), strongbox.getList());
     }
 
     /**
@@ -161,8 +161,8 @@ public class PlayerBoard {
     public int calculateVP(FaithTrack faithTrack) {
         return faithBoard.calculateVP(faithTrack) +
                 leaderBoard.calculateVP() +
-        //      developmentBoard.calculateVP() +    // TODO: Aggiungere calculateVP nella developmentBoard
-                createResourceStock().stream().mapToInt(Resource::getQuantity).sum();
+                developmentBoard.calculateVP() +
+                (int) Math.floor((double) createResourceStock().stream().mapToInt(Resource::getQuantity).sum() / 5);
     }
 
     /**
