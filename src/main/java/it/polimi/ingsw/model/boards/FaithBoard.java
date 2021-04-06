@@ -1,7 +1,10 @@
 package it.polimi.ingsw.model.boards;
 
+import it.polimi.ingsw.model.cards.card.LeaderCard;
+import it.polimi.ingsw.model.faith.FaithTrack;
+
 public class FaithBoard {
-    private final int popeProgressionSize = 3;
+    private static final int popeProgressionSize = 3;
 
     private int faith;
     private boolean[] popeProgression;
@@ -44,5 +47,22 @@ public class FaithBoard {
      */
     public boolean[] getPopeProgression(){
         return this.popeProgression;
+    }
+
+    /**
+     * Calculates total VPs given by the faithBoard for a player
+     * @param faithTrack FaithTrack utilized to calculate total VPs
+     * @return Returns VP amount
+     */
+    public int calculateVP(FaithTrack faithTrack){
+        return faithTrack.calculateVP(faith, popeProgression);
+    }
+
+    /**
+     * Checks if a player completes his faith track
+     * @return Returns true if it's completed, false otherwise
+     */
+    public boolean isCompleted(){
+        return faith >= 24;
     }
 }

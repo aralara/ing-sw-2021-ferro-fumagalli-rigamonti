@@ -17,4 +17,9 @@ public class LeaderBoardTest {
     @Test
     public void testPlayLeaderHand() {
     }
+
+    @Test
+    public void testCalculateVP() {
+
+    }
 }
