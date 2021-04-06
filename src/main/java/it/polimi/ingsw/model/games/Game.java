@@ -169,7 +169,7 @@ public abstract class Game {
     /**
      * Method invoked to let the next player play his turn
      */
-    public abstract void loadNextTurn();
+    public abstract void loadNextTurn();    //TODO: Necessario inserire dei controlli per il funzionamento dell'ultimo giro
 
     /**
      * Method invoked to take resources from the market
@@ -301,9 +301,8 @@ public abstract class Game {
     boolean checkEndGame() {
         boolean endGame = false;
         for(PlayerBoard pBoard : playerBoards)
-            if(!endGame && faithTrack.isCompleted(pBoard.getFaithProgression()))
+            if(!endGame && faithTrack.isCompleted(pBoard.getFaithProgression()) && pBoard.getTotalDevelopmentCards() >= 7)
                 endGame = true;
-        //TODO: Aggiungere un metodo che restituisca il numero totale di DevelopmentCard nella PLayerBoard -> DevelopmentBoard
         return endGame;
     }
 
