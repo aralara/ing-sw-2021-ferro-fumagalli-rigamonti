@@ -20,7 +20,7 @@ public class FaithBoard {
      * Adds a set amount of faith to the current player
      * @param faith Faith quantity to be added
      */
-    public void addFaith(int faith){
+    public void addFaith(int faith) {
         this.faith += faith;
     }
 
@@ -29,7 +29,7 @@ public class FaithBoard {
      * @param position Position of the Pope's favor tile to set
      * @param value Value to give to the Pope's favor tile
      */
-    public void turnCard(int position, boolean value){
+    public void turnCard(int position, boolean value) {
         popeProgression[position] = value;
     }
 
@@ -37,7 +37,7 @@ public class FaithBoard {
      * Gets the faith attribute
      * @return Returns faith
      */
-    public int getFaith(){
+    public int getFaith() {
         return this.faith;
     }
 
@@ -45,7 +45,7 @@ public class FaithBoard {
      * Gets the popeProgression attribute
      * @return Returns popeProgression
      */
-    public boolean[] getPopeProgression(){
+    public boolean[] getPopeProgression() {
         return this.popeProgression;
     }
 
@@ -54,15 +54,8 @@ public class FaithBoard {
      * @param faithTrack FaithTrack utilized to calculate total VPs
      * @return Returns VP amount
      */
-    public int calculateVP(FaithTrack faithTrack){
+    public int calculateVP(FaithTrack faithTrack) {
         return faithTrack.calculateVP(faith, popeProgression);
     }
 
-    /**
-     * Checks if a player completes his faith track
-     * @return Returns true if it's completed, false otherwise
-     */
-    public boolean isCompleted(){
-        return faith >= 24;
-    }
 }

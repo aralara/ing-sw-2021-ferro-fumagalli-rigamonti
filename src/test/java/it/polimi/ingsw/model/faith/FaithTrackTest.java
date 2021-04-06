@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.faith;
 
 import it.polimi.ingsw.model.FileNames;
+import it.polimi.ingsw.model.boards.FaithBoard;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -217,5 +218,17 @@ public class FaithTrackTest {
         assertEquals(26, faithTrack.calculateVP(24, new boolean[] {true, false, true}));
         assertEquals(27, faithTrack.calculateVP(24, new boolean[] {false, true, true}));
         assertEquals(29, faithTrack.calculateVP(24, new boolean[] {true, true, true}));
+    }
+
+    @Test
+    public void testIsCompleted() {
+        FaithTrack faithTrack = new FaithTrack();
+
+        assertFalse(faithTrack.isCompleted(0));
+        assertFalse(faithTrack.isCompleted(8));
+        assertFalse(faithTrack.isCompleted(16));
+        assertFalse(faithTrack.isCompleted(23));
+        assertTrue(faithTrack.isCompleted(24));
+        assertTrue(faithTrack.isCompleted(26)); //out of the faith track range, but still valid
     }
 }

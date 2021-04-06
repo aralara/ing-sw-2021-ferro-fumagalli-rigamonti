@@ -79,21 +79,4 @@ public class FaithBoardTest {
         assertEquals(29, faithBoard.calculateVP(faithTrack));
 
     }
-
-    @Test
-    public void testIsCompleted() {
-        FaithBoard faithBoard = new FaithBoard();
-
-        assertFalse(faithBoard.isCompleted());
-        faithBoard.addFaith(8);
-        assertFalse(faithBoard.isCompleted());
-        faithBoard.addFaith(8);
-        assertFalse(faithBoard.isCompleted());
-        faithBoard.addFaith(7);
-        assertFalse(faithBoard.isCompleted());
-        faithBoard.addFaith(1);
-        assertTrue(faithBoard.isCompleted());
-        faithBoard.addFaith(2);
-        assertTrue(faithBoard.isCompleted()); //out of the faith track range, but still valid
-    }
 }
