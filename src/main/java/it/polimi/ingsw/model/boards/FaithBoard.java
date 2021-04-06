@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model.boards;
 
-import it.polimi.ingsw.model.cards.card.LeaderCard;
 import it.polimi.ingsw.model.faith.FaithTrack;
 
 public class FaithBoard {
@@ -56,6 +55,13 @@ public class FaithBoard {
      */
     public int calculateVP(FaithTrack faithTrack) {
         return faithTrack.calculateVP(faith, popeProgression);
+    }
+
+    /**
+     * Handles the activation of a VaticanReport updating popeProgression values
+     * @param faithTrack FaithTrack relative to the VaticanReport
+     */
+    public void handleReportActivation(FaithTrack faithTrack) {
     }
 
 }

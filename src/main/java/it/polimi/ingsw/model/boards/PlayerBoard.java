@@ -143,6 +143,14 @@ public class PlayerBoard {
     }
 
     /**
+     * Handles the activation of a VaticanReport updating the player's FaithBoard
+     * @param faithTrack FaithTrack relative to the VaticanReport
+     */
+    public void handleReportActivation(FaithTrack faithTrack) {
+        faithBoard.handleReportActivation(faithTrack);
+    }
+
+    /**
      * Creates a list containing all of the player resources
      * @return Returns a list of resources
      */

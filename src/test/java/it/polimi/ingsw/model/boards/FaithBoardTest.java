@@ -79,4 +79,8 @@ public class FaithBoardTest {
         assertEquals(29, faithBoard.calculateVP(faithTrack));
 
     }
+
+    @Test
+    public void testHandleReportActivation() {
+    }
 }

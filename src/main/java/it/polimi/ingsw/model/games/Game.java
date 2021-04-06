@@ -275,14 +275,11 @@ public abstract class Game {
      */
     void checkFaith() {
         boolean vatReport = false;
-        for(int i = 0; i < playerBoards.size() && !vatReport; i++){
+        for(int i = 0; i < playerBoards.size() && !vatReport; i++)
             vatReport =  faithTrack.checkReportActivation(playerBoards.get(i).getFaithProgression());
-        }
         if(vatReport) {
-            for (PlayerBoard pBoard : playerBoards) {
-                boolean playerInVatReport = faithTrack.checkPlayerReportPosition(pBoard.getFaithProgression());
-                //TODO: Gestire update PopeProgression PlayerBoard
-            }
+            for (PlayerBoard pBoard : playerBoards)
+                pBoard.handleReportActivation(faithTrack);
         }
     }
 
