@@ -13,11 +13,10 @@ import it.polimi.ingsw.model.storage.RequestResources;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.Shelf;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public abstract class Game {
 
@@ -174,6 +173,27 @@ public abstract class Game {
     }
 
     /**
+     * Removes the first DevelopmentCard of a DevelopmentDeck given its color and its level
+     * @param color Color of the card to remove
+     * @param level Level of the card to remove, if left at 0 it accounts as the lowest level possible
+     * @return Returns true if the card can be removed, false if there are no more cards
+     */
+    public boolean removeDevCard(CardColors color, int level) {
+        Optional<DevelopmentDeck> deck;
+        Stream<DevelopmentDeck> deckStream = developmentDecks.stream()
+                .filter(d -> d.getDeckColor() == color)
+                .filter(Predicate.not(DevelopmentDeck::isEmpty));
+        if(level == 0)
+            deck = deckStream.min(Comparator.comparingInt(DevelopmentDeck::getDeckLevel));
+        else
+            deck =  deckStream.filter(d -> d.getDeckLevel() == level).findFirst();
+        if(deck.isEmpty())
+            return false;
+        deck.get().removeFirst();
+        return true;
+    }
+
+    /**
      * Checks if a DevelopmentCard can be bought and placed on the board for the player
      * @param player Index of the player to check
      * @param card The development card to be added
@@ -193,7 +213,9 @@ public abstract class Game {
      * @return Returns true if the card is bought, false otherwise
      */
     public boolean buyDevCard(int player, DevelopmentCard card, int space, List<RequestResources> requests) {
-        return playerBoards.get(player).buyDevCard(card, space, requests);
+        if(playerBoards.get(player).buyDevCard(card, space, requests))
+            return removeDevCard(card.getColor(), card.getLevel());
+        return false;
     }
 
     /**
