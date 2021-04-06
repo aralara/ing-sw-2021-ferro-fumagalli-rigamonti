@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.storage;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public interface Storage {
@@ -10,7 +11,9 @@ public interface Storage {
      * Method invoked to merge multiple resource lists in a single list
      * @param lists Lists to be merged
      * @return Returns the created list
+     *
      */
+    @SafeVarargs
     static List<Resource> mergeResourceList(List<Resource> ... lists) {
         List<Resource> temp = new ArrayList<>();
         for (List<Resource> list : lists) {
@@ -27,7 +30,6 @@ public interface Storage {
      * @return Returns true if all the resources are contained, false otherwise
      */
     static boolean checkContainedResources(List<Resource> container, List<Resource> contained) {
-
         for (Resource resource : contained) {
             boolean check = false;
             for (Resource value : container) {
@@ -49,7 +51,7 @@ public interface Storage {
      * @param resources List to be aggregated
      */
     static void aggregateResources(List<Resource> resources) {
-
+        //TODO: Attenzione a rimuovere gli oggetti della lista mentre la stai iterando, prova a vedere soluzioni con un iterator
         for(int i=0;i<resources.size();i++){
             for(int j=1;j<resources.size();j++){
                 if((resources.get(i).getResourceType() == resources.get(j).getResourceType()) && i!=j){
