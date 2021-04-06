@@ -82,11 +82,10 @@ public class Warehouse implements Storage {
 
     @Override
     public List<Resource> getList() {
-        List<List<Resource>> tempListLists = new ArrayList<>();
+        List<Resource> tempList = new ArrayList<>();
         for (Shelf shelf : shelves) {
-            tempListLists.add(shelf.makeClone().getList());
+            tempList = Storage.mergeResourceList(tempList,shelf.makeClone().getList());
         }
-        List<Resource> tempList = Storage.mergeResourceList(tempListLists);
         Storage.aggregateResources(tempList);
         return tempList;
     }
@@ -97,13 +96,12 @@ public class Warehouse implements Storage {
      * @return Returns the list of resources
      */
     public List<Resource> getList(boolean isleader) {
-        List<List<Resource>> tempListLists = new ArrayList<>();
+        List<Resource> tempList = new ArrayList<>();
         for (Shelf shelf : shelves) {
             if (shelf.IsLeader() == isleader) {
-                tempListLists.add(shelf.makeClone().getList());
+                tempList = Storage.mergeResourceList(tempList,shelf.makeClone().getList());
             }
         }
-        List<Resource> tempList = Storage.mergeResourceList(tempListLists);
         Storage.aggregateResources(tempList);
         return tempList;
     }

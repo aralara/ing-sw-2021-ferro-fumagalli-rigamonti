@@ -12,23 +12,16 @@ public class StorageTest{
     @Test
     public void testMergeResourceList() {
 
-        List<List<Resource>> temp = new ArrayList<>();
         List<Resource> res = new ArrayList<>(List.of(new Resource(ResourceType.COIN,2)));
         List<Resource> res1 = new ArrayList<>(List.of(new Resource(ResourceType.SERVANT,4)));
         List<Resource> res2 = new ArrayList<>(List.of(new Resource(ResourceType.SHIELD,3)));
 
-        temp.add(res);
-        temp.add(res);
-        temp.add(res1);
-        temp.add(res2);
-
-
-        assertEquals(4,Storage.mergeResourceList(temp).get(0).getQuantity());
-        assertEquals(ResourceType.COIN,Storage.mergeResourceList(temp).get(0).getResourceType());
-        assertEquals(4,Storage.mergeResourceList(temp).get(1).getQuantity());
-        assertEquals(ResourceType.SERVANT,Storage.mergeResourceList(temp).get(1).getResourceType());
-        assertEquals(3,Storage.mergeResourceList(temp).get(2).getQuantity());
-        assertEquals(ResourceType.SHIELD,Storage.mergeResourceList(temp).get(2).getResourceType());
+        assertEquals(4,Storage.mergeResourceList(res,res,res1,res2).get(0).getQuantity());
+        assertEquals(ResourceType.COIN,Storage.mergeResourceList(res,res,res1,res2).get(0).getResourceType());
+        assertEquals(4,Storage.mergeResourceList(res,res,res1,res2).get(1).getQuantity());
+        assertEquals(ResourceType.SERVANT,Storage.mergeResourceList(res,res,res1,res2).get(1).getResourceType());
+        assertEquals(3,Storage.mergeResourceList(res,res,res1,res2).get(2).getQuantity());
+        assertEquals(ResourceType.SHIELD,Storage.mergeResourceList(res,res,res1,res2).get(2).getResourceType());
     }
 
     @Test
