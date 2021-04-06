@@ -26,8 +26,8 @@ public class DevelopmentCard implements Card {
         this.VP = card.getVP();
         this.color = card.getColor();
         this.level = card.getLevel();
-        this.production = production.makeClone();
-        this.cost = cost.stream().map(Resource::makeClone).collect(Collectors.toList());
+        this.production = card.production.makeClone();
+        this.cost = card.cost.stream().map(Resource::makeClone).collect(Collectors.toList());
     }
 
 
