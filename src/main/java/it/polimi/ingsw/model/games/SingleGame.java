@@ -12,8 +12,8 @@ public class SingleGame extends Game{
     private boolean isLorenzoTurn, isLorenzoWinner;
 
 
-    public SingleGame(){
-
+    public SingleGame(String ... players){
+        initGame(players);
     }
 
 
@@ -58,7 +58,6 @@ public class SingleGame extends Game{
 
     @Override
     public void addFaithAll(int playerEx, int quantity){
-        //TODO: Valutare se chiamare super.addFaithAll() per consistenza
         lorenzoBoard.addFaith(quantity);
     }
 
@@ -77,7 +76,6 @@ public class SingleGame extends Game{
 
     @Override
     public int[] calculateTotalVP() {
-        //TODO: Valutare se chiamare super.calculateTotalVP() per consistenza
         int[] playersVP = new int[1];
         playersVP[0] = getPlayerBoards().get(0).calculateVP(getFaithTrack());
         return playersVP;
