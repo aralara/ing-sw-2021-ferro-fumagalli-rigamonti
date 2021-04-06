@@ -318,8 +318,7 @@ public class PlayerBoard {
      * @return Returns true if the requirement is met, false otherwise
      */
     public boolean checkRequirementDev(CardColors color, int level, int number) {
-        //TODO: metodo per controllare i RequirementDev in DevelopmentBoard
-        return false;
+        return developmentBoard.checkRequirement(color,level,number);
     }
 
     /**
