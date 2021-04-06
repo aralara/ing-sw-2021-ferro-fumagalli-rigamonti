@@ -12,11 +12,13 @@ public class LeaderCard implements Card {
     private SpecialAbility ability;
 
 
-    LeaderCard() {
-
+    public LeaderCard(int VP, List<Requirement> requirements, SpecialAbility ability) {
+        this.VP = VP;
+        this.requirements = requirements;
+        this.ability = ability;
     }
 
-    LeaderCard(LeaderCard card) {
+    private LeaderCard(LeaderCard card) {
         this.VP = card.getVP();
         this.requirements = card.getRequirements();
         this.ability = card.getAbility();

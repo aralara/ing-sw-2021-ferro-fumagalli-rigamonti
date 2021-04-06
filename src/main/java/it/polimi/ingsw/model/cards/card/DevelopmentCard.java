@@ -14,16 +14,18 @@ public class DevelopmentCard implements Card {
     private List<Resource> cost;
 
 
-    DevelopmentCard() {
-
+    public DevelopmentCard(int VP, CardColors color, int level, Production production, List<Resource> cost) {
+        this.VP = VP;
+        this.color = color;
+        this.level = level;
+        this.production = production;
+        this.cost = cost;
     }
 
-    DevelopmentCard(DevelopmentCard card) {
+    private DevelopmentCard(DevelopmentCard card) {
         this.VP = card.getVP();
         this.color = card.getColor();
         this.level = card.getLevel();
-        this.production = card.getProduction();
-        this.cost = card.getCost();
         this.production = production.makeClone();
         this.cost = cost.stream().map(Resource::makeClone).collect(Collectors.toList());
     }

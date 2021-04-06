@@ -8,11 +8,12 @@ public class LorenzoDev implements LorenzoCard{
     private int quantity;
 
 
-    LorenzoDev() {
-
+    public LorenzoDev(CardColors color, int quantity) {
+        this.color = color;
+        this.quantity = quantity;
     }
 
-    LorenzoDev(LorenzoDev card) {
+    private LorenzoDev(LorenzoDev card) {
         this.color = card.getColor();
         this.quantity = card.getQuantity();
     }

@@ -8,11 +8,12 @@ public class LorenzoFaith implements LorenzoCard{
     private int amount;
 
 
-    LorenzoFaith() {
-
+    public LorenzoFaith(boolean refresh, int amount) {
+        this.refresh = refresh;
+        this.amount = amount;
     }
 
-    LorenzoFaith(LorenzoFaith card) {
+    private LorenzoFaith(LorenzoFaith card) {
         this.refresh = card.isRefresh();
         this.amount = card.getAmount();
     }
