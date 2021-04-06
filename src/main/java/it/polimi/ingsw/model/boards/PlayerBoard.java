@@ -290,7 +290,7 @@ public class PlayerBoard {
      * Adds a ResourceType to the list of ResourceType from active leader marble abilities
      * @param type ResourceType to be added
      */
-    public void addAbilityMarbles(ResourceType type){
+    public void addAbilityMarbles(ResourceType type) {
         activeAbilityMarbles.add(type);
     }
 
@@ -298,7 +298,7 @@ public class PlayerBoard {
      * Adds a ResourceType to the list of ResourceType from active leader discount abilities
      * @param type ResourceType to be added
      */
-    public void addAbilityDiscounts(ResourceType type){
+    public void addAbilityDiscounts(ResourceType type) {
         activeAbilityDiscounts.add(type);
     }
 
@@ -306,7 +306,28 @@ public class PlayerBoard {
      * Adds a Shelf given by a leader ability to the Warehouse
      * @param shelf Shelf to be added
      */
-    public void addAbilityWarehouse(Shelf shelf){
+    public void addAbilityWarehouse(Shelf shelf) {
         warehouse.addShelf(shelf);
+    }
+
+    /**
+     * Checks if the PlayerBoard meets a specific Development Requirement
+     * @param color Color of the DevelopmentCard(s)
+     * @param level Level of the DevelopmentCard(s)
+     * @param number Number of DevelopmentCard(s)
+     * @return Returns true if the requirement is met, false otherwise
+     */
+    public boolean checkRequirementDev(CardColors color, int level, int number) {
+        //TODO: metodo per controllare i RequirementDev in DevelopmentBoard
+        return false;
+    }
+
+    /**
+     * Checks if the PlayerBoard meets a specific Resource Requirement
+     * @param resource Resource to check
+     * @return Returns true if the requirement is met, false otherwise
+     */
+    public boolean checkRequirementRes(Resource resource) {
+        return Storage.checkContainedResources(createResourceStock(), List.of(resource));
     }
 }
