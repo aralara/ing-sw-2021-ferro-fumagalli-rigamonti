@@ -29,7 +29,7 @@ public class SingleGame extends Game{
      * Initializes the LorenzoBoard loading tokens from a file
      */
     public void initLorenzoBoard(){
-        lorenzoBoard = new LorenzoBoard();
+        lorenzoBoard = new LorenzoBoard(this);
         lorenzoBoard.initLorenzoDeck(FileNames.LORENZO_DEV_FILE.value(), FileNames.LORENZO_FAITH_FILE.value());
     }
 
