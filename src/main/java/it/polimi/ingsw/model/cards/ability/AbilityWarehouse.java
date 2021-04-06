@@ -16,6 +16,6 @@ public class AbilityWarehouse implements SpecialAbility {
 
     @Override
     public void activateAbility(PlayerBoard board){
-        //TODO da cambiare (?) per gestire shelf nella playerboard
+        board.addAbilityWarehouse(new Shelf(resourceType, new Resource(resourceType,0), 2, true));
     }
 }
