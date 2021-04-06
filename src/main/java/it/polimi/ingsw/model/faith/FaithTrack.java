@@ -148,4 +148,12 @@ public class FaithTrack {
                 sumVP += vaticanReports.get(i).getPopeValue();
         return sumVP;
     }
+
+    /**
+     * Checks if a player has completed the faith track
+     * @return Returns true if it's completed, false otherwise
+     */
+    public boolean isCompleted(int faith) {
+        return faith >= 24;
+    }
 }

@@ -88,6 +88,14 @@ public class PlayerBoard {
     }
 
     /**
+     * Gets the total number of DevelopmentCards detained by the player
+     * @return Returns the number of cards
+     */
+    public int getTotalDevelopmentCards() {
+        return developmentBoard.numberOfCards();
+    }
+
+    /**
      * Sets the player attribute
      * @param player New attribute value
      */

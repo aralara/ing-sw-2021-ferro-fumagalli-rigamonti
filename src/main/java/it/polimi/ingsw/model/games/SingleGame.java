@@ -64,12 +64,15 @@ public class SingleGame extends Game{
     @Override
     boolean checkEndGame(){
         boolean endGame = super.checkEndGame();
-        //TODO: Aggiungere un metodo che controlli nella FaithBoard se Lorenzo ha raggiunto l'ultimo PopeSpace
         for(DevelopmentDeck dDeck : getDevelopmentDecks()) {
-            if (dDeck.getDeckLevel() == 3 && dDeck.isEmpty()) {
+            if (!endGame && dDeck.getDeckLevel() == 3 && dDeck.isEmpty()) {
                 endGame = true;
                 isLorenzoWinner = true;
             }
+        }
+        if(!endGame && getFaithTrack().isCompleted(lorenzoBoard.getFaith())){
+            endGame = true;
+            isLorenzoWinner = true;
         }
         return endGame;
     }
