@@ -1,12 +1,9 @@
 package it.polimi.ingsw.model.storage;
 
-import it.polimi.ingsw.model.cards.card.LorenzoDev;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class Warehouse implements Storage , Cloneable{
+public class Warehouse implements Storage {
 
     private List<Shelf> shelves;
 
@@ -20,26 +17,28 @@ public class Warehouse implements Storage , Cloneable{
         this.shelves = shelves;
     }
 
+
     /**
      * Checks if a configuration of shelves is valid in order to be added to a warehouse
+     *
      * @param configuration List of shelves to be validated
      * @return Returns true if the configuration is valid, false otherwise
      */
     public static boolean validate(List<Shelf> configuration) {
 
-        if (configuration.stream().filter(Shelf::getIsLeader).count() > 2) {
+        if (configuration.stream().filter(Shelf::IsLeader).count() > 2) {
             return false;
         }
-        if(configuration.stream().filter(t -> !t.getIsLeader()).count() > 3) {
+        if (configuration.stream().filter(t -> !t.IsLeader()).count() > 3) {
             return false;
         }
-        for(int i=0;i<configuration.size()-1;i++) {
-            for(int j=1;j<configuration.size();j++) {
-                if(!configuration.get(i).getIsLeader() && !configuration.get(j).getIsLeader() && i !=j) {
-                    if(configuration.get(i).getResourceType() == configuration.get(j).getResourceType()) {
+        for (int i = 0; i < configuration.size() - 1; i++) {
+            for (int j = 1; j < configuration.size(); j++) {
+                if (!configuration.get(i).IsLeader() && !configuration.get(j).IsLeader() && i != j) {
+                    if (configuration.get(i).getResourceType() == configuration.get(j).getResourceType()) {
                         return false;
                     }
-                    if(configuration.get(i).getLevel() == configuration.get(j).getLevel()) {
+                    if (configuration.get(i).getLevel() == configuration.get(j).getLevel()) {
                         return false;
                     }
                 }
@@ -51,36 +50,62 @@ public class Warehouse implements Storage , Cloneable{
 
     /**
      * Adds a shelf to the list of shelves
+     *
      * @param shelf Shelf that need to be added
      */
-    public void addShelf(Shelf shelf){
+    public void addShelf(Shelf shelf) {
 
         shelves.add(shelf);
     }
 
+    public List<Shelf> getShelves() {
+        List<Shelf> temp = new ArrayList<>();
+        for (Shelf shelf : shelves) {
+            temp.add(shelf.makeClone());
+        }
+        return temp;
+    }
+
     /**
      * Updates the current warehouse configuration to a new list of shelves
+     *
      * @param configuration New list of shelves
      * @return Returns true if the configuration is updated correctly, false otherwise
      */
     public boolean changeConfiguration(List<Shelf> configuration) {
-        if(validate(configuration))
-        {
+        if (validate(configuration)) {
             this.shelves = configuration;
             return true;
         }
         return false;
     }
 
-    //TODO sistemare getList, non passo per indirizzo perchè atrimenti mi somma le risorse nel merge
-    //     N.B. se gestisco solo shelf normali non ho problemi perche hanno risorse di tipi diversi
     @Override
     public List<Resource> getList() {
-        List<List<Resource>> tempList = new ArrayList<>();
+        List<List<Resource>> tempListLists = new ArrayList<>();
         for (Shelf shelf : shelves) {
-            tempList.add(shelf.makeClone().getList());
+            tempListLists.add(shelf.makeClone().getList());
         }
-        return Storage.aggregateResources(Storage.mergeResourceList(tempList));
+        List<Resource> tempList = Storage.mergeResourceList(tempListLists);
+        Storage.aggregateResources(tempList);
+        return tempList;
+    }
+
+    /**
+     * Gets an aggregated list of all the resources contained in the Warehouse that respects the parameter
+     * @param isleader Indicates if the type of controlled shelves is leader or not
+     * @return Returns the list of resources
+     */
+    public List<Resource> getList(boolean isleader) {
+        List<List<Resource>> tempListLists = new ArrayList<>();
+        for (Shelf shelf : shelves) {
+            if (shelf.IsLeader() == isleader) {
+                tempListLists.add(shelf.makeClone().getList());
+            }
+        }
+        List<Resource> tempList = Storage.mergeResourceList(tempListLists);
+        Storage.aggregateResources(tempList);
+        return tempList;
     }
 
     @Override
@@ -88,15 +113,22 @@ public class Warehouse implements Storage , Cloneable{
         return false;
     }
 
-
     @Override
     public boolean removeResources(List<Resource> resources) {
+        return false;
+    }
+
+    /**
+     * Removes a list of resources from the shelves in the warehouse that have isLeader equals to the parameter
+     * @param resources List of resources to be removed
+     * @param isLeader Indicates if the type of controlled shelves is leader or not
+     * @return Returns true if the list is removed correctly, false otherwise
+     */
+    public boolean removeResources(List<Resource> resources, boolean isLeader) {
         Storage.aggregateResources(resources);
-        if(Storage.checkContainedResources(this.getList(), resources)) {
+        if (Storage.checkContainedResources(this.getList(isLeader), resources)) {
             for (Shelf shelf : shelves) {
-                if(!shelf.getIsLeader()) {
-                    /*shelf.removeResources(resources.stream().filter(k -> k.getResourceType() ==
-                            shelf.getResourceType()).collect(Collectors.toList()));*/
+                if (shelf.IsLeader() == isLeader) {
                     for (Resource resource : resources) {
                         if (shelf.getResourceType() == resource.getResourceType()) {
                             shelf.removeResources(resources.get(0));
@@ -109,3 +141,4 @@ public class Warehouse implements Storage , Cloneable{
         return false;
     }
 }
+

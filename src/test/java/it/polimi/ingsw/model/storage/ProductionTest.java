@@ -10,6 +10,17 @@ import static org.junit.Assert.*;
 public class ProductionTest{
 
     @Test
+    public void testMakeClone() {
+        Production temp = new Production(new ArrayList<>(List.of(new Resource(ResourceType.COIN,4))),
+                new ArrayList<>(List.of(new Resource(ResourceType.SHIELD,4))));
+
+        Production temp2 = temp.makeClone();
+
+        assertEquals(4,temp2.getConsumed().get(0).getQuantity());
+        assertEquals(ResourceType.COIN,temp2.getConsumed().get(0).getResourceType());
+    }
+
+    @Test
     public void testGetConsumed() {
         Production temp = new Production(new ArrayList<>(List.of(new Resource(ResourceType.COIN,4))),
                 new ArrayList<>(List.of(new Resource(ResourceType.SHIELD,4))));

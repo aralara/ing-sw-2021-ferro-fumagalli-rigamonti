@@ -54,6 +54,17 @@ public class WarehouseTest{
     }
 
     @Test
+    public void testGetShelves() {
+        Warehouse wh = new Warehouse();
+        Shelf s1 = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,false);
+        wh.addShelf(s1);
+
+        List<Shelf> temp = wh.getShelves();
+        assertEquals(2,temp.get(0).getList().get(0).getQuantity());
+        assertEquals(ResourceType.COIN,temp.get(0).getList().get(0).getResourceType());
+    }
+
+    @Test
     public void testChangeConfiguration() {
         Warehouse wh = new Warehouse();
         List<Shelf> temp = new ArrayList<>();
@@ -83,6 +94,32 @@ public class WarehouseTest{
 
     @Test
     public void testGetList() {
+        Warehouse wh = new Warehouse();
+        List<Shelf> temp = new ArrayList<>();
+        temp.add(new Shelf(ResourceType.STONE,new Resource(ResourceType.STONE,1),2,true));
+        temp.add(new Shelf(ResourceType.STONE,new Resource(ResourceType.STONE,1),2,true));
+        temp.add(new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,1),1,false));
+        temp.add(new Shelf(ResourceType.SHIELD,new Resource(ResourceType.SHIELD,1),2,false));
+        temp.add(new Shelf(ResourceType.STONE,new Resource(ResourceType.STONE,1),3,false));
+        assertTrue(wh.changeConfiguration(temp));
+
+        assertEquals(3,wh.getList().get(0).getQuantity());
+        assertEquals(ResourceType.STONE,wh.getList().get(0).getResourceType());
+        assertEquals(1,wh.getList().get(1).getQuantity());
+        assertEquals(ResourceType.COIN,wh.getList().get(1).getResourceType());
+        assertEquals(1,wh.getList().get(2).getQuantity());
+        assertEquals(ResourceType.SHIELD,wh.getList().get(2).getResourceType());
+
+        assertEquals(2,wh.getList(true).get(0).getQuantity());
+        assertEquals(ResourceType.STONE,wh.getList(true).get(0).getResourceType());
+
+        assertEquals(1,wh.getList(false).get(0).getQuantity());
+        assertEquals(ResourceType.COIN,wh.getList(false).get(0).getResourceType());
+        assertEquals(1,wh.getList(false).get(1).getQuantity());
+        assertEquals(ResourceType.SHIELD,wh.getList(false).get(1).getResourceType());
+        assertEquals(1,wh.getList(false).get(2).getQuantity());
+        assertEquals(ResourceType.STONE,wh.getList(false).get(2).getResourceType());
+
     }
 
     @Test
@@ -99,17 +136,29 @@ public class WarehouseTest{
         temp.add(new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,1),1,false));
         temp.add(new Shelf(ResourceType.SHIELD,new Resource(ResourceType.SHIELD,1),2,false));
         temp.add(new Shelf(ResourceType.STONE,new Resource(ResourceType.STONE,1),3,false));
+        temp.add(new Shelf(ResourceType.SHIELD,new Resource(ResourceType.SHIELD,2),2,true));
+        temp.add(new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,true));
         assertTrue(wh.changeConfiguration(temp));
 
-        assertTrue(wh.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN,1)))));
-        assertTrue(wh.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.SHIELD,1)))));
+        assertTrue(wh.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN,1))),false));
+        assertTrue(wh.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.SHIELD,1))),false));
 
-        assertEquals(0,wh.getList().get(0).getQuantity());
-        assertEquals(ResourceType.COIN,wh.getList().get(0).getResourceType());
-        assertEquals(0,wh.getList().get(1).getQuantity());
-        assertEquals(ResourceType.SHIELD,wh.getList().get(1).getResourceType());
-        assertEquals(1,wh.getList().get(2).getQuantity());
-        assertEquals(ResourceType.STONE,wh.getList().get(2).getResourceType());
+        assertEquals(0,wh.getList(false).get(0).getQuantity());
+        assertEquals(ResourceType.COIN,wh.getList(false).get(0).getResourceType());
+        assertEquals(0,wh.getList(false).get(1).getQuantity());
+        assertEquals(ResourceType.SHIELD,wh.getList(false).get(1).getResourceType());
+        assertEquals(1,wh.getList(false).get(2).getQuantity());
+        assertEquals(ResourceType.STONE,wh.getList(false).get(2).getResourceType());
+
+        assertFalse(wh.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN,1))),false));
+
+        assertTrue(wh.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN,1))),true));
+
+        assertEquals(2,wh.getList(true).get(0).getQuantity());
+        assertEquals(ResourceType.SHIELD,wh.getList(true).get(0).getResourceType());
+        assertEquals(1,wh.getList(true).get(1).getQuantity());
+        assertEquals(ResourceType.COIN,wh.getList(true).get(1).getResourceType());
+
 
         assertFalse(wh.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN,1)))));
     }

@@ -47,9 +47,8 @@ public interface Storage {
     /**
      * Aggregates the resources in the list that have the same resourceType and return the list
      * @param resources List to be aggregated
-     * @return Returns the list updated
      */
-    static List<Resource> aggregateResources(List<Resource> resources) {
+    static void aggregateResources(List<Resource> resources) {
 
         for(int i=0;i<resources.size();i++){
             for(int j=1;j<resources.size();j++){
@@ -59,7 +58,6 @@ public interface Storage {
                 }
             }
         }
-        return resources;
     }
 
     /**

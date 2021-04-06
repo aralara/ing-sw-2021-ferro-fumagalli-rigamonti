@@ -7,6 +7,16 @@ import static org.junit.Assert.*;
 public class ResourceTest{
 
     @Test
+    public void testMakeClone() {
+        Resource res = new Resource(ResourceType.COIN, 2);
+
+        Resource res2 = res.makeClone();
+
+        assertEquals(ResourceType.COIN,res2.getResourceType());
+        assertEquals(2,res2.getQuantity());
+    }
+
+    @Test
     public void testAdd() {
         Resource res = new Resource(ResourceType.COIN, 2);
 

@@ -18,6 +18,14 @@ public class Resource {
 
 
     /**
+     * Method to return a cloned instance for a Resource
+     * @return Returns Resource cloned object
+     */
+    public Resource makeClone() {
+        return new Resource(this.resourceType,this.quantity);
+    }
+
+    /**
      * Adds the quantity of the given resource to the quantity of the current resource if the resource types match
      * @param r The resource to add
      * @return Returns true if the resource is added correctly, false otherwise

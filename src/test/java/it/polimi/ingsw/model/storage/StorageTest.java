@@ -53,26 +53,28 @@ public class StorageTest{
     public void testAggregateResources() {
 
         List<Resource> res = new ArrayList<>(List.of(new Resource(ResourceType.COIN,2)));
-
-        assertEquals(2,Storage.aggregateResources(res).get(0).getQuantity());
-        assertEquals(ResourceType.COIN,Storage.aggregateResources(res).get(0).getResourceType());
+        Storage.aggregateResources(res);
+        assertEquals(2,res.get(0).getQuantity());
+        assertEquals(ResourceType.COIN,res.get(0).getResourceType());
 
         res = new ArrayList<>(List.of(new Resource(ResourceType.COIN,2),
                 new Resource(ResourceType.COIN,2)));
 
-        assertEquals(1,Storage.aggregateResources(res).size());
-        assertEquals(4,Storage.aggregateResources(res).get(0).getQuantity());
-        assertEquals(ResourceType.COIN,Storage.aggregateResources(res).get(0).getResourceType());
+        Storage.aggregateResources(res);
+        assertEquals(1,res.size());
+        assertEquals(4,res.get(0).getQuantity());
+        assertEquals(ResourceType.COIN,res.get(0).getResourceType());
 
         res = new ArrayList<>(List.of(new Resource(ResourceType.COIN,2),
                 new Resource(ResourceType.COIN,2),new Resource(ResourceType.SERVANT,2),
                 new Resource(ResourceType.COIN,2)));
 
-        assertEquals(2,Storage.aggregateResources(res).size());
-        assertEquals(6,Storage.aggregateResources(res).get(0).getQuantity());
-        assertEquals(ResourceType.COIN,Storage.aggregateResources(res).get(0).getResourceType());
-        assertEquals(2,Storage.aggregateResources(res).get(1).getQuantity());
-        assertEquals(ResourceType.SERVANT,Storage.aggregateResources(res).get(1).getResourceType());
+        Storage.aggregateResources(res);
+        assertEquals(2,res.size());
+        assertEquals(6,res.get(0).getQuantity());
+        assertEquals(ResourceType.COIN,res.get(0).getResourceType());
+        assertEquals(2,res.get(1).getQuantity());
+        assertEquals(ResourceType.SERVANT,res.get(1).getResourceType());
 
     }
 

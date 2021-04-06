@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.storage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Production {
 
@@ -13,6 +14,18 @@ public class Production {
         this.produced = produced;
     }
 
+
+    /**
+     * Method to return a cloned instance for a Production
+     * @return Returns Production cloned object
+     */
+    public Production makeClone() {
+        List<Resource> consumedCopy;
+        List<Resource> producedCopy;
+        consumedCopy = consumed.stream().map(Resource::makeClone).collect(Collectors.toList());
+        producedCopy = produced.stream().map(Resource::makeClone).collect(Collectors.toList());
+        return new Production(consumedCopy,producedCopy);
+    }
 
     /**
      * Returns a list of the consumed resources
