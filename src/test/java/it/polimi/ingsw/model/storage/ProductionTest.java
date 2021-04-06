@@ -23,7 +23,13 @@ public class ProductionTest{
 
     @Test
     public void testGetConsumed() {
-        Production temp = new Production(new ArrayList<>(List.of(new Resource(ResourceType.COIN,4))),
+
+        Production temp = new Production();
+
+        assertEquals(2,temp.getConsumed().get(0).getQuantity());
+        assertEquals(ResourceType.WILDCARD,temp.getConsumed().get(0).getResourceType());
+
+        temp = new Production(new ArrayList<>(List.of(new Resource(ResourceType.COIN,4))),
                 new ArrayList<>(List.of(new Resource(ResourceType.SHIELD,4))));
 
         assertEquals(4,temp.getConsumed().get(0).getQuantity());
@@ -41,7 +47,13 @@ public class ProductionTest{
 
     @Test
     public void testGetProduced() {
-        Production temp = new Production(new ArrayList<>(List.of(new Resource(ResourceType.COIN,4))),
+
+        Production temp = new Production();
+
+        assertEquals(1,temp.getProduced().get(0).getQuantity());
+        assertEquals(ResourceType.WILDCARD,temp.getProduced().get(0).getResourceType());
+
+        temp = new Production(new ArrayList<>(List.of(new Resource(ResourceType.COIN,4))),
                 new ArrayList<>(List.of(new Resource(ResourceType.SHIELD,4))));
 
         assertEquals(4,temp.getProduced().get(0).getQuantity());

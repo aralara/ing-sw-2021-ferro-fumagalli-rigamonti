@@ -9,6 +9,11 @@ public class Production {
     List<Resource> consumed, produced;
 
 
+    public Production() {
+        this.consumed = new ArrayList<>(List.of(new Resource(ResourceType.WILDCARD,2)));
+        this.produced = new ArrayList<>(List.of(new Resource(ResourceType.WILDCARD,1)));
+    }
+
     public Production(List<Resource> consumed, List<Resource> produced) {
         this.consumed = consumed;
         this.produced = produced;
