@@ -105,4 +105,12 @@ public class PlayerBoardTest {
     @Test
     public void testAddAbilityWarehouse() {
     }
+
+    @Test
+    public void testCheckRequirementDev() {
+    }
+
+    @Test
+    public void testCheckRequirementRes() {
+    }
 }

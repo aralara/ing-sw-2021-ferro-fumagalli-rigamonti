@@ -72,6 +72,15 @@ public abstract class Game {
     }
 
     /**
+     * Gets the nickname of the player at a specified position
+     * @param position Position of the player
+     * @return Returns a String containing the nickname of the player
+     */
+    public String getPlayerNameAt(int position){
+        return playerBoards.get(position).getPlayer().getNickname();
+    }
+
+    /**
      * Initializes a game by calling initMarket, initDevelopment, initFaithTrack, initLeaders in this order
      * @param players Nicknames of the players
      */
@@ -304,7 +313,7 @@ public abstract class Game {
         int playerNumber = getPlayerNumber();
         int[] playersVP = new int[playerNumber];
         for(int i = 0; i < playerNumber; i++)
-            playersVP[i] = playerBoards.get(i).calculateVP();
+            playersVP[i] = playerBoards.get(i).calculateVP(faithTrack);
         return playersVP;
     }
 

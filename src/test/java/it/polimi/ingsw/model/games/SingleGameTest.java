@@ -11,7 +11,7 @@ public class SingleGameTest {
     }
 
     @Test
-    public void testnitLorenzoBoard() {
+    public void testInitLorenzoBoard() {
     }
 
     @Test

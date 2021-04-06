@@ -7,14 +7,6 @@ import static org.junit.Assert.*;
 public class MultiGameTest {
 
     @Test
-    public void testGetPlayerNameAt() {
-    }
-
-    @Test
-    public void testSetPlayerNumber() {
-    }
-
-    @Test
     public void testInitGame() {
     }
 

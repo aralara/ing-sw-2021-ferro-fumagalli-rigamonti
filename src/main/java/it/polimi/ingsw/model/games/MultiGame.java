@@ -1,46 +1,34 @@
 package it.polimi.ingsw.model.games;
 
+import it.polimi.ingsw.model.boards.PlayerBoard;
 import it.polimi.ingsw.model.storage.*;
 
-import java.util.List;
+import java.util.*;
 
 public class MultiGame extends Game{
 
-    private boolean lastTurn;
+    private boolean lastTurn;   //TODO: lastTurn andrebbe spostato in Game
 
 
-    public MultiGame(){
-
+    public MultiGame(String ... players){
+        initGame(players);
     }
 
-
-    /**
-     * Gets the nickname of the player at a specified position
-     * @param position Position of the player
-     * @return Returns a String containing the nickname of the player
-     */
-    public String getPlayerNameAt(int position){
-        return null;
-    }
-
-    /**
-     * Sets the number of players that will play the game
-     * @param playerNumber Number of players
-     */
-    public void setPlayerNumber(int playerNumber){
-
-    }
 
     @Override
     public void initGame(String ... players){
-
+        super.initGame(players);
+        lastTurn = false;
+        randomizeStartingPlayer();
     }
 
     /**
-     * Chooses a random player that will start the game
+     * Shuffles the players and appoints the first one as the starting player
      */
     public void randomizeStartingPlayer(){
-
+        //TODO: Questo metodo potrebbe essere private
+        Collections.shuffle(getPlayerBoards());
+        getPlayerBoards().get(0).firstPlayer();
     }
 
     /**
@@ -49,14 +37,37 @@ public class MultiGame extends Game{
      * @return Returns a list of lists of resources
      */
     public List<List<Resource>> getResourcesToEqualize(){
-        return null;
+        List<List<Resource>> equalizeRes = new ArrayList<>();
+        equalizeRes.add(null);
+        equalizeRes.add(new ArrayList<>(){{
+            add(new Resource(ResourceType.FAITH, 1));
+        }});
+        equalizeRes.add(new ArrayList<>(){{
+            add(new Resource(ResourceType.WILDCARD, 1));
+            add(new Resource(ResourceType.FAITH, 1));
+        }});
+        equalizeRes.add(new ArrayList<>(){{
+            add(new Resource(ResourceType.WILDCARD, 2));
+            add(new Resource(ResourceType.FAITH, 1));
+        }});
+        return equalizeRes;
     }
 
     @Override
     public void loadNextTurn(){
-
+        checkFaith();
+        if(checkEndGame()) {
+            calculateTotalVP();
+            calculateFinalPositions();
+        }
     }
 
     @Override
-    public void addFaithAll(int playerEx, int quantity){}
+    public void addFaithAll(int playerEx, int quantity){
+        List<PlayerBoard> playerBoards = getPlayerBoards();
+        for(int i = 0; i < getPlayerNumber(); i++){
+            if(i != playerEx)
+                playerBoards.get(i).addFaith(quantity);
+        }
+    }
 }
