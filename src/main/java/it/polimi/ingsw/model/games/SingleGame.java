@@ -18,8 +18,8 @@ public class SingleGame extends Game{
 
 
     @Override
-    public void initGame(){
-        super.initGame();
+    public void initGame(String ... players){
+        super.initGame(players);
         initLorenzoBoard();
         isLorenzoTurn = false;
         isLorenzoWinner = false;

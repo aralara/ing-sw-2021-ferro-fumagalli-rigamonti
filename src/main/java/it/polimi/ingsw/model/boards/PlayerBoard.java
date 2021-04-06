@@ -28,8 +28,21 @@ public class PlayerBoard {
     private List<ResourceType> activeAbilityDiscounts;
 
 
-    public PlayerBoard() {
-
+    public PlayerBoard(Game game, String player) {
+        this.player = new Player(player);
+        this.game = game;
+        this.developmentBoard = new DevelopmentBoard();
+        this.leaderBoard = new LeaderBoard();
+        this.faithBoard = new FaithBoard();
+        this.warehouse = new Warehouse();
+        this.strongbox = new Strongbox();
+        inkwell = false;
+        turnPlayed = false;
+        //TODO: Necessario aggiungere un costruttore di default per Production che crei una basic production
+        //basicProduction = new Production();
+        this.activeAbilityProductions = new ArrayList<>();
+        this.activeAbilityMarbles = new ArrayList<>();
+        this.activeAbilityDiscounts = new ArrayList<>();
     }
 
 
@@ -54,7 +67,7 @@ public class PlayerBoard {
      * @return Returns leaderBoard value
      */
     public LeaderBoard getLeaderBoard() {
-        return null;
+        return leaderBoard;
     }
 
     /**
@@ -102,14 +115,14 @@ public class PlayerBoard {
      * @return Returns a list of the ResourceType
      */
     public List<ResourceType> getAbilityMarbles() {
-        return null;
+        return activeAbilityMarbles;
     }
 
     /**
      * Sets the current PlayerBoard as the first playing one
      */
     public void firstPlayer() {
-        inkwell = true;
+        this.inkwell = true;
     }
 
     /**

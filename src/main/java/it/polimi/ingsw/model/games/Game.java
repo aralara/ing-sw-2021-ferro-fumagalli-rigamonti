@@ -15,6 +15,7 @@ import it.polimi.ingsw.model.storage.Shelf;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,8 +27,8 @@ public abstract class Game {
     private FaithTrack faithTrack;
 
 
-    public Game() {
-        initGame();
+    public Game(String ... players) {
+        initGame(players);
     }
 
 
@@ -73,12 +74,24 @@ public abstract class Game {
 
     /**
      * Initializes a game by calling initMarket, initDevelopment, initFaithTrack, initLeaders in this order
+     * @param players Nicknames of the players
      */
-    public void initGame() {
+    public void initGame(String ... players) {
+        initPlayerBoards(players);
         initMarket();
         initDevelopment();
         initFaithTrack();
         initLeaders();
+    }
+
+    /**
+     * Initializes the player boards from the players' nicknames
+     * @param players Nicknames of the players
+     */
+    void initPlayerBoards(String ... players) {
+        this.playerBoards = new ArrayList<>();
+        for (String player : players)
+            playerBoards.add(new PlayerBoard(this, player));
     }
 
     /**
@@ -112,7 +125,7 @@ public abstract class Game {
      * Loads leader cards from their file utilizing LeaderCardFactory and sends four random cards to each player
      */
     void initLeaders() {
-        int[] first4 = new int[]{0, 1, 2, 3};
+        int[] first4 = new int[]{0, 1, 2, 3};   //TODO: Si potrebbe migliorare
         LeaderCardFactory leadCardFactory = new LeaderCardFactory();
         Deck leadCardDeck = new Deck(leadCardFactory.loadCardFromFile(FileNames.LEADER_CARD_FILE.value()));
         leadCardDeck.shuffle();

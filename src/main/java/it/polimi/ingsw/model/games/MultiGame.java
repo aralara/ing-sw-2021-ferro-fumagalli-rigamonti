@@ -32,7 +32,7 @@ public class MultiGame extends Game{
     }
 
     @Override
-    public void initGame(){
+    public void initGame(String ... players){
 
     }
 

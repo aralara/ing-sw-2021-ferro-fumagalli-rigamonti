@@ -27,6 +27,10 @@ public class GameTest {
     }
 
     @Test
+    public void testInitPlayerBoards() {
+    }
+
+    @Test
     public void testInitMarket() {
     }
 
