@@ -1,24 +1,10 @@
 package it.polimi.ingsw.model.boards;
 
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
-import it.polimi.ingsw.model.cards.card.CardColors;
-import it.polimi.ingsw.model.cards.card.LorenzoDev;
-import it.polimi.ingsw.model.cards.card.LorenzoFaith;
+import it.polimi.ingsw.model.cards.card.*;
 import it.polimi.ingsw.model.cards.deck.Deck;
-import it.polimi.ingsw.model.cards.deck.DevelopmentDeck;
+import it.polimi.ingsw.model.cards.factory.LorenzoDevFactory;
+import it.polimi.ingsw.model.cards.factory.LorenzoFaithFactory;
 import it.polimi.ingsw.model.games.Game;
-import it.polimi.ingsw.model.cards.card.LorenzoCard;
-import it.polimi.ingsw.model.games.SingleGame;
-import it.polimi.ingsw.model.market.Marble;
-
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Stack;
-import java.util.stream.Collectors;
 
 public class LorenzoBoard {
 
@@ -27,8 +13,8 @@ public class LorenzoBoard {
     private int faith;
 
 
-    public LorenzoBoard() {
-        game = null;
+    public LorenzoBoard(Game game) {
+        this.game = game;
         lorenzoDeck = new Deck();
         faith = 0;
     }
@@ -56,81 +42,33 @@ public class LorenzoBoard {
      * @param quantity Quantity of cards to be removed
      */
     public void takeDevCard(CardColors color, int quantity) {
-        /*//getDevelopmentDecks() ritorna lista devDeck
-        boolean removed = false;
-        int index = 0;
-        List<DevelopmentDeck> temp = new ArrayList<>();
-
-        List<DevelopmentDeck> prova = new ArrayList<>(); //sostituire
-
-        //creates a DevelopmentDeck list of the specified color sorted by level
-        temp = prova.stream().filter(card -> card.getDeckColor() == color)
-                .sorted(Comparator.comparing(DevelopmentDeck::getDeckLevel)).collect(Collectors.toList());
-
-        //searches the first not empty deck
-        for(int i=0; i<temp.size() && !removed; i++){
-            if(!temp.get(i).isEmpty()){
-                index = i;
-                removed = true;
-            }
-        }
-
-        //removes quantity of cards from the found deck
-        if(removed){
-            for(int i=0; i<quantity; i++)
-                prova.get(index).removeFirst();
-        }*/
+        for(int i=0; i<quantity; i++)
+            game.removeDevCard(color, 0);
+            //TODO: if(!(game.removeDevCard(color, 0))) lanciare eccezione?
     }
 
     /**
-     * Initializes lorenzoDeck by loading cards from the specified files and randomizes the order by calling refreshDeck
+     * Initializes lorenzoDeck by loading cards from the specified files and randomizes the order
+     * by calling refreshDeck
      * @param fileNameDev File containing the LorenzoDev cards
      * @param fileNameFaith File containing the LorenzoFaith cards
      */
     public void initLorenzoDeck(String fileNameDev, String fileNameFaith) {
-        initLorenzoDev(fileNameDev);
-        initLorenzoFaith(fileNameFaith);
+        LorenzoDevFactory lorenzoDevFactory = new LorenzoDevFactory();
+        LorenzoFaithFactory lorenzoFaithFactory = new LorenzoFaithFactory();
+        Deck cardsFromFactory;
+
+        cardsFromFactory = new Deck(lorenzoDevFactory.loadCardFromFile(fileNameDev));
+        for(Card card : cardsFromFactory){
+            lorenzoDeck.add(card);
+        }
+
+        cardsFromFactory = new Deck(lorenzoFaithFactory.loadCardFromFile(fileNameFaith));
+        for(Card card : cardsFromFactory){
+            lorenzoDeck.add(card);
+        }
+
         refreshDeck();
-    }
-
-    /**
-     * Loads LorenzoDev cards from the specified files
-     * @param fileName File containing the LorenzoDev cards
-     */
-    private void initLorenzoDev(String fileName){
-        /*Gson gson = new Gson();
-
-        try {
-            LorenzoDev[] jsonLorenzoDevs;
-            JsonReader reader = new JsonReader(new FileReader(fileName));
-            jsonLorenzoDevs = gson.fromJson(reader, LorenzoDev[].class);
-
-            for (LorenzoDev lorenzoDev : jsonLorenzoDevs) {
-                lorenzoDeck.add(new LorenzoDev());
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }*/
-    }
-
-    /**
-     * Loads LorenzoFaith cards from the specified files
-     * @param fileName File containing the LorenzoFaith cards
-     */
-    private void initLorenzoFaith(String fileName){
-        /*Gson gson = new Gson();
-
-        try {
-            LorenzoFaith[] jsonLorenzoFaith;
-            JsonReader reader = new JsonReader(new FileReader(fileName));
-            jsonLorenzoFaith = gson.fromJson(reader, LorenzoDev[].class);
-
-            for (LorenzoFaith lorenzoFaith : jsonLorenzoFaith) {
-                lorenzoDeck.add(new LorenzoFaith());
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }*/
     }
 
     /**
