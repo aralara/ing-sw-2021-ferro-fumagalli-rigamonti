@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.cards.card.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 public class DevelopmentDeck {
@@ -29,20 +30,16 @@ public class DevelopmentDeck {
      * @return Returns a list of cards
      */
     private static List<Card> createListFromColorLevel(Deck deck) {
-        List<Card> retList = new ArrayList<>();
-        CardColors firstColor = ((DevelopmentCard)deck.get(0)).getColor();
-        int firstLevel = ((DevelopmentCard)deck.get(0)).getLevel();
-        int deckSize = deck.size(); //TODO: xRIGA: ho cambiato qui
-        int j = 0; //TODO: xRIGA: ho cambiato qui
-        for(int i=0; i<deckSize; i++){ //TODO: xRIGA: ho cambiato qui
-        //for(Card card : deck) {
-            //DevelopmentCard dCard = (DevelopmentCard)card;
-            DevelopmentCard dCard = (DevelopmentCard)deck.get(j); //TODO: xRIGA: ho cambiato qui
+        CardColors firstColor = ((DevelopmentCard) deck.get(0)).getColor();
+        int firstLevel = ((DevelopmentCard) deck.get(0)).getLevel();
+        int[] extractIndexes = new int[4];
+        int index = 0;
+        for(int i = 0; i < deck.size(); i++) {
+            DevelopmentCard dCard = (DevelopmentCard) deck.get(i);
             if (dCard.getColor() == firstColor && dCard.getLevel() == firstLevel)
-                //retList.add(deck.extract( new int[]{deck.indexOf(card)} ).get(0));
-                retList.add(deck.extract( new int[]{deck.indexOf(deck.get(j))} ).get(0)); //TODO: xRIGA: ho cambiato qui
-            else j++; //TODO: xRIGA: ho cambiato qui
+                extractIndexes[index++] = i;
         }
+        List<Card> retList = new ArrayList<>(deck.extract(extractIndexes));
         Collections.shuffle(retList);
         return retList;
     }
