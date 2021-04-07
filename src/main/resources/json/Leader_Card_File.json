@@ -1,252 +1,248 @@
 [
 	{
 		"VP": "2",
-		"Requirements": [
+		"requirements": [
 			{
-				"RequirementType": "DEVELOPMENT",
-				"devColor": "YELLOW",
-				"devLevel": "1",
+				"RequirementType": "Development",
+				"color": "YELLOW",
+				"level": "1",
 				"number": "1"
 			},
 			{
-				"RequirementType": "DEVELOPMENT",
-				"devColor": "GREEN",
-				"devLevel": "1",
+				"RequirementType": "Development",
+				"color": "GREEN",
+				"level": "1",
 				"number": "1"
 			}
 		],
-		"SpecialAbility": {
-				"abilityType": "DISCOUNT",
-				"ResourceType": "SERVANT"
+		"ability": {
+				"AbilityType": "Discount",
+				"resourceType": "SERVANT"
 		}
 	},
 	{
 		"VP": "2",
-		"Requirements": [
+		"requirements": [
 			{
-				"RequirementType": "DEVELOPMENT",
-				"devColor": "BLUE",
-				"devLevel": "1",
+				"RequirementType": "Development",
+				"color": "BLUE",
+				"level": "1",
 				"number": "1"
 			},
 			{
-				"RequirementType": "DEVELOPMENT",
-				"devColor": "PURPLE",
-				"devLevel": "1",
+				"RequirementType": "Development",
+				"color": "PURPLE",
+				"level": "1",
 				"number": "1"
 			}
 		],
-		"SpecialAbility": {
-				"abilityType": "DISCOUNT",
-				"ResourceType": "SHIELD"
+		"ability": {
+				"AbilityType": "Discount",
+				"resourceType": "SHIELD"
 		}
 	},
 	{
 		"VP": "2",
-		"Requirements": [
+		"requirements": [
 			{
-				"RequirementType": "DEVELOPMENT",
-				"devColor": "GREEN",
-				"devLevel": "1",
+				"RequirementType": "Development",
+				"color": "GREEN",
+				"level": "1",
 				"number": "1"
 			},
 			{
-				"RequirementType": "DEVELOPMENT",
-				"devColor": "BLUE",
-				"devLevel": "1",
+				"RequirementType": "Development",
+				"color": "BLUE",
+				"level": "1",
 				"number": "1"
 			}
 		],
-		"SpecialAbility": {
-				"abilityType": "DISCOUNT",
-				"ResourceType": "STONE"
+		"ability": {
+				"AbilityType": "Discount",
+				"resourceType": "STONE"
 		}
 	},
 	{
 		"VP": "2",
-		"Requirements": [
+		"requirements": [
 			{
-				"RequirementType": "DEVELOPMENT",
-				"devColor": "YELLOW",
-				"devLevel": "1",
+				"RequirementType": "Development",
+				"color": "YELLOW",
+				"level": "1",
 				"number": "1"
 			},
 			{
-				"RequirementType": "DEVELOPMENT",
-				"devColor": "PURPLE",
-				"devLevel": "1",
+				"RequirementType": "Development",
+				"color": "PURPLE",
+				"level": "1",
 				"number": "1"
 			}
 		],
-		"SpecialAbility": {
-				"abilityType": "DISCOUNT",
-				"ResourceType": "COIN"
+		"ability": {
+				"AbilityType": "Discount",
+				"resourceType": "COIN"
 		}
 	},
 	{
 		"VP": "3",
-		"Requirements": [
+		"requirements": [
 			{
-				"RequirementType": "RESOURCE",
-				"resourceType": "COIN",
-				"quantity": "5"
+				"RequirementType": "Resource",
+				"resource": {
+					"resourceType": "COIN",
+					"quantity": "5"
+				}
 			}
 		],
-		"SpecialAbility": {
-			"abilityType": "WAREHOUSE",
-			"shelf": {
-				"level": "2",
-				"ResourceType": "STONE"
-			}
+		"ability": {
+			"AbilityType": "Warehouse",
+			"resourceType": "STONE"
 		}
 	},
 	{
 		"VP": "3",
-		"Requirements": [
+		"requirements": [
 			{
-				"RequirementType": "RESOURCE",
-				"resourceType": "STONE",
-				"quantity": "5"
+				"RequirementType": "Resource",
+				"resource": {
+					"resourceType": "STONE",
+					"quantity": "5"
+				}
 			}
 		],
-		"SpecialAbility": {
-			"abilityType": "WAREHOUSE",
-			"shelf": {
-				"level": "2",
-				"ResourceType": "SERVANT"
-			}
+		"ability": {
+			"AbilityType": "Warehouse",
+			"resourceType": "SERVANT"
 		}
 	},
 	{
 		"VP": "3",
-		"Requirements": [
+		"requirements": [
 			{
-				"RequirementType": "RESOURCE",
-				"resourceType": "SERVANT",
-				"quantity": "5"
+				"RequirementType": "Resource",
+				"resource": {
+					"resourceType": "SERVANT",
+					"quantity": "5"
+				}
 			}
 		],
-		"SpecialAbility": {
-			"abilityType": "WAREHOUSE",
-			"shelf": {
-				"level": "2",
-				"ResourceType": "SHIELD"
-			}
+		"ability": {
+			"AbilityType": "Warehouse",
+			"resourceType": "SHIELD"
 		}
 	},
 	{
 		"VP": "3",
-		"Requirements": [
+		"requirements": [
 			{
-				"RequirementType": "RESOURCE",
-				"resourceType": "SHIELD",
-				"quantity": "5"
+				"RequirementType": "Resource",
+				"resource": {
+					"resourceType": "SHIELD",
+					"quantity": "5"
+				}
 			}
 		],
-		"SpecialAbility": {
-			"abilityType": "WAREHOUSE",
-			"shelf": {
-				"level": "2",
-				"ResourceType": "COIN"
-			}
+		"ability": {
+			"AbilityType": "Warehouse",
+			"resourceType": "COIN"
 		}
 	},
 	{
 		"VP": "5",
-		"Requirements": [
+		"requirements": [
 			{
-				"RequirementType": "DEVELOPMENT",
-				"devColor": "YELLOW",
-				"devLevel": "1",
+				"RequirementType": "Development",
+				"color": "YELLOW",
+				"level": "1",
 				"number": "2"
 			},
 			{
-				"RequirementType": "DEVELOPMENT",
-				"devColor": "BLUE",
-				"devLevel": "1",
+				"RequirementType": "Development",
+				"color": "BLUE",
+				"level": "1",
 				"number": "1"
 			}
 		],
-		"SpecialAbility": {
-			"abilityType": "MARBLE",
-			"ResourceType": "SERVANT"
+		"ability": {
+			"AbilityType": "Marble",
+			"resourceType": "SERVANT"
 		}
 	},
 	{
 		"VP": "5",
-		"Requirements": [
+		"requirements": [
 			{
-				"RequirementType": "DEVELOPMENT",
-				"devColor": "GREEN",
-				"devLevel": "1",
+				"RequirementType": "Development",
+				"color": "GREEN",
+				"level": "1",
 				"number": "2"
 			},
 			{
-				"RequirementType": "DEVELOPMENT",
-				"devColor": "PURPLE",
-				"devLevel": "1",
+				"RequirementType": "Development",
+				"color": "PURPLE",
+				"level": "1",
 				"number": "1"
 			}
 		],
-		"SpecialAbility": {
-			"abilityType": "MARBLE",
-			"ResourceType": "SHIELD"
+		"ability": {
+			"AbilityType": "Marble",
+			"resourceType": "SHIELD"
 		}
 	},
 	{
 		"VP": "5",
-		"Requirements": [
+		"requirements": [
 			{
-				"RequirementType": "DEVELOPMENT",
-				"devColor": "BLUE",
-				"devLevel": "1",
+				"RequirementType": "Development",
+				"color": "BLUE",
+				"level": "1",
 				"number": "2"
 			},
 			{
-				"RequirementType": "DEVELOPMENT",
-				"devColor": "YELLOW",
-				"devLevel": "1",
+				"RequirementType": "Development",
+				"color": "YELLOW",
+				"level": "1",
 				"number": "1"
 			}
 		],
-		"SpecialAbility": {
-			"abilityType": "MARBLE",
-			"ResourceType": "STONE"
+		"ability": {
+			"AbilityType": "Marble",
+			"resourceType": "STONE"
 		}
 	},
 	{
 		"VP": "5",
-		"Requirements": [
+		"requirements": [
 			{
-				"RequirementType": "DEVELOPMENT",
-				"devColor": "PURPLE",
-				"devLevel": "1",
+				"RequirementType": "Development",
+				"color": "PURPLE",
+				"level": "1",
 				"number": "2"
 			},
 			{
-				"RequirementType": "DEVELOPMENT",
-				"devColor": "GREEN",
-				"devLevel": "1",
+				"RequirementType": "Development",
+				"color": "GREEN",
+				"level": "1",
 				"number": "1"
 			}
 		],
-		"SpecialAbility": {
-			"abilityType": "MARBLE",
-			"ResourceType": "COIN"
+		"ability": {
+			"AbilityType": "Marble",
+			"resourceType": "COIN"
 		}
 	},
 	{
 		"VP": "4",
-		"Requirements": [
+		"requirements": [
 			{
-				"RequirementType": "DEVELOPMENT",
-				"devColor": "YELLOW",
-				"devLevel": "2",
+				"RequirementType": "Development",
+				"color": "YELLOW",
+				"level": "2",
 				"number": "1"
 			}
 		],
-		"SpecialAbility": {
-			"abilityType": "PRODUCTION",
+		"ability": {
+			"AbilityType": "Production",
 			"production": {
 				"consumed": [
 					{
@@ -269,16 +265,16 @@
 	},
 	{
 		"VP": "4",
-		"Requirements": [
+		"requirements": [
 			{
-				"RequirementType": "DEVELOPMENT",
-				"devColor": "BLUE",
-				"devLevel": "2",
+				"RequirementType": "Development",
+				"color": "BLUE",
+				"level": "2",
 				"number": "1"
 			}
 		],
-		"SpecialAbility": {
-			"abilityType": "PRODUCTION",
+		"ability": {
+			"AbilityType": "Production",
 			"production": {
 				"consumed": [
 					{
@@ -301,16 +297,16 @@
 	},
 	{
 		"VP": "4",
-		"Requirements": [
+		"requirements": [
 			{
-				"RequirementType": "DEVELOPMENT",
-				"devColor": "PURPLE",
-				"devLevel": "2",
+				"RequirementType": "Development",
+				"color": "PURPLE",
+				"level": "2",
 				"number": "1"
 			}
 		],
-		"SpecialAbility": {
-			"abilityType": "PRODUCTION",
+		"ability": {
+			"AbilityType": "Production",
 			"production": {
 				"consumed": [
 					{
@@ -333,16 +329,16 @@
 	},
 	{
 		"VP": "4",
-		"Requirements": [
+		"requirements": [
 			{
-				"RequirementType": "DEVELOPMENT",
-				"devColor": "GREEN",
-				"devLevel": "2",
+				"RequirementType": "Development",
+				"color": "GREEN",
+				"level": "2",
 				"number": "1"
 			}
 		],
-		"SpecialAbility": {
-			"abilityType": "PRODUCTION",
+		"ability": {
+			"AbilityType": "Production",
 			"production": {
 				"consumed": [
 					{
