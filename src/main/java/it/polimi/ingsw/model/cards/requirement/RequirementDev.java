@@ -11,13 +11,44 @@ public class RequirementDev implements Requirement {
     private int number;
 
 
-    public RequirementDev(){
-
+    public RequirementDev(CardColors color, int level, int number){
+        this.color = color;
+        this.level = level;
+        this.number = number;
     }
 
+
+    /**
+     * Gets the color attribute
+     * @return Returns color value
+     */
+    public CardColors getColor() {
+        return color;
+    }
+
+    /**
+     * Gets the level attribute
+     * @return Returns level value
+     */
+    public int getLevel() {
+        return level;
+    }
+
+    /**
+     * Gets the number attribute
+     * @return Returns number value
+     */
+    public int getNumber() {
+        return number;
+    }
 
     @Override
     public boolean checkRequirement(PlayerBoard board){
         return board.checkRequirementDev(color, level, number);
+    }
+
+    @Override
+    public RequirementDev makeClone(){
+        return new RequirementDev(this.color,this.level,this.number);
     }
 }

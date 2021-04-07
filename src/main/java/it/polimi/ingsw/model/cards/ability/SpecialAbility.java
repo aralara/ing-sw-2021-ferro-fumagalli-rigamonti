@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.cards.ability;
 
 import it.polimi.ingsw.model.boards.PlayerBoard;
+import it.polimi.ingsw.model.cards.requirement.Requirement;
 
 public interface SpecialAbility {
 
@@ -10,4 +11,10 @@ public interface SpecialAbility {
      */
     void activateAbility(PlayerBoard board);
 
+
+    /**
+     * Method to return a cloned instance for a SpecialAbility
+     * @return Returns SpecialAbility cloned object
+     */
+    SpecialAbility makeClone();
 }

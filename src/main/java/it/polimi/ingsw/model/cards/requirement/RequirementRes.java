@@ -12,11 +12,26 @@ public class RequirementRes implements Requirement {
     Resource resource;
 
 
-    public RequirementRes(){}
+    public RequirementRes(Resource resource) {
+        this.resource = resource;
+    }
 
+
+    /**
+     * Gets the resource attribute
+     * @return Returns resource value
+     */
+    public Resource getResource() {
+        return resource;
+    }
 
     @Override
     public boolean checkRequirement(PlayerBoard board){
         return Storage.checkContainedResources(board.createResourceStock(),new ArrayList<>(List.of(resource)));
+    }
+
+    @Override
+    public RequirementRes makeClone(){
+        return new RequirementRes(this.resource.makeClone());
     }
 }

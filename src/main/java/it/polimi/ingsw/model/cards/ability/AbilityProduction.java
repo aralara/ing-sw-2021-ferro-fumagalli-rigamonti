@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.cards.ability;
 
 import it.polimi.ingsw.model.boards.PlayerBoard;
 import it.polimi.ingsw.model.storage.Production;
+import it.polimi.ingsw.model.storage.ResourceType;
 
 public class AbilityProduction implements SpecialAbility {
 
@@ -13,8 +14,21 @@ public class AbilityProduction implements SpecialAbility {
     }
 
 
+    /**
+     * Gets the resource attribute
+     * @return Returns resource value
+     */
+    public Production getProduction() {
+        return production;
+    }
+
     @Override
     public void activateAbility(PlayerBoard board){
         board.addAbilityProductions(this.production);
+    }
+
+    @Override
+    public AbilityProduction makeClone(){
+        return new AbilityProduction(this.production.makeClone());
     }
 }

@@ -13,8 +13,21 @@ public class AbilityMarble implements SpecialAbility {
     }
 
 
+    /**
+     * Gets the resource attribute
+     * @return Returns resource value
+     */
+    public ResourceType getResourceType() {
+        return resourceType;
+    }
+
     @Override
     public void activateAbility(PlayerBoard board){
         board.addAbilityMarbles(this.resourceType);
+    }
+
+    @Override
+    public AbilityMarble makeClone(){
+        return new AbilityMarble(this.resourceType);
     }
 }
