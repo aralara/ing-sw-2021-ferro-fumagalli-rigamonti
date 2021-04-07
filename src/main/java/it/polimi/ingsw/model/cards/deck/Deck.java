@@ -64,7 +64,8 @@ public class Deck implements Iterable<Card>{
         Arrays.sort(positions);
         List<Card> retList = new ArrayList<>();
         for(int i = positions.length - 1; i >= 0; i--)
-            retList.add(cards.remove(i));
+            //retList.add(cards.remove(i));
+            retList.add(cards.remove(positions[i])); //TODO: x RIGA
         return retList;
     }
 
