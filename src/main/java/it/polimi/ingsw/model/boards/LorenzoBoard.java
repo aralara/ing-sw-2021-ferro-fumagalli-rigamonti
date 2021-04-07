@@ -4,16 +4,16 @@ import it.polimi.ingsw.model.cards.card.*;
 import it.polimi.ingsw.model.cards.deck.Deck;
 import it.polimi.ingsw.model.cards.factory.LorenzoDevFactory;
 import it.polimi.ingsw.model.cards.factory.LorenzoFaithFactory;
-import it.polimi.ingsw.model.games.Game;
+import it.polimi.ingsw.model.games.SingleGame;
 
 public class LorenzoBoard {
 
-    private Game game;
+    private SingleGame game;
     private Deck lorenzoDeck;
     private int faith;
 
 
-    public LorenzoBoard(Game game) {
+    public LorenzoBoard(SingleGame game) {
         this.game = game;
         lorenzoDeck = new Deck();
         faith = 0;
