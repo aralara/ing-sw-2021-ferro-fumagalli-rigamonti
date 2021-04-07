@@ -3,12 +3,12 @@ package it.polimi.ingsw.model.boards;
 public class Player {
 
     private String nickname;
-    private int totalVp, finalPosition;
+    private int totalVP, finalPosition;
 
 
     public Player(String nickname){
         this.nickname = nickname;
-        totalVp = 0;
+        totalVP = 0;
         finalPosition = 0;
     }
 
@@ -26,15 +26,15 @@ public class Player {
      * @return Returns totalVp
      */
     public int getTotalVp(){
-        return totalVp;
+        return totalVP;
     }
 
     /**
      * Sets the totalVp attribute
-     * @param totalVp New attribute value
+     * @param totalVP New attribute value
      */
-    public void setTotalVp(int totalVp){
-        this.totalVp = totalVp;
+    public void setTotalVp(int totalVP){
+        this.totalVP = totalVP;
     }
 
     /**

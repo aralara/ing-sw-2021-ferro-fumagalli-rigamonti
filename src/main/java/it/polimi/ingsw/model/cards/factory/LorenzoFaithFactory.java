@@ -10,7 +10,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LorenzoFaithFactory implements LorenzoCardFactory {
+public class LorenzoFaithFactory implements CardFactory {
 
     public LorenzoFaithFactory(){
 

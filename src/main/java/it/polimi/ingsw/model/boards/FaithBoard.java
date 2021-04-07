@@ -3,7 +3,7 @@ package it.polimi.ingsw.model.boards;
 import it.polimi.ingsw.model.faith.FaithTrack;
 
 public class FaithBoard {
-    private static final int popeProgressionSize = 3;
+    private static final int POPE_PROGRESSION_SIZE = 3;
 
     private int faith;
     private boolean[] popeProgression;
@@ -11,7 +11,7 @@ public class FaithBoard {
 
     public FaithBoard() {
         faith = 0;
-        popeProgression = new boolean[popeProgressionSize];
+        popeProgression = new boolean[POPE_PROGRESSION_SIZE];
     }
 
 

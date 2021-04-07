@@ -9,7 +9,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LorenzoDevFactory implements LorenzoCardFactory {
+public class LorenzoDevFactory implements CardFactory {
 
     public LorenzoDevFactory(){
 

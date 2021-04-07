@@ -20,15 +20,15 @@ public class LorenzoFaith implements LorenzoCard{
 
 
     @Override
-    public LorenzoFaith makeClone() {
-        return new LorenzoFaith(this);
-    }
-
-    @Override
     public void activateLorenzo(LorenzoBoard board) {
         board.addFaith(amount);
         if(refresh)
             board.refreshDeck();
+    }
+
+    @Override
+    public LorenzoFaith makeClone() {
+        return new LorenzoFaith(this);
     }
 
     /**

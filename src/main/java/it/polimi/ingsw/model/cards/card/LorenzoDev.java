@@ -20,13 +20,13 @@ public class LorenzoDev implements LorenzoCard{
 
 
     @Override
-    public LorenzoDev makeClone() {
-        return new LorenzoDev(this);
+    public void activateLorenzo(LorenzoBoard board) {
+        board.takeDevCard(color, quantity);
     }
 
     @Override
-    public void activateLorenzo(LorenzoBoard board) {
-        board.takeDevCard(color, quantity);
+    public LorenzoDev makeClone() {
+        return new LorenzoDev(this);
     }
 
     /**
