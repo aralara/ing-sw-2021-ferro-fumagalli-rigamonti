@@ -1,18 +1,18 @@
 [
 	{
 		"color": "GREEN",
-		"removeNumber": "2"
+		"quantity": "2"
 	},
 	{
 		"color": "PURPLE",
-		"removeNumber": "2"
+		"quantity": "2"
 	},
 	{
 		"color": "BLUE",
-		"removeNumber": "2"
+		"quantity": "2"
 	},
 	{
 		"color": "YELLOW",
-		"removeNumber": "2"
+		"quantity": "2"
 	}
 ]

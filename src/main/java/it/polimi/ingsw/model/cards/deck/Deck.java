@@ -10,7 +10,7 @@ public class Deck implements Iterable<Card>{
 
 
     public Deck(){
-
+        cards = new ArrayList<>(); //TODO: xRIGA: ho cambiato qui
     }
 
     public Deck(List<? extends Card> cards) {

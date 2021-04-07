@@ -15,7 +15,8 @@ public class DevelopmentDeck {
 
     public DevelopmentDeck(Deck deck) {
         this.deck = new Deck(createListFromColorLevel(deck));
-        DevelopmentCard firstCard = (DevelopmentCard) deck.get(0);
+        //DevelopmentCard firstCard = (DevelopmentCard) deck.get(0);
+        DevelopmentCard firstCard = (DevelopmentCard) this.deck.get(0); //TODO: xRIGA: ho cambiato qui
         this.deckColor = firstCard.getColor();
         this.deckLevel = firstCard.getLevel();
     }
@@ -31,10 +32,16 @@ public class DevelopmentDeck {
         List<Card> retList = new ArrayList<>();
         CardColors firstColor = ((DevelopmentCard)deck.get(0)).getColor();
         int firstLevel = ((DevelopmentCard)deck.get(0)).getLevel();
-        for(Card card : deck) {
-            DevelopmentCard dCard = (DevelopmentCard)card;
+        int deckSize = deck.size(); //TODO: xRIGA: ho cambiato qui
+        int j = 0; //TODO: xRIGA: ho cambiato qui
+        for(int i=0; i<deckSize; i++){ //TODO: xRIGA: ho cambiato qui
+        //for(Card card : deck) {
+            //DevelopmentCard dCard = (DevelopmentCard)card;
+            DevelopmentCard dCard = (DevelopmentCard)deck.get(j); //TODO: xRIGA: ho cambiato qui
             if (dCard.getColor() == firstColor && dCard.getLevel() == firstLevel)
-                retList.add(deck.extract( new int[]{deck.indexOf(card)} ).get(0));
+                //retList.add(deck.extract( new int[]{deck.indexOf(card)} ).get(0));
+                retList.add(deck.extract( new int[]{deck.indexOf(deck.get(j))} ).get(0)); //TODO: xRIGA: ho cambiato qui
+            else j++; //TODO: xRIGA: ho cambiato qui
         }
         Collections.shuffle(retList);
         return retList;

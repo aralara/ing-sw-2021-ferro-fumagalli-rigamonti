@@ -223,6 +223,7 @@ public class FaithTrackTest {
     @Test
     public void testIsCompleted() {
         FaithTrack faithTrack = new FaithTrack();
+        faithTrack.loadTrack(FileNames.VATICAN_REPORT_FILE.value(), FileNames.FAITH_SPACE_FILE.value());
 
         assertFalse(faithTrack.isCompleted(0));
         assertFalse(faithTrack.isCompleted(8));

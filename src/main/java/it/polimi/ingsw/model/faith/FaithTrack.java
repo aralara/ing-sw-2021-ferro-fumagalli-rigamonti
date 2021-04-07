@@ -93,7 +93,7 @@ public class FaithTrack {
      */
     public boolean checkReportActivation(int position) {
         for(int i=lastReportTriggered+1; i<vaticanReports.size(); i++)
-            if(!vaticanReports.get(i).getTriggered() && position>=vaticanReports.get(i).getMax()) {
+            if(position>=vaticanReports.get(i).getMax()) {
                 vaticanReports.get(i).setTriggered(true);
                 lastReportTriggered = i;
                 return true;
@@ -154,6 +154,6 @@ public class FaithTrack {
      * @return Returns true if it's completed, false otherwise
      */
     public boolean isCompleted(int faith) {
-        return faith >= 24;
+        return faith >= vaticanReports.get(vaticanReports.size()-1).getMax();
     }
 }
