@@ -15,11 +15,10 @@ public class DevelopmentDeck {
 
 
     public DevelopmentDeck(Deck deck) {
-        this.deck = new Deck(createListFromColorLevel(deck));
-        //DevelopmentCard firstCard = (DevelopmentCard) deck.get(0);
-        DevelopmentCard firstCard = (DevelopmentCard) this.deck.get(0); //TODO: xRIGA: ho cambiato qui
+        DevelopmentCard firstCard = (DevelopmentCard) deck.get(0);
         this.deckColor = firstCard.getColor();
         this.deckLevel = firstCard.getLevel();
+        this.deck = new Deck(createListFromColorLevel(deck));
     }
 
 

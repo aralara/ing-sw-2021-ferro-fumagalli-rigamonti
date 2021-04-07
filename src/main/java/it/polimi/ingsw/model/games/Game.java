@@ -26,6 +26,9 @@ public abstract class Game {
     private FaithTrack faithTrack;
 
 
+    public Game() {
+    }
+
     public Game(String ... players) {
         initGame(players);
     }
