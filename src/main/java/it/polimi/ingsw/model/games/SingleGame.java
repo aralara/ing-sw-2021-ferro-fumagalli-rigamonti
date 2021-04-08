@@ -78,19 +78,15 @@ public class SingleGame extends Game{
     }
 
     @Override
-    public int[] calculateTotalVP() {
-        int[] playersVP = new int[1];
-        playersVP[0] = getPlayerBoards().get(0).calculateVP(getFaithTrack());
-        return playersVP;
+    public void calculateTotalVP() {
+        getPlayerBoards().get(0).calculateVP(getFaithTrack());
     }
 
     @Override
-    public int[] calculateFinalPositions() {
-        int[] playersVP = new int[1];
+    public void calculateFinalPositions() {
         if(!isLorenzoWinner)
-            playersVP[0] = 1;
+            getPlayerBoards().get(0).setPlayerFinalPosition(1);
         else
-            playersVP[0] = 2;
-        return playersVP;
+            getPlayerBoards().get(0).setPlayerFinalPosition(2);
     }
 }
