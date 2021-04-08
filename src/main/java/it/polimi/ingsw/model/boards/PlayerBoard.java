@@ -80,14 +80,6 @@ public class PlayerBoard {
     }
 
     /**
-     * Gets the pope's favor tile values from the FaithBoard
-     * @return Returns the pope progression
-     */
-    public boolean[] getPopeProgression() {
-        return faithBoard.getPopeProgression();
-    }
-
-    /**
      * Gets the total number of DevelopmentCards detained by the player
      * @return Returns the number of cards
      */
@@ -96,11 +88,19 @@ public class PlayerBoard {
     }
 
     /**
-     * Sets the player attribute
-     * @param player New attribute value
+     * Sets the player's final position attribute
+     * @param position Final position for the player
      */
-    public void setPlayer(Player player) {
-        this.player = player;
+    public void setPlayerFinalPosition(int position) {
+        player.setFinalPosition(position);
+    }
+
+    /**
+     * Gets the player's VP attribute
+     * @return Returns the total count of VP for the current player
+     */
+    public int getPlayerVP() {
+        return player.getTotalVp();
     }
 
     /**
@@ -171,14 +171,17 @@ public class PlayerBoard {
     }
 
     /**
-     * Calculates total VPs for the player checking the FaithTrack, leader cards, development cards and resources
-     * @return Returns total VP amount
+     * Calculates total VPs for the player checking the FaithTrack, leader cards, development cards and resources and
+     * saves the result to the player attribute
+     * @param faithTrack FaithTrack reference to calculate faith-based VPs
      */
-    public int calculateVP(FaithTrack faithTrack) {
-        return faithBoard.calculateVP(faithTrack) +
+    public void calculateVP(FaithTrack faithTrack) {
+        player.setTotalVp(
+                faithBoard.calculateVP(faithTrack) +
                 leaderBoard.calculateVP() +
                 developmentBoard.calculateVP() +
-                (int) Math.floor((double) createResourceStock().stream().mapToInt(Resource::getQuantity).sum() / 5);
+                (int) Math.floor((double) createResourceStock().stream().mapToInt(Resource::getQuantity).sum() / 5)
+        );
     }
 
     /**

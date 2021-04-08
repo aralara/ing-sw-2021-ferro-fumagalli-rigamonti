@@ -308,24 +308,23 @@ public abstract class Game {
 
     /**
      * Method invoked to calculate the amount of VP earned by each player
-     * @return Returns an array containing the results, parallel to the list of player boards
      */
-    public int[] calculateTotalVP() {
-        int playerNumber = getPlayerNumber();
-        int[] playersVP = new int[playerNumber];
-        for(int i = 0; i < playerNumber; i++)
-            playersVP[i] = playerBoards.get(i).calculateVP(faithTrack);
-        return playersVP;
+    public void calculateTotalVP() {
+        for(PlayerBoard pBoard : playerBoards)
+            pBoard.calculateVP(faithTrack);
     }
 
     /**
      * Method invoked to calculate the final position for each player
-     * @return Returns an array containing the positions, parallel to the list of player boards
      */
-    public int[] calculateFinalPositions() {
+    public void calculateFinalPositions() {
         int playerNumber = getPlayerNumber();
-        int[] playersVP = calculateTotalVP();
+        int[] playersVP = new int[playerNumber];
         int[] playersPositions = new int[playerNumber];
+
+        for(int i = 0; i < playerNumber; i++)
+            playersVP[i] = playerBoards.get(i).getPlayerVP();
+
         int currentMax = Integer.MAX_VALUE;
         for(int i = 0; i < playerNumber; i++)
             playersPositions[i] = 0;
@@ -339,6 +338,8 @@ public abstract class Game {
                 }
             }
         }
-        return playersPositions;
+
+        for(int i = 0; i < playerNumber; i++)
+            playerBoards.get(i).setPlayerFinalPosition(playersPositions[i]);
     }
 }

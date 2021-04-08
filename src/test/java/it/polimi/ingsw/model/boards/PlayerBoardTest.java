@@ -23,15 +23,15 @@ public class PlayerBoardTest {
     }
 
     @Test
-    public void testGetPopeProgression() {
-    }
-
-    @Test
     public void testGetTotalDevelopmentCards() {
     }
 
     @Test
-    public void testSetPlayer() {
+    public void testSetPlayerFinalPosition() {
+    }
+
+    @Test
+    public void testGetPlayerVP() {
     }
 
     @Test
