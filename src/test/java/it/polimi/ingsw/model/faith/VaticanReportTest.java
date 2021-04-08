@@ -36,10 +36,6 @@ public class VaticanReportTest {
     }
 
     @Test
-    public void testGetPopeValue() {
-    }
-
-    @Test
     public void testSetTriggered() {
         VaticanReport[] vaticanReports = new VaticanReport[3];
         vaticanReports[0] = new VaticanReport(5,8,2);
@@ -64,17 +60,5 @@ public class VaticanReportTest {
         assertFalse(vaticanReports[0].getTriggered());
         assertTrue(vaticanReports[1].getTriggered());
         assertTrue(vaticanReports[2].getTriggered());
-    }
-
-    @Test
-    public void testGetTriggered() {
-    }
-
-    @Test
-    public void testGetMax() {
-    }
-
-    @Test
-    public void testGetMin() {
     }
 }

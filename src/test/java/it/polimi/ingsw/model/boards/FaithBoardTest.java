@@ -43,14 +43,6 @@ public class FaithBoardTest {
     }
 
     @Test
-    public void testGetFaith() {
-    }
-
-    @Test
-    public void testGetPopeProgression() {
-    }
-
-    @Test
     public void testCalculateVP() {
         FaithBoard faithBoard = new FaithBoard();
         FaithTrack faithTrack = new FaithTrack();

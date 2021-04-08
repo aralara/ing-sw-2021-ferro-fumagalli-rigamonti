@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.faith;
 
 import it.polimi.ingsw.model.FileNames;
-import it.polimi.ingsw.model.boards.FaithBoard;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

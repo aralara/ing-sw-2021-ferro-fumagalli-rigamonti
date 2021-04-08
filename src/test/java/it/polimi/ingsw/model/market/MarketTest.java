@@ -66,10 +66,14 @@ public class MarketTest {
     }
 
     @Test
-    public void testGetMarbleAt() {
-    }
+    public void testGetMarbles() {
+        Market market = new Market();
+        market.loadMarket(FileNames.MARKET_FILE.value());
 
-    @Test
-    public void testGetFloatingMarble() {
+        for(int row=0; row<3; row++)
+            for(int column=0; column<3; column++)
+                assertNotNull(market.getMarbleAt(row, column));
+
+        assertNotNull(market.getFloatingMarble());
     }
 }

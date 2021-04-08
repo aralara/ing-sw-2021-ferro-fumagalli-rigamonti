@@ -2,7 +2,6 @@ package it.polimi.ingsw.model.faith;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-import it.polimi.ingsw.model.FileNames;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;

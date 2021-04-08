@@ -13,10 +13,6 @@ import static org.junit.Assert.*;
 public class LorenzoBoardTest {
 
     @Test
-    public void testGetFaith() {
-    }
-
-    @Test
     public void testAddFaith() {
         SingleGame game = new SingleGame("singleUser");
         LorenzoBoard lorenzoBoard = new LorenzoBoard(game);
@@ -70,9 +66,11 @@ public class LorenzoBoardTest {
         }
 
         boolean different = false;
-        for (int i=0; i<numOfCards && !different; i++){
-            if(preRefresh.get(i)!=postRefresh.get(i))
-                different=true;
+        for (int i=0; i<numOfCards; i++){
+            if (preRefresh.get(i) != postRefresh.get(i)) {
+                different = true;
+                break;
+            }
         }
         assertTrue(different);
     }
