@@ -62,6 +62,9 @@ public class FaithBoard {
      * @param faithTrack FaithTrack relative to the VaticanReport
      */
     public void handleReportActivation(FaithTrack faithTrack) {
+        int index = faithTrack.getLastReportTriggered();
+        boolean activated = faithTrack.checkPlayerReportPosition(faith);
+        popeProgression[index] = activated;
     }
 
 }

@@ -82,5 +82,32 @@ public class FaithBoardTest {
 
     @Test
     public void testHandleReportActivation() {
+        FaithTrack faithTrack = new FaithTrack();
+        faithTrack.loadTrack(FileNames.VATICAN_REPORT_FILE.value(), FileNames.FAITH_SPACE_FILE.value());
+        FaithBoard faithBoard = new FaithBoard();
+        for(boolean popeProgressionValue : faithBoard.getPopeProgression()){
+            assertFalse(popeProgressionValue);
+        }
+
+        faithBoard.addFaith(8);
+        faithTrack.checkReportActivation(8);
+        faithBoard.handleReportActivation(faithTrack);
+        assertTrue(faithBoard.getPopeProgression()[0]);
+        assertFalse(faithBoard.getPopeProgression()[1]);
+        assertFalse(faithBoard.getPopeProgression()[2]);
+
+        faithBoard.addFaith(3);
+        faithTrack.checkReportActivation(16);
+        faithBoard.handleReportActivation(faithTrack);
+        assertTrue(faithBoard.getPopeProgression()[0]);
+        assertFalse(faithBoard.getPopeProgression()[1]);
+        assertFalse(faithBoard.getPopeProgression()[2]);
+
+        faithBoard.addFaith(8);
+        faithTrack.checkReportActivation(24);
+        faithBoard.handleReportActivation(faithTrack);
+        assertTrue(faithBoard.getPopeProgression()[0]);
+        assertFalse(faithBoard.getPopeProgression()[1]);
+        assertTrue(faithBoard.getPopeProgression()[2]);
     }
 }

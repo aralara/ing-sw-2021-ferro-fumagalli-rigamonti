@@ -8,12 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DevelopmentBoard {
+    private static final int NUMBER_OF_SPACES = 3;
 
     private List<Deck> spaces;
 
 
     public DevelopmentBoard(){
         spaces = new ArrayList<>();
+        for(int i=0; i<NUMBER_OF_SPACES; i++)
+            spaces.add(new Deck());
     }
 
 
@@ -25,8 +28,10 @@ public class DevelopmentBoard {
         List<Production> activeProductions = new ArrayList<>();
 
         for(Deck deck : spaces){
-            DevelopmentCard developmentCard = (DevelopmentCard) deck.get(0);
-            activeProductions.add(developmentCard.getProduction());
+            if(!deck.isEmpty()) {
+                DevelopmentCard developmentCard = (DevelopmentCard) deck.get(0);
+                activeProductions.add(developmentCard.getProduction());
+            }
         }
 
         return activeProductions;
@@ -37,7 +42,7 @@ public class DevelopmentBoard {
      * @param card The development card to be added
      * @param space Position of the space on the board
      */
-    public void addDevCard(DevelopmentCard card, int space) {
+    public void addDevCard(DevelopmentCard card, int space) { //TODO: si potrebbe inserire controllo per space valido
         spaces.get(space).addOnTop(card);
     }
 
@@ -68,7 +73,7 @@ public class DevelopmentBoard {
     /**
      * Checks if a specified card is present at the right quantity
      * @param color Color of the requested card
-     * @param level Level of the requested card
+     * @param level Level of the requested card, if it's "1" all levels are valid
      * @param number Quantity of cards requested
      * @return Returns true if there are at least the correct quantity, false otherwise
      */
@@ -78,7 +83,7 @@ public class DevelopmentBoard {
         for (Deck deck : spaces)
             for(Card card : deck)
                 if ((((DevelopmentCard)card).getColor() == color)
-                        && (((DevelopmentCard)card).getLevel()) == level)
+                        && (level==1 || (((DevelopmentCard)card).getLevel()) == level))
                     cardRequested++;
 
         return cardRequested >= number;
