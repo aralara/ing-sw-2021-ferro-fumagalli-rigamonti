@@ -29,9 +29,4 @@ public class RequirementRes implements Requirement {
     public boolean checkRequirement(PlayerBoard board){
         return Storage.checkContainedResources(board.createResourceStock(),new ArrayList<>(List.of(resource)));
     }
-
-    @Override
-    public RequirementRes makeClone(){
-        return new RequirementRes(this.resource.makeClone());
-    }
 }

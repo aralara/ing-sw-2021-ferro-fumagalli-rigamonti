@@ -22,19 +22,6 @@ public class DevelopmentCard implements Card {
         this.cost = cost;
     }
 
-    private DevelopmentCard(DevelopmentCard card) {
-        this.VP = card.getVP();
-        this.color = card.getColor();
-        this.level = card.getLevel();
-        this.production = card.production.makeClone();
-        this.cost = card.cost.stream().map(Resource::makeClone).collect(Collectors.toList());
-    }
-
-
-    @Override
-    public DevelopmentCard makeClone() {
-        return new DevelopmentCard(this);
-    }
 
     /**
      * Gets the VP amount

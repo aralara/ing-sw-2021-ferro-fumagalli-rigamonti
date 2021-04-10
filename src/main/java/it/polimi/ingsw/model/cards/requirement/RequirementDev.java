@@ -46,9 +46,4 @@ public class RequirementDev implements Requirement {
     public boolean checkRequirement(PlayerBoard board) {
         return board.getDevelopmentBoard().checkRequirement(color, level, number);
     }
-
-    @Override
-    public RequirementDev makeClone() {
-        return new RequirementDev(this.color,this.level,this.number);
-    }
 }

@@ -26,9 +26,4 @@ public class AbilityProduction implements SpecialAbility {
     public void activateAbility(PlayerBoard board){
         board.getAbilityProductions().add(this.production);
     }
-
-    @Override
-    public AbilityProduction makeClone(){
-        return new AbilityProduction(this.production.makeClone());
-    }
 }

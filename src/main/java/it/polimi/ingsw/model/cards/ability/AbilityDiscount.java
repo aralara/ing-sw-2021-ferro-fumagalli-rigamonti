@@ -27,9 +27,4 @@ public class AbilityDiscount implements SpecialAbility {
         board.getAbilityDiscounts().add(this.resourceType);
 
     }
-
-    @Override
-    public AbilityDiscount makeClone(){
-        return new AbilityDiscount(this.resourceType);
-    }
 }

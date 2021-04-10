@@ -11,10 +11,4 @@ public interface Requirement {
      * @return Returns true if the requirement is met, false otherwise
      */
     boolean checkRequirement(PlayerBoard board);
-
-    /**
-     * Method to return a cloned instance for a Requirement
-     * @return Returns Requirement cloned object
-     */
-    Requirement makeClone();
 }

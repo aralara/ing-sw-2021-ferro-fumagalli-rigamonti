@@ -7,10 +7,6 @@ import static org.junit.Assert.*;
 public class LorenzoDevTest {
 
     @Test
-    public void testMakeClone() {
-    }
-
-    @Test
     public void testActivateLorenzo() {
     }
 

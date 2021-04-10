@@ -9,7 +9,4 @@ public interface LorenzoCard extends Card {
      * @param board LorenzoBoard where the effect needs to be activated
      */
     void activateLorenzo(LorenzoBoard board);
-
-    @Override
-    LorenzoCard makeClone();
 }

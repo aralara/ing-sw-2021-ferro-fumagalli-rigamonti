@@ -7,10 +7,6 @@ import static org.junit.Assert.*;
 public class LeaderCardTest {
 
     @Test
-    public void testMakeClone() {
-    }
-
-    @Test
     public void testGetVP() {
     }
 

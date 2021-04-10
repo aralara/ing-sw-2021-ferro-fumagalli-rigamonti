@@ -10,11 +10,4 @@ public interface SpecialAbility {
      * @param board Playerboard where the ability needs to be activated
      */
     void activateAbility(PlayerBoard board);
-
-
-    /**
-     * Method to return a cloned instance for a SpecialAbility
-     * @return Returns SpecialAbility cloned object
-     */
-    SpecialAbility makeClone();
 }

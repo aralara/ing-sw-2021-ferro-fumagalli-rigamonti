@@ -22,14 +22,4 @@ public class RequirementResTest {
     @Test
     public void checkRequirement() {
     }
-
-    @Test
-    public void makeClone() {
-        RequirementRes rr = new RequirementRes(new Resource(ResourceType.SERVANT,5));
-
-        RequirementRes rr2 = rr.makeClone();
-        assertNotEquals(rr,rr2);
-        assertEquals(ResourceType.SERVANT,rr2.getResource().getResourceType());
-        assertEquals(5,rr2.getResource().getQuantity());
-    }
 }

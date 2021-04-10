@@ -27,9 +27,4 @@ public class AbilityWarehouse implements SpecialAbility {
     public void activateAbility(PlayerBoard board){
         board.getWarehouse().addShelf(new Shelf(resourceType, new Resource(resourceType,0), 2, true));
     }
-
-    @Override
-    public AbilityWarehouse makeClone(){
-        return new AbilityWarehouse(this.resourceType);
-    }
 }

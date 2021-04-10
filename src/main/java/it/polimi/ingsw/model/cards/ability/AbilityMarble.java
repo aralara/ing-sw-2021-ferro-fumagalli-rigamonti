@@ -25,9 +25,4 @@ public class AbilityMarble implements SpecialAbility {
     public void activateAbility(PlayerBoard board){
         board.getAbilityMarbles().add(this.resourceType);
     }
-
-    @Override
-    public AbilityMarble makeClone(){
-        return new AbilityMarble(this.resourceType);
-    }
 }

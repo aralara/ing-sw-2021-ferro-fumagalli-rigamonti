@@ -18,18 +18,6 @@ public class LeaderCard implements Card {
         this.ability = ability;
     }
 
-    private LeaderCard(LeaderCard card) {
-        this.VP = card.getVP();
-        this.requirements = card.getRequirements();
-        this.ability = card.getAbility();
-        //TODO: Valutare se far restituire degli oggetti copia ai getter e implementare dei metodi per restituire copie di Requirement e SpecialAbility
-    }
-
-
-    @Override
-    public LeaderCard makeClone() {
-        return new LeaderCard(this);
-    }
 
     /**
      * Gets the VP amount

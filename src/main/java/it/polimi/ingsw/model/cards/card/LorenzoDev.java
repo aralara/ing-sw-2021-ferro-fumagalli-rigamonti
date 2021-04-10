@@ -13,20 +13,10 @@ public class LorenzoDev implements LorenzoCard{
         this.quantity = quantity;
     }
 
-    private LorenzoDev(LorenzoDev card) {
-        this.color = card.getColor();
-        this.quantity = card.getQuantity();
-    }
-
 
     @Override
     public void activateLorenzo(LorenzoBoard board) {
         board.takeDevCard(color, quantity);
-    }
-
-    @Override
-    public LorenzoDev makeClone() {
-        return new LorenzoDev(this);
     }
 
     /**

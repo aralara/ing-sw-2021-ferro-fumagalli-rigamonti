@@ -13,22 +13,12 @@ public class LorenzoFaith implements LorenzoCard{
         this.amount = amount;
     }
 
-    private LorenzoFaith(LorenzoFaith card) {
-        this.refresh = card.isRefresh();
-        this.amount = card.getAmount();
-    }
-
 
     @Override
     public void activateLorenzo(LorenzoBoard board) {
         board.addFaith(amount);
         if(refresh)
             board.refreshDeck();
-    }
-
-    @Override
-    public LorenzoFaith makeClone() {
-        return new LorenzoFaith(this);
     }
 
     /**
