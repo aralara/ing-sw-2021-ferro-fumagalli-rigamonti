@@ -41,9 +41,16 @@ public class DevelopmentBoard {
      * Puts a development card at the top of one of the spaces specified by the parameter
      * @param card The development card to be added
      * @param space Position of the space on the board
+     * @return Returns true if the card is added correctly
      */
-    public void addDevCard(DevelopmentCard card, int space) { //TODO: si potrebbe inserire controllo per space valido
-        spaces.get(space).addOnTop(card);
+    public boolean addDevCard(DevelopmentCard card, int space) {
+        if((card.getLevel() == 1 && spaces.get(space).isEmpty()) ||
+            (!spaces.get(space).isEmpty() &&
+            card.getLevel()-1 == ((DevelopmentCard)spaces.get(space).get(0)).getLevel())) {
+                spaces.get(space).addOnTop(card);
+                return true;
+        }
+        return false;
     }
 
     /**
@@ -52,22 +59,12 @@ public class DevelopmentBoard {
      * @return Returns true if the card can be added, false otherwise
      */
     public boolean checkDevCardAddable(DevelopmentCard card) {
-        if(card.getLevel()==1) {
-            for (Deck deck : spaces)
-                if (deck.isEmpty())
+        for (Deck deck : spaces)
+            if ((card.getLevel()==1 && deck.isEmpty()) ||
+                (!deck.isEmpty() &&
+                card.getLevel()-1 == ((DevelopmentCard)deck.get(0)).getLevel()))
                     return true;
-            return false;
-        } else if(card.getLevel()==2) {
-            for (Deck deck : spaces)
-                if (!deck.isEmpty() && ((DevelopmentCard)deck.get(0)).getLevel()==1)
-                    return true;
-            return false;
-        } else {
-            for (Deck deck : spaces)
-                if (!deck.isEmpty() && ((DevelopmentCard)deck.get(0)).getLevel()==2)
-                    return true;
-            return false;
-        }
+        return false;
     }
 
     /**

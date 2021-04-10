@@ -44,7 +44,6 @@ public class LorenzoBoard {
     public void takeDevCard(CardColors color, int quantity) {
         for(int i=0; i<quantity; i++)
             game.removeDevCard(color, 0);
-            //TODO: if(!(game.removeDevCard(color, 0))) lanciare eccezione?
     }
 
     /**
