@@ -12,6 +12,7 @@ import it.polimi.ingsw.model.market.Market;
 import it.polimi.ingsw.model.storage.RequestResources;
 import it.polimi.ingsw.model.storage.Resource;
 import it.polimi.ingsw.model.storage.Shelf;
+import it.polimi.ingsw.model.storage.Storage;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -79,7 +80,7 @@ public abstract class Game {
      * @param position Position of the player
      * @return Returns a String containing the nickname of the player
      */
-    public String getPlayerNameAt(int position){
+    public String getPlayerNameAt(int position) {
         return playerBoards.get(position).getPlayer().getNickname();
     }
 
@@ -143,7 +144,7 @@ public abstract class Game {
         for(PlayerBoard pBoard : playerBoards){
             List<LeaderCard> leadCardsPlayer = leadCardDeck.extract(first4).stream().map(s -> (LeaderCard)s)
                     .collect(Collectors.toList());
-            pBoard.addLeaderCards(leadCardsPlayer);
+            pBoard.getLeaderBoard().setLeaderHand(leadCardsPlayer);
         }
     }
 
@@ -154,7 +155,7 @@ public abstract class Game {
      */
     public void discardLeaders(int player, List<LeaderCard> cards) {
         for(LeaderCard card : cards)
-            playerBoards.get(player).discardLeader(card);
+            playerBoards.get(player).getLeaderBoard().discardLeaderHand(card);
     }
 
     /**
@@ -212,7 +213,7 @@ public abstract class Game {
      * @return Returns true if the card can be added, false otherwise
      */
     public boolean canBuyDevCard(int player, DevelopmentCard card) {
-        return playerBoards.get(player).canBuyDevCard(card);
+        return playerBoards.get(player).getDevelopmentBoard().checkDevCardAddable(card);
     }
 
     /**
@@ -237,7 +238,7 @@ public abstract class Game {
      * @return Returns true if the productions can be activated, false otherwise
      */
     public boolean canActivateProductions(int player, List<Resource> consumed) {
-        return playerBoards.get(player).canActivateProductions(consumed);
+        return Storage.checkContainedResources(playerBoards.get(player).createResourceStock(),consumed);
     }
 
     /**
@@ -258,8 +259,8 @@ public abstract class Game {
      * @param card LeaderCard to be discarded
      */
     public void discardExtraLeader(int player, LeaderCard card) {
-        playerBoards.get(player).discardLeader(card);
-        playerBoards.get(player).addFaith(1);
+        playerBoards.get(player).getLeaderBoard().discardLeaderHand(card);
+        playerBoards.get(player).getFaithBoard().addFaith(1);
     }
 
     /**
@@ -279,10 +280,10 @@ public abstract class Game {
     void checkFaith() {
         boolean vatReport = false;
         for(int i = 0; i < playerBoards.size() && !vatReport; i++)
-            vatReport =  faithTrack.checkReportActivation(playerBoards.get(i).getFaithProgression());
+            vatReport =  faithTrack.checkReportActivation(playerBoards.get(i).getFaithBoard().getFaith());
         if(vatReport) {
             for (PlayerBoard pBoard : playerBoards)
-                pBoard.handleReportActivation(faithTrack);
+                pBoard.getFaithBoard().handleReportActivation(faithTrack);
         }
     }
 
@@ -301,7 +302,9 @@ public abstract class Game {
     boolean checkEndGame() {
         boolean endGame = false;
         for(PlayerBoard pBoard : playerBoards)
-            if(!endGame && faithTrack.isCompleted(pBoard.getFaithProgression()) && pBoard.getTotalDevelopmentCards() >= 7)
+            if(!endGame &&
+                    faithTrack.isCompleted(pBoard.getFaithBoard().getFaith()) &&
+                    pBoard.getDevelopmentBoard().numberOfCards() >= 7)
                 endGame = true;
         return endGame;
     }
@@ -323,7 +326,7 @@ public abstract class Game {
         int[] playersPositions = new int[playerNumber];
 
         for(int i = 0; i < playerNumber; i++)
-            playersVP[i] = playerBoards.get(i).getPlayerVP();
+            playersVP[i] = playerBoards.get(i).getPlayer().getTotalVP();
 
         int currentMax = Integer.MAX_VALUE;
         for(int i = 0; i < playerNumber; i++)
@@ -340,6 +343,6 @@ public abstract class Game {
         }
 
         for(int i = 0; i < playerNumber; i++)
-            playerBoards.get(i).setPlayerFinalPosition(playersPositions[i]);
+            playerBoards.get(i).getPlayer().setFinalPosition(playersPositions[i]);
     }
 }

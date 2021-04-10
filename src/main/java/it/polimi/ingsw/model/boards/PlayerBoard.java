@@ -39,8 +39,7 @@ public class PlayerBoard {
         this.strongbox = new Strongbox();
         inkwell = false;
         turnPlayed = false;
-        //TODO: Necessario aggiungere un costruttore di default per Production che crei una basic production
-        //basicProduction = new Production();
+        basicProduction = new Production();
         this.activeAbilityProductions = new ArrayList<>();
         this.activeAbilityMarbles = new ArrayList<>();
         this.activeAbilityDiscounts = new ArrayList<>();
@@ -56,11 +55,11 @@ public class PlayerBoard {
     }
 
     /**
-     * Gets the warehouse attribute
-     * @return Returns warehouse value
+     * Gets the developmentBoard attribute
+     * @return Returns developmentBoard value
      */
-    public Warehouse getWarehouse() {
-        return this.warehouse;
+    public DevelopmentBoard getDevelopmentBoard() {
+        return developmentBoard;
     }
 
     /**
@@ -72,35 +71,26 @@ public class PlayerBoard {
     }
 
     /**
-     * Gets the faith attribute from the FaithBoard
-     * @return Returns faith value
+     * Gets the faithBoard attribute
+     * @return Returns faithBoard value
      */
-    public int getFaithProgression() {
-        return faithBoard.getFaith();
+    public FaithBoard getFaithBoard() {
+        return faithBoard;
     }
 
     /**
-     * Gets the total number of DevelopmentCards detained by the player
-     * @return Returns the number of cards
+     * Gets the warehouse attribute
+     * @return Returns warehouse value
      */
-    public int getTotalDevelopmentCards() {
-        return developmentBoard.numberOfCards();
+    public Warehouse getWarehouse() {
+        return this.warehouse;
     }
 
     /**
-     * Sets the player's final position attribute
-     * @param position Final position for the player
+     * Sets the current PlayerBoard as the first playing one
      */
-    public void setPlayerFinalPosition(int position) {
-        player.setFinalPosition(position);
-    }
-
-    /**
-     * Gets the player's VP attribute
-     * @return Returns the total count of VP for the current player
-     */
-    public int getPlayerVP() {
-        return player.getTotalVp();
+    public void firstPlayer() {
+        this.inkwell = true;
     }
 
     /**
@@ -120,7 +110,15 @@ public class PlayerBoard {
     }
 
     /**
-     * Gets all the possible ResourceType from the activeAbilityMarbles
+     * Gets all the possible productions from the activeAbilityProductions
+     * @return Returns a list of the Production
+     */
+    public List<Production> getAbilityProductions() {
+        return activeAbilityProductions;
+    }
+
+    /**
+     * Gets all the possible resource types from the activeAbilityMarbles
      * @return Returns a list of the ResourceType
      */
     public List<ResourceType> getAbilityMarbles() {
@@ -128,26 +126,11 @@ public class PlayerBoard {
     }
 
     /**
-     * Sets the current PlayerBoard as the first playing one
+     * Gets all the possible resource types from the activeAbilityDiscounts
+     * @return Returns a list of the ResourceType
      */
-    public void firstPlayer() {
-        this.inkwell = true;
-    }
-
-    /**
-     * Adds a set amount of faith to the current FaithBoard
-     * @param faith Faith quantity to be added
-     */
-    public void addFaith(int faith) {
-        faithBoard.addFaith(faith);
-    }
-
-    /**
-     * Handles the activation of a VaticanReport updating the player's FaithBoard
-     * @param faithTrack FaithTrack relative to the VaticanReport
-     */
-    public void handleReportActivation(FaithTrack faithTrack) {
-        faithBoard.handleReportActivation(faithTrack);
+    public List<ResourceType> getAbilityDiscounts() {
+        return activeAbilityDiscounts;
     }
 
     /**
@@ -176,30 +159,12 @@ public class PlayerBoard {
      * @param faithTrack FaithTrack reference to calculate faith-based VPs
      */
     public void calculateVP(FaithTrack faithTrack) {
-        player.setTotalVp(
+        player.setTotalVP(
                 faithBoard.calculateVP(faithTrack) +
                 leaderBoard.calculateVP() +
                 developmentBoard.calculateVP() +
                 (int) Math.floor((double) createResourceStock().stream().mapToInt(Resource::getQuantity).sum() / 5)
         );
-    }
-
-    /**
-     * Changes the current Warehouse configuration
-     * @param shelves New shelves for the Warehouse
-     * @return Returns true if the configuration is valid, false otherwise
-     */
-    private boolean changeWarehouse(List<Shelf> shelves) {
-        return warehouse.changeConfiguration(shelves);
-    }
-
-    /**
-     * Checks if a DevelopmentCard can be placed on the board
-     * @param card The development card to be added
-     * @return Returns true if the card can be added, false otherwise
-     */
-    public boolean canBuyDevCard(DevelopmentCard card) {
-        return developmentBoard.checkDevCardAddable(card);
     }
 
     /**
@@ -214,15 +179,6 @@ public class PlayerBoard {
         if(bought)
             developmentBoard.addDevCard(card, space);
         return bought;
-    }
-
-    /**
-     * Checks if a list of productions can be activated for the current player by checking if they own enough resources
-     * @param consumed The list of resources to be consumed
-     * @return Returns true if the productions can be activated, false otherwise
-     */
-    public boolean canActivateProductions(List<Resource> consumed) {
-        return Storage.checkContainedResources(createResourceStock(), consumed);
     }
 
     /**
@@ -260,23 +216,6 @@ public class PlayerBoard {
     }
 
     /**
-     * Adds an amount of leader cards to the LeaderBoard
-     * @param leaderCards List of LeaderCard to add
-     */
-    public void addLeaderCards(List<LeaderCard> leaderCards) {
-        leaderBoard.setLeaderHand(leaderCards);
-    }
-
-
-    /**
-     * Discards a LeaderCard from the hand
-     * @param leaderCard LeaderCard to be discarded
-     */
-    public void discardLeader(LeaderCard leaderCard) {
-        leaderBoard.discardLeaderHand(leaderCard);
-    }
-
-    /**
      * Plays a LeaderCard from the hand to the board
      * @param leaderCard LeaderCard to be played
      * @return Returns true if the LeaderCard can be played, false otherwise
@@ -295,57 +234,5 @@ public class PlayerBoard {
             leaderBoard.playLeaderHand(leaderCard);
         }
         return canPlay;
-    }
-
-    /**
-     * Adds a production to the list of productions from active leader abilities
-     * @param production Production to be added
-     */
-    public void addAbilityProductions(Production production) {
-        activeAbilityProductions.add(production);
-    }
-
-    /**
-     * Adds a ResourceType to the list of ResourceType from active leader marble abilities
-     * @param type ResourceType to be added
-     */
-    public void addAbilityMarbles(ResourceType type) {
-        activeAbilityMarbles.add(type);
-    }
-
-    /**
-     * Adds a ResourceType to the list of ResourceType from active leader discount abilities
-     * @param type ResourceType to be added
-     */
-    public void addAbilityDiscounts(ResourceType type) {
-        activeAbilityDiscounts.add(type);
-    }
-
-    /**
-     * Adds a Shelf given by a leader ability to the Warehouse
-     * @param shelf Shelf to be added
-     */
-    public void addAbilityWarehouse(Shelf shelf) {
-        warehouse.addShelf(shelf);
-    }
-
-    /**
-     * Checks if the PlayerBoard meets a specific Development Requirement
-     * @param color Color of the DevelopmentCard(s)
-     * @param level Level of the DevelopmentCard(s)
-     * @param number Number of DevelopmentCard(s)
-     * @return Returns true if the requirement is met, false otherwise
-     */
-    public boolean checkRequirementDev(CardColors color, int level, int number) {
-        return developmentBoard.checkRequirement(color,level,number);
-    }
-
-    /**
-     * Checks if the PlayerBoard meets a specific Resource Requirement
-     * @param resource Resource to check
-     * @return Returns true if the requirement is met, false otherwise
-     */
-    public boolean checkRequirementRes(Resource resource) {
-        return Storage.checkContainedResources(createResourceStock(), List.of(resource));
     }
 }

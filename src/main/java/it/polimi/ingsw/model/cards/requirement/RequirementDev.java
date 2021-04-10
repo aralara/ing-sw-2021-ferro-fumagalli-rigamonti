@@ -11,7 +11,7 @@ public class RequirementDev implements Requirement {
     private int number;
 
 
-    public RequirementDev(CardColors color, int level, int number){
+    public RequirementDev(CardColors color, int level, int number) {
         this.color = color;
         this.level = level;
         this.number = number;
@@ -43,12 +43,12 @@ public class RequirementDev implements Requirement {
     }
 
     @Override
-    public boolean checkRequirement(PlayerBoard board){
-        return board.checkRequirementDev(color, level, number);
+    public boolean checkRequirement(PlayerBoard board) {
+        return board.getDevelopmentBoard().checkRequirement(color, level, number);
     }
 
     @Override
-    public RequirementDev makeClone(){
+    public RequirementDev makeClone() {
         return new RequirementDev(this.color,this.level,this.number);
     }
 }

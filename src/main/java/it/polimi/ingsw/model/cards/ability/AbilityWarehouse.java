@@ -25,7 +25,7 @@ public class AbilityWarehouse implements SpecialAbility {
 
     @Override
     public void activateAbility(PlayerBoard board){
-        board.addAbilityWarehouse(new Shelf(resourceType, new Resource(resourceType,0), 2, true));
+        board.getWarehouse().addShelf(new Shelf(resourceType, new Resource(resourceType,0), 2, true));
     }
 
     @Override

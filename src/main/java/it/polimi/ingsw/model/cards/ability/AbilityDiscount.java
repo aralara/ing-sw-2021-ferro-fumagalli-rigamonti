@@ -24,7 +24,7 @@ public class AbilityDiscount implements SpecialAbility {
 
     @Override
     public void activateAbility(PlayerBoard board){
-        board.addAbilityDiscounts(this.resourceType);
+        board.getAbilityDiscounts().add(this.resourceType);
 
     }
 

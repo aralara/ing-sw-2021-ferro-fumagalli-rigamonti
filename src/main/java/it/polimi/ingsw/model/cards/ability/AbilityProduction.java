@@ -24,7 +24,7 @@ public class AbilityProduction implements SpecialAbility {
 
     @Override
     public void activateAbility(PlayerBoard board){
-        board.addAbilityProductions(this.production);
+        board.getAbilityProductions().add(this.production);
     }
 
     @Override

@@ -23,7 +23,7 @@ public class AbilityMarble implements SpecialAbility {
 
     @Override
     public void activateAbility(PlayerBoard board){
-        board.addAbilityMarbles(this.resourceType);
+        board.getAbilityMarbles().add(this.resourceType);
     }
 
     @Override

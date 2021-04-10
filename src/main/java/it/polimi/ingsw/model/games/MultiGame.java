@@ -67,7 +67,7 @@ public class MultiGame extends Game{
         List<PlayerBoard> playerBoards = getPlayerBoards();
         for(int i = 0; i < getPlayerNumber(); i++){
             if(i != playerEx)
-                playerBoards.get(i).addFaith(quantity);
+                playerBoards.get(i).getFaithBoard().addFaith(quantity);
         }
     }
 }

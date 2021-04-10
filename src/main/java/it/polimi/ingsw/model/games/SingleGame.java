@@ -47,11 +47,11 @@ public class SingleGame extends Game{
     void checkFaith(){
         FaithTrack faithTrack = getFaithTrack();
         PlayerBoard playerBoard = getPlayerBoards().get(0);
-        boolean vatReport = getFaithTrack().checkReportActivation(playerBoard.getFaithProgression());
+        boolean vatReport = getFaithTrack().checkReportActivation(playerBoard.getFaithBoard().getFaith());
         if(!vatReport)
             vatReport = faithTrack.checkReportActivation(lorenzoBoard.getFaith());
         if(vatReport) {
-            boolean playerInVatReport = faithTrack.checkPlayerReportPosition(playerBoard.getFaithProgression());
+            boolean playerInVatReport = faithTrack.checkPlayerReportPosition(playerBoard.getFaithBoard().getFaith());
             //TODO: Gestire update PopeProgression PlayerBoard
         }
     }
@@ -85,8 +85,8 @@ public class SingleGame extends Game{
     @Override
     public void calculateFinalPositions() {
         if(!isLorenzoWinner)
-            getPlayerBoards().get(0).setPlayerFinalPosition(1);
+            getPlayerBoards().get(0).getPlayer().setFinalPosition(1);
         else
-            getPlayerBoards().get(0).setPlayerFinalPosition(2);
+            getPlayerBoards().get(0).getPlayer().setFinalPosition(2);
     }
 }

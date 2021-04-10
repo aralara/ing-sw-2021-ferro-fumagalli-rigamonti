@@ -23,17 +23,17 @@ public class Player {
 
     /**
      * Gets the totalVp attribute
-     * @return Returns totalVp
+     * @return Returns totalVP
      */
-    public int getTotalVp(){
+    public int getTotalVP(){
         return totalVP;
     }
 
     /**
-     * Sets the totalVp attribute
+     * Sets the totalVP attribute
      * @param totalVP New attribute value
      */
-    public void setTotalVp(int totalVP){
+    public void setTotalVP(int totalVP){
         this.totalVP = totalVP;
     }
 
