@@ -20,29 +20,6 @@ public class FaithBoardTest {
     }
 
     @Test
-    public void testTurnCard() {
-        FaithBoard faithBoard = new FaithBoard();
-        for(boolean popeProgressionValue : faithBoard.getPopeProgression()){
-            assertFalse(popeProgressionValue);
-        }
-
-        faithBoard.turnCard(0,true);
-        assertTrue(faithBoard.getPopeProgression()[0]);
-        assertFalse(faithBoard.getPopeProgression()[1]);
-        assertFalse(faithBoard.getPopeProgression()[2]);
-
-        faithBoard.turnCard(1,false);
-        assertTrue(faithBoard.getPopeProgression()[0]);
-        assertFalse(faithBoard.getPopeProgression()[1]);
-        assertFalse(faithBoard.getPopeProgression()[2]);
-
-        faithBoard.turnCard(2,true);
-        assertTrue(faithBoard.getPopeProgression()[0]);
-        assertFalse(faithBoard.getPopeProgression()[1]);
-        assertTrue(faithBoard.getPopeProgression()[2]);
-    }
-
-    @Test
     public void testCalculateVP() {
         FaithBoard faithBoard = new FaithBoard();
         FaithTrack faithTrack = new FaithTrack();
@@ -57,17 +34,21 @@ public class FaithBoardTest {
         assertEquals(2, faithBoard.calculateVP(faithTrack));
         faithBoard.addFaith(1);
         assertEquals(4, faithBoard.calculateVP(faithTrack));
-        faithBoard.turnCard(0, true);
+        faithTrack.checkReportActivation(8);
+        faithBoard.handleReportActivation(faithTrack);
         assertEquals(6, faithBoard.calculateVP(faithTrack));
         faithBoard.addFaith(9);
-        faithBoard.turnCard(1, false);
+        faithTrack.checkReportActivation(8);
+        faithBoard.handleReportActivation(faithTrack);
         assertEquals(14, faithBoard.calculateVP(faithTrack));
-        faithBoard.turnCard(1, true);
+        faithTrack.checkReportActivation(17);
+        faithBoard.handleReportActivation(faithTrack);
         assertEquals(17, faithBoard.calculateVP(faithTrack));
         faithBoard.addFaith(4);
         assertEquals(21, faithBoard.calculateVP(faithTrack));
         faithBoard.addFaith(3);
-        faithBoard.turnCard(2, true);
+        faithTrack.checkReportActivation(24);
+        faithBoard.handleReportActivation(faithTrack);
         assertEquals(29, faithBoard.calculateVP(faithTrack));
 
     }

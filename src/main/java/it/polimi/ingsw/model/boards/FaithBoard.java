@@ -24,15 +24,6 @@ public class FaithBoard {
     }
 
     /**
-     * Sets a Pope progression value based on the position of the faith marker
-     * @param position Position of the Pope's favor tile to set
-     * @param value Value to give to the Pope's favor tile
-     */
-    public void turnCard(int position, boolean value) {
-        popeProgression[position] = value;
-    }
-
-    /**
      * Gets the faith attribute
      * @return Returns faith
      */
@@ -62,9 +53,7 @@ public class FaithBoard {
      * @param faithTrack FaithTrack relative to the VaticanReport
      */
     public void handleReportActivation(FaithTrack faithTrack) {
-        int index = faithTrack.getLastReportTriggered();
-        boolean activated = faithTrack.checkPlayerReportPosition(faith);
-        popeProgression[index] = activated;
+        popeProgression[faithTrack.getLastReportTriggered()] = faithTrack.checkPlayerReportPosition(faith);
     }
 
 }

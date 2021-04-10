@@ -2,6 +2,8 @@ package it.polimi.ingsw.model.boards;
 
 import it.polimi.ingsw.model.FileNames;
 import it.polimi.ingsw.model.cards.card.LorenzoCard;
+import it.polimi.ingsw.model.cards.card.LorenzoDev;
+import it.polimi.ingsw.model.cards.card.LorenzoFaith;
 import it.polimi.ingsw.model.games.SingleGame;
 import org.junit.Test;
 
@@ -33,16 +35,19 @@ public class LorenzoBoardTest {
         SingleGame game = new SingleGame("singleUser");
         LorenzoBoard lorenzoBoard = new LorenzoBoard(game);
         lorenzoBoard.initLorenzoDeck(FileNames.LORENZO_DEV_FILE.value(), FileNames.LORENZO_FAITH_FILE.value());
-        List<LorenzoCard> found = new ArrayList<>();
+        int[] lorenzoCards = new int[2];
         int numOfCards = 7;
-        while (found.size() < numOfCards){
+
+        for(int i=0; i<7; i++){
             LorenzoCard picked = lorenzoBoard.pickLorenzoCard();
             assertNotNull(picked);
-            if(!found.contains(picked))
-                found.add(picked);
+            if(picked instanceof LorenzoDev)
+                lorenzoCards[0]++;
+            else if(picked instanceof LorenzoFaith)
+                lorenzoCards[1]++;
         }
-        for(int i=0; i<numOfCards; i++)
-            assertEquals(found.get(i), lorenzoBoard.pickLorenzoCard());
+        assertEquals(4, lorenzoCards[0]);
+        assertEquals(3, lorenzoCards[1]);
     }
 
     @Test
@@ -65,13 +70,7 @@ public class LorenzoBoardTest {
             postRefresh.add(picked);
         }
 
-        boolean different = false;
-        for (int i=0; i<numOfCards; i++){
-            if (preRefresh.get(i) != postRefresh.get(i)) {
-                different = true;
-                break;
-            }
-        }
-        assertTrue(different);
+        assertTrue(preRefresh.containsAll(postRefresh));
+        assertTrue(postRefresh.containsAll(preRefresh));
     }
 }

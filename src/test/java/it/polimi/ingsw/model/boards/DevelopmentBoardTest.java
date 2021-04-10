@@ -123,40 +123,38 @@ public class DevelopmentBoardTest {
         Production production = new Production(consumed, produced);
 
         DevelopmentCard developmentCard = new DevelopmentCard(3, CardColors.PURPLE, 1, production, cost);
-        developmentBoard.addDevCard(developmentCard, 0);
+        assertTrue(developmentBoard.addDevCard(developmentCard, 0));
         assertEquals(1, developmentBoard.numberOfCards());
 
         developmentCard = new DevelopmentCard(3, CardColors.YELLOW, 1, production, cost);
-        developmentBoard.addDevCard(developmentCard, 1);
+        assertTrue(developmentBoard.addDevCard(developmentCard, 1));
         assertEquals(2, developmentBoard.numberOfCards());
 
         developmentCard = new DevelopmentCard(2, CardColors.YELLOW, 2, production, cost);
-        developmentBoard.addDevCard(developmentCard, 1);
+        assertFalse(developmentBoard.addDevCard(developmentCard, 2));
+        assertEquals(2, developmentBoard.numberOfCards());
+
+        assertTrue(developmentBoard.addDevCard(developmentCard, 1));
         assertEquals(3, developmentBoard.numberOfCards());
 
         developmentCard = new DevelopmentCard(3, CardColors.GREEN, 1, production, cost);
-        developmentBoard.addDevCard(developmentCard, 2);
+        assertFalse(developmentBoard.addDevCard(developmentCard, 1));
+        assertEquals(3, developmentBoard.numberOfCards());
+
+        assertTrue(developmentBoard.addDevCard(developmentCard, 2));
         assertEquals(4, developmentBoard.numberOfCards());
 
         developmentCard = new DevelopmentCard(1, CardColors.YELLOW, 2, production, cost);
-        developmentBoard.addDevCard(developmentCard, 2);
+        assertTrue(developmentBoard.addDevCard(developmentCard, 2));
         assertEquals(5, developmentBoard.numberOfCards());
 
         developmentCard = new DevelopmentCard(3, CardColors.BLUE, 3, production, cost);
-        developmentBoard.addDevCard(developmentCard, 1);
+        assertTrue(developmentBoard.addDevCard(developmentCard, 1));
         assertEquals(6, developmentBoard.numberOfCards());
 
         developmentCard = new DevelopmentCard(6, CardColors.YELLOW, 2, production, cost);
-        developmentBoard.addDevCard(developmentCard, 0);
+        assertTrue(developmentBoard.addDevCard(developmentCard, 0));
         assertEquals(7, developmentBoard.numberOfCards());
-
-        developmentCard = new DevelopmentCard(6, CardColors.BLUE, 3, production, cost);
-        developmentBoard.addDevCard(developmentCard, 0);
-        assertEquals(8, developmentBoard.numberOfCards());
-
-        developmentCard = new DevelopmentCard(6, CardColors.GREEN, 3, production, cost);
-        developmentBoard.addDevCard(developmentCard, 2);
-        assertEquals(9, developmentBoard.numberOfCards());
     }
 
     @Test
