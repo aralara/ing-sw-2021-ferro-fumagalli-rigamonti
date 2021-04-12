@@ -58,10 +58,11 @@ public class Deck implements Iterable<Card>{
      * @return Returns a list of the selected cards
      */
     public List<Card> extract(int[] positions) {
-        Arrays.sort(positions);
         List<Card> retList = new ArrayList<>();
-        for(int i = positions.length - 1; i >= 0; i--)
-            retList.add(cards.remove(positions[i]));
+        for (int position : positions)
+            retList.add(cards.get(position));
+        for(Card card : retList)
+            cards.remove(card);
         return retList;
     }
 

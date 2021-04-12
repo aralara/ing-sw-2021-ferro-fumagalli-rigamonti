@@ -63,26 +63,6 @@ public class DeckTest {
         return l;
     }
 
-    private void testDevelopmentCards(DevelopmentCard card1, DevelopmentCard card2) {
-        assertEquals(card1.getVP(), card2.getVP());
-        assertEquals(card1.getColor(), card2.getColor());
-        assertEquals(card1.getLevel(), card2.getLevel());
-
-        assertEquals(card1.getProduction().getProduced().size(), card2.getProduction().getProduced().size());
-        for(int i = 0; i < card1.getProduction().getProduced().size(); i++) {
-            assertEquals(card1.getProduction().getProduced().get(0).getResourceType(), card2.getProduction().getProduced().get(0).getResourceType());
-            assertEquals(card1.getProduction().getProduced().get(0).getQuantity(), card2.getProduction().getProduced().get(0).getQuantity());
-            assertEquals(card1.getProduction().getConsumed().get(0).getResourceType(), card2.getProduction().getConsumed().get(0).getResourceType());
-            assertEquals(card1.getProduction().getConsumed().get(0).getQuantity(), card2.getProduction().getConsumed().get(0).getQuantity());
-        }
-
-        assertEquals(card1.getCost().size(), card2.getCost().size());
-        for(int i = 0; i < card1.getCost().size(); i++) {
-            assertEquals(card1.getCost().get(0).getResourceType(), card2.getCost().get(0).getResourceType());
-            assertEquals(card1.getCost().get(0).getQuantity(), card2.getCost().get(0).getQuantity());
-        }
-    }
-
     //TODO: Test solo con DevelopmentCard
     @Test
     public void testIsEmpty() {
@@ -104,7 +84,7 @@ public class DeckTest {
             DevelopmentCard card1 = dCards.get(i);
             DevelopmentCard card2 = (DevelopmentCard) deck.get(i);
 
-            testDevelopmentCards(card1, card2);
+            assertEquals(card1, card2);
         }
     }
 
@@ -120,25 +100,31 @@ public class DeckTest {
     @Test
     public void testGetCards() {
         List<DevelopmentCard> dCards = createRandomDevelopmentCards(10);
-        List<DevelopmentCard> deck = new Deck(dCards).getCards().stream().map(c -> (DevelopmentCard) c)
-                .collect(Collectors.toList());
+        Deck deck = new Deck(dCards);
+        List<Card> cards = deck.getCards();
+
+        for(int i = 0; i < dCards.size(); i++)
+            assertEquals(dCards.get(i), cards.get(i));
     }
 
     @Test
-    public void testExtract() {     //TODO: necessario un metodo equals per le carte
-        /*
-        List<DevelopmentCard> dCards = createRandomDevelopmentCards(2);
+    public void testExtract() {
+        List<DevelopmentCard> dCards = createRandomDevelopmentCards(4);
         Deck deck = new Deck(dCards);
-        List<Card> extracted = deck.extract(new int[]{0, 1});
+        List<Card> extracted;
 
-        for(int i = 0; i < extracted.size(); i++){
-            DevelopmentCard card1 = dCards.get(i);
-            DevelopmentCard card2 = (DevelopmentCard) extracted.get(i);
+        extracted = deck.extract(new int[]{0, 1});
+        assertEquals(deck.size(), 2);
+        assertEquals(dCards.get(0), extracted.get(0));
+        assertEquals(dCards.get(1), extracted.get(1));
 
-            testDevelopmentCards(card1, card2);
-        }
+        extracted = deck.extract(new int[]{0});
+        assertEquals(deck.size(), 1);
+        assertEquals(dCards.get(2), extracted.get(0));
+
+        extracted = deck.extract(new int[]{0});
         assertTrue(deck.isEmpty());
-         */
+        assertEquals(dCards.get(3), extracted.get(0));
     }
 
     @Test
@@ -156,8 +142,8 @@ public class DeckTest {
 
         assertEquals(deck1.size(), 2);
         assertEquals(deck2.size(), 1);
-        testDevelopmentCards(added, fromDeck1);
-        testDevelopmentCards(added, fromDeck2);
+        assertEquals(added, fromDeck1);
+        assertEquals(added, fromDeck2);
     }
 
     @Test
@@ -175,8 +161,8 @@ public class DeckTest {
 
         assertEquals(deck1.size(), 2);
         assertEquals(deck2.size(), 1);
-        testDevelopmentCards(added, fromDeck1);
-        testDevelopmentCards(added, fromDeck2);
+        assertEquals(added, fromDeck1);
+        assertEquals(added, fromDeck2);
     }
 
     @Test
@@ -190,7 +176,7 @@ public class DeckTest {
 
     @Test
     public void testShuffle() {
-        // Random
+        //TODO: Random test?
     }
 
     @Test
