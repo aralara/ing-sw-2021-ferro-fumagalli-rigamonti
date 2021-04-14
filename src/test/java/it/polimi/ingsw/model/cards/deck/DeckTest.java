@@ -1,20 +1,14 @@
 package it.polimi.ingsw.model.cards.deck;
 
-import it.polimi.ingsw.model.cards.card.Card;
-import it.polimi.ingsw.model.cards.card.CardColors;
-import it.polimi.ingsw.model.cards.card.DevelopmentCard;
-import it.polimi.ingsw.model.storage.Production;
-import it.polimi.ingsw.model.storage.Resource;
-import it.polimi.ingsw.model.storage.ResourceType;
-import org.junit.Test;
+import it.polimi.ingsw.model.cards.card.*;
+import it.polimi.ingsw.model.storage.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class DeckTest {
