@@ -25,13 +25,10 @@ public abstract class Game {
     private Market market;
     private List<DevelopmentDeck> developmentDecks;
     private FaithTrack faithTrack;
+    boolean finished;
 
 
     public Game() {
-    }
-
-    public Game(String ... players) {
-        initGame(players);
     }
 
 
@@ -59,13 +56,6 @@ public abstract class Game {
         return this.faithTrack;
     }
 
-    /**
-     * Sets the playerBoards attribute
-     * @param playerBoards New attribute value
-     */
-    void setPlayerBoards (List<PlayerBoard> playerBoards) {
-        this.playerBoards = playerBoards;
-    }
 
     /**
      * Gets the number of players in a game
@@ -94,6 +84,7 @@ public abstract class Game {
         initDevelopment();
         initFaithTrack();
         initLeaders();
+        finished = false;
     }
 
     /**
@@ -162,18 +153,22 @@ public abstract class Game {
      * Adds resources organized in shelves to the specified player's warehouse
      * @param player Index of the player to add resources to
      * @param shelves List of shelves containing resources to add
-     * @param discarded List of resources to be discarded
+     * @param extra List of resources to be discarded and faith to be added
      */
-    public void addResourcesToWarehouse(int player, List<Shelf> shelves, List<Resource> discarded) {
-        boolean success = playerBoards.get(player).getWarehouse().changeConfiguration(shelves);
-        if(discarded.size() > 0 && success)
-            addFaithAll(player, discarded.size());
+    public void addResourcesToWarehouse(int player, List<Shelf> shelves, List<Resource> extra) {
+        PlayerBoard playerboard = playerBoards.get(player);
+        boolean success = playerboard.getWarehouse().changeConfiguration(shelves);
+        if(extra.size() > 0 && success) {
+            playerboard.getFaithBoard().takeFaithFromResources(extra);
+            addFaithAll(player, extra.size());
+        }
+        checkFaith();
     }
 
     /**
      * Method invoked to let the next player play his turn
      */
-    public abstract void loadNextTurn();    //TODO: Necessario inserire dei controlli per il funzionamento dell'ultimo giro
+    public abstract void loadNextTurn();
 
     /**
      * Method invoked to take resources from the market
@@ -247,9 +242,14 @@ public abstract class Game {
      * @param player Index of the player to activate productions for
      * @param produced List of resources to produce
      * @param requests List of requests containing resource quantity and location for the spent resources
-     * @return Returns true if the card is bought, false otherwise
+     * @return Returns true if the productions can be activated, false otherwise
      */
     public boolean activateProductions(int player, List<Resource> produced, List<RequestResources> requests) {
+        PlayerBoard playerBoard = playerBoards.get(player);
+        if(playerBoard.canTakeFromStorages(requests)) {
+            playerBoard.getFaithBoard().takeFaithFromResources(produced);
+            checkFaith();
+        }
         return playerBoards.get(player).activateProductions(produced, requests);
     }
 
@@ -261,6 +261,7 @@ public abstract class Game {
     public void discardExtraLeader(int player, LeaderCard card) {
         playerBoards.get(player).getLeaderBoard().discardLeaderHand(card);
         playerBoards.get(player).getFaithBoard().addFaith(1);
+        checkFaith();
     }
 
     /**

@@ -94,6 +94,14 @@ public class PlayerBoard {
     }
 
     /**
+     * Gets the inkwell attribute
+     * @return Returns inkwell value
+     */
+    public boolean isFirstPlayer() {
+        return inkwell;
+    }
+
+    /**
      * Gets the turnPlayed attribute
      * @return Returns turnPlayed value
      */
@@ -175,8 +183,9 @@ public class PlayerBoard {
      * @return Returns true if the card is bought, false otherwise
      */
     public boolean buyDevCard(DevelopmentCard card, int space, List<RequestResources> requests) {
-        boolean bought = takeFromStorages(requests);
+        boolean bought = canTakeFromStorages(requests);
         if(bought)
+            takeFromStorages(requests);
             developmentBoard.addDevCard(card, space);
         return bought;
     }
@@ -186,33 +195,49 @@ public class PlayerBoard {
      * activates the productions for said player by adding the produced resources to their Strongbox
      * @param produced List of resources to produce
      * @param requests List of requests containing resource quantity and location for the spent resources
-     * @return Returns true if the card is bought, false otherwise
+     * @return Returns true if the productions can be activated, false otherwise
      */
     public boolean activateProductions(List<Resource> produced, List<RequestResources> requests) {
-        boolean activated = takeFromStorages(requests);
-        if(activated)
+        boolean activated = canTakeFromStorages(requests);
+        if(activated) {
+            takeFromStorages(requests);
             strongbox.addResources(produced);
+        }
         return activated;
+    }
+
+    /**
+     * Checks if the resources from the Storages specified by the RequestResources can be taken
+     * @param requests List of requests containing resource quantity and location for the spent resources
+     * @return Returns true if the resources can be taken, false otherwise
+     */
+    public boolean canTakeFromStorages(List<RequestResources> requests) {
+        boolean canTake = true;
+        List<Resource> containerList;
+        for(int i = 0; i < requests.size() && canTake; i++){
+            RequestResources request = requests.get(i);
+            if (request.getStorageType() == StorageType.STRONGBOX)
+                containerList = strongbox.getList();
+            else if (request.getStorageType() == StorageType.WAREHOUSE)
+                containerList = warehouse.getList();
+            else
+                containerList = null;
+            canTake = Storage.checkContainedResources(containerList, request.getList());
+        }
+        return canTake;
     }
 
     /**
      * Takes the resources from the Storages specified by the RequestResources if all the requests are valid
      * @param requests List of requests containing resource quantity and location for the spent resources
-     * @return Returns true if the resources are taken, false otherwise
      */
-    private boolean takeFromStorages(List<RequestResources> requests) {
-        boolean canTake = false, flag = true;
+    private void takeFromStorages(List<RequestResources> requests) {
         for(RequestResources request : requests){
-            if(flag) {
-                if (request.getStorageType() == StorageType.STRONGBOX)
-                    canTake = strongbox.removeResources(request.getList());
-                else if (request.getStorageType() == StorageType.WAREHOUSE)
-                    canTake = warehouse.removeResources(request.getList());
-                if(!canTake)
-                    flag = false;
-            }
+            if (request.getStorageType() == StorageType.STRONGBOX)
+                strongbox.removeResources(request.getList());
+            else if (request.getStorageType() == StorageType.WAREHOUSE)
+                warehouse.removeResources(request.getList());
         }
-        return canTake;
     }
 
     /**

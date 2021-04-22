@@ -1,6 +1,13 @@
 package it.polimi.ingsw.model.boards;
 
 import it.polimi.ingsw.model.faith.FaithTrack;
+import it.polimi.ingsw.model.storage.Resource;
+import it.polimi.ingsw.model.storage.ResourceType;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class FaithBoard {
     private static final int POPE_PROGRESSION_SIZE = 3;
@@ -54,6 +61,16 @@ public class FaithBoard {
      */
     public void handleReportActivation(FaithTrack faithTrack) {
         popeProgression[faithTrack.getLastReportTriggered()] = faithTrack.checkPlayerReportPosition(faith);
+    }
+
+    /**
+     * Adds faith to the current FaithBoard from a list of resources, removing the utilized resources from the list
+     * @param resources List of resources
+     */
+    public void takeFaithFromResources(List<Resource> resources) {
+        Predicate<Resource> isFaith = r -> r.getResourceType() == ResourceType.FAITH;
+        addFaith(resources.stream().filter(isFaith).map(Resource::getQuantity).findFirst().orElse(0));
+        resources.removeIf(isFaith);
     }
 
 }

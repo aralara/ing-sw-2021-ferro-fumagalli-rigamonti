@@ -40,6 +40,7 @@ public class SingleGame extends Game{
         if(checkEndGame()){
             calculateTotalVP();
             calculateFinalPositions();
+            finished = true;
         }
     }
 
@@ -50,10 +51,8 @@ public class SingleGame extends Game{
         boolean vatReport = getFaithTrack().checkReportActivation(playerBoard.getFaithBoard().getFaith());
         if(!vatReport)
             vatReport = faithTrack.checkReportActivation(lorenzoBoard.getFaith());
-        if(vatReport) {
-            boolean playerInVatReport = faithTrack.checkPlayerReportPosition(playerBoard.getFaithBoard().getFaith());
-            //TODO: Gestire update PopeProgression PlayerBoard
-        }
+        if(vatReport)
+            playerBoard.getFaithBoard().handleReportActivation(faithTrack);
     }
 
     @Override

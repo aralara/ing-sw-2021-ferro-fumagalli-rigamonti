@@ -7,7 +7,8 @@ import java.util.*;
 
 public class MultiGame extends Game{
 
-    private boolean lastTurn;   //TODO: lastTurn andrebbe spostato in Game
+    private boolean lastTurn;
+    private int currentPlayer;
 
 
     public MultiGame(String ... players){
@@ -25,8 +26,7 @@ public class MultiGame extends Game{
     /**
      * Shuffles the players and appoints the first one as the starting player
      */
-    public void randomizeStartingPlayer(){
-        //TODO: Questo metodo potrebbe essere private
+    private void randomizeStartingPlayer(){
         Collections.shuffle(getPlayerBoards());
         getPlayerBoards().get(0).firstPlayer();
     }
@@ -55,10 +55,14 @@ public class MultiGame extends Game{
 
     @Override
     public void loadNextTurn(){
+        currentPlayer = currentPlayer++ % getPlayerNumber();
         checkFaith();
-        if(checkEndGame()) {
+        if(checkEndGame())
+            lastTurn = true;
+        if(lastTurn && getPlayerBoards().get(currentPlayer).isFirstPlayer()){
             calculateTotalVP();
             calculateFinalPositions();
+            finished = true;
         }
     }
 
