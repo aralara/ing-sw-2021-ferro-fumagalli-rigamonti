@@ -86,7 +86,7 @@ public abstract class Game {
      * Initializes the player boards from the players' nicknames
      * @param players Nicknames of the players
      */
-    void initPlayerBoards(String ... players) {
+    private void initPlayerBoards(String ... players) {
         this.playerBoards = new ArrayList<>();
         for (String player : players)
             playerBoards.add(new PlayerBoard(this, player));
@@ -95,7 +95,7 @@ public abstract class Game {
     /**
      * Initializes the market
      */
-    void initMarket() {
+    private void initMarket() {
         this.market = new Market();
         market.loadMarket(FileNames.MARKET_FILE.value());
     }
@@ -103,7 +103,7 @@ public abstract class Game {
     /**
      * Loads development cards from their file utilizing DevelopmentCardFactory and split them into 12 DevelopmentDeck
      */
-    void initDevelopment() {
+    private void initDevelopment() {
         this.developmentDecks = new ArrayList<>();
         DevelopmentCardFactory devCardFactory = new DevelopmentCardFactory();
         Deck devCardDeck = new Deck(devCardFactory.loadCardFromFile(FileNames.DEV_CARD_FILE.value()));
@@ -114,7 +114,7 @@ public abstract class Game {
     /**
      * Loads faith track information from his file
      */
-    void initFaithTrack() {
+    private void initFaithTrack() {
         this.faithTrack = new FaithTrack();
         faithTrack.loadTrack(FileNames.VATICAN_REPORT_FILE.value(), FileNames.FAITH_SPACE_FILE.value());
     }
@@ -122,7 +122,7 @@ public abstract class Game {
     /**
      * Loads leader cards from their file utilizing LeaderCardFactory and sends four random cards to each player
      */
-    void initLeaders() {
+    private void initLeaders() {
         int[] first4 = new int[]{0, 1, 2, 3};   //TODO: Si potrebbe migliorare
         LeaderCardFactory leadCardFactory = new LeaderCardFactory();
         Deck leadCardDeck = new Deck(leadCardFactory.loadCardFromFile(FileNames.LEADER_CARD_FILE.value()));
