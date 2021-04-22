@@ -61,19 +61,24 @@ public abstract class Game {
     }
 
     /**
-     * Gets the nickname of the player at a specified position
-     * @param position Position of the player
-     * @return Returns a String containing the nickname of the player
+     * Gets the index of the player with a specified nickname
+     * @param nickname Nickname of the player
+     * @return Returns the position of the player
      */
-    public String getPlayerNameAt(int position) {
-        return playerBoards.get(position).getPlayer().getNickname();
+    public int getPlayerIndexOf(String nickname) {
+        int index = -1;
+        for(int i = 0; i < getPlayerNumber() && index == -1; i++) {
+            if (playerBoards.get(i).getPlayer().getNickname().equals(nickname))
+                index = i;
+        }
+        return index;
     }
 
     /**
      * Initializes a game by calling initMarket, initDevelopment, initFaithTrack, initLeaders in this order
      * @param players Nicknames of the players
      */
-    public void initGame(String ... players) {
+    public void initGame(List<String> players) {
         initPlayerBoards(players);
         initMarket();
         initDevelopment();
@@ -86,7 +91,7 @@ public abstract class Game {
      * Initializes the player boards from the players' nicknames
      * @param players Nicknames of the players
      */
-    private void initPlayerBoards(String ... players) {
+    private void initPlayerBoards(List<String> players) {
         this.playerBoards = new ArrayList<>();
         for (String player : players)
             playerBoards.add(new PlayerBoard(this, player));
@@ -167,12 +172,18 @@ public abstract class Game {
 
     /**
      * Method invoked to take resources from the market
+     * @param player Index of the player
      * @param row Row chosen by the player, if the player chose a column it is -1
      * @param column Column chosen by the player, if the player chose a row it is -1
      * @return Returns a list of resources corresponding to the marbles contained in the market
      */
-    public List<Resource> getFromMarket(int row, int column) {
-        return market.chooseCoordinates(row, column);
+    public List<Resource> getFromMarket(int player, int row, int column) {
+        PlayerBoard playerBoard = playerBoards.get(player);
+        if(!playerBoard.isTurnPlayed()) {//TODO: eccezione
+            playerBoard.setTurnPlayed(true);
+            return market.chooseCoordinates(row, column);
+        }
+        return null;
     }
 
     /**
@@ -216,8 +227,12 @@ public abstract class Game {
      * @return Returns true if the card is bought, false otherwise
      */
     public boolean buyDevCard(int player, DevelopmentCard card, int space, List<RequestResources> requests) {
-        if(playerBoards.get(player).buyDevCard(card, space, requests))
-            return removeDevCard(card.getColor(), card.getLevel());
+        PlayerBoard playerBoard = playerBoards.get(player);
+        if(!playerBoard.isTurnPlayed())
+            if(playerBoard.buyDevCard(card, space, requests)) {
+                playerBoard.setTurnPlayed(true);
+                return removeDevCard(card.getColor(), card.getLevel());
+            }
         return false;
     }
 
@@ -241,11 +256,15 @@ public abstract class Game {
      */
     public boolean activateProductions(int player, List<Resource> produced, List<RequestResources> requests) {
         PlayerBoard playerBoard = playerBoards.get(player);
-        if(playerBoard.canTakeFromStorages(requests)) {
-            playerBoard.getFaithBoard().takeFaithFromResources(produced);
-            checkFaith();
+        if(!playerBoard.isTurnPlayed()) {
+            if(playerBoard.canTakeFromStorages(requests)) {
+                playerBoard.getFaithBoard().takeFaithFromResources(produced);
+                checkFaith();
+                playerBoard.setTurnPlayed(true);
+            }
+            return playerBoards.get(player).activateProductions(produced, requests);
         }
-        return playerBoards.get(player).activateProductions(produced, requests);
+        return false;   //TODO: eccezione
     }
 
     /**

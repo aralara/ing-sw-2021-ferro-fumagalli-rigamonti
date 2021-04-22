@@ -11,13 +11,12 @@ public class MultiGame extends Game{
     private int currentPlayer;
 
 
-    public MultiGame(String ... players){
-        initGame(players);
+    public MultiGame(){
     }
 
 
     @Override
-    public void initGame(String ... players){
+    public void initGame(List<String> players){
         super.initGame(players);
         lastTurn = false;
         randomizeStartingPlayer();
@@ -36,7 +35,7 @@ public class MultiGame extends Game{
      * in the same playing order
      * @return Returns a list of lists of resources
      */
-    public List<List<Resource>> getResourcesToEqualize(){
+    public List<List<Resource>> getResourcesToEqualize(){   //TODO: da integrare con VIEW
         List<List<Resource>> equalizeRes = new ArrayList<>();
         equalizeRes.add(null);
         equalizeRes.add(new ArrayList<>(){{
@@ -55,7 +54,8 @@ public class MultiGame extends Game{
 
     @Override
     public void loadNextTurn(){
-        currentPlayer = currentPlayer++ % getPlayerNumber();
+        getPlayerBoards().get(currentPlayer).setTurnPlayed(false);
+        currentPlayer = ++currentPlayer % getPlayerNumber();
         checkFaith();
         if(checkEndGame())
             lastTurn = true;

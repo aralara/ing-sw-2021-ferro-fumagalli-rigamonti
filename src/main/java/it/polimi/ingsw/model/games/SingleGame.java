@@ -5,19 +5,20 @@ import it.polimi.ingsw.model.boards.*;
 import it.polimi.ingsw.model.cards.deck.DevelopmentDeck;
 import it.polimi.ingsw.model.faith.FaithTrack;
 
+import java.util.List;
+
 public class SingleGame extends Game{
 
     private LorenzoBoard lorenzoBoard;
     private boolean isLorenzoTurn, isLorenzoWinner;
 
 
-    public SingleGame(String ... players){
-        initGame(players);
+    public SingleGame(){
     }
 
 
     @Override
-    public void initGame(String ... players){
+    public void initGame(List<String> players){
         super.initGame(players);
         initLorenzoBoard();
         isLorenzoTurn = false;
@@ -35,6 +36,7 @@ public class SingleGame extends Game{
     @Override
     public void loadNextTurn(){
         isLorenzoTurn = !isLorenzoTurn;
+        getPlayerBoards().get(0).setTurnPlayed(false);
         checkFaith();
         if(checkEndGame()){
             calculateTotalVP();
