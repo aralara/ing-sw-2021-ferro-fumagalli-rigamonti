@@ -1,8 +1,7 @@
 package it.polimi.ingsw.model.games;
 
 import it.polimi.ingsw.model.FileNames;
-import it.polimi.ingsw.model.boards.LorenzoBoard;
-import it.polimi.ingsw.model.boards.PlayerBoard;
+import it.polimi.ingsw.model.boards.*;
 import it.polimi.ingsw.model.cards.deck.DevelopmentDeck;
 import it.polimi.ingsw.model.faith.FaithTrack;
 

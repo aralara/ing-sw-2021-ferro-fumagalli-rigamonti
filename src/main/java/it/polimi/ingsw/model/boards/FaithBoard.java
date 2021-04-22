@@ -1,13 +1,10 @@
 package it.polimi.ingsw.model.boards;
 
 import it.polimi.ingsw.model.faith.FaithTrack;
-import it.polimi.ingsw.model.storage.Resource;
-import it.polimi.ingsw.model.storage.ResourceType;
+import it.polimi.ingsw.model.storage.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 public class FaithBoard {
     private static final int POPE_PROGRESSION_SIZE = 3;

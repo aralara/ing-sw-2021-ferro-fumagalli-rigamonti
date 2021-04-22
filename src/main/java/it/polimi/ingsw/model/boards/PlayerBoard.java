@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 public class PlayerBoard {
 
     private Player player;
-    private Game game;
+    private Game game;  //TODO: rimuovere
     private DevelopmentBoard developmentBoard;
     private LeaderBoard leaderBoard;
     private FaithBoard faithBoard;
