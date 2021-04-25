@@ -5,15 +5,21 @@ import it.polimi.ingsw.utils.messages.Message;
 
 public class PlayerWarehouseMessage implements Message {
 
-    private Warehouse developmentBoard;
+    private Warehouse warehouse;
+    private String nickname;
 
 
-    public PlayerWarehouseMessage(Warehouse developmentBoard) {
-        this.developmentBoard = developmentBoard;
+    public PlayerWarehouseMessage(Warehouse developmentBoard, String nickname) {
+        this.warehouse = developmentBoard;
+        this.nickname = nickname;
     }
 
 
-    public Warehouse getDevelopmentBoard() {
-        return developmentBoard;
+    public Warehouse getWarehouse() {
+        return warehouse;
+    }
+
+    public String getNickname(){
+        return nickname;
     }
 }

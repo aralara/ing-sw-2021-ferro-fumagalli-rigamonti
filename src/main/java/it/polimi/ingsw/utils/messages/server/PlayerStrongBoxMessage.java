@@ -5,15 +5,21 @@ import it.polimi.ingsw.utils.messages.Message;
 
 public class PlayerStrongBoxMessage implements Message {
 
-    private Strongbox developmentBoard;
+    private Strongbox strongbox;
+    private String nickname;
 
 
-    public PlayerStrongBoxMessage(Strongbox developmentBoard) {
-        this.developmentBoard = developmentBoard;
+    public PlayerStrongBoxMessage(Strongbox developmentBoard, String nickname) {
+        this.strongbox = developmentBoard;
+        this.nickname = nickname;
     }
 
 
-    public Strongbox getDevelopmentBoard() {
-        return developmentBoard;
+    public Strongbox getStrongbox() {
+        return strongbox;
+    }
+
+    public String getNickname(){
+        return nickname;
     }
 }
