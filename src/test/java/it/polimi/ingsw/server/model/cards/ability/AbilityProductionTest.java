@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.model.cards.ability;
 
+import it.polimi.ingsw.server.model.boards.PlayerBoard;
+import it.polimi.ingsw.server.model.games.MultiGame;
 import it.polimi.ingsw.server.model.storage.Production;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
@@ -25,9 +27,9 @@ public class AbilityProductionTest {
         assertEquals(ResourceType.SERVANT,ap.getProduction().getProduced().get(0).getResourceType());
     }
 
-    @Test   //TODO: cambiato costruttore game
-    public void activateAbility() {/*
-        PlayerBoard pb = new PlayerBoard(new MultiGame("Bonucci"),"Bonucci");
+    @Test
+    public void activateAbility() {
+        PlayerBoard pb = new PlayerBoard(new MultiGame(),"Bonucci");
         AbilityProduction ap = new AbilityProduction(new Production(
                 new ArrayList<>(List.of(new Resource(ResourceType.COIN,2))),
                 new ArrayList<>(List.of(new Resource(ResourceType.SERVANT,1)))));
@@ -58,6 +60,6 @@ public class AbilityProductionTest {
         assertEquals(2,pb.getAbilityProductions().get(1).getProduced().get(0).getQuantity());
         assertEquals(ResourceType.FAITH,pb.getAbilityProductions().get(1).getProduced().get(0).getResourceType());
         assertEquals(1,pb.getAbilityProductions().get(1).getProduced().get(1).getQuantity());
-        assertEquals(ResourceType.COIN,pb.getAbilityProductions().get(1).getProduced().get(1).getResourceType());*/
+        assertEquals(ResourceType.COIN,pb.getAbilityProductions().get(1).getProduced().get(1).getResourceType());
     }
 }

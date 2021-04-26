@@ -1,8 +1,14 @@
 package it.polimi.ingsw.server.model.cards.requirement;
 
+import it.polimi.ingsw.server.model.boards.PlayerBoard;
+import it.polimi.ingsw.server.model.games.MultiGame;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
+import it.polimi.ingsw.server.model.storage.Shelf;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -16,9 +22,9 @@ public class RequirementResTest {
         assertEquals(ResourceType.SHIELD,rr.getResource().getResourceType());
     }
 
-    @Test   //TODO: cambiato costruttore game
-    public void testCheckRequirement() {/*
-        PlayerBoard pb = new PlayerBoard(new MultiGame("Bonucci"),"Bonucci");
+    @Test
+    public void testCheckRequirement() {
+        PlayerBoard pb = new PlayerBoard(new MultiGame(),"Bonucci");
         Shelf s1 = new Shelf(ResourceType.SHIELD,new Resource(ResourceType.SHIELD,3),3,false );
         Shelf s2 = new Shelf(ResourceType.SHIELD,new Resource(ResourceType.SHIELD,2),2,true );
 
@@ -31,6 +37,6 @@ public class RequirementResTest {
         assertFalse(rr.checkRequirement(pb));
 
         rr = new RequirementRes(new Resource(ResourceType.SHIELD,6));
-        assertFalse(rr.checkRequirement(pb));*/
+        assertFalse(rr.checkRequirement(pb));
     }
 }

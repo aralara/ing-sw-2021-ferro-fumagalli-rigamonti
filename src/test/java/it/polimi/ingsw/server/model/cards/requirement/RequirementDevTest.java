@@ -1,7 +1,16 @@
 package it.polimi.ingsw.server.model.cards.requirement;
 
+import it.polimi.ingsw.server.model.boards.PlayerBoard;
 import it.polimi.ingsw.server.model.cards.card.CardColors;
+import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
+import it.polimi.ingsw.server.model.games.MultiGame;
+import it.polimi.ingsw.server.model.storage.Production;
+import it.polimi.ingsw.server.model.storage.Resource;
+import it.polimi.ingsw.server.model.storage.ResourceType;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -25,9 +34,9 @@ public class RequirementDevTest {
         assertEquals(1,rd.getNumber());
     }
 
-    @Test   //TODO: cambiato costruttore game
-    public void testCheckRequirement() {/*
-        PlayerBoard pb = new PlayerBoard(new MultiGame("Bonucci"),"Bonucci");
+    @Test
+    public void testCheckRequirement() {
+        PlayerBoard pb = new PlayerBoard(new MultiGame(),"Bonucci");
 
         pb.getDevelopmentBoard().addDevCard(new DevelopmentCard(2,CardColors.YELLOW,1,
                 new Production(new ArrayList<>(List.of(new Resource(ResourceType.SERVANT,2))),
@@ -56,6 +65,6 @@ public class RequirementDevTest {
         assertTrue(rr.checkRequirement(pb));
 
         rr = new RequirementDev(CardColors.BLUE, 2,1);
-        assertFalse(rr.checkRequirement(pb));*/
+        assertFalse(rr.checkRequirement(pb));
     }
 }

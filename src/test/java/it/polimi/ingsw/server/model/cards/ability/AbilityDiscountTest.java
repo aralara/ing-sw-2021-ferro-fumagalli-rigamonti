@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.model.cards.ability;
 
+import it.polimi.ingsw.server.model.boards.PlayerBoard;
+import it.polimi.ingsw.server.model.games.MultiGame;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 import org.junit.Test;
 
@@ -14,9 +16,9 @@ public class AbilityDiscountTest {
 
     }
 
-    @Test   //TODO: cambiato costruttore game
-    public void testActivateAbility() {/*
-        PlayerBoard pb = new PlayerBoard(new MultiGame("Bonucci"),"Bonucci");
+    @Test
+    public void testActivateAbility() {
+        PlayerBoard pb = new PlayerBoard(new MultiGame(),"Bonucci");
         AbilityDiscount ad = new AbilityDiscount(ResourceType.COIN);
         ad.activateAbility(pb);
 
@@ -29,6 +31,6 @@ public class AbilityDiscountTest {
 
         assertEquals(2,pb.getAbilityDiscounts().size());
         assertEquals(ResourceType.COIN, pb.getAbilityDiscounts().get(0));
-        assertEquals(ResourceType.SHIELD, pb.getAbilityDiscounts().get(1));*/
+        assertEquals(ResourceType.SHIELD, pb.getAbilityDiscounts().get(1));
     }
 }

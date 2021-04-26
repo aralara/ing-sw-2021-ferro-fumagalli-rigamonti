@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.model.cards.ability;
 
+import it.polimi.ingsw.server.model.boards.PlayerBoard;
+import it.polimi.ingsw.server.model.games.MultiGame;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 import org.junit.Test;
 
@@ -13,9 +15,9 @@ public class AbilityWarehouseTest {
         assertEquals(ResourceType.STONE,aw.getResourceType());
     }
 
-    @Test   //TODO: cambiato costruttore game
-    public void testActivateAbility() {/*
-        PlayerBoard pb = new PlayerBoard(new MultiGame("Bonucci"),"Bonucci");
+    @Test
+    public void testActivateAbility() {
+        PlayerBoard pb = new PlayerBoard(new MultiGame(),"Bonucci");
         AbilityWarehouse aw = new AbilityWarehouse(ResourceType.STONE);
         aw.activateAbility(pb);
 
@@ -28,6 +30,6 @@ public class AbilityWarehouseTest {
 
         assertEquals(2,pb.getWarehouse().getShelves().size());
         assertEquals(ResourceType.STONE, pb.getWarehouse().getShelves().get(0).getResourceType());
-        assertEquals(ResourceType.SERVANT, pb.getWarehouse().getShelves().get(1).getResourceType());*/
+        assertEquals(ResourceType.SERVANT, pb.getWarehouse().getShelves().get(1).getResourceType());
     }
 }

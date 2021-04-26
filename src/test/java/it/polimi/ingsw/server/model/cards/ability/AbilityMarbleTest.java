@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.model.cards.ability;
 
+import it.polimi.ingsw.server.model.boards.PlayerBoard;
+import it.polimi.ingsw.server.model.games.MultiGame;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 import org.junit.Test;
 
@@ -13,9 +15,9 @@ public class AbilityMarbleTest {
         assertEquals(ResourceType.STONE,am.getResourceType());
     }
 
-    @Test   //TODO: cambiato costruttore game
-    public void testActivateAbility() {/*
-        PlayerBoard pb = new PlayerBoard(new MultiGame("Bonucci"),"Bonucci");
+    @Test
+    public void testActivateAbility() {
+        PlayerBoard pb = new PlayerBoard(new MultiGame(),"Bonucci");
         AbilityMarble ad = new AbilityMarble(ResourceType.SERVANT);
         ad.activateAbility(pb);
 
@@ -28,6 +30,6 @@ public class AbilityMarbleTest {
 
         assertEquals(2,pb.getAbilityMarbles().size());
         assertEquals(ResourceType.SERVANT, pb.getAbilityMarbles().get(0));
-        assertEquals(ResourceType.STONE, pb.getAbilityMarbles().get(1));*/
+        assertEquals(ResourceType.STONE, pb.getAbilityMarbles().get(1));
     }
 }
