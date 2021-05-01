@@ -95,13 +95,13 @@ public class Warehouse extends Listened implements Storage {
 
     /**
      * Gets an aggregated list of all the resources contained in the Warehouse that respects the parameter
-     * @param isleader Indicates if the type of controlled shelves is leader or not
+     * @param isLeader Indicates if the type of controlled shelves is leader or not
      * @return Returns the list of resources
      */
-    public List<Resource> getList(boolean isleader) {
+    public List<Resource> getList(boolean isLeader) {
         List<Resource> tempList = new ArrayList<>();
         for (Shelf shelf : shelves) {
-            if (shelf.IsLeader() == isleader) {
+            if (shelf.IsLeader() == isLeader) {
                 tempList = Storage.mergeResourceList(tempList,shelf.makeClone().getList());
             }
         }
