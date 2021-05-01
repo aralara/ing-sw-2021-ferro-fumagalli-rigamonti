@@ -267,18 +267,4 @@ public class PlayerBoard {
         }
         return canPlay;
     }
-
-    /**
-     * Adds listeners to the PlayerBoard's components
-     * @param virtualViews VirtualViews that intend to listen to the board
-     */
-    public void addListeners(List<VirtualView> virtualViews) {
-        for(VirtualView view : virtualViews){
-            developmentBoard.addListener(Listeners.L_BOARD_DEV.value(), view);
-            faithBoard.addListener(Listeners.L_BOARD_FAITH.value(), view);
-            leaderBoard.addListener(Listeners.L_BOARD_LEADER.value(), view);
-            strongbox.addListener(Listeners.L_BOARD_STRONGBOX.value(), view);
-            warehouse.addListener(Listeners.L_BOARD_WAREHOUSE.value(), view);
-        }
-    }
 }
