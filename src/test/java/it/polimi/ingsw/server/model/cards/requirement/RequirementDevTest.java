@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.cards.requirement;
 
+import it.polimi.ingsw.exceptions.InvalidSpaceException;
 import it.polimi.ingsw.server.model.boards.PlayerBoard;
 import it.polimi.ingsw.server.model.cards.card.CardColors;
 import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
@@ -38,18 +39,23 @@ public class RequirementDevTest {
     public void testCheckRequirement() {
         PlayerBoard pb = new PlayerBoard("Bonucci");
 
-        pb.getDevelopmentBoard().addDevCard(new DevelopmentCard(2,CardColors.YELLOW,1,
-                new Production(new ArrayList<>(List.of(new Resource(ResourceType.SERVANT,2))),
-                        new ArrayList<>(List.of(new Resource(ResourceType.FAITH,2)))),
-                        new ArrayList<>(List.of(new Resource(ResourceType.SHIELD,2)))),1);
-        pb.getDevelopmentBoard().addDevCard(new DevelopmentCard(2,CardColors.BLUE,1,
-                new Production(new ArrayList<>(List.of(new Resource(ResourceType.SERVANT,2))),
-                        new ArrayList<>(List.of(new Resource(ResourceType.FAITH,2)))),
-                new ArrayList<>(List.of(new Resource(ResourceType.SHIELD,2)))),2);
-        pb.getDevelopmentBoard().addDevCard(new DevelopmentCard(2,CardColors.YELLOW,2,
-                new Production(new ArrayList<>(List.of(new Resource(ResourceType.SERVANT,2))),
-                        new ArrayList<>(List.of(new Resource(ResourceType.FAITH,2)))),
-                new ArrayList<>(List.of(new Resource(ResourceType.SHIELD,2)))),1);
+        try {
+            pb.getDevelopmentBoard().addDevCard(new DevelopmentCard(2, CardColors.YELLOW, 1,
+                    new Production(new ArrayList<>(List.of(new Resource(ResourceType.SERVANT, 2))),
+                            new ArrayList<>(List.of(new Resource(ResourceType.FAITH, 2)))),
+                    new ArrayList<>(List.of(new Resource(ResourceType.SHIELD, 2)))), 1);
+            pb.getDevelopmentBoard().addDevCard(new DevelopmentCard(2, CardColors.BLUE, 1,
+                    new Production(new ArrayList<>(List.of(new Resource(ResourceType.SERVANT, 2))),
+                            new ArrayList<>(List.of(new Resource(ResourceType.FAITH, 2)))),
+                    new ArrayList<>(List.of(new Resource(ResourceType.SHIELD, 2)))), 2);
+            pb.getDevelopmentBoard().addDevCard(new DevelopmentCard(2, CardColors.YELLOW, 2,
+                    new Production(new ArrayList<>(List.of(new Resource(ResourceType.SERVANT, 2))),
+                            new ArrayList<>(List.of(new Resource(ResourceType.FAITH, 2)))),
+                    new ArrayList<>(List.of(new Resource(ResourceType.SHIELD, 2)))), 1);
+        }
+        catch (InvalidSpaceException e){
+            e.printStackTrace();
+        }
 
 
         RequirementDev rr = new RequirementDev(CardColors.YELLOW, 2,1);
