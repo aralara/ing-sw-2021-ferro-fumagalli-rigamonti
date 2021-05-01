@@ -99,6 +99,7 @@ public class Market extends Listened {
 
         if(row>=0){
             newFloatingMarble = marbleMatrix[row][0];
+            //noinspection ManualArrayCopy
             for(int resColumn=0; resColumn<COLUMNS-1; resColumn++) {
                 marbleMatrix[row][resColumn] = marbleMatrix[row][resColumn+1];
             }
