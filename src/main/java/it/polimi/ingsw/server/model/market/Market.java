@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.utils.listeners.Listened;
+import it.polimi.ingsw.utils.listeners.Listeners;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -83,6 +84,7 @@ public class Market extends Listened {
         Storage.aggregateResources(marbleResources);
 
         moveFloatingMarble(row, column);
+        fireUpdate(Listeners.GAME_MARKET.value(), null, this);
         return marbleResources;
     }
 

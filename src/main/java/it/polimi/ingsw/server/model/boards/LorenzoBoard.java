@@ -5,6 +5,7 @@ import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.server.model.cards.factory.*;
 import it.polimi.ingsw.server.model.games.SingleGame;
 import it.polimi.ingsw.utils.listeners.Listened;
+import it.polimi.ingsw.utils.listeners.Listeners;
 
 public class LorenzoBoard extends Listened {
 
@@ -41,7 +42,9 @@ public class LorenzoBoard extends Listened {
      * @param faith Faith quantity to be added
      */
     public void addFaith(int faith) {
+        int temp = this.faith;
         this.faith += faith;
+        fireUpdate(Listeners.GAME_LORENZO_FAITH.value(), temp, this.faith);
     }
 
     /**
