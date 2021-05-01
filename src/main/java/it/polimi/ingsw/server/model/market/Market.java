@@ -2,6 +2,8 @@ package it.polimi.ingsw.server.model.market;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+import it.polimi.ingsw.exceptions.InvalidColumnException;
+import it.polimi.ingsw.exceptions.InvalidRowException;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.utils.listeners.Listened;
 import it.polimi.ingsw.utils.listeners.Listeners;
@@ -65,17 +67,21 @@ public class Market extends Listened {
      * @param row Row chosen by the player, if the player chose a column it is -1
      * @param column Column chosen by the player, if the player chose a row it is -1
      * @return Returns a list of resources corresponding to the marbles contained in the chosen matrix coordinates
+     * @throws InvalidRowException when the selected row is out of the maximum ROWS value
+     * @throws InvalidColumnException when the selected column is out of the maximum COLUMNS value
      */
-    public List<Resource> chooseCoordinates(int row, int column) {
+    public List<Resource> chooseCoordinates(int row, int column)
+            throws InvalidRowException, InvalidColumnException {
         List<Resource> marbleResources = new ArrayList<>();
-        int resTypeNum = ResourceType.values().length;
 
         if(row>=0){
+            if (row >= ROWS) throw new InvalidRowException();
             for(int resColumn=0; resColumn<COLUMNS; resColumn++) {
                 marbleResources.add(new Resource(marbleMatrix[row][resColumn].getResourceType(), 1));
             }
         }
         else {
+            if (column >= COLUMNS) throw new InvalidColumnException();
             for(int resRow=0; resRow<ROWS; resRow++) {
                 marbleResources.add(new Resource(marbleMatrix[resRow][column].getResourceType(), 1));
             }

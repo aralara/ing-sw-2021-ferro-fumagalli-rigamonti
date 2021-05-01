@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.boards;
 
+import it.polimi.ingsw.exceptions.InvalidSpaceException;
 import it.polimi.ingsw.server.model.cards.card.*;
 import it.polimi.ingsw.server.model.cards.requirement.Requirement;
 import it.polimi.ingsw.server.model.faith.FaithTrack;
@@ -191,9 +192,15 @@ public class PlayerBoard {
      */
     public boolean buyDevCard(DevelopmentCard card, int space, List<RequestResources> requests) {
         boolean bought = canTakeFromStorages(requests);
-        if(bought)
+        if(bought) {
             takeFromStorages(requests);
-            developmentBoard.addDevCard(card, space);
+            try {
+                developmentBoard.addDevCard(card, space);
+            }
+            catch (InvalidSpaceException e){
+                e.printStackTrace();
+            }
+        }
         return bought;
     }
 

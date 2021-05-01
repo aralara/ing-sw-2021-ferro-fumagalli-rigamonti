@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.boards;
 
+import it.polimi.ingsw.exceptions.InvalidSpaceException;
 import it.polimi.ingsw.server.model.cards.card.*;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.server.model.storage.Production;
@@ -44,8 +45,11 @@ public class DevelopmentBoard extends Listened {
      * @param card The development card to be added
      * @param space Position of the space on the board
      * @return Returns true if the card is added correctly
+     * @throws InvalidSpaceException when the selected space is out of the allowed range
      */
-    public boolean addDevCard(DevelopmentCard card, int space) {
+    public boolean addDevCard(DevelopmentCard card, int space)
+        throws InvalidSpaceException {
+        if(space<0 || space>=NUMBER_OF_SPACES) throw new InvalidSpaceException();
         if((card.getLevel() == 1 && spaces.get(space).isEmpty()) ||
             (!spaces.get(space).isEmpty() &&
             card.getLevel()-1 == ((DevelopmentCard)spaces.get(space).get(0)).getLevel())) {

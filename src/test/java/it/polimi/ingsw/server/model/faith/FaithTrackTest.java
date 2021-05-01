@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.faith;
 
+import it.polimi.ingsw.exceptions.NotExistingLastReportTriggeredException;
 import it.polimi.ingsw.server.model.FileNames;
 import org.junit.Test;
 
@@ -86,32 +87,37 @@ public class FaithTrackTest {
         FaithTrack faithTrack = new FaithTrack();
         faithTrack.loadTrack(FileNames.VATICAN_REPORT_FILE.value(), FileNames.FAITH_SPACE_FILE.value());
 
-        faithTrack.checkReportActivation(8);
-        assertFalse(faithTrack.checkPlayerReportPosition(4));
-        assertTrue(faithTrack.checkPlayerReportPosition(5));
-        assertTrue(faithTrack.checkPlayerReportPosition(8));
-        assertTrue(faithTrack.checkPlayerReportPosition(11));
+        try {
+            faithTrack.checkReportActivation(8);
+            assertFalse(faithTrack.checkPlayerReportPosition(4));
+            assertTrue(faithTrack.checkPlayerReportPosition(5));
+            assertTrue(faithTrack.checkPlayerReportPosition(8));
+            assertTrue(faithTrack.checkPlayerReportPosition(11));
 
-        faithTrack.checkReportActivation(16);
-        assertFalse(faithTrack.checkPlayerReportPosition(4));
-        assertFalse(faithTrack.checkPlayerReportPosition(5));
-        assertFalse(faithTrack.checkPlayerReportPosition(8));
-        assertFalse(faithTrack.checkPlayerReportPosition(11));
-        assertTrue(faithTrack.checkPlayerReportPosition(12));
-        assertTrue(faithTrack.checkPlayerReportPosition(16));
-        assertTrue(faithTrack.checkPlayerReportPosition(18));
+            faithTrack.checkReportActivation(16);
+            assertFalse(faithTrack.checkPlayerReportPosition(4));
+            assertFalse(faithTrack.checkPlayerReportPosition(5));
+            assertFalse(faithTrack.checkPlayerReportPosition(8));
+            assertFalse(faithTrack.checkPlayerReportPosition(11));
+            assertTrue(faithTrack.checkPlayerReportPosition(12));
+            assertTrue(faithTrack.checkPlayerReportPosition(16));
+            assertTrue(faithTrack.checkPlayerReportPosition(18));
 
-        faithTrack.checkReportActivation(24);
-        assertFalse(faithTrack.checkPlayerReportPosition(4));
-        assertFalse(faithTrack.checkPlayerReportPosition(5));
-        assertFalse(faithTrack.checkPlayerReportPosition(8));
-        assertFalse(faithTrack.checkPlayerReportPosition(11));
-        assertFalse(faithTrack.checkPlayerReportPosition(12));
-        assertFalse(faithTrack.checkPlayerReportPosition(16));
-        assertFalse(faithTrack.checkPlayerReportPosition(18));
-        assertTrue(faithTrack.checkPlayerReportPosition(19));
-        assertTrue(faithTrack.checkPlayerReportPosition(24));
-        assertTrue(faithTrack.checkPlayerReportPosition(25)); //out of the faith track range, but still valid
+            faithTrack.checkReportActivation(24);
+            assertFalse(faithTrack.checkPlayerReportPosition(4));
+            assertFalse(faithTrack.checkPlayerReportPosition(5));
+            assertFalse(faithTrack.checkPlayerReportPosition(8));
+            assertFalse(faithTrack.checkPlayerReportPosition(11));
+            assertFalse(faithTrack.checkPlayerReportPosition(12));
+            assertFalse(faithTrack.checkPlayerReportPosition(16));
+            assertFalse(faithTrack.checkPlayerReportPosition(18));
+            assertTrue(faithTrack.checkPlayerReportPosition(19));
+            assertTrue(faithTrack.checkPlayerReportPosition(24));
+            assertTrue(faithTrack.checkPlayerReportPosition(25)); //out of the faith track range, but still valid
+        }
+        catch (NotExistingLastReportTriggeredException e){
+            e.printStackTrace();
+        }
     }
 
     @Test
