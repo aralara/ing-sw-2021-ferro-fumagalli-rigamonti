@@ -1,12 +1,13 @@
 package it.polimi.ingsw.server.model.cards.deck;
 
 import it.polimi.ingsw.server.model.cards.card.*;
+import it.polimi.ingsw.utils.listeners.Listened;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class DevelopmentDeck {
+public class DevelopmentDeck extends Listened {
 
     private final Deck deck;
     private final CardColors deckColor;

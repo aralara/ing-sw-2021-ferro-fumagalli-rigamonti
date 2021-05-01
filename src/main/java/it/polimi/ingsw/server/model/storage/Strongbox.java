@@ -1,9 +1,11 @@
 package it.polimi.ingsw.server.model.storage;
 
+import it.polimi.ingsw.utils.listeners.Listened;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Strongbox implements Storage{
+public class Strongbox extends Listened implements Storage{
 
     private final List<Resource> resources;
 

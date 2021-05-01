@@ -8,6 +8,8 @@ import it.polimi.ingsw.server.model.cards.factory.*;
 import it.polimi.ingsw.server.model.faith.FaithTrack;
 import it.polimi.ingsw.server.model.market.Market;
 import it.polimi.ingsw.server.model.storage.*;
+import it.polimi.ingsw.server.view.VirtualView;
+import it.polimi.ingsw.utils.listeners.Listeners;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -359,5 +361,20 @@ public abstract class Game {
 
         for(int i = 0; i < playerNumber; i++)
             playerBoards.get(i).getPlayer().setFinalPosition(playersPositions[i]);
+    }
+
+    /**
+     * Adds listeners to the Game's components
+     * @param virtualViews VirtualViews that intend to listen to the Game
+     */
+    public void addListeners(List<VirtualView> virtualViews) {
+        for(VirtualView view : virtualViews){
+            for(DevelopmentDeck dDeck : developmentDecks)
+                dDeck.addListener(Listeners.L_GAME_DEV_DECKS.value(), view);
+            faithTrack.addListener(Listeners.L_GAME_FAITH.value(), view);
+            market.addListener(Listeners.L_GAME_MARKET.value(), view);
+        }
+        for(PlayerBoard pBoard : playerBoards)
+            pBoard.addListeners(virtualViews);
     }
 }

@@ -2,11 +2,12 @@ package it.polimi.ingsw.server.model.boards;
 
 import it.polimi.ingsw.server.model.faith.FaithTrack;
 import it.polimi.ingsw.server.model.storage.*;
+import it.polimi.ingsw.utils.listeners.Listened;
 
 import java.util.List;
 import java.util.function.Predicate;
 
-public class FaithBoard {
+public class FaithBoard extends Listened {
     private static final int POPE_PROGRESSION_SIZE = 3;
 
     private int faith;

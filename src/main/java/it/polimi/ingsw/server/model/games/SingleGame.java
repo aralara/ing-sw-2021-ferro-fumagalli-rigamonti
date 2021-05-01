@@ -4,6 +4,8 @@ import it.polimi.ingsw.server.model.FileNames;
 import it.polimi.ingsw.server.model.boards.*;
 import it.polimi.ingsw.server.model.cards.deck.DevelopmentDeck;
 import it.polimi.ingsw.server.model.faith.FaithTrack;
+import it.polimi.ingsw.server.view.VirtualView;
+import it.polimi.ingsw.utils.listeners.Listeners;
 
 import java.util.List;
 
@@ -88,5 +90,11 @@ public class SingleGame extends Game{
             getPlayerBoards().get(0).getPlayer().setFinalPosition(1);
         else
             getPlayerBoards().get(0).getPlayer().setFinalPosition(2);
+    }
+
+    @Override
+    public void addListeners(List<VirtualView> virtualViews) {
+        super.addListeners(virtualViews);
+        lorenzoBoard.addListener(Listeners.L_GAME_LORENZO.value(), virtualViews.get(0));
     }
 }

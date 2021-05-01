@@ -2,13 +2,14 @@ package it.polimi.ingsw.server.model.faith;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+import it.polimi.ingsw.utils.listeners.Listened;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FaithTrack {
+public class FaithTrack extends Listened {
 
     private final List<VaticanReport> vaticanReports;
     private final List<FaithSpace> faithSpaces;

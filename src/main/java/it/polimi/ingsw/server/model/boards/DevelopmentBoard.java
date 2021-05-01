@@ -3,11 +3,12 @@ package it.polimi.ingsw.server.model.boards;
 import it.polimi.ingsw.server.model.cards.card.*;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.server.model.storage.Production;
+import it.polimi.ingsw.utils.listeners.Listened;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DevelopmentBoard {
+public class DevelopmentBoard extends Listened {
     private static final int NUMBER_OF_SPACES = 3;
 
     private final List<Deck> spaces;

@@ -2,10 +2,11 @@ package it.polimi.ingsw.server.model.boards;
 
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
+import it.polimi.ingsw.utils.listeners.Listened;
 
 import java.util.List;
 
-public class LeaderBoard {
+public class LeaderBoard extends Listened {
 
     private final Deck hand;
     private final Deck board;

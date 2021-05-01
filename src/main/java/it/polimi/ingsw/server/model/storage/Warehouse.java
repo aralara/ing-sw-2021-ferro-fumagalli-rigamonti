@@ -1,9 +1,11 @@
 package it.polimi.ingsw.server.model.storage;
 
+import it.polimi.ingsw.utils.listeners.Listened;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Warehouse implements Storage {
+public class Warehouse extends Listened implements Storage {
 
     private List<Shelf> shelves;
 

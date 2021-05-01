@@ -4,6 +4,8 @@ import it.polimi.ingsw.server.model.cards.card.*;
 import it.polimi.ingsw.server.model.cards.requirement.Requirement;
 import it.polimi.ingsw.server.model.faith.FaithTrack;
 import it.polimi.ingsw.server.model.storage.*;
+import it.polimi.ingsw.server.view.VirtualView;
+import it.polimi.ingsw.utils.listeners.Listeners;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -264,5 +266,19 @@ public class PlayerBoard {
             leaderBoard.playLeaderHand(leaderCard);
         }
         return canPlay;
+    }
+
+    /**
+     * Adds listeners to the PlayerBoard's components
+     * @param virtualViews VirtualViews that intend to listen to the board
+     */
+    public void addListeners(List<VirtualView> virtualViews) {
+        for(VirtualView view : virtualViews){
+            developmentBoard.addListener(Listeners.L_BOARD_DEV.value(), view);
+            faithBoard.addListener(Listeners.L_BOARD_FAITH.value(), view);
+            leaderBoard.addListener(Listeners.L_BOARD_LEADER.value(), view);
+            strongbox.addListener(Listeners.L_BOARD_STRONGBOX.value(), view);
+            warehouse.addListener(Listeners.L_BOARD_WAREHOUSE.value(), view);
+        }
     }
 }

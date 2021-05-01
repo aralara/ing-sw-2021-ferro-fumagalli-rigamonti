@@ -2,11 +2,11 @@ package it.polimi.ingsw.server.model.boards;
 
 import it.polimi.ingsw.server.model.cards.card.*;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
-import it.polimi.ingsw.server.model.cards.factory.LorenzoDevFactory;
-import it.polimi.ingsw.server.model.cards.factory.LorenzoFaithFactory;
+import it.polimi.ingsw.server.model.cards.factory.*;
 import it.polimi.ingsw.server.model.games.SingleGame;
+import it.polimi.ingsw.utils.listeners.Listened;
 
-public class LorenzoBoard {
+public class LorenzoBoard extends Listened {
 
     private final SingleGame game;
     private final Deck lorenzoDeck;

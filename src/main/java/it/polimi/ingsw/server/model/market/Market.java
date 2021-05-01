@@ -2,15 +2,14 @@ package it.polimi.ingsw.server.model.market;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-import it.polimi.ingsw.server.model.storage.Resource;
-import it.polimi.ingsw.server.model.storage.ResourceType;
-import it.polimi.ingsw.server.model.storage.Storage;
+import it.polimi.ingsw.server.model.storage.*;
+import it.polimi.ingsw.utils.listeners.Listened;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.*;
 
-public class Market {
+public class Market extends Listened {
 
     private static final int ROWS = 3;
     private static final int COLUMNS = 4;
