@@ -64,7 +64,12 @@ public class FaithBoard extends Listened {
     public void handleReportActivation(FaithTrack faithTrack) {
         int lastReportTriggered = faithTrack.getLastReportTriggered();
         boolean temp = this.popeProgression[lastReportTriggered];
-        this.popeProgression[lastReportTriggered] = faithTrack.checkPlayerReportPosition(faith);
+        try {
+            this.popeProgression[lastReportTriggered] = faithTrack.checkPlayerReportPosition(faith);
+        }
+        catch (NotExistingLastReportTriggeredException e){
+            e.printStackTrace();
+        }
         fireUpdate(Listeners.BOARD_FAITH_POPE.value(), temp, this.popeProgression);
     }
 
