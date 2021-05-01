@@ -4,8 +4,8 @@ import java.util.List;
 
 public class RequestResources implements Storage{
 
-    private List<Resource> requestedResources;
-    private StorageType storageType;
+    private final List<Resource> requestedResources;
+    private final StorageType storageType;
 
 
     public RequestResources(List<Resource> requestedResources, StorageType storageType) {

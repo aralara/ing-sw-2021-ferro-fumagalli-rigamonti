@@ -2,8 +2,8 @@ package it.polimi.ingsw.server.model.faith;
 
 public class VaticanReport {
 
-    private int min, max;
-    private int popeValue;
+    private final int min, max;
+    private final int popeValue;
     private boolean triggered;
 
 

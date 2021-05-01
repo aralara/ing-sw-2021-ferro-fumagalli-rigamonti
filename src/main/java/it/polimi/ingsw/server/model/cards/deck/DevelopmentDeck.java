@@ -8,9 +8,9 @@ import java.util.List;
 
 public class DevelopmentDeck {
 
-    private Deck deck;
-    private CardColors deckColor;
-    private int deckLevel;
+    private final Deck deck;
+    private final CardColors deckColor;
+    private final int deckLevel;
 
 
     public DevelopmentDeck(Deck deck) {

@@ -10,8 +10,8 @@ import java.util.List;
 
 public class FaithTrack {
 
-    private List<VaticanReport> vaticanReports;
-    private List<FaithSpace> faithSpaces;
+    private final List<VaticanReport> vaticanReports;
+    private final List<FaithSpace> faithSpaces;
     private int lastReportTriggered;
 
 

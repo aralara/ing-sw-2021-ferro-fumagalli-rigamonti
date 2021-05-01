@@ -15,7 +15,7 @@ public class Market {
     private static final int ROWS = 3;
     private static final int COLUMNS = 4;
 
-    private Marble[][] marbleMatrix;
+    private final Marble[][] marbleMatrix;
     private Marble floatingMarble;
 
 

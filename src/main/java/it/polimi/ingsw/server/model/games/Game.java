@@ -94,7 +94,7 @@ public abstract class Game {
     private void initPlayerBoards(List<String> players) {
         this.playerBoards = new ArrayList<>();
         for (String player : players)
-            playerBoards.add(new PlayerBoard(this, player));
+            playerBoards.add(new PlayerBoard(player));
     }
 
     /**

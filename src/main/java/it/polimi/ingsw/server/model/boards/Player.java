@@ -2,7 +2,7 @@ package it.polimi.ingsw.server.model.boards;
 
 public class Player {
 
-    private String nickname;
+    private final String nickname;
     private int totalVP, finalPosition;
 
 

@@ -18,7 +18,7 @@ public class AbilityDiscountTest {
 
     @Test
     public void testActivateAbility() {
-        PlayerBoard pb = new PlayerBoard(new MultiGame(),"Bonucci");
+        PlayerBoard pb = new PlayerBoard("Bonucci");
         AbilityDiscount ad = new AbilityDiscount(ResourceType.COIN);
         ad.activateAbility(pb);
 

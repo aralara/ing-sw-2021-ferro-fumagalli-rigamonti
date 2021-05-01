@@ -6,7 +6,7 @@ import it.polimi.ingsw.server.model.storage.*;
 
 public class AbilityDiscount implements SpecialAbility {
 
-    private ResourceType resourceType;
+    private final ResourceType resourceType;
 
 
     public AbilityDiscount(ResourceType resourceType){

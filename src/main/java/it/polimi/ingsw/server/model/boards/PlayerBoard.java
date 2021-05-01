@@ -3,7 +3,6 @@ package it.polimi.ingsw.server.model.boards;
 import it.polimi.ingsw.server.model.cards.card.*;
 import it.polimi.ingsw.server.model.cards.requirement.Requirement;
 import it.polimi.ingsw.server.model.faith.FaithTrack;
-import it.polimi.ingsw.server.model.games.Game;
 import it.polimi.ingsw.server.model.storage.*;
 
 import java.util.ArrayList;
@@ -13,25 +12,23 @@ import java.util.stream.Stream;
 
 public class PlayerBoard {
 
-    private Player player;
-    private Game game;  //TODO: rimuovere
-    private DevelopmentBoard developmentBoard;
-    private LeaderBoard leaderBoard;
-    private FaithBoard faithBoard;
-    private Warehouse warehouse;
-    private Strongbox strongbox;
+    private final Player player;
+    private final DevelopmentBoard developmentBoard;
+    private final LeaderBoard leaderBoard;
+    private final FaithBoard faithBoard;
+    private final Warehouse warehouse;
+    private final Strongbox strongbox;
     private boolean inkwell;
     private boolean turnPlayed;
-    private Production basicProduction;
+    private final Production basicProduction;
 
-    private List<Production> activeAbilityProductions;
-    private List<ResourceType> activeAbilityMarbles;
-    private List<ResourceType> activeAbilityDiscounts;
+    private final List<Production> activeAbilityProductions;
+    private final List<ResourceType> activeAbilityMarbles;
+    private final List<ResourceType> activeAbilityDiscounts;
 
 
-    public PlayerBoard(Game game, String player) {
+    public PlayerBoard(String player) {
         this.player = new Player(player);
-        this.game = game;
         this.developmentBoard = new DevelopmentBoard();
         this.leaderBoard = new LeaderBoard();
         this.faithBoard = new FaithBoard();

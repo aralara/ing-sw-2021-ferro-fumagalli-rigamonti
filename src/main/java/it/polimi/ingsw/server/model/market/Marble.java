@@ -4,8 +4,8 @@ import it.polimi.ingsw.server.model.storage.ResourceType;
 
 public class Marble {
 
-    private MarbleColors color;
-    private ResourceType resourceType;
+    private final MarbleColors color;
+    private final ResourceType resourceType;
 
 
     public Marble(MarbleColors color, ResourceType resourceType) {

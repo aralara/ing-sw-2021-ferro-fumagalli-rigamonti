@@ -5,7 +5,7 @@ import it.polimi.ingsw.server.model.storage.Production;
 
 public class AbilityProduction implements SpecialAbility {
 
-    private Production production;
+    private final Production production;
 
 
     public AbilityProduction(Production production){

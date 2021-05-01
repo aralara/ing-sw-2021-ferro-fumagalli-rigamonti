@@ -36,7 +36,7 @@ public class RequirementDevTest {
 
     @Test
     public void testCheckRequirement() {
-        PlayerBoard pb = new PlayerBoard(new MultiGame(),"Bonucci");
+        PlayerBoard pb = new PlayerBoard("Bonucci");
 
         pb.getDevelopmentBoard().addDevCard(new DevelopmentCard(2,CardColors.YELLOW,1,
                 new Production(new ArrayList<>(List.of(new Resource(ResourceType.SERVANT,2))),

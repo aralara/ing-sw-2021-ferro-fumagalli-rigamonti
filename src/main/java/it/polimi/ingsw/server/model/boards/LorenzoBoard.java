@@ -8,8 +8,8 @@ import it.polimi.ingsw.server.model.games.SingleGame;
 
 public class LorenzoBoard {
 
-    private SingleGame game;
-    private Deck lorenzoDeck;
+    private final SingleGame game;
+    private final Deck lorenzoDeck;
     private int faith;
 
 

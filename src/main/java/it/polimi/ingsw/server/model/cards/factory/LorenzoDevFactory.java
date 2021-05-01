@@ -12,7 +12,6 @@ import java.util.List;
 public class LorenzoDevFactory implements CardFactory {
 
     public LorenzoDevFactory(){
-
     }
 
 

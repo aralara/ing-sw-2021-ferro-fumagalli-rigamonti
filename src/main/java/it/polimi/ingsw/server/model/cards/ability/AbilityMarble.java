@@ -5,7 +5,7 @@ import it.polimi.ingsw.server.model.storage.ResourceType;
 
 public class AbilityMarble implements SpecialAbility {
 
-    private ResourceType resourceType;
+    private final ResourceType resourceType;
 
 
     public AbilityMarble(ResourceType resourceType){

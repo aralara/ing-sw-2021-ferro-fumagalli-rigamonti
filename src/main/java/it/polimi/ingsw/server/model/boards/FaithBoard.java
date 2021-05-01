@@ -10,7 +10,7 @@ public class FaithBoard {
     private static final int POPE_PROGRESSION_SIZE = 3;
 
     private int faith;
-    private boolean[] popeProgression;
+    private final boolean[] popeProgression;
 
 
     public FaithBoard() {

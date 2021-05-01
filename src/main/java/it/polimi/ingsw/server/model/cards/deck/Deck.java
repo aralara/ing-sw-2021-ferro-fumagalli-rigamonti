@@ -6,7 +6,7 @@ import java.util.*;
 
 public class Deck implements Iterable<Card>{
 
-    private List<Card> cards;
+    private final List<Card> cards;
 
 
     public Deck(){

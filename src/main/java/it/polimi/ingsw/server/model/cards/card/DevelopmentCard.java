@@ -6,11 +6,11 @@ import java.util.List;
 
 public class DevelopmentCard implements Card {
 
-    private int VP;
-    private CardColors color;
-    private int level;
-    private Production production;
-    private List<Resource> cost;
+    private final int VP;
+    private final CardColors color;
+    private final int level;
+    private final Production production;
+    private final List<Resource> cost;
 
 
     public DevelopmentCard(int VP, CardColors color, int level, Production production, List<Resource> cost) {

@@ -29,7 +29,7 @@ public class AbilityProductionTest {
 
     @Test
     public void activateAbility() {
-        PlayerBoard pb = new PlayerBoard(new MultiGame(),"Bonucci");
+        PlayerBoard pb = new PlayerBoard("Bonucci");
         AbilityProduction ap = new AbilityProduction(new Production(
                 new ArrayList<>(List.of(new Resource(ResourceType.COIN,2))),
                 new ArrayList<>(List.of(new Resource(ResourceType.SERVANT,1)))));

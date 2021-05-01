@@ -9,7 +9,7 @@ import java.util.List;
 
 public class RequirementRes implements Requirement {
 
-    Resource resource;
+    private final Resource resource;
 
 
     public RequirementRes(Resource resource) {

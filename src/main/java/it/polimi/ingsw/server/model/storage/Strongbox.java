@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Strongbox implements Storage{
 
-    List<Resource> resources;
+    private final List<Resource> resources;
 
 
     public Strongbox() {

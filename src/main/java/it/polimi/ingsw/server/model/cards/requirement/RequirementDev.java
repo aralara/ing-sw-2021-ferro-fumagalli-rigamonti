@@ -6,9 +6,9 @@ import it.polimi.ingsw.server.model.cards.card.CardColors;
 
 public class RequirementDev implements Requirement {
 
-    private CardColors color;
-    private int level;
-    private int number;
+    private final CardColors color;
+    private final int level;
+    private final int number;
 
 
     public RequirementDev(CardColors color, int level, int number) {

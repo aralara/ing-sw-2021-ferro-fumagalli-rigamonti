@@ -24,7 +24,7 @@ public class RequirementResTest {
 
     @Test
     public void testCheckRequirement() {
-        PlayerBoard pb = new PlayerBoard(new MultiGame(),"Bonucci");
+        PlayerBoard pb = new PlayerBoard("Bonucci");
         Shelf s1 = new Shelf(ResourceType.SHIELD,new Resource(ResourceType.SHIELD,3),3,false );
         Shelf s2 = new Shelf(ResourceType.SHIELD,new Resource(ResourceType.SHIELD,2),2,true );
 

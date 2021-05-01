@@ -10,7 +10,7 @@ import java.util.List;
 public class DevelopmentBoard {
     private static final int NUMBER_OF_SPACES = 3;
 
-    private List<Deck> spaces;
+    private final List<Deck> spaces;
 
 
     public DevelopmentBoard(){

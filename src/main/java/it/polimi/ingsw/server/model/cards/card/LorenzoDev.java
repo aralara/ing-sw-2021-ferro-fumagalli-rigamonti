@@ -4,8 +4,8 @@ import it.polimi.ingsw.server.model.boards.LorenzoBoard;
 
 public class LorenzoDev implements LorenzoCard{
 
-    private CardColors color;
-    private int quantity;
+    private final CardColors color;
+    private final int quantity;
 
 
     public LorenzoDev(CardColors color, int quantity) {

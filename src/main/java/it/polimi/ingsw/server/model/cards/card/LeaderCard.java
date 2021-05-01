@@ -7,9 +7,9 @@ import java.util.List;
 
 public class LeaderCard implements Card {
 
-    private int VP;
-    private List<Requirement> requirements;
-    private SpecialAbility ability;
+    private final int VP;
+    private final List<Requirement> requirements;
+    private final SpecialAbility ability;
 
 
     public LeaderCard(int VP, List<Requirement> requirements, SpecialAbility ability) {

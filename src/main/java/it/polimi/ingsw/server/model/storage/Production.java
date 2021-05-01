@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 public class Production {
 
-    List<Resource> consumed, produced;
+    private final List<Resource> consumed, produced;
 
 
     public Production() {

@@ -17,7 +17,7 @@ public class AbilityWarehouseTest {
 
     @Test
     public void testActivateAbility() {
-        PlayerBoard pb = new PlayerBoard(new MultiGame(),"Bonucci");
+        PlayerBoard pb = new PlayerBoard("Bonucci");
         AbilityWarehouse aw = new AbilityWarehouse(ResourceType.STONE);
         aw.activateAbility(pb);
 

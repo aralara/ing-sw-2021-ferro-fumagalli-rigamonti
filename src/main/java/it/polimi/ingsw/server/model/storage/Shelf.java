@@ -6,9 +6,9 @@ import java.util.List;
 public class Shelf implements Storage{
 
     private ResourceType resourceType;
-    private Resource resources;
-    private int level;
-    private boolean isLeader;
+    private final Resource resources;
+    private final int level;
+    private final boolean isLeader;
 
 
     public Shelf(){

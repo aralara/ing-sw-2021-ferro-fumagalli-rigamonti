@@ -17,7 +17,7 @@ public class AbilityMarbleTest {
 
     @Test
     public void testActivateAbility() {
-        PlayerBoard pb = new PlayerBoard(new MultiGame(),"Bonucci");
+        PlayerBoard pb = new PlayerBoard("Bonucci");
         AbilityMarble ad = new AbilityMarble(ResourceType.SERVANT);
         ad.activateAbility(pb);
 

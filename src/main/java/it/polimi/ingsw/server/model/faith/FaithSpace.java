@@ -2,8 +2,8 @@ package it.polimi.ingsw.server.model.faith;
 
 public class FaithSpace {
 
-    private int VP;
-    private int position;
+    private final int VP;
+    private final int position;
 
 
     public FaithSpace(int VP, int position) {

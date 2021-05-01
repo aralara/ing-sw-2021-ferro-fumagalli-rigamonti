@@ -4,8 +4,8 @@ import it.polimi.ingsw.server.model.boards.LorenzoBoard;
 
 public class LorenzoFaith implements LorenzoCard{
 
-    private boolean refresh;
-    private int amount;
+    private final boolean refresh;
+    private final int amount;
 
 
     public LorenzoFaith(boolean refresh, int amount) {
