@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.model.games;
 
+import it.polimi.ingsw.exceptions.InvalidColumnException;
+import it.polimi.ingsw.exceptions.InvalidRowException;
 import it.polimi.ingsw.server.model.FileNames;
 import it.polimi.ingsw.server.model.boards.PlayerBoard;
 import it.polimi.ingsw.server.model.cards.card.*;
@@ -183,7 +185,12 @@ public abstract class Game {
         PlayerBoard playerBoard = playerBoards.get(player);
         if(!playerBoard.isTurnPlayed()) {//TODO: eccezione
             playerBoard.setTurnPlayed(true);
-            return market.chooseCoordinates(row, column);
+            try{
+                return market.chooseCoordinates(row, column);
+            }
+            catch (InvalidRowException | InvalidColumnException e){
+                e.printStackTrace();
+            }
         }
         return null;
     }

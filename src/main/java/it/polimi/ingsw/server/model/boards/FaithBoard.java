@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.boards;
 
+import it.polimi.ingsw.exceptions.NotExistingLastReportTriggeredException;
 import it.polimi.ingsw.server.model.faith.FaithTrack;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.utils.listeners.Listened;
@@ -58,7 +59,12 @@ public class FaithBoard extends Listened {
      * @param faithTrack FaithTrack relative to the VaticanReport
      */
     public void handleReportActivation(FaithTrack faithTrack) {
-        popeProgression[faithTrack.getLastReportTriggered()] = faithTrack.checkPlayerReportPosition(faith);
+        try{
+            popeProgression[faithTrack.getLastReportTriggered()] = faithTrack.checkPlayerReportPosition(faith);
+        }
+        catch (NotExistingLastReportTriggeredException e){
+            e.printStackTrace();
+        } //TODO: demandare la gestione dell'eccezione ancora più in alto a game?
     }
 
     /**

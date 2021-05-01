@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.model.market;
 
+import it.polimi.ingsw.exceptions.InvalidColumnException;
+import it.polimi.ingsw.exceptions.InvalidRowException;
 import it.polimi.ingsw.server.model.FileNames;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
@@ -36,33 +38,38 @@ public class MarketTest {
         List<Resource> resources;
         market.loadMarket(FileNames.MARKET_FILE.value());
 
-        resources = market.chooseCoordinates(2, -1);
-        assertFalse(resources.isEmpty());
-        assertTrue(resources.size()>0 && resources.size()<=4);
+        try {
+            resources = market.chooseCoordinates(2, -1);
+            assertFalse(resources.isEmpty());
+            assertTrue(resources.size() > 0 && resources.size() <= 4);
 
-        resources = market.chooseCoordinates(1, -1);
-        assertFalse(resources.isEmpty());
-        assertTrue(resources.size()>0 && resources.size()<=4);
+            resources = market.chooseCoordinates(1, -1);
+            assertFalse(resources.isEmpty());
+            assertTrue(resources.size() > 0 && resources.size() <= 4);
 
-        resources = market.chooseCoordinates(0, -1);
-        assertFalse(resources.isEmpty());
-        assertTrue(resources.size()>0 && resources.size()<=4);
+            resources = market.chooseCoordinates(0, -1);
+            assertFalse(resources.isEmpty());
+            assertTrue(resources.size() > 0 && resources.size() <= 4);
 
-        resources = market.chooseCoordinates(-1, 3);
-        assertFalse(resources.isEmpty());
-        assertTrue(resources.size()>0 && resources.size()<=3);
+            resources = market.chooseCoordinates(-1, 3);
+            assertFalse(resources.isEmpty());
+            assertTrue(resources.size() > 0 && resources.size() <= 3);
 
-        resources = market.chooseCoordinates(-1, 2);
-        assertFalse(resources.isEmpty());
-        assertTrue(resources.size()>0 && resources.size()<=3);
+            resources = market.chooseCoordinates(-1, 2);
+            assertFalse(resources.isEmpty());
+            assertTrue(resources.size() > 0 && resources.size() <= 3);
 
-        resources = market.chooseCoordinates(-1, 1);
-        assertFalse(resources.isEmpty());
-        assertTrue(resources.size()>0 && resources.size()<=3);
+            resources = market.chooseCoordinates(-1, 1);
+            assertFalse(resources.isEmpty());
+            assertTrue(resources.size() > 0 && resources.size() <= 3);
 
-        resources = market.chooseCoordinates(-1, 0);
-        assertFalse(resources.isEmpty());
-        assertTrue(resources.size()>0 && resources.size()<=3);
+            resources = market.chooseCoordinates(-1, 0);
+            assertFalse(resources.isEmpty());
+            assertTrue(resources.size() > 0 && resources.size() <= 3);
+        }
+        catch (InvalidRowException | InvalidColumnException e){
+            e.printStackTrace();
+        }
     }
 
     @Test

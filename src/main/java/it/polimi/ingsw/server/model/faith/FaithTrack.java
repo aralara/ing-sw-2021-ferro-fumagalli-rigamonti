@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.model.faith;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+import it.polimi.ingsw.exceptions.NotExistingLastReportTriggeredException;
 import it.polimi.ingsw.utils.listeners.Listened;
 
 import java.io.FileNotFoundException;
@@ -106,9 +107,11 @@ public class FaithTrack extends Listened {
      * report range in order to turn their favor tiles
      * @param position Position of the player in the faith track
      * @return Returns true if the player is in range, false otherwise
+     * @throws NotExistingLastReportTriggeredException if the method is called when there are no triggered reports
      */
-    public boolean checkPlayerReportPosition(int position) {
-        //TODO: if(lastReportTriggered == -1) return false; or exception?
+    public boolean checkPlayerReportPosition(int position)
+        throws NotExistingLastReportTriggeredException {
+        if(lastReportTriggered == -1) throw new NotExistingLastReportTriggeredException();
         return vaticanReports.get(lastReportTriggered).inRange(position);
     }
 
