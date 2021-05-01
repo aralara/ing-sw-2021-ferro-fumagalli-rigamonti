@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.model.storage;
 
 import it.polimi.ingsw.utils.listeners.Listened;
+import it.polimi.ingsw.utils.listeners.Listeners;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +47,6 @@ public class Warehouse extends Listened implements Storage {
                 }
             }
         }
-
         return true;
     }
 
@@ -56,8 +56,8 @@ public class Warehouse extends Listened implements Storage {
      * @param shelf Shelf that need to be added
      */
     public void addShelf(Shelf shelf) {
-
         shelves.add(shelf);
+        fireUpdate(Listeners.BOARD_WAREHOUSE.value(), null, shelves);
     }
 
     public List<Shelf> getShelves() {
@@ -77,6 +77,7 @@ public class Warehouse extends Listened implements Storage {
     public boolean changeConfiguration(List<Shelf> configuration) {
         if (validate(configuration)) {
             this.shelves = configuration;
+            fireUpdate(Listeners.BOARD_WAREHOUSE.value(), null, shelves);
             return true;
         }
         return false;
@@ -94,13 +95,13 @@ public class Warehouse extends Listened implements Storage {
 
     /**
      * Gets an aggregated list of all the resources contained in the Warehouse that respects the parameter
-     * @param isleader Indicates if the type of controlled shelves is leader or not
+     * @param isLeader Indicates if the type of controlled shelves is leader or not
      * @return Returns the list of resources
      */
-    public List<Resource> getList(boolean isleader) {
+    public List<Resource> getList(boolean isLeader) {
         List<Resource> tempList = new ArrayList<>();
         for (Shelf shelf : shelves) {
-            if (shelf.IsLeader() == isleader) {
+            if (shelf.IsLeader() == isLeader) {
                 tempList = Storage.mergeResourceList(tempList,shelf.makeClone().getList());
             }
         }
@@ -136,6 +137,7 @@ public class Warehouse extends Listened implements Storage {
                     }
                 }
             }
+            fireUpdate(Listeners.BOARD_WAREHOUSE.value(), null, shelves);
             return true;
         }
         return false;

@@ -377,11 +377,18 @@ public abstract class Game {
     public void addListeners(List<VirtualView> virtualViews) {
         for(VirtualView view : virtualViews){
             for(DevelopmentDeck dDeck : developmentDecks)
-                dDeck.addListener(Listeners.L_GAME_DEV_DECKS.value(), view);
-            faithTrack.addListener(Listeners.L_GAME_FAITH.value(), view);
-            market.addListener(Listeners.L_GAME_MARKET.value(), view);
+                dDeck.addListener(Listeners.GAME_DEV_DECK.value(), view);
+            faithTrack.addListener(Listeners.GAME_FAITH_REPORT.value(), view);
+            market.addListener(Listeners.GAME_MARKET.value(), view);
+            for(PlayerBoard pBoard : playerBoards){
+                pBoard.getDevelopmentBoard().addListener(Listeners.BOARD_DEV_SPACES.value(), view);
+                pBoard.getFaithBoard().addListener(Listeners.BOARD_FAITH_FAITH.value(), view);
+                pBoard.getFaithBoard().addListener(Listeners.BOARD_FAITH_POPE.value(), view);
+                pBoard.getLeaderBoard().addListener(Listeners.BOARD_LEADER_BOARD.value(), view);
+                pBoard.getLeaderBoard().addListener(Listeners.BOARD_LEADER_HAND.value(), view);
+                pBoard.getStrongbox().addListener(Listeners.BOARD_STRONGBOX.value(), view);
+                pBoard.getWarehouse().addListener(Listeners.BOARD_WAREHOUSE.value(), view);
+            }
         }
-        for(PlayerBoard pBoard : playerBoards)
-            pBoard.addListeners(virtualViews);
     }
 }

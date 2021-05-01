@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.model.storage;
 
 import it.polimi.ingsw.utils.listeners.Listened;
+import it.polimi.ingsw.utils.listeners.Listeners;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,7 @@ public class Strongbox extends Listened implements Storage{
     public boolean addResources(List<Resource> resources) {
         this.resources.addAll(resources);
         Storage.aggregateResources(this.resources);
+        fireUpdate(Listeners.BOARD_STRONGBOX.value(), null, resources);
         return true;
     }
 
@@ -38,6 +40,7 @@ public class Strongbox extends Listened implements Storage{
                     }
                 }
             }
+            fireUpdate(Listeners.BOARD_STRONGBOX.value(), null, resources);
             return true;
         }
         return false;

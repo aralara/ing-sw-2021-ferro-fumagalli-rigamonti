@@ -5,6 +5,7 @@ import it.polimi.ingsw.server.model.cards.card.*;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.server.model.storage.Production;
 import it.polimi.ingsw.utils.listeners.Listened;
+import it.polimi.ingsw.utils.listeners.Listeners;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +54,7 @@ public class DevelopmentBoard extends Listened {
             (!spaces.get(space).isEmpty() &&
             card.getLevel()-1 == ((DevelopmentCard)spaces.get(space).get(0)).getLevel())) {
                 spaces.get(space).addOnTop(card);
+                fireUpdate(Listeners.BOARD_DEV_SPACES.value(), null, spaces);
                 return true;
         }
         return false;

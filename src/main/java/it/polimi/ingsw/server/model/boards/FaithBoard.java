@@ -4,6 +4,7 @@ import it.polimi.ingsw.exceptions.NotExistingLastReportTriggeredException;
 import it.polimi.ingsw.server.model.faith.FaithTrack;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.utils.listeners.Listened;
+import it.polimi.ingsw.utils.listeners.Listeners;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -26,7 +27,9 @@ public class FaithBoard extends Listened {
      * @param faith Faith quantity to be added
      */
     public void addFaith(int faith) {
+        int temp = this.faith;
         this.faith += faith;
+        fireUpdate(Listeners.BOARD_FAITH_FAITH.value(), temp, this.faith);
     }
 
     /**
@@ -59,12 +62,10 @@ public class FaithBoard extends Listened {
      * @param faithTrack FaithTrack relative to the VaticanReport
      */
     public void handleReportActivation(FaithTrack faithTrack) {
-        try{
-            popeProgression[faithTrack.getLastReportTriggered()] = faithTrack.checkPlayerReportPosition(faith);
-        }
-        catch (NotExistingLastReportTriggeredException e){
-            e.printStackTrace();
-        } //TODO: demandare la gestione dell'eccezione ancora più in alto a game?
+        int lastReportTriggered = faithTrack.getLastReportTriggered();
+        boolean temp = this.popeProgression[lastReportTriggered];
+        this.popeProgression[lastReportTriggered] = faithTrack.checkPlayerReportPosition(faith);
+        fireUpdate(Listeners.BOARD_FAITH_POPE.value(), temp, this.popeProgression);
     }
 
     /**

@@ -6,6 +6,7 @@ import it.polimi.ingsw.exceptions.InvalidColumnException;
 import it.polimi.ingsw.exceptions.InvalidRowException;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.utils.listeners.Listened;
+import it.polimi.ingsw.utils.listeners.Listeners;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -89,6 +90,7 @@ public class Market extends Listened {
         Storage.aggregateResources(marbleResources);
 
         moveFloatingMarble(row, column);
+        fireUpdate(Listeners.GAME_MARKET.value(), null, this);
         return marbleResources;
     }
 
@@ -103,6 +105,7 @@ public class Market extends Listened {
 
         if(row>=0){
             newFloatingMarble = marbleMatrix[row][0];
+            //noinspection ManualArrayCopy
             for(int resColumn=0; resColumn<COLUMNS-1; resColumn++) {
                 marbleMatrix[row][resColumn] = marbleMatrix[row][resColumn+1];
             }

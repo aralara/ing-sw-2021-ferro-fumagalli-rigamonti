@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import it.polimi.ingsw.exceptions.NotExistingLastReportTriggeredException;
 import it.polimi.ingsw.utils.listeners.Listened;
+import it.polimi.ingsw.utils.listeners.Listeners;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -97,6 +98,7 @@ public class FaithTrack extends Listened {
             if(position>=vaticanReports.get(i).getMax()) {
                 vaticanReports.get(i).setTriggered(true);
                 lastReportTriggered = i;
+                fireUpdate(Listeners.GAME_FAITH_REPORT.value(), null, lastReportTriggered);
                 return true;
             }
         return false;

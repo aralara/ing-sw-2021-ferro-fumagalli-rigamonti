@@ -95,6 +95,6 @@ public class SingleGame extends Game{
     @Override
     public void addListeners(List<VirtualView> virtualViews) {
         super.addListeners(virtualViews);
-        lorenzoBoard.addListener(Listeners.L_GAME_LORENZO.value(), virtualViews.get(0));
+        lorenzoBoard.addListener(Listeners.GAME_LORENZO_FAITH.value(), virtualViews.get(0));
     }
 }

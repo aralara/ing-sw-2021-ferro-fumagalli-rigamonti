@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.model.cards.deck;
 
 import it.polimi.ingsw.server.model.cards.card.*;
 import it.polimi.ingsw.utils.listeners.Listened;
+import it.polimi.ingsw.utils.listeners.Listeners;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -72,6 +73,7 @@ public class DevelopmentDeck extends Listened {
      * @return Returns the first card
      */
     public DevelopmentCard removeFirst() {
+        fireUpdate(Listeners.GAME_DEV_DECK.value(), null, deck);
         return (DevelopmentCard) deck.extract(new int[]{0});
     }
 }
