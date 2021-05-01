@@ -11,7 +11,7 @@ import it.polimi.ingsw.server.model.faith.FaithTrack;
 import it.polimi.ingsw.server.model.market.Market;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.server.view.VirtualView;
-import it.polimi.ingsw.utils.listeners.Listeners;
+import it.polimi.ingsw.utils.listeners.*;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -377,17 +377,24 @@ public abstract class Game {
     public void addListeners(List<VirtualView> virtualViews) {
         for(VirtualView view : virtualViews){
             for(DevelopmentDeck dDeck : developmentDecks)
-                dDeck.addListener(Listeners.GAME_DEV_DECK.value(), view);
-            faithTrack.addListener(Listeners.GAME_FAITH_REPORT.value(), view);
-            market.addListener(Listeners.GAME_MARKET.value(), view);
+                dDeck.addListener(Listeners.GAME_DEV_DECK.value(), new DevelopmentDeckChangeListener(view));
+            faithTrack.addListener(Listeners.GAME_FAITH_REPORT.value(), new FaithReportChangeListener(view));
+            market.addListener(Listeners.GAME_MARKET.value(), new MarketChangeListener(view));
             for(PlayerBoard pBoard : playerBoards){
-                pBoard.getDevelopmentBoard().addListener(Listeners.BOARD_DEV_SPACES.value(), view);
-                pBoard.getFaithBoard().addListener(Listeners.BOARD_FAITH_FAITH.value(), view);
-                pBoard.getFaithBoard().addListener(Listeners.BOARD_FAITH_POPE.value(), view);
-                pBoard.getLeaderBoard().addListener(Listeners.BOARD_LEADER_BOARD.value(), view);
-                pBoard.getLeaderBoard().addListener(Listeners.BOARD_LEADER_HAND.value(), view);
-                pBoard.getStrongbox().addListener(Listeners.BOARD_STRONGBOX.value(), view);
-                pBoard.getWarehouse().addListener(Listeners.BOARD_WAREHOUSE.value(), view);
+                pBoard.getDevelopmentBoard().addListener(Listeners.BOARD_DEV_SPACES.value(),
+                        new DevelopmentBoardSpacesChangeListener(view));
+                pBoard.getFaithBoard().addListener(Listeners.BOARD_FAITH_FAITH.value(),
+                        new FaithBoardFaithListener(view));
+                pBoard.getFaithBoard().addListener(Listeners.BOARD_FAITH_POPE.value(),
+                        new FaithBoardPopeChangeListener(view));
+                pBoard.getLeaderBoard().addListener(Listeners.BOARD_LEADER_BOARD.value(),
+                        new LeaderBoardBoardChangeListener(view));
+                pBoard.getLeaderBoard().addListener(Listeners.BOARD_LEADER_HAND.value(),
+                        new LeaderBoardHandChangeListener(view));
+                pBoard.getStrongbox().addListener(Listeners.BOARD_STRONGBOX.value(),
+                        new StrongboxChangeListener(view));
+                pBoard.getWarehouse().addListener(Listeners.BOARD_WAREHOUSE.value(),
+                        new WarehouseChangeListener(view));
             }
         }
     }

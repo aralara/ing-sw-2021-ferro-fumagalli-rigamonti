@@ -6,6 +6,7 @@ import it.polimi.ingsw.server.model.cards.deck.DevelopmentDeck;
 import it.polimi.ingsw.server.model.faith.FaithTrack;
 import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.listeners.Listeners;
+import it.polimi.ingsw.utils.listeners.LorenzoFaithChangeListener;
 
 import java.util.List;
 
@@ -95,6 +96,7 @@ public class SingleGame extends Game{
     @Override
     public void addListeners(List<VirtualView> virtualViews) {
         super.addListeners(virtualViews);
-        lorenzoBoard.addListener(Listeners.GAME_LORENZO_FAITH.value(), virtualViews.get(0));
+        lorenzoBoard.addListener(Listeners.GAME_LORENZO_FAITH.value(),
+                new LorenzoFaithChangeListener(virtualViews.get(0)));
     }
 }
