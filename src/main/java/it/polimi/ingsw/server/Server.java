@@ -23,7 +23,7 @@ public class Server {
             try {
                 Socket client = socket.accept();
                 ClientHandler clientHandler = new ClientHandler(client);
-                Thread thread = new Thread(clientHandler, "server_" + client.getInetAddress());
+                Thread thread = new Thread(clientHandler, "server_" + client.getInetAddress()) ;
                 thread.start();
             } catch (IOException e) {
                 System.out.println("Error! Connection dropped");
