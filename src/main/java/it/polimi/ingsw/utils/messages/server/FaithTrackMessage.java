@@ -1,8 +1,6 @@
 package it.polimi.ingsw.utils.messages.server;
 
-import it.polimi.ingsw.server.model.faith.FaithSpace;
-import it.polimi.ingsw.server.model.faith.FaithTrack;
-import it.polimi.ingsw.server.model.faith.VaticanReport;
+import it.polimi.ingsw.server.model.faith.*;
 import it.polimi.ingsw.utils.messages.Message;
 
 import java.util.List;

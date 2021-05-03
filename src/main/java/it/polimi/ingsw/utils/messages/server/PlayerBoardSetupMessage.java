@@ -1,8 +1,7 @@
 package it.polimi.ingsw.utils.messages.server;
 
 import it.polimi.ingsw.server.model.boards.*;
-import it.polimi.ingsw.server.model.storage.Strongbox;
-import it.polimi.ingsw.server.model.storage.Warehouse;
+import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.utils.messages.Message;
 
 public class PlayerBoardSetupMessage implements Message {

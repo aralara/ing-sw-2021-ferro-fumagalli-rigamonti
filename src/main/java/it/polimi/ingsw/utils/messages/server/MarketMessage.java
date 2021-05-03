@@ -1,7 +1,6 @@
 package it.polimi.ingsw.utils.messages.server;
 
-import it.polimi.ingsw.server.model.market.Marble;
-import it.polimi.ingsw.server.model.market.Market;
+import it.polimi.ingsw.server.model.market.*;
 import it.polimi.ingsw.utils.messages.Message;
 
 public class MarketMessage implements Message {

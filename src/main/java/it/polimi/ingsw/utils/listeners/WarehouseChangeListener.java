@@ -1,8 +1,11 @@
 package it.polimi.ingsw.utils.listeners;
 
+import it.polimi.ingsw.server.model.storage.Shelf;
 import it.polimi.ingsw.server.view.VirtualView;
+import it.polimi.ingsw.utils.messages.server.PlayerWarehouseMessage;
 
 import java.beans.PropertyChangeEvent;
+import java.util.List;
 
 public class WarehouseChangeListener extends ModelChangeListener {
 
@@ -12,6 +15,8 @@ public class WarehouseChangeListener extends ModelChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-
+        PlayerProperty newValue = (PlayerProperty) evt.getNewValue();
+        getVirtualView().sendUpdateMessage(
+                new PlayerWarehouseMessage((List<Shelf>) newValue.getProperty(), newValue.getNickname()));
     }
 }
