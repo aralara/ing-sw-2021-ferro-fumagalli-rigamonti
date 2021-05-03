@@ -40,4 +40,14 @@ public class CLI {
 
         packetHandler.sendConnectionMessage(nickname);
     }
+
+    public void createNewLobby(){
+        int size = -1;
+        System.out.println("There isnt's any player waiting for a match!");
+        do {
+            System.out.println("Insert the number of player that will play the game (between 1 and 4)");
+            size = scanner.nextInt();
+        }while(size <= 0 || size >= 5);
+        packetHandler.sendNewGameSize(size);
+    }
 }
