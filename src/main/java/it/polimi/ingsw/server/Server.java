@@ -88,9 +88,6 @@ public class Server {
                     thread.start();
                     server.reset();
                 }
-
-                /*Thread thread = new Thread(clientHandler, "server_" + client.getInetAddress());
-                thread.start();*/
             }
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Error! Connection dropped");

@@ -22,16 +22,16 @@ public class CLI {
 
     public void setup() {
         //TODO: fase di setup per iniziare la partita
-        connect();
+        while(!connect());
         askNickname();
     }
 
-    private void connect(){
+    private boolean connect(){
 
         System.out.println("IP address of server?");
         String ip = scanner.nextLine();
 
-        packetHandler.start(ip,Server.SOCKET_PORT);
+        return packetHandler.start(ip,Server.SOCKET_PORT);
 
     }
 

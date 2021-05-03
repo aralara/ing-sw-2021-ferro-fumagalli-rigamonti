@@ -1,11 +1,9 @@
 package it.polimi.ingsw.client.cli;
 
-import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
 import it.polimi.ingsw.utils.messages.client.NewLobbyMessage;
 import it.polimi.ingsw.utils.messages.server.LobbyMessage;
 import it.polimi.ingsw.utils.messages.server.NewPlayerMessage;
-import it.polimi.ingsw.utils.messages.server.ack.ActivateProductionsAckMessage;
 import it.polimi.ingsw.utils.messages.server.ack.ConnectionAckMessage;
 
 import java.io.IOException;
@@ -29,20 +27,22 @@ public class PacketHandler {
         this.cli = cli;
     }
 
-    public void start(String address, int port) {
-        connect(address, port);
+    public boolean start(String address, int port) {
+        if(!connect(address, port)){
+            return false;
+        }
 
         packetReceiver = new Thread(this::managePackets);
         packetReceiver.start();
-
+        return true;
     }
 
-    public void connect(String address, int port) {
+    public boolean connect(String address, int port) {
         try {
             server = new Socket(address, port);
         } catch (IOException e) {
             System.out.println("server unreachable");
-            return;
+            return false;
         }
         System.out.println("Connected");
 
@@ -55,6 +55,7 @@ public class PacketHandler {
         } catch (ClassCastException e) {
             System.out.println("protocol violation");
         }
+        return true;
     }
 
     public void sendConnectionMessage(String nickname){
@@ -78,32 +79,33 @@ public class PacketHandler {
     }
 
     private void managePackets(){
-        while(true){
-            Object temp;
-            try {
+        try {
+            while (true) {
+                Object temp;
+
                 temp = input.readObject();
 
                 //TODO: inserire tutti i casi di pachetti che poissiamo ricevere
 
                 if (temp instanceof ConnectionAckMessage) {
-                    if(((ConnectionAckMessage) temp).isState()){
+                    if (((ConnectionAckMessage) temp).isState()) {
                         System.out.println("riceve ack funziona");
-                    }
-                    else{
+                    } else {
                         System.out.println("nick non va bene");
                         cli.askNickname();
                     }
 
                 } else if (temp instanceof LobbyMessage) {
-                    if(((LobbyMessage) temp).getLobbySize() == ((LobbyMessage) temp).getWaitingPlayers()){
+                    if (((LobbyMessage) temp).getLobbySize() == ((LobbyMessage) temp).getWaitingPlayers()) {
                         cli.createNewLobby();
                     }
                 } else if (temp instanceof NewPlayerMessage) {
                     cli.notifyNewPlayer(((NewPlayerMessage) temp).getPlayerNickname());
                 }
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
+
             }
+        }catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 }

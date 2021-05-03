@@ -49,8 +49,7 @@ public class ClientHandler implements Runnable{
     }
 
     private void handleClientConnection() throws IOException{
-        System.out.println("Connected to " + client.getInetAddress());
-
+        System.out.println("Connected to " + client.getInetAddress()); //TODO: da togliere
 
 
         Object temp;    //TODO: fa schifo? ricezione pacchetti?
