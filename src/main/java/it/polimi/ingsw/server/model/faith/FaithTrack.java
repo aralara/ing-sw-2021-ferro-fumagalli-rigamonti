@@ -11,7 +11,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FaithTrack extends Listened {
+public class FaithTrack {
 
     private final List<VaticanReport> vaticanReports;
     private final List<FaithSpace> faithSpaces;
@@ -98,7 +98,6 @@ public class FaithTrack extends Listened {
             if(position>=vaticanReports.get(i).getMax()) {
                 vaticanReports.get(i).setTriggered(true);
                 lastReportTriggered = i;
-                fireUpdate(Listeners.GAME_FAITH_REPORT.value(), null, lastReportTriggered);
                 return true;
             }
         return false;
