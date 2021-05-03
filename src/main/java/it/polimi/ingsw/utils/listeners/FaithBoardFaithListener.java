@@ -4,7 +4,7 @@ import it.polimi.ingsw.server.view.VirtualView;
 
 import java.beans.PropertyChangeEvent;
 
-public class FaithBoardFaithListener extends ViewChangeListener {
+public class FaithBoardFaithListener extends ModelChangeListener {
 
     public FaithBoardFaithListener(VirtualView virtualView) {
         super(virtualView);

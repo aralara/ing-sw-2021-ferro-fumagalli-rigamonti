@@ -4,7 +4,7 @@ import it.polimi.ingsw.server.view.VirtualView;
 
 import java.beans.PropertyChangeEvent;
 
-public class LeaderBoardBoardChangeListener extends ViewChangeListener {
+public class LeaderBoardBoardChangeListener extends ModelChangeListener {
 
     public LeaderBoardBoardChangeListener(VirtualView virtualView) {
         super(virtualView);

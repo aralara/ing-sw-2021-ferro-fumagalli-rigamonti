@@ -2,7 +2,6 @@ package it.polimi.ingsw.utils.listeners;
 
 public enum Listeners {
     GAME_DEV_DECK("developmentDeckListener"),
-    GAME_FAITH_REPORT("lastReportListener"),
     GAME_MARKET("marketListener"),
     GAME_LORENZO_FAITH("lorenzoFaithListener"),
     BOARD_DEV_SPACES("developmentBoardSpacesListener"),

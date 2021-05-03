@@ -4,13 +4,13 @@ import it.polimi.ingsw.exceptions.InvalidSpaceException;
 import it.polimi.ingsw.server.model.cards.card.*;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.server.model.storage.Production;
-import it.polimi.ingsw.utils.listeners.Listened;
 import it.polimi.ingsw.utils.listeners.Listeners;
+import it.polimi.ingsw.utils.listeners.PlayerListened;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DevelopmentBoard extends Listened {
+public class DevelopmentBoard extends PlayerListened {
     private static final int NUMBER_OF_SPACES = 3;
 
     private final List<Deck> spaces;
@@ -47,14 +47,13 @@ public class DevelopmentBoard extends Listened {
      * @return Returns true if the card is added correctly
      * @throws InvalidSpaceException when the selected space is out of the allowed range
      */
-    public boolean addDevCard(DevelopmentCard card, int space)
-        throws InvalidSpaceException {
+    public boolean addDevCard(DevelopmentCard card, int space) throws InvalidSpaceException {
         if(space<0 || space>=NUMBER_OF_SPACES) throw new InvalidSpaceException();
         if((card.getLevel() == 1 && spaces.get(space).isEmpty()) ||
             (!spaces.get(space).isEmpty() &&
             card.getLevel()-1 == ((DevelopmentCard)spaces.get(space).get(0)).getLevel())) {
                 spaces.get(space).addOnTop(card);
-                fireUpdate(Listeners.BOARD_DEV_SPACES.value(), null, spaces);
+                fireUpdate(Listeners.BOARD_DEV_SPACES.value(), spaces);
                 return true;
         }
         return false;

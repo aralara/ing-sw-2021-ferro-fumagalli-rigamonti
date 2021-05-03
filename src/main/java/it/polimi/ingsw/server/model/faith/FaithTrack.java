@@ -3,15 +3,13 @@ package it.polimi.ingsw.server.model.faith;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import it.polimi.ingsw.exceptions.NotExistingLastReportTriggeredException;
-import it.polimi.ingsw.utils.listeners.Listened;
-import it.polimi.ingsw.utils.listeners.Listeners;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FaithTrack extends Listened {
+public class FaithTrack {
 
     private final List<VaticanReport> vaticanReports;
     private final List<FaithSpace> faithSpaces;
@@ -23,6 +21,7 @@ public class FaithTrack extends Listened {
         faithSpaces = new ArrayList<>();
         lastReportTriggered = -1;
     }
+
 
     public List<VaticanReport> getVaticanReports() {
         return vaticanReports;
@@ -98,7 +97,6 @@ public class FaithTrack extends Listened {
             if(position>=vaticanReports.get(i).getMax()) {
                 vaticanReports.get(i).setTriggered(true);
                 lastReportTriggered = i;
-                fireUpdate(Listeners.GAME_FAITH_REPORT.value(), null, lastReportTriggered);
                 return true;
             }
         return false;

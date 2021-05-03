@@ -42,9 +42,8 @@ public class LorenzoBoard extends Listened {
      * @param faith Faith quantity to be added
      */
     public void addFaith(int faith) {
-        int temp = this.faith;
         this.faith += faith;
-        fireUpdate(Listeners.GAME_LORENZO_FAITH.value(), temp, this.faith);
+        fireUpdate(Listeners.GAME_LORENZO_FAITH.value(), this.faith);
     }
 
     /**

@@ -2,12 +2,12 @@ package it.polimi.ingsw.server.model.boards;
 
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
-import it.polimi.ingsw.utils.listeners.Listened;
 import it.polimi.ingsw.utils.listeners.Listeners;
+import it.polimi.ingsw.utils.listeners.PlayerListened;
 
 import java.util.List;
 
-public class LeaderBoard extends Listened {
+public class LeaderBoard extends PlayerListened {
 
     private final Deck hand;
     private final Deck board;
@@ -35,7 +35,7 @@ public class LeaderBoard extends Listened {
     public void discardLeaderHand(LeaderCard leaderCard) {
         int index = hand.indexOf(leaderCard);
         hand.extract(new int[] {index});
-        fireUpdate(Listeners.BOARD_LEADER_HAND.value(), null, hand);
+        fireUpdate(Listeners.BOARD_LEADER_HAND.value(), hand);
     }
 
     /**
@@ -45,8 +45,8 @@ public class LeaderBoard extends Listened {
     public void playLeaderHand(LeaderCard leaderCard){
         int index = hand.indexOf(leaderCard);
         board.add(hand.extract(new int[] {index}).get(0));
-        fireUpdate(Listeners.BOARD_LEADER_HAND.value(), null, hand);
-        fireUpdate(Listeners.BOARD_LEADER_BOARD.value(), null, board);
+        fireUpdate(Listeners.BOARD_LEADER_HAND.value(), hand);
+        fireUpdate(Listeners.BOARD_LEADER_BOARD.value(), board);
     }
 
     /**

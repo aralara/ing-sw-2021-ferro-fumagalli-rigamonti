@@ -4,7 +4,7 @@ import it.polimi.ingsw.server.view.VirtualView;
 
 import java.beans.PropertyChangeEvent;
 
-public class LorenzoFaithChangeListener extends ViewChangeListener {
+public class LorenzoFaithChangeListener extends ModelChangeListener {
 
     public LorenzoFaithChangeListener(VirtualView virtualView) {
         super(virtualView);

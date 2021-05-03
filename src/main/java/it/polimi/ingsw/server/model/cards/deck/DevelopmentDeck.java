@@ -73,7 +73,7 @@ public class DevelopmentDeck extends Listened {
      * @return Returns the first card
      */
     public DevelopmentCard removeFirst() {
-        fireUpdate(Listeners.GAME_DEV_DECK.value(), null, deck);
+        fireUpdate(Listeners.GAME_DEV_DECK.value(), deck);
         return (DevelopmentCard) deck.extract(new int[]{0});
     }
 }
