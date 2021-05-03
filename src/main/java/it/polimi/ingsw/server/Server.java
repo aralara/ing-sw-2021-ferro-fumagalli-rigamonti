@@ -74,6 +74,7 @@ public class Server {
                     server.size = ((NewLobbyMessage) temp).getLobbySize();
 
                     server.gameHandler = new GameHandler();
+                    server.gameHandler.setSize(server.size);
                     server.lobbyAlreadyExist = true;
                     server.connectedPlayers++;
                     Thread thread = new Thread(server.gameHandler);
@@ -84,10 +85,10 @@ public class Server {
                     server.reset();
                 }
 
-                server.gameHandler.add(client);
+                ClientHandler clientHandler = new ClientHandler(client, server.output, server.input, nick);
 
+                server.gameHandler.add(clientHandler);
 
-                ClientHandler clientHandler = new ClientHandler(client, server.output, server.input);
                 Thread thread = new Thread(clientHandler, "server_" + client.getInetAddress());
                 thread.start();
 

@@ -8,6 +8,7 @@ public class CLI {
 
     private Scanner scanner;
     private PacketHandler packetHandler;
+    private String nickname;
 
     CLI(){
         scanner = new Scanner(System.in);
@@ -36,7 +37,7 @@ public class CLI {
 
     public void askNickname(){
         System.out.println("Insert your Nickname");
-        String nickname = scanner.nextLine();
+         nickname = scanner.nextLine();
 
         packetHandler.sendConnectionMessage(nickname);
     }
@@ -49,5 +50,13 @@ public class CLI {
             size = scanner.nextInt();
         }while(size <= 0 || size >= 5);
         packetHandler.sendNewGameSize(size);
+    }
+
+    public void notifyNewPlayer(String nickname){
+        if(!this.nickname.equals(nickname)) {
+            System.out.println("The player " + nickname + " has joined the game!! ♥");
+        }else{
+            System.out.println("You have been added to the game!! ♥");
+        }
     }
 }

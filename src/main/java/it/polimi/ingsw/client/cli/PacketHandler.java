@@ -4,6 +4,7 @@ import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
 import it.polimi.ingsw.utils.messages.client.NewLobbyMessage;
 import it.polimi.ingsw.utils.messages.server.LobbyMessage;
+import it.polimi.ingsw.utils.messages.server.NewPlayerMessage;
 import it.polimi.ingsw.utils.messages.server.ack.ActivateProductionsAckMessage;
 import it.polimi.ingsw.utils.messages.server.ack.ConnectionAckMessage;
 
@@ -97,6 +98,8 @@ public class PacketHandler {
                     if(((LobbyMessage) temp).getLobbySize() == ((LobbyMessage) temp).getWaitingPlayers()){
                         cli.createNewLobby();
                     }
+                } else if (temp instanceof NewPlayerMessage) {
+                    cli.notifyNewPlayer(((NewPlayerMessage) temp).getPlayerNickname());
                 }
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();

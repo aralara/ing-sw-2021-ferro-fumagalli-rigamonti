@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.utils.messages.client.*;
-import it.polimi.ingsw.utils.messages.server.ack.ConnectionAckMessage;
+import it.polimi.ingsw.utils.messages.server.NewPlayerMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -13,11 +13,29 @@ public class ClientHandler implements Runnable{
     private Socket client;
     private ObjectOutputStream output;
     private ObjectInputStream input;
+    private String nickname;
 
-    ClientHandler(Socket client, ObjectOutputStream out, ObjectInputStream in) {
+    ClientHandler(Socket client, ObjectOutputStream out, ObjectInputStream in, String nickname) {
         this.client = client;
         this.output = out;
         this.input = in;
+        this.nickname = nickname;
+    }
+
+    public Socket getSocket() {
+        return client;
+    }
+
+    public ObjectOutputStream getOutput() {
+        return output;
+    }
+
+    public ObjectInputStream getInput() {
+        return input;
+    }
+
+    public String getNickname() {
+        return nickname;
     }
 
     @Override
@@ -71,5 +89,13 @@ public class ClientHandler implements Runnable{
         }
 
         //TODO: da completare con codice client
+    }
+
+    public void notifyNewPlayer(String nickname){
+        try{
+            output.writeObject(new NewPlayerMessage(nickname));
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 }
