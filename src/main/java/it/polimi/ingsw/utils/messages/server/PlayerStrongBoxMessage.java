@@ -1,22 +1,24 @@
 package it.polimi.ingsw.utils.messages.server;
 
-import it.polimi.ingsw.server.model.storage.Strongbox;
+import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.utils.messages.Message;
+
+import java.util.List;
 
 public class PlayerStrongBoxMessage implements Message {
 
-    private Strongbox strongbox;
+    private List<Resource> resources;
     private String nickname;
 
 
-    public PlayerStrongBoxMessage(Strongbox developmentBoard, String nickname) {
-        this.strongbox = developmentBoard;
+    public PlayerStrongBoxMessage(List<Resource> resources, String nickname) {
+        this.resources = resources;
         this.nickname = nickname;
     }
 
 
-    public Strongbox getStrongbox() {
-        return strongbox;
+    public List<Resource> getResources() {
+        return resources;
     }
 
     public String getNickname(){
