@@ -32,7 +32,7 @@ public class PacketHandler {
         packetReceiver = new Thread(this::managePackets);
         packetReceiver.start();
 
-        cli.askNickname();
+        //cli.askNickname();
     }
 
     public void connect(String address, int port) {

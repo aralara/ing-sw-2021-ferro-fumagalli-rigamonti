@@ -22,6 +22,7 @@ public class CLI {
     public void setup() {
         //TODO: fase di setup per iniziare la partita
         connect();
+        askNickname();
     }
 
     private void connect(){
