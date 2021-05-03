@@ -13,6 +13,14 @@ public class VirtualView {
         this.client = client;
     }
 
+    public String getNickname() {
+        return nickname;
+    }
+
+    public ClientHandler getClient() {
+        return client;
+    }
+
     public void sendUpdateMessage(Message message) {
         //TODO: metodo per inviare messaggio di update al client
     }

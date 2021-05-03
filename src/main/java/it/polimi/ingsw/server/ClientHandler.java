@@ -13,13 +13,11 @@ public class ClientHandler implements Runnable{
     private Socket client;
     private ObjectOutputStream output;
     private ObjectInputStream input;
-    private String nickname;
 
-    ClientHandler(Socket client, ObjectOutputStream out, ObjectInputStream in, String nickname) {
+    ClientHandler(Socket client, ObjectOutputStream out, ObjectInputStream in) {
         this.client = client;
         this.output = out;
         this.input = in;
-        this.nickname = nickname;
     }
 
     public Socket getSocket() {
@@ -32,10 +30,6 @@ public class ClientHandler implements Runnable{
 
     public ObjectInputStream getInput() {
         return input;
-    }
-
-    public String getNickname() {
-        return nickname;
     }
 
     @Override

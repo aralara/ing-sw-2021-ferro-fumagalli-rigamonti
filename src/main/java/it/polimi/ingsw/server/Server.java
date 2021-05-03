@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
 import it.polimi.ingsw.utils.messages.client.NewLobbyMessage;
 import it.polimi.ingsw.utils.messages.server.LobbyMessage;
@@ -57,14 +58,14 @@ public class Server {
                 server.output = new ObjectOutputStream(client.getOutputStream());
                 server.input = new ObjectInputStream(client.getInputStream());
                 Object packet;
-                String nick = null;
+                String nickname = null;
                 do {
                     packet = server.input.readObject();
-                    nick = ((ConnectionMessage) packet).getNickname();
+                    nickname = ((ConnectionMessage) packet).getNickname();
 
-                } while (!server.checkValidNickname(nick));
-                server.nicknameUsed.add(nick);
-                System.out.println("Benvenuto " + nick);
+                } while (!server.checkValidNickname(nickname));
+                server.nicknameUsed.add(nickname);
+                System.out.println("Benvenuto " + nickname);
 
 
                 server.output.writeObject(new LobbyMessage(server.size, server.connectedPlayers));
@@ -78,9 +79,9 @@ public class Server {
 
                 }
 
-                ClientHandler clientHandler = new ClientHandler(client, server.output, server.input, nick);
+                ClientHandler clientHandler = new ClientHandler(client, server.output, server.input);
 
-                server.gameHandler.add(clientHandler);
+                server.gameHandler.add(new VirtualView(nickname,clientHandler));
                 server.connectedPlayers++;
 
                 if (server.connectedPlayers == server.size) {
