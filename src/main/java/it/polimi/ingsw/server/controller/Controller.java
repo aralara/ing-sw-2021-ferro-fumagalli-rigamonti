@@ -16,7 +16,7 @@ public class Controller {
     List<String> players;
 
 
-    Controller(int playerNumber) {
+    public Controller(int playerNumber) {
         if(playerNumber == 1)
             game = new SingleGame();
         else
@@ -26,10 +26,11 @@ public class Controller {
     }
 
 
-    public boolean addPlayer(String player) {
-        players.add(player);
+    public boolean addPlayer(String player) {  //TODO: serve un controllo anche qui?
         if(players.stream().anyMatch(s -> s.equals(player)))
             return false;
+
+        players.add(player);
         if(players.size() >= playerNumber)
             initGame(players);
         return true;

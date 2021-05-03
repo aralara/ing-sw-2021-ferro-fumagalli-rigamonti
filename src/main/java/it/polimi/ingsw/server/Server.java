@@ -28,12 +28,13 @@ public class Server {
     public void reset(){
         lobbyAlreadyExist = false;
         connectedPlayers = 0;
-        nicknameUsed = new ArrayList<>();
+        size = 0;
     }
 
     public static void main(String[] args) {
 
         Server server = new Server();
+        server.nicknameUsed = new ArrayList<>();
         server.reset();
 
         ServerSocket socket;
@@ -55,11 +56,11 @@ public class Server {
 
                 server.output = new ObjectOutputStream(client.getOutputStream());
                 server.input = new ObjectInputStream(client.getInputStream());
-                Object temp;
+                Object packet;
                 String nick = null;
                 do {
-                    temp = server.input.readObject();
-                    nick = ((ConnectionMessage) temp).getNickname();
+                    packet = server.input.readObject();
+                    nick = ((ConnectionMessage) packet).getNickname();
 
                 } while (!server.checkValidNickname(nick));
                 server.nicknameUsed.add(nick);
@@ -69,29 +70,27 @@ public class Server {
                 server.output.writeObject(new LobbyMessage(server.size, server.connectedPlayers));
 
                 if (!server.lobbyAlreadyExist) {
+                    packet = server.input.readObject();
+                    server.size = ((NewLobbyMessage) packet).getLobbySize();
 
-                    temp = server.input.readObject();
-                    server.size = ((NewLobbyMessage) temp).getLobbySize();
-
-                    server.gameHandler = new GameHandler();
-                    server.gameHandler.setSize(server.size);
+                    server.gameHandler = new GameHandler(server.size);
                     server.lobbyAlreadyExist = true;
-                    server.connectedPlayers++;
-                    Thread thread = new Thread(server.gameHandler);
-                    thread.start();
-                }
 
-                if (server.connectedPlayers == server.size) {
-                    server.reset();
                 }
 
                 ClientHandler clientHandler = new ClientHandler(client, server.output, server.input, nick);
 
                 server.gameHandler.add(clientHandler);
+                server.connectedPlayers++;
 
-                Thread thread = new Thread(clientHandler, "server_" + client.getInetAddress());
-                thread.start();
+                if (server.connectedPlayers == server.size) {
+                    Thread thread = new Thread(server.gameHandler);
+                    thread.start();
+                    server.reset();
+                }
 
+                /*Thread thread = new Thread(clientHandler, "server_" + client.getInetAddress());
+                thread.start();*/
             }
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Error! Connection dropped");

@@ -62,12 +62,6 @@ public class ClientHandler implements Runnable{
 
                 } else if (temp instanceof BuyDevelopmentCardMessage){
 
-                /*}else if (temp instanceof ConnectionMessage){
-                    //TODO: server controlla se user disponibile
-                    System.out.println("Benvenuto "+ ((ConnectionMessage) temp).getNickname());
-                    output.writeObject(new ConnectionAckMessage(true));  //TODO:inserire controllo per user valido
-                    //output.writeObject(new NewPlayerMessage(((ConnectionMessage) temp).getNickname()));
-                    //TODO: inserito per prova, da controllare*/
                 }else if (temp instanceof EndTurnMessage){
 
                 }else if (temp instanceof LeaderCardDiscardMessage){
