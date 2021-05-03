@@ -2,6 +2,9 @@ package it.polimi.ingsw.client.cli;
 
 import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
+import it.polimi.ingsw.utils.messages.client.NewLobbyMessage;
+import it.polimi.ingsw.utils.messages.server.LobbyMessage;
+import it.polimi.ingsw.utils.messages.server.NewPlayerMessage;
 import it.polimi.ingsw.utils.messages.server.ack.ActivateProductionsAckMessage;
 import it.polimi.ingsw.utils.messages.server.ack.ConnectionAckMessage;
 
@@ -32,7 +35,6 @@ public class PacketHandler {
         packetReceiver = new Thread(this::managePackets);
         packetReceiver.start();
 
-        //cli.askNickname();
     }
 
     public void connect(String address, int port) {
@@ -65,18 +67,39 @@ public class PacketHandler {
         }
     }
 
+    public void sendNewGameSize(int size){
+
+        try{
+            output.writeObject(new NewLobbyMessage(size));
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
     private void managePackets(){
         while(true){
             Object temp;
             try {
                 temp = input.readObject();
 
-                if (temp instanceof ConnectionAckMessage) {
-                    System.out.println("riceve ack funziona");
-                } else if (temp instanceof ActivateProductionsAckMessage) {
-                    //TODO: inserire tutti i casi di pachetti che poissiamo ricevere
+                //TODO: inserire tutti i casi di pachetti che poissiamo ricevere
 
-                    System.out.println("altro ack ricevuto");
+                if (temp instanceof ConnectionAckMessage) {
+                    if(((ConnectionAckMessage) temp).isState()){
+                        System.out.println("riceve ack funziona");
+                    }
+                    else{
+                        System.out.println("nick non va bene");
+                        cli.askNickname();
+                    }
+
+                } else if (temp instanceof LobbyMessage) {
+                    if(((LobbyMessage) temp).getLobbySize() == ((LobbyMessage) temp).getWaitingPlayers()){
+                        cli.createNewLobby();
+                    }
+                } else if (temp instanceof NewPlayerMessage) {
+                    cli.notifyNewPlayer(((NewPlayerMessage) temp).getPlayerNickname());
                 }
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();

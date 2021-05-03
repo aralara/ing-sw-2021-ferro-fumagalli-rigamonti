@@ -1,24 +1,41 @@
 package it.polimi.ingsw.server;
 
-import it.polimi.ingsw.utils.messages.Message;
 import it.polimi.ingsw.utils.messages.client.*;
 import it.polimi.ingsw.utils.messages.server.NewPlayerMessage;
-import it.polimi.ingsw.utils.messages.server.ack.ActivateProductionsAckMessage;
-import it.polimi.ingsw.utils.messages.server.ack.ConnectionAckMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.ConnectException;
 import java.net.Socket;
-import java.util.concurrent.TimeUnit;
 
 public class ClientHandler implements Runnable{
 
     private Socket client;
+    private ObjectOutputStream output;
+    private ObjectInputStream input;
+    private String nickname;
 
-    ClientHandler(Socket client) {
+    ClientHandler(Socket client, ObjectOutputStream out, ObjectInputStream in, String nickname) {
         this.client = client;
+        this.output = out;
+        this.input = in;
+        this.nickname = nickname;
+    }
+
+    public Socket getSocket() {
+        return client;
+    }
+
+    public ObjectOutputStream getOutput() {
+        return output;
+    }
+
+    public ObjectInputStream getInput() {
+        return input;
+    }
+
+    public String getNickname() {
+        return nickname;
     }
 
     @Override
@@ -34,8 +51,7 @@ public class ClientHandler implements Runnable{
     private void handleClientConnection() throws IOException{
         System.out.println("Connected to " + client.getInetAddress());
 
-        ObjectOutputStream output = new ObjectOutputStream(client.getOutputStream());
-        ObjectInputStream input = new ObjectInputStream(client.getInputStream());
+
 
         Object temp;    //TODO: fa schifo? ricezione pacchetti?
 
@@ -46,12 +62,12 @@ public class ClientHandler implements Runnable{
 
                 } else if (temp instanceof BuyDevelopmentCardMessage){
 
-                }else if (temp instanceof ConnectionMessage){
+                /*}else if (temp instanceof ConnectionMessage){
                     //TODO: server controlla se user disponibile
                     System.out.println("Benvenuto "+ ((ConnectionMessage) temp).getNickname());
                     output.writeObject(new ConnectionAckMessage(true));  //TODO:inserire controllo per user valido
                     //output.writeObject(new NewPlayerMessage(((ConnectionMessage) temp).getNickname()));
-                    //TODO: inserito per prova, da controllare
+                    //TODO: inserito per prova, da controllare*/
                 }else if (temp instanceof EndTurnMessage){
 
                 }else if (temp instanceof LeaderCardDiscardMessage){
@@ -73,5 +89,13 @@ public class ClientHandler implements Runnable{
         }
 
         //TODO: da completare con codice client
+    }
+
+    public void notifyNewPlayer(String nickname){
+        try{
+            output.writeObject(new NewPlayerMessage(nickname));
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 }
