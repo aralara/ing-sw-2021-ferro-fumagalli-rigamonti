@@ -380,18 +380,24 @@ public abstract class Game {
                 dDeck.addListener(Listeners.GAME_DEV_DECK.value(), new DevelopmentDeckChangeListener(view));
             market.addListener(Listeners.GAME_MARKET.value(), new MarketChangeListener(view));
             for(PlayerBoard pBoard : playerBoards){
+                String nickname = pBoard.getPlayer().getNickname();
+                pBoard.getDevelopmentBoard().setPlayerNickname(nickname);
                 pBoard.getDevelopmentBoard().addListener(Listeners.BOARD_DEV_SPACES.value(),
                         new DevelopmentBoardSpacesChangeListener(view));
+                pBoard.getFaithBoard().setPlayerNickname(nickname);
                 pBoard.getFaithBoard().addListener(Listeners.BOARD_FAITH_FAITH.value(),
                         new FaithBoardFaithListener(view));
                 pBoard.getFaithBoard().addListener(Listeners.BOARD_FAITH_POPE.value(),
                         new FaithBoardPopeChangeListener(view));
+                pBoard.getLeaderBoard().setPlayerNickname(nickname);
                 pBoard.getLeaderBoard().addListener(Listeners.BOARD_LEADER_BOARD.value(),
                         new LeaderBoardBoardChangeListener(view));
                 pBoard.getLeaderBoard().addListener(Listeners.BOARD_LEADER_HAND.value(),
                         new LeaderBoardHandChangeListener(view));
+                pBoard.getStrongbox().setPlayerNickname(nickname);
                 pBoard.getStrongbox().addListener(Listeners.BOARD_STRONGBOX.value(),
                         new StrongboxChangeListener(view));
+                pBoard.getWarehouse().setPlayerNickname(nickname);
                 pBoard.getWarehouse().addListener(Listeners.BOARD_WAREHOUSE.value(),
                         new WarehouseChangeListener(view));
             }

@@ -4,7 +4,7 @@ import it.polimi.ingsw.server.view.VirtualView;
 
 import java.beans.PropertyChangeEvent;
 
-public class DevelopmentDeckChangeListener extends ViewChangeListener {
+public class DevelopmentDeckChangeListener extends ModelChangeListener {
 
     public DevelopmentDeckChangeListener(VirtualView virtualView) {
         super(virtualView);

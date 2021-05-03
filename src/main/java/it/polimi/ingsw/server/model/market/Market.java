@@ -90,7 +90,7 @@ public class Market extends Listened {
         Storage.aggregateResources(marbleResources);
 
         moveFloatingMarble(row, column);
-        fireUpdate(Listeners.GAME_MARKET.value(), null, this);
+        fireUpdate(Listeners.GAME_MARKET.value(), this);
         return marbleResources;
     }
 

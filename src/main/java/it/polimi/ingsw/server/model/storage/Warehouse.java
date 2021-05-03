@@ -1,12 +1,12 @@
 package it.polimi.ingsw.server.model.storage;
 
-import it.polimi.ingsw.utils.listeners.Listened;
 import it.polimi.ingsw.utils.listeners.Listeners;
+import it.polimi.ingsw.utils.listeners.PlayerListened;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Warehouse extends Listened implements Storage {
+public class Warehouse extends PlayerListened implements Storage {
 
     private List<Shelf> shelves;
 
@@ -57,7 +57,7 @@ public class Warehouse extends Listened implements Storage {
      */
     public void addShelf(Shelf shelf) {
         shelves.add(shelf);
-        fireUpdate(Listeners.BOARD_WAREHOUSE.value(), null, shelves);
+        fireUpdate(Listeners.BOARD_WAREHOUSE.value(), shelves);
     }
 
     public List<Shelf> getShelves() {
@@ -77,7 +77,7 @@ public class Warehouse extends Listened implements Storage {
     public boolean changeConfiguration(List<Shelf> configuration) {
         if (validate(configuration)) {
             this.shelves = configuration;
-            fireUpdate(Listeners.BOARD_WAREHOUSE.value(), null, shelves);
+            fireUpdate(Listeners.BOARD_WAREHOUSE.value(), shelves);
             return true;
         }
         return false;
@@ -137,7 +137,7 @@ public class Warehouse extends Listened implements Storage {
                     }
                 }
             }
-            fireUpdate(Listeners.BOARD_WAREHOUSE.value(), null, shelves);
+            fireUpdate(Listeners.BOARD_WAREHOUSE.value(), shelves);
             return true;
         }
         return false;

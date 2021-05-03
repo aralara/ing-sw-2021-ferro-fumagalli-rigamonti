@@ -3,7 +3,8 @@ package it.polimi.ingsw.utils.listeners;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-public class Listened {
+public abstract class Listened {
+
     private final PropertyChangeSupport listeners = new PropertyChangeSupport(this);
 
     /**
@@ -25,12 +26,12 @@ public class Listened {
     }
 
     /**
-     * Fires an update to the current listeners of the listened object
+     * Fires an update to the current listeners of the listened object, the old value parameter is not used
+     * and therefore set null by default
      * @param propertyName Name of the changed property
-     * @param oldValue Old value of the property
      * @param newValue New value of the property
      */
-    public void fireUpdate(String propertyName, Object oldValue, Object newValue){
-        listeners.firePropertyChange(propertyName, oldValue, newValue);
+    public void fireUpdate(String propertyName, Object newValue){
+        listeners.firePropertyChange(propertyName, null, newValue);
     }
 }

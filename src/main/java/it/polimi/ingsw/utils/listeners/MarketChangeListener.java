@@ -4,7 +4,7 @@ import it.polimi.ingsw.server.view.VirtualView;
 
 import java.beans.PropertyChangeEvent;
 
-public class MarketChangeListener extends ViewChangeListener {
+public class MarketChangeListener extends ModelChangeListener {
 
     public MarketChangeListener(VirtualView virtualView) {
         super(virtualView);

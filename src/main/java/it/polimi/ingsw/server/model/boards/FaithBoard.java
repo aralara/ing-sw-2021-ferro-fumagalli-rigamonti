@@ -5,11 +5,12 @@ import it.polimi.ingsw.server.model.faith.FaithTrack;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.utils.listeners.Listened;
 import it.polimi.ingsw.utils.listeners.Listeners;
+import it.polimi.ingsw.utils.listeners.PlayerListened;
 
 import java.util.List;
 import java.util.function.Predicate;
 
-public class FaithBoard extends Listened {
+public class FaithBoard extends PlayerListened {
     private static final int POPE_PROGRESSION_SIZE = 3;
 
     private int faith;
@@ -27,9 +28,8 @@ public class FaithBoard extends Listened {
      * @param faith Faith quantity to be added
      */
     public void addFaith(int faith) {
-        int temp = this.faith;
         this.faith += faith;
-        fireUpdate(Listeners.BOARD_FAITH_FAITH.value(), temp, this.faith);
+        fireUpdate(Listeners.BOARD_FAITH_FAITH.value(), this.faith);
     }
 
     /**
@@ -63,14 +63,13 @@ public class FaithBoard extends Listened {
      */
     public void handleReportActivation(FaithTrack faithTrack) {
         int lastReportTriggered = faithTrack.getLastReportTriggered();
-        boolean temp = this.popeProgression[lastReportTriggered];
         try {
             this.popeProgression[lastReportTriggered] = faithTrack.checkPlayerReportPosition(faith);
         }
         catch (NotExistingLastReportTriggeredException e){
             e.printStackTrace();
         }
-        fireUpdate(Listeners.BOARD_FAITH_POPE.value(), temp, this.popeProgression);
+        fireUpdate(Listeners.BOARD_FAITH_POPE.value(), this.popeProgression);
     }
 
     /**

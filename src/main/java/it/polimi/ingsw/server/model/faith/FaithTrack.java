@@ -3,8 +3,6 @@ package it.polimi.ingsw.server.model.faith;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import it.polimi.ingsw.exceptions.NotExistingLastReportTriggeredException;
-import it.polimi.ingsw.utils.listeners.Listened;
-import it.polimi.ingsw.utils.listeners.Listeners;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -23,6 +21,7 @@ public class FaithTrack {
         faithSpaces = new ArrayList<>();
         lastReportTriggered = -1;
     }
+
 
     public List<VaticanReport> getVaticanReports() {
         return vaticanReports;
