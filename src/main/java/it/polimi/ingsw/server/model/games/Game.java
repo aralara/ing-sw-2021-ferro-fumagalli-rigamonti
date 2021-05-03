@@ -383,17 +383,17 @@ public abstract class Game {
                 String nickname = pBoard.getPlayer().getNickname();
                 pBoard.getDevelopmentBoard().setPlayerNickname(nickname);
                 pBoard.getDevelopmentBoard().addListener(Listeners.BOARD_DEV_SPACES.value(),
-                        new DevelopmentBoardSpacesChangeListener(view));
+                        new DevelopmentBSpacesChangeListener(view));
                 pBoard.getFaithBoard().setPlayerNickname(nickname);
                 pBoard.getFaithBoard().addListener(Listeners.BOARD_FAITH_FAITH.value(),
-                        new FaithBoardFaithListener(view));
+                        new FaithBFaithListener(view));
                 pBoard.getFaithBoard().addListener(Listeners.BOARD_FAITH_POPE.value(),
-                        new FaithBoardPopeChangeListener(view));
+                        new FaithBPopeChangeListener(view));
                 pBoard.getLeaderBoard().setPlayerNickname(nickname);
                 pBoard.getLeaderBoard().addListener(Listeners.BOARD_LEADER_BOARD.value(),
-                        new LeaderBoardBoardChangeListener(view));
+                        new LeaderBBoardChangeListener(view));
                 pBoard.getLeaderBoard().addListener(Listeners.BOARD_LEADER_HAND.value(),
-                        new LeaderBoardHandChangeListener(view));
+                        new LeaderBHandChangeListener(view));
                 pBoard.getStrongbox().setPlayerNickname(nickname);
                 pBoard.getStrongbox().addListener(Listeners.BOARD_STRONGBOX.value(),
                         new StrongboxChangeListener(view));
