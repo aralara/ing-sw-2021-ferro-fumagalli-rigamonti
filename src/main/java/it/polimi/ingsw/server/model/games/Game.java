@@ -378,7 +378,6 @@ public abstract class Game {
         for(VirtualView view : virtualViews){
             for(DevelopmentDeck dDeck : developmentDecks)
                 dDeck.addListener(Listeners.GAME_DEV_DECK.value(), new DevelopmentDeckChangeListener(view));
-            faithTrack.addListener(Listeners.GAME_FAITH_REPORT.value(), new FaithReportChangeListener(view));
             market.addListener(Listeners.GAME_MARKET.value(), new MarketChangeListener(view));
             for(PlayerBoard pBoard : playerBoards){
                 pBoard.getDevelopmentBoard().addListener(Listeners.BOARD_DEV_SPACES.value(),
