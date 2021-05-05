@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.cli;
 
 import it.polimi.ingsw.server.Server;
+import it.polimi.ingsw.utils.messages.client.SelectMarketMessage;
 
 import java.util.Scanner;
 
@@ -37,7 +38,7 @@ public class CLI {
 
     public void askNickname(){
         System.out.println("Insert your Nickname");
-         nickname = scanner.nextLine();
+        nickname = scanner.nextLine();
 
         packetHandler.sendConnectionMessage(nickname);
     }
@@ -58,5 +59,30 @@ public class CLI {
         }else{
             System.out.println("You have been added to the game!! ♥");
         }
+    }
+
+    public void chooseAction() {        // TODO: scritto di fretta per testare
+        int action = -1;
+        while(action != 1) {
+            System.out.println("1-market 2-development 3-productions");
+            action = scanner.nextInt();
+        }
+        int column = 0;
+        int row = -1;
+        while(row < 0 || row > 3) {
+            System.out.println("row number? (0 for column)");
+            row = scanner.nextInt();
+        }
+        if(row == 0){
+            while(column <= 0 || column > 4) {
+                System.out.println("column number?");
+                column = scanner.nextInt();
+            }
+        }
+        packetHandler.sendMessage(new SelectMarketMessage(row-1, column-1));
+        /*TODO: teoricamente il messaggio di ritorno è ok ma la matrice aggiornata che ritorna non è affatto aggiornata
+         *      sebbene la floating marble lo sia, avendo controllato anche all'interno del Server, il messaggio
+         *      inviato contiene i dati completamente corretti ma quello ricevuto dal client no ... boh
+         */
     }
 }

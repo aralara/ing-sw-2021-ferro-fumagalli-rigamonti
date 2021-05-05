@@ -1,7 +1,9 @@
 package it.polimi.ingsw.client.cli;
 
+import it.polimi.ingsw.utils.messages.Message;
 import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
 import it.polimi.ingsw.utils.messages.client.NewLobbyMessage;
+import it.polimi.ingsw.utils.messages.server.FaithTrackMessage;
 import it.polimi.ingsw.utils.messages.server.LobbyMessage;
 import it.polimi.ingsw.utils.messages.server.NewPlayerMessage;
 import it.polimi.ingsw.utils.messages.server.ack.ConnectionAckMessage;
@@ -15,7 +17,6 @@ import java.util.Scanner;
 public class PacketHandler {
 
     private CLI cli;
-    private Scanner scanner;
     private Socket server;
     private ObjectOutputStream output;
     private ObjectInputStream input;
@@ -23,7 +24,6 @@ public class PacketHandler {
     private Thread packetReceiver;
 
     public PacketHandler(CLI cli) {
-        scanner = new Scanner(System.in);
         this.cli = cli;
     }
 
@@ -81,33 +81,44 @@ public class PacketHandler {
     private void managePackets(){
         try {
             while (true) {
-                Object temp;
+                Object message;
 
-                temp = input.readObject();
+                message = input.readObject();
 
                 //TODO: inserire tutti i casi di pachetti che poissiamo ricevere
 
-                if (temp instanceof ConnectionAckMessage) {
-                    if (((ConnectionAckMessage) temp).isState()) {
+                if (message instanceof ConnectionAckMessage) {
+                    if (((ConnectionAckMessage) message).isState()) {
                         System.out.println("riceve ack funziona");
                     } else {
                         System.out.println("nick non va bene");
                         cli.askNickname();
                     }
 
-                } else if (temp instanceof LobbyMessage) {
-                    if (((LobbyMessage) temp).getLobbySize() == ((LobbyMessage) temp).getWaitingPlayers()) {
+                } else if (message instanceof LobbyMessage) {
+                    if (((LobbyMessage) message).getLobbySize() == ((LobbyMessage) message).getWaitingPlayers()) {
                         cli.createNewLobby();
                     }
-                } else if (temp instanceof NewPlayerMessage) {
-                    cli.notifyNewPlayer(((NewPlayerMessage) temp).getPlayerNickname());
+                } else if (message instanceof NewPlayerMessage) {
+                    cli.notifyNewPlayer(((NewPlayerMessage) message).getPlayerNickname());
+                } else if (message instanceof FaithTrackMessage) {
+                    cli.chooseAction();   // TODO: scritto di fretta per testare
                 }
                 else {
-                    System.out.println("ricevuto qualcosa " + temp.toString());
+                    System.out.println("ricevuto " + message.toString());
                 }
 
             }
         }catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendMessage(Message message) {    // TODO: scritto di fretta per testare
+        try{
+            output.writeObject(message);
+        }
+        catch(IOException e) {
             e.printStackTrace();
         }
     }
