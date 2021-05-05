@@ -14,7 +14,7 @@ public class FaithBFaithListener extends ModelChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         PlayerProperty newValue = (PlayerProperty) evt.getNewValue();
-        getVirtualView().sendUpdateMessage(
+        getVirtualView().sendMessage(
                 new PlayerFaithBFaithMessage((int) newValue.getProperty(), newValue.getNickname()));
     }
 }

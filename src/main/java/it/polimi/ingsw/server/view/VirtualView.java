@@ -5,8 +5,8 @@ import it.polimi.ingsw.utils.messages.Message;
 
 public class VirtualView {
 
-    private String nickname;
-    private ClientHandler client;
+    private final String nickname;
+    private final ClientHandler client;
 
     public VirtualView(String nickname, ClientHandler client) {
         this.nickname = nickname;
@@ -21,7 +21,7 @@ public class VirtualView {
         return client;
     }
 
-    public void sendUpdateMessage(Message message) {
-        //TODO: metodo per inviare messaggio di update al client
+    public void sendMessage(Message message) {
+        client.sendMessage(message);
     }
 }

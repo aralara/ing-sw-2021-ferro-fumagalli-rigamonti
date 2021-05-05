@@ -15,6 +15,6 @@ public class DevelopmentDeckChangeListener extends ModelChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        getVirtualView().sendUpdateMessage(new DevelopmentDecksMessage(List.of((DevelopmentDeck) evt.getNewValue())));
+        getVirtualView().sendMessage(new DevelopmentDecksMessage(List.of((DevelopmentDeck) evt.getNewValue())));
     }
 }

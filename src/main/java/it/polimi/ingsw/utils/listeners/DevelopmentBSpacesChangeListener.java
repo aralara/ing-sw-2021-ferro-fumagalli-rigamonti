@@ -16,7 +16,7 @@ public class DevelopmentBSpacesChangeListener extends ModelChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         PlayerProperty newValue = (PlayerProperty) evt.getNewValue();
-        getVirtualView().sendUpdateMessage(
+        getVirtualView().sendMessage(
                 new PlayerDevelopmentBSpacesMessage((List<Deck>) newValue.getProperty(), newValue.getNickname()));
     }
 }

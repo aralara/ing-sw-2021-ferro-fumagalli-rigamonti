@@ -14,6 +14,6 @@ public class MarketChangeListener extends ModelChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        getVirtualView().sendUpdateMessage(new MarketMessage((Market) evt.getNewValue()));
+        getVirtualView().sendMessage(new MarketMessage((Market) evt.getNewValue()));
     }
 }

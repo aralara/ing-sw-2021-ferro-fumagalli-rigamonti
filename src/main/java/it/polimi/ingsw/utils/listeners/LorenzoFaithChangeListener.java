@@ -13,6 +13,6 @@ public class LorenzoFaithChangeListener extends ModelChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        getVirtualView().sendUpdateMessage(new LorenzoFaithMessage((int) evt.getNewValue()));
+        getVirtualView().sendMessage(new LorenzoFaithMessage((int) evt.getNewValue()));
     }
 }

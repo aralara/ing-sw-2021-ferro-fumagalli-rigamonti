@@ -16,7 +16,7 @@ public class WarehouseChangeListener extends ModelChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         PlayerProperty newValue = (PlayerProperty) evt.getNewValue();
-        getVirtualView().sendUpdateMessage(
+        getVirtualView().sendMessage(
                 new PlayerWarehouseMessage((List<Shelf>) newValue.getProperty(), newValue.getNickname()));
     }
 }
