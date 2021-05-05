@@ -1,27 +1,29 @@
 package it.polimi.ingsw.server.view;
 
-import it.polimi.ingsw.server.ClientHandler;
+import it.polimi.ingsw.server.GameHandler;
 import it.polimi.ingsw.utils.messages.Message;
 
-public class VirtualView {
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+
+public class VirtualView extends ClientHandler{
 
     private final String nickname;
-    private final ClientHandler client;
+    private final GameHandler gameHandler;
 
-    public VirtualView(String nickname, ClientHandler client) {
+    public VirtualView(Socket client, ObjectOutputStream out, ObjectInputStream in, String nickname, GameHandler gameHandler) {
+        super(client, out, in);
         this.nickname = nickname;
-        this.client = client;
+        this.gameHandler = gameHandler;
     }
 
     public String getNickname() {
         return nickname;
     }
 
-    public ClientHandler getClient() {
-        return client;
-    }
-
-    public void sendMessage(Message message) {
-        client.sendMessage(message);
+    @Override
+    public void onMessageReceived(Message message) {
+        gameHandler.handleMessage(nickname, message);
     }
 }

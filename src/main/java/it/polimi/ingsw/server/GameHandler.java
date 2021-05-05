@@ -2,9 +2,9 @@ package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.view.VirtualView;
+import it.polimi.ingsw.utils.messages.ActionMessage;
 import it.polimi.ingsw.utils.messages.Message;
 import it.polimi.ingsw.utils.messages.server.NewPlayerMessage;
-import it.polimi.ingsw.utils.messages.server.PlayerBoardSetupMessage;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -12,7 +12,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameHandler implements Runnable{
+public class GameHandler implements Runnable {
 
     private final List<VirtualView> clientsVirtualView;
     private final Controller controller;
@@ -25,7 +25,7 @@ public class GameHandler implements Runnable{
     @Override
     public void run(){
         for (VirtualView virtualView : clientsVirtualView) {
-            Thread thread = new Thread(virtualView.getClient());
+            Thread thread = new Thread(virtualView);
             thread.start();
         }
         controller.initGame(clientsVirtualView);
@@ -35,13 +35,21 @@ public class GameHandler implements Runnable{
     }
 
     public void add(Socket client, ObjectOutputStream out, ObjectInputStream in, String nickname) {
-        clientsVirtualView.add(new VirtualView(nickname, new ClientHandler(client, out, in, controller)));
+        clientsVirtualView.add(new VirtualView(client, out, in, nickname, this));
         controller.addPlayer(nickname);
         sendAll(new NewPlayerMessage(nickname));
     }
 
-    public void sendAll(Message message){
+    public void sendAll(Message message) {
         for (VirtualView virtualView : clientsVirtualView)
             virtualView.sendMessage(message);
+    }
+
+    public void handleMessage(String nickname, Message message) {
+        if (message instanceof ActionMessage) {
+            ((ActionMessage) message).doAction(nickname, controller);
+        } else {
+            System.out.println("Can't handle message");
+        }
     }
 }
