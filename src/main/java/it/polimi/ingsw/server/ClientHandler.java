@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.server.controller.Controller;
+import it.polimi.ingsw.utils.messages.Message;
 import it.polimi.ingsw.utils.messages.client.*;
 import it.polimi.ingsw.utils.messages.server.NewPlayerMessage;
 
@@ -10,14 +12,16 @@ import java.net.Socket;
 
 public class ClientHandler implements Runnable{
 
-    private Socket client;
-    private ObjectOutputStream output;
-    private ObjectInputStream input;
+    private final Socket client;
+    private final ObjectOutputStream output;
+    private final ObjectInputStream input;
+    private final Controller controller;
 
-    ClientHandler(Socket client, ObjectOutputStream out, ObjectInputStream in) {
+    ClientHandler(Socket client, ObjectOutputStream out, ObjectInputStream in, Controller controller) {
         this.client = client;
         this.output = out;
         this.input = in;
+        this.controller = controller;
     }
 
     public Socket getSocket() {
@@ -43,31 +47,31 @@ public class ClientHandler implements Runnable{
     }
 
     private void handleClientConnection() throws IOException{
-        System.out.println("Connected to " + client.getInetAddress()); //TODO: da togliere
+        System.out.println("Connected to " + client.getInetAddress());
 
 
-        Object temp;    //TODO: fa schifo? ricezione pacchetti?
+        Object message;
 
         try {
             while (true){  //TODO: quando bisogna chiudere la connessione?
-                temp = input.readObject();
-                if (temp instanceof ActivateProductionsMessage) {
+                message = input.readObject();
+                if (message instanceof ActivateProductionsMessage) {
+                    //((Message)message).doAction(controller.getGame());
+                } else if (message instanceof BuyDevelopmentCardMessage){
 
-                } else if (temp instanceof BuyDevelopmentCardMessage){
+                }else if (message instanceof EndTurnMessage){
 
-                }else if (temp instanceof EndTurnMessage){
+                }else if (message instanceof LeaderCardDiscardMessage){
 
-                }else if (temp instanceof LeaderCardDiscardMessage){
+                }else if (message instanceof LeaderCardPlayMessage){
 
-                }else if (temp instanceof LeaderCardPlayMessage){
+                }else if (message instanceof NewLobbyMessage){
 
-                }else if (temp instanceof NewLobbyMessage){
+                }else if (message instanceof RequestResourcesMessage){
 
-                }else if (temp instanceof RequestResourcesMessage){
+                }else if (message instanceof SelectMarketMessage){
 
-                }else if (temp instanceof SelectMarketMessage){
-
-                }else if (temp instanceof ShelvesConfigurationMessage){
+                }else if (message instanceof ShelvesConfigurationMessage){
 
                 }
             }
@@ -78,9 +82,9 @@ public class ClientHandler implements Runnable{
         //TODO: da completare con codice client
     }
 
-    public void notifyNewPlayer(String nickname){
+    public void sendMessage(Message message){
         try{
-            output.writeObject(new NewPlayerMessage(nickname));
+            output.writeObject(message);
         }catch(IOException e){
             e.printStackTrace();
         }

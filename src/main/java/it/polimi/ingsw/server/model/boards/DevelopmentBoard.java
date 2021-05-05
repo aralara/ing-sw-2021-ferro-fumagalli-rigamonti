@@ -24,6 +24,14 @@ public class DevelopmentBoard extends PlayerListened {
 
 
     /**
+     * Gets the spaces attribute
+     * @return Returns spaces
+     */
+    public List<Deck> getSpaces() {
+        return spaces;
+    }
+
+    /**
      * Gets all the productions that can be activated from the top card of each deck
      * @return Returns a list of Production
      */

@@ -20,6 +20,22 @@ public class LeaderBoard extends PlayerListened {
 
 
     /**
+     * Gets the hand attribute
+     * @return Returns hand
+     */
+    public Deck getHand() {
+        return hand;
+    }
+
+    /**
+     * Gets the board attribute
+     * @return Returns board
+     */
+    public Deck getBoard() {
+        return board;
+    }
+
+    /**
      * Gives a hand of leader cards to the player
      * @param hand List of leader cards
      */

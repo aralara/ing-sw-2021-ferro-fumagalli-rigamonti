@@ -57,11 +57,11 @@ public class Server {
 
                 server.output = new ObjectOutputStream(client.getOutputStream());
                 server.input = new ObjectInputStream(client.getInputStream());
-                Object packet;
-                String nickname = null;
+                Object message;
+                String nickname;
                 do {
-                    packet = server.input.readObject();
-                    nickname = ((ConnectionMessage) packet).getNickname();
+                    message = server.input.readObject();
+                    nickname = ((ConnectionMessage) message).getNickname();
 
                 } while (!server.checkValidNickname(nickname));
                 server.nicknameUsed.add(nickname);
@@ -71,17 +71,15 @@ public class Server {
                 server.output.writeObject(new LobbyMessage(server.size, server.connectedPlayers));
 
                 if (!server.lobbyAlreadyExist) {
-                    packet = server.input.readObject();
-                    server.size = ((NewLobbyMessage) packet).getLobbySize();
+                    message = server.input.readObject();
+                    server.size = ((NewLobbyMessage) message).getLobbySize();
 
                     server.gameHandler = new GameHandler(server.size);
                     server.lobbyAlreadyExist = true;
 
                 }
 
-                ClientHandler clientHandler = new ClientHandler(client, server.output, server.input);
-
-                server.gameHandler.add(new VirtualView(nickname,clientHandler));
+                server.gameHandler.add(client, server.output, server.input, nickname);
                 server.connectedPlayers++;
 
                 if (server.connectedPlayers == server.size) {

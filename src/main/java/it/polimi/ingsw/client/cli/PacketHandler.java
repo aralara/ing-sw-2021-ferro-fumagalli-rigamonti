@@ -102,6 +102,9 @@ public class PacketHandler {
                 } else if (temp instanceof NewPlayerMessage) {
                     cli.notifyNewPlayer(((NewPlayerMessage) temp).getPlayerNickname());
                 }
+                else {
+                    System.out.println("ricevuto qualcosa " + temp.toString());
+                }
 
             }
         }catch (IOException | ClassNotFoundException e) {

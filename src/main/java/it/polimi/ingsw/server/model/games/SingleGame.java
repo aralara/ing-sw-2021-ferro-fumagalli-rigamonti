@@ -21,9 +21,9 @@ public class SingleGame extends Game{
 
 
     @Override
-    public void initGame(List<String> players){
-        super.initGame(players);
+    public void initGame(List<VirtualView> views){
         initLorenzoBoard();
+        super.initGame(views);
         isLorenzoTurn = false;
         isLorenzoWinner = false;
     }

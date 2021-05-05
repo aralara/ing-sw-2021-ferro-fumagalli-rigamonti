@@ -12,6 +12,10 @@ import it.polimi.ingsw.server.model.market.Market;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.listeners.*;
+import it.polimi.ingsw.utils.messages.server.DevelopmentDecksMessage;
+import it.polimi.ingsw.utils.messages.server.FaithTrackMessage;
+import it.polimi.ingsw.utils.messages.server.MarketMessage;
+import it.polimi.ingsw.utils.messages.server.PlayerBoardSetupMessage;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -79,15 +83,18 @@ public abstract class Game {
     }
 
     /**
-     * Initializes a game by calling initMarket, initDevelopment, initFaithTrack, initLeaders in this order
-     * @param players Nicknames of the players
+     * Initializes a game by calling initMarket, initDevelopment, initFaithTrack, initLeaders in this order and adds
+     * listeners to the virtual views
+     * @param views Virtual views of the players
      */
-    public void initGame(List<String> players) {
-        initPlayerBoards(players);
+    public void initGame(List<VirtualView> views) {
+        initPlayerBoards(views.stream().map(VirtualView::getNickname).collect(Collectors.toList()));
+        randomizeStartingPlayer();
         initMarket();
         initDevelopment();
         initFaithTrack();
         initLeaders();
+        addListeners(views);
         finished = false;
     }
 
@@ -183,7 +190,7 @@ public abstract class Game {
      */
     public List<Resource> getFromMarket(int player, int row, int column) {
         PlayerBoard playerBoard = playerBoards.get(player);
-        if(!playerBoard.isTurnPlayed()) {//TODO: eccezione
+        if(!playerBoard.isTurnPlayed()) {
             playerBoard.setTurnPlayed(true);
             try{
                 return market.chooseCoordinates(row, column);
@@ -342,6 +349,14 @@ public abstract class Game {
     }
 
     /**
+     * Shuffles the players and appoints the first one as the starting player
+     */
+    private void randomizeStartingPlayer(){
+        Collections.shuffle(getPlayerBoards());
+        getPlayerBoards().get(0).firstPlayer();
+    }
+
+    /**
      * Method invoked to calculate the final position for each player
      */
     public void calculateFinalPositions() {
@@ -400,7 +415,12 @@ public abstract class Game {
                 pBoard.getWarehouse().setPlayerNickname(nickname);
                 pBoard.getWarehouse().addListener(Listeners.BOARD_WAREHOUSE.value(),
                         new WarehouseChangeListener(view));
+
+                view.sendMessage(new PlayerBoardSetupMessage(pBoard));
             }
+            view.sendMessage(new MarketMessage(market));
+            view.sendMessage(new DevelopmentDecksMessage(developmentDecks));
+            view.sendMessage(new FaithTrackMessage(faithTrack));
         }
     }
 }

@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.model.games;
 
 import it.polimi.ingsw.server.model.boards.PlayerBoard;
 import it.polimi.ingsw.server.model.storage.*;
+import it.polimi.ingsw.server.view.VirtualView;
 
 import java.util.*;
 
@@ -16,19 +17,11 @@ public class MultiGame extends Game{
 
 
     @Override
-    public void initGame(List<String> players){
-        super.initGame(players);
+    public void initGame(List<VirtualView> views){
+        super.initGame(views);
         lastTurn = false;
-        randomizeStartingPlayer();
     }
 
-    /**
-     * Shuffles the players and appoints the first one as the starting player
-     */
-    private void randomizeStartingPlayer(){
-        Collections.shuffle(getPlayerBoards());
-        getPlayerBoards().get(0).firstPlayer();
-    }
 
     /**
      * Gets a list that contains a list of resources (wildcards and fatih) for each player that need to be equalized
