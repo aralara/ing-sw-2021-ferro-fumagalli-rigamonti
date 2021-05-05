@@ -50,6 +50,7 @@ public abstract class ClientHandler implements Runnable{
     public void sendMessage(Message message){
         try{
             output.writeObject(message);
+            output.reset();
         }catch(IOException e){
             e.printStackTrace();
         }

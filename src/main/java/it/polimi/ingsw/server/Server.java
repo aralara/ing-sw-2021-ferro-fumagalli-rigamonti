@@ -51,8 +51,6 @@ public class Server {
 
         try {
             while (true) {
-
-
                 Socket client = socket.accept();
 
                 server.output = new ObjectOutputStream(client.getOutputStream());
@@ -69,6 +67,7 @@ public class Server {
 
 
                 server.output.writeObject(new LobbyMessage(server.size, server.connectedPlayers));
+                server.output.reset();
 
                 if (!server.lobbyAlreadyExist) {
                     message = server.input.readObject();
@@ -98,6 +97,7 @@ public class Server {
             if (s.equals(nickname)) {
                 try {
                     output.writeObject(new ConnectionAckMessage(false));
+                    output.reset();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -107,6 +107,7 @@ public class Server {
 
         try{
             output.writeObject(new ConnectionAckMessage(true));
+            output.reset();
         }catch(IOException e) {
             e.printStackTrace();
         }

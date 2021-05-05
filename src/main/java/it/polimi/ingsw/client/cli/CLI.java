@@ -44,7 +44,7 @@ public class CLI {
     }
 
     public void createNewLobby(){
-        int size = -1;
+        int size;
         System.out.println("There isnt's any player waiting for a match!");
         do {
             System.out.println("Insert the number of player that will play the game (between 1 and 4)");
@@ -80,9 +80,5 @@ public class CLI {
             }
         }
         packetHandler.sendMessage(new SelectMarketMessage(row-1, column-1));
-        /*TODO: teoricamente il messaggio di ritorno è ok ma la matrice aggiornata che ritorna non è affatto aggiornata
-         *      sebbene la floating marble lo sia, avendo controllato anche all'interno del Server, il messaggio
-         *      inviato contiene i dati completamente corretti ma quello ricevuto dal client no ... boh
-         */
     }
 }

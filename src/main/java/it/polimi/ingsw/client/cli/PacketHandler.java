@@ -62,6 +62,7 @@ public class PacketHandler {
 
         try{
             output.writeObject(new ConnectionMessage(nickname));
+            output.reset();
         }
         catch(IOException e){
             e.printStackTrace();
@@ -72,6 +73,7 @@ public class PacketHandler {
 
         try{
             output.writeObject(new NewLobbyMessage(size));
+            output.reset();
         }
         catch(IOException e){
             e.printStackTrace();
@@ -85,7 +87,7 @@ public class PacketHandler {
 
                 message = input.readObject();
 
-                //TODO: inserire tutti i casi di pachetti che poissiamo ricevere
+                //TODO: inserire tutti i casi di pachetti che possiamo ricevere
 
                 if (message instanceof ConnectionAckMessage) {
                     if (((ConnectionAckMessage) message).isState()) {
@@ -117,6 +119,7 @@ public class PacketHandler {
     public void sendMessage(Message message) {    // TODO: scritto di fretta per testare
         try{
             output.writeObject(message);
+            output.reset();
         }
         catch(IOException e) {
             e.printStackTrace();
