@@ -1,9 +1,10 @@
 package it.polimi.ingsw.server.model.storage;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Shelf implements Storage{
+public class Shelf implements Storage, Serializable {
 
     private ResourceType resourceType;
     private final Resource resources;

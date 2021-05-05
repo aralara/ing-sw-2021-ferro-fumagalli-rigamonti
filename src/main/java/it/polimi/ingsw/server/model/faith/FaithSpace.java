@@ -1,6 +1,8 @@
 package it.polimi.ingsw.server.model.faith;
 
-public class FaithSpace {
+import java.io.Serializable;
+
+public class FaithSpace implements Serializable {
 
     private final int VP;
     private final int position;

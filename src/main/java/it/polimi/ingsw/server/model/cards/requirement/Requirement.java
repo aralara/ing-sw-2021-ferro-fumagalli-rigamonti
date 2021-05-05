@@ -2,7 +2,9 @@ package it.polimi.ingsw.server.model.cards.requirement;
 
 import it.polimi.ingsw.server.model.boards.PlayerBoard;
 
-public interface Requirement {
+import java.io.Serializable;
+
+public interface Requirement extends Serializable {
 
     /**
      * Checks if a specific requirement is met on the PlayerBoard given by parameter

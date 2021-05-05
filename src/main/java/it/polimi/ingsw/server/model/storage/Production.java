@@ -1,10 +1,11 @@
 package it.polimi.ingsw.server.model.storage;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Production {
+public class Production implements Serializable {
 
     private final List<Resource> consumed, produced;
 

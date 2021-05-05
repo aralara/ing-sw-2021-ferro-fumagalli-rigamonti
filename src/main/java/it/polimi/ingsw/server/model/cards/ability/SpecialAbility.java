@@ -2,7 +2,9 @@ package it.polimi.ingsw.server.model.cards.ability;
 
 import it.polimi.ingsw.server.model.boards.PlayerBoard;
 
-public interface SpecialAbility {
+import java.io.Serializable;
+
+public interface SpecialAbility extends Serializable {
 
     /**
      * Activates the leader's special ability on the board given by parameter

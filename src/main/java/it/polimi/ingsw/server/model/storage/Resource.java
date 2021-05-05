@@ -1,6 +1,8 @@
 package it.polimi.ingsw.server.model.storage;
 
-public class Resource {
+import java.io.Serializable;
+
+public class Resource implements Serializable {
 
     private ResourceType resourceType;
     private int quantity;

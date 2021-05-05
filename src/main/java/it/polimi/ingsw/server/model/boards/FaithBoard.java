@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class FaithBoard extends PlayerListened {
-    private static final int POPE_PROGRESSION_SIZE = 3;
+    public static final int POPE_PROGRESSION_SIZE = 3;
 
     private int faith;
     private final boolean[] popeProgression;

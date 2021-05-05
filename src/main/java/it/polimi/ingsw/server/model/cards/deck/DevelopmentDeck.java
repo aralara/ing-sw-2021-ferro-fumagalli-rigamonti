@@ -4,11 +4,12 @@ import it.polimi.ingsw.server.model.cards.card.*;
 import it.polimi.ingsw.utils.listeners.Listened;
 import it.polimi.ingsw.utils.listeners.Listeners;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class DevelopmentDeck extends Listened {
+public class DevelopmentDeck extends Listened implements Serializable {
 
     private final Deck deck;
     private final CardColors deckColor;

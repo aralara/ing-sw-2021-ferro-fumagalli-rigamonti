@@ -1,6 +1,8 @@
 package it.polimi.ingsw.server.model.faith;
 
-public class VaticanReport {
+import java.io.Serializable;
+
+public class VaticanReport implements Serializable {
 
     private final int min, max;
     private final int popeValue;

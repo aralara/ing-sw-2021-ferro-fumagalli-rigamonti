@@ -2,9 +2,10 @@ package it.polimi.ingsw.server.model.cards.deck;
 
 import it.polimi.ingsw.server.model.cards.card.Card;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Deck implements Iterable<Card>{
+public class Deck implements Iterable<Card>, Serializable {
 
     private final List<Card> cards;
 

@@ -2,7 +2,9 @@ package it.polimi.ingsw.server.model.market;
 
 import it.polimi.ingsw.server.model.storage.ResourceType;
 
-public class Marble {
+import java.io.Serializable;
+
+public class Marble implements Serializable {
 
     private final MarbleColors color;
     private final ResourceType resourceType;
