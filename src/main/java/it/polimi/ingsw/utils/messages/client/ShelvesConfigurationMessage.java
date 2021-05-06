@@ -3,8 +3,8 @@ package it.polimi.ingsw.utils.messages.client;
 import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.server.view.VirtualView;
-import it.polimi.ingsw.utils.messages.AckMessage;
 import it.polimi.ingsw.utils.messages.ActionMessage;
+import it.polimi.ingsw.utils.messages.server.ack.ShelvesConfigurationAckMessage;
 
 import java.util.List;
 
@@ -30,6 +30,7 @@ public class ShelvesConfigurationMessage implements ActionMessage {
 
     @Override
     public void doAction(VirtualView view, Controller controller) {
-        view.sendMessage(new AckMessage(controller.addResourcesToWarehouse(view.getNickname(), shelves, extra)));
+        boolean success = controller.addResourcesToWarehouse(view.getNickname(), shelves, extra);
+        view.sendMessage(new ShelvesConfigurationAckMessage(success));
     }
 }
