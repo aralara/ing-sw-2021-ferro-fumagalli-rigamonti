@@ -43,8 +43,8 @@ public class Controller {
         game.discardLeaders(game.getPlayerIndexOf(player), cards);
     }
 
-    public void addResourcesToWarehouse(String player, List<Shelf> shelves, List<Resource> extra) {
-        game.addResourcesToWarehouse(game.getPlayerIndexOf(player), shelves, extra);
+    public boolean addResourcesToWarehouse(String player, List<Shelf> shelves, List<Resource> extra) {
+        return game.addResourcesToWarehouse(game.getPlayerIndexOf(player), shelves, extra);
     }
 
     public void loadNextTurn(){

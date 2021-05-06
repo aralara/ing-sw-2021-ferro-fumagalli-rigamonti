@@ -165,15 +165,17 @@ public abstract class Game {
      * @param player Index of the player to add resources to
      * @param shelves List of shelves containing resources to add
      * @param extra List of resources to be discarded and faith to be added
+     * @return Returns true if the resources are added correctly, false otherwise
      */
-    public void addResourcesToWarehouse(int player, List<Shelf> shelves, List<Resource> extra) {
+    public boolean addResourcesToWarehouse(int player, List<Shelf> shelves, List<Resource> extra) {
         PlayerBoard playerboard = playerBoards.get(player);
         boolean success = playerboard.getWarehouse().changeConfiguration(shelves);
         if(extra.size() > 0 && success) {
             playerboard.getFaithBoard().takeFaithFromResources(extra);
-            addFaithAll(player, extra.size());
+            addFaithAll(player, extra.size());  // TODO: Necessario un metodo per controllare numero di risorse
         }
         checkFaith();
+        return success;
     }
 
     /**
