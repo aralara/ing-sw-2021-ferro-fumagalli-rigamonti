@@ -10,7 +10,7 @@ import java.util.List;
 
 public class SelectMarketMessage implements ActionMessage {
 
-    private int row, column;
+    private final int row, column;
 
 
     public SelectMarketMessage(int row, int column) {
