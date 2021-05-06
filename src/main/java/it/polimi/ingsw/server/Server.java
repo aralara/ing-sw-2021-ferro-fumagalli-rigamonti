@@ -1,6 +1,5 @@
 package it.polimi.ingsw.server;
 
-import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
 import it.polimi.ingsw.utils.messages.client.NewLobbyMessage;
 import it.polimi.ingsw.utils.messages.server.LobbyMessage;
@@ -24,7 +23,7 @@ public class Server {
     private List<String> nicknameUsed;
     private ObjectOutputStream output;
     private ObjectInputStream input;
-    private GameHandler gameHandler;
+    private List<GameHandler> gameHandlerList;
 
     public void reset(){
         lobbyAlreadyExist = false;
@@ -36,6 +35,7 @@ public class Server {
 
         Server server = new Server();
         server.nicknameUsed = new ArrayList<>();
+        server.gameHandlerList = new ArrayList<>();
         server.reset();
 
         ServerSocket socket;
@@ -73,16 +73,16 @@ public class Server {
                     message = server.input.readObject();
                     server.size = ((NewLobbyMessage) message).getLobbySize();
 
-                    server.gameHandler = new GameHandler(server.size);
+                    server.gameHandlerList.add(new GameHandler(server.size));
                     server.lobbyAlreadyExist = true;
 
                 }
 
-                server.gameHandler.add(client, server.output, server.input, nickname);
+                server.gameHandlerList.get(server.gameHandlerList.size()-1).add(client, server.output, server.input, nickname);
                 server.connectedPlayers++;
 
                 if (server.connectedPlayers == server.size) {
-                    Thread thread = new Thread(server.gameHandler);
+                    Thread thread = new Thread(server.gameHandlerList.get(server.gameHandlerList.size()-1));
                     thread.start();
                     server.reset();
                 }
@@ -93,15 +93,19 @@ public class Server {
     }
 
     public boolean checkValidNickname(String nickname) {
-        for (String s : nicknameUsed) {
-            if (s.equals(nickname)) {
-                try {
-                    output.writeObject(new ConnectionAckMessage(false));
-                    output.reset();
-                } catch (IOException e) {
-                    e.printStackTrace();
+        List<String> nicknameList;
+        for (GameHandler gameHandler : gameHandlerList) {
+            nicknameList = gameHandler.getAllNicknames();
+            for (String s : nicknameList) {
+                if (s.equals(nickname)) {
+                    try {
+                        output.writeObject(new ConnectionAckMessage(false));
+                        output.reset();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return false;
                 }
-                return false;
             }
         }
 

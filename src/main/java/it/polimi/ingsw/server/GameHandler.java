@@ -52,4 +52,12 @@ public class GameHandler implements Runnable {
             System.out.println("Can't handle message");
         }
     }
+
+    public List<String> getAllNicknames(){
+        List<String> temp = new ArrayList<>();
+        for (VirtualView virtualView : clientsVirtualView) {
+            temp.add(virtualView.getNickname());
+        }
+        return temp;
+    }
 }
