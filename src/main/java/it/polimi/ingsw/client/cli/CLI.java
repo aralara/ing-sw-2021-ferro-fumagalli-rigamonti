@@ -11,14 +11,9 @@ public class CLI {
     private PacketHandler packetHandler;
     private String nickname;
 
-    CLI(){
+    public CLI(){
         scanner = new Scanner(System.in);
         packetHandler = new PacketHandler(this);
-        setup();
-    }
-
-    public static void main(String[] args) {
-        CLI cli = new CLI();
     }
 
     public void setup() {

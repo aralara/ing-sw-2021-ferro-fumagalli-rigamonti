@@ -9,6 +9,8 @@ public class Client {
 
         //TODO: gestire il lancio di diverse tipologie di gioco
 
-        CLI.main(args);
+        //CLI.main(args);
+        CLI cli = new CLI();
+        cli.setup();
     }
 }
