@@ -172,7 +172,7 @@ public abstract class Game {
         boolean success = playerboard.getWarehouse().changeConfiguration(shelves);
         if(extra.size() > 0 && success) {
             playerboard.getFaithBoard().takeFaithFromResources(extra);
-            addFaithAll(player, extra.size());  // TODO: Necessario un metodo per controllare numero di risorse
+            addFaithAll(player, Storage.getTotalQuantity(extra));  // TODO: da controllare se va bene
         }
         checkFaith();
         return success;

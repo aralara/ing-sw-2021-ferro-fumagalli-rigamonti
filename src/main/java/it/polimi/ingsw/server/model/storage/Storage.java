@@ -73,6 +73,19 @@ public interface Storage {
     }
 
     /**
+     * Return the total quantity of resources contained in a list
+     * @param resources List to be evaluated
+     * @return Quantity of resources
+     */
+    static int getTotalQuantity(List<Resource> resources){
+        int temp = 0;
+        for (Resource resource : resources) {
+            temp += resource.getQuantity();
+        }
+        return temp;
+    }
+
+    /**
      * Gets an aggregated list of all the resources contained in the storage
      * @return Returns the list of resources
      */
