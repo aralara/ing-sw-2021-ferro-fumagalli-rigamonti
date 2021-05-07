@@ -5,6 +5,7 @@ import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
 import it.polimi.ingsw.utils.messages.client.NewLobbyMessage;
 import it.polimi.ingsw.utils.messages.server.FaithTrackMessage;
 import it.polimi.ingsw.utils.messages.server.LobbyMessage;
+import it.polimi.ingsw.utils.messages.server.MarketMessage;
 import it.polimi.ingsw.utils.messages.server.NewPlayerMessage;
 import it.polimi.ingsw.utils.messages.server.ack.ConnectionAckMessage;
 
@@ -105,6 +106,8 @@ public class PacketHandler {
                     cli.notifyNewPlayer(((NewPlayerMessage) message).getPlayerNickname());
                 } else if (message instanceof FaithTrackMessage) {
                     cli.chooseAction();   // TODO: scritto di fretta per testare
+                } else if (message instanceof MarketMessage) {
+                    cli.updateMarket(((MarketMessage) message).getMarbleMatrix(), ((MarketMessage) message).getFloatingMarble());   // TODO: da scegliere come gestire la graphical cli
                 }
                 else {
                     System.out.println("ricevuto " + message.toString());

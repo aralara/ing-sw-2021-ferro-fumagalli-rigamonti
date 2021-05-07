@@ -1,6 +1,8 @@
 package it.polimi.ingsw.client.cli;
 
+import it.polimi.ingsw.client.structures.MarketView;
 import it.polimi.ingsw.server.Server;
+import it.polimi.ingsw.server.model.market.Marble;
 import it.polimi.ingsw.utils.messages.client.SelectMarketMessage;
 
 import java.util.Scanner;
@@ -10,10 +12,12 @@ public class CLI {
     private Scanner scanner;
     private PacketHandler packetHandler;
     private String nickname;
+    private GraphicalCLI graphicalCLI;
 
     public CLI(){
         scanner = new Scanner(System.in);
         packetHandler = new PacketHandler(this);
+        graphicalCLI = new GraphicalCLI();
     }
 
     public void setup() {
@@ -75,5 +79,9 @@ public class CLI {
             }
         }
         packetHandler.sendMessage(new SelectMarketMessage(row-1, column-1));
+    }
+
+    public void updateMarket(Marble[][] matrix, Marble floatingMarble){
+        graphicalCLI.printMarket(new MarketView(matrix,floatingMarble));  //TODO: da gestire, avremo strutture tutte nella CLI?
     }
 }
