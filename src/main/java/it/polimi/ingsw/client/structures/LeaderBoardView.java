@@ -8,11 +8,9 @@ public class LeaderBoardView {
     private Deck board;
 
 
-    public LeaderBoardView(Deck hand, Deck board) {
+    public LeaderBoardView() {
         this.hand = new Deck();
         this.board = new Deck();
-        this.hand = hand;
-        this.board = board;
     }
 
 

@@ -11,6 +11,11 @@ public class PlayerBoardView {
 
 
     public PlayerBoardView() {
+        developmentBoard = new DevelopmentBoardView();
+        leaderBoard = new LeaderBoardView();
+        faithBoard = new FaithBoardView();
+        warehouse = new WarehouseView();
+        strongbox = new StrongboxView();
     }
 
 

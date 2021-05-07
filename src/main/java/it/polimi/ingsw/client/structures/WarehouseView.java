@@ -10,9 +10,8 @@ public class WarehouseView {
     private List<Shelf> shelves;
 
 
-    public WarehouseView(List<Shelf> shelves) {
+    public WarehouseView() {
         this.shelves = new ArrayList<>();
-        this.shelves = shelves;
     }
 
 

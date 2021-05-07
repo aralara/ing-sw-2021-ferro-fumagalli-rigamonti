@@ -13,9 +13,8 @@ public class DevelopmentBoardView {
     private List<Deck> spaces;
 
 
-    public DevelopmentBoardView(List<Deck> spaces){
+    public DevelopmentBoardView(){
         this.spaces = new ArrayList<>();
-        this.spaces = spaces;
     }
 
 

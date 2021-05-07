@@ -8,10 +8,9 @@ public class FaithBoardView {
     private boolean[] popeProgression;
 
 
-    public FaithBoardView(int faith, boolean[] popeProgression) {
-        this.faith = faith;
+    public FaithBoardView() {
+        this.faith = 0;
         this.popeProgression = new boolean[POPE_PROGRESSION_SIZE];
-        this.popeProgression = popeProgression;
     }
 
 

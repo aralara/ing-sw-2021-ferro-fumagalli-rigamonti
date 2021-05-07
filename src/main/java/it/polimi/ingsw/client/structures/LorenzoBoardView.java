@@ -6,8 +6,8 @@ public class LorenzoBoardView {
     private int faith;
 
 
-    public LorenzoBoardView(int faith) {
-        this.faith = faith;
+    public LorenzoBoardView() {
+        this.faith = 0;
     }
 
 

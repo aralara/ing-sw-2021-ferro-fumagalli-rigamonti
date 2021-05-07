@@ -11,9 +11,9 @@ public class FaithTrackView {
     private final List<FaithSpace> faithSpaces;
 
 
-    public FaithTrackView(List<VaticanReportView> vaticanReports, List<FaithSpace> faithSpaces) {
-        this.vaticanReports = new ArrayList<>(vaticanReports);
-        this.faithSpaces = new ArrayList<>(faithSpaces);
+    public FaithTrackView() {
+        this.vaticanReports = new ArrayList<>();
+        this.faithSpaces = new ArrayList<>();
     }
 
 

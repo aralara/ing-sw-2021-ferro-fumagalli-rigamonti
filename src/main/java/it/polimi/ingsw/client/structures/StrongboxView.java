@@ -10,9 +10,8 @@ public class StrongboxView {
     private List<Resource> resources;
 
 
-    public StrongboxView(List<Resource> resources) {
+    public StrongboxView() {
         this.resources = new ArrayList<>();
-        this.resources = resources;
     }
 
 

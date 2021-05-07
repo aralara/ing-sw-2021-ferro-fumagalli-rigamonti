@@ -11,10 +11,8 @@ public class MarketView {
     private Marble floatingMarble;
 
 
-    public MarketView(Marble[][] marbleMatrix, Marble floatingMarble){
+    public MarketView(){
         this.marbleMatrix = new Marble[ROWS][COLUMNS];
-        this.marbleMatrix = marbleMatrix;
-        this.floatingMarble = floatingMarble;
     }
 
 
