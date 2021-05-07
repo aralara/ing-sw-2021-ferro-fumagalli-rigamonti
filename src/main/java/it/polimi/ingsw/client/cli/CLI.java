@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.cli;
 
 import it.polimi.ingsw.client.structures.*;
 import it.polimi.ingsw.server.Server;
+import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.server.model.cards.deck.DevelopmentDeck;
 import it.polimi.ingsw.server.model.faith.VaticanReport;
@@ -104,6 +105,11 @@ public class CLI {
             playerBoardView.setWarehouse(warehouse);
             playerBoardView.setStrongbox(strongbox);
             playerBoardView.setInkwell(inkwell);
+
+            for(int i = 0; i<playerBoardView.getLeaderBoard().getHand().size();i++){  //TODO: da togliere
+                graphicalCLI.printLeaderCard((LeaderCard)playerBoardView.getLeaderBoard().getHand().get(i));
+            }
+
         } else {
             opposingPlayerBoards.add(new PlayerBoardView(message.getNickname()));
             int index = opposingPlayerBoards.size()-1;
@@ -114,6 +120,8 @@ public class CLI {
             ((PlayerBoardView)opposingPlayerBoards.get(index)).setStrongbox(strongbox);
             ((PlayerBoardView)opposingPlayerBoards.get(index)).setInkwell(inkwell);
         }
+
+
     }
 
     private int opposingPlayerBoardOf(String nickname){ //TODO: può servire?

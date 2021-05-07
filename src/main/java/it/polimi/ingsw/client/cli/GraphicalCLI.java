@@ -1,10 +1,24 @@
 package it.polimi.ingsw.client.cli;
 
 import it.polimi.ingsw.client.structures.MarketView;
+import it.polimi.ingsw.server.model.cards.ability.AbilityDiscount;
+import it.polimi.ingsw.server.model.cards.ability.AbilityMarble;
+import it.polimi.ingsw.server.model.cards.ability.AbilityProduction;
+import it.polimi.ingsw.server.model.cards.ability.AbilityWarehouse;
+import it.polimi.ingsw.server.model.cards.card.LeaderCard;
+import it.polimi.ingsw.server.model.cards.requirement.Requirement;
+import it.polimi.ingsw.server.model.cards.requirement.RequirementDev;
+import it.polimi.ingsw.server.model.cards.requirement.RequirementRes;
 import it.polimi.ingsw.server.model.market.Marble;
 import it.polimi.ingsw.server.model.market.MarbleColors;
+import it.polimi.ingsw.server.model.storage.Production;
+
 
 public class GraphicalCLI {
+
+    public static void main(String[] args) {
+
+    }
 
     public static final String RESET = "\033[0m";  // Text Reset
 
@@ -48,6 +62,54 @@ public class GraphicalCLI {
             return YELLOW_BRIGHT;
         }
         else return RESET;
+    }
+
+    public void printLeaderCard(LeaderCard card){
+        System.out.print("Requirements: ");
+        if(card.getRequirements().get(0) instanceof RequirementDev) {   //TODO: va bene get(0)? tnato 1 requirement c'e di sicuro
+            for (Requirement req : card.getRequirements()) {
+                System.out.print(((RequirementDev) req).getNumber() + " " +
+                        ((RequirementDev) req).getColor() + " development cards level " +
+                        ((RequirementDev) req).getLevel());
+            }
+        }else if(card.getRequirements().get(0) instanceof RequirementRes) {
+            for (Requirement req : card.getRequirements()) {
+                System.out.print(((RequirementRes) req).getResource().getQuantity() + " " +
+                        ((RequirementRes) req).getResource().getResourceType());
+            }
+        }
+        System.out.println();
+        System.out.println("The card value is " + card.getVP() + " victory point");
+
+        System.out.print("The special ability is ");
+
+        if(card.getAbility() instanceof AbilityDiscount) {
+            System.out.print("a discount by 1 unit of " + ((AbilityDiscount) card.getAbility()).getResourceType());
+        }else if(card.getAbility() instanceof AbilityMarble) {
+            System.out.print("the power of getting a  " + ((AbilityMarble) card.getAbility()).getResourceType() +
+                    " from a white marble from the market");
+        }else if(card.getAbility() instanceof AbilityProduction) {
+            System.out.print("the production:  ");
+            printProduction(((AbilityProduction) card.getAbility()).getProduction());
+        }else if(card.getAbility() instanceof AbilityWarehouse) {
+            System.out.print("to have an extra shelf to contain 1 " + ((AbilityWarehouse) card.getAbility()).getResourceType());
+        }
+        System.out.println();
+    }
+
+    public void printProduction(Production production){
+        System.out.print("Consumed: ");
+        for(int i = 0; i< production.getConsumed().size(); i++){
+            System.out.print(" * " + production.getConsumed().get(i).getQuantity() +
+                    production.getConsumed().get(i).getResourceType());
+        }
+        System.out.println();
+        System.out.print("Produced: ");
+        for(int i = 0; i< production.getProduced().size(); i++){
+            System.out.print(" * " + production.getProduced().get(i).getQuantity() +
+                    production.getProduced().get(i).getResourceType());
+        }
+
     }
 
 }
