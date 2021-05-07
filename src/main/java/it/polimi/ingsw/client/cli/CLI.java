@@ -1,31 +1,37 @@
 package it.polimi.ingsw.client.cli;
 
 import it.polimi.ingsw.client.structures.FaithTrackView;
+import it.polimi.ingsw.client.structures.LorenzoBoardView;
 import it.polimi.ingsw.client.structures.MarketView;
 import it.polimi.ingsw.client.structures.PlayerBoardView;
 import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.server.model.market.Marble;
 import it.polimi.ingsw.utils.messages.client.SelectMarketMessage;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class CLI {
 
-    private Scanner scanner;
-    private PacketHandler packetHandler;
-    private String nickname;
-    private GraphicalCLI graphicalCLI;
+    //private String nickname                   //TODO: spostato nella PlayerBoardView
+    private int numberOfPlayers;                //TODO: aggiunta da controllare (non so se il numero di player può essere utile anche qua)
     private PlayerBoardView playerBoardView;
+    private List<Object> opposingPlayerBoards;  //TODO: aggiunta da controllare
     private MarketView marketView;
     private FaithTrackView faithTrackView;
+    private Scanner scanner;
+    private GraphicalCLI graphicalCLI;
+    private PacketHandler packetHandler;
 
     public CLI(){
-        scanner = new Scanner(System.in);
-        packetHandler = new PacketHandler(this);
-        graphicalCLI = new GraphicalCLI();
         playerBoardView = new PlayerBoardView();
+        opposingPlayerBoards = new ArrayList<>();
         marketView = new MarketView();
         faithTrackView = new FaithTrackView();
+        scanner = new Scanner(System.in);
+        graphicalCLI = new GraphicalCLI();
+        packetHandler = new PacketHandler(this);
     }
 
     public void setup() {
@@ -40,13 +46,13 @@ public class CLI {
         String ip = scanner.nextLine();
 
         return packetHandler.start(ip,Server.SOCKET_PORT);
-
     }
 
     public void askNickname(){
         System.out.println("Insert your Nickname");
-        nickname = scanner.nextLine();
+        String nickname = scanner.nextLine();       //TODO: cambiato in var locale
 
+        playerBoardView.setNickname(nickname);      //TODO: aggiunta da controllare
         packetHandler.sendConnectionMessage(nickname);
     }
 
@@ -57,12 +63,20 @@ public class CLI {
             System.out.println("Insert the number of player that will play the game (between 1 and 4)");
             size = scanner.nextInt();
         }while(size <= 0 || size >= 5);
+        setNumberOfPlayers(size);       //TODO: aggiunta da controllare
         packetHandler.sendNewGameSize(size);
     }
 
+    public void setNumberOfPlayers(int numberOfPlayers){        //TODO: aggiunta da controllare
+        this.numberOfPlayers = numberOfPlayers;
+        if(numberOfPlayers == 1)
+            opposingPlayerBoards.add(new LorenzoBoardView());
+    }
+
     public void notifyNewPlayer(String nickname){
-        if(!this.nickname.equals(nickname)) {
+        if(!playerBoardView.getNickname().equals(nickname)) {       //TODO: modificato recuperando da playerBoard
             System.out.println("The player " + nickname + " has joined the game!! ♥");
+            opposingPlayerBoards.add(new PlayerBoardView(nickname));        //TODO: aggiunta da controllare
         }else{
             System.out.println("You have been added to the game!! ♥");
         }

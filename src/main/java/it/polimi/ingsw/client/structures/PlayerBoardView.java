@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.structures;
 
 public class PlayerBoardView {
 
+    private String nickname;
     private DevelopmentBoardView developmentBoard;
     private LeaderBoardView leaderBoard;
     private FaithBoardView faithBoard;
@@ -18,6 +19,32 @@ public class PlayerBoardView {
         strongbox = new StrongboxView();
     }
 
+
+    public PlayerBoardView(String nickname) {
+        this.nickname = nickname;
+        developmentBoard = new DevelopmentBoardView();
+        leaderBoard = new LeaderBoardView();
+        faithBoard = new FaithBoardView();
+        warehouse = new WarehouseView();
+        strongbox = new StrongboxView();
+    }
+
+
+    /**
+     * Gets the nickname attribute
+     * @return Returns nickname
+     */
+    public String getNickname() {
+        return nickname;
+    }
+
+    /**
+     * Sets the nickname attribute
+     * @param nickname New attribute value
+     */
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
 
     /**
      * Gets the developmentBoard attribute

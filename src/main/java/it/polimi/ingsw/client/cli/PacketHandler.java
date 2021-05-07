@@ -101,6 +101,7 @@ public class PacketHandler {
                     if (((LobbyMessage) message).getLobbySize() == ((LobbyMessage) message).getWaitingPlayers()) {
                         cli.createNewLobby();
                     }
+                    else cli.setNumberOfPlayers(((LobbyMessage) message).getLobbySize());   //TODO: aggiunta da controllare
                 } else if (message instanceof NewPlayerMessage) {
                     cli.notifyNewPlayer(((NewPlayerMessage) message).getPlayerNickname());
                 } else if (message instanceof FaithTrackMessage) {
