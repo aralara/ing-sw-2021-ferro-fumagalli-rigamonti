@@ -15,7 +15,7 @@ public class DevelopmentBoardView {
 
     public DevelopmentBoardView(List<Deck> spaces){
         this.spaces = new ArrayList<>();
-        setSpaces(spaces);
+        this.spaces = spaces;
     }
 
 
@@ -24,16 +24,14 @@ public class DevelopmentBoardView {
      * @return Returns spaces
      */
     public List<Deck> getSpaces() {
-        return spaces; //TODO: va bene o creare copia?
+        return spaces;
     }
 
     /**
      * Sets the spaces attribute
      * @param spaces New attribute value
      */
-    public void setSpaces(List<Deck> spaces) {  //TODO: aggiunge carte ai deck presenti, da usare sempre su nuovo oggetto
-        for(int i=0; i<NUMBER_OF_SPACES; i++)
-            for(Card card : spaces.get(i).getCards())
-                this.spaces.get(i).add(card);
+    public void setSpaces(List<Deck> spaces) {
+        this.spaces = spaces;
     }
 }

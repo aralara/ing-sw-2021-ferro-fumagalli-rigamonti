@@ -12,7 +12,7 @@ public class StrongboxView {
 
     public StrongboxView(List<Resource> resources) {
         this.resources = new ArrayList<>();
-        setResources(resources);
+        this.resources = resources;
     }
 
 
@@ -21,7 +21,7 @@ public class StrongboxView {
      * @return Returns resources
      */
     public List<Resource> getResources() {
-        return new ArrayList<>(resources);
+        return resources;
     }
 
     /**
@@ -29,6 +29,6 @@ public class StrongboxView {
      * @param resources New attribute value
      */
     public void setResources(List<Resource> resources) {
-        this.resources.addAll(resources);
+        this.resources = resources;
     }
 }

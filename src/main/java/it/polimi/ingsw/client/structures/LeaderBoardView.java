@@ -1,6 +1,5 @@
 package it.polimi.ingsw.client.structures;
 
-import it.polimi.ingsw.server.model.cards.card.Card; //TODO:duplicare anche card e deck o spostare in package condiviso?
 import it.polimi.ingsw.server.model.cards.deck.Deck;
 
 public class LeaderBoardView {
@@ -12,8 +11,8 @@ public class LeaderBoardView {
     public LeaderBoardView(Deck hand, Deck board) {
         this.hand = new Deck();
         this.board = new Deck();
-        setHand(hand);
-        setBoard(board);
+        this.hand = hand;
+        this.board = board;
     }
 
 
@@ -22,10 +21,7 @@ public class LeaderBoardView {
      * @return Returns hand
      */
     public Deck getHand() {
-        Deck handCopy = new Deck();
-        for(Card card : hand)
-            handCopy.add(card);
-        return handCopy;
+        return hand;
     }
 
     /**
@@ -33,8 +29,7 @@ public class LeaderBoardView {
      * @param hand New attribute value
      */
     public void setHand(Deck hand) {
-        for(Card card : hand)
-            this.hand.add(card);
+        this.hand = hand;
     }
 
     /**
@@ -42,10 +37,7 @@ public class LeaderBoardView {
      * @return Returns board
      */
     public Deck getBoard() {
-        Deck boardCopy = new Deck();
-        for(Card card : board)
-            boardCopy.add(card);
-        return boardCopy;
+        return board;
     }
 
     /**
@@ -53,7 +45,6 @@ public class LeaderBoardView {
      * @param board New attribute value
      */
     public void setBoard(Deck board) {
-        for(Card card : board)
-            this.board.add(card);
+        this.board = board;
     }
 }

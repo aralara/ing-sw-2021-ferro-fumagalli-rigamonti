@@ -11,7 +11,7 @@ public class FaithBoardView {
     public FaithBoardView(int faith, boolean[] popeProgression) {
         this.faith = faith;
         this.popeProgression = new boolean[POPE_PROGRESSION_SIZE];
-        setPopeProgression(popeProgression);
+        this.popeProgression = popeProgression;
     }
 
 
@@ -36,9 +36,7 @@ public class FaithBoardView {
      * @return Returns popeProgression
      */
     public boolean[] getPopeProgression() {
-        boolean[] popeProgressionCopy = new boolean[POPE_PROGRESSION_SIZE];
-        System.arraycopy(this.popeProgression, 0, popeProgressionCopy, 0, POPE_PROGRESSION_SIZE);
-        return popeProgressionCopy;
+        return popeProgression;
     }
 
     /**
@@ -46,6 +44,6 @@ public class FaithBoardView {
      * @param popeProgression New attribute value
      */
     public void setPopeProgression(boolean[] popeProgression) {
-        System.arraycopy(popeProgression, 0, this.popeProgression, 0, POPE_PROGRESSION_SIZE);
+        this.popeProgression = popeProgression;
     }
 }

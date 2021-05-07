@@ -12,7 +12,7 @@ public class WarehouseView {
 
     public WarehouseView(List<Shelf> shelves) {
         this.shelves = new ArrayList<>();
-        setShelves(shelves);
+        this.shelves = shelves;
     }
 
 
@@ -21,7 +21,7 @@ public class WarehouseView {
      * @return Returns shelves
      */
     public List<Shelf> getShelves() {
-        return new ArrayList<>(shelves);
+        return shelves;
     }
 
     /**
@@ -29,6 +29,6 @@ public class WarehouseView {
      * @param shelves New attribute value
      */
     public void setShelves(List<Shelf> shelves) {
-        this.shelves.addAll(shelves);
+        this.shelves = shelves;
     }
 }

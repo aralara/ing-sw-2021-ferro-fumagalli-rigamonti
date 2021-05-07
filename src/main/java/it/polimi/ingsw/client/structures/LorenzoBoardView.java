@@ -6,9 +6,7 @@ public class LorenzoBoardView {
     private int faith;
 
 
-    public LorenzoBoardView(/*Deck lorenzoDeck, */int faith) {
-        /*for(Card lorenzoCard : lorenzoDeck)
-            this.lorenzoDeck.add(lorenzoCard);*/
+    public LorenzoBoardView(int faith) {
         this.faith = faith;
     }
 

@@ -1,17 +1,19 @@
 package it.polimi.ingsw.client.structures;
 
+import it.polimi.ingsw.server.model.market.Marble;
+
 public class MarketView {
 
     private static final int ROWS = 3; //TODO: servono?
     private static final int COLUMNS = 4;
 
-    private MarbleView[][] marbleMatrix;
-    private MarbleView floatingMarble;
+    private Marble[][] marbleMatrix;
+    private Marble floatingMarble;
 
 
-    public MarketView(MarbleView[][] marbleMatrix, MarbleView floatingMarble){
-        this.marbleMatrix = new MarbleView[ROWS][COLUMNS];
-        setMarbleMatrix(marbleMatrix);
+    public MarketView(Marble[][] marbleMatrix, Marble floatingMarble){
+        this.marbleMatrix = new Marble[ROWS][COLUMNS];
+        this.marbleMatrix = marbleMatrix;
         this.floatingMarble = floatingMarble;
     }
 
@@ -20,29 +22,23 @@ public class MarketView {
      * Gets the marbleMatrix attribute
      * @return Returns a copy of marbleMatrix
      */
-    public MarbleView[][] getMarbleMatrix() {
-        MarbleView[][] marbleMatrixCopy = new MarbleView[ROWS][COLUMNS];
-        for(int r=0; r<ROWS; r++)
-            for(int c=0; c<COLUMNS; c++)
-                marbleMatrixCopy[r][c]=marbleMatrix[r][c];
-        return marbleMatrixCopy;
+    public Marble[][] getMarbleMatrix() {
+        return marbleMatrix;
     }
 
     /**
      * Sets the marbleMatrix attribute
      * @param marbleMatrix New attribute value
      */
-    public void setMarbleMatrix(MarbleView[][] marbleMatrix) {
-        for(int r=0; r<ROWS; r++)
-            for(int c=0; c<COLUMNS; c++)
-                this.marbleMatrix[r][c]=marbleMatrix[r][c];
+    public void setMarbleMatrix(Marble[][] marbleMatrix) {
+        this.marbleMatrix = marbleMatrix;
     }
 
     /**
      * Gets the floatingMarble attribute
      * @return Returns floatingMarble
      */
-    public MarbleView getFloatingMarble() {
+    public Marble getFloatingMarble() {
         return floatingMarble;
     }
 
@@ -50,7 +46,7 @@ public class MarketView {
      * Sets the floatingMarble attribute
      * @param floatingMarble New attribute value
      */
-    public void setFloatingMarble(MarbleView floatingMarble) {
+    public void setFloatingMarble(Marble floatingMarble) {
         this.floatingMarble = floatingMarble;
     }
 }
