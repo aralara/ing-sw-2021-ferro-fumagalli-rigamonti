@@ -1,6 +1,5 @@
 package it.polimi.ingsw.client.structures;
 
-import it.polimi.ingsw.server.model.cards.card.Card;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
 
 import java.util.ArrayList;

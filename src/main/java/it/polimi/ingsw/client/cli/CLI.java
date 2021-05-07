@@ -1,6 +1,8 @@
 package it.polimi.ingsw.client.cli;
 
+import it.polimi.ingsw.client.structures.FaithTrackView;
 import it.polimi.ingsw.client.structures.MarketView;
+import it.polimi.ingsw.client.structures.PlayerBoardView;
 import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.server.model.market.Marble;
 import it.polimi.ingsw.utils.messages.client.SelectMarketMessage;
@@ -13,11 +15,17 @@ public class CLI {
     private PacketHandler packetHandler;
     private String nickname;
     private GraphicalCLI graphicalCLI;
+    private PlayerBoardView playerBoardView;
+    private MarketView marketView;
+    private FaithTrackView faithTrackView;
 
     public CLI(){
         scanner = new Scanner(System.in);
         packetHandler = new PacketHandler(this);
         graphicalCLI = new GraphicalCLI();
+        playerBoardView = new PlayerBoardView();
+        marketView = new MarketView();
+        faithTrackView = new FaithTrackView();
     }
 
     public void setup() {
@@ -82,6 +90,8 @@ public class CLI {
     }
 
     public void updateMarket(Marble[][] matrix, Marble floatingMarble){
-        graphicalCLI.printMarket(new MarketView(matrix,floatingMarble));  //TODO: da gestire, avremo strutture tutte nella CLI?
+        marketView.setMarbleMatrix(matrix);
+        marketView.setFloatingMarble(floatingMarble);
+        graphicalCLI.printMarket(marketView);  //TODO: da gestire, avremo strutture tutte nella CLI?
     }
 }
