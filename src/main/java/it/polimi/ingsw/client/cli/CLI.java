@@ -43,6 +43,7 @@ public class CLI {
     public void setup() {
         //TODO: fase di setup per iniziare la partita
         while(!connect());
+        System.out.println("Insert your nickname");
         askNickname();
     }
 
@@ -55,7 +56,6 @@ public class CLI {
     }
 
     public void askNickname(){
-        System.out.println("Insert your Nickname");
         String nickname = scanner.nextLine();       //TODO: cambiato in var locale
 
         playerBoardView.setNickname(nickname);      //TODO: aggiunta da controllare
@@ -81,9 +81,9 @@ public class CLI {
 
     public void notifyNewPlayer(String nickname){
         if(!playerBoardView.getNickname().equals(nickname)) {       //TODO: modificato recuperando da playerBoard
-            System.out.println("The player " + nickname + " has joined the game!! ♥");
+            System.out.println("The player " + nickname + " has joined the game!");
         }else{
-            System.out.println("You have been added to the game!! ♥");
+            System.out.println("You have been added to the game!");
         }
     }
 

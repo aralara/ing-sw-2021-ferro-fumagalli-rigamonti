@@ -87,17 +87,13 @@ public class PacketHandler {
                 //TODO: inserire tutti i casi di pachetti che possiamo ricevere
 
                 if (message instanceof ConnectionAckMessage) {
-                    if (((ConnectionAckMessage) message).isState()) {
-                        System.out.println("riceve ack funziona");
-                    } else {
-                        System.out.println("nick non va bene");
+                    if (!((ConnectionAckMessage) message).isState()) {
+                        System.out.println("Nickname is not available, please choose another one");
                         cli.askNickname();
                     }
-
                 } else if (message instanceof LobbyMessage) {
-                    if (((LobbyMessage) message).getLobbySize() == ((LobbyMessage) message).getWaitingPlayers()) {
+                    if (((LobbyMessage) message).getLobbySize() == ((LobbyMessage) message).getWaitingPlayers())
                         cli.createNewLobby();
-                    }
                     else cli.setNumberOfPlayers(((LobbyMessage) message).getLobbySize());   //TODO: aggiunta da controllare
                 } else if (message instanceof NewPlayerMessage) {
                     cli.notifyNewPlayer(((NewPlayerMessage) message).getPlayerNickname());
@@ -111,7 +107,7 @@ public class PacketHandler {
                     cli.faithTrackSetup((FaithTrackMessage) message);
                     //cli.chooseAction();   // TODO: scritto di fretta per testare
                 } else {
-                    System.out.println("ricevuto " + message.toString());
+                    System.out.println("Received " + message.toString());
                 }
 
             }
