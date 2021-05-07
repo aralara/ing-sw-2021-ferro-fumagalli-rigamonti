@@ -5,9 +5,9 @@ import it.polimi.ingsw.utils.messages.Message;
 
 import java.util.List;
 
-public class LeaderCardMessage implements Message {
+public abstract class LeaderCardMessage implements ActionMessage {
 
-    private List<LeaderCard> leaderCards;
+    private final List<LeaderCard> leaderCards;
 
 
     public LeaderCardMessage(List<LeaderCard> leaderCards) {
