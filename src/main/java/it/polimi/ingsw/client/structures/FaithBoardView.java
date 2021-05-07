@@ -13,6 +13,11 @@ public class FaithBoardView {
         this.popeProgression = new boolean[POPE_PROGRESSION_SIZE];
     }
 
+    public FaithBoardView(int faith, boolean[] popeProgression) {
+        this.faith = faith;
+        this.popeProgression = popeProgression;
+    }
+
 
     /**
      * Gets the faith attribute

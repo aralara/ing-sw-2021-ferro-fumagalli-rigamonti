@@ -3,10 +3,7 @@ package it.polimi.ingsw.client.cli;
 import it.polimi.ingsw.utils.messages.Message;
 import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
 import it.polimi.ingsw.utils.messages.client.NewLobbyMessage;
-import it.polimi.ingsw.utils.messages.server.FaithTrackMessage;
-import it.polimi.ingsw.utils.messages.server.LobbyMessage;
-import it.polimi.ingsw.utils.messages.server.MarketMessage;
-import it.polimi.ingsw.utils.messages.server.NewPlayerMessage;
+import it.polimi.ingsw.utils.messages.server.*;
 import it.polimi.ingsw.utils.messages.server.ack.ConnectionAckMessage;
 
 import java.io.IOException;
@@ -104,12 +101,16 @@ public class PacketHandler {
                     else cli.setNumberOfPlayers(((LobbyMessage) message).getLobbySize());   //TODO: aggiunta da controllare
                 } else if (message instanceof NewPlayerMessage) {
                     cli.notifyNewPlayer(((NewPlayerMessage) message).getPlayerNickname());
-                } else if (message instanceof FaithTrackMessage) {
-                    cli.chooseAction();   // TODO: scritto di fretta per testare
+                } else if (message instanceof PlayerBoardSetupMessage) {
+                    cli.playerBoardSetup((PlayerBoardSetupMessage) message);
                 } else if (message instanceof MarketMessage) {
-                    cli.updateMarket(((MarketMessage) message).getMarbleMatrix(), ((MarketMessage) message).getFloatingMarble());   // TODO: da scegliere come gestire la graphical cli
-                }
-                else {
+                    cli.marketSetup(((MarketMessage) message));
+                } else if (message instanceof DevelopmentDecksMessage) {
+                    cli.developmentDecksSetup(((DevelopmentDecksMessage) message));
+                }  else if (message instanceof FaithTrackMessage) {
+                    cli.faithTrackSetup((FaithTrackMessage) message);
+                    //cli.chooseAction();   // TODO: scritto di fretta per testare
+                } else {
                     System.out.println("ricevuto " + message.toString());
                 }
 

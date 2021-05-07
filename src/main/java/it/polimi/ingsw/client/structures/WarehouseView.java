@@ -14,6 +14,10 @@ public class WarehouseView {
         this.shelves = new ArrayList<>();
     }
 
+    public WarehouseView(List<Shelf> shelves) {
+        this.shelves = shelves;
+    }
+
 
     /**
      * Gets the shelves attribute

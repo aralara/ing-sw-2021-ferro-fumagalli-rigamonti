@@ -7,8 +7,8 @@ import java.util.List;
 
 public class FaithTrackView {
 
-    private final List<VaticanReportView> vaticanReports;
-    private final List<FaithSpace> faithSpaces;
+    private List<VaticanReportView> vaticanReports;
+    private List<FaithSpace> faithSpaces;
 
 
     public FaithTrackView() {
@@ -16,6 +16,11 @@ public class FaithTrackView {
         this.faithSpaces = new ArrayList<>();
     }
 
+
+    public void setFaithTrackView(List<VaticanReportView> vaticanReports, List<FaithSpace> faithSpaces) {
+        this.vaticanReports = vaticanReports;
+        this.faithSpaces = faithSpaces;
+    }
 
     /**
      * Gets the vaticanReports attribute

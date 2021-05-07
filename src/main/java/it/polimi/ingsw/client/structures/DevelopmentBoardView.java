@@ -16,6 +16,10 @@ public class DevelopmentBoardView {
         this.spaces = new ArrayList<>();
     }
 
+    public DevelopmentBoardView(List<Deck> spaces){
+        this.spaces = spaces;
+    }
+
 
     /**
      * Gets the spaces attribute

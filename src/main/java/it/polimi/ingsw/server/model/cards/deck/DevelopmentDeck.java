@@ -45,6 +45,15 @@ public class DevelopmentDeck extends Listened implements Serializable {
         return retList;
     }
 
+
+    /**
+     * Gets the deck attribute
+     * @return Returns deck value
+     */
+    public Deck getDeck() {
+        return this.deck;
+    }
+
     /**
      * Gets the deckColor attribute
      * @return Returns deckColor value
