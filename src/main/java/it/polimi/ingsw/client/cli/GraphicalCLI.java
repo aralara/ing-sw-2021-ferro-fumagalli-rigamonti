@@ -29,7 +29,7 @@ public class GraphicalCLI {
         System.out.println("[ x ][ x ][ x ][ x ]");
 
         color = chooseColor(market.getFloatingMarble());
-        System.out.println("The marble to place is " + color + "■ ■" + color);
+        System.out.println("The marble to place is " + color + "■" + color);
         System.out.print(RESET);
     }
 
