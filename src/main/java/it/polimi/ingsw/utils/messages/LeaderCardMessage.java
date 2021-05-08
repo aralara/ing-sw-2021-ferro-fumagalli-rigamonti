@@ -7,15 +7,15 @@ import java.util.List;
 
 public abstract class LeaderCardMessage implements ActionMessage {
 
-    private final List<LeaderCard> leaderCards;
+    private final LeaderCard leaderCard;
 
 
-    public LeaderCardMessage(List<LeaderCard> leaderCards) {
-        this.leaderCards = leaderCards;
+    public LeaderCardMessage(LeaderCard leaderCard) {
+        this.leaderCard = leaderCard;
     }
 
 
-    public List<LeaderCard> getLeaderCards() {
-        return leaderCards;
+    public LeaderCard getLeaderCard() {
+        return leaderCard;
     }
 }

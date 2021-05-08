@@ -10,14 +10,14 @@ import java.util.List;
 
 public class LeaderCardPlayMessage extends LeaderCardMessage {
 
-    public LeaderCardPlayMessage(List<LeaderCard> leaderCards) {
-        super(leaderCards);
+    public LeaderCardPlayMessage(LeaderCard leaderCard) {
+        super(leaderCard);
     }
 
 
     @Override
     public void doAction(VirtualView view, Controller controller) {
-        boolean success = controller.playLeaderCard(view.getNickname(), getLeaderCards().get(0));
+        boolean success = controller.playLeaderCard(view.getNickname(), getLeaderCard());
         view.sendMessage(new LeaderCardPlayAckMessage(success));
     }
 }

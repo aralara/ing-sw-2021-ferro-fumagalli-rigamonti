@@ -39,8 +39,8 @@ public class Controller {
         game.initGame(views);
     }
 
-    public void discardLeaders(String player, List<LeaderCard> cards) {
-        game.discardLeaders(game.getPlayerIndexOf(player), cards);
+    public void discardLeaders(String player, LeaderCard leaderCard) {
+        game.discardLeader(game.getPlayerIndexOf(player), leaderCard);
     }
 
     public boolean addResourcesToWarehouse(String player, List<Shelf> shelves, List<Resource> extra) {

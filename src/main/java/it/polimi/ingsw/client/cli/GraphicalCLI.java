@@ -115,7 +115,8 @@ public class GraphicalCLI {
             System.out.println(toPrint);
             first = false;
         }
-
     }
+
+
 
 }
