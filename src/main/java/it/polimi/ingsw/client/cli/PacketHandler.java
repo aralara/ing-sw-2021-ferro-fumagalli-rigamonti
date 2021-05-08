@@ -2,7 +2,6 @@ package it.polimi.ingsw.client.cli;
 
 import it.polimi.ingsw.utils.messages.Message;
 import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
-import it.polimi.ingsw.utils.messages.client.LeaderCardDiscardMessage;
 import it.polimi.ingsw.utils.messages.client.NewLobbyMessage;
 import it.polimi.ingsw.utils.messages.server.*;
 import it.polimi.ingsw.utils.messages.server.ack.ConnectionAckMessage;
@@ -116,12 +115,15 @@ public class PacketHandler {
                     } else {
                         //TODO: aggiorno?
                         System.out.println("Scarto dei leader a buon fine");
-                        cli.temp();
                     }
-                } else {
+                } else if (message instanceof PlayerLeaderBBoardMessage) {
+                    //TODO: stampare la board delle leader
+                }else if (message instanceof PlayerLeaderBHandMessage) {
+                    //TODO: da sistemare, ricevo la hand di tutti i player della lobby, ma dovrebbe arrivare solo se la mia hand
+                    cli.updateLeaderHand(((PlayerLeaderBHandMessage)message).getHand());
+                }else {
                     System.out.println("Received " + message.toString());
                 }
-
             }
         }catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

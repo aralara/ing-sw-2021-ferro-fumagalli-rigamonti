@@ -170,13 +170,22 @@ public class CLI {
             secondOne = scanner.nextInt();
         }while(secondOne<=0 || secondOne>size || secondOne == firstOne);
 
-        //TODO: memorizzare o aggiorno con nuovo pacchetto?
-        sendDiscardedLeader((LeaderCard) playerBoardView.getLeaderBoard().getHand().get(firstOne-1));
-        sendDiscardedLeader((LeaderCard) playerBoardView.getLeaderBoard().getHand().get(secondOne-1));
+        List<LeaderCard> leaderCards = new ArrayList<>();
+        leaderCards.add((LeaderCard) playerBoardView.getLeaderBoard().getHand().get(firstOne-1));
+        leaderCards.add((LeaderCard) playerBoardView.getLeaderBoard().getHand().get(secondOne-1));
+        sendDiscardedLeader(leaderCards);
     }
 
-    private void sendDiscardedLeader(LeaderCard leaderCard){
-        packetHandler.sendMessage(new LeaderCardDiscardMessage(leaderCard));
+    private void sendDiscardedLeader(List<LeaderCard> leaderCards){
+        for(LeaderCard leaderCard : leaderCards)
+            packetHandler.sendMessage(new LeaderCardDiscardMessage(leaderCard));
+    }
+
+    public void updateLeaderHand(Deck leaderCards){
+        playerBoardView.getLeaderBoard().setHand(leaderCards);
+        if(playerBoardView.getLeaderBoard().getHand().size() == 2){  //TODO: da togliere, serve solo per testare
+            temp();
+        }
     }
 
     public void temp(){

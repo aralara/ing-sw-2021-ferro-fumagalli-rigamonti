@@ -30,7 +30,7 @@ public class GameHandler implements Runnable {
             thread.start();
         }
         controller.initGame(clientsVirtualView);  //TODO: giusto gestire controller qui o tutto nei doAction()?
-        //sendAll(new AskLeaderCardDiscardMessage());
+        sendAll(new AskLeaderCardDiscardMessage());
         while(true) {
             //TODO: da metterci qualcosa?
         }
