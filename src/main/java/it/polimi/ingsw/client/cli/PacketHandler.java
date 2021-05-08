@@ -2,9 +2,11 @@ package it.polimi.ingsw.client.cli;
 
 import it.polimi.ingsw.utils.messages.Message;
 import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
+import it.polimi.ingsw.utils.messages.client.LeaderCardDiscardMessage;
 import it.polimi.ingsw.utils.messages.client.NewLobbyMessage;
 import it.polimi.ingsw.utils.messages.server.*;
 import it.polimi.ingsw.utils.messages.server.ack.ConnectionAckMessage;
+import it.polimi.ingsw.utils.messages.server.ack.LeaderCardDiscardAckMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -103,9 +105,19 @@ public class PacketHandler {
                     cli.marketSetup(((MarketMessage) message));
                 } else if (message instanceof DevelopmentDecksMessage) {
                     cli.developmentDecksSetup(((DevelopmentDecksMessage) message));
-                }  else if (message instanceof FaithTrackMessage) {
+                } else if (message instanceof FaithTrackMessage) {
                     cli.faithTrackSetup((FaithTrackMessage) message);
-                    //cli.chooseAction();   // TODO: scritto di fretta per testare
+                } else if (message instanceof AskLeaderCardDiscardMessage) {
+                    cli.askDiscardLeader();
+                } else if (message instanceof LeaderCardDiscardAckMessage) {
+                    if(!((LeaderCardDiscardAckMessage) message).isState()){
+                        //TODO: richiedo?
+                        System.out.println("Errore nello scarto dei leader");
+                    } else {
+                        //TODO: aggiorno?
+                        System.out.println("Scarto dei leader a buon fine");
+                        cli.temp();
+                    }
                 } else {
                     System.out.println("Received " + message.toString());
                 }

@@ -3,7 +3,7 @@ package it.polimi.ingsw.utils.messages.server;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.utils.messages.Message;
 
-public class PlayerLeaderBHandMessage implements Message {
+public class PlayerLeaderBHandMessage implements Message { //TODO: guarda dubbio drive
 
     private Deck hand;
     private String nickname;

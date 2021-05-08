@@ -7,6 +7,7 @@ import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.server.model.cards.deck.DevelopmentDeck;
 import it.polimi.ingsw.server.model.faith.VaticanReport;
 import it.polimi.ingsw.server.model.market.Marble;
+import it.polimi.ingsw.utils.messages.client.LeaderCardDiscardMessage;
 import it.polimi.ingsw.utils.messages.client.SelectMarketMessage;
 import it.polimi.ingsw.utils.messages.server.DevelopmentDecksMessage;
 import it.polimi.ingsw.utils.messages.server.FaithTrackMessage;
@@ -105,11 +106,6 @@ public class CLI {
             playerBoardView.setWarehouse(warehouse);
             playerBoardView.setStrongbox(strongbox);
             playerBoardView.setInkwell(inkwell);
-
-            for(int i = 0; i<playerBoardView.getLeaderBoard().getHand().size();i++){  //TODO: da togliere
-                graphicalCLI.printLeaderCard((LeaderCard)playerBoardView.getLeaderBoard().getHand().get(i));
-            }
-
         } else {
             opposingPlayerBoards.add(new PlayerBoardView(message.getNickname()));
             int index = opposingPlayerBoards.size()-1;
@@ -154,6 +150,39 @@ public class CLI {
                     vaticanReport.getPopeValue()));
         }
         faithTrackView.setFaithTrackView(vaticanReports, message.getFaithSpaces());
+    }
+
+    public void askDiscardLeader(){
+        System.out.println("You have to discard 2 leader cards\nSelect the corresponding number");
+        int size = playerBoardView.getLeaderBoard().getHand().size();
+        int firstOne, secondOne;
+        for(int i=0; i<size; i++){
+            System.out.print((i+1) + ": ");
+            graphicalCLI.printLeaderCard((LeaderCard) playerBoardView.getLeaderBoard().getHand().get(i));
+        }
+        do{
+            System.out.print("Choose the first one: ");
+            firstOne = scanner.nextInt();
+        }while(firstOne<=0 || firstOne>size);
+
+        do{
+            System.out.print("Choose the second one: ");
+            secondOne = scanner.nextInt();
+        }while(secondOne<=0 || secondOne>size || secondOne == firstOne);
+
+        //TODO: memorizzare o aggiorno con nuovo pacchetto?
+        sendDiscardedLeader((LeaderCard) playerBoardView.getLeaderBoard().getHand().get(firstOne-1));
+        sendDiscardedLeader((LeaderCard) playerBoardView.getLeaderBoard().getHand().get(secondOne-1));
+    }
+
+    private void sendDiscardedLeader(LeaderCard leaderCard){
+        packetHandler.sendMessage(new LeaderCardDiscardMessage(leaderCard));
+    }
+
+    public void temp(){
+        for(int i = 0; i<playerBoardView.getLeaderBoard().getHand().size();i++){  //TODO: da togliere
+            graphicalCLI.printLeaderCard((LeaderCard)playerBoardView.getLeaderBoard().getHand().get(i));
+        }
     }
 
     public void chooseAction() {        // TODO: scritto di fretta per testare

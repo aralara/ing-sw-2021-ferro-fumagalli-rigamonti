@@ -4,6 +4,7 @@ import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.messages.ActionMessage;
 import it.polimi.ingsw.utils.messages.Message;
+import it.polimi.ingsw.utils.messages.server.AskLeaderCardDiscardMessage;
 import it.polimi.ingsw.utils.messages.server.NewPlayerMessage;
 
 import java.io.ObjectInputStream;
@@ -28,7 +29,8 @@ public class GameHandler implements Runnable {
             Thread thread = new Thread(virtualView);
             thread.start();
         }
-        controller.initGame(clientsVirtualView);
+        controller.initGame(clientsVirtualView);  //TODO: giusto gestire controller qui o tutto nei doAction()?
+        //sendAll(new AskLeaderCardDiscardMessage());
         while(true) {
             //TODO: da metterci qualcosa?
         }
