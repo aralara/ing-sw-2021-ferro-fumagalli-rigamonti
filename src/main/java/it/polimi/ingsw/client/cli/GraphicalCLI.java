@@ -65,12 +65,17 @@ public class GraphicalCLI {
     }
 
     public void printLeaderCard(LeaderCard card){
-        System.out.print("Requirements: ");
+        String toPrint;
+        boolean first = true;
+        System.out.println("♥ LEADER CARD ♥ ");
+        System.out.print(" • Requirements: ");
         if(card.getRequirements().get(0) instanceof RequirementDev) {   //TODO: va bene get(0)? tnato 1 requirement c'e di sicuro
             for (Requirement req : card.getRequirements()) {
-                System.out.print(((RequirementDev) req).getNumber() + " " +
+                toPrint = ((!first) ? ", " :"") + ((RequirementDev) req).getNumber() + " " +
                         ((RequirementDev) req).getColor() + " development cards level " +
-                        ((RequirementDev) req).getLevel());
+                        ((RequirementDev) req).getLevel();
+                System.out.print(toPrint);
+                first = false;
             }
         }else if(card.getRequirements().get(0) instanceof RequirementRes) {
             for (Requirement req : card.getRequirements()) {
@@ -79,35 +84,40 @@ public class GraphicalCLI {
             }
         }
         System.out.println();
-        System.out.println("The card value is " + card.getVP() + " victory point");
+        System.out.println(" • The card value is " + card.getVP() + " victory point");
 
-        System.out.print("The special ability is ");
+        System.out.print(" • The special ability is ");
 
         if(card.getAbility() instanceof AbilityDiscount) {
-            System.out.print("a discount by 1 unit of " + ((AbilityDiscount) card.getAbility()).getResourceType());
+            System.out.println("a discount by 1 unit of " + ((AbilityDiscount) card.getAbility()).getResourceType());
         }else if(card.getAbility() instanceof AbilityMarble) {
-            System.out.print("the power of getting a  " + ((AbilityMarble) card.getAbility()).getResourceType() +
+            System.out.println("the power of getting a " + ((AbilityMarble) card.getAbility()).getResourceType() +
                     " from a white marble from the market");
         }else if(card.getAbility() instanceof AbilityProduction) {
-            System.out.print("the production:  ");
+            System.out.println("the production:  ");
             printProduction(((AbilityProduction) card.getAbility()).getProduction());
         }else if(card.getAbility() instanceof AbilityWarehouse) {
-            System.out.print("to have an extra shelf to contain 1 " + ((AbilityWarehouse) card.getAbility()).getResourceType());
+            System.out.println("to have an extra shelf to contain 1 " + ((AbilityWarehouse) card.getAbility()).getResourceType());
         }
-        System.out.println();
     }
 
     public void printProduction(Production production){
         System.out.print("Consumed: ");
+        boolean first = true;
+        String toPrint;
         for(int i = 0; i< production.getConsumed().size(); i++){
-            System.out.print(" * " + production.getConsumed().get(i).getQuantity() +
-                    production.getConsumed().get(i).getResourceType());
+            toPrint = ((!first) ? "          " :"") + " > " + production.getConsumed().get(i).getQuantity() + " " +
+                    production.getConsumed().get(i).getResourceType();
+            System.out.println(toPrint);
+            first = false;
         }
-        System.out.println();
         System.out.print("Produced: ");
+        first = true;
         for(int i = 0; i< production.getProduced().size(); i++){
-            System.out.print(" * " + production.getProduced().get(i).getQuantity() +
-                    production.getProduced().get(i).getResourceType());
+            toPrint = ((!first) ? "          " :"") + " > " + production.getProduced().get(i).getQuantity() + " " +
+                    production.getProduced().get(i).getResourceType();
+            System.out.println(toPrint);
+            first = false;
         }
 
     }
