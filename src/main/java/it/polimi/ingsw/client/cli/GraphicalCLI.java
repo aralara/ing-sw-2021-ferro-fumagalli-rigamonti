@@ -16,10 +16,6 @@ import it.polimi.ingsw.server.model.storage.Production;
 
 public class GraphicalCLI {
 
-    public static void main(String[] args) {
-
-    }
-
     public static final String RESET = "\033[0m";  // Text Reset
 
     public static final String BLACK_BRIGHT = "\033[0;90m";  // BLACK
