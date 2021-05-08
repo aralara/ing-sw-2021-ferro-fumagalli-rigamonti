@@ -5,14 +5,23 @@ import it.polimi.ingsw.server.model.boards.LorenzoBoard;
 public class LorenzoDev implements LorenzoCard{
 
     private final CardColors color;
-    private final int quantity;
+    private final int quantity,ID;
 
 
-    public LorenzoDev(CardColors color, int quantity) {
+    public LorenzoDev(int ID, CardColors color, int quantity) {
+        this.ID = ID;
         this.color = color;
         this.quantity = quantity;
     }
 
+
+    /**
+     * Gets the ID value
+     * @return Returns ID
+     */
+    public int getID() {
+        return ID;
+    }
 
     @Override
     public void activateLorenzo(LorenzoBoard board) {

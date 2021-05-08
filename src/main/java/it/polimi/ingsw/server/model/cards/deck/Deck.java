@@ -4,6 +4,7 @@ import it.polimi.ingsw.server.model.cards.card.Card;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.IntStream;
 
 public class Deck implements Iterable<Card>, Serializable {
 
@@ -42,7 +43,7 @@ public class Deck implements Iterable<Card>, Serializable {
      * @return Returns the index of the card
      */
     public int indexOf(Card card){
-        return cards.indexOf(card);
+        return IntStream.range(0, cards.size()).filter(i -> cards.get(i).getID() == card.getID()).findFirst().orElse(-1);
     }
 
     /**

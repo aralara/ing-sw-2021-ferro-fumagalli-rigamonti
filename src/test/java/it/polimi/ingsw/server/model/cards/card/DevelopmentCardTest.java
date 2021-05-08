@@ -31,6 +31,7 @@ public class DevelopmentCardTest {
                 4));
     }};
     private static final DevelopmentCard devCard = new DevelopmentCard(
+            0,
             VP,
             color,
             level,

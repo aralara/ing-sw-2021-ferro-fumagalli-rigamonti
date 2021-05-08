@@ -6,6 +6,7 @@ import java.util.List;
 
 public class DevelopmentCard implements Card {
 
+    private final int ID;
     private final int VP;
     private final CardColors color;
     private final int level;
@@ -13,7 +14,8 @@ public class DevelopmentCard implements Card {
     private final List<Resource> cost;
 
 
-    public DevelopmentCard(int VP, CardColors color, int level, Production production, List<Resource> cost) {
+    public DevelopmentCard(int ID, int VP, CardColors color, int level, Production production, List<Resource> cost) {
+        this.ID = ID;
         this.VP = VP;
         this.color = color;
         this.level = level;
@@ -21,6 +23,14 @@ public class DevelopmentCard implements Card {
         this.cost = cost;
     }
 
+
+    /**
+     * Gets the ID value
+     * @return Returns ID
+     */
+    public int getID() {
+        return ID;
+    }
 
     /**
      * Gets the VP amount

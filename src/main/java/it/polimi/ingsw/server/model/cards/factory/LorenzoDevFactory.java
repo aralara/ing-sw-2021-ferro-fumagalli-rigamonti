@@ -17,6 +17,7 @@ public class LorenzoDevFactory implements CardFactory {
 
     @Override
     public List<LorenzoDev> loadCardFromFile(String fileName) {
+        int i = 0;
         Gson gson = new Gson();
         List<LorenzoDev> lorenzoDevDeck = new ArrayList<>();
 
@@ -26,7 +27,8 @@ public class LorenzoDevFactory implements CardFactory {
             jsonLorenzoDevs = gson.fromJson(reader, LorenzoDev[].class);
 
             for (LorenzoDev lorenzoDev : jsonLorenzoDevs) {
-                lorenzoDevDeck.add(new LorenzoDev(lorenzoDev.getColor(), lorenzoDev.getQuantity()));
+                lorenzoDevDeck.add(new LorenzoDev(i, lorenzoDev.getColor(), lorenzoDev.getQuantity()));
+                i++;
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();

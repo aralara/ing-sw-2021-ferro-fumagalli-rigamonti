@@ -32,7 +32,7 @@ public class DeckTest {
         Random rand = new Random();
         List<DevelopmentCard> l =  new ArrayList<>();
         for(int i = 0; i < n; i++) {
-            l.add(new DevelopmentCard(
+            l.add(new DevelopmentCard(0,
                     i + 1,  // Cards generated in the same batch are always different
                     randomEnumEntry(rand, CardColors.class, null),
                     randomIntBetween(rand, 1, 3),

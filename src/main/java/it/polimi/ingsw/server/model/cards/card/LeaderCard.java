@@ -7,15 +7,24 @@ import java.util.List;
 
 public class LeaderCard implements Card {
 
-    private final int VP;
+    private final int VP, ID;
     private final List<Requirement> requirements;
     private final SpecialAbility ability;
 
 
-    public LeaderCard(int VP, List<Requirement> requirements, SpecialAbility ability) {
+    public LeaderCard(int ID, int VP, List<Requirement> requirements, SpecialAbility ability) {
+        this.ID = ID;
         this.VP = VP;
         this.requirements = requirements;
         this.ability = ability;
+    }
+
+    /**
+     * Gets the ID value
+     * @return Returns ID
+     */
+    public int getID() {
+        return ID;
     }
 
 

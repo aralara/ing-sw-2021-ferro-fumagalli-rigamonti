@@ -29,6 +29,7 @@ public class LeaderCardTest {
     );
 
     private static final LeaderCard leadCard = new LeaderCard(
+            0,
             VP,
             requirements,
             ability

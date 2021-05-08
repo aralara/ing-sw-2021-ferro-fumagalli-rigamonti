@@ -35,10 +35,10 @@ public class LeaderBoardTest {
         List<Requirement> requirements = new ArrayList<>();
         requirements.add(new RequirementRes(new Resource(ResourceType.SERVANT, 2)));
         SpecialAbility ability = new AbilityMarble(ResourceType.COIN);
-        leaderCards.add(new LeaderCard(3, requirements, ability));
-        leaderCards.add(new LeaderCard(6, requirements, ability));
-        leaderCards.add(new LeaderCard(9, requirements, ability));
-        leaderCards.add(new LeaderCard(12, requirements, ability));
+        leaderCards.add(new LeaderCard(0,3, requirements, ability));
+        leaderCards.add(new LeaderCard(0,6, requirements, ability));
+        leaderCards.add(new LeaderCard(0,9, requirements, ability));
+        leaderCards.add(new LeaderCard(0,12, requirements, ability));
 
         assertEquals(0, leaderBoard.calculateVP());
 

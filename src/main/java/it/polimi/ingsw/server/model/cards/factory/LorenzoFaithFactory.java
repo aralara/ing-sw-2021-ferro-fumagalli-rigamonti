@@ -17,6 +17,7 @@ public class LorenzoFaithFactory implements CardFactory {
 
     @Override
     public List<LorenzoFaith> loadCardFromFile(String fileName) {
+        int i = 0;
         Gson gson = new Gson();
         List<LorenzoFaith> lorenzoFaithDeck = new ArrayList<>();
 
@@ -26,7 +27,8 @@ public class LorenzoFaithFactory implements CardFactory {
             jsonLorenzoFaiths = gson.fromJson(reader, LorenzoFaith[].class);
 
             for (LorenzoFaith lorenzoFaith : jsonLorenzoFaiths) {
-                lorenzoFaithDeck.add(new LorenzoFaith(lorenzoFaith.isRefresh(), lorenzoFaith.getAmount()));
+                lorenzoFaithDeck.add(new LorenzoFaith(i, lorenzoFaith.isRefresh(), lorenzoFaith.getAmount()));
+                i++;
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();

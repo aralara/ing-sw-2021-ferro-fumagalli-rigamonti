@@ -17,6 +17,7 @@ public class DevelopmentCardFactory implements CardFactory {
 
     @Override
     public List<DevelopmentCard> loadCardFromFile(String fileName){
+        int i=0;
         Gson gson = new Gson();
         List<DevelopmentCard> developmentCardList = new ArrayList<>();
 
@@ -26,8 +27,9 @@ public class DevelopmentCardFactory implements CardFactory {
             jsonDevelopmentCard = gson.fromJson(reader, DevelopmentCard[].class);
 
             for (DevelopmentCard developmentCard : jsonDevelopmentCard) {
-                developmentCardList.add(new DevelopmentCard(developmentCard.getVP(), developmentCard.getColor(),
+                developmentCardList.add(new DevelopmentCard(i,developmentCard.getVP(), developmentCard.getColor(),
                         developmentCard.getLevel(), developmentCard.getProduction(), developmentCard.getCost()));
+                i++;
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();

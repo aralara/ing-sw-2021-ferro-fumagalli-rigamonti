@@ -5,14 +5,23 @@ import it.polimi.ingsw.server.model.boards.LorenzoBoard;
 public class LorenzoFaith implements LorenzoCard{
 
     private final boolean refresh;
-    private final int amount;
+    private final int amount, ID;
 
 
-    public LorenzoFaith(boolean refresh, int amount) {
+    public LorenzoFaith(int ID, boolean refresh, int amount) {
+        this.ID = ID;
         this.refresh = refresh;
         this.amount = amount;
     }
 
+
+    /**
+     * Gets the ID value
+     * @return Returns ID
+     */
+    public int getID() {
+        return ID;
+    }
 
     @Override
     public void activateLorenzo(LorenzoBoard board) {

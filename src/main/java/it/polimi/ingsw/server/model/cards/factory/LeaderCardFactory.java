@@ -22,6 +22,7 @@ public class LeaderCardFactory implements CardFactory {
 
     @Override
     public List<LeaderCard> loadCardFromFile(String fileName) {
+        int i = 0;
         RuntimeTypeAdapterFactory<Requirement> requirementAdapterFactory
                 = RuntimeTypeAdapterFactory.of(Requirement.class, "RequirementType");
         RuntimeTypeAdapterFactory<SpecialAbility> abilityAdapterFactory
@@ -47,7 +48,8 @@ public class LeaderCardFactory implements CardFactory {
             jsonLeaderCard = gson.fromJson(reader, LeaderCard[].class);
 
             for (LeaderCard leaderCard : jsonLeaderCard) {
-                leadList.add(new LeaderCard(leaderCard.getVP(), leaderCard.getRequirements(), leaderCard.getAbility()));
+                leadList.add(new LeaderCard(i, leaderCard.getVP(), leaderCard.getRequirements(), leaderCard.getAbility()));
+                i++;
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();

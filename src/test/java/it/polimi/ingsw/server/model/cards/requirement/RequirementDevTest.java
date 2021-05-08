@@ -40,15 +40,15 @@ public class RequirementDevTest {
         PlayerBoard pb = new PlayerBoard("Bonucci");
 
         try {
-            pb.getDevelopmentBoard().addDevCard(new DevelopmentCard(2, CardColors.YELLOW, 1,
+            pb.getDevelopmentBoard().addDevCard(new DevelopmentCard(0,2, CardColors.YELLOW, 1,
                     new Production(new ArrayList<>(List.of(new Resource(ResourceType.SERVANT, 2))),
                             new ArrayList<>(List.of(new Resource(ResourceType.FAITH, 2)))),
                     new ArrayList<>(List.of(new Resource(ResourceType.SHIELD, 2)))), 1);
-            pb.getDevelopmentBoard().addDevCard(new DevelopmentCard(2, CardColors.BLUE, 1,
+            pb.getDevelopmentBoard().addDevCard(new DevelopmentCard(0,2, CardColors.BLUE, 1,
                     new Production(new ArrayList<>(List.of(new Resource(ResourceType.SERVANT, 2))),
                             new ArrayList<>(List.of(new Resource(ResourceType.FAITH, 2)))),
                     new ArrayList<>(List.of(new Resource(ResourceType.SHIELD, 2)))), 2);
-            pb.getDevelopmentBoard().addDevCard(new DevelopmentCard(2, CardColors.YELLOW, 2,
+            pb.getDevelopmentBoard().addDevCard(new DevelopmentCard(0,2, CardColors.YELLOW, 2,
                     new Production(new ArrayList<>(List.of(new Resource(ResourceType.SERVANT, 2))),
                             new ArrayList<>(List.of(new Resource(ResourceType.FAITH, 2)))),
                     new ArrayList<>(List.of(new Resource(ResourceType.SHIELD, 2)))), 1);
