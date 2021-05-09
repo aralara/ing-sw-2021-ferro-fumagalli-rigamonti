@@ -63,37 +63,42 @@ public class GraphicalCLI {
     public void printLeaderCard(LeaderCard card){
         String toPrint;
         boolean first = true;
-        System.out.println("♥ LEADER CARD ♥ ");
-        System.out.print(" • Requirements: ");
-        if(card.getRequirements().get(0) instanceof RequirementDev) {   //TODO: va bene get(0)? tnato 1 requirement c'e di sicuro
-            for (Requirement req : card.getRequirements()) {
-                toPrint = ((!first) ? ", " :"") + ((RequirementDev) req).getNumber() + " " +
-                        ((RequirementDev) req).getColor() + " development cards level " +
-                        ((RequirementDev) req).getLevel();
-                System.out.print(toPrint);
-                first = false;
+        if(card.getID() != -1) {
+            System.out.println("♥ LEADER CARD ♥ ");
+            System.out.print(" • Requirements: ");
+            if (card.getRequirements().get(0) instanceof RequirementDev) {   //TODO: va bene get(0)? tnato 1 requirement c'e di sicuro
+                for (Requirement req : card.getRequirements()) {
+                    toPrint = ((!first) ? ", " : "") + ((RequirementDev) req).getNumber() + " " +
+                            ((RequirementDev) req).getColor() + " development cards level " +
+                            ((RequirementDev) req).getLevel();
+                    System.out.print(toPrint);
+                    first = false;
+                }
+            } else if (card.getRequirements().get(0) instanceof RequirementRes) {
+                for (Requirement req : card.getRequirements()) {
+                    System.out.print(((RequirementRes) req).getResource().getQuantity() + " " +
+                            ((RequirementRes) req).getResource().getResourceType());
+                }
             }
-        }else if(card.getRequirements().get(0) instanceof RequirementRes) {
-            for (Requirement req : card.getRequirements()) {
-                System.out.print(((RequirementRes) req).getResource().getQuantity() + " " +
-                        ((RequirementRes) req).getResource().getResourceType());
+            System.out.println();
+            System.out.println(" • The card value is " + card.getVP() + " victory point");
+
+            System.out.print(" • The special ability is ");
+
+            if (card.getAbility() instanceof AbilityDiscount) {
+                System.out.println("a discount by 1 unit of " + ((AbilityDiscount) card.getAbility()).getResourceType());
+            } else if (card.getAbility() instanceof AbilityMarble) {
+                System.out.println("the power of getting a " + ((AbilityMarble) card.getAbility()).getResourceType() +
+                        " from a white marble from the market");
+            } else if (card.getAbility() instanceof AbilityProduction) {
+                System.out.println("the production:  ");
+                printProduction(((AbilityProduction) card.getAbility()).getProduction());
+            } else if (card.getAbility() instanceof AbilityWarehouse) {
+                System.out.println("to have an extra shelf to contain 1 " + ((AbilityWarehouse) card.getAbility()).getResourceType());
             }
         }
-        System.out.println();
-        System.out.println(" • The card value is " + card.getVP() + " victory point");
-
-        System.out.print(" • The special ability is ");
-
-        if(card.getAbility() instanceof AbilityDiscount) {
-            System.out.println("a discount by 1 unit of " + ((AbilityDiscount) card.getAbility()).getResourceType());
-        }else if(card.getAbility() instanceof AbilityMarble) {
-            System.out.println("the power of getting a " + ((AbilityMarble) card.getAbility()).getResourceType() +
-                    " from a white marble from the market");
-        }else if(card.getAbility() instanceof AbilityProduction) {
-            System.out.println("the production:  ");
-            printProduction(((AbilityProduction) card.getAbility()).getProduction());
-        }else if(card.getAbility() instanceof AbilityWarehouse) {
-            System.out.println("to have an extra shelf to contain 1 " + ((AbilityWarehouse) card.getAbility()).getResourceType());
+        else {
+            //TODO: printare una carta coperta (?)
         }
     }
 
