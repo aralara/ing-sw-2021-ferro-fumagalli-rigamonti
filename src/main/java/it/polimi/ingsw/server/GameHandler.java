@@ -1,11 +1,12 @@
 package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.server.controller.Controller;
+import it.polimi.ingsw.server.model.boards.PlayerBoard;
+import it.polimi.ingsw.server.model.games.Game;
 import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.messages.ActionMessage;
 import it.polimi.ingsw.utils.messages.Message;
-import it.polimi.ingsw.utils.messages.server.AskLeaderCardDiscardMessage;
-import it.polimi.ingsw.utils.messages.server.NewPlayerMessage;
+import it.polimi.ingsw.utils.messages.server.*;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -29,10 +30,33 @@ public class GameHandler implements Runnable {
             Thread thread = new Thread(virtualView);
             thread.start();
         }
-        controller.initGame(clientsVirtualView);  //TODO: giusto gestire controller qui o tutto nei doAction()?
+        setup();
         sendAll(new AskLeaderCardDiscardMessage());
         while(true) {
             //TODO: da metterci qualcosa?
+        }
+    }
+
+    private void setup() {
+        controller.initGame(clientsVirtualView);
+
+        Game game = controller.getGame();
+        List<PlayerBoard> playerBoards = game.getPlayerBoards();
+        for (VirtualView virtualView : clientsVirtualView) {
+            for(PlayerBoard pBoard : playerBoards) {
+                PlayerBoardSetupMessage pBoardMessage = new PlayerBoardSetupMessage(pBoard);
+
+                // The cards relative to the hand are hidden to the player if the message isn't being sent to the
+                // owner of the LeaderCard hand
+                if(!pBoard.getPlayer().getNickname().equals(virtualView.getNickname()))
+                    pBoardMessage.hide();
+
+                virtualView.sendMessage(pBoardMessage);
+            }
+
+            virtualView.sendMessage(new MarketMessage(game.getMarket()));
+            virtualView.sendMessage(new DevelopmentDecksMessage(game.getDevelopmentDecks()));
+            virtualView.sendMessage(new FaithTrackMessage(game.getFaithTrack()));
         }
     }
 

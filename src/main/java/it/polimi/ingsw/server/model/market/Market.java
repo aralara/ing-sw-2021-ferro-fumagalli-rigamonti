@@ -12,17 +12,17 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.*;
 
-public class Market extends Listened {
+import static it.polimi.ingsw.utils.Constants.MARKET_COLUMN_SIZE;
+import static it.polimi.ingsw.utils.Constants.MARKET_ROW_SIZE;
 
-    private static final int ROWS = 3;
-    private static final int COLUMNS = 4;
+public class Market extends Listened {
 
     private final Marble[][] marbleMatrix;
     private Marble floatingMarble;
 
 
     public Market() {
-        marbleMatrix = new Marble [ROWS][COLUMNS];
+        marbleMatrix = new Marble [MARKET_ROW_SIZE.value()][MARKET_COLUMN_SIZE.value()];
         floatingMarble = null;
     }
 
@@ -56,8 +56,8 @@ public class Market extends Listened {
      */
     private void randomizeMarbles(Stack<Marble> buffer) {
         Collections.shuffle(buffer);
-        for(int row=0; row<ROWS; row++)
-            for(int column=0; column<COLUMNS; column++)
+        for(int row=0; row<MARKET_ROW_SIZE.value(); row++)
+            for(int column=0; column<MARKET_COLUMN_SIZE.value(); column++)
                 marbleMatrix[row][column] = buffer.pop();
         floatingMarble = buffer.pop();
     }
@@ -75,14 +75,14 @@ public class Market extends Listened {
         List<Resource> marbleResources = new ArrayList<>();
 
         if(row>=0){
-            if (row >= ROWS) throw new InvalidRowException();
-            for(int resColumn=0; resColumn<COLUMNS; resColumn++) {
+            if (row >= MARKET_ROW_SIZE.value()) throw new InvalidRowException();
+            for(int resColumn=0; resColumn<MARKET_COLUMN_SIZE.value(); resColumn++) {
                 marbleResources.add(new Resource(marbleMatrix[row][resColumn].getResourceType(), 1));
             }
         }
         else {
-            if (column >= COLUMNS) throw new InvalidColumnException();
-            for(int resRow=0; resRow<ROWS; resRow++) {
+            if (column >= MARKET_COLUMN_SIZE.value()) throw new InvalidColumnException();
+            for(int resRow=0; resRow<MARKET_ROW_SIZE.value(); resRow++) {
                 marbleResources.add(new Resource(marbleMatrix[resRow][column].getResourceType(), 1));
             }
         }
@@ -106,17 +106,17 @@ public class Market extends Listened {
         if(row>=0){
             newFloatingMarble = marbleMatrix[row][0];
             //noinspection ManualArrayCopy
-            for(int resColumn=0; resColumn<COLUMNS-1; resColumn++) {
+            for(int resColumn=0; resColumn<MARKET_COLUMN_SIZE.value()-1; resColumn++) {
                 marbleMatrix[row][resColumn] = marbleMatrix[row][resColumn+1];
             }
-            marbleMatrix[row][COLUMNS-1] = floatingMarble;
+            marbleMatrix[row][MARKET_COLUMN_SIZE.value()-1] = floatingMarble;
         }
         else {
             newFloatingMarble = marbleMatrix[0][column];
-            for(int resRow=0; resRow<ROWS-1; resRow++) {
+            for(int resRow=0; resRow<MARKET_ROW_SIZE.value()-1; resRow++) {
                 marbleMatrix[resRow][column] = marbleMatrix[resRow+1][column];
             }
-            marbleMatrix[ROWS-1][column] = floatingMarble;
+            marbleMatrix[MARKET_ROW_SIZE.value()-1][column] = floatingMarble;
         }
 
         floatingMarble = newFloatingMarble;

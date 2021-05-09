@@ -56,7 +56,7 @@ public class PacketHandler {
         return true;
     }
 
-    public void sendConnectionMessage(String nickname){
+    public void sendConnectionMessage(String nickname){ // TODO: togliere
 
         try{
             output.writeObject(new ConnectionMessage(nickname));
@@ -67,7 +67,7 @@ public class PacketHandler {
         }
     }
 
-    public void sendNewGameSize(int size){
+    public void sendNewGameSize(int size){  // TODO: togliere
 
         try{
             output.writeObject(new NewLobbyMessage(size));
@@ -85,8 +85,6 @@ public class PacketHandler {
 
                 message = input.readObject();
 
-                //TODO: inserire tutti i casi di pachetti che possiamo ricevere
-
                 if (message instanceof ConnectionAckMessage) {
                     if (!((ConnectionAckMessage) message).isState()) {
                         System.out.println("Nickname is not available, please choose another one");
@@ -95,7 +93,7 @@ public class PacketHandler {
                 } else if (message instanceof LobbyMessage) {
                     if (((LobbyMessage) message).getLobbySize() == ((LobbyMessage) message).getWaitingPlayers())
                         cli.createNewLobby();
-                    else cli.setNumberOfPlayers(((LobbyMessage) message).getLobbySize());   //TODO: aggiunta da controllare
+                    else cli.setNumberOfPlayers(((LobbyMessage) message).getLobbySize());   //TODO: serve numero giocatori?
                 } else if (message instanceof NewPlayerMessage) {
                     cli.notifyNewPlayer(((NewPlayerMessage) message).getPlayerNickname());
                 } else if (message instanceof PlayerBoardSetupMessage) {
@@ -112,14 +110,10 @@ public class PacketHandler {
                     if(!((LeaderCardDiscardAckMessage) message).isState()){
                         //TODO: richiedo?
                         System.out.println("Errore nello scarto dei leader");
-                    } else {
-                        //TODO: aggiorno?
-                        System.out.println("Scarto dei leader a buon fine");
                     }
                 } else if (message instanceof PlayerLeaderBBoardMessage) {
                     //TODO: stampare la board delle leader
                 }else if (message instanceof PlayerLeaderBHandMessage) {
-                    //TODO: da sistemare, ricevo la hand di tutti i player della lobby, ma dovrebbe arrivare solo se la mia hand
                     cli.updateLeaderHand(((PlayerLeaderBHandMessage)message).getHand());
                 }else {
                     System.out.println("Received " + message.toString());
@@ -130,7 +124,7 @@ public class PacketHandler {
         }
     }
 
-    public void sendMessage(Message message) {    // TODO: scritto di fretta per testare
+    public void sendMessage(Message message) {
         try{
             output.writeObject(message);
             output.reset();

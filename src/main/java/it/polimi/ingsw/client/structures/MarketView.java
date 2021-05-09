@@ -2,17 +2,18 @@ package it.polimi.ingsw.client.structures;
 
 import it.polimi.ingsw.server.model.market.Marble;
 
-public class MarketView {
+import static it.polimi.ingsw.utils.Constants.MARKET_COLUMN_SIZE;
+import static it.polimi.ingsw.utils.Constants.MARKET_ROW_SIZE;
 
-    private static final int ROWS = 3; //TODO: servono?
-    private static final int COLUMNS = 4;
+
+public class MarketView {
 
     private Marble[][] marbleMatrix;
     private Marble floatingMarble;
 
 
     public MarketView(){
-        this.marbleMatrix = new Marble[ROWS][COLUMNS];
+        this.marbleMatrix = new Marble[MARKET_ROW_SIZE.value()][MARKET_COLUMN_SIZE.value()];
     }
 
 

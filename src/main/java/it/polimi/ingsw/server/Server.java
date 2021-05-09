@@ -63,7 +63,6 @@ public class Server {
 
                 } while (!server.checkValidNickname(nickname));
                 server.nicknameUsed.add(nickname);
-                System.out.println("Welcome " + nickname); //TODO: da togliere
 
 
                 server.output.writeObject(new LobbyMessage(server.size, server.connectedPlayers));

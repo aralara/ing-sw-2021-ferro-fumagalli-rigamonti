@@ -39,15 +39,23 @@ public abstract class Game {
      * Gets the playerBoards attribute
      * @return Returns playerBoards value
      */
-    List<PlayerBoard> getPlayerBoards() {
+    public List<PlayerBoard> getPlayerBoards() {
         return playerBoards;
+    }
+
+    /**
+     * Gets the market attribute
+     * @return Returns market value
+     */
+    public Market getMarket() {
+        return this.market;
     }
 
     /**
      * Gets the developmentDecks attribute
      * @return Returns developmentDecks value
      */
-    List<DevelopmentDeck> getDevelopmentDecks() {
+    public List<DevelopmentDeck> getDevelopmentDecks() {
         return this.developmentDecks;
     }
 
@@ -55,7 +63,7 @@ public abstract class Game {
      * Gets the faithTrack attribute
      * @return Returns faithTrack value
      */
-    FaithTrack getFaithTrack() {
+    public FaithTrack getFaithTrack() {
         return this.faithTrack;
     }
 
@@ -171,7 +179,7 @@ public abstract class Game {
         boolean success = playerboard.getWarehouse().changeConfiguration(shelves);
         if(extra.size() > 0 && success) {
             playerboard.getFaithBoard().takeFaithFromResources(extra);
-            addFaithAll(player, Storage.getTotalQuantity(extra));  // TODO: da controllare se va bene
+            addFaithAll(player, Storage.getTotalQuantity(extra));
         }
         checkFaith();
         return success;
@@ -416,19 +424,7 @@ public abstract class Game {
                 pBoard.getWarehouse().setPlayerNickname(nickname);
                 pBoard.getWarehouse().addListener(Listeners.BOARD_WAREHOUSE.value(),
                         new WarehouseChangeListener(view));
-
-                PlayerBoardSetupMessage pBoardMessage = new PlayerBoardSetupMessage(pBoard);
-
-                // The cards relative to the hand are hidden to the player if the message isn't being sent to the
-                // owner of the LeaderCard hand
-                if(!nickname.equals(view.getNickname()))
-                    pBoardMessage.hide();
-
-                view.sendMessage(pBoardMessage);
             }
-            view.sendMessage(new MarketMessage(market));
-            view.sendMessage(new DevelopmentDecksMessage(developmentDecks));
-            view.sendMessage(new FaithTrackMessage(faithTrack));
         }
     }
 }

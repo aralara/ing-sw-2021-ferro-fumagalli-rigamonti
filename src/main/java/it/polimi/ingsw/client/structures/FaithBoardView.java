@@ -1,8 +1,8 @@
 package it.polimi.ingsw.client.structures;
 
-public class FaithBoardView {
+import static it.polimi.ingsw.utils.Constants.FAITH_TOTAL_VATICAN_REPORTS;
 
-    public static final int POPE_PROGRESSION_SIZE = 3; //TODO: serve?
+public class FaithBoardView {
 
     private int faith;
     private boolean[] popeProgression;
@@ -10,7 +10,7 @@ public class FaithBoardView {
 
     public FaithBoardView() {
         this.faith = 0;
-        this.popeProgression = new boolean[POPE_PROGRESSION_SIZE];
+        this.popeProgression = new boolean[FAITH_TOTAL_VATICAN_REPORTS.value()];
     }
 
     public FaithBoardView(int faith, boolean[] popeProgression) {

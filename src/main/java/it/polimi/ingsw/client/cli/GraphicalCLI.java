@@ -1,7 +1,6 @@
 package it.polimi.ingsw.client.cli;
 
 import it.polimi.ingsw.client.structures.FaithTrackView;
-import it.polimi.ingsw.client.structures.LorenzoBoardView;
 import it.polimi.ingsw.client.structures.MarketView;
 import it.polimi.ingsw.client.structures.PlayerBoardView;
 import it.polimi.ingsw.server.model.cards.ability.AbilityDiscount;
@@ -17,6 +16,9 @@ import it.polimi.ingsw.server.model.market.MarbleColors;
 import it.polimi.ingsw.server.model.storage.Production;
 
 import java.util.List;
+
+import static it.polimi.ingsw.utils.Constants.MARKET_COLUMN_SIZE;
+import static it.polimi.ingsw.utils.Constants.MARKET_ROW_SIZE;
 
 
 public class GraphicalCLI {
@@ -34,8 +36,8 @@ public class GraphicalCLI {
     public void printMarket(MarketView market){
         System.out.println("The market:");
         String color;
-        for(int i= 0; i< 3;i++){   //TODO: dove prendo le dimensioni della matrice
-            for(int j = 0; j<4;j++){
+        for(int i= 0; i<MARKET_ROW_SIZE.value();i++){
+            for(int j = 0; j<MARKET_COLUMN_SIZE.value();j++){
                 color = chooseColor(market.getMarbleMatrix()[i][j]);
                 System.out.print("[ " + color + "■" + color + RESET + " ]");
             }
@@ -71,7 +73,7 @@ public class GraphicalCLI {
         if(card.getID() != -1) {
             System.out.println("♥ LEADER CARD ♥ ");
             System.out.print(" • Requirements: ");
-            if (card.getRequirements().get(0) instanceof RequirementDev) {   //TODO: va bene get(0)? tnato 1 requirement c'e di sicuro
+            if (card.getRequirements().get(0) instanceof RequirementDev) {   //TODO: sostituire con strategy quando ci sarà una classe apposita
                 for (Requirement req : card.getRequirements()) {
                     toPrint = ((!first) ? ", " : "") + ((RequirementDev) req).getNumber() + " " +
                             ((RequirementDev) req).getColor() + " development cards level " +
@@ -124,22 +126,6 @@ public class GraphicalCLI {
                     production.getProduced().get(i).getResourceType();
             System.out.println(toPrint);
             first = false;
-        }
-    }
-
-    public void printOpponents(List<Object> opponents, FaithTrackView faithTrack){
-        if(opponents.size()==1 && opponents.get(0) instanceof LorenzoBoardView){
-            System.out.println("Lorenzo il Magnifico's faith level is " + (((LorenzoBoardView) opponents.get(0)).getFaith()));
-        }
-        else{
-            PlayerBoardView opposingPlayer;
-            for(int i=0; i<opponents.size();i++){
-                opposingPlayer = (PlayerBoardView) opponents.get(i);
-
-                System.out.println(opposingPlayer.getNickname() + "'s board:");
-                printFaithBoard(opposingPlayer, faithTrack);
-                //TODO: da terminare
-            }
         }
     }
 

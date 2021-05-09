@@ -3,15 +3,15 @@ package it.polimi.ingsw.server.model.boards;
 import it.polimi.ingsw.exceptions.NotExistingLastReportTriggeredException;
 import it.polimi.ingsw.server.model.faith.FaithTrack;
 import it.polimi.ingsw.server.model.storage.*;
-import it.polimi.ingsw.utils.listeners.Listened;
 import it.polimi.ingsw.utils.listeners.Listeners;
 import it.polimi.ingsw.utils.listeners.PlayerListened;
 
 import java.util.List;
 import java.util.function.Predicate;
 
+import static it.polimi.ingsw.utils.Constants.FAITH_TOTAL_VATICAN_REPORTS;
+
 public class FaithBoard extends PlayerListened {
-    public static final int POPE_PROGRESSION_SIZE = 3;
 
     private int faith;
     private final boolean[] popeProgression;
@@ -19,7 +19,7 @@ public class FaithBoard extends PlayerListened {
 
     public FaithBoard() {
         faith = 0;
-        popeProgression = new boolean[POPE_PROGRESSION_SIZE];
+        popeProgression = new boolean[FAITH_TOTAL_VATICAN_REPORTS.value()];
     }
 
 
