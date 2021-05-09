@@ -1,23 +1,25 @@
 package it.polimi.ingsw.utils.messages.server;
 
 import it.polimi.ingsw.server.model.boards.*;
+import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.server.model.storage.*;
-import it.polimi.ingsw.utils.messages.Message;
+import it.polimi.ingsw.utils.messages.HiddenMessage;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class PlayerBoardSetupMessage implements Message {
+public class PlayerBoardSetupMessage implements HiddenMessage {
 
-    private String nickname;
-    private List<Deck> developmentBSpaces;
-    private Deck leaderBBoard;
+    private final String nickname;
+    private final List<Deck> developmentBSpaces;
+    private final Deck leaderBBoard;
     private Deck leaderBHand;
-    private int faithBFaith;
-    private boolean[] faithBPope;
-    private List<Shelf> warehouse;
-    private List<Resource> strongbox;
-    private boolean inkwell;
+    private final int faithBFaith;
+    private final boolean[] faithBPope;
+    private final List<Shelf> warehouse;
+    private final List<Resource> strongbox;
+    private final boolean inkwell;
 
 
     public PlayerBoardSetupMessage(PlayerBoard playerBoard) {
@@ -67,5 +69,12 @@ public class PlayerBoardSetupMessage implements Message {
 
     public boolean isFirstPlayer() {
         return inkwell;
+    }
+
+    @Override
+    public void hide() {
+        List<LeaderCard> newList = new ArrayList<>();
+        leaderBHand.getCards().forEach(c -> newList.add(new LeaderCard()));
+        leaderBHand = new Deck(newList);
     }
 }

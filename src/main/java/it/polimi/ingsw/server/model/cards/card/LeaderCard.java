@@ -12,12 +12,23 @@ public class LeaderCard implements Card {
     private final SpecialAbility ability;
 
 
+    /**
+     * Constructor that creates a default LeaderCard having ID = -1 which is used to denote a hidden card
+     */
+    public LeaderCard() {
+        this.ID = -1;
+        this.VP = 0;
+        this.requirements = null;
+        this.ability = null;
+    }
+
     public LeaderCard(int ID, int VP, List<Requirement> requirements, SpecialAbility ability) {
         this.ID = ID;
         this.VP = VP;
         this.requirements = requirements;
         this.ability = ability;
     }
+
 
     /**
      * Gets the ID value

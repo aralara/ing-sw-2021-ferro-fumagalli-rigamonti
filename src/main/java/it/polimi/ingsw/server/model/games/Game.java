@@ -417,7 +417,14 @@ public abstract class Game {
                 pBoard.getWarehouse().addListener(Listeners.BOARD_WAREHOUSE.value(),
                         new WarehouseChangeListener(view));
 
-                view.sendMessage(new PlayerBoardSetupMessage(pBoard));
+                PlayerBoardSetupMessage pBoardMessage = new PlayerBoardSetupMessage(pBoard);
+
+                // The cards relative to the hand are hidden to the player if the message isn't being sent to the
+                // owner of the LeaderCard hand
+                if(!nickname.equals(view.getNickname()))
+                    pBoardMessage.hide();
+
+                view.sendMessage(pBoardMessage);
             }
             view.sendMessage(new MarketMessage(market));
             view.sendMessage(new DevelopmentDecksMessage(developmentDecks));

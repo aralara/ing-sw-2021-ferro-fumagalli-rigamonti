@@ -14,8 +14,14 @@ public class LeaderBHandChangeListener extends ModelChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        PlayerProperty newValue = (PlayerProperty) evt.getNewValue();
-        getVirtualView().sendMessage(
-                new PlayerLeaderBHandMessage((Deck) newValue.getProperty(), newValue.getNickname()));
+        Deck newDeck = (Deck) ((PlayerProperty) evt.getNewValue()).getProperty();
+        String nickname = ((PlayerProperty) evt.getNewValue()).getNickname();
+        PlayerLeaderBHandMessage message = new PlayerLeaderBHandMessage(newDeck, nickname);
+
+        // The cards are hidden to the player if the message isn't being sent to the owner of the LeaderCard hand
+        if(!nickname.equals(getVirtualView().getNickname()))
+            message.hide();
+
+        getVirtualView().sendMessage(message);
     }
 }
