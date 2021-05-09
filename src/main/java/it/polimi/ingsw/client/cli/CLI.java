@@ -7,7 +7,9 @@ import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.server.model.cards.deck.DevelopmentDeck;
 import it.polimi.ingsw.server.model.faith.VaticanReport;
 import it.polimi.ingsw.server.model.market.Marble;
+import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
 import it.polimi.ingsw.utils.messages.client.LeaderCardDiscardMessage;
+import it.polimi.ingsw.utils.messages.client.NewLobbyMessage;
 import it.polimi.ingsw.utils.messages.client.SelectMarketMessage;
 import it.polimi.ingsw.utils.messages.server.DevelopmentDecksMessage;
 import it.polimi.ingsw.utils.messages.server.FaithTrackMessage;
@@ -58,7 +60,7 @@ public class CLI {
 
     public void askNickname(){
         nickname = scanner.nextLine();
-        packetHandler.sendConnectionMessage(nickname);
+        packetHandler.sendMessage(new ConnectionMessage(nickname));
     }
 
     public void createNewLobby(){
@@ -69,7 +71,7 @@ public class CLI {
             size = scanner.nextInt();
         }while(size <= 0 || size >= 5);
         setNumberOfPlayers(size);
-        packetHandler.sendNewGameSize(size);
+        packetHandler.sendMessage(new NewLobbyMessage(size));
     }
 
     public void setNumberOfPlayers(int numberOfPlayers){
@@ -85,6 +87,7 @@ public class CLI {
     }
 
     public void playerBoardSetup(PlayerBoardSetupMessage message){  //TODO: metodo di update da rimuovere quando ci saranno le action
+        String nickname = message.getNickname();
         DevelopmentBoardView developmentBoard = new DevelopmentBoardView(message.getDevelopmentBSpaces());
         LeaderBoardView leaderBoard = new LeaderBoardView();
         leaderBoard.setBoard(message.getLeaderBBoard());
@@ -94,15 +97,7 @@ public class CLI {
         StrongboxView strongbox = new StrongboxView(message.getStrongbox());
         boolean inkwell = message.isFirstPlayer();
 
-        PlayerBoardView playerBoard = new PlayerBoardView();    //TODO: costruttore con parametri
-        /*
-        ((PlayerBoardView)opposingPlayerBoards.get(index)).setDevelopmentBoard(developmentBoard);
-        ((PlayerBoardView)opposingPlayerBoards.get(index)).setLeaderBoard(leaderBoard);
-        ((PlayerBoardView)opposingPlayerBoards.get(index)).setFaithBoard(faithBoard);
-        ((PlayerBoardView)opposingPlayerBoards.get(index)).setWarehouse(warehouse);
-        ((PlayerBoardView)opposingPlayerBoards.get(index)).setStrongbox(strongbox);
-        ((PlayerBoardView)opposingPlayerBoards.get(index)).setInkwell(inkwell);
-         */
+        PlayerBoardView playerBoard = new PlayerBoardView(nickname,developmentBoard,leaderBoard,faithBoard,warehouse,strongbox,inkwell);
         playerBoards.add(playerBoard);
     }
 

@@ -19,6 +19,15 @@ public class PlayerBoardView {
         strongbox = new StrongboxView();
     }
 
+    public PlayerBoardView(String nickname, DevelopmentBoardView developmentBoard, LeaderBoardView leaderBoard, FaithBoardView faithBoard, WarehouseView warehouse, StrongboxView strongbox, boolean inkwell) {
+        this.nickname = nickname;
+        this.developmentBoard = developmentBoard;
+        this.leaderBoard = leaderBoard;
+        this.faithBoard = faithBoard;
+        this.warehouse = warehouse;
+        this.strongbox = strongbox;
+        this.inkwell = inkwell;
+    }
 
     public PlayerBoardView(String nickname) {
         this.nickname = nickname;

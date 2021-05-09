@@ -56,28 +56,6 @@ public class PacketHandler {
         return true;
     }
 
-    public void sendConnectionMessage(String nickname){ // TODO: togliere
-
-        try{
-            output.writeObject(new ConnectionMessage(nickname));
-            output.reset();
-        }
-        catch(IOException e){
-            e.printStackTrace();
-        }
-    }
-
-    public void sendNewGameSize(int size){  // TODO: togliere
-
-        try{
-            output.writeObject(new NewLobbyMessage(size));
-            output.reset();
-        }
-        catch(IOException e){
-            e.printStackTrace();
-        }
-    }
-
     private void managePackets(){
         try {
             while (true) {
