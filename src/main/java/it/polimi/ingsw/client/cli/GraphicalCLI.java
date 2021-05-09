@@ -1,6 +1,9 @@
 package it.polimi.ingsw.client.cli;
 
+import it.polimi.ingsw.client.structures.FaithTrackView;
+import it.polimi.ingsw.client.structures.LorenzoBoardView;
 import it.polimi.ingsw.client.structures.MarketView;
+import it.polimi.ingsw.client.structures.PlayerBoardView;
 import it.polimi.ingsw.server.model.cards.ability.AbilityDiscount;
 import it.polimi.ingsw.server.model.cards.ability.AbilityMarble;
 import it.polimi.ingsw.server.model.cards.ability.AbilityProduction;
@@ -12,6 +15,8 @@ import it.polimi.ingsw.server.model.cards.requirement.RequirementRes;
 import it.polimi.ingsw.server.model.market.Marble;
 import it.polimi.ingsw.server.model.market.MarbleColors;
 import it.polimi.ingsw.server.model.storage.Production;
+
+import java.util.List;
 
 
 public class GraphicalCLI {
@@ -122,6 +127,30 @@ public class GraphicalCLI {
         }
     }
 
+    public void printOpponents(List<Object> opponents, FaithTrackView faithTrack){
+        if(opponents.size()==1 && opponents.get(0) instanceof LorenzoBoardView){
+            System.out.println("Lorenzo il Magnifico's faith level is " + (((LorenzoBoardView) opponents.get(0)).getFaith()));
+        }
+        else{
+            PlayerBoardView opposingPlayer;
+            for(int i=0; i<opponents.size();i++){
+                opposingPlayer = (PlayerBoardView) opponents.get(i);
 
+                System.out.println(opposingPlayer.getNickname() + "'s board:");
+                printFaithBoard(opposingPlayer, faithTrack);
+                //TODO: da terminare
+            }
+        }
+    }
 
+    public void printFaithBoard(PlayerBoardView player, FaithTrackView faithTrack){
+        System.out.println(" • FAITH");
+        System.out.println("\t > Faith level is " + player.getFaithBoard().getFaith());
+        for(int i=0;i<player.getFaithBoard().getPopeProgression().length;i++){
+            System.out.print("\t > Pope’s Favor tiles number "+(i+1)+" is ");
+            if(player.getFaithBoard().getPopeProgression()[i]){
+                System.out.println("active and its value is " + faithTrack.getVaticanReports().get(i).getPopeValue());
+            } else System.out.println("not active");
+        }
+    }
 }

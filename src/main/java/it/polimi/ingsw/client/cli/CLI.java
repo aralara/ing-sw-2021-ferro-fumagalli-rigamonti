@@ -20,12 +20,11 @@ import java.util.Scanner;
 
 public class CLI {
 
-    //private String nickname                   //TODO: spostato nella PlayerBoardView
     private int numberOfPlayers;                //TODO: aggiunta da controllare (non so se il numero di player può essere utile anche qua)
     private PlayerBoardView playerBoardView;
-    private List<Object> opposingPlayerBoards;  //TODO: aggiunta da controllare
+    private List<Object> opposingPlayerBoards; //TODO: Object va bene? perchè potrei caricare gli avversari veri o Lorenzo
     private MarketView marketView;
-    private List<DevelopmentDeckView> developmentDecks;        //TODO: aggiunta da controllare
+    private List<DevelopmentDeckView> developmentDecks;
     private FaithTrackView faithTrackView;
     private Scanner scanner;
     private GraphicalCLI graphicalCLI;
@@ -35,7 +34,7 @@ public class CLI {
         playerBoardView = new PlayerBoardView();
         opposingPlayerBoards = new ArrayList<>();
         marketView = new MarketView();
-        developmentDecks = new ArrayList<>();   //TODO: aggiunta da controllare
+        developmentDecks = new ArrayList<>();
         faithTrackView = new FaithTrackView();
         scanner = new Scanner(System.in);
         graphicalCLI = new GraphicalCLI();
@@ -58,31 +57,31 @@ public class CLI {
     }
 
     public void askNickname(){
-        String nickname = scanner.nextLine();       //TODO: cambiato in var locale
+        String nickname = scanner.nextLine();
 
-        playerBoardView.setNickname(nickname);      //TODO: aggiunta da controllare
+        playerBoardView.setNickname(nickname);
         packetHandler.sendConnectionMessage(nickname);
     }
 
     public void createNewLobby(){
         int size;
-        System.out.println("There isnt's any player waiting for a match!");
+        System.out.println("There isn't any player waiting for a match!");
         do {
             System.out.println("Insert the number of player that will play the game (between 1 and 4)");
             size = scanner.nextInt();
         }while(size <= 0 || size >= 5);
-        setNumberOfPlayers(size);       //TODO: aggiunta da controllare
+        setNumberOfPlayers(size);
         packetHandler.sendNewGameSize(size);
     }
 
-    public void setNumberOfPlayers(int numberOfPlayers){        //TODO: aggiunta da controllare
+    public void setNumberOfPlayers(int numberOfPlayers){
         this.numberOfPlayers = numberOfPlayers;
         if(numberOfPlayers == 1)
             opposingPlayerBoards.add(new LorenzoBoardView());
     }
 
     public void notifyNewPlayer(String nickname){
-        if(!playerBoardView.getNickname().equals(nickname)) {       //TODO: modificato recuperando da playerBoard
+        if(!playerBoardView.getNickname().equals(nickname)) {
             System.out.println("The player " + nickname + " has joined the game!");
         }else{
             System.out.println("You have been added to the game!");
@@ -93,13 +92,13 @@ public class CLI {
         DevelopmentBoardView developmentBoard = new DevelopmentBoardView(message.getDevelopmentBSpaces()); //TODO: non è sempre vuoto all'inizio?
         LeaderBoardView leaderBoard = new LeaderBoardView();
         leaderBoard.setBoard(message.getLeaderBBoard()); //TODO: stessa cosa
+        leaderBoard.setHand(message.getLeaderBHand());
         FaithBoardView faithBoard = new FaithBoardView(message.getFaithBFaith(), message.getFaithBPope());
         WarehouseView warehouse = new WarehouseView(message.getWarehouse());
         StrongboxView strongbox = new StrongboxView(message.getStrongbox()); //TODO: stessa cosa
         boolean inkwell = message.isFirstPlayer();
 
         if(playerBoardView.getNickname().equals(message.getNickname())){
-            leaderBoard.setHand(message.getLeaderBHand());
             playerBoardView.setDevelopmentBoard(developmentBoard);
             playerBoardView.setLeaderBoard(leaderBoard);
             playerBoardView.setFaithBoard(faithBoard);
@@ -116,34 +115,28 @@ public class CLI {
             ((PlayerBoardView)opposingPlayerBoards.get(index)).setStrongbox(strongbox);
             ((PlayerBoardView)opposingPlayerBoards.get(index)).setInkwell(inkwell);
         }
-
-
     }
 
-    private int opposingPlayerBoardOf(String nickname){ //TODO: può servire?
+    private int opposingPlayerBoardOf(String nickname){         //TODO: può servire?
         for(int i=0; i<opposingPlayerBoards.size(); i++)
             if(((PlayerBoardView)opposingPlayerBoards.get(i)).getNickname().equals(nickname))
                 return i;
         return -1;
     }
 
-    public void marketSetup(MarketMessage message){
-        updateMarket(message.getMarbleMatrix(), message.getFloatingMarble());
-    }
-
-    public void updateMarket(Marble[][] matrix, Marble floatingMarble){
-        marketView.setMarbleMatrix(matrix);
-        marketView.setFloatingMarble(floatingMarble);
+    public void updateMarket(MarketMessage message){
+        marketView.setMarbleMatrix(message.getMarbleMatrix());
+        marketView.setFloatingMarble(message.getFloatingMarble());
         graphicalCLI.printMarket(marketView);  //TODO: da gestire, avremo strutture tutte nella CLI?
     }
 
-    public void developmentDecksSetup(DevelopmentDecksMessage message){ //TODO: aggiunta da controllare
+    public void developmentDecksSetup(DevelopmentDecksMessage message){
         for(DevelopmentDeck developmentDeck : message.getDevelopmentDecks())
             developmentDecks.add(new DevelopmentDeckView(developmentDeck.getDeck(), developmentDeck.getDeckColor(),
                     developmentDeck.getDeckLevel()));
     }
 
-    public void faithTrackSetup(FaithTrackMessage message){     //TODO: aggiunta da controllare
+    public void faithTrackSetup(FaithTrackMessage message){
         List<VaticanReportView> vaticanReports = new ArrayList<>();
         for(VaticanReport vaticanReport : message.getVaticanReports()){
             vaticanReports.add(new VaticanReportView(vaticanReport.getMin(), vaticanReport.getMax(),
@@ -153,22 +146,26 @@ public class CLI {
     }
 
     public void askDiscardLeader(){
-        System.out.println("You have to discard 2 leader cards\nSelect the corresponding number");
+        System.out.println("You have to discard 2 leader cards from your hand:");
         int size = playerBoardView.getLeaderBoard().getHand().size();
         int firstOne, secondOne;
         for(int i=0; i<size; i++){
             System.out.print((i+1) + ": ");
             graphicalCLI.printLeaderCard((LeaderCard) playerBoardView.getLeaderBoard().getHand().get(i));
         }
-        do{
-            System.out.print("Choose the first one: ");
-            firstOne = scanner.nextInt();
-        }while(firstOne<=0 || firstOne>size);
 
-        do{
-            System.out.print("Choose the second one: ");
+        System.out.print("Choose the first one by selecting the corresponding number: ");
+        firstOne = scanner.nextInt();
+        while(firstOne<=0 || firstOne>size){
+            System.out.print("The chosen number is invalid, please choose another one: ");
+            firstOne = scanner.nextInt();
+        }
+        System.out.print("Choose the second one by selecting the corresponding number: ");
+        secondOne = scanner.nextInt();
+        while(secondOne<=0 || secondOne>size || secondOne == firstOne){
+            System.out.print("The chosen number is invalid, please choose another one: ");
             secondOne = scanner.nextInt();
-        }while(secondOne<=0 || secondOne>size || secondOne == firstOne);
+        }
 
         List<LeaderCard> leaderCards = new ArrayList<>();
         leaderCards.add((LeaderCard) playerBoardView.getLeaderBoard().getHand().get(firstOne-1));
@@ -214,4 +211,5 @@ public class CLI {
         }
         packetHandler.sendMessage(new SelectMarketMessage(row-1, column-1));
     }
+    //TODO: possibile aggiungere azione per vedere le playerboard avversarie
 }

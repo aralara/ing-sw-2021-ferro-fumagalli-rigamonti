@@ -101,7 +101,7 @@ public class PacketHandler {
                 } else if (message instanceof PlayerBoardSetupMessage) {
                     cli.playerBoardSetup((PlayerBoardSetupMessage) message);
                 } else if (message instanceof MarketMessage) {
-                    cli.marketSetup(((MarketMessage) message));
+                    cli.updateMarket(((MarketMessage) message));
                 } else if (message instanceof DevelopmentDecksMessage) {
                     cli.developmentDecksSetup(((DevelopmentDecksMessage) message));
                 } else if (message instanceof FaithTrackMessage) {
