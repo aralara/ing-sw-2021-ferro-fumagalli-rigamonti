@@ -137,4 +137,13 @@ public class GraphicalCLI {
             } else System.out.println("not active");
         }
     }
+
+    public void printActions(){
+        System.out.println("You can choose an action to play your turn!");
+        System.out.println(" •1) Get resources from market ");
+        System.out.println(" •2) Buy a development card ");
+        System.out.println(" •3) Activate your production");
+        System.out.println(" •4) Activate a leader card");
+        System.out.println(" •5) Discard a leader card");
+    }
 }

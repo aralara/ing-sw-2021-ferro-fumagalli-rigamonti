@@ -177,24 +177,25 @@ public class CLI {
         }*/
     }
 
-    public void chooseAction() {        // TODO: scritto di fretta per testare (da togliere prima o poi)
-        int action = -1;
-        while(action != 1) {
-            System.out.println("1-market 2-development 3-productions");
+    public void chooseAction() {
+        int action;
+        graphicalCLI.printActions();
+        do {
             action = scanner.nextInt();
+        }while(action<1 || action >4);
+        switch (action){
+            case 1: //chiedo  riga/ colonna e invio packetHandler.sendMessage(new SelectMarketMessage();
+                break;
+            case 2: //chiedo che dev ccard comprare
+                break;
+            case 3: //chiedo che produzioni attivare
+                break;
+            case 4: //chiedo che leader card attivare
+                break;
+            case 5: //chiedo che leader card scartare
+                break;
+            default: //boh, default non lo farò mai :)
+                break;
         }
-        int column = 0;
-        int row = -1;
-        while(row < 0 || row > 3) {
-            System.out.println("row number? (0 for column)");
-            row = scanner.nextInt();
-        }
-        if(row == 0){
-            while(column <= 0 || column > 4) {
-                System.out.println("column number?");
-                column = scanner.nextInt();
-            }
-        }
-        packetHandler.sendMessage(new SelectMarketMessage(row-1, column-1));
     }
 }
