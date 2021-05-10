@@ -13,6 +13,10 @@ public class LeaderCardDiscardAckMessage extends LeaderCardAckMessage implements
 
     @Override
     public void doAction(CLI client) {
-        //TODO: Deve fare qualcosa?
+        //TODO: Deve fare qualcosa? (LARA: copiato da come era prima, va bene?)
+        if (!isState()) {
+            System.out.println("Something went wrong, please try again");
+            client.askDiscardLeader();
+        }
     }
 }

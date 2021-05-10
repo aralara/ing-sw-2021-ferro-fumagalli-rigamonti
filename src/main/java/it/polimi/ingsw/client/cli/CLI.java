@@ -402,7 +402,7 @@ public class CLI {
     }
 
     private void sendMarketChoice(int row, int column){
-        packetHandler.sendMessage(new SelectMarketMessage(row, column));
+        packetHandler.sendMessage(new SelectMarketMessageClient(row, column));
     }
 
     public void chooseAction(StartTurnMessage message) {
