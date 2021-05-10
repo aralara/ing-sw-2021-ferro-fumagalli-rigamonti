@@ -7,12 +7,12 @@ import it.polimi.ingsw.utils.messages.server.ResourcesMarketMessage;
 
 import java.util.List;
 
-public class SelectMarketMessageClient implements ClientActionMessage {
+public class SelectMarketMessage implements ClientActionMessage {
 
     private final int row, column;
 
 
-    public SelectMarketMessageClient(int row, int column) {
+    public SelectMarketMessage(int row, int column) {
         this.row = row;
         this.column = column;
     }

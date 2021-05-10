@@ -5,13 +5,13 @@ import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.messages.server.ack.BuyDevelopmentCardAckMessage;
 
-public class BuyDevelopmentCardMessageClient implements ClientActionMessage {
+public class BuyDevelopmentCardMessage implements ClientActionMessage {
 
     private final DevelopmentCard developmentCard;
     private final int space;
 
 
-    public BuyDevelopmentCardMessageClient(DevelopmentCard developmentCard, int space) {
+    public BuyDevelopmentCardMessage(DevelopmentCard developmentCard, int space) {
         this.developmentCard = developmentCard;
         this.space = space;
     }

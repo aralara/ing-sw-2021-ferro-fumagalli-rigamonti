@@ -8,12 +8,12 @@ import it.polimi.ingsw.utils.messages.server.ack.ActivateProductionsAckMessage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivateProductionsMessageClient implements ClientActionMessage {
+public class ActivateProductionsMessage implements ClientActionMessage {
 
     private final List<Production> productions;
 
 
-    public ActivateProductionsMessageClient(List<Production> productions) {
+    public ActivateProductionsMessage(List<Production> productions) {
         this.productions = productions;
     }
 

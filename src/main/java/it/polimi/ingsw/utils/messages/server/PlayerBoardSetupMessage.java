@@ -10,7 +10,7 @@ import it.polimi.ingsw.utils.messages.HiddenMessage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayerBoardSetupMessageClient implements HiddenMessage, ServerActionMessage {
+public class PlayerBoardSetupMessage implements HiddenMessage, ServerActionMessage {
 
     private final String nickname;
     private final List<Deck> developmentBSpaces;
@@ -23,7 +23,7 @@ public class PlayerBoardSetupMessageClient implements HiddenMessage, ServerActio
     private final boolean inkwell;
 
 
-    public PlayerBoardSetupMessageClient(PlayerBoard playerBoard) {
+    public PlayerBoardSetupMessage(PlayerBoard playerBoard) {
         this.nickname = playerBoard.getPlayer().getNickname();
         this.developmentBSpaces = playerBoard.getDevelopmentBoard().getSpaces();
         this.leaderBBoard = playerBoard.getLeaderBoard().getBoard();

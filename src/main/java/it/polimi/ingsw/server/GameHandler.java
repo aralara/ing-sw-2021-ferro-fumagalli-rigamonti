@@ -74,7 +74,7 @@ public class GameHandler implements Runnable {
         List<PlayerBoard> playerBoards = game.getPlayerBoards();
         for (VirtualView virtualView : clientsVirtualView) {
             for(PlayerBoard pBoard : playerBoards) {
-                PlayerBoardSetupMessageClient pBoardMessage = new PlayerBoardSetupMessageClient(pBoard);
+                PlayerBoardSetupMessage pBoardMessage = new PlayerBoardSetupMessage(pBoard);
 
                 // The cards relative to the hand are hidden to the player if the message isn't being sent to the
                 // owner of the LeaderCard hand
@@ -84,7 +84,7 @@ public class GameHandler implements Runnable {
                 virtualView.sendMessage(pBoardMessage);
             }
 
-            virtualView.sendMessage(new MarketMessageClient(game.getMarket()));
+            virtualView.sendMessage(new MarketMessage(game.getMarket()));
             virtualView.sendMessage(new DevelopmentDecksMessage(game.getDevelopmentDecks()));
             virtualView.sendMessage(new FaithTrackMessage(game.getFaithTrack()));
         }
@@ -93,7 +93,7 @@ public class GameHandler implements Runnable {
     public void add(Socket client, ObjectOutputStream out, ObjectInputStream in, String nickname) {
         clientsVirtualView.add(new VirtualView(client, out, in, nickname, this));
         controller.addPlayer(nickname);
-        sendAll(new NewPlayerMessageClient(nickname));
+        sendAll(new NewPlayerMessage(nickname));
     }
 
     public void sendAll(Message message) {

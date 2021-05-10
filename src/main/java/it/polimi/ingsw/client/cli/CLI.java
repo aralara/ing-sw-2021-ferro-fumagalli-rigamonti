@@ -10,10 +10,7 @@ import it.polimi.ingsw.server.model.faith.VaticanReport;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 import it.polimi.ingsw.server.model.storage.Shelf;
-import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
-import it.polimi.ingsw.utils.messages.client.LeaderCardDiscardMessageClient;
-import it.polimi.ingsw.utils.messages.client.NewLobbyMessage;
-import it.polimi.ingsw.utils.messages.client.ShelvesConfigurationMessageClient;
+import it.polimi.ingsw.utils.messages.client.*;
 import it.polimi.ingsw.utils.messages.server.*;
 
 import java.util.ArrayList;
@@ -89,7 +86,7 @@ public class CLI {
         }
     }
 
-    public void playerBoardSetup(PlayerBoardSetupMessageClient message){  //TODO: metodo di update da rimuovere quando ci saranno le action
+    public void playerBoardSetup(PlayerBoardSetupMessage message){  //TODO: metodo di update da rimuovere quando ci saranno le action
         String nickname = message.getNickname();
         DevelopmentBoardView developmentBoard = new DevelopmentBoardView(message.getDevelopmentBSpaces());
         LeaderBoardView leaderBoard = new LeaderBoardView();
@@ -115,7 +112,7 @@ public class CLI {
         throw new NotExistingNickname();    //TODO: va bene gestire con eccezione?
     }
 
-    public void updateMarket(MarketMessageClient message){    //TODO: metodo di update da rimuovere quando ci saranno le action
+    public void updateMarket(MarketMessage message){    //TODO: metodo di update da rimuovere quando ci saranno le action
         marketView.setMarbleMatrix(message.getMarbleMatrix());
         marketView.setFloatingMarble(message.getFloatingMarble());
         graphicalCLI.printMarket(marketView);  //TODO: da spostare nel metodo refresh
@@ -178,7 +175,7 @@ public class CLI {
     }
 
     private void sendDiscardedLeader(List<LeaderCard> leaderCards){ //TODO: conviene mettere qua o lasciamo nel metodo? (stessa cosa per gli altri send)
-        packetHandler.sendMessage(new LeaderCardDiscardMessageClient(leaderCards));
+        packetHandler.sendMessage(new LeaderCardDiscardMessage(leaderCards));
     }
 
     public void updateLeaderHand(PlayerLeaderBHandMessage message){ //TODO: messaggio unico con lista carte
@@ -206,7 +203,7 @@ public class CLI {
                 try {
                     playerBoardFromNickname(nickname).getFaithBoard().setFaith(resource.getQuantity()); //Do per scontato che arriverà solo quello del player corretto?
                     System.out.println(resource.getQuantity() + " " + resource.getResourceType()
-                            + " has been added to your Faith Board");
+                            + " has been added to your faith board");
                 } catch (NotExistingNickname e) {
                     e.printStackTrace();
                 }
@@ -217,7 +214,7 @@ public class CLI {
         }
         if(newResources.size()>0) {
             storeTempResources(newResources);
-            System.out.println("Now place on the shelves:");
+            System.out.println("Now place the resources on the shelves:");
             selectShelvesManagement(newResources);
         }
     }
@@ -260,14 +257,6 @@ public class CLI {
                     index = scanner.nextInt() - 1;
                 }
 
-                    if(newResources.size()>0 && newResources.get(0).getResourceType()==ResourceType.values()[index]){
-                        newResources.get(0).setQuantity(newResources.get(0).getQuantity()+1);
-                    } else {
-                        newResources.add(new Resource(ResourceType.values()[index], 1));
-                    }
-                } //TODO: risorse da memorizzare da qualche parte prima che sia convalidato il loro posizionamento
-                System.out.println("Now place the resources on the shelves:");
-                selectShelvesManagement(newResources); //x controllare se si hanno o meno i leader
                 if (resources.size() > 0 && resources.get(0).getResourceType() == ResourceType.values()[index]) {
                     resources.get(0).setQuantity(resources.get(0).getQuantity() + 1);
                 } else {
@@ -380,12 +369,12 @@ public class CLI {
     }
 
     private void sendShelvesConfiguration(List<Shelf> shelves, List<Resource> extra){
-        packetHandler.sendMessage(new ShelvesConfigurationMessageClient(shelves, extra));
+        packetHandler.sendMessage(new ShelvesConfigurationMessage(shelves, extra));
     }
 
     public void selectMarket(){
         graphicalCLI.printMarket(marketView);
-        System.out.print("Where do you want to place the marble?\nChoose R row or C column followed by a number: ");
+        System.out.print("Where do you want to place the marble?\nChoose R (row) or C (column) followed by a number: ");
 
         boolean valid;
         do {

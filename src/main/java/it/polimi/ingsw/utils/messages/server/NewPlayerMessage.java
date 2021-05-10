@@ -2,12 +2,12 @@ package it.polimi.ingsw.utils.messages.server;
 
 import it.polimi.ingsw.client.cli.CLI;
 
-public class NewPlayerMessageClient implements ServerActionMessage {
+public class NewPlayerMessage implements ServerActionMessage {
 
     private final String playerNickname;
 
 
-    public NewPlayerMessageClient(String playerNickname) {
+    public NewPlayerMessage(String playerNickname) {
         this.playerNickname = playerNickname;
     }
 

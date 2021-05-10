@@ -7,13 +7,13 @@ import it.polimi.ingsw.utils.messages.server.ack.ShelvesConfigurationAckMessage;
 
 import java.util.List;
 
-public class ShelvesConfigurationMessageClient implements ClientActionMessage {
+public class ShelvesConfigurationMessage implements ClientActionMessage {
 
     private final List<Shelf> shelves;
     private final List<Resource> extra;
 
 
-    public ShelvesConfigurationMessageClient(List<Shelf> shelves, List<Resource> extra) {
+    public ShelvesConfigurationMessage(List<Shelf> shelves, List<Resource> extra) {
         this.shelves = shelves;
         this.extra = extra;
     }
