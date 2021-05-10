@@ -48,7 +48,7 @@ public class GraphicalCLI {
         System.out.println("[ x ][ x ][ x ][ x ]");
 
         color = chooseColor(market.getFloatingMarble().getResourceType());
-        System.out.println("The marble to place is " + color + "■" + color);
+        System.out.println("Extra marble: " + color + "■" + color);
         System.out.print(RESET);
     }
 
@@ -78,8 +78,8 @@ public class GraphicalCLI {
             if (card.getRequirements().get(0) instanceof RequirementDev) {   //TODO: sostituire con strategy quando ci sarà una classe apposita
                 for (Requirement req : card.getRequirements()) {
                     toPrint = ((!first) ? ", " : "") + ((RequirementDev) req).getNumber() + " " +
-                            ((RequirementDev) req).getColor() + " development cards level " +
-                            ((RequirementDev) req).getLevel();
+                            ((RequirementDev) req).getColor() + " level " +
+                            ((RequirementDev) req).getLevel() + " development cards ";
                     System.out.print(toPrint);
                     first = false;
                 }
@@ -90,20 +90,21 @@ public class GraphicalCLI {
                 }
             }
             System.out.println();
-            System.out.println(" • The card value is " + card.getVP() + " victory point");
+            System.out.println(" • Victory points: " + card.getVP());
 
-            System.out.print(" • The special ability is ");
+            System.out.print(" • Special ability: You ");
 
             if (card.getAbility() instanceof AbilityDiscount) {
-                System.out.println("a discount by 1 unit of " + ((AbilityDiscount) card.getAbility()).getResourceType());
+                System.out.println("can get 1 " + ((AbilityDiscount) card.getAbility()).getResourceType()
+                        + " off the cost of development cards");
             } else if (card.getAbility() instanceof AbilityMarble) {
-                System.out.println("the power of getting a " + ((AbilityMarble) card.getAbility()).getResourceType() +
-                        " from a white marble from the market");
+                System.out.println("can get a " + ((AbilityMarble) card.getAbility()).getResourceType() +
+                        " from the white marbles in the market");
             } else if (card.getAbility() instanceof AbilityProduction) {
-                System.out.println("the production:  ");
+                System.out.println("gain access to the following production:  ");
                 printProduction(((AbilityProduction) card.getAbility()).getProduction());
             } else if (card.getAbility() instanceof AbilityWarehouse) {
-                System.out.println("to have an extra shelf to contain 1 " + ((AbilityWarehouse) card.getAbility())
+                System.out.println("gain an extra shelf to contain 2 units of " + ((AbilityWarehouse) card.getAbility())
                         .getResourceType());
             }
         }
@@ -144,10 +145,10 @@ public class GraphicalCLI {
     }
 
     public void printActions(){
-        System.out.println("You can choose an action to play your turn!");
+        System.out.println("Choose an action to do on your turn!");
         System.out.println(" •1) Get resources from market ");
         System.out.println(" •2) Buy a development card ");
-        System.out.println(" •3) Activate your production");
+        System.out.println(" •3) Activate your productions");
         System.out.println(" •4) Activate a leader card");
         System.out.println(" •5) Discard a leader card");
     }
@@ -155,7 +156,7 @@ public class GraphicalCLI {
     public void printWarehouse(WarehouseView warehouseView){
         String color;
         int i;
-        System.out.println("This is your warehouse!");
+        System.out.println("Warehouse");
         for(i = 1; i <= 3; i++) {
             int finalI = i;
             System.out.print(" ");
@@ -180,7 +181,7 @@ public class GraphicalCLI {
         int specialWarehouse = (int)playerBoardView.getLeaderBoard().getBoard().getCards().stream()
                 .filter(x -> ((LeaderCard)x).getAbility() instanceof AbilityWarehouse).count(); //TODO: guarda shelf true
         if(specialWarehouse > 0){
-            System.out.println("Your special warehouse is:");
+            System.out.println("Special warehouse:");
             List<Shelf> specialShelf = warehouseView.getShelves().stream()
                     .filter(x -> x.getLevel() == level && x.IsLeader()).collect(Collectors.toList());
             for(int i = 0; i < specialWarehouse;i++){
@@ -194,13 +195,10 @@ public class GraphicalCLI {
                 }
             }
         }
-        else{
-            System.out.println("You don't have any special warehouse! ");
-        }
     }
 
     public void printStrongbox(StrongboxView strongboxView){
-        System.out.println("Your strongbox contains: ");
+        System.out.println("Strongbox: ");
         if(strongboxView.getResources().size() > 0) {
             for (int i = 0; i < strongboxView.getResources().size(); i++) {
                 System.out.println(" • " + strongboxView.getResources().get(i).getQuantity() + " " +
@@ -208,7 +206,7 @@ public class GraphicalCLI {
             }
         }
         else{
-            System.out.println(" • Nothing! :(");
+            System.out.println(" • Empty");
         }
     }
 }

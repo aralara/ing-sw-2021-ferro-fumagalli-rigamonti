@@ -51,7 +51,7 @@ public class CLI {
     }
 
     private boolean connect(){
-        System.out.println("IP address of server?");
+        System.out.println("Insert the IP address of server");
         String ip = scanner.nextLine();
 
         return packetHandler.start(ip,Server.SOCKET_PORT);
@@ -66,7 +66,7 @@ public class CLI {
         int size;
         System.out.println("There isn't any player waiting for a match!");
         do {
-            System.out.println("Insert the number of player that will play the game (between 1 and 4)");
+            System.out.println("Insert the number of players that will play the game (value inserted must between 1 and 4)");
             size = scanner.nextInt();
         }while(size <= 0 || size >= 5);
         setNumberOfPlayers(size);
@@ -226,7 +226,7 @@ public class CLI {
                         newResources.add(new Resource(ResourceType.values()[index], 1));
                     }
                 } //TODO: risorse da memorizzare da qualche parte prima che sia convalidato il loro posizionamento
-                System.out.println("Now place on the shelves:");
+                System.out.println("Now place the resources on the shelves:");
                 selectShelvesManagement(newResources); //x controllare se si hanno o meno i leader
             }
         }

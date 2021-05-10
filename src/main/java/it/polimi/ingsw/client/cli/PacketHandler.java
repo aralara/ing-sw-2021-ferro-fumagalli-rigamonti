@@ -37,7 +37,7 @@ public class PacketHandler {
         try {
             server = new Socket(address, port);
         } catch (IOException e) {
-            System.out.println("server unreachable");
+            System.out.println("Server unreachable");
             return false;
         }
         System.out.println("Connected");
@@ -47,9 +47,9 @@ public class PacketHandler {
             input = new ObjectInputStream(server.getInputStream());
 
         } catch (IOException e) {
-            System.out.println("server has died");
+            System.out.println("Server has died");
         } catch (ClassCastException e) {
-            System.out.println("protocol violation");
+            System.out.println("Protocol violation");
         }
         return true;
     }
