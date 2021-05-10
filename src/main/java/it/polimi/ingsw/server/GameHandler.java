@@ -6,7 +6,7 @@ import it.polimi.ingsw.server.model.games.Game;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 import it.polimi.ingsw.server.view.VirtualView;
-import it.polimi.ingsw.utils.messages.ActionMessage;
+import it.polimi.ingsw.utils.messages.client.ClientActionMessage;
 import it.polimi.ingsw.utils.messages.Message;
 import it.polimi.ingsw.utils.messages.server.*;
 
@@ -15,7 +15,6 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class GameHandler implements Runnable {
 
@@ -74,7 +73,7 @@ public class GameHandler implements Runnable {
         List<PlayerBoard> playerBoards = game.getPlayerBoards();
         for (VirtualView virtualView : clientsVirtualView) {
             for(PlayerBoard pBoard : playerBoards) {
-                PlayerBoardSetupMessage pBoardMessage = new PlayerBoardSetupMessage(pBoard);
+                PlayerBoardSetupMessageClient pBoardMessage = new PlayerBoardSetupMessageClient(pBoard);
 
                 // The cards relative to the hand are hidden to the player if the message isn't being sent to the
                 // owner of the LeaderCard hand
@@ -84,7 +83,7 @@ public class GameHandler implements Runnable {
                 virtualView.sendMessage(pBoardMessage);
             }
 
-            virtualView.sendMessage(new MarketMessage(game.getMarket()));
+            virtualView.sendMessage(new MarketMessageClient(game.getMarket()));
             virtualView.sendMessage(new DevelopmentDecksMessage(game.getDevelopmentDecks()));
             virtualView.sendMessage(new FaithTrackMessage(game.getFaithTrack()));
         }
@@ -93,7 +92,7 @@ public class GameHandler implements Runnable {
     public void add(Socket client, ObjectOutputStream out, ObjectInputStream in, String nickname) {
         clientsVirtualView.add(new VirtualView(client, out, in, nickname, this));
         controller.addPlayer(nickname);
-        sendAll(new NewPlayerMessage(nickname));
+        sendAll(new NewPlayerMessageClient(nickname));
     }
 
     public void sendAll(Message message) {
@@ -102,8 +101,8 @@ public class GameHandler implements Runnable {
     }
 
     public void handleMessage(VirtualView view, Message message) {
-        if (message instanceof ActionMessage) {
-            ((ActionMessage) message).doAction(view, controller);
+        if (message instanceof ClientActionMessage) {
+            ((ClientActionMessage) message).doAction(view, controller);
         } else {
             System.out.println("Can't handle message");
         }

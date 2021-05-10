@@ -3,16 +3,15 @@ package it.polimi.ingsw.utils.messages.client;
 import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.view.VirtualView;
-import it.polimi.ingsw.utils.messages.ActionMessage;
 import it.polimi.ingsw.utils.messages.server.ack.BuyDevelopmentCardAckMessage;
 
-public class BuyDevelopmentCardMessage implements ActionMessage {
+public class BuyDevelopmentCardMessageClient implements ClientActionMessage {
 
     private final DevelopmentCard developmentCard;
     private final int space;
 
 
-    public BuyDevelopmentCardMessage(DevelopmentCard developmentCard, int space) {
+    public BuyDevelopmentCardMessageClient(DevelopmentCard developmentCard, int space) {
         this.developmentCard = developmentCard;
         this.space = space;
     }

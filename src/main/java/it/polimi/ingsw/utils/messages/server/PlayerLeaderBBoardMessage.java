@@ -1,12 +1,12 @@
 package it.polimi.ingsw.utils.messages.server;
 
+import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
-import it.polimi.ingsw.utils.messages.Message;
 
-public class PlayerLeaderBBoardMessage implements Message {
+public class PlayerLeaderBBoardMessage implements ServerActionMessage {
 
-    private Deck board;
-    private String nickname;
+    private final Deck board;
+    private final String nickname;
 
 
     public PlayerLeaderBBoardMessage(Deck board, String nickname) {
@@ -21,5 +21,10 @@ public class PlayerLeaderBBoardMessage implements Message {
 
     public String getNickname(){
         return nickname;
+    }
+
+    @Override
+    public void doAction(CLI client) {
+        //TODO: stampare la board delle leader
     }
 }

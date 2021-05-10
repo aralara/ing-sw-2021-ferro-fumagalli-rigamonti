@@ -1,15 +1,15 @@
 package it.polimi.ingsw.utils.messages.server;
 
+import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.server.model.market.*;
-import it.polimi.ingsw.utils.messages.Message;
 
-public class MarketMessage implements Message {
+public class MarketMessageClient implements ServerActionMessage {
 
-    private Marble[][] marbleMatrix;
-    private Marble floatingMarble;
+    private final Marble[][] marbleMatrix;
+    private final Marble floatingMarble;
 
 
-    public MarketMessage(Market market) {
+    public MarketMessageClient(Market market) {
         this.marbleMatrix = market.getMarbleMatrix();
         this.floatingMarble = market.getFloatingMarble();
     }
@@ -21,5 +21,10 @@ public class MarketMessage implements Message {
 
     public Marble getFloatingMarble() {
         return floatingMarble;
+    }
+
+    @Override
+    public void doAction(CLI client) {
+        client.updateMarket(this);
     }
 }

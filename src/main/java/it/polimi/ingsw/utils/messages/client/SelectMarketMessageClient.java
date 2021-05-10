@@ -3,17 +3,16 @@ package it.polimi.ingsw.utils.messages.client;
 import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.view.VirtualView;
-import it.polimi.ingsw.utils.messages.ActionMessage;
 import it.polimi.ingsw.utils.messages.server.ResourcesMarketMessage;
 
 import java.util.List;
 
-public class SelectMarketMessage implements ActionMessage {
+public class SelectMarketMessageClient implements ClientActionMessage {
 
     private final int row, column;
 
 
-    public SelectMarketMessage(int row, int column) {
+    public SelectMarketMessageClient(int row, int column) {
         this.row = row;
         this.column = column;
     }
