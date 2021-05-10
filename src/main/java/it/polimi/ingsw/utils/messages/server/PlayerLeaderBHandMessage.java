@@ -3,7 +3,6 @@ package it.polimi.ingsw.utils.messages.server;
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.utils.messages.HiddenMessage;
-import it.polimi.ingsw.utils.messages.Message;
 
 import java.util.ArrayList;
 import java.util.List;

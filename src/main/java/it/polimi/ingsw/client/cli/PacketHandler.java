@@ -69,9 +69,17 @@ public class PacketHandler {
                         cli.askNickname();
                     }
                 } else if (message instanceof LobbyMessage) {
-                    if (((LobbyMessage) message).getLobbySize() == ((LobbyMessage) message).getWaitingPlayers())
+                    int size = ((LobbyMessage) message).getLobbySize();
+                    int waitingPlayers = ((LobbyMessage) message).getWaitingPlayers();
+                    if (size == waitingPlayers)
                         cli.createNewLobby();
-                    else cli.setNumberOfPlayers(((LobbyMessage) message).getLobbySize());   //TODO: serve numero giocatori?
+                    else {
+                        System.out.print("There's already a " + size + " player lobby waiting for ");
+                        if(size-waitingPlayers==1)
+                            System.out.println("another player");
+                        else System.out.println(waitingPlayers + " more players");
+                        cli.setNumberOfPlayers(((LobbyMessage) message).getLobbySize());   //TODO: serve numero giocatori?
+                    }
                 } else if (message instanceof NewPlayerMessage) {
                     cli.notifyNewPlayer(((NewPlayerMessage) message).getPlayerNickname());
                 } else if (message instanceof PlayerBoardSetupMessage) {
@@ -87,12 +95,13 @@ public class PacketHandler {
                 } else if (message instanceof LeaderCardDiscardAckMessage) {
                     if(!((LeaderCardDiscardAckMessage) message).isState()){
                         //TODO: richiedo?
-                        System.out.println("Errore nello scarto dei leader");
+                        System.out.println("Something went wrong, please try again");
+                        cli.askDiscardLeader();
                     }
                 } else if (message instanceof PlayerLeaderBBoardMessage) {
                     //TODO: stampare la board delle leader
                 }else if (message instanceof PlayerLeaderBHandMessage) {
-                    cli.updateLeaderHand(((PlayerLeaderBHandMessage)message).getHand());
+                    cli.updateLeaderHand((PlayerLeaderBHandMessage)message); //TODO: il messaggio arriva due volte anche scartando i leader insieme, va bene?
                 }else {
                     System.out.println("Received " + message.toString());
                 }

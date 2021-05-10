@@ -161,10 +161,11 @@ public abstract class Game {
     /**
      * Discards leader cards from the hand of a player
      * @param player Index of the player discarding cards
-     * @param leaderCard List of leader cards to discard
+     * @param leaderCards List of leader cards to discard
      */
-    public void discardLeader(int player, LeaderCard leaderCard) {
-        playerBoards.get(player).getLeaderBoard().discardLeaderHand(leaderCard);
+    public void discardLeader(int player, List<LeaderCard> leaderCards) {
+        for(LeaderCard leaderCard : leaderCards)
+            playerBoards.get(player).getLeaderBoard().discardLeaderHand(leaderCard);
     }
 
     /**

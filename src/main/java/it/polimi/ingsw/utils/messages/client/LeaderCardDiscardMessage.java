@@ -11,14 +11,14 @@ import java.util.List;
 
 public class LeaderCardDiscardMessage extends LeaderCardMessage {
 
-    public LeaderCardDiscardMessage(LeaderCard leaderCard) {
-        super(leaderCard);
+    public LeaderCardDiscardMessage(List<LeaderCard> leaderCards) {
+        super(leaderCards);
     }
 
 
     @Override
     public void doAction(VirtualView view, Controller controller) {
-        controller.discardLeaders(view.getNickname(), getLeaderCard());
+        controller.discardLeaders(view.getNickname(), getLeaderCards());
         view.sendMessage(new LeaderCardDiscardAckMessage(true));    // TODO: nessun valore di ritorno effettivo
     }
 }

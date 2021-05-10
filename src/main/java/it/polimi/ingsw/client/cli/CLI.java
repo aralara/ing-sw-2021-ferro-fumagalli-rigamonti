@@ -1,20 +1,16 @@
 package it.polimi.ingsw.client.cli;
 
 import it.polimi.ingsw.client.structures.*;
+import it.polimi.ingsw.exceptions.NotExistingNickname;
 import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.server.model.cards.deck.DevelopmentDeck;
 import it.polimi.ingsw.server.model.faith.VaticanReport;
-import it.polimi.ingsw.server.model.market.Marble;
 import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
 import it.polimi.ingsw.utils.messages.client.LeaderCardDiscardMessage;
 import it.polimi.ingsw.utils.messages.client.NewLobbyMessage;
-import it.polimi.ingsw.utils.messages.client.SelectMarketMessage;
-import it.polimi.ingsw.utils.messages.server.DevelopmentDecksMessage;
-import it.polimi.ingsw.utils.messages.server.FaithTrackMessage;
-import it.polimi.ingsw.utils.messages.server.MarketMessage;
-import it.polimi.ingsw.utils.messages.server.PlayerBoardSetupMessage;
+import it.polimi.ingsw.utils.messages.server.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +47,6 @@ public class CLI {
     }
 
     private boolean connect(){
-
         System.out.println("IP address of server?");
         String ip = scanner.nextLine();
 
@@ -97,15 +92,19 @@ public class CLI {
         StrongboxView strongbox = new StrongboxView(message.getStrongbox());
         boolean inkwell = message.isFirstPlayer();
 
-        PlayerBoardView playerBoard = new PlayerBoardView(nickname,developmentBoard,leaderBoard,faithBoard,warehouse,strongbox,inkwell);
+        PlayerBoardView playerBoard = new PlayerBoardView(nickname,developmentBoard,leaderBoard,faithBoard,
+                warehouse,strongbox,inkwell);
         playerBoards.add(playerBoard);
+
+        if(playerBoards.size()==numberOfPlayers)
+            System.out.println("\nTHE GAME CAN START!\n");
     }
 
-    private PlayerBoardView playerBoardFromNickname(String nickname){
+    private PlayerBoardView playerBoardFromNickname(String nickname) throws NotExistingNickname {
         for(PlayerBoardView playerBoard : playerBoards)
             if(playerBoard.getNickname().equals(nickname))
                 return playerBoard;
-        return null;    //TODO: possibile eccezione?
+        throw new NotExistingNickname();    //TODO: va bene gestire con eccezione?
     }
 
     public void updateMarket(MarketMessage message){    //TODO: metodo di update da rimuovere quando ci saranno le action
@@ -130,51 +129,59 @@ public class CLI {
     }
 
     public void askDiscardLeader(){
-        PlayerBoardView playerBoard = playerBoardFromNickname(nickname);
-        System.out.println("You have to discard 2 leader cards from your hand:");
-        int size = playerBoard.getLeaderBoard().getHand().size();
-        int firstOne, secondOne;
-        for(int i=0; i<size; i++){
-            System.out.print((i+1) + ": ");
-            graphicalCLI.printLeaderCard((LeaderCard) playerBoard.getLeaderBoard().getHand().get(i));
-        }
+        try {
+            PlayerBoardView playerBoard = playerBoardFromNickname(nickname);
 
-        System.out.print("Choose the first one by selecting the corresponding number: ");
-        firstOne = scanner.nextInt();
-        while(firstOne<=0 || firstOne>size){
-            System.out.print("The chosen number is invalid, please choose another one: ");
+            System.out.println("You have to discard 2 leader cards from your hand:");
+            int size = playerBoard.getLeaderBoard().getHand().size();
+            int firstOne, secondOne;
+            for(int i=0; i<size; i++){
+                System.out.print((i+1) + ": ");
+                graphicalCLI.printLeaderCard((LeaderCard) playerBoard.getLeaderBoard().getHand().get(i));
+            }
+
+            System.out.print("Choose the first one by selecting the corresponding number: ");
             firstOne = scanner.nextInt();
-        }
-        System.out.print("Choose the second one by selecting the corresponding number: ");
-        secondOne = scanner.nextInt();
-        while(secondOne<=0 || secondOne>size || secondOne == firstOne){
-            System.out.print("The chosen number is invalid, please choose another one: ");
+            while(firstOne<=0 || firstOne>size){
+                System.out.print("The chosen number is invalid, please choose another one: ");
+                firstOne = scanner.nextInt();
+            }
+            System.out.print("Choose the second one by selecting the corresponding number: ");
             secondOne = scanner.nextInt();
-        }
+            while(secondOne<=0 || secondOne>size || secondOne == firstOne){
+                System.out.print("The chosen number is invalid, please choose another one: ");
+                secondOne = scanner.nextInt();
+            }
 
-        List<LeaderCard> leaderCards = new ArrayList<>();
-        leaderCards.add((LeaderCard) playerBoard.getLeaderBoard().getHand().get(firstOne-1));
-        leaderCards.add((LeaderCard) playerBoard.getLeaderBoard().getHand().get(secondOne-1));
-        sendDiscardedLeader(leaderCards);
+            List<LeaderCard> leaderCards = new ArrayList<>();
+            leaderCards.add((LeaderCard) playerBoard.getLeaderBoard().getHand().get(firstOne-1));
+            leaderCards.add((LeaderCard) playerBoard.getLeaderBoard().getHand().get(secondOne-1));
+            sendDiscardedLeader(leaderCards);
+        }catch (NotExistingNickname e){
+            e.printStackTrace();
+        }
     }
 
     private void sendDiscardedLeader(List<LeaderCard> leaderCards){
-        for(LeaderCard leaderCard : leaderCards)
-            packetHandler.sendMessage(new LeaderCardDiscardMessage(leaderCard));
+        packetHandler.sendMessage(new LeaderCardDiscardMessage(leaderCards));
     }
 
-    public void updateLeaderHand(Deck leaderCards){ //TODO: messaggio unico con lista carte
-        /*
-        playerBoardView.getLeaderBoard().setHand(leaderCards);
-        if(playerBoardView.getLeaderBoard().getHand().size() == 2){
-            temp();
-        }*/
+    public void updateLeaderHand(PlayerLeaderBHandMessage message){ //TODO: messaggio unico con lista carte
+        try {
+            PlayerBoardView playerBoard = playerBoardFromNickname(message.getNickname()); //TODO: controllare se così va bene
+            playerBoard.getLeaderBoard().setHand(message.getHand());
+            if (message.getNickname().equals(nickname) && playerBoard.getLeaderBoard().getHand().size()==2) { //TODO: da togliere
+                temp(playerBoard);
+            }
+        } catch(NotExistingNickname e){
+            e.printStackTrace();
+        }
     }
 
-    public void temp(){/*
-        for(int i = 0; i<playerBoardView.getLeaderBoard().getHand().size();i++){  //TODO: da togliere (per testare)
-            graphicalCLI.printLeaderCard((LeaderCard)playerBoardView.getLeaderBoard().getHand().get(i));
-        }*/
+    public void temp(PlayerBoardView player){
+        for(int i = 0; i<player.getLeaderBoard().getHand().size();i++){  //TODO: da togliere (per testare)
+            graphicalCLI.printLeaderCard((LeaderCard)player.getLeaderBoard().getHand().get(i));
+        }
     }
 
     public void chooseAction() {
