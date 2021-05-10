@@ -3,13 +3,18 @@ package it.polimi.ingsw.client.cli;
 import it.polimi.ingsw.client.structures.*;
 import it.polimi.ingsw.exceptions.NotExistingNickname;
 import it.polimi.ingsw.server.Server;
+import it.polimi.ingsw.server.model.cards.ability.AbilityWarehouse;
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.server.model.cards.deck.DevelopmentDeck;
 import it.polimi.ingsw.server.model.faith.VaticanReport;
+import it.polimi.ingsw.server.model.storage.Resource;
+import it.polimi.ingsw.server.model.storage.ResourceType;
+import it.polimi.ingsw.server.model.storage.Shelf;
 import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
 import it.polimi.ingsw.utils.messages.client.LeaderCardDiscardMessage;
 import it.polimi.ingsw.utils.messages.client.NewLobbyMessage;
+import it.polimi.ingsw.utils.messages.client.ShelvesConfigurationMessage;
 import it.polimi.ingsw.utils.messages.server.*;
 
 import java.util.ArrayList;
@@ -71,6 +76,8 @@ public class CLI {
 
     public void setNumberOfPlayers(int numberOfPlayers){
         this.numberOfPlayers = numberOfPlayers;
+        if(numberOfPlayers==1)
+            lorenzoFaith=0;
     }
 
     public void notifyNewPlayer(String nickname){
@@ -189,6 +196,77 @@ public class CLI {
         for(int i = 0; i<player.getLeaderBoard().getHand().size();i++){  //TODO: da togliere (per testare)
             graphicalCLI.printLeaderCard((LeaderCard)player.getLeaderBoard().getHand().get(i));
         }
+    }
+
+    public void askResourcesToEqualize(ResourcesEqualizeMessage message){ //TODO: da controllare poi con il metodo corrispondente del server
+        for(Resource resource : message.getResources()) {
+            if (resource.getResourceType() == ResourceType.FAITH) {
+                try {
+                    playerBoardFromNickname(nickname).getFaithBoard().setFaith(resource.getQuantity()); //Do per scontato che arriverà solo quello del player corretto?
+                    System.out.println(resource.getQuantity() + " " + resource.getResourceType()
+                            + " has been added to your Faith Board");
+                } catch (NotExistingNickname e) {
+                    e.printStackTrace();
+                }
+            }
+            else if (resource.getResourceType() == ResourceType.WILDCARD){ //TODO: potrebbe essere migliorato
+                List<Resource> newResources = new ArrayList<>();
+                for(int num=0; num<resource.getQuantity(); num++){
+                    System.out.println("You can choose a resource from the following: "); //TODO: in ordine come nel file... va bene?
+                    for(int i=0;i<4;i++)
+                        System.out.println((i+1) + ": " + ResourceType.values()[i].toString());
+                    int index = -1;
+                    while(index<0 || index>=4){
+                        System.out.print("Please choose a valid resource: ");
+                        index = scanner.nextInt()-1;
+                    }
+
+                    if(newResources.size()>0 && newResources.get(0).getResourceType()==ResourceType.values()[index]){
+                        newResources.get(0).setQuantity(newResources.get(0).getQuantity()+1);
+                    } else {
+                        newResources.add(new Resource(ResourceType.values()[index], 1));
+                    }
+                } //TODO: risorse da memorizzare da qualche parte prima che sia convalidato il loro posizionamento
+                System.out.println("Now place on the shelves:");
+                selectShelvesManagement(newResources); //x controllare se si hanno o meno i leader
+            }
+        }
+    }
+
+    private void selectShelvesManagement(List<Resource> resources){ //TODO: manca gestione slot leader
+        //printare ordine shelves
+
+        try {
+            PlayerBoardView player = playerBoardFromNickname(nickname);
+            List<AbilityWarehouse> leaderWarehouse = new ArrayList<>();
+
+            for (int i = 0; i < player.getLeaderBoard().getBoard().size(); i++) {
+                LeaderCard leaderCard = (LeaderCard) player.getLeaderBoard().getBoard().get(i);
+                if (leaderCard.getAbility() instanceof AbilityWarehouse)
+                    leaderWarehouse.add((AbilityWarehouse) leaderCard.getAbility());
+            }
+
+            if(leaderWarehouse.size()==0)
+                placeResourcesOnShelves(resources);
+            else
+                placeResourcesOnShelves(resources, leaderWarehouse);
+        }catch (NotExistingNickname e){
+            e.printStackTrace();
+        }
+    }
+
+    private void placeResourcesOnShelves(List<Resource> resources){
+        //TODO: da completare
+        //sendShelvesConfiguration();
+    }
+
+    private void placeResourcesOnShelves(List<Resource> resources, List<AbilityWarehouse> leaderWarehouse){
+        //TODO: da completare
+        //sendShelvesConfiguration();
+    }
+
+    private void sendShelvesConfiguration(List<Shelf> shelves, List<Resource> extra){
+        packetHandler.sendMessage(new ShelvesConfigurationMessage(shelves, extra));
     }
 
     public void chooseAction() {

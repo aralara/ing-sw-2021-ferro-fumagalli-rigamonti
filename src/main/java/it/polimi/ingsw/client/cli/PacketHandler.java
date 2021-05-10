@@ -102,6 +102,8 @@ public class PacketHandler {
                     //TODO: stampare la board delle leader
                 }else if (message instanceof PlayerLeaderBHandMessage) {
                     cli.updateLeaderHand((PlayerLeaderBHandMessage)message); //TODO: il messaggio arriva due volte anche scartando i leader insieme, va bene?
+                }else if (message instanceof ResourcesEqualizeMessage) {
+                    cli.askResourcesToEqualize((ResourcesEqualizeMessage)message);
                 }else {
                     System.out.println("Received " + message.toString());
                 }

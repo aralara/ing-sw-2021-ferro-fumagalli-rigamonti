@@ -3,6 +3,8 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.model.boards.PlayerBoard;
 import it.polimi.ingsw.server.model.games.Game;
+import it.polimi.ingsw.server.model.storage.Resource;
+import it.polimi.ingsw.server.model.storage.ResourceType;
 import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.messages.ActionMessage;
 import it.polimi.ingsw.utils.messages.Message;
@@ -13,6 +15,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class GameHandler implements Runnable {
 
@@ -32,8 +35,35 @@ public class GameHandler implements Runnable {
         }
         setup();
         sendAll(new AskLeaderCardDiscardMessage());
+        getResourcesToEqualize(); //TODO: RIGA DA TOGLIERE
         while(true) {
             //TODO: da metterci qualcosa?
+        }
+    }
+
+    private void getResourcesToEqualize(){   //TODO: METODO DA TOGLIERE, solo x test
+        List<Resource> res1 = new ArrayList<>();
+        List<Resource> res2 = new ArrayList<>(); res2.add(new Resource(ResourceType.WILDCARD, 1));
+        List<Resource> res3 = new ArrayList<>(); res3.add(new Resource(ResourceType.WILDCARD, 1));
+                                                 res3.add(new Resource(ResourceType.FAITH, 1));
+        List<Resource> res4 = new ArrayList<>(); res4.add(new Resource(ResourceType.WILDCARD, 2));
+                                                 res4.add(new Resource(ResourceType.FAITH, 1));
+
+        int num = clientsVirtualView.size();
+        ResourcesEqualizeMessage message;
+        message = new ResourcesEqualizeMessage(res1);
+        clientsVirtualView.get(0).sendMessage(message);
+        if(num>1){
+            message = new ResourcesEqualizeMessage(res2);
+            clientsVirtualView.get(1).sendMessage(message);
+        }
+        if(num>2){
+            message = new ResourcesEqualizeMessage(res3);
+            clientsVirtualView.get(2).sendMessage(message);
+        }
+        if(num>3){
+            message = new ResourcesEqualizeMessage(res4);
+            clientsVirtualView.get(3).sendMessage(message);
         }
     }
 
