@@ -234,22 +234,32 @@ public class CLI {
     }
 
     private void selectShelvesManagement(List<Resource> resources){ //TODO: manca gestione slot leader
-        //printare ordine shelves
-
+        try {
+            graphicalCLI.printWarehouse(playerBoardFromNickname(nickname).getWarehouse());
+        }catch (NotExistingNickname e){
+            e.printStackTrace();
+        }
         try {
             PlayerBoardView player = playerBoardFromNickname(nickname);
             List<AbilityWarehouse> leaderWarehouse = new ArrayList<>();
 
             for (int i = 0; i < player.getLeaderBoard().getBoard().size(); i++) {
                 LeaderCard leaderCard = (LeaderCard) player.getLeaderBoard().getBoard().get(i);
-                if (leaderCard.getAbility() instanceof AbilityWarehouse)
+                if (leaderCard.getAbility() instanceof AbilityWarehouse) //TODO: guarda shelf true
                     leaderWarehouse.add((AbilityWarehouse) leaderCard.getAbility());
             }
 
             if(leaderWarehouse.size()==0)
                 placeResourcesOnShelves(resources);
-            else
+            else {
+                try {
+                    graphicalCLI.printExtraShelfLeader(playerBoardFromNickname(nickname),
+                            playerBoardFromNickname(nickname).getWarehouse());
+                }catch (NotExistingNickname e){
+                    e.printStackTrace();
+                }
                 placeResourcesOnShelves(resources, leaderWarehouse);
+            }
         }catch (NotExistingNickname e){
             e.printStackTrace();
         }

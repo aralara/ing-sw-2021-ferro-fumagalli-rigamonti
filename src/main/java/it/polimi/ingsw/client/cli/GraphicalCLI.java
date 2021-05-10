@@ -103,7 +103,8 @@ public class GraphicalCLI {
                 System.out.println("the production:  ");
                 printProduction(((AbilityProduction) card.getAbility()).getProduction());
             } else if (card.getAbility() instanceof AbilityWarehouse) {
-                System.out.println("to have an extra shelf to contain 1 " + ((AbilityWarehouse) card.getAbility()).getResourceType());
+                System.out.println("to have an extra shelf to contain 1 " + ((AbilityWarehouse) card.getAbility())
+                        .getResourceType());
             }
         }
         else {
@@ -160,8 +161,10 @@ public class GraphicalCLI {
             System.out.print(" ");
             for(int j = 0; j < i; j++) {
                 if ((warehouseView.getShelves().stream().anyMatch(x -> x.getLevel() == finalI && !x.IsLeader())) &&
-                        (warehouseView.getShelves().stream().filter(x -> x.getLevel() == finalI && !x.IsLeader()).findFirst().get().getResources().getQuantity()>=j)) {
-                    color = chooseColor(warehouseView.getShelves().stream().filter(x -> x.getLevel() == 1).findFirst().get().getResourceType());
+                        (warehouseView.getShelves().stream().filter(x -> x.getLevel() == finalI && !x.IsLeader())
+                                .findFirst().get().getResources().getQuantity()>=j)) {
+                    color = chooseColor(warehouseView.getShelves().stream().filter(x -> x.getLevel() == 1)
+                            .findFirst().get().getResourceType());
                     System.out.print("[ " + color + "■" + color + RESET + " ]");
                 } else {
                     System.out.print("[ x ]");
@@ -174,10 +177,12 @@ public class GraphicalCLI {
     public void printExtraShelfLeader(PlayerBoardView playerBoardView, WarehouseView warehouseView){  //TODO: va testato in game quando attiviamo delle leader card con abilità warehouse
         int level = 2;
         String color;
-        int specialWarehouse = (int)playerBoardView.getLeaderBoard().getBoard().getCards().stream().filter(x -> ((LeaderCard)x).getAbility() instanceof AbilityWarehouse).count();
+        int specialWarehouse = (int)playerBoardView.getLeaderBoard().getBoard().getCards().stream()
+                .filter(x -> ((LeaderCard)x).getAbility() instanceof AbilityWarehouse).count(); //TODO: guarda shelf true
         if(specialWarehouse > 0){
             System.out.println("Your special warehouse is:");
-            List<Shelf> specialShelf = warehouseView.getShelves().stream().filter(x -> x.getLevel() == level && x.IsLeader()).collect(Collectors.toList());
+            List<Shelf> specialShelf = warehouseView.getShelves().stream()
+                    .filter(x -> x.getLevel() == level && x.IsLeader()).collect(Collectors.toList());
             for(int i = 0; i < specialWarehouse;i++){
                 for(int j = 0; j < level; j++){
                     if (specialShelf.get(i).getResources().getQuantity()>=j) {
@@ -198,7 +203,8 @@ public class GraphicalCLI {
         System.out.println("Your strongbox contains: ");
         if(strongboxView.getResources().size() > 0) {
             for (int i = 0; i < strongboxView.getResources().size(); i++) {
-                System.out.println(" • " + strongboxView.getResources().get(i).getQuantity() + " " + strongboxView.getResources().get(i).getResourceType());
+                System.out.println(" • " + strongboxView.getResources().get(i).getQuantity() + " " +
+                        strongboxView.getResources().get(i).getResourceType());
             }
         }
         else{
