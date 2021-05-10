@@ -3,18 +3,17 @@ package it.polimi.ingsw.utils.messages.client;
 import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.server.view.VirtualView;
-import it.polimi.ingsw.utils.messages.ActionMessage;
 import it.polimi.ingsw.utils.messages.server.ack.ActivateProductionsAckMessage;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivateProductionsMessage implements ActionMessage {
+public class ActivateProductionsMessageClient implements ClientActionMessage {
 
     private final List<Production> productions;
 
 
-    public ActivateProductionsMessage(List<Production> productions) {
+    public ActivateProductionsMessageClient(List<Production> productions) {
         this.productions = productions;
     }
 

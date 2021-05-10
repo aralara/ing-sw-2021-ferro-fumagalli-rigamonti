@@ -1,19 +1,20 @@
 package it.polimi.ingsw.utils.messages.client;
 
 import it.polimi.ingsw.server.controller.Controller;
-import it.polimi.ingsw.server.model.storage.*;
+import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
+import it.polimi.ingsw.server.model.storage.RequestResources;
 import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.messages.server.ack.RequestResourcesAckMessage;
 
 import java.util.List;
 
-public class RequestResourcesProdMessage extends ActivateProductionsMessage {
+public class RequestResourcesDevMessageClient extends BuyDevelopmentCardMessageClient {
 
     private final List<RequestResources> requestResources;
 
 
-    public RequestResourcesProdMessage(List<Production> productions, List<RequestResources> requestResources) {
-        super(productions);
+    public RequestResourcesDevMessageClient(DevelopmentCard developmentCard, int space, List<RequestResources> requestResources) {
+        super(developmentCard, space);
         this.requestResources = requestResources;
     }
 
@@ -24,7 +25,7 @@ public class RequestResourcesProdMessage extends ActivateProductionsMessage {
 
     @Override
     public void doAction(VirtualView view, Controller controller) {
-        boolean success = controller.activateProductions(view.getNickname(), getProduced(), requestResources);
+        boolean success = controller.buyDevCard(view.getNickname(), getDevelopmentCard(), getSpace(), requestResources);
         view.sendMessage(new RequestResourcesAckMessage(success));
     }
 }

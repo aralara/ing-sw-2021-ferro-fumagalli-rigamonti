@@ -1,14 +1,14 @@
 package it.polimi.ingsw.utils.messages.server;
 
+import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.server.model.faith.*;
-import it.polimi.ingsw.utils.messages.Message;
 
 import java.util.List;
 
-public class FaithTrackMessage implements Message {
+public class FaithTrackMessage implements ServerActionMessage {
 
-    private List<VaticanReport> vaticanReports;
-    private List<FaithSpace> faithSpaces;
+    private final List<VaticanReport> vaticanReports;
+    private final List<FaithSpace> faithSpaces;
 
 
     public FaithTrackMessage(FaithTrack faithTrack) {
@@ -23,5 +23,10 @@ public class FaithTrackMessage implements Message {
 
     public List<FaithSpace> getFaithSpaces() {
         return faithSpaces;
+    }
+
+    @Override
+    public void doAction(CLI client) {
+        client.faithTrackSetup(this);
     }
 }

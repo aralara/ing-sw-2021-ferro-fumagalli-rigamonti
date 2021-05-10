@@ -1,8 +1,6 @@
 package it.polimi.ingsw.client.cli;
 
 import it.polimi.ingsw.utils.messages.Message;
-import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
-import it.polimi.ingsw.utils.messages.client.NewLobbyMessage;
 import it.polimi.ingsw.utils.messages.server.*;
 import it.polimi.ingsw.utils.messages.server.ack.ConnectionAckMessage;
 import it.polimi.ingsw.utils.messages.server.ack.LeaderCardDiscardAckMessage;
@@ -63,7 +61,7 @@ public class PacketHandler {
 
                 message = input.readObject();
 
-                if (message instanceof ConnectionAckMessage) {
+                /*if (message instanceof ConnectionAckMessage) {
                     if (!((ConnectionAckMessage) message).isState()) {
                         System.out.println("Nickname is not available, please choose another one");
                         cli.askNickname();
@@ -106,7 +104,12 @@ public class PacketHandler {
                     cli.askResourcesToEqualize((ResourcesEqualizeMessage)message);
                 }else if (message instanceof StartTurnMessage) {
                     cli.chooseAction((StartTurnMessage) message);
-                }else {
+                }else {*/
+  
+                if (message instanceof ServerActionMessage) {
+                    ((ServerActionMessage) message).doAction(cli);
+                } else {
+
                     System.out.println("Received " + message.toString());
                 }
             }

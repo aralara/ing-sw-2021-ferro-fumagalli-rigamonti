@@ -1,5 +1,6 @@
 package it.polimi.ingsw.utils.messages.server;
 
+import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.server.model.boards.*;
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
@@ -9,7 +10,7 @@ import it.polimi.ingsw.utils.messages.HiddenMessage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayerBoardSetupMessage implements HiddenMessage {
+public class PlayerBoardSetupMessageClient implements HiddenMessage, ServerActionMessage {
 
     private final String nickname;
     private final List<Deck> developmentBSpaces;
@@ -22,7 +23,7 @@ public class PlayerBoardSetupMessage implements HiddenMessage {
     private final boolean inkwell;
 
 
-    public PlayerBoardSetupMessage(PlayerBoard playerBoard) {
+    public PlayerBoardSetupMessageClient(PlayerBoard playerBoard) {
         this.nickname = playerBoard.getPlayer().getNickname();
         this.developmentBSpaces = playerBoard.getDevelopmentBoard().getSpaces();
         this.leaderBBoard = playerBoard.getLeaderBoard().getBoard();
@@ -76,5 +77,10 @@ public class PlayerBoardSetupMessage implements HiddenMessage {
         List<LeaderCard> newList = new ArrayList<>();
         leaderBHand.getCards().forEach(c -> newList.add(new LeaderCard()));
         leaderBHand = new Deck(newList);
+    }
+
+    @Override
+    public void doAction(CLI client) {
+        client.playerBoardSetup(this);
     }
 }
