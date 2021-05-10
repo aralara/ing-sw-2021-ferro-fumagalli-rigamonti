@@ -43,9 +43,9 @@ public class GraphicalCLI {
                 color = chooseColor(market.getMarbleMatrix()[i][j].getResourceType());
                 System.out.print("[ " + color + "■" + color + RESET + " ]");
             }
-            System.out.println("[ x ]");
+            System.out.println(" [ " + (i+1) + " ]");
         }
-        System.out.println("[ x ][ x ][ x ][ x ]");
+        System.out.println("[ 1 ][ 2 ][ 3 ][ 4 ]");
 
         color = chooseColor(market.getFloatingMarble().getResourceType());
         System.out.println("The marble to place is " + color + "■" + color);
