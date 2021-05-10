@@ -111,8 +111,9 @@ public class CLI {
         marketView.setMarbleMatrix(message.getMarbleMatrix());
         marketView.setFloatingMarble(message.getFloatingMarble());
         graphicalCLI.printMarket(marketView);  //TODO: da spostare nel metodo refresh
-        try {
+        try {   //TODO: da togliere, sono qui solo per controllare che tutto funzioni
             graphicalCLI.printWarehouse(playerBoardFromNickname(nickname).getWarehouse());
+            graphicalCLI.printExtraShelfLeader(playerBoardFromNickname(nickname),playerBoardFromNickname(nickname).getWarehouse());
             graphicalCLI.printStrongbox(playerBoardFromNickname(nickname).getStrongbox());
         }catch(NotExistingNickname e){
             e.printStackTrace();

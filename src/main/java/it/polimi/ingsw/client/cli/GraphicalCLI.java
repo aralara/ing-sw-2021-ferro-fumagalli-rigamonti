@@ -13,8 +13,11 @@ import it.polimi.ingsw.server.model.market.Marble;
 import it.polimi.ingsw.server.model.market.MarbleColors;
 import it.polimi.ingsw.server.model.storage.Production;
 import it.polimi.ingsw.server.model.storage.ResourceType;
+import it.polimi.ingsw.server.model.storage.Shelf;
 
 import java.sql.SQLSyntaxErrorException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.utils.Constants.MARKET_COLUMN_SIZE;
 import static it.polimi.ingsw.utils.Constants.MARKET_ROW_SIZE;
@@ -156,8 +159,8 @@ public class GraphicalCLI {
             int finalI = i;
             System.out.print(" ");
             for(int j = 0; j < i; j++) {
-                if ((warehouseView.getShelves().stream().anyMatch(x -> x.getLevel() == finalI)) &&
-                        (warehouseView.getShelves().stream().filter(x -> x.getLevel() == finalI).findFirst().get().getResources().getQuantity()>=j)) {
+                if ((warehouseView.getShelves().stream().anyMatch(x -> x.getLevel() == finalI && !x.IsLeader())) &&
+                        (warehouseView.getShelves().stream().filter(x -> x.getLevel() == finalI && !x.IsLeader()).findFirst().get().getResources().getQuantity()>=j)) {
                     color = chooseColor(warehouseView.getShelves().stream().filter(x -> x.getLevel() == 1).findFirst().get().getResourceType());
                     System.out.print("[ " + color + "■" + color + RESET + " ]");
                 } else {
@@ -165,6 +168,29 @@ public class GraphicalCLI {
                 }
             }
             System.out.println();
+        }
+    }
+
+    public void printExtraShelfLeader(PlayerBoardView playerBoardView, WarehouseView warehouseView){  //TODO: va testato in game quando attiviamo delle leader card con abilità warehouse
+        int level = 2;
+        String color;
+        int specialWarehouse = (int)playerBoardView.getLeaderBoard().getBoard().getCards().stream().filter(x -> ((LeaderCard)x).getAbility() instanceof AbilityWarehouse).count();
+        if(specialWarehouse > 0){
+            System.out.println("Your special warehouse is:");
+            List<Shelf> specialShelf = warehouseView.getShelves().stream().filter(x -> x.getLevel() == level && x.IsLeader()).collect(Collectors.toList());
+            for(int i = 0; i < specialWarehouse;i++){
+                for(int j = 0; j < level; j++){
+                    if (specialShelf.get(i).getResources().getQuantity()>=j) {
+                        color = chooseColor(specialShelf.get(i).getResourceType());
+                        System.out.print("[ " + color + "■" + color + RESET + " ]");
+                    } else {
+                        System.out.print("[ x ]");
+                    }
+                }
+            }
+        }
+        else{
+            System.out.println("You don't have any special warehouse! ");
         }
     }
 
