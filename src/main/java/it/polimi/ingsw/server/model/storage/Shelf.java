@@ -35,6 +35,14 @@ public class Shelf implements Storage, Serializable {
     }
 
     /**
+     * Gets the resources attribute
+     * @return Returns resources value
+     */
+    public Resource getResources() {
+        return this.resources;
+    }
+
+    /**
      * Gets the resourceType attribute
      * @return Returns resourceType value
      */

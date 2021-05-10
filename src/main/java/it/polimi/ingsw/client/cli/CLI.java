@@ -111,6 +111,12 @@ public class CLI {
         marketView.setMarbleMatrix(message.getMarbleMatrix());
         marketView.setFloatingMarble(message.getFloatingMarble());
         graphicalCLI.printMarket(marketView);  //TODO: da spostare nel metodo refresh
+        try {
+            graphicalCLI.printWarehouse(playerBoardFromNickname(nickname).getWarehouse());
+            graphicalCLI.printStrongbox(playerBoardFromNickname(nickname).getStrongbox());
+        }catch(NotExistingNickname e){
+            e.printStackTrace();
+        }
     }
 
     public void developmentDecksSetup(DevelopmentDecksMessage message){ //TODO: metodo di update da rimuovere quando ci saranno le action

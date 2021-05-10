@@ -1,8 +1,6 @@
 package it.polimi.ingsw.client.cli;
 
-import it.polimi.ingsw.client.structures.FaithTrackView;
-import it.polimi.ingsw.client.structures.MarketView;
-import it.polimi.ingsw.client.structures.PlayerBoardView;
+import it.polimi.ingsw.client.structures.*;
 import it.polimi.ingsw.server.model.cards.ability.AbilityDiscount;
 import it.polimi.ingsw.server.model.cards.ability.AbilityMarble;
 import it.polimi.ingsw.server.model.cards.ability.AbilityProduction;
@@ -14,6 +12,9 @@ import it.polimi.ingsw.server.model.cards.requirement.RequirementRes;
 import it.polimi.ingsw.server.model.market.Marble;
 import it.polimi.ingsw.server.model.market.MarbleColors;
 import it.polimi.ingsw.server.model.storage.Production;
+import it.polimi.ingsw.server.model.storage.ResourceType;
+
+import java.sql.SQLSyntaxErrorException;
 
 import static it.polimi.ingsw.utils.Constants.MARKET_COLUMN_SIZE;
 import static it.polimi.ingsw.utils.Constants.MARKET_ROW_SIZE;
@@ -36,30 +37,30 @@ public class GraphicalCLI {
         String color;
         for(int i= 0; i<MARKET_ROW_SIZE.value();i++){
             for(int j = 0; j<MARKET_COLUMN_SIZE.value();j++){
-                color = chooseColor(market.getMarbleMatrix()[i][j]);
+                color = chooseColor(market.getMarbleMatrix()[i][j].getResourceType());
                 System.out.print("[ " + color + "■" + color + RESET + " ]");
             }
             System.out.println("[ x ]");
         }
         System.out.println("[ x ][ x ][ x ][ x ]");
 
-        color = chooseColor(market.getFloatingMarble());
+        color = chooseColor(market.getFloatingMarble().getResourceType());
         System.out.println("The marble to place is " + color + "■" + color);
         System.out.print(RESET);
     }
 
-    private String chooseColor(Marble m){
-        if(m.getColor() == MarbleColors.BLUE){
+    private String chooseColor(ResourceType resourceType){
+        if(resourceType == ResourceType.SHIELD){
             return BLUE_BRIGHT;
-        }else if(m.getColor() == MarbleColors.GREY){
+        }else if(resourceType == ResourceType.STONE){
             return BLACK_BRIGHT;
-        }else if(m.getColor() == MarbleColors.PURPLE){
+        }else if(resourceType == ResourceType.SERVANT){
             return PURPLE_BRIGHT;
-        }else if(m.getColor() == MarbleColors.RED){
+        }else if(resourceType == ResourceType.FAITH){
             return RED_BRIGHT;
-        }else if(m.getColor() == MarbleColors.WHITE){
+        }else if(resourceType == ResourceType.WILDCARD){
             return WHITE_BRIGHT;
-        }else if(m.getColor() == MarbleColors.YELLOW){
+        }else if(resourceType == ResourceType.COIN){
             return YELLOW_BRIGHT;
         }
         else return RESET;
@@ -145,5 +146,37 @@ public class GraphicalCLI {
         System.out.println(" •3) Activate your production");
         System.out.println(" •4) Activate a leader card");
         System.out.println(" •5) Discard a leader card");
+    }
+
+    public void printWarehouse(WarehouseView warehouseView){
+        String color;
+        int i;
+        System.out.println("This is your warehouse!");
+        for(i = 1; i <= 3; i++) {
+            int finalI = i;
+            System.out.print(" ");
+            for(int j = 0; j < i; j++) {
+                if ((warehouseView.getShelves().stream().anyMatch(x -> x.getLevel() == finalI)) &&
+                        (warehouseView.getShelves().stream().filter(x -> x.getLevel() == finalI).findFirst().get().getResources().getQuantity()>=j)) {
+                    color = chooseColor(warehouseView.getShelves().stream().filter(x -> x.getLevel() == 1).findFirst().get().getResourceType());
+                    System.out.print("[ " + color + "■" + color + RESET + " ]");
+                } else {
+                    System.out.print("[ x ]");
+                }
+            }
+            System.out.println();
+        }
+    }
+
+    public void printStrongbox(StrongboxView strongboxView){
+        System.out.println("Your strongbox contains: ");
+        if(strongboxView.getResources().size() > 0) {
+            for (int i = 0; i < strongboxView.getResources().size(); i++) {
+                System.out.println(" • " + strongboxView.getResources().get(i).getQuantity() + " " + strongboxView.getResources().get(i).getResourceType());
+            }
+        }
+        else{
+            System.out.println(" • Nothing! :(");
+        }
     }
 }
