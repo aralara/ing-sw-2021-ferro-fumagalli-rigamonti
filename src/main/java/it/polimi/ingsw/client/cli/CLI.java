@@ -10,10 +10,7 @@ import it.polimi.ingsw.server.model.faith.VaticanReport;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 import it.polimi.ingsw.server.model.storage.Shelf;
-import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
-import it.polimi.ingsw.utils.messages.client.LeaderCardDiscardMessageClient;
-import it.polimi.ingsw.utils.messages.client.NewLobbyMessage;
-import it.polimi.ingsw.utils.messages.client.ShelvesConfigurationMessageClient;
+import it.polimi.ingsw.utils.messages.client.*;
 import it.polimi.ingsw.utils.messages.server.*;
 
 import java.util.ArrayList;
@@ -405,7 +402,7 @@ public class CLI {
     }
 
     private void sendMarketChoice(int row, int column){
-        packetHandler.sendMessage(new SelectMarketMessage(row, column));
+        packetHandler.sendMessage(new SelectMarketMessageClient(row, column));
     }
 
     public void chooseAction(StartTurnMessage message) {

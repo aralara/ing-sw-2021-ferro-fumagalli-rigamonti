@@ -1,8 +1,9 @@
 package it.polimi.ingsw.utils.messages.server;
 
+import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.utils.messages.Message;
 
-public class StartTurnMessage implements Message {
+public class StartTurnMessage implements ServerActionMessage { //TODO: implements da Message a que'... RIGA CONTROLLAAAA grazie c:
 
     private String playingNickname;
 
@@ -14,5 +15,10 @@ public class StartTurnMessage implements Message {
 
     public String getPlayingNickname() {
         return playingNickname;
+    }
+
+    @Override
+    public void doAction(CLI client) {
+        client.chooseAction(this);
     }
 }
