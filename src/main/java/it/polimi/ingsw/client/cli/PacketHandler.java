@@ -77,7 +77,7 @@ public class PacketHandler {
                         System.out.print("There's already a " + size + " player lobby waiting for ");
                         if(size-waitingPlayers==1)
                             System.out.println("another player");
-                        else System.out.println(waitingPlayers + " more players");
+                        else System.out.println((size-waitingPlayers) + " more players");
                         cli.setNumberOfPlayers(((LobbyMessage) message).getLobbySize());   //TODO: serve numero giocatori?
                     }
                 } else if (message instanceof NewPlayerMessage) {

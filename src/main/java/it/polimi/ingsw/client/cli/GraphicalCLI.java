@@ -108,19 +108,19 @@ public class GraphicalCLI {
     }
 
     public void printProduction(Production production){
-        System.out.print("Consumed: ");
+        System.out.print("\tConsumed: ");
         boolean first = true;
         String toPrint;
         for(int i = 0; i< production.getConsumed().size(); i++){
-            toPrint = ((!first) ? "          " :"") + " > " + production.getConsumed().get(i).getQuantity() + " " +
+            toPrint = ((!first) ? "\t          " :"") + " > " + production.getConsumed().get(i).getQuantity() + " " +
                     production.getConsumed().get(i).getResourceType();
             System.out.println(toPrint);
             first = false;
         }
-        System.out.print("Produced: ");
+        System.out.print("\tProduced: ");
         first = true;
         for(int i = 0; i< production.getProduced().size(); i++){
-            toPrint = ((!first) ? "          " :"") + " > " + production.getProduced().get(i).getQuantity() + " " +
+            toPrint = ((!first) ? "\t          " :"") + " > " + production.getProduced().get(i).getQuantity() + " " +
                     production.getProduced().get(i).getResourceType();
             System.out.println(toPrint);
             first = false;
