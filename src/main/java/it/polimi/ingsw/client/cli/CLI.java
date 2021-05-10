@@ -3,18 +3,14 @@ package it.polimi.ingsw.client.cli;
 import it.polimi.ingsw.client.structures.*;
 import it.polimi.ingsw.exceptions.NotExistingNickname;
 import it.polimi.ingsw.server.Server;
-import it.polimi.ingsw.server.model.cards.ability.AbilityWarehouse;
+import it.polimi.ingsw.server.model.cards.ability.*;
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
-import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.server.model.cards.deck.DevelopmentDeck;
 import it.polimi.ingsw.server.model.faith.VaticanReport;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 import it.polimi.ingsw.server.model.storage.Shelf;
-import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
-import it.polimi.ingsw.utils.messages.client.LeaderCardDiscardMessage;
-import it.polimi.ingsw.utils.messages.client.NewLobbyMessage;
-import it.polimi.ingsw.utils.messages.client.ShelvesConfigurationMessage;
+import it.polimi.ingsw.utils.messages.client.*;
 import it.polimi.ingsw.utils.messages.server.*;
 
 import java.util.ArrayList;
@@ -30,6 +26,7 @@ public class CLI {
     private MarketView marketView;
     private List<DevelopmentDeckView> developmentDecks;
     private FaithTrackView faithTrackView;
+    private List<Resource> resourcesToPut;
     private Scanner scanner;
     private GraphicalCLI graphicalCLI;
     private PacketHandler packetHandler;
@@ -40,6 +37,7 @@ public class CLI {
         marketView = new MarketView();
         developmentDecks = new ArrayList<>();
         faithTrackView = new FaithTrackView();
+        resourcesToPut = new ArrayList<>();
         scanner = new Scanner(System.in);
         graphicalCLI = new GraphicalCLI();
         packetHandler = new PacketHandler(this);
@@ -176,7 +174,7 @@ public class CLI {
         }
     }
 
-    private void sendDiscardedLeader(List<LeaderCard> leaderCards){
+    private void sendDiscardedLeader(List<LeaderCard> leaderCards){ //TODO: conviene mettere qua o lasciamo nel metodo? (stessa cosa per gli altri send)
         packetHandler.sendMessage(new LeaderCardDiscardMessage(leaderCards));
     }
 
@@ -199,6 +197,7 @@ public class CLI {
     }
 
     public void askResourcesToEqualize(ResourcesEqualizeMessage message){ //TODO: da controllare poi con il metodo corrispondente del server
+        List<Resource> newResources = new ArrayList<>();
         for(Resource resource : message.getResources()) {
             if (resource.getResourceType() == ResourceType.FAITH) {
                 try {
@@ -210,68 +209,162 @@ public class CLI {
                 }
             }
             else if (resource.getResourceType() == ResourceType.WILDCARD){ //TODO: potrebbe essere migliorato
-                List<Resource> newResources = new ArrayList<>();
-                for(int num=0; num<resource.getQuantity(); num++){
-                    System.out.println("You can choose a resource from the following: "); //TODO: in ordine come nel file... va bene?
-                    for(int i=0;i<4;i++)
-                        System.out.println((i+1) + ": " + ResourceType.values()[i].toString());
-                    int index = -1;
-                    while(index<0 || index>=4){
-                        System.out.print("Please choose a valid resource: ");
-                        index = scanner.nextInt()-1;
-                    }
-
-                    if(newResources.size()>0 && newResources.get(0).getResourceType()==ResourceType.values()[index]){
-                        newResources.get(0).setQuantity(newResources.get(0).getQuantity()+1);
-                    } else {
-                        newResources.add(new Resource(ResourceType.values()[index], 1));
-                    }
-                } //TODO: risorse da memorizzare da qualche parte prima che sia convalidato il loro posizionamento
-                System.out.println("Now place on the shelves:");
-                selectShelvesManagement(newResources); //x controllare se si hanno o meno i leader
+                newResources = resolveResourcesToEqualize(resource.getQuantity());
             }
+        }
+        if(newResources.size()>0) {
+            storeTempResources(newResources);
+            System.out.println("Now place on the shelves:");
+            selectShelvesManagement(newResources);
         }
     }
 
-    private void selectShelvesManagement(List<Resource> resources){ //TODO: manca gestione slot leader
+    private List<Resource> resolveResourcesToEqualize(int wildcardQuantity){
+        List<Resource> resources = new ArrayList<>();
+        for(int num=0; num<wildcardQuantity; num++){
+            System.out.println("You can choose a resource from the following: "); //TODO: in ordine come nel file... va bene?
+            for(int i=0;i<4;i++)
+                System.out.println((i+1) + ": " + ResourceType.values()[i].toString());
+            int index = -1;
+            while(index<0 || index>=4){
+                System.out.print("Please choose a valid resource: ");
+                index = scanner.nextInt()-1;
+            }
+
+            if(resources.size()>0 && resources.get(0).getResourceType()==ResourceType.values()[index]){
+                resources.get(0).setQuantity(resources.get(0).getQuantity()+1);
+            } else {
+                resources.add(new Resource(ResourceType.values()[index], 1));
+            }
+        }
+        return resources;
+    }
+
+    private List<Resource> resolveResourcesWithLeader(int wildcardQuantity){ //TODO: Simile a resolveResourcesToEqualize
+        List<Resource> resources = new ArrayList<>();
+
+        List<AbilityMarble> leaderAbility = getActiveAbilityMarble();
+
+        if(leaderAbility.size()>0) {
+            for (int num = 0; num < wildcardQuantity; num++) {
+                System.out.println("You can choose a resource from the following leader's ability: ");
+                for (int i = 0; i < leaderAbility.size(); i++)
+                    System.out.println((i + 1) + ": " + leaderAbility.get(i).getResourceType().toString());
+
+                int index = -1;
+                while (index < 0 || index >= 4) {
+                    System.out.print("Please choose a valid resource: ");
+                    index = scanner.nextInt() - 1;
+                }
+
+                if (resources.size() > 0 && resources.get(0).getResourceType() == ResourceType.values()[index]) {
+                    resources.get(0).setQuantity(resources.get(0).getQuantity() + 1);
+                } else {
+                    resources.add(new Resource(ResourceType.values()[index], 1));
+                }
+            }
+        }
+        return resources;
+    }
+
+    private List<AbilityDiscount> getActiveAbilityDiscount(){
+        List<AbilityDiscount> leaderAbility = new ArrayList<>();
         try {
-            graphicalCLI.printWarehouse(playerBoardFromNickname(nickname).getWarehouse());
+            LeaderBoardView leaderBoard = playerBoardFromNickname(nickname).getLeaderBoard();
+            for(int i=0;i<leaderBoard.getBoard().size();i++){
+                if(leaderBoard.getBoard().get(i) instanceof AbilityDiscount) //TODO:instanceof
+                    leaderAbility.add((AbilityDiscount) leaderBoard.getBoard().get(i));
+            }
         }catch (NotExistingNickname e){
             e.printStackTrace();
         }
+        return leaderAbility;
+    }
+
+    private List<AbilityMarble> getActiveAbilityMarble(){
+        List<AbilityMarble> leaderAbility = new ArrayList<>();
+        try {
+            LeaderBoardView leaderBoard = playerBoardFromNickname(nickname).getLeaderBoard();
+            for(int i=0;i<leaderBoard.getBoard().size();i++){
+                if(leaderBoard.getBoard().get(i) instanceof AbilityMarble) //TODO:instanceof
+                    leaderAbility.add((AbilityMarble) leaderBoard.getBoard().get(i));
+            }
+        }catch (NotExistingNickname e){
+            e.printStackTrace();
+        }
+        return leaderAbility;
+    }
+
+    private List<AbilityProduction> getActiveAbilityProduction(){
+        List<AbilityProduction> leaderAbility = new ArrayList<>();
+        try {
+            LeaderBoardView leaderBoard = playerBoardFromNickname(nickname).getLeaderBoard();
+            for(int i=0;i<leaderBoard.getBoard().size();i++){
+                if(leaderBoard.getBoard().get(i) instanceof AbilityProduction) //TODO:instanceof
+                    leaderAbility.add((AbilityProduction) leaderBoard.getBoard().get(i));
+            }
+        }catch (NotExistingNickname e){
+            e.printStackTrace();
+        }
+        return leaderAbility;
+    }
+
+    private List<AbilityWarehouse> getActiveAbilityWarehouse(){
+        List<AbilityWarehouse> leaderAbility = new ArrayList<>();
+        try {
+            LeaderBoardView leaderBoard = playerBoardFromNickname(nickname).getLeaderBoard();
+            for(int i=0;i<leaderBoard.getBoard().size();i++){
+                if(leaderBoard.getBoard().get(i) instanceof AbilityWarehouse) //TODO:instanceof
+                    leaderAbility.add((AbilityWarehouse) leaderBoard.getBoard().get(i));
+            }
+        }catch (NotExistingNickname e){
+            e.printStackTrace();
+        }
+        return leaderAbility;
+    }
+
+    private void storeTempResources(List<Resource> resourcesToMemorize){ //TODO: risorse da memorizzare prima che sia convalidato il loro posizionamento
+        resourcesToPut = new ArrayList<>(resourcesToMemorize);
+    }
+
+    private void tryAgainToPlaceResources(){
+        System.out.println("Please, try again to place on the shelves:");
+        selectShelvesManagement(resourcesToPut);
+    }
+
+    private void selectShelvesManagement(List<Resource> resources){ //TODO: x controllare se si hanno o meno i leader
         try {
             PlayerBoardView player = playerBoardFromNickname(nickname);
-            List<AbilityWarehouse> leaderWarehouse = new ArrayList<>();
+            graphicalCLI.printWarehouse(player.getWarehouse());
 
-            for (int i = 0; i < player.getLeaderBoard().getBoard().size(); i++) {
-                LeaderCard leaderCard = (LeaderCard) player.getLeaderBoard().getBoard().get(i);
-                if (leaderCard.getAbility() instanceof AbilityWarehouse) //TODO: guarda shelf true
-                    leaderWarehouse.add((AbilityWarehouse) leaderCard.getAbility());
-            }
-
-            if(leaderWarehouse.size()==0)
+            if(!isLeaderShelfActive())
                 placeResourcesOnShelves(resources);
             else {
-                try {
-                    graphicalCLI.printExtraShelfLeader(playerBoardFromNickname(nickname),
-                            playerBoardFromNickname(nickname).getWarehouse());
-                }catch (NotExistingNickname e){
-                    e.printStackTrace();
-                }
-                placeResourcesOnShelves(resources, leaderWarehouse);
+                    graphicalCLI.printExtraShelfLeader(player, player.getWarehouse());
+                    placeResourcesOnShelves(resources, true);
             }
         }catch (NotExistingNickname e){
             e.printStackTrace();
         }
+    }
+
+    private boolean isLeaderShelfActive(){
+        List<Shelf> shelves = new ArrayList<>();
+        try{
+            shelves = playerBoardFromNickname(nickname).getWarehouse().getShelves();
+        }catch (NotExistingNickname e){
+            e.printStackTrace();
+        }
+        return shelves.stream().anyMatch(Shelf::IsLeader);
     }
 
     private void placeResourcesOnShelves(List<Resource> resources){
-        //TODO: da completare
+        //TODO: da completare, è un casino :)
         //sendShelvesConfiguration();
     }
 
-    private void placeResourcesOnShelves(List<Resource> resources, List<AbilityWarehouse> leaderWarehouse){
-        //TODO: da completare
+    private void placeResourcesOnShelves(List<Resource> resources, boolean thereIsLeaderShelf){ //TODO: gestire così va bene?
+        //TODO: da completare, è un casino :)
         //sendShelvesConfiguration();
     }
 
@@ -279,25 +372,63 @@ public class CLI {
         packetHandler.sendMessage(new ShelvesConfigurationMessage(shelves, extra));
     }
 
-    public void chooseAction() {
-        int action;
-        graphicalCLI.printActions();
+    public void selectMarket(){
+        graphicalCLI.printMarket(marketView);
+        System.out.print("Where do you want to place the marble?\nChoose R row or C column followed by a number: ");
+
+        boolean valid;
         do {
-            action = scanner.nextInt();
-        }while(action<1 || action >4);
-        switch (action){
-            case 1: //chiedo  riga/ colonna e invio packetHandler.sendMessage(new SelectMarketMessage();
-                break;
-            case 2: //chiedo che dev ccard comprare
-                break;
-            case 3: //chiedo che produzioni attivare
-                break;
-            case 4: //chiedo che leader card attivare
-                break;
-            case 5: //chiedo che leader card scartare
-                break;
-            default: //boh, default non lo farò mai :)
-                break;
+            valid = true;
+            String choice = scanner.next();
+            switch (choice.toUpperCase()) {
+                case "R1": sendMarketChoice(0, -1);
+                    break;
+                case "R2": sendMarketChoice(1, -1);
+                    break;
+                case "R3": sendMarketChoice(2, -1);
+                    break;
+                case "C1": sendMarketChoice(-1, 0);
+                    break;
+                case "C2": sendMarketChoice(-1, 1);
+                    break;
+                case "C3": sendMarketChoice(-1, 2);
+                    break;
+                case "C4": sendMarketChoice(-1, 3);
+                    break;
+                default: System.out.println("Your choice is invalid, please try again"); valid=false;
+                    break;
+            }
+        } while(!valid);
+    }
+
+    private void sendMarketChoice(int row, int column){
+        packetHandler.sendMessage(new SelectMarketMessage(row, column));
+    }
+
+    public void chooseAction(StartTurnMessage message) {
+        if (message.getPlayingNickname().equals(nickname)) {
+            System.out.println("Now it's your turn!");
+            int action;
+            graphicalCLI.printActions();
+            do {
+                action = scanner.nextInt();
+            } while (action < 1 || action > 4);
+            switch (action) {
+                case 1:
+                    selectMarket();
+                    break;
+                case 2: //chiedo che dev ccard comprare
+                    break;
+                case 3: //chiedo che produzioni attivare
+                    break;
+                case 4: //chiedo che leader card attivare
+                    break;
+                case 5: //chiedo che leader card scartare
+                    break;
+                default: //boh, default non lo farò mai :)
+                    break;
+            }
         }
+        else System.out.println("Now is " + message.getPlayingNickname() + "'s turn");
     }
 }
