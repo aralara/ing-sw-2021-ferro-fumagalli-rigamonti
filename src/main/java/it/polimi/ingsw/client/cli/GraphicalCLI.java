@@ -170,6 +170,7 @@ public class GraphicalCLI {
         System.out.println(" •3) Activate your productions");
         System.out.println(" •4) Activate a leader card");
         System.out.println(" •5) Discard a leader card");
+        System.out.println(" •6) End turn");
     }
 
     public void printWarehouse(WarehouseView warehouseView){

@@ -34,6 +34,7 @@ public class CLI {
     private DevelopmentCard cardToBuy;
     private List<Production> productionsToActivate;
     private final Scanner scanner;
+    private boolean goBack, mainActionPlayed, endTurn;
     private final GraphicalCLI graphicalCLI;
     private final PacketHandler packetHandler;
 
@@ -44,6 +45,8 @@ public class CLI {
         developmentDecks = new ArrayList<>();
         faithTrackView = new FaithTrackView();
         scanner = new Scanner(System.in);
+        goBack = false;
+        mainActionPlayed = false;
         graphicalCLI = new GraphicalCLI();
         packetHandler = new PacketHandler(this);
     }
@@ -102,9 +105,7 @@ public class CLI {
     }
 
     public void askNickname(){
-        do {
-            nickname = scanner.nextLine();
-        }while (nickname.equals(""));
+        nickname = scanner.next();
         packetHandler.sendMessage(new ConnectionMessage(nickname));
     }
 
@@ -160,7 +161,7 @@ public class CLI {
         if(newResources.size()>0) {
             storeTempResources(newResources);
             System.out.println("Now place the resources on the shelves:");
-            selectShelvesManagement(newResources);
+            chooseShelvesManagement(newResources);
         }
     }
 
@@ -215,6 +216,7 @@ public class CLI {
     private void refresh(String nickname){
         //TODO: da fare
         graphicalCLI.printMarket(marketView);
+        System.out.println("\nThe development decks:");
         graphicalCLI.printDevelopmentDecks(developmentDecks);
         try {
             PlayerBoardView playerBoard = playerBoardFromNickname(nickname);
@@ -298,19 +300,36 @@ public class CLI {
     }
 
     public void tryAgainToPlaceResources(){ //TODO: decidere visibility (anche x altri try)
-        System.out.println("Please, try again to place on the shelves:");
-        selectShelvesManagement(resourcesToPut);
+        System.out.println("The selected configuration is invalid");
+        if(askGoBack())
+            turnMenu(true);
+        else {
+            System.out.println("Please, try again to place on the shelves:");
+            chooseShelvesManagement(resourcesToPut);
+        }
     }
 
     private void tryAgainToBuyCard(){
+        System.out.println("The selected configuration is invalid");
         //TODO: da fare
+        if(askGoBack())
+            turnMenu(true);
+        else {
+            ;
+        }
     }
 
     private void tryAgainToActivateProduction(){
+        System.out.println("The selected configuration is invalid");
         //TODO: da fare
+        if(askGoBack())
+            turnMenu(true);
+        else {
+            ;
+        }
     }
 
-    private void selectShelvesManagement(List<Resource> resources){ //TODO: x controllare se si hanno o meno i leader
+    private void chooseShelvesManagement(List<Resource> resources){ //TODO: x controllare se si hanno o meno i leader
         try {
             PlayerBoardView player = playerBoardFromNickname(nickname);
             graphicalCLI.printWarehouse(player.getWarehouse());
@@ -338,12 +357,16 @@ public class CLI {
 
     private void placeResourcesOnShelves(List<Resource> resources){
         //TODO: da completare, è un casino :)
+        if(askGoBack())
+            return;
         //sendShelvesConfiguration();
     }
 
     private void placeResourcesOnShelves(List<Resource> resources, boolean leaderShelfActive){
         //TODO: gestire così il parametro va bene?
         //TODO: da completare, è un casino :)
+        if(askGoBack())
+            return;
         //sendShelvesConfiguration();
     }
 
@@ -353,6 +376,8 @@ public class CLI {
 
     public void selectMarket(){
         graphicalCLI.printMarket(marketView);
+        if(askGoBack())
+            return;
         System.out.print("Where do you want to place the marble?\nChoose R (row) or C (column) followed by a number: ");
 
         boolean valid;
@@ -378,21 +403,27 @@ public class CLI {
                     break;
             }
         } while(!valid);
+        mainActionPlayed = true;
     }
 
     private void sendMarketChoice(int row, int column){
         packetHandler.sendMessage(new SelectMarketMessage(row, column));
     }
 
-    private void selectDevDecks(){
+    private void selectDevDecks(){ //TODO: dividere in selezione carta (aspettando ack) e selezione spazio?
+        graphicalCLI.printDevelopmentDecks(developmentDecks);
+        if(askGoBack())
+            return;
         System.out.print("Which card do you want to buy?\nChoose B (blue), G (green), P (purple) or Y (yellow)" +
                 " followed by a number corresponding to its level: ");
 
         DevelopmentCard developmentCard = chooseCardFromDecks();
         int space = chooseDevCardSpace(developmentCard.getLevel());
+        //TODO: aggiungere controlli anche su risorse da spendere?
 
         storeTempCard(developmentCard);
         sendDevDeckChoice(developmentCard, space);
+        mainActionPlayed = true;
     }
 
     private DevelopmentCard chooseCardFromDecks(){
@@ -400,8 +431,8 @@ public class CLI {
         String choice;
         int level=0;
         List<DevelopmentCard> activeCards = getActiveCardsInSpaces(nickname);
-        DevelopmentCard developmentCard = new DevelopmentCard(-1,0,null,-1,null,null); //TODO: va bene? non verrà mai utilizzato. Oppure costruttore vuoto?
-
+        //TODO: va bene? non verrà mai utilizzato. Oppure costruttore vuoto?
+        DevelopmentCard developmentCard = new DevelopmentCard(-1,0,null,-1,null,null);
         do {
             valid = true;
             choice = scanner.next();
@@ -550,31 +581,80 @@ public class CLI {
     public void chooseAction(StartTurnMessage message) {
         //TODO: serve una stringa che inserita in qualsiasi modo ci faccia tornare indietro
         // (es. se provo a comprare una carta ma non ho risorse se no si blocca il gioco)
+
         if (message.getPlayingNickname().equals(nickname)) {
             System.out.println("\nNOW IT'S YOUR TURN!\n");
-            refresh(nickname);
-            int action;
+            mainActionPlayed = false;
+
+            turnMenu(true);
+        }
+        else {
+            System.out.println("Now is " + message.getPlayingNickname() + "'s turn");
+            //turnMenu(false); TODO: gestire per far fare comunque altre azioni
+        }
+    }
+
+    private void turnMenu(boolean isPlayerTurn){ //TODO: gestire per far fare comunque altre azioni
+        int action;
+        goBack = false;
+        endTurn = false;
+        refresh(nickname);
+        do {
             graphicalCLI.printActions();
+            if(goBack){
+                System.out.print("Choose another action to do on your turn: ");
+                goBack=false;
+            }
             do {
                 action = scanner.nextInt();
-            } while (action < 1 || action > 4);
+            } while (action < 1 || action > 6);
+
             switch (action) {
                 case 1:
-                    selectMarket();
+                    if(!mainActionPlayed)
+                        selectMarket();
+                    else {
+                        System.out.println("You can't play this action on your turn anymore");
+                        goBack = true;
+                    }
                     break;
                 case 2:
-                    selectDevDecks();
+                    if(!mainActionPlayed)
+                        selectDevDecks();
+                    else {
+                        System.out.println("You can't play this action on your turn anymore");
+                        goBack = true;
+                    }
                     break;
-                case 3: //chiedo che produzioni attivare
+                case 3:
+                    if(!mainActionPlayed)
+                        //chiedo che produzioni attivare
+                        ;
+                    else {
+                        System.out.println("You can't play this action on your turn anymore");
+                        goBack = true;
+                    }
+
                     break;
                 case 4: //chiedo che leader card attivare
                     break;
                 case 5: //chiedo che leader card scartare
                     break;
+                case 6: endTurn = true;
+                    break;
                 default: //boh, default non lo farò mai :)
                     break;
             }
+        } while (!endTurn);
+    }
+
+    private boolean askGoBack(){
+        System.out.print("Do you want to go back and choose another action?\nIf you want to, insert YES: ");
+        String command = scanner.next();
+        if(command.equalsIgnoreCase("YES") || command.equalsIgnoreCase("Y")){
+            goBack = true;
+            return true;
         }
-        else System.out.println("Now is " + message.getPlayingNickname() + "'s turn");
+        return false;
     }
 }
