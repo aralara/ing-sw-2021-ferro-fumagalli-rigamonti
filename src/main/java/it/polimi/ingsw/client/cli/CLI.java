@@ -26,16 +26,16 @@ public class CLI {
     private String nickname;
     private int numberOfPlayers;
     private int lorenzoFaith;                   //TODO: gestione lorenzo WIP
-    private List<PlayerBoardView> playerBoards;
-    private MarketView marketView;
-    private List<DevelopmentDeckView> developmentDecks;
-    private FaithTrackView faithTrackView;
+    private final List<PlayerBoardView> playerBoards;
+    private final MarketView marketView;
+    private final List<DevelopmentDeckView> developmentDecks;
+    private final FaithTrackView faithTrackView;
     private List<Resource> resourcesToPut;
     private DevelopmentCard cardToBuy;
     private List<Production> productionsToActivate;
-    private Scanner scanner;
-    private GraphicalCLI graphicalCLI;
-    private PacketHandler packetHandler;
+    private final Scanner scanner;
+    private final GraphicalCLI graphicalCLI;
+    private final PacketHandler packetHandler;
 
     public CLI(){
         lorenzoFaith = -1;
@@ -159,21 +159,6 @@ public class CLI {
     public void updateMarket(MarketMessage message){
         marketView.setMarbleMatrix(message.getMarbleMatrix());
         marketView.setFloatingMarble(message.getFloatingMarble());
-    }
-
-    public void developmentDecksSetup(DevelopmentDecksMessage message){
-        for(DevelopmentDeck developmentDeck : message.getDevelopmentDecks())
-            developmentDecks.add(new DevelopmentDeckView(developmentDeck.getDeck(), developmentDeck.getDeckColor(),
-                    developmentDeck.getDeckLevel()));
-    }
-
-    public void faithTrackSetup(FaithTrackMessage message){
-        List<VaticanReportView> vaticanReports = new ArrayList<>();
-        for(VaticanReport vaticanReport : message.getVaticanReports()){
-            vaticanReports.add(new VaticanReportView(vaticanReport.getMin(), vaticanReport.getMax(),
-                    vaticanReport.getPopeValue()));
-        }
-        faithTrackView.setFaithTrackView(vaticanReports, message.getFaithSpaces());
     }
 
     public void updateLeaderHand(PlayerLeaderBHandMessage message){
