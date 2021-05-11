@@ -4,7 +4,10 @@ import it.polimi.ingsw.client.structures.*;
 import it.polimi.ingsw.exceptions.NotExistingNickname;
 import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.server.model.cards.ability.*;
+import it.polimi.ingsw.server.model.cards.card.CardColors;
+import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
+import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.server.model.cards.deck.DevelopmentDeck;
 import it.polimi.ingsw.server.model.faith.VaticanReport;
 import it.polimi.ingsw.server.model.storage.Resource;
@@ -405,6 +408,118 @@ public class CLI {
         packetHandler.sendMessage(new SelectMarketMessage(row, column));
     }
 
+    private void selectDevDecks(){
+        //printare mazzetti
+        System.out.print("Which card do you want to buy?\nChoose B (blue), G (green), P (purple) or Y (yellow)" +
+                " followed by a number corresponding to its level: ");
+
+        boolean valid;
+        String choice;
+        int level=0, space;
+        List<DevelopmentCard> activeCards = getActiveCardsInSpaces(nickname);
+        DevelopmentCard developmentCard = new DevelopmentCard(-1,0,null,-1,null,null); //TODO: va bene? non verrà mai utilizzato
+
+        do {
+            valid = true;
+            choice = scanner.next();
+            switch (choice.toUpperCase()) { //TODO: bruttino?
+                case "B1":
+                case "B2":
+                case "B3":
+                    level = Integer.parseInt(Character.toString(choice.charAt(1)));
+                    for (DevelopmentDeckView developmentDeck : developmentDecks) {
+                        if (developmentDeck.getDeckColor().equals(CardColors.BLUE) &&
+                                developmentDeck.getDeckLevel() == level) {
+                            developmentCard = (DevelopmentCard) developmentDeck.getDeck().get(0);
+                            break;
+                        }
+                    }
+                    break;
+                case "G1":
+                case "G2":
+                case "G3":
+                    level = Integer.parseInt(Character.toString(choice.charAt(1)));
+                    for (DevelopmentDeckView developmentDeck : developmentDecks) {
+                        if (developmentDeck.getDeckColor().equals(CardColors.GREEN) &&
+                                developmentDeck.getDeckLevel() == level) {
+                            developmentCard = (DevelopmentCard) developmentDeck.getDeck().get(0);
+                            break;
+                        }
+                    }
+                    break;
+                case "P1":
+                case "P2":
+                case "P3":
+                    level = Integer.parseInt(Character.toString(choice.charAt(1)));
+                    for (DevelopmentDeckView developmentDeck : developmentDecks) {
+                        if (developmentDeck.getDeckColor().equals(CardColors.PURPLE) &&
+                                developmentDeck.getDeckLevel() == level) {
+                            developmentCard = (DevelopmentCard) developmentDeck.getDeck().get(0);
+                            break;
+                        }
+                    }
+                    break;
+                case "Y1":
+                case "Y2":
+                case "Y3":
+                    level = Integer.parseInt(Character.toString(choice.charAt(1)));
+                    for (DevelopmentDeckView developmentDeck : developmentDecks) {
+                        if (developmentDeck.getDeckColor().equals(CardColors.YELLOW) &&
+                                developmentDeck.getDeckLevel() == level) {
+                            developmentCard = (DevelopmentCard) developmentDeck.getDeck().get(0);
+                            break;
+                        }
+                    }
+                    break;
+                default:
+                    System.out.print("Your choice is invalid, please try again ");
+                    valid = false;
+                    break;
+            }
+
+            if(valid){ //TODO: verificare che siano controlli giusti (sono tra l'altro controlli già presenti a lato server)
+                int finalLevel = level;
+                if(!((finalLevel==1 && activeCards.size()<=2) || (activeCards.size()>0 &&
+                        activeCards.stream().anyMatch(card -> card.getLevel()==finalLevel-1)))){
+                    System.out.print("You haven't slot to place the selected card, please choose another one ");
+                    valid = false;
+                }
+            }
+
+        } while (!valid);
+
+        /*System.out.println("You've chosen "); può servire mostrare la carta selezionata?*/
+        //TODO: mostrare la carta selezionata
+
+        System.out.print("Which space do you want to put the card on? ");
+        space = scanner.nextInt();
+        while (space<=0 || space>3){
+            System.out.print("Your choice is invalid, please try again ");
+            space = scanner.nextInt();
+        }
+        //TODO: devo aggiungere più controlli?
+
+        sendDevDeckChoice(developmentCard, space);
+    }
+
+    private List<DevelopmentCard> getActiveCardsInSpaces(String nickname){ //TODO: da controllare qunado si sarà comprata qualche carta
+        List<DevelopmentCard> activeSpaces = new ArrayList<>();
+        try{
+             List<Deck> playerSpaces = playerBoardFromNickname(nickname).getDevelopmentBoard().getSpaces();
+             for(Deck deck : playerSpaces){
+                 if(deck.size()>0)
+                    activeSpaces.add((DevelopmentCard) deck.get(0));
+             }
+        }catch (NotExistingNickname e){
+            e.printStackTrace();
+        }
+        return activeSpaces;
+    }
+
+    private void sendDevDeckChoice(DevelopmentCard developmentCard,  int space){
+        packetHandler.sendMessage(new BuyDevelopmentCardMessage(developmentCard, space));
+    }
+
     public void chooseAction(StartTurnMessage message) {
         if (message.getPlayingNickname().equals(nickname)) {
             System.out.println("Now it's your turn!");
@@ -417,7 +532,8 @@ public class CLI {
                 case 1:
                     selectMarket();
                     break;
-                case 2: //chiedo che dev ccard comprare
+                case 2:
+                    selectDevDecks();
                     break;
                 case 3: //chiedo che produzioni attivare
                     break;

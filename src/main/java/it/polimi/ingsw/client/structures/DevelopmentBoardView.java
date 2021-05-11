@@ -7,8 +7,6 @@ import java.util.List;
 
 public class DevelopmentBoardView {
 
-    private static final int NUMBER_OF_SPACES = 3;
-
     private List<Deck> spaces;
 
 
