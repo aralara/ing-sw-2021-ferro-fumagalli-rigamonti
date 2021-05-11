@@ -10,6 +10,7 @@ import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.server.model.cards.deck.DevelopmentDeck;
 import it.polimi.ingsw.server.model.faith.VaticanReport;
+import it.polimi.ingsw.server.model.storage.Production;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 import it.polimi.ingsw.server.model.storage.Shelf;
@@ -30,6 +31,8 @@ public class CLI {
     private List<DevelopmentDeckView> developmentDecks;
     private FaithTrackView faithTrackView;
     private List<Resource> resourcesToPut;
+    private DevelopmentCard cardToBuy;
+    private List<Production> productionsToActivate;
     private Scanner scanner;
     private GraphicalCLI graphicalCLI;
     private PacketHandler packetHandler;
@@ -68,7 +71,8 @@ public class CLI {
         int size;
         System.out.println("There isn't any player waiting for a match!");
         do {
-            System.out.println("Insert the number of players that will play the game (value inserted must between 1 and 4)");
+            System.out.println("Insert the number of players that will play the game " +
+                    "(value inserted must between 1 and 4)");
             size = scanner.nextInt();
         }while(size <= 0 || size >= 5);
         setNumberOfPlayers(size);
@@ -118,14 +122,6 @@ public class CLI {
     public void updateMarket(MarketMessage message){    //TODO: metodo di update da rimuovere quando ci saranno le action
         marketView.setMarbleMatrix(message.getMarbleMatrix());
         marketView.setFloatingMarble(message.getFloatingMarble());
-        graphicalCLI.printMarket(marketView);  //TODO: da spostare nel metodo refresh
-        try {   //TODO: da togliere, sono qui solo per controllare che tutto funzioni
-            graphicalCLI.printWarehouse(playerBoardFromNickname(nickname).getWarehouse());
-            graphicalCLI.printExtraShelfLeader(playerBoardFromNickname(nickname).getWarehouse());
-            graphicalCLI.printStrongbox(playerBoardFromNickname(nickname).getStrongbox());
-        }catch(NotExistingNickname e){
-            e.printStackTrace();
-        }
     }
 
     public void developmentDecksSetup(DevelopmentDecksMessage message){ //TODO: metodo di update da rimuovere quando ci saranno le action
@@ -185,17 +181,8 @@ public class CLI {
         try {
             PlayerBoardView playerBoard = playerBoardFromNickname(message.getNickname()); //TODO: controllare se così va bene
             playerBoard.getLeaderBoard().setHand(message.getHand());
-            if (message.getNickname().equals(nickname) && playerBoard.getLeaderBoard().getHand().size()==2) { //TODO: da togliere
-                temp(playerBoard);
-            }
         } catch(NotExistingNickname e){
             e.printStackTrace();
-        }
-    }
-
-    public void temp(PlayerBoardView player){
-        for(int i = 0; i<player.getLeaderBoard().getHand().size();i++){  //TODO: da togliere (per testare)
-            graphicalCLI.printLeaderCard((LeaderCard)player.getLeaderBoard().getHand().get(i));
         }
     }
 
@@ -268,6 +255,22 @@ public class CLI {
             }
         }
         return resources;
+    }
+
+    private void refresh(){
+        //TODO: da fare
+        graphicalCLI.printMarket(marketView);
+        graphicalCLI.printDevelopmentDeck(developmentDecks);
+        try {
+            PlayerBoardView playerBoard = playerBoardFromNickname(nickname);
+            //faithboard
+            //developmentboard
+            graphicalCLI.printWarehouse(playerBoard.getWarehouse());
+            graphicalCLI.printExtraShelfLeader(playerBoard.getWarehouse());
+            graphicalCLI.printStrongbox(playerBoard.getStrongbox());
+        }catch(NotExistingNickname e){
+            e.printStackTrace();
+        }
     }
 
     private List<AbilityDiscount> getActiveAbilityDiscount(){
@@ -409,13 +412,20 @@ public class CLI {
     }
 
     private void selectDevDecks(){
-        //printare mazzetti
         System.out.print("Which card do you want to buy?\nChoose B (blue), G (green), P (purple) or Y (yellow)" +
                 " followed by a number corresponding to its level: ");
 
+        DevelopmentCard developmentCard = chooseCardFromDecks();
+        int space = chooseDevCardSpace(developmentCard.getLevel());
+
+        //TODO: memorizzare la carta
+        sendDevDeckChoice(developmentCard, space);
+    }
+
+    private DevelopmentCard chooseCardFromDecks(){
         boolean valid;
         String choice;
-        int level=0, space;
+        int level=0;
         List<DevelopmentCard> activeCards = getActiveCardsInSpaces(nickname);
         DevelopmentCard developmentCard = new DevelopmentCard(-1,0,null,-1,null,null); //TODO: va bene? non verrà mai utilizzato
 
@@ -427,6 +437,11 @@ public class CLI {
                 case "B2":
                 case "B3":
                     level = Integer.parseInt(Character.toString(choice.charAt(1)));
+                    if(!isDeckCardAvailable(CardColors.BLUE.toString(), level)){
+                        System.out.print("There's no more cards available from this deck, please try again ");
+                        valid=false;
+                        break;
+                    }
                     for (DevelopmentDeckView developmentDeck : developmentDecks) {
                         if (developmentDeck.getDeckColor().equals(CardColors.BLUE) &&
                                 developmentDeck.getDeckLevel() == level) {
@@ -439,6 +454,11 @@ public class CLI {
                 case "G2":
                 case "G3":
                     level = Integer.parseInt(Character.toString(choice.charAt(1)));
+                    if(!isDeckCardAvailable(CardColors.GREEN.toString(), level)){
+                        System.out.print("There's no more cards available from this deck, please try again ");
+                        valid=false;
+                        break;
+                    }
                     for (DevelopmentDeckView developmentDeck : developmentDecks) {
                         if (developmentDeck.getDeckColor().equals(CardColors.GREEN) &&
                                 developmentDeck.getDeckLevel() == level) {
@@ -451,6 +471,11 @@ public class CLI {
                 case "P2":
                 case "P3":
                     level = Integer.parseInt(Character.toString(choice.charAt(1)));
+                    if(!isDeckCardAvailable(CardColors.PURPLE.toString(), level)){
+                        System.out.print("There's no more cards available from this deck, please try again ");
+                        valid=false;
+                        break;
+                    }
                     for (DevelopmentDeckView developmentDeck : developmentDecks) {
                         if (developmentDeck.getDeckColor().equals(CardColors.PURPLE) &&
                                 developmentDeck.getDeckLevel() == level) {
@@ -463,6 +488,11 @@ public class CLI {
                 case "Y2":
                 case "Y3":
                     level = Integer.parseInt(Character.toString(choice.charAt(1)));
+                    if(!isDeckCardAvailable(CardColors.YELLOW.toString(), level)){
+                        System.out.print("There's no more cards available from this deck, please try again ");
+                        valid=false;
+                        break;
+                    }
                     for (DevelopmentDeckView developmentDeck : developmentDecks) {
                         if (developmentDeck.getDeckColor().equals(CardColors.YELLOW) &&
                                 developmentDeck.getDeckLevel() == level) {
@@ -481,25 +511,49 @@ public class CLI {
                 int finalLevel = level;
                 if(!((finalLevel==1 && activeCards.size()<=2) || (activeCards.size()>0 &&
                         activeCards.stream().anyMatch(card -> card.getLevel()==finalLevel-1)))){
-                    System.out.print("You haven't slot to place the selected card, please choose another one ");
+                    System.out.print("You don't have any slot to place the selected card on, please choose another one ");
                     valid = false;
                 }
             }
 
         } while (!valid);
+        return developmentCard;
+    }
 
-        /*System.out.println("You've chosen "); può servire mostrare la carta selezionata?*/
-        //TODO: mostrare la carta selezionata
-
-        System.out.print("Which space do you want to put the card on? ");
-        space = scanner.nextInt();
-        while (space<=0 || space>3){
-            System.out.print("Your choice is invalid, please try again ");
-            space = scanner.nextInt();
+    private boolean isDeckCardAvailable(String color, int level){
+        for(DevelopmentDeckView deck : developmentDecks){
+            if(deck.getDeckColor().toString().equals(color) &&
+                    deck.getDeckLevel()==level && !deck.getDeck().isEmpty())
+                return true;
         }
-        //TODO: devo aggiungere più controlli?
+        return false;
+    }
 
-        sendDevDeckChoice(developmentCard, space);
+    private int chooseDevCardSpace(int cardLevel){
+        int space = -1;
+        boolean valid;
+        try{
+            List<Deck> spaces = playerBoardFromNickname(nickname).getDevelopmentBoard().getSpaces();
+            System.out.print("Which space do you want to put the card on? ");
+            space = scanner.nextInt()-1;
+            do{
+                valid=true;
+                while (space<0 || space>=3){
+                    System.out.print("Your choice is invalid, please try again ");
+                    space = scanner.nextInt()-1;
+                }
+                if((cardLevel==1 && spaces.get(space).size()>0) || cardLevel >1 && (spaces.get(space).size()==0 ||
+                        ((DevelopmentCard)spaces.get(space).get(0)).getLevel()>=cardLevel-1)){
+                    System.out.print("The selected slot has been already filled, please try again ");
+                    space = scanner.nextInt()-1;
+                    valid = false;
+                }
+            } while (!valid);
+
+        }catch (NotExistingNickname e){
+            e.printStackTrace();
+        }
+        return space;
     }
 
     private List<DevelopmentCard> getActiveCardsInSpaces(String nickname){ //TODO: da controllare qunado si sarà comprata qualche carta
@@ -520,9 +574,10 @@ public class CLI {
         packetHandler.sendMessage(new BuyDevelopmentCardMessage(developmentCard, space));
     }
 
-    public void chooseAction(StartTurnMessage message) {
+    public void chooseAction(StartTurnMessage message) {   //TODO: serve una stringa che inserita in qualsiasi modo ci faccia tornare indietro (es. se provo a comprare una carta ma non ho risorse se no si blocca il gioco)
         if (message.getPlayingNickname().equals(nickname)) {
-            System.out.println("Now it's your turn!");
+            System.out.println("\nNOW IT'S YOUR TURN!\n");
+            refresh();
             int action;
             graphicalCLI.printActions();
             do {

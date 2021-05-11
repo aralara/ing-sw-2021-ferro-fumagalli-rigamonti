@@ -223,13 +223,14 @@ public class GraphicalCLI {
         System.out.println(" • This is a " + developmentCard.getColor() + " card level " + developmentCard.getLevel());
 
         System.out.println(" • Victory points: " + developmentCard.getVP());
-        System.out.println(" • Cost: ");
+        System.out.print(" • Cost: ");
         for(int i = 0; i<developmentCard.getCost().size();i++){
             System.out.print((!first) ? ", " : "");
             printResource(developmentCard.getCost().get(i));
             first = false;
         }
-        System.out.print(" • Special ability: You gain access to the following production: ");
+        System.out.println();
+        System.out.println(" • Special ability: You gain access to the following production: ");
         printProduction(developmentCard.getProduction());
     }
 
