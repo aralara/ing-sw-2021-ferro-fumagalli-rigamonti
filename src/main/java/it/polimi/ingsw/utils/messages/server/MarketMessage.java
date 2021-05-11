@@ -25,6 +25,7 @@ public class MarketMessage implements ServerActionMessage {
 
     @Override
     public void doAction(CLI client) {
-        client.updateMarket(this);
+        client.getMarketView().setMarbleMatrix(marbleMatrix);
+        client.getMarketView().setFloatingMarble(floatingMarble);
     }
 }

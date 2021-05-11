@@ -17,7 +17,11 @@ public class NewPlayerMessage implements ServerActionMessage {
     }
 
     @Override
-    public void doAction(CLI client) {
-        client.notifyNewPlayer(playerNickname);
+    public void doAction(CLI client) {                                                  //TODO: print nel messaggio
+        if(!client.getNickname().equals(playerNickname)) {
+            System.out.println("The player " + playerNickname + " has joined the game!");
+        }else{
+            System.out.println("You have been added to the game!");
+        }
     }
 }

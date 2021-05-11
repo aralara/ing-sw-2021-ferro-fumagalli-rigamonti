@@ -52,6 +52,10 @@ public class CLI {
         return nickname;
     }
 
+    public int getNumberOfPlayers() {
+        return numberOfPlayers;
+    }
+
     public int getLorenzoFaith() {
         return lorenzoFaith;
     }
@@ -118,35 +122,8 @@ public class CLI {
 
     public void setNumberOfPlayers(int numberOfPlayers){
         this.numberOfPlayers = numberOfPlayers;
-        if(numberOfPlayers==1)
-            lorenzoFaith=0;
-    }
-
-    public void notifyNewPlayer(String nickname){
-        if(!this.nickname.equals(nickname)) {
-            System.out.println("The player " + nickname + " has joined the game!");
-        }else{
-            System.out.println("You have been added to the game!");
-        }
-    }
-
-    public void playerBoardSetup(PlayerBoardSetupMessage message){
-        String nickname = message.getNickname();
-        DevelopmentBoardView developmentBoard = new DevelopmentBoardView(message.getDevelopmentBSpaces());
-        LeaderBoardView leaderBoard = new LeaderBoardView();
-        leaderBoard.setBoard(message.getLeaderBBoard());
-        leaderBoard.setHand(message.getLeaderBHand());
-        FaithBoardView faithBoard = new FaithBoardView(message.getFaithBFaith(), message.getFaithBPope());
-        WarehouseView warehouse = new WarehouseView(message.getWarehouse());
-        StrongboxView strongbox = new StrongboxView(message.getStrongbox());
-        boolean inkwell = message.isFirstPlayer();
-
-        PlayerBoardView playerBoard = new PlayerBoardView(nickname,developmentBoard,leaderBoard,faithBoard,
-                warehouse,strongbox,inkwell);
-        playerBoards.add(playerBoard);
-
-        if(playerBoards.size()==numberOfPlayers)
-            System.out.println("\nTHE GAME CAN START!\n");
+        if(numberOfPlayers == 1)
+            lorenzoFaith = 0;
     }
 
     public PlayerBoardView playerBoardFromNickname(String nickname) throws NotExistingNickname {
@@ -154,11 +131,6 @@ public class CLI {
             if(playerBoard.getNickname().equals(nickname))
                 return playerBoard;
         throw new NotExistingNickname();
-    }
-
-    public void updateMarket(MarketMessage message){
-        marketView.setMarbleMatrix(message.getMarbleMatrix());
-        marketView.setFloatingMarble(message.getFloatingMarble());
     }
 
     public void updateLeaderHand(PlayerLeaderBHandMessage message){

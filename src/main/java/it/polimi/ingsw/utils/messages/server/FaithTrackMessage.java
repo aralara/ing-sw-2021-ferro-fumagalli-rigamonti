@@ -28,7 +28,7 @@ public class FaithTrackMessage implements ServerActionMessage {
     }
 
     @Override
-    public void doAction(CLI client) {  //TODO: considerare la conversione da VaticanReport a VaticanReportView nel costruttore
+    public void doAction(CLI client) {  //TODO: considerare la conversione da VaticanReport a VaticanReportView nel costruttore del messaggio o nel set del FaithTrackView
         List<VaticanReportView> clientVaticanReports = new ArrayList<>();
         for(VaticanReport vaticanReport : vaticanReports) {
             clientVaticanReports.add(new VaticanReportView(vaticanReport.getMin(),
