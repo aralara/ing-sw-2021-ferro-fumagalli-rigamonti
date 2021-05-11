@@ -16,7 +16,7 @@ public class LeaderCardPlayAckMessage extends LeaderCardAckMessage implements Se
         if(!isState()){
             //TODO: richiesta?
             System.out.println("Something went wrong, please try again");
-            client.askDiscardLeader();
+            //client.askDiscardLeader();
         }
     }
 }
