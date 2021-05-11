@@ -118,7 +118,7 @@ public class CLI {
         graphicalCLI.printMarket(marketView);  //TODO: da spostare nel metodo refresh
         try {   //TODO: da togliere, sono qui solo per controllare che tutto funzioni
             graphicalCLI.printWarehouse(playerBoardFromNickname(nickname).getWarehouse());
-            graphicalCLI.printExtraShelfLeader(playerBoardFromNickname(nickname),playerBoardFromNickname(nickname).getWarehouse());
+            graphicalCLI.printExtraShelfLeader(playerBoardFromNickname(nickname).getWarehouse());
             graphicalCLI.printStrongbox(playerBoardFromNickname(nickname).getStrongbox());
         }catch(NotExistingNickname e){
             e.printStackTrace();
@@ -340,7 +340,7 @@ public class CLI {
             if(!isLeaderShelfActive())
                 placeResourcesOnShelves(resources);
             else {
-                    graphicalCLI.printExtraShelfLeader(player, player.getWarehouse());
+                    graphicalCLI.printExtraShelfLeader(player.getWarehouse());
                     placeResourcesOnShelves(resources, true);
             }
         }catch (NotExistingNickname e){

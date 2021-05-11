@@ -156,7 +156,7 @@ public class GraphicalCLI {
     public void printWarehouse(WarehouseView warehouseView){
         String color;
         int i;
-        System.out.println("Warehouse");
+        System.out.println("Warehouse:");
         for(i = 1; i <= 3; i++) {
             int finalI = i;
             System.out.print(" ");
@@ -175,11 +175,10 @@ public class GraphicalCLI {
         }
     }
 
-    public void printExtraShelfLeader(PlayerBoardView playerBoardView, WarehouseView warehouseView){  //TODO: va testato in game quando attiviamo delle leader card con abilità warehouse
+    public void printExtraShelfLeader(WarehouseView warehouseView){  //TODO: va testato in game quando attiviamo delle leader card con abilità warehouse
         int level = 2;
         String color;
-        int specialWarehouse = (int)playerBoardView.getLeaderBoard().getBoard().getCards().stream()
-                .filter(x -> ((LeaderCard)x).getAbility() instanceof AbilityWarehouse).count(); //TODO: guarda shelf true
+        int specialWarehouse = (int)warehouseView.getShelves().stream().filter(Shelf::IsLeader).count();
         if(specialWarehouse > 0){
             System.out.println("Special warehouse:");
             List<Shelf> specialShelf = warehouseView.getShelves().stream()
