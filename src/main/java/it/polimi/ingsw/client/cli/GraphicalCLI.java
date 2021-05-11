@@ -73,6 +73,14 @@ public class GraphicalCLI {
         else return RESET;
     }
 
+    public void printLeaderCardList(Deck leaderCards){
+        int size = leaderCards.size();
+        for(int i=0; i<size; i++){
+            System.out.print((i+1) + ": ");
+            printLeaderCard((LeaderCard) leaderCards.get(i));
+        }
+    }
+
     public void printLeaderCard(LeaderCard card){
         String toPrint;
         boolean first = true;
@@ -113,6 +121,14 @@ public class GraphicalCLI {
         }
         else {
             //TODO: printare una carta coperta (?)
+        }
+    }
+
+    public void printLeaderAbilityMarble(List<AbilityMarble> abilities){
+        int i=0;
+        for (AbilityMarble abilityMarble : abilities) {
+            System.out.println((i + 1) + ": " + abilityMarble.getResourceType().toString());
+            i++;
         }
     }
 
@@ -234,11 +250,12 @@ public class GraphicalCLI {
         printProduction(developmentCard.getProduction());
     }
 
-    public void printDevelopmentDeck(List<DevelopmentDeckView> developmentDeck) {
+    public void printDevelopmentDecks(List<DevelopmentDeckView> developmentDeck) {
         int maxLevel = 3;
         for(int i = 1; i<= maxLevel; i++) {
             int finalI = i;
-            List<DevelopmentDeckView> temp = developmentDeck.stream().filter(x -> x.getDeckLevel() == finalI).collect(Collectors.toList());
+            List<DevelopmentDeckView> temp = developmentDeck.stream().filter(x -> x.getDeckLevel() == finalI)
+                    .collect(Collectors.toList());
             for (DevelopmentDeckView developmentDeckView : temp) {
                 if (!developmentDeckView.getDeck().isEmpty()) {
                     printDevelopmentCard((DevelopmentCard) developmentDeckView.getDeck().get(0));

@@ -43,7 +43,6 @@ public class CLI {
         marketView = new MarketView();
         developmentDecks = new ArrayList<>();
         faithTrackView = new FaithTrackView();
-        resourcesToPut = new ArrayList<>();
         scanner = new Scanner(System.in);
         graphicalCLI = new GraphicalCLI();
         packetHandler = new PacketHandler(this);
@@ -63,7 +62,9 @@ public class CLI {
     }
 
     public void askNickname(){
-        nickname = scanner.nextLine();
+        do {
+            nickname = scanner.nextLine();
+        }while (nickname.equals(""));
         packetHandler.sendMessage(new ConnectionMessage(nickname));
     }
 
@@ -142,31 +143,27 @@ public class CLI {
     public void askDiscardLeader(){
         try {
             PlayerBoardView playerBoard = playerBoardFromNickname(nickname);
+            int firstOne, secondOne, size = playerBoard.getLeaderBoard().getHand().size();
 
             System.out.println("You have to discard 2 leader cards from your hand:");
-            int size = playerBoard.getLeaderBoard().getHand().size();
-            int firstOne, secondOne;
-            for(int i=0; i<size; i++){
-                System.out.print((i+1) + ": ");
-                graphicalCLI.printLeaderCard((LeaderCard) playerBoard.getLeaderBoard().getHand().get(i));
-            }
+            graphicalCLI.printLeaderCardList(playerBoard.getLeaderBoard().getHand());
 
             System.out.print("Choose the first one by selecting the corresponding number: ");
-            firstOne = scanner.nextInt();
-            while(firstOne<=0 || firstOne>size){
+            firstOne = scanner.nextInt()-1;
+            while(firstOne<0 || firstOne>=size){
                 System.out.print("The chosen number is invalid, please choose another one: ");
-                firstOne = scanner.nextInt();
+                firstOne = scanner.nextInt()-1;
             }
             System.out.print("Choose the second one by selecting the corresponding number: ");
-            secondOne = scanner.nextInt();
-            while(secondOne<=0 || secondOne>size || secondOne == firstOne){
+            secondOne = scanner.nextInt()-1;
+            while(secondOne<0 || secondOne>=size || secondOne == firstOne){
                 System.out.print("The chosen number is invalid, please choose another one: ");
-                secondOne = scanner.nextInt();
+                secondOne = scanner.nextInt()-1;
             }
 
             List<LeaderCard> leaderCards = new ArrayList<>();
-            leaderCards.add((LeaderCard) playerBoard.getLeaderBoard().getHand().get(firstOne-1));
-            leaderCards.add((LeaderCard) playerBoard.getLeaderBoard().getHand().get(secondOne-1));
+            leaderCards.add((LeaderCard) playerBoard.getLeaderBoard().getHand().get(firstOne));
+            leaderCards.add((LeaderCard) playerBoard.getLeaderBoard().getHand().get(secondOne));
             sendDiscardedLeader(leaderCards);
         }catch (NotExistingNickname e){
             e.printStackTrace();
@@ -190,7 +187,7 @@ public class CLI {
         for(Resource resource : message.getResources()) {
             if (resource.getResourceType() == ResourceType.FAITH) {
                 try {
-                    playerBoardFromNickname(nickname).getFaithBoard().setFaith(resource.getQuantity()); //Do per scontato che arriverà solo quello del player corretto?
+                    playerBoardFromNickname(nickname).getFaithBoard().setFaith(resource.getQuantity()); //TODO: Do per scontato che arriverà solo quello del player corretto?
                     System.out.println(resource.getQuantity() + " " + resource.getResourceType()
                             + " has been added to your faith board");
                 } catch (NotExistingNickname e) {
@@ -208,13 +205,14 @@ public class CLI {
         }
     }
 
-    private List<Resource> resolveResourcesToEqualize(int wildcardQuantity){
+    private List<Resource> resolveResourcesToEqualize(int wildcardQuantity){ //TODO: sarà chiamato una sola volta per equalizzare
+        int index;
         List<Resource> resources = new ArrayList<>();
         for(int num=0; num<wildcardQuantity; num++){
             System.out.println("You can choose a resource from the following: "); //TODO: in ordine come nel file... va bene?
             for(int i=0;i<4;i++)
                 System.out.println((i+1) + ": " + ResourceType.values()[i].toString());
-            int index = -1;
+            index = -1;
             while(index<0 || index>=4){
                 System.out.print("Please choose a valid resource: ");
                 index = scanner.nextInt()-1;
@@ -231,18 +229,17 @@ public class CLI {
 
     private List<Resource> resolveResourcesWithLeader(int wildcardQuantity){ //TODO: Simile a resolveResourcesToEqualize
         List<Resource> resources = new ArrayList<>();
-
         List<AbilityMarble> leaderAbility = getActiveAbilityMarble();
+        int index, size=leaderAbility.size();
 
-        if(leaderAbility.size()>0) {
-            for (int num = 0; num < wildcardQuantity; num++) {
-                System.out.println("You can choose a resource from the following leader's ability: ");
-                for (int i = 0; i < leaderAbility.size(); i++)
-                    System.out.println((i + 1) + ": " + leaderAbility.get(i).getResourceType().toString());
+        if(size>0 && wildcardQuantity>0) {
+            System.out.println("You can choose a resource from the following leader's ability: ");
+            graphicalCLI.printLeaderAbilityMarble(leaderAbility);
 
-                int index = -1;
-                while (index < 0 || index >= 4) {
-                    System.out.print("Please choose a valid resource: ");
+            for (int num = 1; num <= wildcardQuantity; num++) {
+                index = -1;
+                while (index < 0 || index >= size) {
+                    System.out.print("Wildcard" + num + ": please choose a valid resource ");
                     index = scanner.nextInt() - 1;
                 }
 
@@ -256,13 +253,13 @@ public class CLI {
         return resources;
     }
 
-    private void refresh(){
+    private void refresh(String nickname){
         //TODO: da fare
         graphicalCLI.printMarket(marketView);
-        graphicalCLI.printDevelopmentDeck(developmentDecks);
+        graphicalCLI.printDevelopmentDecks(developmentDecks);
         try {
             PlayerBoardView playerBoard = playerBoardFromNickname(nickname);
-            //faithboard
+            graphicalCLI.printFaithBoard(playerBoard,faithTrackView);
             //developmentboard
             graphicalCLI.printWarehouse(playerBoard.getWarehouse());
             graphicalCLI.printExtraShelfLeader(playerBoard.getWarehouse());
@@ -328,13 +325,30 @@ public class CLI {
         return leaderAbility;
     }
 
-    private void storeTempResources(List<Resource> resourcesToMemorize){ //TODO: risorse da memorizzare prima che sia convalidato il loro posizionamento
+    private void storeTempResources(List<Resource> resourcesToMemorize){
         resourcesToPut = new ArrayList<>(resourcesToMemorize);
     }
 
-    private void tryAgainToPlaceResources(){
+    private void storeTempCard(DevelopmentCard devCardToMemorize){ //TODO: valutare se aggiungere costruttore apposito
+        cardToBuy = new DevelopmentCard(devCardToMemorize.getID(),devCardToMemorize.getVP(),devCardToMemorize.getColor(),
+                devCardToMemorize.getLevel(),devCardToMemorize.getProduction(),devCardToMemorize.getCost());
+    }
+
+    private void storeTempProduction(List<Production> productionsToMemorize){
+        productionsToActivate = new ArrayList<>(productionsToMemorize);
+    }
+
+    public void tryAgainToPlaceResources(){ //TODO: decidere visibility (anche x altri try)
         System.out.println("Please, try again to place on the shelves:");
         selectShelvesManagement(resourcesToPut);
+    }
+
+    private void tryAgainToBuyCard(){
+        //TODO: da fare
+    }
+
+    private void tryAgainToActivateProduction(){
+        //TODO: da fare
     }
 
     private void selectShelvesManagement(List<Resource> resources){ //TODO: x controllare se si hanno o meno i leader
@@ -345,8 +359,8 @@ public class CLI {
             if(!isLeaderShelfActive())
                 placeResourcesOnShelves(resources);
             else {
-                    graphicalCLI.printExtraShelfLeader(player.getWarehouse());
-                    placeResourcesOnShelves(resources, true);
+                graphicalCLI.printExtraShelfLeader(player.getWarehouse());
+                placeResourcesOnShelves(resources, true);
             }
         }catch (NotExistingNickname e){
             e.printStackTrace();
@@ -368,7 +382,8 @@ public class CLI {
         //sendShelvesConfiguration();
     }
 
-    private void placeResourcesOnShelves(List<Resource> resources, boolean thereIsLeaderShelf){ //TODO: gestire così va bene?
+    private void placeResourcesOnShelves(List<Resource> resources, boolean leaderShelfActive){
+        //TODO: gestire così il parametro va bene?
         //TODO: da completare, è un casino :)
         //sendShelvesConfiguration();
     }
@@ -417,7 +432,7 @@ public class CLI {
         DevelopmentCard developmentCard = chooseCardFromDecks();
         int space = chooseDevCardSpace(developmentCard.getLevel());
 
-        //TODO: memorizzare la carta
+        storeTempCard(developmentCard);
         sendDevDeckChoice(developmentCard, space);
     }
 
@@ -578,7 +593,7 @@ public class CLI {
         // (es. se provo a comprare una carta ma non ho risorse se no si blocca il gioco)
         if (message.getPlayingNickname().equals(nickname)) {
             System.out.println("\nNOW IT'S YOUR TURN!\n");
-            refresh();
+            refresh(nickname);
             int action;
             graphicalCLI.printActions();
             do {
