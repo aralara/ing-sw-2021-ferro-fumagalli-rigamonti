@@ -5,7 +5,10 @@ import it.polimi.ingsw.server.model.cards.ability.AbilityDiscount;
 import it.polimi.ingsw.server.model.cards.ability.AbilityMarble;
 import it.polimi.ingsw.server.model.cards.ability.AbilityProduction;
 import it.polimi.ingsw.server.model.cards.ability.AbilityWarehouse;
+import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
+import it.polimi.ingsw.server.model.cards.deck.Deck;
+import it.polimi.ingsw.server.model.cards.deck.DevelopmentDeck;
 import it.polimi.ingsw.server.model.cards.requirement.Requirement;
 import it.polimi.ingsw.server.model.cards.requirement.RequirementDev;
 import it.polimi.ingsw.server.model.cards.requirement.RequirementRes;
@@ -212,5 +215,34 @@ public class GraphicalCLI {
 
     private void printResource(Resource resource){
         System.out.print(resource.getQuantity() + " " + resource.getResourceType());
+    }
+
+    public void printDevelopmentCard(DevelopmentCard developmentCard){
+        boolean first = true;
+        System.out.println("♥ DEVELOPMENT CARD ♥ ");
+        System.out.println(" • This is a " + developmentCard.getColor() + " card level " + developmentCard.getLevel());
+
+        System.out.println(" • Victory points: " + developmentCard.getVP());
+        System.out.println(" • Cost: ");
+        for(int i = 0; i<developmentCard.getCost().size();i++){
+            System.out.print((!first) ? ", " : "");
+            printResource(developmentCard.getCost().get(i));
+            first = false;
+        }
+        System.out.print(" • Special ability: You gain access to the following production: ");
+        printProduction(developmentCard.getProduction());
+    }
+
+    public void printDevelopmentDeck(List<DevelopmentDeckView> developmentDeck) {
+        int maxLevel = 3;
+        for(int i = 1; i<= maxLevel; i++) {
+            int finalI = i;
+            List<DevelopmentDeckView> temp = developmentDeck.stream().filter(x -> x.getDeckLevel() == finalI).collect(Collectors.toList());
+            for (DevelopmentDeckView developmentDeckView : temp) {
+                if (!developmentDeckView.getDeck().isEmpty()) {
+                    printDevelopmentCard((DevelopmentCard) developmentDeckView.getDeck().get(0));
+                }
+            }
+        }
     }
 }
