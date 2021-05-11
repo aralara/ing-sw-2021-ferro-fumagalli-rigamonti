@@ -24,7 +24,7 @@ import java.util.Scanner;
 public class CLI {
 
     private String nickname;
-    private int numberOfPlayers;                //TODO: serve numero giocatori?
+    private int numberOfPlayers;
     private int lorenzoFaith;                   //TODO: gestione lorenzo WIP
     private List<PlayerBoardView> playerBoards;
     private MarketView marketView;
@@ -93,7 +93,7 @@ public class CLI {
         }
     }
 
-    public void playerBoardSetup(PlayerBoardSetupMessage message){  //TODO: metodo di update da rimuovere quando ci saranno le action
+    public void playerBoardSetup(PlayerBoardSetupMessage message){
         String nickname = message.getNickname();
         DevelopmentBoardView developmentBoard = new DevelopmentBoardView(message.getDevelopmentBSpaces());
         LeaderBoardView leaderBoard = new LeaderBoardView();
@@ -116,21 +116,21 @@ public class CLI {
         for(PlayerBoardView playerBoard : playerBoards)
             if(playerBoard.getNickname().equals(nickname))
                 return playerBoard;
-        throw new NotExistingNickname();    //TODO: va bene gestire con eccezione?
+        throw new NotExistingNickname();
     }
 
-    public void updateMarket(MarketMessage message){    //TODO: metodo di update da rimuovere quando ci saranno le action
+    public void updateMarket(MarketMessage message){
         marketView.setMarbleMatrix(message.getMarbleMatrix());
         marketView.setFloatingMarble(message.getFloatingMarble());
     }
 
-    public void developmentDecksSetup(DevelopmentDecksMessage message){ //TODO: metodo di update da rimuovere quando ci saranno le action
+    public void developmentDecksSetup(DevelopmentDecksMessage message){
         for(DevelopmentDeck developmentDeck : message.getDevelopmentDecks())
             developmentDecks.add(new DevelopmentDeckView(developmentDeck.getDeck(), developmentDeck.getDeckColor(),
                     developmentDeck.getDeckLevel()));
     }
 
-    public void faithTrackSetup(FaithTrackMessage message){ //TODO: metodo di update da rimuovere quando ci saranno le action
+    public void faithTrackSetup(FaithTrackMessage message){
         List<VaticanReportView> vaticanReports = new ArrayList<>();
         for(VaticanReport vaticanReport : message.getVaticanReports()){
             vaticanReports.add(new VaticanReportView(vaticanReport.getMin(), vaticanReport.getMax(),
@@ -177,10 +177,9 @@ public class CLI {
         packetHandler.sendMessage(new LeaderCardDiscardMessage(leaderCards));
     }
 
-    public void updateLeaderHand(PlayerLeaderBHandMessage message){ //TODO: messaggio unico con lista carte
+    public void updateLeaderHand(PlayerLeaderBHandMessage message){
         try {
-            PlayerBoardView playerBoard = playerBoardFromNickname(message.getNickname()); //TODO: controllare se così va bene
-            playerBoard.getLeaderBoard().setHand(message.getHand());
+            playerBoardFromNickname(message.getNickname()).getLeaderBoard().setHand(message.getHand());
         } catch(NotExistingNickname e){
             e.printStackTrace();
         }
@@ -198,7 +197,7 @@ public class CLI {
                     e.printStackTrace();
                 }
             }
-            else if (resource.getResourceType() == ResourceType.WILDCARD){ //TODO: potrebbe essere migliorato
+            else if (resource.getResourceType() == ResourceType.WILDCARD){
                 newResources = resolveResourcesToEqualize(resource.getQuantity());
             }
         }
@@ -278,7 +277,7 @@ public class CLI {
         try {
             LeaderBoardView leaderBoard = playerBoardFromNickname(nickname).getLeaderBoard();
             for(int i=0;i<leaderBoard.getBoard().size();i++){
-                if(leaderBoard.getBoard().get(i) instanceof AbilityDiscount) //TODO:instanceof
+                if(leaderBoard.getBoard().get(i) instanceof AbilityDiscount) //TODO:instanceof (uguale anche x altre get di ability)
                     leaderAbility.add((AbilityDiscount) leaderBoard.getBoard().get(i));
             }
         }catch (NotExistingNickname e){
@@ -292,7 +291,7 @@ public class CLI {
         try {
             LeaderBoardView leaderBoard = playerBoardFromNickname(nickname).getLeaderBoard();
             for(int i=0;i<leaderBoard.getBoard().size();i++){
-                if(leaderBoard.getBoard().get(i) instanceof AbilityMarble) //TODO:instanceof
+                if(leaderBoard.getBoard().get(i) instanceof AbilityMarble)
                     leaderAbility.add((AbilityMarble) leaderBoard.getBoard().get(i));
             }
         }catch (NotExistingNickname e){
@@ -306,7 +305,7 @@ public class CLI {
         try {
             LeaderBoardView leaderBoard = playerBoardFromNickname(nickname).getLeaderBoard();
             for(int i=0;i<leaderBoard.getBoard().size();i++){
-                if(leaderBoard.getBoard().get(i) instanceof AbilityProduction) //TODO:instanceof
+                if(leaderBoard.getBoard().get(i) instanceof AbilityProduction)
                     leaderAbility.add((AbilityProduction) leaderBoard.getBoard().get(i));
             }
         }catch (NotExistingNickname e){
@@ -320,7 +319,7 @@ public class CLI {
         try {
             LeaderBoardView leaderBoard = playerBoardFromNickname(nickname).getLeaderBoard();
             for(int i=0;i<leaderBoard.getBoard().size();i++){
-                if(leaderBoard.getBoard().get(i) instanceof AbilityWarehouse) //TODO:instanceof
+                if(leaderBoard.getBoard().get(i) instanceof AbilityWarehouse)
                     leaderAbility.add((AbilityWarehouse) leaderBoard.getBoard().get(i));
             }
         }catch (NotExistingNickname e){
@@ -427,12 +426,12 @@ public class CLI {
         String choice;
         int level=0;
         List<DevelopmentCard> activeCards = getActiveCardsInSpaces(nickname);
-        DevelopmentCard developmentCard = new DevelopmentCard(-1,0,null,-1,null,null); //TODO: va bene? non verrà mai utilizzato
+        DevelopmentCard developmentCard = new DevelopmentCard(-1,0,null,-1,null,null); //TODO: va bene? non verrà mai utilizzato. Oppure costruttore vuoto?
 
         do {
             valid = true;
             choice = scanner.next();
-            switch (choice.toUpperCase()) { //TODO: bruttino?
+            switch (choice.toUpperCase()) {
                 case "B1":
                 case "B2":
                 case "B3":
@@ -556,7 +555,7 @@ public class CLI {
         return space;
     }
 
-    private List<DevelopmentCard> getActiveCardsInSpaces(String nickname){ //TODO: da controllare qunado si sarà comprata qualche carta
+    private List<DevelopmentCard> getActiveCardsInSpaces(String nickname){ //TODO: da testare quando funzionerà tutto e si sarà comprata qualche carta
         List<DevelopmentCard> activeSpaces = new ArrayList<>();
         try{
              List<Deck> playerSpaces = playerBoardFromNickname(nickname).getDevelopmentBoard().getSpaces();
@@ -574,7 +573,9 @@ public class CLI {
         packetHandler.sendMessage(new BuyDevelopmentCardMessage(developmentCard, space));
     }
 
-    public void chooseAction(StartTurnMessage message) {   //TODO: serve una stringa che inserita in qualsiasi modo ci faccia tornare indietro (es. se provo a comprare una carta ma non ho risorse se no si blocca il gioco)
+    public void chooseAction(StartTurnMessage message) {
+        //TODO: serve una stringa che inserita in qualsiasi modo ci faccia tornare indietro
+        // (es. se provo a comprare una carta ma non ho risorse se no si blocca il gioco)
         if (message.getPlayingNickname().equals(nickname)) {
             System.out.println("\nNOW IT'S YOUR TURN!\n");
             refresh();
