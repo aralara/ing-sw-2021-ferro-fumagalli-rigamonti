@@ -1,7 +1,6 @@
 package it.polimi.ingsw.utils.messages.server;
 
 import it.polimi.ingsw.client.cli.CLI;
-import it.polimi.ingsw.utils.messages.Message;
 
 public class StartTurnMessage implements ServerActionMessage { //TODO: implements da Message a que'... RIGA CONTROLLAAAA grazie c:
 
