@@ -12,6 +12,7 @@ import it.polimi.ingsw.server.model.cards.requirement.RequirementRes;
 import it.polimi.ingsw.server.model.market.Marble;
 import it.polimi.ingsw.server.model.market.MarbleColors;
 import it.polimi.ingsw.server.model.storage.Production;
+import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 import it.polimi.ingsw.server.model.storage.Shelf;
 
@@ -79,14 +80,13 @@ public class GraphicalCLI {
                 for (Requirement req : card.getRequirements()) {
                     toPrint = ((!first) ? ", " : "") + ((RequirementDev) req).getNumber() + " " +
                             ((RequirementDev) req).getColor() + " level " +
-                            ((RequirementDev) req).getLevel() + " development cards ";
+                            ((RequirementDev) req).getLevel() + " development cards";
                     System.out.print(toPrint);
                     first = false;
                 }
             } else if (card.getRequirements().get(0) instanceof RequirementRes) {
                 for (Requirement req : card.getRequirements()) {
-                    System.out.print(((RequirementRes) req).getResource().getQuantity() + " " +
-                            ((RequirementRes) req).getResource().getResourceType());
+                    printResource(((RequirementRes) req).getResource());
                 }
             }
             System.out.println();
@@ -118,17 +118,17 @@ public class GraphicalCLI {
         boolean first = true;
         String toPrint;
         for(int i = 0; i< production.getConsumed().size(); i++){
-            toPrint = ((!first) ? "\t          " :"") + " > " + production.getConsumed().get(i).getQuantity() + " " +
-                    production.getConsumed().get(i).getResourceType();
-            System.out.println(toPrint);
+            System.out.print(((!first) ? "\t          " :"") + " > ");
+            printResource(production.getConsumed().get(i));
+            System.out.println();
             first = false;
         }
         System.out.print("\tProduced: ");
         first = true;
         for(int i = 0; i< production.getProduced().size(); i++){
-            toPrint = ((!first) ? "\t          " :"") + " > " + production.getProduced().get(i).getQuantity() + " " +
-                    production.getProduced().get(i).getResourceType();
-            System.out.println(toPrint);
+            System.out.print(((!first) ? "\t          " :"") + " > ");
+            printResource(production.getProduced().get(i));
+            System.out.println();
             first = false;
         }
     }
@@ -200,12 +200,17 @@ public class GraphicalCLI {
         System.out.println("Strongbox: ");
         if(strongboxView.getResources().size() > 0) {
             for (int i = 0; i < strongboxView.getResources().size(); i++) {
-                System.out.println(" • " + strongboxView.getResources().get(i).getQuantity() + " " +
-                        strongboxView.getResources().get(i).getResourceType());
+                System.out.print(" • ");
+                printResource(strongboxView.getResources().get(i));
+                System.out.println();
             }
         }
         else{
             System.out.println(" • Empty");
         }
+    }
+
+    private void printResource(Resource resource){
+        System.out.print(resource.getQuantity() + " " + resource.getResourceType());
     }
 }
