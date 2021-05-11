@@ -13,6 +13,11 @@ public class LeaderBoardView {
         this.board = new Deck();
     }
 
+    public LeaderBoardView(Deck hand, Deck board) {
+        this.hand = hand;
+        this.board = board;
+    }
+
 
     /**
      * Gets the hand attribute

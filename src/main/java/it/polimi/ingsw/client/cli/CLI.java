@@ -26,17 +26,17 @@ public class CLI {
     private String nickname;
     private int numberOfPlayers;
     private int lorenzoFaith;                   //TODO: gestione lorenzo WIP
-    private List<PlayerBoardView> playerBoards;
-    private MarketView marketView;
-    private List<DevelopmentDeckView> developmentDecks;
-    private FaithTrackView faithTrackView;
+    private final List<PlayerBoardView> playerBoards;
+    private final MarketView marketView;
+    private final List<DevelopmentDeckView> developmentDecks;
+    private final FaithTrackView faithTrackView;
     private List<Resource> resourcesToPut;
     private DevelopmentCard cardToBuy;
     private List<Production> productionsToActivate;
-    private Scanner scanner;
+    private final Scanner scanner;
     private boolean goBack, mainActionPlayed, endTurn;
-    private GraphicalCLI graphicalCLI;
-    private PacketHandler packetHandler;
+    private final GraphicalCLI graphicalCLI;
+    private final PacketHandler packetHandler;
 
     public CLI(){
         lorenzoFaith = -1;
@@ -49,6 +49,46 @@ public class CLI {
         mainActionPlayed = false;
         graphicalCLI = new GraphicalCLI();
         packetHandler = new PacketHandler(this);
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public int getNumberOfPlayers() {
+        return numberOfPlayers;
+    }
+
+    public int getLorenzoFaith() {
+        return lorenzoFaith;
+    }
+
+    public List<PlayerBoardView> getPlayerBoards() {
+        return playerBoards;
+    }
+
+    public MarketView getMarketView() {
+        return marketView;
+    }
+
+    public List<DevelopmentDeckView> getDevelopmentDecks() {
+        return developmentDecks;
+    }
+
+    public FaithTrackView getFaithTrackView() {
+        return faithTrackView;
+    }
+
+    public GraphicalCLI getGraphicalCLI() {
+        return graphicalCLI;
+    }
+
+    public PacketHandler getPacketHandler() {
+        return packetHandler;
+    }
+
+    public int getNextInt() {
+        return scanner.nextInt();
     }
 
     public void setup() {
@@ -83,96 +123,15 @@ public class CLI {
 
     public void setNumberOfPlayers(int numberOfPlayers){
         this.numberOfPlayers = numberOfPlayers;
-        if(numberOfPlayers==1)
-            lorenzoFaith=0;
+        if(numberOfPlayers == 1)
+            lorenzoFaith = 0;
     }
 
-    public void notifyNewPlayer(String nickname){
-        if(!this.nickname.equals(nickname)) {
-            System.out.println("The player " + nickname + " has joined the game!");
-        }else{
-            System.out.println("You have been added to the game!");
-        }
-    }
-
-    public void playerBoardSetup(PlayerBoardSetupMessage message){
-        String nickname = message.getNickname();
-        DevelopmentBoardView developmentBoard = new DevelopmentBoardView(message.getDevelopmentBSpaces());
-        LeaderBoardView leaderBoard = new LeaderBoardView();
-        leaderBoard.setBoard(message.getLeaderBBoard());
-        leaderBoard.setHand(message.getLeaderBHand());
-        FaithBoardView faithBoard = new FaithBoardView(message.getFaithBFaith(), message.getFaithBPope());
-        WarehouseView warehouse = new WarehouseView(message.getWarehouse());
-        StrongboxView strongbox = new StrongboxView(message.getStrongbox());
-        boolean inkwell = message.isFirstPlayer();
-
-        PlayerBoardView playerBoard = new PlayerBoardView(nickname,developmentBoard,leaderBoard,faithBoard,
-                warehouse,strongbox,inkwell);
-        playerBoards.add(playerBoard);
-
-        if(playerBoards.size()==numberOfPlayers)
-            System.out.println("\nTHE GAME CAN START!\n");
-    }
-
-    private PlayerBoardView playerBoardFromNickname(String nickname) throws NotExistingNickname {
+    public PlayerBoardView playerBoardFromNickname(String nickname) throws NotExistingNickname {
         for(PlayerBoardView playerBoard : playerBoards)
             if(playerBoard.getNickname().equals(nickname))
                 return playerBoard;
         throw new NotExistingNickname();
-    }
-
-    public void updateMarket(MarketMessage message){
-        marketView.setMarbleMatrix(message.getMarbleMatrix());
-        marketView.setFloatingMarble(message.getFloatingMarble());
-    }
-
-    public void developmentDecksSetup(DevelopmentDecksMessage message){
-        for(DevelopmentDeck developmentDeck : message.getDevelopmentDecks())
-            developmentDecks.add(new DevelopmentDeckView(developmentDeck.getDeck(), developmentDeck.getDeckColor(),
-                    developmentDeck.getDeckLevel()));
-    }
-
-    public void faithTrackSetup(FaithTrackMessage message){
-        List<VaticanReportView> vaticanReports = new ArrayList<>();
-        for(VaticanReport vaticanReport : message.getVaticanReports()){
-            vaticanReports.add(new VaticanReportView(vaticanReport.getMin(), vaticanReport.getMax(),
-                    vaticanReport.getPopeValue()));
-        }
-        faithTrackView.setFaithTrackView(vaticanReports, message.getFaithSpaces());
-    }
-
-    public void askDiscardLeader(){
-        try {
-            PlayerBoardView playerBoard = playerBoardFromNickname(nickname);
-            int firstOne, secondOne, size = playerBoard.getLeaderBoard().getHand().size();
-
-            System.out.println("You have to discard 2 leader cards from your hand:");
-            graphicalCLI.printLeaderCardList(playerBoard.getLeaderBoard().getHand());
-
-            System.out.print("Choose the first one by selecting the corresponding number: ");
-            firstOne = scanner.nextInt()-1;
-            while(firstOne<0 || firstOne>=size){
-                System.out.print("The chosen number is invalid, please choose another one: ");
-                firstOne = scanner.nextInt()-1;
-            }
-            System.out.print("Choose the second one by selecting the corresponding number: ");
-            secondOne = scanner.nextInt()-1;
-            while(secondOne<0 || secondOne>=size || secondOne == firstOne){
-                System.out.print("The chosen number is invalid, please choose another one: ");
-                secondOne = scanner.nextInt()-1;
-            }
-
-            List<LeaderCard> leaderCards = new ArrayList<>();
-            leaderCards.add((LeaderCard) playerBoard.getLeaderBoard().getHand().get(firstOne));
-            leaderCards.add((LeaderCard) playerBoard.getLeaderBoard().getHand().get(secondOne));
-            sendDiscardedLeader(leaderCards);
-        }catch (NotExistingNickname e){
-            e.printStackTrace();
-        }
-    }
-
-    private void sendDiscardedLeader(List<LeaderCard> leaderCards){ //TODO: conviene mettere qua o lasciamo nel metodo? (stessa cosa per gli altri send)
-        packetHandler.sendMessage(new LeaderCardDiscardMessage(leaderCards));
     }
 
     public void updateLeaderHand(PlayerLeaderBHandMessage message){
