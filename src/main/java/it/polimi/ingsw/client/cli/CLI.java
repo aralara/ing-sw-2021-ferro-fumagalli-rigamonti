@@ -356,32 +356,31 @@ public class CLI {
 
         boolean valid;
         do {
+            int row = -1, column = -1;
             valid = true;
+
             String choice = scanner.next();
-            switch (choice.toUpperCase()) {
-                case "R1": sendMarketChoice(0, -1);
-                    break;
-                case "R2": sendMarketChoice(1, -1);
-                    break;
-                case "R3": sendMarketChoice(2, -1);
-                    break;
-                case "C1": sendMarketChoice(-1, 0);
-                    break;
-                case "C2": sendMarketChoice(-1, 1);
-                    break;
-                case "C3": sendMarketChoice(-1, 2);
-                    break;
-                case "C4": sendMarketChoice(-1, 3);
-                    break;
-                default: graphicalCLI.printString("Your choice is invalid, please try again\n"); valid=false;
-                    break;
+
+            if(choice.matches("[RCrc][0-4]")) {
+                String rowCol = choice.substring(0, 1).toUpperCase();
+                int number = Integer.parseInt(choice.substring(1, 2));
+
+                if (rowCol.equals("R") && 0 < number && number <= 3)
+                    row = number - 1;
+                else if (rowCol.equals("C") && 0 < number && number <= 4)
+                    column = number - 1;
+                else
+                    valid = false;
             }
+            else
+                valid = false;
+
+            if(valid)
+                packetHandler.sendMessage(new SelectMarketMessage(row, column));
+            else
+                graphicalCLI.printString("Your choice is invalid, please try again\n");
         } while(!valid);
         mainActionPlayed = true;
-    }
-
-    private void sendMarketChoice(int row, int column){
-        packetHandler.sendMessage(new SelectMarketMessage(row, column));
     }
 
     private void selectDevDecks(){ //TODO: dividere in selezione carta (aspettando ack) e selezione spazio?
@@ -396,7 +395,7 @@ public class CLI {
         //TODO: aggiungere controlli anche su risorse da spendere?
 
         storeTempCard(developmentCard);
-        sendDevDeckChoice(developmentCard, space);
+        packetHandler.sendMessage(new BuyDevelopmentCardMessage(developmentCard, space));
         mainActionPlayed = true;
     }
 
@@ -548,10 +547,6 @@ public class CLI {
         return activeSpaces;
     }
 
-    private void sendDevDeckChoice(DevelopmentCard developmentCard,  int space){
-        packetHandler.sendMessage(new BuyDevelopmentCardMessage(developmentCard, space));
-    }
-
     public void chooseAction(StartTurnMessage message) {
         //TODO: serve una stringa che inserita in qualsiasi modo ci faccia tornare indietro
         // (es. se provo a comprare una carta ma non ho risorse se no si blocca il gioco)
@@ -616,7 +611,8 @@ public class CLI {
                     case 5: //chiedo che leader card scartare
                         break;
                     case 6:
-                        endTurn = true;
+                        if (mainActionPlayed)
+                            endTurn = true;
                         break;
                     default: //boh, default non lo farò mai :)
                         break;
