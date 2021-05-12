@@ -1,14 +1,15 @@
 package it.polimi.ingsw.utils.messages.server;
 
+import it.polimi.ingsw.client.cli.CLI;
+import it.polimi.ingsw.exceptions.NotExistingNickname;
 import it.polimi.ingsw.server.model.storage.Shelf;
-import it.polimi.ingsw.utils.messages.Message;
 
 import java.util.List;
 
-public class PlayerWarehouseMessage implements Message {
+public class PlayerWarehouseMessage implements ServerActionMessage {
 
-    private List<Shelf> shelves;
-    private String nickname;
+    private final List<Shelf> shelves;
+    private final String nickname;
 
 
     public PlayerWarehouseMessage(List<Shelf> shelves, String nickname) {
@@ -23,5 +24,14 @@ public class PlayerWarehouseMessage implements Message {
 
     public String getNickname(){
         return nickname;
+    }
+
+    @Override
+    public void doAction(CLI client) {
+        try {
+            client.playerBoardFromNickname(nickname).getWarehouse().setShelves(shelves);
+        } catch(NotExistingNickname e){
+            e.printStackTrace();
+        }
     }
 }

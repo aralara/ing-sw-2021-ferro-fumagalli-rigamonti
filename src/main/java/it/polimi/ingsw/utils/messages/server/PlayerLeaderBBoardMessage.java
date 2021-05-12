@@ -1,6 +1,7 @@
 package it.polimi.ingsw.utils.messages.server;
 
 import it.polimi.ingsw.client.cli.CLI;
+import it.polimi.ingsw.exceptions.NotExistingNickname;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
 
 public class PlayerLeaderBBoardMessage implements ServerActionMessage {
@@ -25,6 +26,10 @@ public class PlayerLeaderBBoardMessage implements ServerActionMessage {
 
     @Override
     public void doAction(CLI client) {
-        //TODO: stampare la board delle leader
+        try {
+            client.playerBoardFromNickname(nickname).getLeaderBoard().setBoard(board);
+        } catch(NotExistingNickname e){
+            e.printStackTrace();
+        }
     }
 }

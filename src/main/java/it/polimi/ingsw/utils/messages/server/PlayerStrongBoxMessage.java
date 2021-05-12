@@ -1,14 +1,15 @@
 package it.polimi.ingsw.utils.messages.server;
 
+import it.polimi.ingsw.client.cli.CLI;
+import it.polimi.ingsw.exceptions.NotExistingNickname;
 import it.polimi.ingsw.server.model.storage.Resource;
-import it.polimi.ingsw.utils.messages.Message;
 
 import java.util.List;
 
-public class PlayerStrongBoxMessage implements Message {
+public class PlayerStrongBoxMessage implements ServerActionMessage {
 
-    private List<Resource> resources;
-    private String nickname;
+    private final List<Resource> resources;
+    private final String nickname;
 
 
     public PlayerStrongBoxMessage(List<Resource> resources, String nickname) {
@@ -23,5 +24,14 @@ public class PlayerStrongBoxMessage implements Message {
 
     public String getNickname(){
         return nickname;
+    }
+
+    @Override
+    public void doAction(CLI client) {
+        try {
+            client.playerBoardFromNickname(nickname).getStrongbox().setResources(resources);
+        } catch(NotExistingNickname e){
+            e.printStackTrace();
+        }
     }
 }

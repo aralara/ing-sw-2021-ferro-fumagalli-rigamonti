@@ -1,10 +1,10 @@
 package it.polimi.ingsw.utils.messages.server;
 
-import it.polimi.ingsw.utils.messages.Message;
+import it.polimi.ingsw.client.cli.CLI;
 
-public class LorenzoFaithMessage implements Message {
+public class LorenzoFaithMessage implements ServerActionMessage {
 
-    private int faith;
+    private final int faith;
 
 
     public LorenzoFaithMessage(int faith) {
@@ -14,5 +14,10 @@ public class LorenzoFaithMessage implements Message {
 
     public int getFaith() {
         return faith;
+    }
+
+    @Override
+    public void doAction(CLI client) {
+        client.setLorenzoFaith(faith);
     }
 }

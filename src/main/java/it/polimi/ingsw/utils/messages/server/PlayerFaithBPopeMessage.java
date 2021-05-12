@@ -1,12 +1,13 @@
 package it.polimi.ingsw.utils.messages.server;
 
-import it.polimi.ingsw.utils.messages.Message;
+import it.polimi.ingsw.client.cli.CLI;
+import it.polimi.ingsw.exceptions.NotExistingNickname;
 
 import static it.polimi.ingsw.utils.Constants.FAITH_TOTAL_VATICAN_REPORTS;
 
-public class PlayerFaithBPopeMessage implements Message {
-    private boolean[] popeProgression;
-    private String nickname;
+public class PlayerFaithBPopeMessage implements ServerActionMessage {
+    private final boolean[] popeProgression;
+    private final String nickname;
 
 
     public PlayerFaithBPopeMessage(boolean[] popeProgression, String nickname) {
@@ -24,5 +25,14 @@ public class PlayerFaithBPopeMessage implements Message {
 
     public String getNickname() {
         return nickname;
+    }
+
+    @Override
+    public void doAction(CLI client) {
+        try {
+            client.playerBoardFromNickname(nickname).getFaithBoard().setPopeProgression(popeProgression);
+        } catch(NotExistingNickname e){
+            e.printStackTrace();
+        }
     }
 }

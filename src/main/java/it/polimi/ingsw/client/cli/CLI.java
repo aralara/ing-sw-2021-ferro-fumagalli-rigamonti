@@ -6,10 +6,7 @@ import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.server.model.cards.ability.*;
 import it.polimi.ingsw.server.model.cards.card.CardColors;
 import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
-import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
-import it.polimi.ingsw.server.model.cards.deck.DevelopmentDeck;
-import it.polimi.ingsw.server.model.faith.VaticanReport;
 import it.polimi.ingsw.server.model.storage.Production;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
@@ -63,6 +60,10 @@ public class CLI {
         return lorenzoFaith;
     }
 
+    public void setLorenzoFaith(int lorenzoFaith) {
+        this.lorenzoFaith = lorenzoFaith;
+    }
+
     public List<PlayerBoardView> getPlayerBoards() {
         return playerBoards;
     }
@@ -77,6 +78,14 @@ public class CLI {
 
     public FaithTrackView getFaithTrackView() {
         return faithTrackView;
+    }
+
+    public boolean isMainActionPlayed() {
+        return mainActionPlayed;
+    }
+
+    public void setMainActionPlayed(boolean mainActionPlayed) {
+        this.mainActionPlayed = mainActionPlayed;
     }
 
     public GraphicalCLI getGraphicalCLI() {
@@ -134,38 +143,7 @@ public class CLI {
         throw new NotExistingNickname();
     }
 
-    public void updateLeaderHand(PlayerLeaderBHandMessage message){
-        try {
-            playerBoardFromNickname(message.getNickname()).getLeaderBoard().setHand(message.getHand());
-        } catch(NotExistingNickname e){
-            e.printStackTrace();
-        }
-    }
-
-    public void askResourcesToEqualize(ResourcesEqualizeMessage message){ //TODO: da controllare poi con il metodo corrispondente del server
-        List<Resource> newResources = new ArrayList<>();
-        for(Resource resource : message.getResources()) {
-            if (resource.getResourceType() == ResourceType.FAITH) {
-                try {
-                    playerBoardFromNickname(nickname).getFaithBoard().setFaith(resource.getQuantity()); //TODO: Do per scontato che arriverà solo quello del player corretto?
-                    graphicalCLI.printString(resource.getQuantity() + " " + resource.getResourceType()
-                            + " has been added to your faith board\n");
-                } catch (NotExistingNickname e) {
-                    e.printStackTrace();
-                }
-            }
-            else if (resource.getResourceType() == ResourceType.WILDCARD){
-                newResources = resolveResourcesToEqualize(resource.getQuantity());
-            }
-        }
-        if(newResources.size()>0) {
-            storeTempResources(newResources);
-            graphicalCLI.printString("Now place the resources on the shelves:\n");
-            chooseShelvesManagement(newResources);
-        }
-    }
-
-    private List<Resource> resolveResourcesToEqualize(int wildcardQuantity){ //TODO: sarà chiamato una sola volta per equalizzare
+    public List<Resource> resolveResourcesToEqualize(int wildcardQuantity){ //TODO: sarà chiamato una sola volta per equalizzare
         int index;
         List<Resource> resources = new ArrayList<>();
         for(int num=0; num<wildcardQuantity; num++){
@@ -286,7 +264,7 @@ public class CLI {
         return leaderAbility;
     }
 
-    private void storeTempResources(List<Resource> resourcesToMemorize){
+    public void storeTempResources(List<Resource> resourcesToMemorize){
         resourcesToPut = new ArrayList<>(resourcesToMemorize);
     }
 
@@ -314,9 +292,7 @@ public class CLI {
         //TODO: da fare
         if(askGoBack())
             turnMenu(true);
-        else {
-            ;
-        }
+        else { }
     }
 
     private void tryAgainToActivateProduction(){
@@ -324,12 +300,10 @@ public class CLI {
         //TODO: da fare
         if(askGoBack())
             turnMenu(true);
-        else {
-            ;
-        }
+        else { }
     }
 
-    private void chooseShelvesManagement(List<Resource> resources){ //TODO: x controllare se si hanno o meno i leader
+    public void chooseShelvesManagement(List<Resource> resources){ //TODO: x controllare se si hanno o meno i leader
         try {
             PlayerBoardView player = playerBoardFromNickname(nickname);
             graphicalCLI.printWarehouse(player.getWarehouse());
@@ -594,58 +568,61 @@ public class CLI {
         }
     }
 
-    private void turnMenu(boolean isPlayerTurn){ //TODO: gestire per far fare comunque altre azioni
+    public void turnMenu(boolean isPlayerTurn){ //TODO: gestire per far fare comunque altre azioni
         int action;
         goBack = false;
         endTurn = false;
         refresh(nickname);
-        do {
-            graphicalCLI.printActions();
-            if(goBack){
-                graphicalCLI.printString("Choose another action to do on your turn: ");
-                goBack=false;
-            }
+        if(isPlayerTurn) {
             do {
-                action = scanner.nextInt();
-            } while (action < 1 || action > 6);
+                graphicalCLI.printActions();
+                if (goBack) {
+                    graphicalCLI.printString("Choose another action to do on your turn: ");
+                    goBack = false;
+                }
+                do {
+                    action = scanner.nextInt();
+                } while (action < 1 || action > 6);
 
-            switch (action) {
-                case 1:
-                    if(!mainActionPlayed)
-                        selectMarket();
-                    else {
-                        graphicalCLI.printString("You can't play this action on your turn anymore\n");
-                        goBack = true;
-                    }
-                    break;
-                case 2:
-                    if(!mainActionPlayed)
-                        selectDevDecks();
-                    else {
-                        graphicalCLI.printString("You can't play this action on your turn anymore\n");
-                        goBack = true;
-                    }
-                    break;
-                case 3:
-                    if(!mainActionPlayed)
-                        //chiedo che produzioni attivare
-                        ;
-                    else {
-                        graphicalCLI.printString("You can't play this action on your turn anymore\n");
-                        goBack = true;
-                    }
+                switch (action) {
+                    case 1:
+                        if (!mainActionPlayed)
+                            selectMarket();
+                        else {
+                            graphicalCLI.printString("You can't play this action on your turn anymore\n");
+                            goBack = true;
+                        }
+                        break;
+                    case 2:
+                        if (!mainActionPlayed)
+                            selectDevDecks();
+                        else {
+                            graphicalCLI.printString("You can't play this action on your turn anymore\n");
+                            goBack = true;
+                        }
+                        break;
+                    case 3:
+                        if (!mainActionPlayed)
+                            //chiedo che produzioni attivare
+                            ;
+                        else {
+                            graphicalCLI.printString("You can't play this action on your turn anymore\n");
+                            goBack = true;
+                        }
 
-                    break;
-                case 4: //chiedo che leader card attivare
-                    break;
-                case 5: //chiedo che leader card scartare
-                    break;
-                case 6: endTurn = true;
-                    break;
-                default: //boh, default non lo farò mai :)
-                    break;
-            }
-        } while (!endTurn);
+                        break;
+                    case 4: //chiedo che leader card attivare
+                        break;
+                    case 5: //chiedo che leader card scartare
+                        break;
+                    case 6:
+                        endTurn = true;
+                        break;
+                    default: //boh, default non lo farò mai :)
+                        break;
+                }
+            } while (!endTurn);
+        }
     }
 
     private boolean askGoBack(){

@@ -1,11 +1,12 @@
 package it.polimi.ingsw.utils.messages.server;
 
-import it.polimi.ingsw.utils.messages.Message;
+import it.polimi.ingsw.client.cli.CLI;
+import it.polimi.ingsw.exceptions.NotExistingNickname;
 
-public class PlayerFaithBFaithMessage implements Message {
+public class PlayerFaithBFaithMessage implements ServerActionMessage {
 
-    private int faith;
-    private String nickname;
+    private final int faith;
+    private final String nickname;
 
 
     public PlayerFaithBFaithMessage(int faith, String nickname) {
@@ -20,5 +21,14 @@ public class PlayerFaithBFaithMessage implements Message {
 
     public String getNickname() {
         return nickname;
+    }
+
+    @Override
+    public void doAction(CLI client) {
+        try {
+            client.playerBoardFromNickname(nickname).getFaithBoard().setFaith(faith);
+        } catch(NotExistingNickname e){
+            e.printStackTrace();
+        }
     }
 }

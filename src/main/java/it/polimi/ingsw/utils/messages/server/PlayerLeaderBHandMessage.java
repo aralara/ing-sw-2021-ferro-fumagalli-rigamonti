@@ -1,6 +1,7 @@
 package it.polimi.ingsw.utils.messages.server;
 
 import it.polimi.ingsw.client.cli.CLI;
+import it.polimi.ingsw.exceptions.NotExistingNickname;
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.utils.messages.HiddenMessage;
@@ -37,6 +38,10 @@ public class PlayerLeaderBHandMessage implements HiddenMessage, ServerActionMess
 
     @Override
     public void doAction(CLI client) {
-        client.updateLeaderHand(this);
+        try {
+            client.playerBoardFromNickname(nickname).getLeaderBoard().setHand(hand);
+        } catch(NotExistingNickname e){
+            e.printStackTrace();
+        }
     }
 }

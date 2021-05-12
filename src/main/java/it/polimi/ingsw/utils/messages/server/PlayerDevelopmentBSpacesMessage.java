@@ -1,14 +1,15 @@
 package it.polimi.ingsw.utils.messages.server;
 
+import it.polimi.ingsw.client.cli.CLI;
+import it.polimi.ingsw.exceptions.NotExistingNickname;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
-import it.polimi.ingsw.utils.messages.Message;
 
 import java.util.List;
 
-public class PlayerDevelopmentBSpacesMessage implements Message {
+public class PlayerDevelopmentBSpacesMessage implements ServerActionMessage {
 
-    private List<Deck> spaces;
-    private String nickname;
+    private final List<Deck> spaces;
+    private final String nickname;
 
 
     public PlayerDevelopmentBSpacesMessage(List<Deck> spaces, String nickname) {
@@ -23,5 +24,14 @@ public class PlayerDevelopmentBSpacesMessage implements Message {
 
     public String getNickname(){
         return nickname;
+    }
+
+    @Override
+    public void doAction(CLI client) {
+        try {
+            client.playerBoardFromNickname(nickname).getDevelopmentBoard().setSpaces(spaces);
+        } catch(NotExistingNickname e){
+            e.printStackTrace();
+        }
     }
 }
