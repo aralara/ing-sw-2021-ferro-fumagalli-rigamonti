@@ -38,6 +38,9 @@ public class GraphicalCLI {
     public static final String PURPLE_BRIGHT = "\033[0;95m"; // PURPLE
     public static final String WHITE_BRIGHT = "\033[0;97m";  // WHITE
 
+    public void printString(String toPrint){
+        System.out.print(toPrint);
+    }
 
     public void printMarket(MarketView market){
         System.out.println("The market:");

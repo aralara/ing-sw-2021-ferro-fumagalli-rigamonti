@@ -93,12 +93,12 @@ public class CLI {
 
     public void setup() {
         while(!connect());
-        System.out.println("Insert your nickname");
+        graphicalCLI.printString("Insert your nickname\n");
         askNickname();
     }
 
     private boolean connect(){
-        System.out.println("Insert the IP address of server");
+        graphicalCLI.printString("Insert the IP address of server\n");
         String ip = scanner.nextLine();
 
         return packetHandler.start(ip,Server.SOCKET_PORT);
@@ -111,10 +111,10 @@ public class CLI {
 
     public void createNewLobby(){
         int size;
-        System.out.println("There isn't any player waiting for a match!");
+        graphicalCLI.printString("There isn't any player waiting for a match!\n");
         do {
-            System.out.println("Insert the number of players that will play the game " +
-                    "(value inserted must between 1 and 4)");
+            graphicalCLI.printString("Insert the number of players that will play the game " +
+                    "(value inserted must between 1 and 4)\n");
             size = scanner.nextInt();
         }while(size <= 0 || size >= 5);
         setNumberOfPlayers(size);
@@ -148,8 +148,8 @@ public class CLI {
             if (resource.getResourceType() == ResourceType.FAITH) {
                 try {
                     playerBoardFromNickname(nickname).getFaithBoard().setFaith(resource.getQuantity()); //TODO: Do per scontato che arriverà solo quello del player corretto?
-                    System.out.println(resource.getQuantity() + " " + resource.getResourceType()
-                            + " has been added to your faith board");
+                    graphicalCLI.printString(resource.getQuantity() + " " + resource.getResourceType()
+                            + " has been added to your faith board\n");
                 } catch (NotExistingNickname e) {
                     e.printStackTrace();
                 }
@@ -160,7 +160,7 @@ public class CLI {
         }
         if(newResources.size()>0) {
             storeTempResources(newResources);
-            System.out.println("Now place the resources on the shelves:");
+            graphicalCLI.printString("Now place the resources on the shelves:\n");
             chooseShelvesManagement(newResources);
         }
     }
@@ -169,12 +169,12 @@ public class CLI {
         int index;
         List<Resource> resources = new ArrayList<>();
         for(int num=0; num<wildcardQuantity; num++){
-            System.out.println("You can choose a resource from the following: "); //TODO: in ordine come nel file... va bene?
+            graphicalCLI.printString("You can choose a resource from the following: \n"); //TODO: in ordine come nel file... va bene?
             for(int i=0;i<4;i++)
                 System.out.println((i+1) + ": " + ResourceType.values()[i].toString());
             index = -1;
             while(index<0 || index>=4){
-                System.out.print("Please choose a valid resource: ");
+                graphicalCLI.printString("Please choose a valid resource: ");
                 index = scanner.nextInt()-1;
             }
 
@@ -193,13 +193,13 @@ public class CLI {
         int index, size=leaderAbility.size();
 
         if(size>0 && wildcardQuantity>0) {
-            System.out.println("You can choose a resource from the following leader's ability: ");
+            graphicalCLI.printString("You can choose a resource from the following leader's ability: \n");
             graphicalCLI.printLeaderAbilityMarble(leaderAbility);
 
             for (int num = 1; num <= wildcardQuantity; num++) {
                 index = -1;
                 while (index < 0 || index >= size) {
-                    System.out.print("Wildcard" + num + ": please choose a valid resource ");
+                    graphicalCLI.printString("Wildcard" + num + ": please choose a valid resource ");
                     index = scanner.nextInt() - 1;
                 }
 
@@ -216,7 +216,7 @@ public class CLI {
     private void refresh(String nickname){
         //TODO: da fare
         graphicalCLI.printMarket(marketView);
-        System.out.println("\nThe development decks:");
+        graphicalCLI.printString("\nThe development decks:\n");
         graphicalCLI.printDevelopmentDecks(developmentDecks);
         try {
             PlayerBoardView playerBoard = playerBoardFromNickname(nickname);
@@ -300,17 +300,17 @@ public class CLI {
     }
 
     public void tryAgainToPlaceResources(){ //TODO: decidere visibility (anche x altri try)
-        System.out.println("The selected configuration is invalid");
+        graphicalCLI.printString("The selected configuration is invalid\n");
         if(askGoBack())
             turnMenu(true);
         else {
-            System.out.println("Please, try again to place on the shelves:");
+            graphicalCLI.printString("Please, try again to place on the shelves:\n");
             chooseShelvesManagement(resourcesToPut);
         }
     }
 
     private void tryAgainToBuyCard(){
-        System.out.println("The selected configuration is invalid");
+        graphicalCLI.printString("The selected configuration is invalid\n");
         //TODO: da fare
         if(askGoBack())
             turnMenu(true);
@@ -320,7 +320,7 @@ public class CLI {
     }
 
     private void tryAgainToActivateProduction(){
-        System.out.println("The selected configuration is invalid");
+        graphicalCLI.printString("The selected configuration is invalid\n");
         //TODO: da fare
         if(askGoBack())
             turnMenu(true);
@@ -378,7 +378,7 @@ public class CLI {
         graphicalCLI.printMarket(marketView);
         if(askGoBack())
             return;
-        System.out.print("Where do you want to place the marble?\nChoose R (row) or C (column) followed by a number: ");
+        graphicalCLI.printString("Where do you want to place the marble?\nChoose R (row) or C (column) followed by a number: \n");
 
         boolean valid;
         do {
@@ -399,7 +399,7 @@ public class CLI {
                     break;
                 case "C4": sendMarketChoice(-1, 3);
                     break;
-                default: System.out.println("Your choice is invalid, please try again"); valid=false;
+                default: graphicalCLI.printString("Your choice is invalid, please try again\n"); valid=false;
                     break;
             }
         } while(!valid);
@@ -414,7 +414,7 @@ public class CLI {
         graphicalCLI.printDevelopmentDecks(developmentDecks);
         if(askGoBack())
             return;
-        System.out.print("Which card do you want to buy?\nChoose B (blue), G (green), P (purple) or Y (yellow)" +
+        graphicalCLI.printString("Which card do you want to buy?\nChoose B (blue), G (green), P (purple) or Y (yellow)" +
                 " followed by a number corresponding to its level: ");
 
         DevelopmentCard developmentCard = chooseCardFromDecks();
@@ -442,7 +442,7 @@ public class CLI {
                 case "B3":
                     level = Integer.parseInt(Character.toString(choice.charAt(1)));
                     if(!isDeckCardAvailable(CardColors.BLUE.toString(), level)){
-                        System.out.print("There's no more cards available from this deck, please try again ");
+                        graphicalCLI.printString("There's no more cards available from this deck, please try again ");
                         valid=false;
                         break;
                     }
@@ -459,7 +459,7 @@ public class CLI {
                 case "G3":
                     level = Integer.parseInt(Character.toString(choice.charAt(1)));
                     if(!isDeckCardAvailable(CardColors.GREEN.toString(), level)){
-                        System.out.print("There's no more cards available from this deck, please try again ");
+                        graphicalCLI.printString("There's no more cards available from this deck, please try again ");
                         valid=false;
                         break;
                     }
@@ -476,7 +476,7 @@ public class CLI {
                 case "P3":
                     level = Integer.parseInt(Character.toString(choice.charAt(1)));
                     if(!isDeckCardAvailable(CardColors.PURPLE.toString(), level)){
-                        System.out.print("There's no more cards available from this deck, please try again ");
+                        graphicalCLI.printString("There's no more cards available from this deck, please try again ");
                         valid=false;
                         break;
                     }
@@ -493,7 +493,7 @@ public class CLI {
                 case "Y3":
                     level = Integer.parseInt(Character.toString(choice.charAt(1)));
                     if(!isDeckCardAvailable(CardColors.YELLOW.toString(), level)){
-                        System.out.print("There's no more cards available from this deck, please try again ");
+                        graphicalCLI.printString("There's no more cards available from this deck, please try again ");
                         valid=false;
                         break;
                     }
@@ -506,7 +506,7 @@ public class CLI {
                     }
                     break;
                 default:
-                    System.out.print("Your choice is invalid, please try again ");
+                    graphicalCLI.printString("Your choice is invalid, please try again ");
                     valid = false;
                     break;
             }
@@ -515,7 +515,7 @@ public class CLI {
                 int finalLevel = level;
                 if(!((finalLevel==1 && activeCards.size()<=2) || (activeCards.size()>0 &&
                         activeCards.stream().anyMatch(card -> card.getLevel()==finalLevel-1)))){
-                    System.out.print("You don't have any slot to place the selected card on, please choose another one ");
+                    graphicalCLI.printString("You don't have any slot to place the selected card on, please choose another one ");
                     valid = false;
                 }
             }
@@ -538,17 +538,17 @@ public class CLI {
         boolean valid;
         try{
             List<Deck> spaces = playerBoardFromNickname(nickname).getDevelopmentBoard().getSpaces();
-            System.out.print("Which space do you want to put the card on? ");
+            graphicalCLI.printString("Which space do you want to put the card on? ");
             space = scanner.nextInt()-1;
             do{
                 valid=true;
                 while (space<0 || space>=3){
-                    System.out.print("Your choice is invalid, please try again ");
+                    graphicalCLI.printString("Your choice is invalid, please try again ");
                     space = scanner.nextInt()-1;
                 }
                 if((cardLevel==1 && spaces.get(space).size()>0) || cardLevel >1 && (spaces.get(space).size()==0 ||
                         ((DevelopmentCard)spaces.get(space).get(0)).getLevel()>=cardLevel-1)){
-                    System.out.print("The selected slot has been already filled, please try again ");
+                    graphicalCLI.printString("The selected slot has been already filled, please try again ");
                     space = scanner.nextInt()-1;
                     valid = false;
                 }
@@ -583,13 +583,13 @@ public class CLI {
         // (es. se provo a comprare una carta ma non ho risorse se no si blocca il gioco)
 
         if (message.getPlayingNickname().equals(nickname)) {
-            System.out.println("\nNOW IT'S YOUR TURN!\n");
+            graphicalCLI.printString("\nNOW IT'S YOUR TURN!\n\n");
             mainActionPlayed = false;
 
             turnMenu(true);
         }
         else {
-            System.out.println("Now is " + message.getPlayingNickname() + "'s turn");
+            graphicalCLI.printString("Now is " + message.getPlayingNickname() + "'s turn\n");
             //turnMenu(false); TODO: gestire per far fare comunque altre azioni
         }
     }
@@ -602,7 +602,7 @@ public class CLI {
         do {
             graphicalCLI.printActions();
             if(goBack){
-                System.out.print("Choose another action to do on your turn: ");
+                graphicalCLI.printString("Choose another action to do on your turn: ");
                 goBack=false;
             }
             do {
@@ -614,7 +614,7 @@ public class CLI {
                     if(!mainActionPlayed)
                         selectMarket();
                     else {
-                        System.out.println("You can't play this action on your turn anymore");
+                        graphicalCLI.printString("You can't play this action on your turn anymore\n");
                         goBack = true;
                     }
                     break;
@@ -622,7 +622,7 @@ public class CLI {
                     if(!mainActionPlayed)
                         selectDevDecks();
                     else {
-                        System.out.println("You can't play this action on your turn anymore");
+                        graphicalCLI.printString("You can't play this action on your turn anymore\n");
                         goBack = true;
                     }
                     break;
@@ -631,7 +631,7 @@ public class CLI {
                         //chiedo che produzioni attivare
                         ;
                     else {
-                        System.out.println("You can't play this action on your turn anymore");
+                        graphicalCLI.printString("You can't play this action on your turn anymore\n");
                         goBack = true;
                     }
 
@@ -649,7 +649,7 @@ public class CLI {
     }
 
     private boolean askGoBack(){
-        System.out.print("Do you want to go back and choose another action?\nIf you want to, insert YES: ");
+        graphicalCLI.printString("Do you want to go back and choose another action?\nIf you want to, insert YES: ");
         String command = scanner.next();
         if(command.equalsIgnoreCase("YES") || command.equalsIgnoreCase("Y")){
             goBack = true;
