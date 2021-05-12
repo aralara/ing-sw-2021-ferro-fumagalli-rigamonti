@@ -4,7 +4,7 @@ import it.polimi.ingsw.client.cli.CLI;
 
 public class StartTurnMessage implements ServerActionMessage { //TODO: implements da Message a que'... RIGA CONTROLLAAAA grazie c:
 
-    private String playingNickname;
+    private final String playingNickname;
 
 
     public StartTurnMessage(String playingNickname) {

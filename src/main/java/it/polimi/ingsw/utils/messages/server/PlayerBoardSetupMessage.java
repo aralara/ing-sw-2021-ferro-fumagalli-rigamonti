@@ -1,6 +1,7 @@
 package it.polimi.ingsw.utils.messages.server;
 
 import it.polimi.ingsw.client.cli.CLI;
+import it.polimi.ingsw.client.cli.GraphicalCLI;
 import it.polimi.ingsw.client.structures.*;
 import it.polimi.ingsw.server.model.boards.*;
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
@@ -81,7 +82,8 @@ public class PlayerBoardSetupMessage implements HiddenMessage, ServerActionMessa
     }
 
     @Override
-    public void doAction(CLI client) {                                      //TODO: print nel messaggio
+    public void doAction(CLI client) {
+        GraphicalCLI graphicalCLI = client.getGraphicalCLI();
         List<PlayerBoardView> clientPlayerBoards = client.getPlayerBoards();
 
         PlayerBoardView playerBoard = new PlayerBoardView(
@@ -96,6 +98,6 @@ public class PlayerBoardSetupMessage implements HiddenMessage, ServerActionMessa
         clientPlayerBoards.add(playerBoard);
 
         if(clientPlayerBoards.size() == client.getNumberOfPlayers())
-            System.out.println("\nTHE GAME CAN START!\n");
+            graphicalCLI.printString("\nTHE GAME CAN START!\n");
     }
 }

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.utils.messages.server;
 
 import it.polimi.ingsw.client.cli.CLI;
+import it.polimi.ingsw.client.cli.GraphicalCLI;
 
 public class NewPlayerMessage implements ServerActionMessage {
 
@@ -17,11 +18,12 @@ public class NewPlayerMessage implements ServerActionMessage {
     }
 
     @Override
-    public void doAction(CLI client) {                                                  //TODO: print nel messaggio
+    public void doAction(CLI client) {
+        GraphicalCLI graphicalCLI = client.getGraphicalCLI();
         if(!client.getNickname().equals(playerNickname)) {
-            System.out.println("The player " + playerNickname + " has joined the game!");
+            graphicalCLI.printString("The player " + playerNickname + " has joined the game!");
         }else{
-            System.out.println("You have been added to the game!");
+            graphicalCLI.printString("You have been added to the game!");
         }
     }
 }

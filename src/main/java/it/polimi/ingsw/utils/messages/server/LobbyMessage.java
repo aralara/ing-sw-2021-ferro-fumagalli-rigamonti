@@ -1,6 +1,7 @@
 package it.polimi.ingsw.utils.messages.server;
 
 import it.polimi.ingsw.client.cli.CLI;
+import it.polimi.ingsw.client.cli.GraphicalCLI;
 
 public class LobbyMessage implements ServerActionMessage {
 
@@ -22,15 +23,16 @@ public class LobbyMessage implements ServerActionMessage {
     }
 
     @Override
-    public void doAction(CLI client) {     //TODO: ci sono print nel messaggio
+    public void doAction(CLI client) {
+        GraphicalCLI graphicalCLI = client.getGraphicalCLI();
         if (lobbySize == waitingPlayers)
             client.createNewLobby();
         else {
-            System.out.print("There's already a " + lobbySize + " player lobby waiting for ");
+            graphicalCLI.printString("There's already a " + lobbySize + " player lobby waiting for ");
             if(lobbySize - waitingPlayers == 1)
-                System.out.println("another player");
+                graphicalCLI.printString("another player");
             else
-                System.out.println((lobbySize - waitingPlayers) + " more players");
+                graphicalCLI.printString((lobbySize - waitingPlayers) + " more players");
             client.setNumberOfPlayers(lobbySize);
         }
     }

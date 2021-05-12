@@ -14,7 +14,7 @@ import java.util.List;
 public class AskLeaderCardDiscardMessage implements ServerActionMessage {
 
     @Override
-    public void doAction(CLI client) {                      //TODO: print nel messaggio e azioni da delegare alla GraphicalCLI
+    public void doAction(CLI client) {                      //TODO: azioni da delegare alla GraphicalCLI
         String nickname = client.getNickname();
         PacketHandler packetHandler = client.getPacketHandler();
         GraphicalCLI graphicalCLI = client.getGraphicalCLI();
@@ -25,19 +25,19 @@ public class AskLeaderCardDiscardMessage implements ServerActionMessage {
             PlayerBoardView playerBoard = client.playerBoardFromNickname(nickname);
             int size = playerBoard.getLeaderBoard().getHand().size();
 
-            System.out.println("You have to discard 2 leader cards from your hand:");
+            graphicalCLI.printString("You have to discard 2 leader cards from your hand:");
             graphicalCLI.printLeaderCardList(playerBoard.getLeaderBoard().getHand());
 
-            System.out.print("Choose the first one by selecting the corresponding number: ");
+            graphicalCLI.printString("Choose the first one by selecting the corresponding number: ");
             firstOne = client.getNextInt() - 1;
             while(firstOne < 0 || firstOne >= size){
-                System.out.print("The chosen number is invalid, please choose another one: ");
+                graphicalCLI.printString("The chosen number is invalid, please choose another one: ");
                 firstOne = client.getNextInt() - 1;
             }
-            System.out.print("Choose the second one by selecting the corresponding number: ");
+            graphicalCLI.printString("Choose the second one by selecting the corresponding number: ");
             secondOne = client.getNextInt() - 1;
             while(secondOne < 0 || secondOne >= size || secondOne == firstOne){
-                System.out.print("The chosen number is invalid, please choose another one: ");
+                graphicalCLI.printString("The chosen number is invalid, please choose another one: ");
                 secondOne = client.getNextInt() - 1;
             }
 
