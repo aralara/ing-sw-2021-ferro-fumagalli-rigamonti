@@ -27,7 +27,7 @@ public class CLI {
     private final MarketView marketView;
     private final List<DevelopmentDeckView> developmentDecks;
     private final FaithTrackView faithTrackView;
-    private List<Resource> resourcesToPut;
+    private List<Resource> resourcesToPut;      //TODO: valutare se serve memorizzare
     private DevelopmentCard cardToBuy;
     private List<Production> productionsToActivate;
     private final Scanner scanner;
@@ -330,17 +330,119 @@ public class CLI {
     }
 
     private void placeResourcesOnShelves(List<Resource> resources){
-        //TODO: da completare, è un casino :)
-        if(askGoBack())
-            return;
-        //sendShelvesConfiguration();
+        //TODO: da completare, è un casino :) (WIP)
+        List<Shelf> shelves = new ArrayList<>();
+        List<Resource> toDiscard = new ArrayList<>();
+        int level;
+
+        try{
+            if(chekFreeSlotInWarehouse()){
+                WarehouseView warehouse = playerBoardFromNickname(nickname).getWarehouse();
+                shelves = getShelvesWarehouseCopy(warehouse.getShelves());
+                List<Resource> toPlace = getResourcesOneByOne(resources);
+                Resource resourceToPlace;
+                Shelf selectedShelf;
+
+                while (!toPlace.isEmpty()){
+                    resourceToPlace = toPlace.get(0);
+                    graphicalCLI.printWarehouse(warehouse);
+                    graphicalCLI.printString("Where do you want to place " + resourceToPlace.getResourceType()
+                            + "? (0 to discard it) ");
+                    level = scanner.nextInt();
+                    while (level<0 || level>3){
+                        graphicalCLI.printString("Choose a valid shelf: ");
+                        level = scanner.nextInt();
+                    }
+                    if(level>0) {
+                        selectedShelf = shelves.get(level - 1);
+
+                        if (selectedShelf.getResourceType().equals(ResourceType.WILDCARD)) { //ripiano vuoto
+                            Resource finalResourceToPlace = resourceToPlace;
+                            if((shelves.stream().noneMatch(shelf -> shelf.getResourceType()
+                                    .equals(finalResourceToPlace.getResourceType())))) { //non ci sono altri ripiani con stessa risorsa
+                                selectedShelf.setResourceType(resourceToPlace.getResourceType());
+                                selectedShelf.getResources().setResourceType(resourceToPlace.getResourceType());
+                                selectedShelf.getResources().setQuantity(selectedShelf.getResources().getQuantity() +
+                                        resourceToPlace.getQuantity());
+                                toPlace.remove(0);
+                            } else {//altri ripiani con stessa risorsa
+                                graphicalCLI.printString("There's already another shelf with the same resource type\n");
+                            }
+                        }else if (selectedShelf.getResourceType().equals(resourceToPlace.getResourceType())) { //ripiano con stesso tipo di risorsa
+                            if (selectedShelf.getResources().getQuantity() <= selectedShelf.getLevel() - 1) { //ripiano non completo
+                                selectedShelf.getResources().setQuantity(selectedShelf.getResources().getQuantity() +
+                                        resourceToPlace.getQuantity());
+                                toPlace.remove(0);
+                            } else { //ripiano già al completo
+                                graphicalCLI.printString("The selected shelf is already full\n");
+                            }
+                        } else { //ripiano con diverso tipo di risorsa (controllo che non si sdoppino ripiani con stessa risorsa
+                            Resource finalResourceToPlace1 = resourceToPlace;
+                            if((shelves.stream().noneMatch(shelf -> shelf.getResourceType()
+                                    .equals(finalResourceToPlace1.getResourceType())))){ //non ci sono altri ripiani con stessa risorsa
+                                graphicalCLI.printString("This shelf contains a different resource type\nIf you want" +
+                                        " to place it here anyway, insert YES and then you'll place again the removed ones: ");
+                                String command = scanner.next();
+                                if(command.equalsIgnoreCase("YES") || command.equalsIgnoreCase("Y")){
+                                    //TODO: riposiziona
+                                }
+                            } else {//altri ripiani con stessa risorsa
+                                graphicalCLI.printString("There's already another shelf with the same resource type\n");
+                            }
+                        } //TODO: aggiungere possibilità di cambiare ripiani alle risorse se la loro quantità lo permette
+                          //TODO: e aggiungere possibilità di riportare risorse da inserire e shelf all'originale?
+                    } else {
+                        toDiscard.add(new Resource(resourceToPlace.getResourceType(),resourceToPlace.getQuantity()));
+                        graphicalCLI.printString("Resource discarded\n");
+                        toPlace.remove(0);
+                    }
+                    //TODO: prima di inviare controllare che ci siano da scartare solo risorse appena ottenute
+                }
+            } else{
+                graphicalCLI.printString("There are no available slots, all the resources will be discarded\n");
+                toDiscard = resources;
+            }
+
+            sendShelvesConfiguration(shelves,toDiscard);
+
+        }catch (NotExistingNickname e){
+            e.printStackTrace();
+        }
+    }
+
+    private boolean chekFreeSlotInWarehouse(){
+        try {
+            for (Shelf shelf : playerBoardFromNickname(nickname).getWarehouse().getShelves()) { //TODO: da controllare
+                if (shelf.getResourceType().equals(ResourceType.WILDCARD) ||
+                        shelf.getLevel() > shelf.getResources().getQuantity())
+                    return true;
+            }
+        } catch (NotExistingNickname e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private List<Shelf> getShelvesWarehouseCopy(List<Shelf> warehouse){
+        List<Shelf> shelves = new ArrayList<>();
+        for(Shelf shelf : warehouse)
+            shelves.add(new Shelf(shelf.getResourceType(), shelf.getResources(), shelf.getLevel(), shelf.IsLeader()));
+        return shelves;
+    }
+
+    private List<Resource> getResourcesOneByOne(List<Resource> resources){
+        List<Resource> resourcesOneByOne = new ArrayList<>();
+        for(Resource resource : resources){
+            for(int i=0; i<resource.getQuantity(); i++){
+                resourcesOneByOne.add(new Resource(resource.getResourceType(),1));
+            }
+        }
+        return resourcesOneByOne;
     }
 
     private void placeResourcesOnShelves(List<Resource> resources, boolean leaderShelfActive){
         //TODO: gestire così il parametro va bene?
         //TODO: da completare, è un casino :)
-        if(askGoBack())
-            return;
         //sendShelvesConfiguration();
     }
 
@@ -352,7 +454,8 @@ public class CLI {
         graphicalCLI.printMarket(marketView);
         if(askGoBack())
             return;
-        graphicalCLI.printString("Where do you want to place the marble?\nChoose R (row) or C (column) followed by a number: \n");
+        graphicalCLI.printString("Where do you want to place the marble?\n" +
+                "Choose R (row) or C (column) followed by a number: \n");
 
         boolean valid;
         do {
@@ -548,6 +651,7 @@ public class CLI {
     }
 
     public void chooseAction(StartTurnMessage message) {
+        //TODO: dare al metodo un nome + significativo
         //TODO: serve una stringa che inserita in qualsiasi modo ci faccia tornare indietro
         // (es. se provo a comprare una carta ma non ho risorse se no si blocca il gioco)
 
