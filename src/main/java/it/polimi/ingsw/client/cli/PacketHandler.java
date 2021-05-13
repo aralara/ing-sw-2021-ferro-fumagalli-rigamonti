@@ -7,29 +7,26 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class PacketHandler {
 
-    private CLI cli;
     private Socket server;
     private ObjectOutputStream output;
     private ObjectInputStream input;
 
-    private final Queue<Message> messageQueue;
+    private final Queue<ServerActionMessage> messageQueue;
 
     private Thread packetReceiver;
 
 
-    public PacketHandler(CLI cli) {
-        this.cli = cli;
+    public PacketHandler() {
         this.messageQueue = new ConcurrentLinkedQueue<>();
     }
 
 
-    public Queue<Message> getQueue() {
+    public Queue<ServerActionMessage> getQueue() {
         return messageQueue;
     }
 

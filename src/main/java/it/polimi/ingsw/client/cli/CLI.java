@@ -48,7 +48,7 @@ public class CLI {
         goBack = false;
         mainActionPlayed = false;
         graphicalCLI = new GraphicalCLI();
-        packetHandler = new PacketHandler(this);
+        packetHandler = new PacketHandler();
     }
 
     public String getNickname() {
@@ -110,14 +110,14 @@ public class CLI {
     }
 
     public void run() {
-        Queue<Message> messageQueue = packetHandler.getQueue();
+        Queue<ServerActionMessage> messageQueue = packetHandler.getQueue();
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         while(true) {
             try {
                 if (br.ready())
                     turnMenu(true);
                 else if (messageQueue.size() > 0)
-                    ((ServerActionMessage) messageQueue.remove()).doAction(this);
+                    messageQueue.remove().doAction(this);
             } catch(Exception e) {
                 e.printStackTrace();
             }
@@ -183,15 +183,14 @@ public class CLI {
         return resources;
     }
 
-    private void refresh(String nickname){
-        //TODO: da fare
+    private void refresh(){
         graphicalCLI.printMarket(marketView);
         graphicalCLI.printString("\nThe development decks:\n");
         graphicalCLI.printDevelopmentDecks(developmentDecks);
         try {
             PlayerBoardView playerBoard = playerBoardFromNickname(nickname);
             graphicalCLI.printFaithBoard(playerBoard,faithTrackView);
-            //developmentboard
+            //TODO: developmentBoard
             graphicalCLI.printWarehouse(playerBoard.getWarehouse());
             graphicalCLI.printExtraShelfLeader(playerBoard.getWarehouse());
             graphicalCLI.printStrongbox(playerBoard.getStrongbox());
@@ -764,7 +763,7 @@ public class CLI {
         int action;
         goBack = false;
         endTurn = false;
-        refresh(nickname);
+        refresh();
         if(isPlayerTurn) {
             graphicalCLI.printActions();
             if (goBack) {
@@ -827,7 +826,6 @@ public class CLI {
         }
         return false;
     }
-
 
     public List<RequestResources> chooseStorages(List<Resource> resources){
 
