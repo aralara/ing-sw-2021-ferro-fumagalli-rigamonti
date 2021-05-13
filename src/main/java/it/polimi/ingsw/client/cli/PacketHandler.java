@@ -2,13 +2,14 @@ package it.polimi.ingsw.client.cli;
 
 import it.polimi.ingsw.utils.messages.Message;
 import it.polimi.ingsw.utils.messages.server.*;
-import it.polimi.ingsw.utils.messages.server.ack.ConnectionAckMessage;
-import it.polimi.ingsw.utils.messages.server.ack.LeaderCardDiscardAckMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class PacketHandler {
 
@@ -17,10 +18,19 @@ public class PacketHandler {
     private ObjectOutputStream output;
     private ObjectInputStream input;
 
+    private final Queue<Message> messageQueue;
+
     private Thread packetReceiver;
+
 
     public PacketHandler(CLI cli) {
         this.cli = cli;
+        this.messageQueue = new ConcurrentLinkedQueue<>();
+    }
+
+
+    public Queue<Message> getQueue() {
+        return messageQueue;
     }
 
     public boolean start(String address, int port) {
@@ -62,7 +72,7 @@ public class PacketHandler {
                 message = input.readObject();
   
                 if (message instanceof ServerActionMessage) {
-                    ((ServerActionMessage) message).doAction(cli);
+                    messageQueue.add((ServerActionMessage) message);
                 } else {
 
                     System.out.println("Received " + message.toString());

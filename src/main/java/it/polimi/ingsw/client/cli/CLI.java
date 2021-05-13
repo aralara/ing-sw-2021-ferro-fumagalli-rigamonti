@@ -8,11 +8,16 @@ import it.polimi.ingsw.server.model.cards.card.CardColors;
 import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.server.model.storage.*;
+import it.polimi.ingsw.utils.messages.Message;
 import it.polimi.ingsw.utils.messages.client.*;
 import it.polimi.ingsw.utils.messages.server.*;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Scanner;
 
 public class CLI {
@@ -32,7 +37,7 @@ public class CLI {
     private final GraphicalCLI graphicalCLI;
     private final PacketHandler packetHandler;
 
-    public CLI(){
+    public CLI() {
         lorenzoFaith = -1;
         playerBoards = new ArrayList<>();
         marketView = new MarketView();
@@ -101,6 +106,21 @@ public class CLI {
         while(!connect());
         graphicalCLI.printString("Insert your nickname\n");
         askNickname();
+    }
+
+    public void run() {
+        Queue<Message> messageQueue = packetHandler.getQueue();
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        while(true) {
+            try {
+                if (br.ready())
+                    turnMenu(true);
+                else if (messageQueue.size() > 0)
+                    ((ServerActionMessage) messageQueue.remove()).doAction(this);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private boolean connect() {
@@ -357,7 +377,7 @@ public class CLI {
 
             //TODO: controlla res da scartare
 
-            sendShelvesConfiguration(shelves,toDiscard);
+            packetHandler.sendMessage(new ShelvesConfigurationMessage(shelves, toDiscard));
 
         }catch (NotExistingNickname e){
             e.printStackTrace();
@@ -536,10 +556,6 @@ public class CLI {
         //TODO: gestire così il parametro va bene?
         //TODO: da completare, è un casino :)
         //sendShelvesConfiguration();
-    }
-
-    private void sendShelvesConfiguration(List<Shelf> shelves, List<Resource> extra){
-        packetHandler.sendMessage(new ShelvesConfigurationMessage(shelves, extra));
     }
 
     public void selectMarket(){
@@ -748,57 +764,55 @@ public class CLI {
         endTurn = false;
         refresh(nickname);
         if(isPlayerTurn) {
+            graphicalCLI.printActions();
+            if (goBack) {
+                graphicalCLI.printString("Choose another action to do on your turn: ");
+                goBack = false;
+            }
             do {
-                graphicalCLI.printActions();
-                if (goBack) {
-                    graphicalCLI.printString("Choose another action to do on your turn: ");
-                    goBack = false;
-                }
-                do {
-                    action = scanner.nextInt();
-                } while (action < 1 || action > 6);
+                action = scanner.nextInt();
+            } while (action < 1 || action > 6);
 
-                switch (action) {
-                    case 1:
-                        if (!mainActionPlayed)
-                            selectMarket();
-                        else {
-                            graphicalCLI.printString("You can't play this action on your turn anymore\n");
-                            goBack = true;
-                        }
-                        break;
-                    case 2:
-                        if (!mainActionPlayed){
-                            selectDevDecks();
-                            chooseStorages(cardToBuy.getCost());
-                        }
-                        else {
-                            graphicalCLI.printString("You can't play this action on your turn anymore\n");
-                            goBack = true;
-                        }
-                        break;
-                    case 3:
-                        if (!mainActionPlayed)
-                            //chiedo che produzioni attivare
-                            ;
-                        else {
-                            graphicalCLI.printString("You can't play this action on your turn anymore\n");
-                            goBack = true;
-                        }
+            switch (action) {
+                case 1:
+                    if (!mainActionPlayed)
+                        selectMarket();
+                    else {
+                        graphicalCLI.printString("You can't play this action on your turn anymore\n");
+                        goBack = true;
+                    }
+                    break;
+                case 2:
+                    if (!mainActionPlayed){
+                        selectDevDecks();
+                        chooseStorages(cardToBuy.getCost());
+                    }
+                    else {
+                        graphicalCLI.printString("You can't play this action on your turn anymore\n");
+                        goBack = true;
+                    }
+                    break;
+                case 3:
+                    if (!mainActionPlayed)
+                        //chiedo che produzioni attivare
+                        ;
+                    else {
+                        graphicalCLI.printString("You can't play this action on your turn anymore\n");
+                        goBack = true;
+                    }
 
-                        break;
-                    case 4: //chiedo che leader card attivare
-                        break;
-                    case 5: //chiedo che leader card scartare
-                        break;
-                    case 6:
-                        if (mainActionPlayed)
-                            endTurn = true;
-                        break;
-                    default: //boh, default non lo farò mai :)
-                        break;
-                }
-            } while (!endTurn);
+                    break;
+                case 4: //chiedo che leader card attivare
+                    break;
+                case 5: //chiedo che leader card scartare
+                    break;
+                case 6:
+                    if (mainActionPlayed)
+                        endTurn = true;
+                    break;
+                default: //boh, default non lo farò mai :)
+                    break;
+            }
         }
     }
 

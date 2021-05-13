@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.structures;
 
 import it.polimi.ingsw.server.model.storage.Shelf;
+import it.polimi.ingsw.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,8 @@ public class WarehouseView {
 
     public WarehouseView() {
         this.shelves = new ArrayList<>();
+        for(int i = 0; i < Constants.BASE_WAREHOUSE_SHELVES.value(); i++)
+            shelves.add(new Shelf(i + 1));
     }
 
     public WarehouseView(List<Shelf> shelves) {
