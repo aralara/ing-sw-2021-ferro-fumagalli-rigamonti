@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller;
 
+import it.polimi.ingsw.server.model.boards.PlayerBoard;
 import it.polimi.ingsw.server.model.cards.card.*;
 import it.polimi.ingsw.server.model.games.Game;
 import it.polimi.ingsw.server.model.games.MultiGame;
@@ -13,8 +14,6 @@ import java.util.List;
 public class Controller {
 
     private final Game game;
-    private final int playerNumber;
-    private final List<String> players;
 
 
     public Controller(int playerNumber) {
@@ -22,8 +21,6 @@ public class Controller {
             game = new SingleGame();
         else
             game = new MultiGame();
-        this.playerNumber = playerNumber;
-        players = new ArrayList<>();
     }
 
 
@@ -31,8 +28,8 @@ public class Controller {
         return game;
     }
 
-    public void addPlayer(String player) {
-        players.add(player);
+    public PlayerBoard getPlayerBoard(String nickname) {
+        return game.getPlayerBoards().get(game.getPlayerIndexOf(nickname));
     }
 
     public void initGame(List<VirtualView> views) {

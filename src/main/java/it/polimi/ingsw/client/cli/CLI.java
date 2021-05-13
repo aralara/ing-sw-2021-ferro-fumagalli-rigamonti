@@ -103,14 +103,14 @@ public class CLI {
         askNickname();
     }
 
-    private boolean connect(){
+    private boolean connect() {
         graphicalCLI.printString("Insert the IP address of server\n");
         String ip = scanner.nextLine();
 
         return packetHandler.start(ip,Server.SOCKET_PORT);
     }
 
-    public void askNickname(){
+    public void askNickname() {
         nickname = scanner.next();
         packetHandler.sendMessage(new ConnectionMessage(nickname));
     }
@@ -157,32 +157,6 @@ public class CLI {
                 resources.get(0).setQuantity(resources.get(0).getQuantity()+1);
             } else {
                 resources.add(new Resource(ResourceType.values()[index], 1));
-            }
-        }
-        return resources;
-    }
-
-    private List<Resource> resolveResourcesWithLeader(int wildcardQuantity){ //TODO: Simile a resolveResourcesToEqualize
-        List<Resource> resources = new ArrayList<>();
-        List<AbilityMarble> leaderAbility = getActiveAbilityMarble();
-        int index, size=leaderAbility.size();
-
-        if(size>0 && wildcardQuantity>0) {
-            graphicalCLI.printString("You can choose a resource from the following leader's ability: \n");
-            graphicalCLI.printLeaderAbilityMarble(leaderAbility);
-
-            for (int num = 1; num <= wildcardQuantity; num++) {
-                index = -1;
-                while (index < 0 || index >= size) {
-                    graphicalCLI.printString("Wildcard" + num + ": please choose a valid resource ");
-                    index = scanner.nextInt() - 1;
-                }
-
-                if (resources.size() > 0 && resources.get(0).getResourceType() == ResourceType.values()[index]) {
-                    resources.get(0).setQuantity(resources.get(0).getQuantity() + 1);
-                } else {
-                    resources.add(new Resource(ResourceType.values()[index], 1));
-                }
             }
         }
         return resources;
@@ -274,7 +248,7 @@ public class CLI {
         productionsToActivate = new ArrayList<>(productionsToMemorize);
     }
 
-    public void tryAgainToPlaceResources(){ //TODO: decidere visibility (anche x altri try)
+    public void tryToPlaceShelves(){ //TODO: decidere visibility (anche x altri try)
         graphicalCLI.printString("The selected configuration is invalid\n");
         if(askGoBack())
             turnMenu(true);
@@ -328,77 +302,60 @@ public class CLI {
 
     private void placeResourcesOnShelves(List<Resource> resources){
         //TODO: da completare, è un casino :) (WIP)
+        WarehouseView warehouse;
         List<Shelf> shelves = new ArrayList<>();
+        List<Resource> toPlace;
         List<Resource> toDiscard = new ArrayList<>();
+        Shelf selectedShelf;
+        Resource resourceToPlace;
         int level;
 
         try{
-            if(chekFreeSlotInWarehouse()){
-                WarehouseView warehouse = playerBoardFromNickname(nickname).getWarehouse();
+            if(checkFreeSlotInWarehouse()){ //it's possible to place resources
+                rearrangeWarehouse();
+
+                warehouse = playerBoardFromNickname(nickname).getWarehouse();
                 shelves = getShelvesWarehouseCopy(warehouse.getShelves());
-                List<Resource> toPlace = getResourcesOneByOne(resources);
-                Resource resourceToPlace;
-                Shelf selectedShelf;
+                toPlace = getResourcesOneByOne(resources);
 
                 while (!toPlace.isEmpty()){
                     resourceToPlace = toPlace.get(0);
-                    graphicalCLI.printWarehouse(warehouse);
-                    graphicalCLI.printString("Where do you want to place " + resourceToPlace.getResourceType()
-                            + "? (0 to discard it) ");
-                    level = scanner.nextInt();
-                    while (level<0 || level>3){
-                        graphicalCLI.printString("Choose a valid shelf: ");
-                        level = scanner.nextInt();
-                    }
+                    graphicalCLI.printWarehouse(new WarehouseView(shelves)); //temp warehouse
+
+                    level=askWhichShelf(resourceToPlace, shelves.size());
+
                     if(level>0) {
                         selectedShelf = shelves.get(level - 1);
 
-                        if (selectedShelf.getResourceType().equals(ResourceType.WILDCARD)) { //ripiano vuoto
-                            Resource finalResourceToPlace = resourceToPlace;
-                            if((shelves.stream().noneMatch(shelf -> shelf.getResourceType()
-                                    .equals(finalResourceToPlace.getResourceType())))) { //non ci sono altri ripiani con stessa risorsa
-                                selectedShelf.setResourceType(resourceToPlace.getResourceType());
-                                selectedShelf.getResources().setResourceType(resourceToPlace.getResourceType());
-                                selectedShelf.getResources().setQuantity(selectedShelf.getResources().getQuantity() +
-                                        resourceToPlace.getQuantity());
-                                toPlace.remove(0);
-                            } else {//altri ripiani con stessa risorsa
-                                graphicalCLI.printString("There's already another shelf with the same resource type\n");
-                            }
-                        }else if (selectedShelf.getResourceType().equals(resourceToPlace.getResourceType())) { //ripiano con stesso tipo di risorsa
-                            if (selectedShelf.getResources().getQuantity() <= selectedShelf.getLevel() - 1) { //ripiano non completo
-                                selectedShelf.getResources().setQuantity(selectedShelf.getResources().getQuantity() +
-                                        resourceToPlace.getQuantity());
-                                toPlace.remove(0);
-                            } else { //ripiano già al completo
-                                graphicalCLI.printString("The selected shelf is already full\n");
-                            }
-                        } else { //ripiano con diverso tipo di risorsa (controllo che non si sdoppino ripiani con stessa risorsa
-                            Resource finalResourceToPlace1 = resourceToPlace;
-                            if((shelves.stream().noneMatch(shelf -> shelf.getResourceType()
-                                    .equals(finalResourceToPlace1.getResourceType())))){ //non ci sono altri ripiani con stessa risorsa
-                                graphicalCLI.printString("This shelf contains a different resource type\nIf you want" +
-                                        " to place it here anyway, insert YES and then you'll place again the removed ones: ");
-                                String command = scanner.next();
-                                if(command.equalsIgnoreCase("YES") || command.equalsIgnoreCase("Y")){
-                                    //TODO: riposiziona
-                                }
-                            } else {//altri ripiani con stessa risorsa
-                                graphicalCLI.printString("There's already another shelf with the same resource type\n");
-                            }
-                        } //TODO: aggiungere possibilità di cambiare ripiani alle risorse se la loro quantità lo permette
-                          //TODO: e aggiungere possibilità di riportare risorse da inserire e shelf all'originale?
-                    } else {
+                        if (selectedShelf.getResourceType().equals(ResourceType.WILDCARD)) { //empty shelf
+                            emptyShelfManagement(shelves, toPlace, selectedShelf, resourceToPlace);
+                        }
+                        else if (selectedShelf.getResourceType().equals(resourceToPlace.getResourceType())) { //shelf with the same resource type
+                            sameResTypeShelfManagement(toPlace, selectedShelf, resourceToPlace);
+                        }
+                        else { //shelf with different resource type
+                            differentResTypeShelfManagement(shelves, toPlace, selectedShelf, resourceToPlace);
+                        }
+                    }
+                    else if(level==0){
                         toDiscard.add(new Resource(resourceToPlace.getResourceType(),resourceToPlace.getQuantity()));
                         graphicalCLI.printString("Resource discarded\n");
                         toPlace.remove(0);
                     }
-                    //TODO: prima di inviare controllare che ci siano da scartare solo risorse appena ottenute
+                    else if(level<0) {
+                        shelves = getShelvesWarehouseCopy(warehouse.getShelves());
+                        toPlace = getResourcesOneByOne(resources);
+                        toDiscard.clear();
+                        graphicalCLI.printString("Warehouse restored\n");
+                    }
                 }
-            } else{
+            }
+            else{
                 graphicalCLI.printString("There are no available slots, all the resources will be discarded\n");
                 toDiscard = resources;
             }
+
+            //TODO: controlla res da scartare
 
             sendShelvesConfiguration(shelves,toDiscard);
 
@@ -407,7 +364,7 @@ public class CLI {
         }
     }
 
-    private boolean chekFreeSlotInWarehouse(){
+    private boolean checkFreeSlotInWarehouse(){
         try {
             for (Shelf shelf : playerBoardFromNickname(nickname).getWarehouse().getShelves()) { //TODO: da controllare
                 if (shelf.getResourceType().equals(ResourceType.WILDCARD) ||
@@ -418,6 +375,13 @@ public class CLI {
             e.printStackTrace();
         }
         return false;
+    }
+
+    private void rearrangeWarehouse(){
+        graphicalCLI.printString("Do you want to rearrange the warehouse? ");
+        if(isAnswerYes()){
+            //TODO: da fare
+        }
     }
 
     private List<Shelf> getShelvesWarehouseCopy(List<Shelf> warehouse){
@@ -435,6 +399,137 @@ public class CLI {
             }
         }
         return resourcesOneByOne;
+    }
+
+    private int askWhichShelf(Resource resource, int numberOfShelves){
+        int level;
+        graphicalCLI.printString("Do you want to restore warehouse to its original configuration? ");
+        if(isAnswerYes())
+            return -1;
+        graphicalCLI.printString("Where do you want to place " + resource.getResourceType()
+                + "? (0 to discard it) ");
+        level = scanner.nextInt();
+        while (level<0 || level>numberOfShelves){
+            graphicalCLI.printString("Choose a valid shelf: ");
+            level = scanner.nextInt();
+        }
+        return level;
+    }
+
+    private void emptyShelfManagement(List<Shelf> shelves, List<Resource> toPlace, Shelf selectedShelf, Resource resourceToPlace){
+        if(isResourceTypeUnique(shelves,resourceToPlace.getResourceType())) { //there are no shelves with the same resource type
+            placeResource(selectedShelf, resourceToPlace);
+            toPlace.remove(0);
+        }
+        else {//there are shelves with the same resource type
+            graphicalCLI.printString("There's already another shelf with the same resource type\n");
+            if(isShelfRearrangeable(resourceToPlace)) { //it's possible to rearrange shelves
+                graphicalCLI.printString("If you want to place it here anyway, insert YES and " +
+                        "then you'll place again the removed ones from the other shelf: ");
+                if(isAnswerYes()) {
+                    Shelf otherShelf = getShelfWithSameResource(resourceToPlace.getResourceType());
+                    for (int i = 0; i < otherShelf.getResources().getQuantity(); i++) {
+                        toPlace.add(1, new Resource(selectedShelf.getResourceType(), 1));
+                    }
+                    resetShelf(otherShelf);
+                    placeResource(selectedShelf, resourceToPlace);
+                    toPlace.remove(0);
+                }
+            }
+        }
+    }
+
+    private void sameResTypeShelfManagement(List<Resource> toPlace, Shelf selectedShelf, Resource resourceToPlace){
+        if (selectedShelf.getResources().getQuantity() <= selectedShelf.getLevel() - 1) { //shelf not completely full
+            placeResource(selectedShelf, resourceToPlace);
+            toPlace.remove(0);
+        }
+        else { //shelf completely full
+            graphicalCLI.printString("The selected shelf is already full\n");
+            if(isShelfRearrangeable(resourceToPlace)){
+                graphicalCLI.printString("If you want to remove the resources from this" +
+                        " shelf to place them again on another one, insert YES: ");
+                if(isAnswerYes()){
+                    for(int i=0; i<selectedShelf.getResources().getQuantity(); i++){
+                        toPlace.add(1, new Resource(selectedShelf.getResourceType(), 1));
+                    }
+                }
+            }
+        }
+    }
+
+    private void differentResTypeShelfManagement(List<Shelf> shelves, List<Resource> toPlace, Shelf selectedShelf, Resource resourceToPlace){
+        graphicalCLI.printString("This shelf contains a different resource type\nIf you want" +
+                " to place it here anyway, insert YES and then you'll place again the removed ones: ");
+        if(isAnswerYes()) {
+            if (isResourceTypeUnique(shelves, resourceToPlace.getResourceType())) { //there are no shelves with the same resource type
+                for (int i = 0; i < selectedShelf.getResources().getQuantity(); i++) {
+                    toPlace.add(1, new Resource(selectedShelf.getResourceType(), 1));
+                }
+                placeResource(selectedShelf, resourceToPlace);
+                toPlace.remove(0);
+            }
+            else {//there are shelves with the same resource type
+                graphicalCLI.printString("There's already another shelf with the same resource type\n");
+                if (isShelfRearrangeable(resourceToPlace)) { //it's possible to rearrange shelves
+                    graphicalCLI.printString("If you want to place it here anyway, insert YES and " +
+                            "then you'll place again the removed ones: ");
+                    if (isAnswerYes()) {
+                        Shelf otherShelf = getShelfWithSameResource(resourceToPlace.getResourceType());
+                        for (int i = 0; i < otherShelf.getResources().getQuantity(); i++) {
+                            toPlace.add(1, new Resource(selectedShelf.getResourceType(), 1));
+                        }
+                        resetShelf(otherShelf);
+                        for (int i = 0; i < selectedShelf.getResources().getQuantity(); i++) {
+                            toPlace.add(1, new Resource(selectedShelf.getResourceType(), 1));
+                        }
+                        placeResource(selectedShelf, resourceToPlace);
+                        toPlace.remove(0);
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean isResourceTypeUnique(List<Shelf> shelves, ResourceType resourceType){
+        return shelves.stream().noneMatch(shelf -> shelf.getResourceType().equals(resourceType));
+    }
+
+    private void placeResource(Shelf shelf, Resource resource){
+        if(shelf.getResourceType().equals(resource.getResourceType())){ //ripiano con stesso tipo di risorsa
+            shelf.getResources().setQuantity(shelf.getResources().getQuantity() +
+                    resource.getQuantity());
+        }
+        else { //ripiano vuoto o con altro da sostituire
+            shelf.setResourceType(resource.getResourceType());
+            shelf.getResources().setResourceType(resource.getResourceType());
+            shelf.getResources().setQuantity(resource.getQuantity());
+        }
+    }
+
+    private Shelf getShelfWithSameResource(ResourceType resourceType){
+        try {
+            List<Shelf> shelves = playerBoardFromNickname(nickname).getWarehouse().getShelves();
+
+            for(Shelf shelf : shelves){
+                if(shelf.getResourceType().equals(resourceType))
+                    return shelf;
+            }
+        } catch (NotExistingNickname notExistingNickname) {
+            notExistingNickname.printStackTrace();
+        }
+        return null;
+    }
+
+    private boolean isShelfRearrangeable(Resource resource){ //TODO: nome da cambiare?
+        Shelf shelfWithResources = getShelfWithSameResource(resource.getResourceType());
+        return shelfWithResources.getResources().getQuantity()+resource.getQuantity() <= 3;
+    }
+
+    private void resetShelf(Shelf shelf){
+        shelf.setResourceType(ResourceType.WILDCARD);
+        shelf.getResources().setResourceType(ResourceType.WILDCARD);
+        shelf.getResources().setQuantity(0);
     }
 
     private void placeResourcesOnShelves(List<Resource> resources, boolean leaderShelfActive){
@@ -647,23 +742,6 @@ public class CLI {
         return activeSpaces;
     }
 
-    public void chooseAction(StartTurnMessage message) {
-        //TODO: dare al metodo un nome + significativo
-        //TODO: serve una stringa che inserita in qualsiasi modo ci faccia tornare indietro
-        // (es. se provo a comprare una carta ma non ho risorse se no si blocca il gioco)
-
-        if (message.getPlayingNickname().equals(nickname)) {
-            graphicalCLI.printString("\nNOW IT'S YOUR TURN!\n\n");
-            mainActionPlayed = false;
-
-            turnMenu(true);
-        }
-        else {
-            graphicalCLI.printString("Now is " + message.getPlayingNickname() + "'s turn\n");
-            //turnMenu(false); TODO: gestire per far fare comunque altre azioni
-        }
-    }
-
     public void turnMenu(boolean isPlayerTurn){ //TODO: gestire per far fare comunque altre azioni
         int action;
         goBack = false;
@@ -726,8 +804,7 @@ public class CLI {
 
     private boolean askGoBack(){
         graphicalCLI.printString("Do you want to go back and choose another action?\nIf you want to, insert YES: ");
-        String command = scanner.next();
-        if(command.equalsIgnoreCase("YES") || command.equalsIgnoreCase("Y")){
+        if(isAnswerYes()){
             goBack = true;
             return true;
         }
@@ -777,5 +854,11 @@ public class CLI {
         requestResources.add(new RequestResources(strongboxResources,StorageType.STRONGBOX));
 
         return requestResources;
+    }
+  
+    private boolean isAnswerYes(){
+        String command = scanner.next();
+        return  command.equalsIgnoreCase("YES") || command.equalsIgnoreCase("Y");
+
     }
 }

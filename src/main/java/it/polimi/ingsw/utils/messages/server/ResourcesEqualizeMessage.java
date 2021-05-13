@@ -16,6 +16,7 @@ public class ResourcesEqualizeMessage extends ResourcesMessage implements Server
         super(resources);
     }
 
+
     @Override
     public void doAction(CLI client) {
         GraphicalCLI graphicalCLI = client.getGraphicalCLI();
