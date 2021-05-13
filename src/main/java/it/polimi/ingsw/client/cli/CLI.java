@@ -618,103 +618,44 @@ public class CLI {
         //TODO: va bene? non verrà mai utilizzato. Oppure costruttore vuoto?
         DevelopmentCard developmentCard = new DevelopmentCard(-1,0,null,-1,null,null);
         do {
-            valid = true;
+            valid = false;
             choice = scanner.next();
-            switch (choice.toUpperCase()) {
-                case "B1":
-                case "B2":
-                case "B3":
-                    level = Integer.parseInt(Character.toString(choice.charAt(1)));
-                    if(!isDeckCardAvailable(CardColors.BLUE.toString(), level)){
-                        graphicalCLI.printString("There's no more cards available from this deck, please try again ");
-                        valid=false;
-                        break;
-                    }
-                    for (DevelopmentDeckView developmentDeck : developmentDecks) {
-                        if (developmentDeck.getDeckColor().equals(CardColors.BLUE) &&
-                                developmentDeck.getDeckLevel() == level) {
-                            developmentCard = (DevelopmentCard) developmentDeck.getDeck().get(0);
-                            break;
-                        }
-                    }
-                    break;
-                case "G1":
-                case "G2":
-                case "G3":
-                    level = Integer.parseInt(Character.toString(choice.charAt(1)));
-                    if(!isDeckCardAvailable(CardColors.GREEN.toString(), level)){
-                        graphicalCLI.printString("There's no more cards available from this deck, please try again ");
-                        valid=false;
-                        break;
-                    }
-                    for (DevelopmentDeckView developmentDeck : developmentDecks) {
-                        if (developmentDeck.getDeckColor().equals(CardColors.GREEN) &&
-                                developmentDeck.getDeckLevel() == level) {
-                            developmentCard = (DevelopmentCard) developmentDeck.getDeck().get(0);
-                            break;
-                        }
-                    }
-                    break;
-                case "P1":
-                case "P2":
-                case "P3":
-                    level = Integer.parseInt(Character.toString(choice.charAt(1)));
-                    if(!isDeckCardAvailable(CardColors.PURPLE.toString(), level)){
-                        graphicalCLI.printString("There's no more cards available from this deck, please try again ");
-                        valid=false;
-                        break;
-                    }
-                    for (DevelopmentDeckView developmentDeck : developmentDecks) {
-                        if (developmentDeck.getDeckColor().equals(CardColors.PURPLE) &&
-                                developmentDeck.getDeckLevel() == level) {
-                            developmentCard = (DevelopmentCard) developmentDeck.getDeck().get(0);
-                            break;
-                        }
-                    }
-                    break;
-                case "Y1":
-                case "Y2":
-                case "Y3":
-                    level = Integer.parseInt(Character.toString(choice.charAt(1)));
-                    if(!isDeckCardAvailable(CardColors.YELLOW.toString(), level)){
-                        graphicalCLI.printString("There's no more cards available from this deck, please try again ");
-                        valid=false;
-                        break;
-                    }
-                    for (DevelopmentDeckView developmentDeck : developmentDecks) {
-                        if (developmentDeck.getDeckColor().equals(CardColors.YELLOW) &&
-                                developmentDeck.getDeckLevel() == level) {
-                            developmentCard = (DevelopmentCard) developmentDeck.getDeck().get(0);
-                            break;
-                        }
-                    }
-                    break;
-                default:
-                    graphicalCLI.printString("Your choice is invalid, please try again ");
-                    valid = false;
-                    break;
-            }
 
-            if(valid){ //TODO: verificare che siano controlli giusti (sono tra l'altro controlli già presenti a lato server)
-                int finalLevel = level;
-                if(!((finalLevel==1 && activeCards.size()<=2) || (activeCards.size()>0 &&
-                        activeCards.stream().anyMatch(card -> card.getLevel()==finalLevel-1)))){
-                    graphicalCLI.printString("You don't have any slot to place the selected card on, please choose another one ");
-                    valid = false;
+            if(choice.matches("[BGPYbgpy][1-3]")) {
+                String color = choice.substring(0, 1).toUpperCase();
+                level = Integer.parseInt(choice.substring(1, 2));
+                switch (color) {
+                    case "B":
+                        color = CardColors.BLUE.name();
+                        break;
+                    case "G":
+                        color = CardColors.GREEN.name();
+                        break;
+                    case "P":
+                        color = CardColors.PURPLE.name();
+                        break;
+                    case "Y":
+                        color = CardColors.YELLOW.name();
+                        break;
+                }
+                for (DevelopmentDeckView developmentDeck : developmentDecks) {
+                    if (developmentDeck.getDeckColor().equals(CardColors.valueOf(color)) &&
+                            developmentDeck.getDeckLevel() == level) {
+                        if(!developmentDeck.getDeck().isEmpty()) {
+                            developmentCard = (DevelopmentCard) developmentDeck.getDeck().get(0);
+                            valid = true;
+                        }
+                        else
+                            graphicalCLI.printString("There's no more cards available from this deck, " +
+                                    "please try again");
+                        break;
+                    }
                 }
             }
-
+            else
+                graphicalCLI.printString("Invalid choice, please try again");
         } while (!valid);
         return developmentCard;
-    }
-
-    private boolean isDeckCardAvailable(String color, int level){
-        for(DevelopmentDeckView deck : developmentDecks){
-            if(deck.getDeckColor().toString().equals(color) &&
-                    deck.getDeckLevel()==level && !deck.getDeck().isEmpty())
-                return true;
-        }
-        return false;
     }
 
     private int chooseDevCardSpace(int cardLevel){
