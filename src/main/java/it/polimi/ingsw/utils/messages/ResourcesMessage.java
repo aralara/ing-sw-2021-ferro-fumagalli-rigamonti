@@ -6,7 +6,7 @@ import java.util.List;
 
 public class ResourcesMessage implements Message {
 
-    private List<Resource> resources;
+    private final List<Resource> resources;
 
 
     public ResourcesMessage(List<Resource> resources) {

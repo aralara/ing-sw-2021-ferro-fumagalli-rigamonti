@@ -92,7 +92,6 @@ public class GameHandler implements Runnable {
 
     public void add(Socket client, ObjectOutputStream out, ObjectInputStream in, String nickname) {
         clientsVirtualView.add(new VirtualView(client, out, in, nickname, this));
-        controller.addPlayer(nickname);
         sendAll(new NewPlayerMessage(nickname));
     }
 

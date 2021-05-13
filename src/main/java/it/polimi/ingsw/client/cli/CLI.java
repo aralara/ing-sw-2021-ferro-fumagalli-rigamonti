@@ -106,14 +106,14 @@ public class CLI {
         askNickname();
     }
 
-    private boolean connect(){
+    private boolean connect() {
         graphicalCLI.printString("Insert the IP address of server\n");
         String ip = scanner.nextLine();
 
         return packetHandler.start(ip,Server.SOCKET_PORT);
     }
 
-    public void askNickname(){
+    public void askNickname() {
         nickname = scanner.next();
         packetHandler.sendMessage(new ConnectionMessage(nickname));
     }
@@ -160,32 +160,6 @@ public class CLI {
                 resources.get(0).setQuantity(resources.get(0).getQuantity()+1);
             } else {
                 resources.add(new Resource(ResourceType.values()[index], 1));
-            }
-        }
-        return resources;
-    }
-
-    private List<Resource> resolveResourcesWithLeader(int wildcardQuantity){ //TODO: Simile a resolveResourcesToEqualize
-        List<Resource> resources = new ArrayList<>();
-        List<AbilityMarble> leaderAbility = getActiveAbilityMarble();
-        int index, size=leaderAbility.size();
-
-        if(size>0 && wildcardQuantity>0) {
-            graphicalCLI.printString("You can choose a resource from the following leader's ability: \n");
-            graphicalCLI.printLeaderAbilityMarble(leaderAbility);
-
-            for (int num = 1; num <= wildcardQuantity; num++) {
-                index = -1;
-                while (index < 0 || index >= size) {
-                    graphicalCLI.printString("Wildcard" + num + ": please choose a valid resource ");
-                    index = scanner.nextInt() - 1;
-                }
-
-                if (resources.size() > 0 && resources.get(0).getResourceType() == ResourceType.values()[index]) {
-                    resources.get(0).setQuantity(resources.get(0).getQuantity() + 1);
-                } else {
-                    resources.add(new Resource(ResourceType.values()[index], 1));
-                }
             }
         }
         return resources;
@@ -277,7 +251,7 @@ public class CLI {
         productionsToActivate = new ArrayList<>(productionsToMemorize);
     }
 
-    public void tryAgainToPlaceResources(){ //TODO: decidere visibility (anche x altri try)
+    public void tryToPlaceShelves(){ //TODO: decidere visibility (anche x altri try)
         graphicalCLI.printString("The selected configuration is invalid\n");
         if(askGoBack())
             turnMenu(true);
@@ -648,23 +622,6 @@ public class CLI {
             e.printStackTrace();
         }
         return activeSpaces;
-    }
-
-    public void chooseAction(StartTurnMessage message) {
-        //TODO: dare al metodo un nome + significativo
-        //TODO: serve una stringa che inserita in qualsiasi modo ci faccia tornare indietro
-        // (es. se provo a comprare una carta ma non ho risorse se no si blocca il gioco)
-
-        if (message.getPlayingNickname().equals(nickname)) {
-            graphicalCLI.printString("\nNOW IT'S YOUR TURN!\n\n");
-            mainActionPlayed = false;
-
-            turnMenu(true);
-        }
-        else {
-            graphicalCLI.printString("Now is " + message.getPlayingNickname() + "'s turn\n");
-            //turnMenu(false); TODO: gestire per far fare comunque altre azioni
-        }
     }
 
     public void turnMenu(boolean isPlayerTurn){ //TODO: gestire per far fare comunque altre azioni

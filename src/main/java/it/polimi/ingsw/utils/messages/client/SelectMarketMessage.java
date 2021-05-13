@@ -1,7 +1,9 @@
 package it.polimi.ingsw.utils.messages.client;
 
 import it.polimi.ingsw.server.controller.Controller;
+import it.polimi.ingsw.server.model.boards.PlayerBoard;
 import it.polimi.ingsw.server.model.storage.Resource;
+import it.polimi.ingsw.server.model.storage.ResourceType;
 import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.messages.server.ResourcesMarketMessage;
 
@@ -29,6 +31,7 @@ public class SelectMarketMessage implements ClientActionMessage {
     @Override
     public void doAction(VirtualView view, Controller controller) {
         List<Resource> resources = controller.getFromMarket(view.getNickname(), row, column);
-        view.sendMessage(new ResourcesMarketMessage(resources));
+        List<ResourceType> availableResources = controller.getPlayerBoard(view.getNickname()).getAbilityMarbles();
+        view.sendMessage(new ResourcesMarketMessage(resources, availableResources));
     }
 }
