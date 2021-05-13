@@ -7,10 +7,7 @@ import it.polimi.ingsw.server.model.cards.ability.*;
 import it.polimi.ingsw.server.model.cards.card.CardColors;
 import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
-import it.polimi.ingsw.server.model.storage.Production;
-import it.polimi.ingsw.server.model.storage.Resource;
-import it.polimi.ingsw.server.model.storage.ResourceType;
-import it.polimi.ingsw.server.model.storage.Shelf;
+import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.utils.messages.client.*;
 import it.polimi.ingsw.utils.messages.server.*;
 
@@ -771,8 +768,10 @@ public class CLI {
                         }
                         break;
                     case 2:
-                        if (!mainActionPlayed)
+                        if (!mainActionPlayed){
                             selectDevDecks();
+                            chooseStorages(cardToBuy.getCost());
+                        }
                         else {
                             graphicalCLI.printString("You can't play this action on your turn anymore\n");
                             goBack = true;
@@ -812,8 +811,54 @@ public class CLI {
         return false;
     }
 
+
+    public List<RequestResources> chooseStorages(List<Resource> resources){
+
+        try {
+            PlayerBoardView playerBoard = playerBoardFromNickname(nickname);
+            graphicalCLI.printWarehouse(playerBoard.getWarehouse());
+            graphicalCLI.printExtraShelfLeader(playerBoardFromNickname(nickname).getWarehouse());
+            graphicalCLI.printStrongbox(playerBoardFromNickname(nickname).getStrongbox());
+        }catch(NotExistingNickname e){
+            e.printStackTrace();
+        }
+
+        graphicalCLI.printString("You have to take these resources: ");
+        graphicalCLI.printResources(resources);
+
+        int choice;
+        List<Resource> whResources = new ArrayList<>();
+        List<Resource> whLeaderResources = new ArrayList<>();
+        List<Resource> strongboxResources = new ArrayList<>();
+        List<RequestResources> requestResources = new ArrayList<>();
+        List<Resource> allResources = getResourcesOneByOne(resources);
+        graphicalCLI.printChooseStorage();
+        for(Resource res :allResources){
+            graphicalCLI.printString("Resource: " );
+            graphicalCLI.printResource(res);
+            graphicalCLI.printString(" - Storage number: ");
+            do{
+                choice = scanner.nextInt();
+            }while(choice<0 || choice >3);
+
+            if(choice == 1){
+                whResources.add(res);
+            }else if (choice == 2){
+                whLeaderResources.add(res);
+            }else if(choice == 3){
+                strongboxResources.add(res);
+            }
+        }
+        requestResources.add(new RequestResources(whResources,StorageType.WAREHOUSE));
+        requestResources.add(new RequestResources(whLeaderResources,StorageType.LEADER));
+        requestResources.add(new RequestResources(strongboxResources,StorageType.STRONGBOX));
+
+        return requestResources;
+    }
+  
     private boolean isAnswerYes(){
         String command = scanner.next();
         return  command.equalsIgnoreCase("YES") || command.equalsIgnoreCase("Y");
+
     }
 }

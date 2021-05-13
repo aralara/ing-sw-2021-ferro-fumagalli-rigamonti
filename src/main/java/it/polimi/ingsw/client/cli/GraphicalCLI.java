@@ -21,6 +21,7 @@ import it.polimi.ingsw.server.model.storage.Shelf;
 
 import java.sql.SQLSyntaxErrorException;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.utils.Constants.MARKET_COLUMN_SIZE;
@@ -233,8 +234,17 @@ public class GraphicalCLI {
         }
     }
 
-    private void printResource(Resource resource){
+    public void printResource(Resource resource){
         System.out.print(resource.getQuantity() + " " + resource.getResourceType());
+    }
+
+    public void printResources(List<Resource> resources){
+        boolean first = true;
+        for(Resource res : resources){
+            System.out.print(first ? "" : ", ");
+            printResource(res);
+            first = false;
+        }
     }
 
     public void printDevelopmentCard(DevelopmentCard developmentCard){
@@ -266,5 +276,12 @@ public class GraphicalCLI {
                 }
             }
         }
+    }
+
+    public void printChooseStorage(){
+        System.out.println("\nChose the storage where remove the resource:");
+        System.out.println("•1) Warehouse");
+        System.out.println("•2) Special Warehouse");
+        System.out.println("•3) Strongbox");
     }
 }
