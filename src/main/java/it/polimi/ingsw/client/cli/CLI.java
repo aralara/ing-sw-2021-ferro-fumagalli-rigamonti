@@ -26,6 +26,7 @@ public class CLI {
     private final FaithTrackView faithTrackView;
     private List<Resource> resourcesToPut;      //TODO: valutare se serve memorizzare
     private DevelopmentCard cardToBuy;
+    private int spaceToPlace;
     private List<Production> productionsToActivate;
     private final Scanner scanner;
     private boolean goBack, mainActionPlayed, endTurn;
@@ -725,6 +726,7 @@ public class CLI {
         }catch (NotExistingNickname e){
             e.printStackTrace();
         }
+        spaceToPlace = space; //TODO: controllare: mi salvo lo space perchè serve da madnare al server per vedere se puo comprare (insieme alle request resources)
         return space;
     }
 
@@ -770,7 +772,8 @@ public class CLI {
                     case 2:
                         if (!mainActionPlayed){
                             selectDevDecks();
-                            chooseStorages(cardToBuy.getCost());
+                            List<RequestResources> temp = chooseStorages(cardToBuy.getCost());  //TODO: Ste: invio al server le risorse, va testato
+                            packetHandler.sendMessage(new RequestResourcesDevMessage(cardToBuy,spaceToPlace,temp)); //TODO: manca il metodo che riceve ack, quindi si blocca
                         }
                         else {
                             graphicalCLI.printString("You can't play this action on your turn anymore\n");
@@ -827,6 +830,7 @@ public class CLI {
         graphicalCLI.printResources(resources);
 
         int choice;
+        boolean first = true;
         List<Resource> whResources = new ArrayList<>();
         List<Resource> whLeaderResources = new ArrayList<>();
         List<Resource> strongboxResources = new ArrayList<>();
@@ -838,7 +842,9 @@ public class CLI {
             graphicalCLI.printResource(res);
             graphicalCLI.printString(" - Storage number: ");
             do{
+                if(!first) graphicalCLI.printString("Invalid storage number, try again: ");
                 choice = scanner.nextInt();
+                first = choice >= 0 && choice <= 3;
             }while(choice<0 || choice >3);
 
             if(choice == 1){
