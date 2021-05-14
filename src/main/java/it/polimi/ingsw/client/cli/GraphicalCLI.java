@@ -5,6 +5,7 @@ import it.polimi.ingsw.server.model.cards.ability.AbilityDiscount;
 import it.polimi.ingsw.server.model.cards.ability.AbilityMarble;
 import it.polimi.ingsw.server.model.cards.ability.AbilityProduction;
 import it.polimi.ingsw.server.model.cards.ability.AbilityWarehouse;
+import it.polimi.ingsw.server.model.cards.card.Card;
 import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
@@ -89,49 +90,41 @@ public class GraphicalCLI {
         else return RESET;
     }
 
-    public void printLeaderCardList(Deck leaderCards){
-        int size = leaderCards.size();
-        for(int i=0; i<size; i++){
-            System.out.print((i+1) + ": ");
-            printLeaderCard((LeaderCard) leaderCards.get(i));
-        }
-    }
-
-    public void printLeaderCard(LeaderCard card){
+    public void printLeaderCard(LeaderCard leaderCard){
         String toPrint;
         boolean first = true;
-        if(card.getID() != -1) {
+        if(leaderCard.getID() != -1) {
             System.out.println("♥ LEADER CARD ♥ ");
             System.out.print(" • Requirements: ");
-            if (card.getRequirements().get(0) instanceof RequirementDev) {   //TODO: sostituire con strategy quando ci sarà una classe apposita
-                for (Requirement req : card.getRequirements()) {
+            if (leaderCard.getRequirements().get(0) instanceof RequirementDev) {   //TODO: sostituire con strategy quando ci sarà una classe apposita
+                for (Requirement req : leaderCard.getRequirements()) {
                     toPrint = ((!first) ? ", " : "") + ((RequirementDev) req).getNumber() + " " +
                             ((RequirementDev) req).getColor() + " level " +
                             ((RequirementDev) req).getLevel() + " development cards";
                     System.out.print(toPrint);
                     first = false;
                 }
-            } else if (card.getRequirements().get(0) instanceof RequirementRes) {
-                for (Requirement req : card.getRequirements()) {
+            } else if (leaderCard.getRequirements().get(0) instanceof RequirementRes) {
+                for (Requirement req : leaderCard.getRequirements()) {
                     printResource(((RequirementRes) req).getResource());
                 }
             }
             System.out.println();
-            System.out.println(" • Victory points: " + card.getVP());
+            System.out.println(" • Victory points: " + leaderCard.getVP());
 
             System.out.print(" • Special ability: You ");
 
-            if (card.getAbility() instanceof AbilityDiscount) {
-                System.out.println("can get 1 " + ((AbilityDiscount) card.getAbility()).getResourceType()
+            if (leaderCard.getAbility() instanceof AbilityDiscount) {
+                System.out.println("can get 1 " + ((AbilityDiscount) leaderCard.getAbility()).getResourceType()
                         + " off the cost of development cards");
-            } else if (card.getAbility() instanceof AbilityMarble) {
-                System.out.println("can get a " + ((AbilityMarble) card.getAbility()).getResourceType() +
+            } else if (leaderCard.getAbility() instanceof AbilityMarble) {
+                System.out.println("can get a " + ((AbilityMarble) leaderCard.getAbility()).getResourceType() +
                         " from the white marbles in the market");
-            } else if (card.getAbility() instanceof AbilityProduction) {
+            } else if (leaderCard.getAbility() instanceof AbilityProduction) {
                 System.out.println("gain access to the following production:  ");
-                printProduction(((AbilityProduction) card.getAbility()).getProduction());
-            } else if (card.getAbility() instanceof AbilityWarehouse) {
-                System.out.println("gain an extra shelf to contain 2 units of " + ((AbilityWarehouse) card.getAbility())
+                printProduction(((AbilityProduction) leaderCard.getAbility()).getProduction());
+            } else if (leaderCard.getAbility() instanceof AbilityWarehouse) {
+                System.out.println("gain an extra shelf to contain 2 units of " + ((AbilityWarehouse) leaderCard.getAbility())
                         .getResourceType());
             }
         }
@@ -286,20 +279,6 @@ public class GraphicalCLI {
         System.out.println();
         System.out.println(" • Special ability: You gain access to the following production: ");
         printProduction(developmentCard.getProduction());
-    }
-
-    public void printDevelopmentDecks(List<DevelopmentDeckView> developmentDeck) {
-        int maxLevel = 3;
-        for(int i = 1; i<= maxLevel; i++) {
-            int finalI = i;
-            List<DevelopmentDeckView> temp = developmentDeck.stream().filter(x -> x.getDeckLevel() == finalI)
-                    .collect(Collectors.toList());
-            for (DevelopmentDeckView developmentDeckView : temp) {
-                if (!developmentDeckView.getDeck().isEmpty()) {
-                    printDevelopmentCard((DevelopmentCard) developmentDeckView.getDeck().get(0));
-                }
-            }
-        }
     }
 
     public void printChooseStorage(){
