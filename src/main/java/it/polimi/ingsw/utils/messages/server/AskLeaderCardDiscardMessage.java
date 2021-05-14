@@ -26,7 +26,7 @@ public class AskLeaderCardDiscardMessage implements ServerActionMessage {
             PlayerBoardView playerBoard = client.playerBoardFromNickname(nickname);
             int size = playerBoard.getLeaderBoard().getHand().size();
 
-            graphicalCLI.printString("You have to discard 2 leader cards from your hand:");
+            graphicalCLI.printString("You have to discard 2 leader cards from your hand:\n");
             graphicalCLI.printNumberedList((List<LeaderCard>)(List<?>)playerBoard.getLeaderBoard().getHand().getCards(), graphicalCLI::printLeaderCard);
 
             graphicalCLI.printString("Choose the first one by selecting the corresponding number: ");
