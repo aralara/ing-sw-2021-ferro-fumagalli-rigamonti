@@ -4,8 +4,10 @@ import it.polimi.ingsw.client.MessageHandler;
 import it.polimi.ingsw.client.structures.*;
 import it.polimi.ingsw.exceptions.NotExistingNickname;
 import it.polimi.ingsw.server.Server;
+import it.polimi.ingsw.server.model.cards.card.Card;
 import it.polimi.ingsw.server.model.cards.card.CardColors;
 import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
+import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.utils.messages.client.*;
@@ -689,6 +691,23 @@ public class CLI {
         return space;
     }
 
+    public List<LeaderCard> chooseLeaderCard(){
+        try {
+            Deck hand = playerBoardFromNickname(nickname).getLeaderBoard().getHand();
+            graphicalCLI.printLeaderCardList(hand);
+            graphicalCLI.printString("Choose a leader card by selecting the corresponding number: ");
+
+            int index = scanner.nextInt() - 1;
+            List<LeaderCard> temp = new ArrayList<>();
+            temp.add((LeaderCard)hand.get(index));
+            return temp;
+        }catch(NotExistingNickname e){
+            e.printStackTrace();
+        }
+        return null; //TODO: fa schifo tornare null
+    }
+
+
     private List<DevelopmentCard> getActiveCardsInSpaces(String nickname) { //TODO: da testare quando funzionerà tutto e si sarà comprata qualche carta
         List<DevelopmentCard> activeSpaces = new ArrayList<>();
         try{
@@ -821,9 +840,10 @@ public class CLI {
                     }
 
                     break;
-                case 4: //chiedo che leader card attivare
+                case 4:
+                    messageHandler.sendMessage(new LeaderCardPlayMessage(chooseLeaderCard()));
                     break;
-                case 5: //chiedo che leader card scartare
+                case 5: messageHandler.sendMessage(new LeaderCardDiscardMessage(chooseLeaderCard()));
                     break;
                 case 6:
                     if (mainActionPlayed)
