@@ -46,6 +46,6 @@ public class ResourcesMarketMessage extends ResourcesMessage implements ServerAc
             availableAbilities.remove(index);
             marblesLeft--;
         }
-        ((CLI) client).chooseShelvesManagement(resources);
+        ((CLI) client).placeResourcesOnShelves(resources);
     }
 }

@@ -40,7 +40,7 @@ public class ResourcesEqualizeMessage extends ResourcesMessage implements Server
         if(newResources.size() > 0) {
             ((CLI) client).storeTempResources(newResources);
             graphicalCLI.printString("Now place the resources on the shelves:\n");
-            ((CLI) client).chooseShelvesManagement(newResources);
+            ((CLI) client).placeResourcesOnShelves(newResources);
         }
     }
 }

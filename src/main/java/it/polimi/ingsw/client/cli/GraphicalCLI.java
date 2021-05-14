@@ -307,4 +307,8 @@ public class GraphicalCLI {
         printNumberedList(developmentCards,this::printDevelopmentCard);
         printFaithBoard(playerBoardView, faithTrackView);
     }
+
+    public void printDevelopmentBoard(){
+        //TODO: da fare
+    }
 }
