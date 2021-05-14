@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.cli;
 
 import it.polimi.ingsw.client.structures.*;
+import it.polimi.ingsw.server.model.boards.Player;
 import it.polimi.ingsw.server.model.cards.ability.AbilityDiscount;
 import it.polimi.ingsw.server.model.cards.ability.AbilityMarble;
 import it.polimi.ingsw.server.model.cards.ability.AbilityProduction;
@@ -17,6 +18,7 @@ import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 import it.polimi.ingsw.server.model.storage.Shelf;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.Consumer;
@@ -123,7 +125,8 @@ public class GraphicalCLI {
             }
         }
         else {
-            //TODO: printare una carta coperta (?)
+            System.out.println("♥ LEADER CARD ♥ ");
+            System.out.println(" • The leader card is covered, yu can't see it!");
         }
     }
 
@@ -174,7 +177,8 @@ public class GraphicalCLI {
         System.out.println(" •4) Activate a leader card");
         System.out.println(" •5) Discard a leader card");
         System.out.println(" •6) Rearrange Warehouse");
-        System.out.println(" •7) End turn");
+        System.out.println(" •7) View opponents' boards");
+        System.out.println(" •8) End turn");
     }
 
     public void printWarehouse(WarehouseView warehouseView){
@@ -217,6 +221,7 @@ public class GraphicalCLI {
                     }
                 }
             }
+            System.out.println();
         }
     }
 
@@ -286,5 +291,20 @@ public class GraphicalCLI {
     public void printWarehouseConfiguration(WarehouseView warehouseView){
         printWarehouse(warehouseView);
         printExtraShelfLeader(warehouseView);
+    }
+
+    public void printOpponent(PlayerBoardView playerBoardView,FaithTrackView faithTrackView){
+        System.out.println(playerBoardView.getNickname() + "'s board:");
+        printWarehouse(playerBoardView.getWarehouse());
+        printExtraShelfLeader(playerBoardView.getWarehouse());
+        printStrongbox(playerBoardView.getStrongbox());
+        printNumberedList((List<LeaderCard>)(List<?>)playerBoardView.getLeaderBoard().getHand().getCards(),this::printLeaderCard);
+        printNumberedList((List<LeaderCard>)(List<?>)playerBoardView.getLeaderBoard().getBoard().getCards(),this::printLeaderCard);
+        List<DevelopmentCard> developmentCards = new ArrayList<>();
+        for(Deck deck : playerBoardView.getDevelopmentBoard().getSpaces()){
+            developmentCards.addAll((List<DevelopmentCard>)(List<?>)deck.getCards());
+        }
+        printNumberedList(developmentCards,this::printDevelopmentCard);
+        printFaithBoard(playerBoardView, faithTrackView);
     }
 }
