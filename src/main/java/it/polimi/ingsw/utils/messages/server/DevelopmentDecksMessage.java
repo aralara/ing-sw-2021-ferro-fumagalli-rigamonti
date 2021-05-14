@@ -1,6 +1,6 @@
 package it.polimi.ingsw.utils.messages.server;
 
-import it.polimi.ingsw.client.cli.CLI;
+import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.client.structures.DevelopmentDeckView;
 import it.polimi.ingsw.server.model.cards.deck.DevelopmentDeck;
 
@@ -21,7 +21,7 @@ public class DevelopmentDecksMessage implements ServerUpdateMessage {
     }
 
     @Override
-    public void doUpdate(CLI client) {
+    public void doUpdate(ClientController client) {
         List<DevelopmentDeckView> clientDevelopmentDecks = client.getDevelopmentDecks();
         for(DevelopmentDeck developmentDeck : developmentDecks) {
             clientDevelopmentDecks.add(new DevelopmentDeckView(developmentDeck.getDeck(),

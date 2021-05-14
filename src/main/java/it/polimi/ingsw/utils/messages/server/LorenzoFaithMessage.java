@@ -1,6 +1,6 @@
 package it.polimi.ingsw.utils.messages.server;
 
-import it.polimi.ingsw.client.cli.CLI;
+import it.polimi.ingsw.client.ClientController;
 
 public class LorenzoFaithMessage implements ServerUpdateMessage {
 
@@ -17,7 +17,7 @@ public class LorenzoFaithMessage implements ServerUpdateMessage {
     }
 
     @Override
-    public void doUpdate(CLI client) {
+    public void doUpdate(ClientController client) {
         client.setLorenzoFaith(faith);
     }
 }

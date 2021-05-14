@@ -1,5 +1,6 @@
 package it.polimi.ingsw.utils.messages.server;
 
+import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.GraphicalCLI;
 import it.polimi.ingsw.client.structures.*;
@@ -82,8 +83,8 @@ public class PlayerBoardSetupMessage implements HiddenMessage, ServerUpdateMessa
     }
 
     @Override
-    public void doUpdate(CLI client) {
-        GraphicalCLI graphicalCLI = client.getGraphicalCLI();
+    public void doUpdate(ClientController client) {
+        GraphicalCLI graphicalCLI = ((CLI) client).getGraphicalCLI();   //TODO: ORRENDO, BRUTTO E ASSOLUTAMENTE TEMPORANEO
         List<PlayerBoardView> clientPlayerBoards = client.getPlayerBoards();
 
         PlayerBoardView playerBoard = new PlayerBoardView(
