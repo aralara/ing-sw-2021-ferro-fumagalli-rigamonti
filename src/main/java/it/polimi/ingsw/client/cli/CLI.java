@@ -194,62 +194,6 @@ public class CLI {
         }
     }
 
-    private List<AbilityDiscount> getActiveAbilityDiscount() {
-        List<AbilityDiscount> leaderAbility = new ArrayList<>();
-        try {
-            LeaderBoardView leaderBoard = playerBoardFromNickname(nickname).getLeaderBoard();
-            for(int i=0;i<leaderBoard.getBoard().size();i++){
-                if(leaderBoard.getBoard().get(i) instanceof AbilityDiscount) //TODO:instanceof (uguale anche x altre get di ability)
-                    leaderAbility.add((AbilityDiscount) leaderBoard.getBoard().get(i));
-            }
-        }catch (NotExistingNickname e){
-            e.printStackTrace();
-        }
-        return leaderAbility;
-    }
-
-    private List<AbilityMarble> getActiveAbilityMarble() {
-        List<AbilityMarble> leaderAbility = new ArrayList<>();
-        try {
-            LeaderBoardView leaderBoard = playerBoardFromNickname(nickname).getLeaderBoard();
-            for(int i=0;i<leaderBoard.getBoard().size();i++){
-                if(leaderBoard.getBoard().get(i) instanceof AbilityMarble)
-                    leaderAbility.add((AbilityMarble) leaderBoard.getBoard().get(i));
-            }
-        }catch (NotExistingNickname e){
-            e.printStackTrace();
-        }
-        return leaderAbility;
-    }
-
-    private List<AbilityProduction> getActiveAbilityProduction() {
-        List<AbilityProduction> leaderAbility = new ArrayList<>();
-        try {
-            LeaderBoardView leaderBoard = playerBoardFromNickname(nickname).getLeaderBoard();
-            for(int i=0;i<leaderBoard.getBoard().size();i++){
-                if(leaderBoard.getBoard().get(i) instanceof AbilityProduction)
-                    leaderAbility.add((AbilityProduction) leaderBoard.getBoard().get(i));
-            }
-        }catch (NotExistingNickname e){
-            e.printStackTrace();
-        }
-        return leaderAbility;
-    }
-
-    private List<AbilityWarehouse> getActiveAbilityWarehouse() {
-        List<AbilityWarehouse> leaderAbility = new ArrayList<>();
-        try {
-            LeaderBoardView leaderBoard = playerBoardFromNickname(nickname).getLeaderBoard();
-            for(int i=0;i<leaderBoard.getBoard().size();i++){
-                if(leaderBoard.getBoard().get(i) instanceof AbilityWarehouse)
-                    leaderAbility.add((AbilityWarehouse) leaderBoard.getBoard().get(i));
-            }
-        }catch (NotExistingNickname e){
-            e.printStackTrace();
-        }
-        return leaderAbility;
-    }
-
     public void storeTempResources(List<Resource> resourcesToMemorize) {
         resourcesToPut = new ArrayList<>(resourcesToMemorize);
     }
