@@ -90,7 +90,7 @@ public class GraphicalCLI {
         String toPrint;
         boolean first = true;
         if(leaderCard.getID() != -1) {
-            System.out.println("♥ LEADER CARD ♥ ");
+            System.out.println(" LEADER CARD");
             System.out.print(" • Requirements: ");
             if (leaderCard.getRequirements().get(0) instanceof RequirementDev) {   //TODO: sostituire con strategy quando ci sarà una classe apposita
                 for (Requirement req : leaderCard.getRequirements()) {
@@ -125,7 +125,7 @@ public class GraphicalCLI {
             }
         }
         else {
-            System.out.println("♥ LEADER CARD ♥ ");
+            System.out.println(" LEADER CARD");
             System.out.println(" • The leader card is covered, yu can't see it!");
         }
     }
@@ -159,7 +159,7 @@ public class GraphicalCLI {
     }
 
     public void printFaithBoard(PlayerBoardView player, FaithTrackView faithTrack){
-        System.out.println(" • FAITH");
+        System.out.println("Faith:");
         System.out.println("\t > Faith level is " + player.getFaithBoard().getFaith());
         for(int i=0;i<player.getFaithBoard().getPopeProgression().length;i++){
             System.out.print("\t > Pope’s Favor tiles number "+(i+1)+" is ");
@@ -266,7 +266,7 @@ public class GraphicalCLI {
 
     public void printDevelopmentCard(DevelopmentCard developmentCard){
         boolean first = true;
-        System.out.println("♥ DEVELOPMENT CARD ♥ ");
+        System.out.println(" DEVELOPMENT CARD");
         System.out.println(" • This is a " + developmentCard.getColor() + " card level " + developmentCard.getLevel());
 
         System.out.println(" • Victory points: " + developmentCard.getVP());

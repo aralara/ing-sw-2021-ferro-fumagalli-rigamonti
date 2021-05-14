@@ -99,6 +99,6 @@ public class PlayerBoardSetupMessage implements HiddenMessage, ServerUpdateMessa
         clientPlayerBoards.add(playerBoard);
 
         if(clientPlayerBoards.size() == client.getNumberOfPlayers())
-            graphicalCLI.printString("\nTHE GAME CAN START!\n");
+            graphicalCLI.printString("\nTHE GAME CAN START!\n\n");
     }
 }

@@ -24,7 +24,7 @@ public class NewPlayerMessage implements ServerActionMessage {
         if(!client.getNickname().equals(playerNickname)) {
             graphicalCLI.printString("The player " + playerNickname + " has joined the game!");
         }else{
-            graphicalCLI.printString("You have been added to the game!");
+            graphicalCLI.printString("You have been added to the game!\n");
         }
     }
 }
