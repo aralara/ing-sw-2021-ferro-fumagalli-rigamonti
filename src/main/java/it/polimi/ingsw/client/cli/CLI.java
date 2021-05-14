@@ -289,7 +289,7 @@ public class CLI {
             graphicalCLI.printGraphicalResources(toPlace);
 
             if(checkFreeSlotInWarehouse()){ //it's possible to place resources
-                boolean rearranged = rearrangeWarehouse();
+                boolean rearranged = askRearrangeWarehouse();
 
                 shelves = getShelvesWarehouseCopy(warehouse.getShelves());
 
@@ -363,13 +363,16 @@ public class CLI {
         return false;
     }
 
-    private boolean rearrangeWarehouse(){
+    private boolean askRearrangeWarehouse(){
         graphicalCLI.printString("Do you want to rearrange the warehouse? ");
         boolean rearranged = isAnswerYes();
-        if(rearranged){
-            //TODO: da fare
-        }
+        if(rearranged)
+            rearrangeWarehouse();
         return rearranged;
+    }
+
+    private void rearrangeWarehouse(){
+            //TODO: da fare
     }
 
     private List<Shelf> getShelvesWarehouseCopy(List<Shelf> warehouse) {
@@ -826,7 +829,10 @@ public class CLI {
                     break;
                 case 5: messageHandler.sendMessage(new LeaderCardDiscardMessage(chooseLeaderCard()));
                     break;
-                case 6:
+                case 6: rearrangeWarehouse(); //TODO: serve questa opzione?
+                        //TODO: messaggio per confermare config?
+                    break;
+                case 7:
                     if (mainActionPlayed)
                         //endTurn = true; TODO: gestire fine turno
                     break;
