@@ -792,7 +792,7 @@ public class CLI {
             }
             do {
                 action = scanner.nextInt();
-            } while (action < 1 || action > 6);
+            } while (action < 1 || action > 8);
 
             switch (action) {
                 case 1:
@@ -833,9 +833,12 @@ public class CLI {
                         //TODO: messaggio per confermare config?
                     break;
                 case 7:
+                    showOpponents();
+                    break;
+                case 8:
                     if (mainActionPlayed)
                         //endTurn = true; TODO: gestire fine turno
-                    break;
+                        break;
                 default: //boh, default non lo farò mai :)
                     break;
             }
@@ -911,5 +914,13 @@ public class CLI {
                 developmentCards.add((DevelopmentCard) temp.getDeck().getCards().get(0));
         }
         graphicalCLI.printNumberedList(developmentCards, graphicalCLI::printDevelopmentCard);
+    }
+
+    public void showOpponents(){
+        for(PlayerBoardView playerBoardView : playerBoards){
+            if(!playerBoardView.getNickname().equals(nickname)){
+                graphicalCLI.printOpponent(playerBoardView,faithTrackView);
+            }
+        }
     }
 }
