@@ -19,7 +19,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class CLI {
-
+    //TODO: creare classe GameView x togliere delle var da qui?
     private String nickname;
     private int numberOfPlayers;
     private int lorenzoFaith;                   //TODO: gestione lorenzo WIP
@@ -32,7 +32,7 @@ public class CLI {
     private int spaceToPlace;
     private List<Production> productionsToActivate;
     private final Scanner scanner;
-    private boolean goBack, mainActionPlayed, endTurn;
+    private boolean goBack, mainActionPlayed/*, endTurn*/; //TODO: valutare se serve endTurn
     private final GraphicalCLI graphicalCLI;
     private final MessageHandler messageHandler;
 
@@ -114,7 +114,7 @@ public class CLI {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         while(true) {
             try {
-                if (br.ready())
+                if (br.ready()) //TODO: temporaneo
                     turnMenu(true);
                 else if (messageQueue.size() > 0)
                     messageQueue.remove().doAction(this);
@@ -224,7 +224,7 @@ public class CLI {
 
     public void tryToPlaceShelves() { //TODO: decidere visibility (anche x altri try)
         graphicalCLI.printString("The selected configuration is invalid\n");
-        if(askGoBack())
+        if(askGoBack())     //TODO: serve o obbligato?
             turnMenu(true);
         else {
             graphicalCLI.printString("Please, try again to place on the shelves:\n");
@@ -235,7 +235,7 @@ public class CLI {
     private void tryAgainToBuyCard() {
         graphicalCLI.printString("The selected configuration is invalid\n");
         //TODO: da fare
-        if(askGoBack())
+        if(askGoBack()) //TODO: serve o obbligato?
             turnMenu(true);
         else { }
     }
@@ -243,25 +243,13 @@ public class CLI {
     private void tryAgainToActivateProduction() {
         graphicalCLI.printString("The selected configuration is invalid\n");
         //TODO: da fare
-        if(askGoBack())
+        if(askGoBack()) //TODO: serve o obbligato?
             turnMenu(true);
         else { }
     }
 
-    public void chooseShelvesManagement(List<Resource> resources){ //TODO: x controllare se si hanno o meno i leader, valutare se serve
-        try {
-            PlayerBoardView player = playerBoardFromNickname(nickname);
-            graphicalCLI.printWarehouseConfiguration(player.getWarehouse());
-
-            if(!isLeaderShelfActive())
-                placeResourcesOnShelves(resources);
-            else {
-                graphicalCLI.printExtraShelfLeader(player.getWarehouse());
-                placeResourcesOnShelves(resources, true);
-            }
-        }catch (NotExistingNickname e){
-            e.printStackTrace();
-        }
+    public void chooseShelvesManagement(List<Resource> resources){ //TODO: da rimuovere e mettere direttamente placeResourcesOnShelves() dopo aver gestito leader
+        placeResourcesOnShelves(resources);
     }
 
     private boolean isLeaderShelfActive() {
@@ -289,18 +277,21 @@ public class CLI {
             for(int i=0; i<toPlace.size(); i++){ //to remove faith resource
                 if(toPlace.get(i).getResourceType().equals(ResourceType.FAITH)){
                     toDiscard.add(toPlace.get(i));
+                    graphicalCLI.printString(toPlace.get(i).getQuantity() + " " + toPlace.get(i).getResourceType()
+                            + " has been added to your faith board\n");
                     toPlace.remove(i);
                     break;
                 }
             }
 
+            warehouse = playerBoardFromNickname(nickname).getWarehouse();
+            graphicalCLI.printWarehouseConfiguration(warehouse);
             graphicalCLI.printString("Resources to place: ");
             graphicalCLI.printGraphicalResources(toPlace);
 
             if(checkFreeSlotInWarehouse()){ //it's possible to place resources
                 boolean rearranged = rearrangeWarehouse();
 
-                warehouse = playerBoardFromNickname(nickname).getWarehouse();
                 shelves = getShelvesWarehouseCopy(warehouse.getShelves());
 
                 while (!toPlace.isEmpty()){
@@ -416,7 +407,8 @@ public class CLI {
         return level;
     }
 
-    private void emptyShelfManagement(List<Shelf> shelves, List<Resource> toPlace, Shelf selectedShelf, Resource resourceToPlace) {
+    private void emptyShelfManagement(List<Shelf> shelves, List<Resource> toPlace,
+                                      Shelf selectedShelf, Resource resourceToPlace) {
         if(isResourceTypeUnique(shelves,resourceToPlace.getResourceType())) { //there are no shelves with the same resource type
             placeResource(selectedShelf, resourceToPlace);
             toPlace.remove(0);
@@ -439,7 +431,8 @@ public class CLI {
         }
     }
 
-    private void sameResTypeShelfManagement(List<Shelf> shelves, List<Resource> toPlace, Shelf selectedShelf, Resource resourceToPlace){
+    private void sameResTypeShelfManagement(List<Shelf> shelves, List<Resource> toPlace,
+                                            Shelf selectedShelf, Resource resourceToPlace){
         if (selectedShelf.getResources().getQuantity() <= selectedShelf.getLevel() - 1) { //shelf not completely full
             placeResource(selectedShelf, resourceToPlace);
             toPlace.remove(0);
@@ -458,7 +451,8 @@ public class CLI {
         }
     }
 
-    private void differentResTypeShelfManagement(List<Shelf> shelves, List<Resource> toPlace, Shelf selectedShelf, Resource resourceToPlace) {
+    private void differentResTypeShelfManagement(List<Shelf> shelves, List<Resource> toPlace,
+                                                 Shelf selectedShelf, Resource resourceToPlace) {
         graphicalCLI.printString("This shelf contains a different resource type\nIf you want" +
                 " to place it here anyway, insert YES and then you'll place again the removed ones: ");
         if(isAnswerYes()) {
@@ -556,12 +550,6 @@ public class CLI {
         return true;
     }
 
-    private void placeResourcesOnShelves(List<Resource> resources, boolean leaderShelfActive){
-        //TODO: gestire così il parametro va bene?
-        //TODO: da completare, è un casino :)
-        //sendShelvesConfiguration();
-    }
-
     public void selectMarket() {
         graphicalCLI.printMarket(marketView);
         if(askGoBack())
@@ -598,20 +586,17 @@ public class CLI {
         mainActionPlayed = true;
     }
 
-    private void selectDevDecks() { //TODO: dividere in selezione carta (aspettando ack) e selezione spazio?
+    private void selectDevDecks() {
         graphicalCLI.printDevelopmentDecks(developmentDecks);
         if(askGoBack())
             return;
-        graphicalCLI.printString("Which card do you want to buy?\nChoose B (blue), G (green), P (purple) or Y (yellow)" +
-                " followed by a number corresponding to its level: ");
 
         DevelopmentCard developmentCard = chooseCardFromDecks();
-        int space = chooseDevCardSpace(developmentCard.getLevel());
-        //TODO: aggiungere controlli anche su risorse da spendere?
+        spaceToPlace = chooseDevCardSpace();
 
         cardToBuy = new DevelopmentCard(developmentCard.getID(),developmentCard.getVP(),developmentCard.getColor(),
                 developmentCard.getLevel(),developmentCard.getProduction(),developmentCard.getCost());
-        messageHandler.sendMessage(new BuyDevelopmentCardMessage(developmentCard, space));
+        messageHandler.sendMessage(new BuyDevelopmentCardMessage(cardToBuy, spaceToPlace)); //TODO: è più un CANBuyDevelopmentCardMessage?
         mainActionPlayed = true;
     }
 
@@ -619,9 +604,10 @@ public class CLI {
         boolean valid;
         String choice;
         int level;
-        List<DevelopmentCard> activeCards = getActiveCardsInSpaces(nickname);
         //TODO: va bene? non verrà mai utilizzato. Oppure costruttore vuoto?
         DevelopmentCard developmentCard = new DevelopmentCard(-1,0,null,-1,null,null);
+        graphicalCLI.printString("Which card do you want to buy?\nChoose B (blue), G (green), P (purple) " +
+                "or Y (yellow) followed by a number corresponding to its level: ");
         do {
             valid = false;
             choice = scanner.next();
@@ -663,31 +649,17 @@ public class CLI {
         return developmentCard;
     }
 
-    private int chooseDevCardSpace(int cardLevel) {
+    private int chooseDevCardSpace() {
         int space = -1;
-        boolean valid;
-        try{
-            List<Deck> spaces = playerBoardFromNickname(nickname).getDevelopmentBoard().getSpaces();
-            graphicalCLI.printString("Which space do you want to put the card on? ");
-            space = scanner.nextInt()-1;
-            do{
-                valid=true;
-                while (space<0 || space>=3){
-                    graphicalCLI.printString("Your choice is invalid, please try again ");
-                    space = scanner.nextInt()-1;
-                }
-                if((cardLevel==1 && spaces.get(space).size()>0) || cardLevel >1 && (spaces.get(space).size()==0 ||
-                        ((DevelopmentCard)spaces.get(space).get(0)).getLevel()>=cardLevel-1)){
-                    graphicalCLI.printString("The selected slot has been already filled, please try again ");
-                    space = scanner.nextInt()-1;
-                    valid = false;
-                }
-            } while (!valid);
+        graphicalCLI.printString("Which space do you want to put the card on? ");
 
-        }catch (NotExistingNickname e){
-            e.printStackTrace();
+        space = scanner.nextInt()-1;
+        while (space<0 || space>=3){
+            graphicalCLI.printString("Your choice is invalid, please try again ");
+            space = scanner.nextInt()-1;
         }
-        spaceToPlace = space; //TODO: controllare: mi salvo lo space perchè serve da madnare al server per vedere se puo comprare (insieme alle request resources)
+
+        spaceToPlace = space;
         return space;
     }
 
@@ -798,8 +770,8 @@ public class CLI {
 
     public void turnMenu(boolean isPlayerTurn) { //TODO: gestire per far fare comunque altre azioni
         int action;
-        goBack = false;
-        endTurn = false;
+        //goBack = false;
+        //endTurn = false;
         refresh();
         if(isPlayerTurn) {
             graphicalCLI.printActions();
@@ -821,10 +793,11 @@ public class CLI {
                     }
                     break;
                 case 2:
-                    if (!mainActionPlayed){
+                    if (!mainActionPlayed) {
                         selectDevDecks();
-                        List<RequestResources> temp = chooseStorages(cardToBuy.getCost());  //TODO: Ste: invio al server le risorse, va testato
-                        messageHandler.sendMessage(new RequestResourcesDevMessage(cardToBuy,spaceToPlace,temp)); //TODO: manca il metodo che riceve ack, quindi si blocca
+                        if (mainActionPlayed) { //TODO: da spostare in un doAction (togliendo if)
+                            chooseStorages(cardToBuy.getCost());  //TODO: Ste: invio al server le risorse, va testato
+                        }
                     }
                     else {
                         graphicalCLI.printString("You can't play this action on your turn anymore\n");
@@ -847,7 +820,7 @@ public class CLI {
                     break;
                 case 6:
                     if (mainActionPlayed)
-                        endTurn = true;
+                        //endTurn = true; TODO: gestire fine turno
                     break;
                 default: //boh, default non lo farò mai :)
                     break;
@@ -856,7 +829,8 @@ public class CLI {
     }
 
     private boolean askGoBack() {
-        graphicalCLI.printString("Do you want to go back and choose another action?\nIf you want to, insert YES: ");
+        graphicalCLI.printString("Do you want to go back and choose another action?" +
+                "\nIf you want to, insert YES: ");
         if(isAnswerYes()){
             goBack = true;
             return true;
@@ -864,7 +838,7 @@ public class CLI {
         return false;
     }
 
-    public List<RequestResources> chooseStorages(List<Resource> resources) {
+    public void chooseStorages(List<Resource> resources) {
 
         try {
             PlayerBoardView playerBoard = playerBoardFromNickname(nickname);
@@ -908,7 +882,7 @@ public class CLI {
         requestResources.add(new RequestResources(whLeaderResources,StorageType.LEADER));
         requestResources.add(new RequestResources(strongboxResources,StorageType.STRONGBOX));
 
-        return requestResources;
+        messageHandler.sendMessage(new RequestResourcesDevMessage(cardToBuy, spaceToPlace, requestResources)); //TODO: manca il metodo che riceve ack, quindi si blocca
     }
   
     private boolean isAnswerYes() {
