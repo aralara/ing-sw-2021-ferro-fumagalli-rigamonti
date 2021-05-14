@@ -770,7 +770,7 @@ public class CLI extends ClientController {
                     showOpponents();
                     break;
                 case 8:
-                    if (mainActionPlayed)
+                    if (isMainActionPlayed())
 
                         //endTurn = true; TODO: gestire fine turno
                         break;
@@ -852,9 +852,9 @@ public class CLI extends ClientController {
     }
 
     public void showOpponents(){
-        for(PlayerBoardView playerBoardView : playerBoards){
-            if(!playerBoardView.getNickname().equals(nickname)){
-                graphicalCLI.printOpponent(playerBoardView,faithTrackView);
+        for(PlayerBoardView playerBoardView : getPlayerBoards()){
+            if(!playerBoardView.getNickname().equals(getNickname())){
+                graphicalCLI.printOpponent(playerBoardView,getFaithTrackView());
             }
         }
     }
