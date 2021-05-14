@@ -1,5 +1,6 @@
 package it.polimi.ingsw.utils.messages.server;
 
+import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.GraphicalCLI;
 import it.polimi.ingsw.client.MessageHandler;
@@ -14,10 +15,10 @@ import java.util.List;
 public class AskLeaderCardDiscardMessage implements ServerActionMessage {
 
     @Override
-    public void doAction(CLI client) {                      //TODO: azioni da delegare alla GraphicalCLI
+    public void doAction(ClientController client) {                      //TODO: azioni da delegare alla GraphicalCLI
         String nickname = client.getNickname();
         MessageHandler messageHandler = client.getPacketHandler();
-        GraphicalCLI graphicalCLI = client.getGraphicalCLI();
+        GraphicalCLI graphicalCLI = ((CLI) client).getGraphicalCLI();   //TODO: CAST A CLI ORRENDI, BRUTTI E ASSOLUTAMENTE TEMPORANEI IN TUTTO IL METODO
         List<LeaderCard> leaderCards = new ArrayList<>();
         int firstOne, secondOne;
 
@@ -29,16 +30,16 @@ public class AskLeaderCardDiscardMessage implements ServerActionMessage {
             graphicalCLI.printNumberedList((List<LeaderCard>)(List<?>)playerBoard.getLeaderBoard().getHand().getCards(), graphicalCLI::printLeaderCard);
 
             graphicalCLI.printString("Choose the first one by selecting the corresponding number: ");
-            firstOne = client.getNextInt() - 1;
+            firstOne = ((CLI) client).getNextInt() - 1;
             while(firstOne < 0 || firstOne >= size){
                 graphicalCLI.printString("The chosen number is invalid, please choose another one: ");
-                firstOne = client.getNextInt() - 1;
+                firstOne = ((CLI) client).getNextInt() - 1;
             }
             graphicalCLI.printString("Choose the second one by selecting the corresponding number: ");
-            secondOne = client.getNextInt() - 1;
+            secondOne = ((CLI) client).getNextInt() - 1;
             while(secondOne < 0 || secondOne >= size || secondOne == firstOne){
                 graphicalCLI.printString("The chosen number is invalid, please choose another one: ");
-                secondOne = client.getNextInt() - 1;
+                secondOne = ((CLI) client).getNextInt() - 1;
             }
 
             leaderCards.add((LeaderCard) playerBoard.getLeaderBoard().getHand().get(firstOne));
