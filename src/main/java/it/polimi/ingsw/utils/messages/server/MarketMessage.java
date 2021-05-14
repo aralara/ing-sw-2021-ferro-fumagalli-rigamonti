@@ -1,6 +1,6 @@
 package it.polimi.ingsw.utils.messages.server;
 
-import it.polimi.ingsw.client.cli.CLI;
+import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.server.model.market.*;
 
 public class MarketMessage implements ServerUpdateMessage {
@@ -24,7 +24,7 @@ public class MarketMessage implements ServerUpdateMessage {
     }
 
     @Override
-    public void doUpdate(CLI client) {
+    public void doUpdate(ClientController client) {
         client.getMarketView().setMarbleMatrix(marbleMatrix);
         client.getMarketView().setFloatingMarble(floatingMarble);
     }

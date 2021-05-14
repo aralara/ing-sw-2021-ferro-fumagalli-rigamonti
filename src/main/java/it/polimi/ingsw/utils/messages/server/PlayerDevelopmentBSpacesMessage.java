@@ -1,6 +1,6 @@
 package it.polimi.ingsw.utils.messages.server;
 
-import it.polimi.ingsw.client.cli.CLI;
+import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.exceptions.NotExistingNickname;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
 
@@ -27,7 +27,7 @@ public class PlayerDevelopmentBSpacesMessage implements ServerUpdateMessage {
     }
 
     @Override
-    public void doUpdate(CLI client) {
+    public void doUpdate(ClientController client) {
         try {
             client.playerBoardFromNickname(nickname).getDevelopmentBoard().setSpaces(spaces);
         } catch(NotExistingNickname e){

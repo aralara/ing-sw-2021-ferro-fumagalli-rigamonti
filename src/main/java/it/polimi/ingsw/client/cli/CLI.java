@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.cli;
 
+import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.client.MessageHandler;
 import it.polimi.ingsw.client.structures.*;
 import it.polimi.ingsw.exceptions.NotExistingNickname;
@@ -17,76 +18,22 @@ import java.io.InputStreamReader;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class CLI {
-    //TODO: creare classe GameView x togliere delle var da qui?
-    private String nickname;
-    private int numberOfPlayers;
-    private int lorenzoFaith;                   //TODO: gestione lorenzo WIP
-    private final List<PlayerBoardView> playerBoards;
-    private final MarketView marketView;
-    private final List<DevelopmentDeckView> developmentDecks;
-    private final FaithTrackView faithTrackView;
-    private List<Resource> resourcesToPut;      //TODO: valutare se serve memorizzare
-    private DevelopmentCard cardToBuy;
-    private int spaceToPlace;
-    private List<Production> productionsToActivate;
+public class CLI extends ClientController {
     private final Scanner scanner;
-    private boolean goBack, mainActionPlayed/*, endTurn*/; //TODO: valutare se serve endTurn
     private final GraphicalCLI graphicalCLI;
     private final MessageHandler messageHandler;
 
+    private boolean goBack;
+
+
     public CLI() {
-        lorenzoFaith = -1;
-        playerBoards = new ArrayList<>();
-        marketView = new MarketView();
-        developmentDecks = new ArrayList<>();
-        faithTrackView = new FaithTrackView();
+        super();
         scanner = new Scanner(System.in);
-        goBack = false;
-        mainActionPlayed = false;
         graphicalCLI = new GraphicalCLI();
         messageHandler = new MessageHandler(this);
+        goBack = false;
     }
 
-    public String getNickname() {
-        return nickname;
-    }
-
-    public int getNumberOfPlayers() {
-        return numberOfPlayers;
-    }
-
-    public int getLorenzoFaith() {
-        return lorenzoFaith;
-    }
-
-    public void setLorenzoFaith(int lorenzoFaith) {
-        this.lorenzoFaith = lorenzoFaith;
-    }
-
-    public List<PlayerBoardView> getPlayerBoards() {
-        return playerBoards;
-    }
-
-    public MarketView getMarketView() {
-        return marketView;
-    }
-
-    public List<DevelopmentDeckView> getDevelopmentDecks() {
-        return developmentDecks;
-    }
-
-    public FaithTrackView getFaithTrackView() {
-        return faithTrackView;
-    }
-
-    public boolean isMainActionPlayed() {
-        return mainActionPlayed;
-    }
-
-    public void setMainActionPlayed(boolean mainActionPlayed) {
-        this.mainActionPlayed = mainActionPlayed;
-    }
 
     public GraphicalCLI getGraphicalCLI() {
         return graphicalCLI;
@@ -131,8 +78,8 @@ public class CLI {
     }
 
     public void askNickname() {
-        nickname = scanner.next();
-        messageHandler.sendMessage(new ConnectionMessage(nickname));
+        setNickname(scanner.next());
+        messageHandler.sendMessage(new ConnectionMessage(getNickname()));
     }
 
     public void createNewLobby() {
@@ -145,19 +92,6 @@ public class CLI {
         }while(size <= 0 || size >= 5);
         setNumberOfPlayers(size);
         messageHandler.sendMessage(new NewLobbyMessage(size));
-    }
-
-    public void setNumberOfPlayers(int numberOfPlayers) {
-        this.numberOfPlayers = numberOfPlayers;
-        if(numberOfPlayers == 1)
-            lorenzoFaith = 0;
-    }
-
-    public PlayerBoardView playerBoardFromNickname(String nickname) throws NotExistingNickname {
-        for(PlayerBoardView playerBoard : playerBoards)
-            if(playerBoard.getNickname().equals(nickname))
-                return playerBoard;
-        throw new NotExistingNickname();
     }
 
     public ResourceType resourceTypeSelector(List<ResourceType> resourceTypes) {    //TODO: da spostare in graphical insieme allo scanner
@@ -202,12 +136,12 @@ public class CLI {
     }
 
     private void refresh() {
-        graphicalCLI.printMarket(marketView);
+        graphicalCLI.printMarket(getMarketView());
         graphicalCLI.printString("\nThe development decks:\n");
         printDevelopmentDeckTop();
         try {
-            PlayerBoardView playerBoard = playerBoardFromNickname(nickname);
-            graphicalCLI.printFaithBoard(playerBoard,faithTrackView);
+            PlayerBoardView playerBoard = getLocalPlayerBoard();
+            graphicalCLI.printFaithBoard(playerBoard, getFaithTrackView());
             //TODO: developmentBoard
             graphicalCLI.printWarehouse(playerBoard.getWarehouse());
             graphicalCLI.printExtraShelfLeader(playerBoard.getWarehouse());
@@ -218,7 +152,7 @@ public class CLI {
     }
 
     public void storeTempResources(List<Resource> resourcesToMemorize) {    //TODO: da rimuovere
-        resourcesToPut = new ArrayList<>(resourcesToMemorize);
+        setResourcesToPut(new ArrayList<>(resourcesToMemorize));
     }
 
     public void tryToPlaceShelves() { //TODO: decidere visibility (anche x altri try)
@@ -227,7 +161,7 @@ public class CLI {
             turnMenu(true);
         else {
             graphicalCLI.printString("Please, try again to place on the shelves:\n");
-            chooseShelvesManagement(resourcesToPut);
+            chooseShelvesManagement(getResourcesToPut());
         }
     }
 
@@ -254,7 +188,7 @@ public class CLI {
     private boolean isLeaderShelfActive() {
         List<Shelf> shelves = new ArrayList<>();
         try{
-            shelves = playerBoardFromNickname(nickname).getWarehouse().getShelves();
+            shelves = getLocalPlayerBoard().getWarehouse().getShelves();
         }catch (NotExistingNickname e){
             e.printStackTrace();
         }
@@ -283,7 +217,7 @@ public class CLI {
                 }
             }
 
-            warehouse = playerBoardFromNickname(nickname).getWarehouse();
+            warehouse = getLocalPlayerBoard().getWarehouse();
             graphicalCLI.printWarehouseConfiguration(warehouse);
             graphicalCLI.printString("Resources to place: ");
             graphicalCLI.printGraphicalResources(toPlace);
@@ -350,9 +284,9 @@ public class CLI {
 
     private boolean checkFreeSlotInWarehouse() {
         try {
-            if(playerBoardFromNickname(nickname).getWarehouse().getShelves().size()<3)
+            if(getLocalPlayerBoard().getWarehouse().getShelves().size()<3)
                 return true;
-            for (Shelf shelf : playerBoardFromNickname(nickname).getWarehouse().getShelves()) { //TODO: da controllare
+            for (Shelf shelf : getLocalPlayerBoard().getWarehouse().getShelves()) { //TODO: da controllare
                 if (shelf.getResourceType().equals(ResourceType.WILDCARD) ||
                         shelf.getLevel() > shelf.getResources().getQuantity())
                     return true;
@@ -559,7 +493,7 @@ public class CLI {
     }
 
     public void selectMarket() {
-        graphicalCLI.printMarket(marketView);
+        graphicalCLI.printMarket(getMarketView());
         if(askGoBack())
             return;
         graphicalCLI.printString("Where do you want to place the marble?\n" +
@@ -591,7 +525,7 @@ public class CLI {
             else
                 graphicalCLI.printString("Your choice is invalid, please try again\n");
         } while(!valid);
-        mainActionPlayed = true;
+        setMainActionPlayed(true);
     }
 
 
@@ -603,12 +537,12 @@ public class CLI {
             return;
 
         DevelopmentCard developmentCard = chooseCardFromDecks();
-        spaceToPlace = chooseDevCardSpace();
+        setSpaceToPlace(chooseDevCardSpace());
 
-        cardToBuy = new DevelopmentCard(developmentCard.getID(),developmentCard.getVP(),developmentCard.getColor(),
-                developmentCard.getLevel(),developmentCard.getProduction(),developmentCard.getCost());
-        messageHandler.sendMessage(new BuyDevelopmentCardMessage(cardToBuy, spaceToPlace)); //TODO: è più un CANBuyDevelopmentCardMessage?
-        mainActionPlayed = true;
+        setCardToBuy(new DevelopmentCard(developmentCard.getID(),developmentCard.getVP(),developmentCard.getColor(),
+                developmentCard.getLevel(),developmentCard.getProduction(),developmentCard.getCost()));
+        messageHandler.sendMessage(new BuyDevelopmentCardMessage(getCardToBuy(), getSpaceToPlace())); //TODO: è più un CANBuyDevelopmentCardMessage?
+        setMainActionPlayed(true);
     }
 
     private DevelopmentCard chooseCardFromDecks() {
@@ -640,7 +574,7 @@ public class CLI {
                         color = CardColors.YELLOW.name();
                         break;
                 }
-                for (DevelopmentDeckView developmentDeck : developmentDecks) {
+                for (DevelopmentDeckView developmentDeck : getDevelopmentDecks()) {
                     if (developmentDeck.getDeckColor().equals(CardColors.valueOf(color)) &&
                             developmentDeck.getDeckLevel() == level) {
                         if(!developmentDeck.getDeck().isEmpty()) {
@@ -670,13 +604,13 @@ public class CLI {
             space = scanner.nextInt()-1;
         }
 
-        spaceToPlace = space;
+        setSpaceToPlace(space);
         return space;
     }
 
     public List<LeaderCard> chooseLeaderCard(){
         try {
-            List<LeaderCard> hand = (List<LeaderCard>)(List<?>)playerBoardFromNickname(nickname).getLeaderBoard().getHand().getCards();
+            List<LeaderCard> hand = (List<LeaderCard>)(List<?>) getLocalPlayerBoard().getLeaderBoard().getHand().getCards();
             graphicalCLI.printNumberedList(hand, graphicalCLI::printLeaderCard);
             graphicalCLI.printString("Choose a leader card by selecting the corresponding number: ");
 
@@ -707,7 +641,7 @@ public class CLI {
 
     public void selectProductions() {
         try {
-            DevelopmentBoardView developmentBoard = playerBoardFromNickname(nickname).getDevelopmentBoard();
+            DevelopmentBoardView developmentBoard = getLocalPlayerBoard().getDevelopmentBoard();
             List<Production> productions = new ArrayList<>();
             //TODO: gestire leader e basic production
             developmentBoard.getSpaces()
@@ -728,14 +662,14 @@ public class CLI {
                             validIndex = false;
                     } while (!validIndex);
 
-                    productionsToActivate.add(productions.get(index));
+                    getProductionsToActivate().add(productions.get(index));
 
                     graphicalCLI.printString("Do you want to activate another production? ");
                     if (!isAnswerYes())
                         endChoice = true;
                 } while (!endChoice);
                 resolveProductionWildcards();
-                messageHandler.sendMessage(new ActivateProductionsMessage(productionsToActivate));
+                messageHandler.sendMessage(new ActivateProductionsMessage(getProductionsToActivate()));
             }
             else
                 graphicalCLI.printString("No productions:\n");
@@ -746,7 +680,7 @@ public class CLI {
 
     public void resolveProductionWildcards() {
         List<Production> resolvedProductions = new ArrayList<>();
-        for(Production production : productionsToActivate) {
+        for(Production production : getProductionsToActivate()) {
             List<Resource> consumedResolved =  production.getConsumed().stream()
                     .filter((r -> r.getResourceType() != ResourceType.WILDCARD)).collect(Collectors.toList());
             List<Resource> producedResolved =  production.getProduced().stream()
@@ -776,7 +710,7 @@ public class CLI {
             }
             resolvedProductions.add(new Production(consumedResolved, producedResolved));
         }
-        productionsToActivate = resolvedProductions;
+        setProductionsToActivate(resolvedProductions);
     }
 
     public void turnMenu(boolean isPlayerTurn) { //TODO: gestire per far fare comunque altre azioni
@@ -796,7 +730,7 @@ public class CLI {
 
             switch (action) {
                 case 1:
-                    if (!mainActionPlayed)
+                    if (!isMainActionPlayed())
                         selectMarket();
                     else {
                         graphicalCLI.printString("You can't play this action on your turn anymore\n");
@@ -804,10 +738,10 @@ public class CLI {
                     }
                     break;
                 case 2:
-                    if (!mainActionPlayed) {
+                    if (!isMainActionPlayed()) {
                         selectDevDecks();
-                        if (mainActionPlayed) { //TODO: da spostare in un doAction (togliendo if)
-                            chooseStorages(cardToBuy.getCost());  //TODO: Ste: invio al server le risorse, va testato
+                        if (isMainActionPlayed()) { //TODO: da spostare in un doAction (togliendo if)
+                            chooseStorages(getCardToBuy().getCost());  //TODO: Ste: invio al server le risorse, va testato
                         }
                     }
                     else {
@@ -816,7 +750,7 @@ public class CLI {
                     }
                     break;
                 case 3:
-                    if (!mainActionPlayed)
+                    if (!isMainActionPlayed())
                         selectProductions();
                     else {
                         graphicalCLI.printString("You can't play this action on your turn anymore\n");
@@ -837,6 +771,7 @@ public class CLI {
                     break;
                 case 8:
                     if (mainActionPlayed)
+
                         //endTurn = true; TODO: gestire fine turno
                         break;
                 default: //boh, default non lo farò mai :)
@@ -858,10 +793,10 @@ public class CLI {
     public void chooseStorages(List<Resource> resources) {
 
         try {
-            PlayerBoardView playerBoard = playerBoardFromNickname(nickname);
+            PlayerBoardView playerBoard = getLocalPlayerBoard();
             graphicalCLI.printWarehouse(playerBoard.getWarehouse());
-            graphicalCLI.printExtraShelfLeader(playerBoardFromNickname(nickname).getWarehouse());
-            graphicalCLI.printStrongbox(playerBoardFromNickname(nickname).getStrongbox());
+            graphicalCLI.printExtraShelfLeader(getLocalPlayerBoard().getWarehouse());
+            graphicalCLI.printStrongbox(getLocalPlayerBoard().getStrongbox());
         }catch(NotExistingNickname e){
             e.printStackTrace();
         }
@@ -899,7 +834,7 @@ public class CLI {
         requestResources.add(new RequestResources(whLeaderResources,StorageType.LEADER));
         requestResources.add(new RequestResources(strongboxResources,StorageType.STRONGBOX));
 
-        messageHandler.sendMessage(new RequestResourcesDevMessage(cardToBuy, spaceToPlace, requestResources)); //TODO: manca il metodo che riceve ack, quindi si blocca
+        messageHandler.sendMessage(new RequestResourcesDevMessage(getCardToBuy(), getSpaceToPlace(), requestResources)); //TODO: manca il metodo che riceve ack, quindi si blocca
     }
   
     private boolean isAnswerYes() {
@@ -909,7 +844,7 @@ public class CLI {
 
     private void printDevelopmentDeckTop() {
         List<DevelopmentCard> developmentCards =  new ArrayList<>();
-        for(DevelopmentDeckView temp : developmentDecks){
+        for(DevelopmentDeckView temp : getDevelopmentDecks()){
             if(!temp.getDeck().isEmpty())
                 developmentCards.add((DevelopmentCard) temp.getDeck().getCards().get(0));
         }
