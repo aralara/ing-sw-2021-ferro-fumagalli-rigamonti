@@ -19,6 +19,13 @@ public class Shelf implements Storage, Serializable {
         isLeader = false;
     }
 
+    public Shelf(int level){
+        this.resourceType = ResourceType.WILDCARD;
+        this.resources = new Resource();
+        this.level = level;
+        this.isLeader = false;
+    }
+
     public Shelf(ResourceType resourceType, Resource resources, int level, boolean isLeader) {
         this.resourceType = resourceType;
         this.resources = new Resource(resources.getResourceType(), resources.getQuantity());

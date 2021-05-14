@@ -4,7 +4,9 @@ public enum Constants {
 
     MARKET_COLUMN_SIZE(4),
     MARKET_ROW_SIZE(3),
-    FAITH_TOTAL_VATICAN_REPORTS(3);
+    FAITH_TOTAL_VATICAN_REPORTS(3),
+    BASE_WAREHOUSE_SHELVES(3),
+    BASE_DEVELOPMENT_SPACES(3);
 
     private final int value;
 

@@ -12,5 +12,6 @@ public class Client {
         //CLI.main(args);
         CLI cli = new CLI();
         cli.setup();
+        cli.run();
     }
 }

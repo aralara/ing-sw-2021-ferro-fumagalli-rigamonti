@@ -35,8 +35,9 @@ public class ResourcesMarketMessage extends ResourcesMessage implements ServerAc
                     + marblesLeft + " wildcards left ):\n");
 
             availableAbilities.stream().collect(HashMap<Integer, String>::new,
-                    (map, resourceType) -> map.put(map.size() + 1, resourceType.name()),
-                    (map1, map2) -> { }).forEach((n, rt) -> graphicalCLI.printString(n + ")" + rt));
+                    (m, rt) -> m.put(m.size() + 1, rt.name()),
+                    (m1, m2) -> {}
+                    ).forEach((n, rt) -> graphicalCLI.printString(n + ")" + rt));
 
             do {
                 graphicalCLI.printString("Please choose a valid resource type for the wildcard:");

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.storage;
 
+import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.listeners.Listeners;
 import it.polimi.ingsw.utils.listeners.PlayerListened;
 
@@ -13,6 +14,8 @@ public class Warehouse extends PlayerListened implements Storage {
 
     public Warehouse() {
         shelves = new ArrayList<>();
+        for(int i = 0; i < Constants.BASE_WAREHOUSE_SHELVES.value(); i++)
+            shelves.add(new Shelf(i + 1));
     }
 
 
