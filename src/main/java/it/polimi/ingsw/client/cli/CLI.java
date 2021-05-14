@@ -258,11 +258,11 @@ public class CLI {
         }catch (NotExistingNickname e){
             e.printStackTrace();
         }
-        return shelves.stream().anyMatch(Shelf::IsLeader);
+        return shelves.stream().anyMatch(Shelf::isLeader);
     }
 
     private void placeResourcesOnShelves(List<Resource> resources){
-        //TODO: aggiungere gestione leader
+        //TODO: controllare funzioni anche con leaderShelf attivi
         WarehouseView warehouse;
         List<Shelf> shelves = new ArrayList<>();
         List<Resource> toPlace;
@@ -314,9 +314,10 @@ public class CLI {
                         else if (selectedShelf.getResourceType().equals(resourceToPlace.getResourceType())) { //shelf with the same resource type
                             sameResTypeShelfManagement(shelves, toPlace, selectedShelf, resourceToPlace);
                         }
-                        else { //shelf with different resource type
+                        else if(!selectedShelf.isLeader()){ //shelf with different resource type
                             differentResTypeShelfManagement(shelves, toPlace, selectedShelf, resourceToPlace);
                         }
+                        else graphicalCLI.printString("You can't place this resource here\n");
                     }
                     else if(level==0){
                         toDiscard.add(new Resource(resourceToPlace.getResourceType(),resourceToPlace.getQuantity()));
@@ -375,7 +376,7 @@ public class CLI {
         List<Shelf> shelves = new ArrayList<>();
         for(Shelf shelf : warehouse)
             shelves.add(new Shelf(shelf.getResourceType(), shelf.getResources(),
-                    shelf.getLevel(), shelf.IsLeader())); //TODO: controllare se va anche con leaderShelf
+                    shelf.getLevel(), shelf.isLeader())); //TODO: controllare se va anche con leaderShelf
         return shelves;
     }
 
@@ -445,6 +446,7 @@ public class CLI {
                     for(int i=0; i<selectedShelf.getResources().getQuantity(); i++){
                         toPlace.add(1, new Resource(selectedShelf.getResourceType(), 1));
                     }
+                    resetShelf(selectedShelf);
                 }
             }
         }
@@ -485,7 +487,7 @@ public class CLI {
     }
 
     private boolean isResourceTypeUnique(List<Shelf> shelves, ResourceType resourceType) {
-        return shelves.stream().noneMatch(shelf -> shelf.getResourceType().equals(resourceType));
+        return shelves.stream().noneMatch(shelf -> !shelf.isLeader() && shelf.getResourceType().equals(resourceType));
     }
 
     private void placeResource(Shelf shelf, Resource resource){
@@ -502,7 +504,7 @@ public class CLI {
 
     private Shelf getShelfWithSameResource(List<Shelf> shelves, ResourceType resourceType){
         for(Shelf shelf : shelves){
-            if(shelf.getResourceType().equals(resourceType))
+            if(!shelf.isLeader() && shelf.getResourceType().equals(resourceType))
                 return shelf;
         }
         return null; //TODO: brutto?
@@ -510,12 +512,16 @@ public class CLI {
 
     private boolean isShelfRearrangeable(List<Shelf> shelves, Resource resource){ //TODO: nome da cambiare?
         Shelf shelfWithResources = getShelfWithSameResource(shelves, resource.getResourceType());
-        return shelfWithResources.getResources().getQuantity()+resource.getQuantity() <= 3;
+        int totalLeaderShelves = 2*(int)(shelves.stream().filter(shelf -> shelf.isLeader() && shelf.getResourceType()
+                    .equals(resource.getResourceType())).count());
+        return shelfWithResources.getResources().getQuantity()+resource.getQuantity() <= 3 + totalLeaderShelves;
     }
 
     private void resetShelf(Shelf shelf) {
-        shelf.setResourceType(ResourceType.WILDCARD);
-        shelf.getResources().setResourceType(ResourceType.WILDCARD);
+        if(!shelf.isLeader()) {
+            shelf.setResourceType(ResourceType.WILDCARD);
+            shelf.getResources().setResourceType(ResourceType.WILDCARD);
+        }
         shelf.getResources().setQuantity(0);
     }
 
@@ -652,7 +658,7 @@ public class CLI {
     }
 
     private int chooseDevCardSpace() {
-        int space = -1;
+        int space;
         graphicalCLI.printString("Which space do you want to put the card on? ");
 
         space = scanner.nextInt()-1;

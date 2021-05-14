@@ -77,7 +77,7 @@ public class Shelf implements Storage, Serializable {
      * Gets the isLeader attribute
      * @return Returns isLeader value
      */
-    public boolean IsLeader() {
+    public boolean isLeader() {
         return this.isLeader;
     }
 

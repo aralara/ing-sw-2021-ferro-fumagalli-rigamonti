@@ -30,7 +30,7 @@ public class ShelfTest{
     @Test
     public void testGetIsLeader() {
         Shelf instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,false);
-        assertFalse(instance.IsLeader());
+        assertFalse(instance.isLeader());
     }
 
     @Test
