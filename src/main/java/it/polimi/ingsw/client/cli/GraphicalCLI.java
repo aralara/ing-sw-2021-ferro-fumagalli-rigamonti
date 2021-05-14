@@ -20,8 +20,11 @@ import it.polimi.ingsw.server.model.storage.ResourceType;
 import it.polimi.ingsw.server.model.storage.Shelf;
 
 import java.sql.SQLSyntaxErrorException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.utils.Constants.MARKET_COLUMN_SIZE;
@@ -41,6 +44,15 @@ public class GraphicalCLI {
 
     public void printString(String toPrint){
         System.out.print(toPrint);
+    }
+
+    public <T> void printNumberedList(List<T> list, Consumer<T> printConsumer) {
+        list.stream().collect(HashMap<Integer, T>::new,
+                (m, elem) -> m.put(m.size() + 1, elem),
+                (m1, m2) -> {}).forEach((n, elem) -> {
+                    printString(n + ")");
+                    printConsumer.accept(elem);
+                });
     }
 
     public void printMarket(MarketView market){

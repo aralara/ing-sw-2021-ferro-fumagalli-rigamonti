@@ -6,7 +6,6 @@ import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 import it.polimi.ingsw.utils.messages.ResourcesMessage;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,10 +33,7 @@ public class ResourcesMarketMessage extends ResourcesMessage implements ServerAc
             graphicalCLI.printString("You can choose a resource from the following types ( "
                     + marblesLeft + " wildcards left ):\n");
 
-            availableAbilities.stream().collect(HashMap<Integer, String>::new,
-                    (m, rt) -> m.put(m.size() + 1, rt.name()),
-                    (m1, m2) -> {}
-                    ).forEach((n, rt) -> graphicalCLI.printString(n + ")" + rt));
+            graphicalCLI.printNumberedList(availableAbilities, rt -> graphicalCLI.printString(rt.name()));
 
             do {
                 graphicalCLI.printString("Please choose a valid resource type for the wildcard:");

@@ -3,7 +3,6 @@ package it.polimi.ingsw.client.cli;
 import it.polimi.ingsw.client.structures.*;
 import it.polimi.ingsw.exceptions.NotExistingNickname;
 import it.polimi.ingsw.server.Server;
-import it.polimi.ingsw.server.model.cards.ability.*;
 import it.polimi.ingsw.server.model.cards.card.CardColors;
 import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
@@ -14,6 +13,7 @@ import it.polimi.ingsw.utils.messages.server.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class CLI {
 
@@ -156,6 +156,25 @@ public class CLI {
         throw new NotExistingNickname();
     }
 
+    public ResourceType resourceTypeSelector(List<ResourceType> resourceTypes) {    //TODO: da spostare in graphical insieme allo scanner
+        if(resourceTypes.size() > 0) {
+            if(resourceTypes.size() == 1) {
+                ResourceType res = resourceTypes.get(0);
+                graphicalCLI.printString(res + " is the only resource type available\n");
+                return res;
+            }
+            int index;
+            graphicalCLI.printString("You can choose a resource type from the following: \n");
+            graphicalCLI.printNumberedList(resourceTypes, rt -> graphicalCLI.printString(rt.name()));
+            do {
+                graphicalCLI.printString("Please choose a valid resource: ");
+                index = scanner.nextInt()-1;
+            } while(index < 0 || index>=4);
+            return resourceTypes.get(index);
+        }
+        return null;
+    }
+
     public List<Resource> resolveResourcesToEqualize(int wildcardQuantity) { //TODO: sarà chiamato una sola volta per equalizzare
         int index;
         List<Resource> resources = new ArrayList<>();
@@ -194,17 +213,8 @@ public class CLI {
         }
     }
 
-    public void storeTempResources(List<Resource> resourcesToMemorize) {
+    public void storeTempResources(List<Resource> resourcesToMemorize) {    //TODO: da rimuovere
         resourcesToPut = new ArrayList<>(resourcesToMemorize);
-    }
-
-    private void storeTempCard(DevelopmentCard devCardToMemorize) { //TODO: valutare se aggiungere costruttore apposito
-        cardToBuy = new DevelopmentCard(devCardToMemorize.getID(),devCardToMemorize.getVP(),devCardToMemorize.getColor(),
-                devCardToMemorize.getLevel(),devCardToMemorize.getProduction(),devCardToMemorize.getCost());
-    }
-
-    private void storeTempProduction(List<Production> productionsToMemorize) {
-        productionsToActivate = new ArrayList<>(productionsToMemorize);
     }
 
     public void tryToPlaceShelves() { //TODO: decidere visibility (anche x altri try)
@@ -544,7 +554,8 @@ public class CLI {
         int space = chooseDevCardSpace(developmentCard.getLevel());
         //TODO: aggiungere controlli anche su risorse da spendere?
 
-        storeTempCard(developmentCard);
+        cardToBuy = new DevelopmentCard(developmentCard.getID(),developmentCard.getVP(),developmentCard.getColor(),
+                developmentCard.getLevel(),developmentCard.getProduction(),developmentCard.getCost());
         packetHandler.sendMessage(new BuyDevelopmentCardMessage(developmentCard, space));
         mainActionPlayed = true;
     }
@@ -649,33 +660,68 @@ public class CLI {
                             .forEach(c -> productions.add(((DevelopmentCard) c).getProduction()))
                     );
             graphicalCLI.printString("Available productions:\n");
-            productions.stream().collect(HashMap<Integer, Production>::new,
-                    (m, p) -> m.put(m.size() + 1, p),
-                    (m1, m2) -> {}).forEach((n, p) -> {
-                        graphicalCLI.printString(n + ")");
-                        graphicalCLI.printProduction(p);
-                    });
+            graphicalCLI.printNumberedList(productions, graphicalCLI::printProduction);
             boolean endChoice = false;
-            do {
-                int index;
-                boolean validIndex = true;
+            if(productions.size() > 0) {
                 do {
-                    graphicalCLI.printString("Choose a production you want to activate by entering its number: ");
-                    index = scanner.nextInt() - 1;
-                    if(index < 0 || index >= productions.size())
-                        validIndex = false;
-                } while(!validIndex);
+                    int index;
+                    boolean validIndex = true;
+                    do {
+                        graphicalCLI.printString("Choose a production you want to activate by entering its number: ");
+                        index = scanner.nextInt() - 1;
+                        if (index < 0 || index >= productions.size())
+                            validIndex = false;
+                    } while (!validIndex);
 
-                productionsToActivate.add(productions.get(index));
+                    productionsToActivate.add(productions.get(index));
 
-                graphicalCLI.printString("Do you want to activate another production? ");
-                if(!isAnswerYes())
-                    endChoice = true;
-            } while(!endChoice);
-            packetHandler.sendMessage(new ActivateProductionsMessage(productionsToActivate));
+                    graphicalCLI.printString("Do you want to activate another production? ");
+                    if (!isAnswerYes())
+                        endChoice = true;
+                } while (!endChoice);
+                resolveProductionWildcards();
+                packetHandler.sendMessage(new ActivateProductionsMessage(productionsToActivate));
+            }
+            else
+                graphicalCLI.printString("No productions:\n");
         } catch(NotExistingNickname e) {
             e.printStackTrace();
         }
+    }
+
+    public void resolveProductionWildcards() {
+        List<Production> resolvedProductions = new ArrayList<>();
+        for(Production production : productionsToActivate) {
+            List<Resource> consumedResolved =  production.getConsumed().stream()
+                    .filter((r -> r.getResourceType() != ResourceType.WILDCARD)).collect(Collectors.toList());
+            List<Resource> producedResolved =  production.getProduced().stream()
+                    .filter((r -> r.getResourceType() != ResourceType.WILDCARD)).collect(Collectors.toList());
+            List<Resource> consumedWildcards = production.getConsumed().stream()
+                    .filter((r -> r.getResourceType() == ResourceType.WILDCARD)).collect(Collectors.toList());
+            List<Resource> producedWildcards = production.getProduced().stream()
+                    .filter((r -> r.getResourceType() == ResourceType.WILDCARD)).collect(Collectors.toList());
+
+            if(consumedWildcards.size() > 0 || producedWildcards.size() > 0) {
+                graphicalCLI.printString("Resolve wildcards for the following production:\n");
+                graphicalCLI.printProduction(production);
+                if(consumedWildcards.size() > 0) {
+                    graphicalCLI.printString("Choose for consumed wildcards:\n");
+                    for (Resource wildcard : consumedWildcards) {
+                        ResourceType chosenType = resourceTypeSelector(Arrays.asList(ResourceType.values().clone()));
+                        consumedResolved.add(new Resource(chosenType, wildcard.getQuantity()));
+                    }
+                }
+                if(producedWildcards.size() > 0) {
+                    graphicalCLI.printString("Choose for produced wildcards:\n");
+                    for (Resource wildcard : producedWildcards) {
+                        ResourceType chosenType = resourceTypeSelector(Arrays.asList(ResourceType.values().clone()));
+                        producedResolved.add(new Resource(chosenType, wildcard.getQuantity()));
+                    }
+                }
+            }
+            resolvedProductions.add(new Production(consumedResolved, producedResolved));
+        }
+        productionsToActivate = resolvedProductions;
     }
 
     public void turnMenu(boolean isPlayerTurn) { //TODO: gestire per far fare comunque altre azioni
