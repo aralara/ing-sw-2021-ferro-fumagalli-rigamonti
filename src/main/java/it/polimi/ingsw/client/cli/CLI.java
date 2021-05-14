@@ -46,7 +46,7 @@ public class CLI {
         goBack = false;
         mainActionPlayed = false;
         graphicalCLI = new GraphicalCLI();
-        messageHandler = new MessageHandler();
+        messageHandler = new MessageHandler(this);
     }
 
     public String getNickname() {

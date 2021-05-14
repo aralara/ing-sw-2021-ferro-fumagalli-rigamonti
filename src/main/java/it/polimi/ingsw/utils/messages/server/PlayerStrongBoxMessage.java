@@ -6,7 +6,7 @@ import it.polimi.ingsw.server.model.storage.Resource;
 
 import java.util.List;
 
-public class PlayerStrongBoxMessage implements ServerActionMessage {
+public class PlayerStrongBoxMessage implements ServerUpdateMessage {
 
     private final List<Resource> resources;
     private final String nickname;
@@ -27,7 +27,7 @@ public class PlayerStrongBoxMessage implements ServerActionMessage {
     }
 
     @Override
-    public void doAction(CLI client) {
+    public void doUpdate(CLI client) {
         try {
             client.playerBoardFromNickname(nickname).getStrongbox().setResources(resources);
         } catch(NotExistingNickname e){

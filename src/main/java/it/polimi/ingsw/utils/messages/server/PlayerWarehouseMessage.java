@@ -6,7 +6,7 @@ import it.polimi.ingsw.server.model.storage.Shelf;
 
 import java.util.List;
 
-public class PlayerWarehouseMessage implements ServerActionMessage {
+public class PlayerWarehouseMessage implements ServerUpdateMessage {
 
     private final List<Shelf> shelves;
     private final String nickname;
@@ -27,7 +27,7 @@ public class PlayerWarehouseMessage implements ServerActionMessage {
     }
 
     @Override
-    public void doAction(CLI client) {
+    public void doUpdate(CLI client) {
         try {
             client.playerBoardFromNickname(nickname).getWarehouse().setShelves(shelves);
         } catch(NotExistingNickname e){

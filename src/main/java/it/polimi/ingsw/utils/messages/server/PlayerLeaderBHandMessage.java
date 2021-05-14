@@ -9,7 +9,7 @@ import it.polimi.ingsw.utils.messages.HiddenMessage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayerLeaderBHandMessage implements HiddenMessage, ServerActionMessage {
+public class PlayerLeaderBHandMessage implements HiddenMessage, ServerUpdateMessage {
 
     private Deck hand;
     private final String nickname;
@@ -37,7 +37,7 @@ public class PlayerLeaderBHandMessage implements HiddenMessage, ServerActionMess
     }
 
     @Override
-    public void doAction(CLI client) {
+    public void doUpdate(CLI client) {
         try {
             client.playerBoardFromNickname(nickname).getLeaderBoard().setHand(hand);
         } catch(NotExistingNickname e){

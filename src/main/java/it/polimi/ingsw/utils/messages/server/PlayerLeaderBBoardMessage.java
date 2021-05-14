@@ -4,7 +4,7 @@ import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.exceptions.NotExistingNickname;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
 
-public class PlayerLeaderBBoardMessage implements ServerActionMessage {
+public class PlayerLeaderBBoardMessage implements ServerUpdateMessage {
 
     private final Deck board;
     private final String nickname;
@@ -25,7 +25,7 @@ public class PlayerLeaderBBoardMessage implements ServerActionMessage {
     }
 
     @Override
-    public void doAction(CLI client) {
+    public void doUpdate(CLI client) {
         try {
             client.playerBoardFromNickname(nickname).getLeaderBoard().setBoard(board);
         } catch(NotExistingNickname e){

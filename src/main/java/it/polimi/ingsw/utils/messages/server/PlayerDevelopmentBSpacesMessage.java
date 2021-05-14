@@ -6,7 +6,7 @@ import it.polimi.ingsw.server.model.cards.deck.Deck;
 
 import java.util.List;
 
-public class PlayerDevelopmentBSpacesMessage implements ServerActionMessage {
+public class PlayerDevelopmentBSpacesMessage implements ServerUpdateMessage {
 
     private final List<Deck> spaces;
     private final String nickname;
@@ -27,7 +27,7 @@ public class PlayerDevelopmentBSpacesMessage implements ServerActionMessage {
     }
 
     @Override
-    public void doAction(CLI client) {
+    public void doUpdate(CLI client) {
         try {
             client.playerBoardFromNickname(nickname).getDevelopmentBoard().setSpaces(spaces);
         } catch(NotExistingNickname e){

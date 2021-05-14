@@ -3,7 +3,7 @@ package it.polimi.ingsw.utils.messages.server;
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.server.model.market.*;
 
-public class MarketMessage implements ServerActionMessage {
+public class MarketMessage implements ServerUpdateMessage {
 
     private final Marble[][] marbleMatrix;
     private final Marble floatingMarble;
@@ -24,7 +24,7 @@ public class MarketMessage implements ServerActionMessage {
     }
 
     @Override
-    public void doAction(CLI client) {
+    public void doUpdate(CLI client) {
         client.getMarketView().setMarbleMatrix(marbleMatrix);
         client.getMarketView().setFloatingMarble(floatingMarble);
     }
