@@ -233,11 +233,14 @@ public class GraphicalCLI {
     }
 
     public void printStrongbox(StrongboxView strongboxView){
+        String color;
         System.out.println("Strongbox: ");
         if(strongboxView.getResources().size() > 0) {
             for (int i = 0; i < strongboxView.getResources().size(); i++) {
                 System.out.print(" • ");
                 printResource(strongboxView.getResources().get(i));
+                color = chooseColor(strongboxView.getResources().get(i).getResourceType());
+                System.out.print(color + " ■ " + color + RESET);
                 System.out.println();
             }
         }
@@ -247,7 +250,12 @@ public class GraphicalCLI {
     }
 
     public void printGraphicalResources(List<Resource> resources){
-        //TODO: da fare
+        String color;
+        for(Resource res : resources){
+            color = chooseColor(res.getResourceType());
+            System.out.print(color + " ■ " + color + RESET);
+        }
+        System.out.println();
     }
 
     public void printResource(Resource resource){
