@@ -28,6 +28,6 @@ public class BuyDevelopmentCardMessage implements ClientActionMessage {
     @Override
     public void doAction(VirtualView view, Controller controller) {
         boolean success = controller.canBuyDevCard(view.getNickname(), developmentCard);
-        view.sendMessage(new BuyDevelopmentCardAckMessage(success));
+        view.sendMessage(new BuyDevelopmentCardAckMessage(success)); //TODO: CANBuyDevelopmentCardAckMessage?
     }
 }
