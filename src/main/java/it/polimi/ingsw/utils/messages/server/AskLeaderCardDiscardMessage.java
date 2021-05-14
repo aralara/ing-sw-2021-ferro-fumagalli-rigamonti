@@ -2,7 +2,7 @@ package it.polimi.ingsw.utils.messages.server;
 
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.GraphicalCLI;
-import it.polimi.ingsw.client.cli.PacketHandler;
+import it.polimi.ingsw.client.MessageHandler;
 import it.polimi.ingsw.client.structures.PlayerBoardView;
 import it.polimi.ingsw.exceptions.NotExistingNickname;
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
@@ -16,7 +16,7 @@ public class AskLeaderCardDiscardMessage implements ServerActionMessage {
     @Override
     public void doAction(CLI client) {                      //TODO: azioni da delegare alla GraphicalCLI
         String nickname = client.getNickname();
-        PacketHandler packetHandler = client.getPacketHandler();
+        MessageHandler messageHandler = client.getPacketHandler();
         GraphicalCLI graphicalCLI = client.getGraphicalCLI();
         List<LeaderCard> leaderCards = new ArrayList<>();
         int firstOne, secondOne;
@@ -43,7 +43,7 @@ public class AskLeaderCardDiscardMessage implements ServerActionMessage {
 
             leaderCards.add((LeaderCard) playerBoard.getLeaderBoard().getHand().get(firstOne));
             leaderCards.add((LeaderCard) playerBoard.getLeaderBoard().getHand().get(secondOne));
-            packetHandler.sendMessage(new LeaderCardDiscardMessage(leaderCards));
+            messageHandler.sendMessage(new LeaderCardDiscardMessage(leaderCards));
         }catch (NotExistingNickname e){
             e.printStackTrace();
         }

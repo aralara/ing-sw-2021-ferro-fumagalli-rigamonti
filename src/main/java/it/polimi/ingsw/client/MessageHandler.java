@@ -1,4 +1,4 @@
-package it.polimi.ingsw.client.cli;
+package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.utils.messages.Message;
 import it.polimi.ingsw.utils.messages.server.*;
@@ -10,7 +10,7 @@ import java.net.Socket;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-public class PacketHandler {
+public class MessageHandler implements Runnable{
 
     private Socket server;
     private ObjectOutputStream output;
@@ -18,11 +18,12 @@ public class PacketHandler {
 
     private final Queue<ServerActionMessage> messageQueue;
 
-    private Thread packetReceiver;
+    private boolean active;
 
 
-    public PacketHandler() {
+    public MessageHandler() {
         this.messageQueue = new ConcurrentLinkedQueue<>();
+        active = false;
     }
 
 
@@ -30,14 +31,10 @@ public class PacketHandler {
         return messageQueue;
     }
 
-    public boolean start(String address, int port) {
-        if(!connect(address, port)){
-            return false;
-        }
-
-        packetReceiver = new Thread(this::managePackets);
-        packetReceiver.start();
-        return true;
+    @Override
+    public void run() {
+        while(active)
+            managePackets();
     }
 
     public boolean connect(String address, int port) {
@@ -48,7 +45,6 @@ public class PacketHandler {
             return false;
         }
         System.out.println("Connected");
-
         try {
             output = new ObjectOutputStream(server.getOutputStream());
             input = new ObjectInputStream(server.getInputStream());
@@ -58,22 +54,21 @@ public class PacketHandler {
         } catch (ClassCastException e) {
             System.out.println("Protocol violation");
         }
+        active = true;
         return true;
     }
 
     private void managePackets(){
         try {
-            while (true) {
-                Object message;
+            Object message;
 
-                message = input.readObject();
-  
-                if (message instanceof ServerActionMessage) {
-                    messageQueue.add((ServerActionMessage) message);
-                } else {
+            message = input.readObject();
 
-                    System.out.println("Received " + message.toString());
-                }
+            if (message instanceof ServerActionMessage) {
+                messageQueue.add((ServerActionMessage) message);
+            } else {
+
+                System.out.println("Received " + message.toString());
             }
         }catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -88,5 +83,9 @@ public class PacketHandler {
         catch(IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void stop() {
+        active = false;
     }
 }

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.cli;
 
+import it.polimi.ingsw.client.MessageHandler;
 import it.polimi.ingsw.client.structures.*;
 import it.polimi.ingsw.exceptions.NotExistingNickname;
 import it.polimi.ingsw.server.Server;
@@ -14,8 +15,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static it.polimi.ingsw.utils.Constants.MARKET_COLUMN_SIZE;
 
 public class CLI {
 
@@ -33,7 +32,7 @@ public class CLI {
     private final Scanner scanner;
     private boolean goBack, mainActionPlayed, endTurn;
     private final GraphicalCLI graphicalCLI;
-    private final PacketHandler packetHandler;
+    private final MessageHandler messageHandler;
 
     public CLI() {
         lorenzoFaith = -1;
@@ -45,7 +44,7 @@ public class CLI {
         goBack = false;
         mainActionPlayed = false;
         graphicalCLI = new GraphicalCLI();
-        packetHandler = new PacketHandler();
+        messageHandler = new MessageHandler();
     }
 
     public String getNickname() {
@@ -92,8 +91,8 @@ public class CLI {
         return graphicalCLI;
     }
 
-    public PacketHandler getPacketHandler() {
-        return packetHandler;
+    public MessageHandler getPacketHandler() {
+        return messageHandler;
     }
 
     public int getNextInt() {
@@ -101,13 +100,15 @@ public class CLI {
     }
 
     public void setup() {
+        //TODO: busy wait
         while(!connect());
+        new Thread(messageHandler).start();
         graphicalCLI.printString("Insert your nickname\n");
         askNickname();
     }
 
     public void run() {
-        Queue<ServerActionMessage> messageQueue = packetHandler.getQueue();
+        Queue<ServerActionMessage> messageQueue = messageHandler.getQueue();
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         while(true) {
             try {
@@ -125,12 +126,12 @@ public class CLI {
         graphicalCLI.printString("Insert the IP address of server\n");
         String ip = scanner.nextLine();
 
-        return packetHandler.start(ip,Server.SOCKET_PORT);
+        return messageHandler.connect(ip, Server.SOCKET_PORT);
     }
 
     public void askNickname() {
         nickname = scanner.next();
-        packetHandler.sendMessage(new ConnectionMessage(nickname));
+        messageHandler.sendMessage(new ConnectionMessage(nickname));
     }
 
     public void createNewLobby() {
@@ -142,7 +143,7 @@ public class CLI {
             size = scanner.nextInt();
         }while(size <= 0 || size >= 5);
         setNumberOfPlayers(size);
-        packetHandler.sendMessage(new NewLobbyMessage(size));
+        messageHandler.sendMessage(new NewLobbyMessage(size));
     }
 
     public void setNumberOfPlayers(int numberOfPlayers) {
@@ -348,7 +349,7 @@ public class CLI {
                 toDiscard.addAll(toPlace);
             }
 
-            packetHandler.sendMessage(new ShelvesConfigurationMessage(shelves, toDiscard));
+            messageHandler.sendMessage(new ShelvesConfigurationMessage(shelves, toDiscard));
         }catch (NotExistingNickname e){
             e.printStackTrace();
         }
@@ -588,7 +589,7 @@ public class CLI {
                 valid = false;
 
             if(valid)
-                packetHandler.sendMessage(new SelectMarketMessage(row, column));
+                messageHandler.sendMessage(new SelectMarketMessage(row, column));
             else
                 graphicalCLI.printString("Your choice is invalid, please try again\n");
         } while(!valid);
@@ -608,7 +609,7 @@ public class CLI {
 
         cardToBuy = new DevelopmentCard(developmentCard.getID(),developmentCard.getVP(),developmentCard.getColor(),
                 developmentCard.getLevel(),developmentCard.getProduction(),developmentCard.getCost());
-        packetHandler.sendMessage(new BuyDevelopmentCardMessage(developmentCard, space));
+        messageHandler.sendMessage(new BuyDevelopmentCardMessage(developmentCard, space));
         mainActionPlayed = true;
     }
 
@@ -732,7 +733,7 @@ public class CLI {
                         endChoice = true;
                 } while (!endChoice);
                 resolveProductionWildcards();
-                packetHandler.sendMessage(new ActivateProductionsMessage(productionsToActivate));
+                messageHandler.sendMessage(new ActivateProductionsMessage(productionsToActivate));
             }
             else
                 graphicalCLI.printString("No productions:\n");
@@ -804,7 +805,7 @@ public class CLI {
                     if (!mainActionPlayed){
                         selectDevDecks();
                         List<RequestResources> temp = chooseStorages(cardToBuy.getCost());  //TODO: Ste: invio al server le risorse, va testato
-                        packetHandler.sendMessage(new RequestResourcesDevMessage(cardToBuy,spaceToPlace,temp)); //TODO: manca il metodo che riceve ack, quindi si blocca
+                        messageHandler.sendMessage(new RequestResourcesDevMessage(cardToBuy,spaceToPlace,temp)); //TODO: manca il metodo che riceve ack, quindi si blocca
                     }
                     else {
                         graphicalCLI.printString("You can't play this action on your turn anymore\n");
