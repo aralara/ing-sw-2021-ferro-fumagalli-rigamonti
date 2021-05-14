@@ -13,10 +13,7 @@ import it.polimi.ingsw.utils.messages.server.*;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Scanner;
+import java.util.*;
 
 public class CLI {
 
@@ -698,6 +695,45 @@ public class CLI {
         return activeSpaces;
     }
 
+    public void selectProductions() {
+        try {
+            DevelopmentBoardView developmentBoard = playerBoardFromNickname(nickname).getDevelopmentBoard();
+            List<Production> productions = new ArrayList<>();
+            //TODO: gestire leader e basic production
+            developmentBoard.getSpaces()
+                    .forEach(d -> d.getCards()
+                            .forEach(c -> productions.add(((DevelopmentCard) c).getProduction()))
+                    );
+            graphicalCLI.printString("Available productions:\n");
+            productions.stream().collect(HashMap<Integer, Production>::new,
+                    (m, p) -> m.put(m.size() + 1, p),
+                    (m1, m2) -> {}).forEach((n, p) -> {
+                        graphicalCLI.printString(n + ")");
+                        graphicalCLI.printProduction(p);
+                    });
+            boolean endChoice = false;
+            do {
+                int index;
+                boolean validIndex = true;
+                do {
+                    graphicalCLI.printString("Choose a production you want to activate by entering its number: ");
+                    index = scanner.nextInt() - 1;
+                    if(index < 0 || index >= productions.size())
+                        validIndex = false;
+                } while(!validIndex);
+
+                productionsToActivate.add(productions.get(index));
+
+                graphicalCLI.printString("Do you want to activate another production? ");
+                if(!isAnswerYes())
+                    endChoice = true;
+            } while(!endChoice);
+            packetHandler.sendMessage(new ActivateProductionsMessage(productionsToActivate));
+        } catch(NotExistingNickname e) {
+            e.printStackTrace();
+        }
+    }
+
     public void turnMenu(boolean isPlayerTurn) { //TODO: gestire per far fare comunque altre azioni
         int action;
         goBack = false;
@@ -735,8 +771,7 @@ public class CLI {
                     break;
                 case 3:
                     if (!mainActionPlayed)
-                        //chiedo che produzioni attivare
-                        ;
+                        selectProductions();
                     else {
                         graphicalCLI.printString("You can't play this action on your turn anymore\n");
                         goBack = true;
