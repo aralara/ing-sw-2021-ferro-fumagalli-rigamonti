@@ -199,8 +199,8 @@ public class GraphicalCLI {
             for(int j = 0; j < i; j++) {
                 if ((warehouseView.getShelves().stream().anyMatch(x -> x.getLevel() == finalI && !x.IsLeader())) &&
                         (warehouseView.getShelves().stream().filter(x -> x.getLevel() == finalI && !x.IsLeader())
-                                .findFirst().get().getResources().getQuantity()>=j)) {
-                    color = chooseColor(warehouseView.getShelves().stream().filter(x -> x.getLevel() == 1)
+                                .findFirst().get().getResources().getQuantity()>j)) {
+                    color = chooseColor(warehouseView.getShelves().stream().filter(x -> x.getLevel() == finalI)
                             .findFirst().get().getResourceType());
                     System.out.print("[ " + color + "■" + color + RESET + " ]");
                 } else {
@@ -221,7 +221,7 @@ public class GraphicalCLI {
                     .filter(x -> x.getLevel() == level && x.IsLeader()).collect(Collectors.toList());
             for(int i = 0; i < specialWarehouse;i++){
                 for(int j = 0; j < level; j++){
-                    if (specialShelf.get(i).getResources().getQuantity()>=j) {
+                    if (specialShelf.get(i).getResources().getQuantity()>j) {
                         color = chooseColor(specialShelf.get(i).getResourceType());
                         System.out.print("[ " + color + "■" + color + RESET + " ]");
                     } else {
@@ -244,6 +244,10 @@ public class GraphicalCLI {
         else{
             System.out.println(" • Empty");
         }
+    }
+
+    public void printGraphicalResources(List<Resource> resources){
+        //TODO: da fare
     }
 
     public void printResource(Resource resource){
@@ -295,5 +299,10 @@ public class GraphicalCLI {
         System.out.println("•1) Warehouse");
         System.out.println("•2) Special Warehouse");
         System.out.println("•3) Strongbox");
+    }
+
+    public void printWarehouseConfiguration(WarehouseView warehouseView){
+        printWarehouse(warehouseView);
+        printExtraShelfLeader(warehouseView);
     }
 }

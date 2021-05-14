@@ -248,7 +248,7 @@ public class CLI {
     public void chooseShelvesManagement(List<Resource> resources){ //TODO: x controllare se si hanno o meno i leader, valutare se serve
         try {
             PlayerBoardView player = playerBoardFromNickname(nickname);
-            graphicalCLI.printWarehouse(player.getWarehouse());
+            graphicalCLI.printWarehouseConfiguration(player.getWarehouse());
 
             if(!isLeaderShelfActive())
                 placeResourcesOnShelves(resources);
@@ -282,18 +282,35 @@ public class CLI {
         int level;
 
         try{
+            toPlace = getResourcesOneByOne(resources);
+            for(int i=0; i<toPlace.size(); i++){ //to remove faith resource
+                if(toPlace.get(i).getResourceType().equals(ResourceType.FAITH)){
+                    toDiscard.add(toPlace.get(i));
+                    toPlace.remove(i);
+                    break;
+                }
+            }
+
+            graphicalCLI.printString("Resources to place: ");
+            graphicalCLI.printGraphicalResources(toPlace);
+
             if(checkFreeSlotInWarehouse()){ //it's possible to place resources
-                rearrangeWarehouse();
+                boolean rearranged = rearrangeWarehouse();
 
                 warehouse = playerBoardFromNickname(nickname).getWarehouse();
                 shelves = getShelvesWarehouseCopy(warehouse.getShelves());
-                toPlace = getResourcesOneByOne(resources);
 
                 while (!toPlace.isEmpty()){
-                    resourceToPlace = toPlace.get(0);
-                    graphicalCLI.printWarehouse(new WarehouseView(shelves)); //temp warehouse
+                    if(rearranged) { //x non stampare più volte se non si riorganizza warehouse
+                        graphicalCLI.printWarehouseConfiguration(new WarehouseView(shelves));
+                        graphicalCLI.printString("Resources to place: ");
+                        graphicalCLI.printGraphicalResources(toPlace);
+                    }
 
-                    level=askWhichShelf(resourceToPlace, shelves.size());
+                    resourceToPlace = toPlace.get(0);
+
+                    level=askWhichShelf(resourceToPlace, shelves.size(), rearranged);
+                    rearranged = true; //x non stampare più volte se non si riorganizza warehouse
 
                     if(level>0) {
                         selectedShelf = shelves.get(level - 1);
@@ -324,10 +341,11 @@ public class CLI {
                         restoreConfiguration(warehouse, shelves, resources, toPlace, toDiscard);
                     }
                 }
+                graphicalCLI.printWarehouseConfiguration(new WarehouseView(shelves));
             }
             else{
                 graphicalCLI.printString("There are no available slots, all the resources will be discarded\n");
-                toDiscard = resources;
+                toDiscard.addAll(toPlace);
             }
 
             packetHandler.sendMessage(new ShelvesConfigurationMessage(shelves, toDiscard));
@@ -351,22 +369,20 @@ public class CLI {
         return false;
     }
 
-    private void rearrangeWarehouse(){
+    private boolean rearrangeWarehouse(){
         graphicalCLI.printString("Do you want to rearrange the warehouse? ");
-        if(isAnswerYes()){
+        boolean rearranged = isAnswerYes();
+        if(rearranged){
             //TODO: da fare
         }
+        return rearranged;
     }
 
     private List<Shelf> getShelvesWarehouseCopy(List<Shelf> warehouse) {
         List<Shelf> shelves = new ArrayList<>();
-        //TODO: faccio perchè, se sono vuoti, gli shelf non esistono
-        shelves.add(new Shelf(ResourceType.WILDCARD, new Resource(), 1, false));
-        shelves.add(new Shelf(ResourceType.WILDCARD, new Resource(), 2, false));
-        shelves.add(new Shelf(ResourceType.WILDCARD, new Resource(), 3, false));
         for(Shelf shelf : warehouse)
-            shelves.set(shelf.getLevel()-1, new Shelf(shelf.getResourceType(), shelf.getResources(),
-                    shelf.getLevel(), shelf.IsLeader())); //TODO: da rivedere se si vuole convogliare anche leaderShelf
+            shelves.add(new Shelf(shelf.getResourceType(), shelf.getResources(),
+                    shelf.getLevel(), shelf.IsLeader())); //TODO: controllare se va anche con leaderShelf
         return shelves;
     }
 
@@ -380,11 +396,13 @@ public class CLI {
         return resourcesOneByOne;
     }
 
-    private int askWhichShelf(Resource resource, int numberOfShelves) {
+    private int askWhichShelf(Resource resource, int numberOfShelves, boolean rearranged) {
         int level;
-        graphicalCLI.printString("Do you want to restore warehouse to its original configuration? ");
-        if(isAnswerYes())
-            return -1;
+        if(rearranged) {
+            graphicalCLI.printString("Do you want to restore warehouse to its original configuration? ");
+            if (isAnswerYes())
+                return -1;
+        }
         graphicalCLI.printString("Where do you want to place " + resource.getResourceType()
                 + "? (0 to discard it) ");
         level = scanner.nextInt();
@@ -597,7 +615,7 @@ public class CLI {
     private DevelopmentCard chooseCardFromDecks() {
         boolean valid;
         String choice;
-        int level=0;
+        int level;
         List<DevelopmentCard> activeCards = getActiveCardsInSpaces(nickname);
         //TODO: va bene? non verrà mai utilizzato. Oppure costruttore vuoto?
         DevelopmentCard developmentCard = new DevelopmentCard(-1,0,null,-1,null,null);
