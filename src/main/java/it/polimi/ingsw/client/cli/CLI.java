@@ -15,6 +15,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.*;
 
+import static it.polimi.ingsw.utils.Constants.MARKET_COLUMN_SIZE;
+
 public class CLI {
 
     private String nickname;
@@ -233,7 +235,7 @@ public class CLI {
         else { }
     }
 
-    public void chooseShelvesManagement(List<Resource> resources) { //TODO: x controllare se si hanno o meno i leader
+    public void chooseShelvesManagement(List<Resource> resources){ //TODO: x controllare se si hanno o meno i leader, valutare se serve
         try {
             PlayerBoardView player = playerBoardFromNickname(nickname);
             graphicalCLI.printWarehouse(player.getWarehouse());
@@ -259,8 +261,8 @@ public class CLI {
         return shelves.stream().anyMatch(Shelf::IsLeader);
     }
 
-    private void placeResourcesOnShelves(List<Resource> resources) {
-        //TODO: da completare, è un casino :) (WIP)
+    private void placeResourcesOnShelves(List<Resource> resources){
+        //TODO: aggiungere gestione leader
         WarehouseView warehouse;
         List<Shelf> shelves = new ArrayList<>();
         List<Resource> toPlace;
@@ -290,7 +292,7 @@ public class CLI {
                             emptyShelfManagement(shelves, toPlace, selectedShelf, resourceToPlace);
                         }
                         else if (selectedShelf.getResourceType().equals(resourceToPlace.getResourceType())) { //shelf with the same resource type
-                            sameResTypeShelfManagement(toPlace, selectedShelf, resourceToPlace);
+                            sameResTypeShelfManagement(shelves, toPlace, selectedShelf, resourceToPlace);
                         }
                         else { //shelf with different resource type
                             differentResTypeShelfManagement(shelves, toPlace, selectedShelf, resourceToPlace);
@@ -302,10 +304,14 @@ public class CLI {
                         toPlace.remove(0);
                     }
                     else if(level<0) {
-                        shelves = getShelvesWarehouseCopy(warehouse.getShelves());
-                        toPlace = getResourcesOneByOne(resources);
-                        toDiscard.clear();
-                        graphicalCLI.printString("Warehouse restored\n");
+                        restoreConfiguration(warehouse, shelves, resources, toPlace, toDiscard);
+                    }
+
+                    if(toPlace.isEmpty() && !isDiscardedResCorrect(resources, toDiscard)){
+                        graphicalCLI.printString("You're trying to discard resources already stored in the" +
+                                " warehouse!\nThe warehouse will be restored and you'll be asked to place all the" +
+                                " resources again\n");
+                        restoreConfiguration(warehouse, shelves, resources, toPlace, toDiscard);
                     }
                 }
             }
@@ -314,10 +320,7 @@ public class CLI {
                 toDiscard = resources;
             }
 
-            //TODO: controlla res da scartare
-
             packetHandler.sendMessage(new ShelvesConfigurationMessage(shelves, toDiscard));
-
         }catch (NotExistingNickname e){
             e.printStackTrace();
         }
@@ -325,6 +328,8 @@ public class CLI {
 
     private boolean checkFreeSlotInWarehouse() {
         try {
+            if(playerBoardFromNickname(nickname).getWarehouse().getShelves().size()<3)
+                return true;
             for (Shelf shelf : playerBoardFromNickname(nickname).getWarehouse().getShelves()) { //TODO: da controllare
                 if (shelf.getResourceType().equals(ResourceType.WILDCARD) ||
                         shelf.getLevel() > shelf.getResources().getQuantity())
@@ -345,8 +350,13 @@ public class CLI {
 
     private List<Shelf> getShelvesWarehouseCopy(List<Shelf> warehouse) {
         List<Shelf> shelves = new ArrayList<>();
+        //TODO: faccio perchè, se sono vuoti, gli shelf non esistono
+        shelves.add(new Shelf(ResourceType.WILDCARD, new Resource(), 1, false));
+        shelves.add(new Shelf(ResourceType.WILDCARD, new Resource(), 2, false));
+        shelves.add(new Shelf(ResourceType.WILDCARD, new Resource(), 3, false));
         for(Shelf shelf : warehouse)
-            shelves.add(new Shelf(shelf.getResourceType(), shelf.getResources(), shelf.getLevel(), shelf.IsLeader()));
+            shelves.set(shelf.getLevel()-1, new Shelf(shelf.getResourceType(), shelf.getResources(),
+                    shelf.getLevel(), shelf.IsLeader())); //TODO: da rivedere se si vuole convogliare anche leaderShelf
         return shelves;
     }
 
@@ -382,13 +392,13 @@ public class CLI {
         }
         else {//there are shelves with the same resource type
             graphicalCLI.printString("There's already another shelf with the same resource type\n");
-            if(isShelfRearrangeable(resourceToPlace)) { //it's possible to rearrange shelves
+            if(isShelfRearrangeable(shelves, resourceToPlace)) { //it's possible to rearrange shelves
                 graphicalCLI.printString("If you want to place it here anyway, insert YES and " +
                         "then you'll place again the removed ones from the other shelf: ");
                 if(isAnswerYes()) {
-                    Shelf otherShelf = getShelfWithSameResource(resourceToPlace.getResourceType());
+                    Shelf otherShelf = getShelfWithSameResource(shelves, resourceToPlace.getResourceType());
                     for (int i = 0; i < otherShelf.getResources().getQuantity(); i++) {
-                        toPlace.add(1, new Resource(selectedShelf.getResourceType(), 1));
+                        toPlace.add(1, new Resource(otherShelf.getResources().getResourceType(), 1));
                     }
                     resetShelf(otherShelf);
                     placeResource(selectedShelf, resourceToPlace);
@@ -398,14 +408,14 @@ public class CLI {
         }
     }
 
-    private void sameResTypeShelfManagement(List<Resource> toPlace, Shelf selectedShelf, Resource resourceToPlace) {
+    private void sameResTypeShelfManagement(List<Shelf> shelves, List<Resource> toPlace, Shelf selectedShelf, Resource resourceToPlace){
         if (selectedShelf.getResources().getQuantity() <= selectedShelf.getLevel() - 1) { //shelf not completely full
             placeResource(selectedShelf, resourceToPlace);
             toPlace.remove(0);
         }
         else { //shelf completely full
             graphicalCLI.printString("The selected shelf is already full\n");
-            if(isShelfRearrangeable(resourceToPlace)){
+            if(isShelfRearrangeable(shelves, resourceToPlace)){
                 graphicalCLI.printString("If you want to remove the resources from this" +
                         " shelf to place them again on another one, insert YES: ");
                 if(isAnswerYes()){
@@ -430,13 +440,13 @@ public class CLI {
             }
             else {//there are shelves with the same resource type
                 graphicalCLI.printString("There's already another shelf with the same resource type\n");
-                if (isShelfRearrangeable(resourceToPlace)) { //it's possible to rearrange shelves
+                if (isShelfRearrangeable(shelves, resourceToPlace)) { //it's possible to rearrange shelves
                     graphicalCLI.printString("If you want to place it here anyway, insert YES and " +
                             "then you'll place again the removed ones: ");
                     if (isAnswerYes()) {
-                        Shelf otherShelf = getShelfWithSameResource(resourceToPlace.getResourceType());
+                        Shelf otherShelf = getShelfWithSameResource(shelves, resourceToPlace.getResourceType());
                         for (int i = 0; i < otherShelf.getResources().getQuantity(); i++) {
-                            toPlace.add(1, new Resource(selectedShelf.getResourceType(), 1));
+                            toPlace.add(1, new Resource(otherShelf.getResources().getResourceType(), 1));
                         }
                         resetShelf(otherShelf);
                         for (int i = 0; i < selectedShelf.getResources().getQuantity(); i++) {
@@ -454,34 +464,28 @@ public class CLI {
         return shelves.stream().noneMatch(shelf -> shelf.getResourceType().equals(resourceType));
     }
 
-    private void placeResource(Shelf shelf, Resource resource) {
-        if(shelf.getResourceType().equals(resource.getResourceType())){ //ripiano con stesso tipo di risorsa
+    private void placeResource(Shelf shelf, Resource resource){
+        if(shelf.getResourceType().equals(resource.getResourceType())){ //shelf with the same resource type
             shelf.getResources().setQuantity(shelf.getResources().getQuantity() +
                     resource.getQuantity());
         }
-        else { //ripiano vuoto o con altro da sostituire
+        else { //empty shelf or with a different resource type
             shelf.setResourceType(resource.getResourceType());
             shelf.getResources().setResourceType(resource.getResourceType());
             shelf.getResources().setQuantity(resource.getQuantity());
         }
     }
 
-    private Shelf getShelfWithSameResource(ResourceType resourceType) {
-        try {
-            List<Shelf> shelves = playerBoardFromNickname(nickname).getWarehouse().getShelves();
-
-            for(Shelf shelf : shelves){
-                if(shelf.getResourceType().equals(resourceType))
-                    return shelf;
-            }
-        } catch (NotExistingNickname notExistingNickname) {
-            notExistingNickname.printStackTrace();
+    private Shelf getShelfWithSameResource(List<Shelf> shelves, ResourceType resourceType){
+        for(Shelf shelf : shelves){
+            if(shelf.getResourceType().equals(resourceType))
+                return shelf;
         }
-        return null;
+        return null; //TODO: brutto?
     }
 
-    private boolean isShelfRearrangeable(Resource resource) { //TODO: nome da cambiare?
-        Shelf shelfWithResources = getShelfWithSameResource(resource.getResourceType());
+    private boolean isShelfRearrangeable(List<Shelf> shelves, Resource resource){ //TODO: nome da cambiare?
+        Shelf shelfWithResources = getShelfWithSameResource(shelves, resource.getResourceType());
         return shelfWithResources.getResources().getQuantity()+resource.getQuantity() <= 3;
     }
 
@@ -491,7 +495,37 @@ public class CLI {
         shelf.getResources().setQuantity(0);
     }
 
-    private void placeResourcesOnShelves(List<Resource> resources, boolean leaderShelfActive) {
+    private void restoreConfiguration(WarehouseView warehouse, List<Shelf> shelves, List<Resource> resources,
+                                      List<Resource> toPlace, List<Resource> toDiscard){
+        shelves.clear();
+        shelves.addAll(getShelvesWarehouseCopy(warehouse.getShelves()));
+        toPlace.clear();
+        toPlace.addAll(getResourcesOneByOne(resources));
+        toDiscard.clear();
+        graphicalCLI.printString("Warehouse restored\n");
+    }
+
+    private boolean isDiscardedResCorrect(List<Resource> resources, List<Resource> toDiscard){ //TODO: da controllare
+        if(toDiscard.size()>resources.size())
+            return false;
+        List<Resource> resourcesCopy = getResourcesOneByOne(resources);
+        int found;
+        for (Resource resource : toDiscard){
+            found = -1;
+            for(int i=0;i<resourcesCopy.size();i++){
+                if(resource.getResourceType().equals(resourcesCopy.get(i).getResourceType())){
+                    found=i;
+                    break;
+                }
+            }
+            if(found==-1)
+                return false;
+            resourcesCopy.remove(found);
+        }
+        return true;
+    }
+
+    private void placeResourcesOnShelves(List<Resource> resources, boolean leaderShelfActive){
         //TODO: gestire così il parametro va bene?
         //TODO: da completare, è un casino :)
         //sendShelvesConfiguration();
