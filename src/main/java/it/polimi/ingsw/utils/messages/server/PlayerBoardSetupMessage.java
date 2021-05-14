@@ -12,7 +12,7 @@ import it.polimi.ingsw.utils.messages.HiddenMessage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayerBoardSetupMessage implements HiddenMessage, ServerActionMessage {
+public class PlayerBoardSetupMessage implements HiddenMessage, ServerUpdateMessage {
 
     private final String nickname;
     private final List<Deck> developmentBSpaces;
@@ -82,7 +82,7 @@ public class PlayerBoardSetupMessage implements HiddenMessage, ServerActionMessa
     }
 
     @Override
-    public void doAction(CLI client) {
+    public void doUpdate(CLI client) {
         GraphicalCLI graphicalCLI = client.getGraphicalCLI();
         List<PlayerBoardView> clientPlayerBoards = client.getPlayerBoards();
 

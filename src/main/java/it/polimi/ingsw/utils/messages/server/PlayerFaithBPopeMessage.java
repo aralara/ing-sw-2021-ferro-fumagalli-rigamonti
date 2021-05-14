@@ -5,7 +5,7 @@ import it.polimi.ingsw.exceptions.NotExistingNickname;
 
 import static it.polimi.ingsw.utils.Constants.FAITH_TOTAL_VATICAN_REPORTS;
 
-public class PlayerFaithBPopeMessage implements ServerActionMessage {
+public class PlayerFaithBPopeMessage implements ServerUpdateMessage {
     private final boolean[] popeProgression;
     private final String nickname;
 
@@ -28,7 +28,7 @@ public class PlayerFaithBPopeMessage implements ServerActionMessage {
     }
 
     @Override
-    public void doAction(CLI client) {
+    public void doUpdate(CLI client) {
         try {
             client.playerBoardFromNickname(nickname).getFaithBoard().setPopeProgression(popeProgression);
         } catch(NotExistingNickname e){

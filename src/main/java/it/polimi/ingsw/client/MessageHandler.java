@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.utils.messages.Message;
 import it.polimi.ingsw.utils.messages.server.*;
 
@@ -16,12 +17,14 @@ public class MessageHandler implements Runnable{
     private ObjectOutputStream output;
     private ObjectInputStream input;
 
+    private final CLI client;
     private final Queue<ServerActionMessage> messageQueue;
 
     private boolean active;
 
 
-    public MessageHandler() {
+    public MessageHandler(CLI client) {
+        this.client = client;
         this.messageQueue = new ConcurrentLinkedQueue<>();
         active = false;
     }
@@ -64,12 +67,12 @@ public class MessageHandler implements Runnable{
 
             message = input.readObject();
 
-            if (message instanceof ServerActionMessage) {
+            if(message instanceof ServerUpdateMessage)  //TODO: gestione alternativa (forse più corretta) metterli nella queue e lasciare che il client si costruisca un thread a parte per leggerli asincronamente
+                ((ServerUpdateMessage) message).doUpdate(client);
+            else if(message instanceof ServerActionMessage)
                 messageQueue.add((ServerActionMessage) message);
-            } else {
-
+            else
                 System.out.println("Received " + message.toString());
-            }
         }catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

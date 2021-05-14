@@ -3,7 +3,7 @@ package it.polimi.ingsw.utils.messages.server;
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.exceptions.NotExistingNickname;
 
-public class PlayerFaithBFaithMessage implements ServerActionMessage {
+public class PlayerFaithBFaithMessage implements ServerUpdateMessage {
 
     private final int faith;
     private final String nickname;
@@ -24,7 +24,7 @@ public class PlayerFaithBFaithMessage implements ServerActionMessage {
     }
 
     @Override
-    public void doAction(CLI client) {
+    public void doUpdate(CLI client) {
         try {
             client.playerBoardFromNickname(nickname).getFaithBoard().setFaith(faith);
         } catch(NotExistingNickname e){

@@ -7,7 +7,7 @@ import it.polimi.ingsw.server.model.faith.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FaithTrackMessage implements ServerActionMessage {
+public class FaithTrackMessage implements ServerUpdateMessage {
 
     private final List<VaticanReport> vaticanReports;
     private final List<FaithSpace> faithSpaces;
@@ -28,7 +28,7 @@ public class FaithTrackMessage implements ServerActionMessage {
     }
 
     @Override
-    public void doAction(CLI client) {  //TODO: considerare la conversione da VaticanReport a VaticanReportView nel costruttore del messaggio o nel set del FaithTrackView
+    public void doUpdate(CLI client) {  //TODO: considerare la conversione da VaticanReport a VaticanReportView nel costruttore del messaggio o nel set del FaithTrackView
         List<VaticanReportView> clientVaticanReports = new ArrayList<>();
         for(VaticanReport vaticanReport : vaticanReports) {
             clientVaticanReports.add(new VaticanReportView(vaticanReport.getMin(),

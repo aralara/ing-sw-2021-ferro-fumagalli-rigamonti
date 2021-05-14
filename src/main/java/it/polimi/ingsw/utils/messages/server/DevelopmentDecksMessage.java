@@ -6,7 +6,7 @@ import it.polimi.ingsw.server.model.cards.deck.DevelopmentDeck;
 
 import java.util.List;
 
-public class DevelopmentDecksMessage implements ServerActionMessage {
+public class DevelopmentDecksMessage implements ServerUpdateMessage {
 
     private final List<DevelopmentDeck> developmentDecks;
 
@@ -21,7 +21,7 @@ public class DevelopmentDecksMessage implements ServerActionMessage {
     }
 
     @Override
-    public void doAction(CLI client) {
+    public void doUpdate(CLI client) {
         List<DevelopmentDeckView> clientDevelopmentDecks = client.getDevelopmentDecks();
         for(DevelopmentDeck developmentDeck : developmentDecks) {
             clientDevelopmentDecks.add(new DevelopmentDeckView(developmentDeck.getDeck(),
