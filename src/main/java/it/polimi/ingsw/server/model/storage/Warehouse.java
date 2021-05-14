@@ -32,15 +32,15 @@ public class Warehouse extends PlayerListened implements Storage {
      */
     public static boolean validate(List<Shelf> configuration) {
 
-        if (configuration.stream().filter(Shelf::IsLeader).count() > 2) {
+        if (configuration.stream().filter(Shelf::isLeader).count() > 2) {
             return false;
         }
-        if (configuration.stream().filter(t -> !t.IsLeader()).count() > 3) {
+        if (configuration.stream().filter(t -> !t.isLeader()).count() > 3) {
             return false;
         }
         for (int i = 0; i < configuration.size() - 1; i++) {
             for (int j = 1; j < configuration.size(); j++) {
-                if (!configuration.get(i).IsLeader() && !configuration.get(j).IsLeader() && i != j) {
+                if (!configuration.get(i).isLeader() && !configuration.get(j).isLeader() && i != j) {
                     if (configuration.get(i).getResourceType() == configuration.get(j).getResourceType()) {
                         return false;
                     }
@@ -104,7 +104,7 @@ public class Warehouse extends PlayerListened implements Storage {
     public List<Resource> getList(boolean isLeader) {
         List<Resource> tempList = new ArrayList<>();
         for (Shelf shelf : shelves) {
-            if (shelf.IsLeader() == isLeader) {
+            if (shelf.isLeader() == isLeader) {
                 tempList = Storage.mergeResourceList(tempList,shelf.makeClone().getList());
             }
         }
@@ -132,7 +132,7 @@ public class Warehouse extends PlayerListened implements Storage {
         Storage.aggregateResources(resources);
         if (Storage.checkContainedResources(this.getList(isLeader), resources)) {
             for (Shelf shelf : shelves) {
-                if (shelf.IsLeader() == isLeader) {
+                if (shelf.isLeader() == isLeader) {
                     for (Resource resource : resources) {
                         if (shelf.getResourceType() == resource.getResourceType()) {
                             shelf.removeResources(resources.get(0));
