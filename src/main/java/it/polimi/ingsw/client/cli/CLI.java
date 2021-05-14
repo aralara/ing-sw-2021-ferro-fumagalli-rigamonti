@@ -4,7 +4,6 @@ import it.polimi.ingsw.client.MessageHandler;
 import it.polimi.ingsw.client.structures.*;
 import it.polimi.ingsw.exceptions.NotExistingNickname;
 import it.polimi.ingsw.server.Server;
-import it.polimi.ingsw.server.model.cards.card.Card;
 import it.polimi.ingsw.server.model.cards.card.CardColors;
 import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
@@ -205,7 +204,7 @@ public class CLI {
     private void refresh() {
         graphicalCLI.printMarket(marketView);
         graphicalCLI.printString("\nThe development decks:\n");
-        graphicalCLI.printDevelopmentDecks(developmentDecks);
+        printDevelopmentDeckTop();
         try {
             PlayerBoardView playerBoard = playerBoardFromNickname(nickname);
             graphicalCLI.printFaithBoard(playerBoard,faithTrackView);
@@ -586,8 +585,11 @@ public class CLI {
         mainActionPlayed = true;
     }
 
-    private void selectDevDecks() {
-        graphicalCLI.printDevelopmentDecks(developmentDecks);
+
+    private void selectDevDecks() { //TODO: dividere in selezione carta (aspettando ack) e selezione spazio?
+
+        printDevelopmentDeckTop();
+
         if(askGoBack())
             return;
 
@@ -665,13 +667,13 @@ public class CLI {
 
     public List<LeaderCard> chooseLeaderCard(){
         try {
-            Deck hand = playerBoardFromNickname(nickname).getLeaderBoard().getHand();
-            graphicalCLI.printLeaderCardList(hand);
+            List<LeaderCard> hand = (List<LeaderCard>)(List<?>)playerBoardFromNickname(nickname).getLeaderBoard().getHand().getCards();
+            graphicalCLI.printNumberedList(hand, graphicalCLI::printLeaderCard);
             graphicalCLI.printString("Choose a leader card by selecting the corresponding number: ");
 
             int index = scanner.nextInt() - 1;
             List<LeaderCard> temp = new ArrayList<>();
-            temp.add((LeaderCard)hand.get(index));
+            temp.add(hand.get(index));
             return temp;
         }catch(NotExistingNickname e){
             e.printStackTrace();
@@ -888,5 +890,14 @@ public class CLI {
     private boolean isAnswerYes() {
         String command = scanner.next();
         return  command.equalsIgnoreCase("YES") || command.equalsIgnoreCase("Y");
+    }
+
+    private void printDevelopmentDeckTop() {
+        List<DevelopmentCard> developmentCards =  new ArrayList<>();
+        for(DevelopmentDeckView temp : developmentDecks){
+            if(!temp.getDeck().isEmpty())
+                developmentCards.add((DevelopmentCard) temp.getDeck().getCards().get(0));
+        }
+        graphicalCLI.printNumberedList(developmentCards, graphicalCLI::printDevelopmentCard);
     }
 }
