@@ -8,13 +8,11 @@ import it.polimi.ingsw.server.model.cards.card.CardColors;
 import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.server.model.storage.*;
-import it.polimi.ingsw.utils.messages.Message;
 import it.polimi.ingsw.utils.messages.client.*;
 import it.polimi.ingsw.utils.messages.server.*;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
@@ -136,7 +134,7 @@ public class CLI {
         packetHandler.sendMessage(new ConnectionMessage(nickname));
     }
 
-    public void createNewLobby(){
+    public void createNewLobby() {
         int size;
         graphicalCLI.printString("There isn't any player waiting for a match!\n");
         do {
@@ -148,7 +146,7 @@ public class CLI {
         packetHandler.sendMessage(new NewLobbyMessage(size));
     }
 
-    public void setNumberOfPlayers(int numberOfPlayers){
+    public void setNumberOfPlayers(int numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
         if(numberOfPlayers == 1)
             lorenzoFaith = 0;
@@ -161,7 +159,7 @@ public class CLI {
         throw new NotExistingNickname();
     }
 
-    public List<Resource> resolveResourcesToEqualize(int wildcardQuantity){ //TODO: sarà chiamato una sola volta per equalizzare
+    public List<Resource> resolveResourcesToEqualize(int wildcardQuantity) { //TODO: sarà chiamato una sola volta per equalizzare
         int index;
         List<Resource> resources = new ArrayList<>();
         for(int num=0; num<wildcardQuantity; num++){
@@ -183,7 +181,7 @@ public class CLI {
         return resources;
     }
 
-    private void refresh(){
+    private void refresh() {
         graphicalCLI.printMarket(marketView);
         graphicalCLI.printString("\nThe development decks:\n");
         graphicalCLI.printDevelopmentDecks(developmentDecks);
@@ -199,7 +197,7 @@ public class CLI {
         }
     }
 
-    private List<AbilityDiscount> getActiveAbilityDiscount(){
+    private List<AbilityDiscount> getActiveAbilityDiscount() {
         List<AbilityDiscount> leaderAbility = new ArrayList<>();
         try {
             LeaderBoardView leaderBoard = playerBoardFromNickname(nickname).getLeaderBoard();
@@ -213,7 +211,7 @@ public class CLI {
         return leaderAbility;
     }
 
-    private List<AbilityMarble> getActiveAbilityMarble(){
+    private List<AbilityMarble> getActiveAbilityMarble() {
         List<AbilityMarble> leaderAbility = new ArrayList<>();
         try {
             LeaderBoardView leaderBoard = playerBoardFromNickname(nickname).getLeaderBoard();
@@ -227,7 +225,7 @@ public class CLI {
         return leaderAbility;
     }
 
-    private List<AbilityProduction> getActiveAbilityProduction(){
+    private List<AbilityProduction> getActiveAbilityProduction() {
         List<AbilityProduction> leaderAbility = new ArrayList<>();
         try {
             LeaderBoardView leaderBoard = playerBoardFromNickname(nickname).getLeaderBoard();
@@ -241,7 +239,7 @@ public class CLI {
         return leaderAbility;
     }
 
-    private List<AbilityWarehouse> getActiveAbilityWarehouse(){
+    private List<AbilityWarehouse> getActiveAbilityWarehouse() {
         List<AbilityWarehouse> leaderAbility = new ArrayList<>();
         try {
             LeaderBoardView leaderBoard = playerBoardFromNickname(nickname).getLeaderBoard();
@@ -255,20 +253,20 @@ public class CLI {
         return leaderAbility;
     }
 
-    public void storeTempResources(List<Resource> resourcesToMemorize){
+    public void storeTempResources(List<Resource> resourcesToMemorize) {
         resourcesToPut = new ArrayList<>(resourcesToMemorize);
     }
 
-    private void storeTempCard(DevelopmentCard devCardToMemorize){ //TODO: valutare se aggiungere costruttore apposito
+    private void storeTempCard(DevelopmentCard devCardToMemorize) { //TODO: valutare se aggiungere costruttore apposito
         cardToBuy = new DevelopmentCard(devCardToMemorize.getID(),devCardToMemorize.getVP(),devCardToMemorize.getColor(),
                 devCardToMemorize.getLevel(),devCardToMemorize.getProduction(),devCardToMemorize.getCost());
     }
 
-    private void storeTempProduction(List<Production> productionsToMemorize){
+    private void storeTempProduction(List<Production> productionsToMemorize) {
         productionsToActivate = new ArrayList<>(productionsToMemorize);
     }
 
-    public void tryToPlaceShelves(){ //TODO: decidere visibility (anche x altri try)
+    public void tryToPlaceShelves() { //TODO: decidere visibility (anche x altri try)
         graphicalCLI.printString("The selected configuration is invalid\n");
         if(askGoBack())
             turnMenu(true);
@@ -278,7 +276,7 @@ public class CLI {
         }
     }
 
-    private void tryAgainToBuyCard(){
+    private void tryAgainToBuyCard() {
         graphicalCLI.printString("The selected configuration is invalid\n");
         //TODO: da fare
         if(askGoBack())
@@ -286,7 +284,7 @@ public class CLI {
         else { }
     }
 
-    private void tryAgainToActivateProduction(){
+    private void tryAgainToActivateProduction() {
         graphicalCLI.printString("The selected configuration is invalid\n");
         //TODO: da fare
         if(askGoBack())
@@ -294,7 +292,7 @@ public class CLI {
         else { }
     }
 
-    public void chooseShelvesManagement(List<Resource> resources){ //TODO: x controllare se si hanno o meno i leader
+    public void chooseShelvesManagement(List<Resource> resources) { //TODO: x controllare se si hanno o meno i leader
         try {
             PlayerBoardView player = playerBoardFromNickname(nickname);
             graphicalCLI.printWarehouse(player.getWarehouse());
@@ -310,7 +308,7 @@ public class CLI {
         }
     }
 
-    private boolean isLeaderShelfActive(){
+    private boolean isLeaderShelfActive() {
         List<Shelf> shelves = new ArrayList<>();
         try{
             shelves = playerBoardFromNickname(nickname).getWarehouse().getShelves();
@@ -320,7 +318,7 @@ public class CLI {
         return shelves.stream().anyMatch(Shelf::IsLeader);
     }
 
-    private void placeResourcesOnShelves(List<Resource> resources){
+    private void placeResourcesOnShelves(List<Resource> resources) {
         //TODO: da completare, è un casino :) (WIP)
         WarehouseView warehouse;
         List<Shelf> shelves = new ArrayList<>();
@@ -384,7 +382,7 @@ public class CLI {
         }
     }
 
-    private boolean checkFreeSlotInWarehouse(){
+    private boolean checkFreeSlotInWarehouse() {
         try {
             for (Shelf shelf : playerBoardFromNickname(nickname).getWarehouse().getShelves()) { //TODO: da controllare
                 if (shelf.getResourceType().equals(ResourceType.WILDCARD) ||
@@ -404,7 +402,7 @@ public class CLI {
         }
     }
 
-    private List<Shelf> getShelvesWarehouseCopy(List<Shelf> warehouse){
+    private List<Shelf> getShelvesWarehouseCopy(List<Shelf> warehouse) {
         List<Shelf> shelves = new ArrayList<>();
         for(Shelf shelf : warehouse)
             shelves.add(new Shelf(shelf.getResourceType(), shelf.getResources(), shelf.getLevel(), shelf.IsLeader()));
@@ -421,7 +419,7 @@ public class CLI {
         return resourcesOneByOne;
     }
 
-    private int askWhichShelf(Resource resource, int numberOfShelves){
+    private int askWhichShelf(Resource resource, int numberOfShelves) {
         int level;
         graphicalCLI.printString("Do you want to restore warehouse to its original configuration? ");
         if(isAnswerYes())
@@ -436,7 +434,7 @@ public class CLI {
         return level;
     }
 
-    private void emptyShelfManagement(List<Shelf> shelves, List<Resource> toPlace, Shelf selectedShelf, Resource resourceToPlace){
+    private void emptyShelfManagement(List<Shelf> shelves, List<Resource> toPlace, Shelf selectedShelf, Resource resourceToPlace) {
         if(isResourceTypeUnique(shelves,resourceToPlace.getResourceType())) { //there are no shelves with the same resource type
             placeResource(selectedShelf, resourceToPlace);
             toPlace.remove(0);
@@ -459,7 +457,7 @@ public class CLI {
         }
     }
 
-    private void sameResTypeShelfManagement(List<Resource> toPlace, Shelf selectedShelf, Resource resourceToPlace){
+    private void sameResTypeShelfManagement(List<Resource> toPlace, Shelf selectedShelf, Resource resourceToPlace) {
         if (selectedShelf.getResources().getQuantity() <= selectedShelf.getLevel() - 1) { //shelf not completely full
             placeResource(selectedShelf, resourceToPlace);
             toPlace.remove(0);
@@ -478,7 +476,7 @@ public class CLI {
         }
     }
 
-    private void differentResTypeShelfManagement(List<Shelf> shelves, List<Resource> toPlace, Shelf selectedShelf, Resource resourceToPlace){
+    private void differentResTypeShelfManagement(List<Shelf> shelves, List<Resource> toPlace, Shelf selectedShelf, Resource resourceToPlace) {
         graphicalCLI.printString("This shelf contains a different resource type\nIf you want" +
                 " to place it here anyway, insert YES and then you'll place again the removed ones: ");
         if(isAnswerYes()) {
@@ -511,11 +509,11 @@ public class CLI {
         }
     }
 
-    private boolean isResourceTypeUnique(List<Shelf> shelves, ResourceType resourceType){
+    private boolean isResourceTypeUnique(List<Shelf> shelves, ResourceType resourceType) {
         return shelves.stream().noneMatch(shelf -> shelf.getResourceType().equals(resourceType));
     }
 
-    private void placeResource(Shelf shelf, Resource resource){
+    private void placeResource(Shelf shelf, Resource resource) {
         if(shelf.getResourceType().equals(resource.getResourceType())){ //ripiano con stesso tipo di risorsa
             shelf.getResources().setQuantity(shelf.getResources().getQuantity() +
                     resource.getQuantity());
@@ -527,7 +525,7 @@ public class CLI {
         }
     }
 
-    private Shelf getShelfWithSameResource(ResourceType resourceType){
+    private Shelf getShelfWithSameResource(ResourceType resourceType) {
         try {
             List<Shelf> shelves = playerBoardFromNickname(nickname).getWarehouse().getShelves();
 
@@ -541,24 +539,24 @@ public class CLI {
         return null;
     }
 
-    private boolean isShelfRearrangeable(Resource resource){ //TODO: nome da cambiare?
+    private boolean isShelfRearrangeable(Resource resource) { //TODO: nome da cambiare?
         Shelf shelfWithResources = getShelfWithSameResource(resource.getResourceType());
         return shelfWithResources.getResources().getQuantity()+resource.getQuantity() <= 3;
     }
 
-    private void resetShelf(Shelf shelf){
+    private void resetShelf(Shelf shelf) {
         shelf.setResourceType(ResourceType.WILDCARD);
         shelf.getResources().setResourceType(ResourceType.WILDCARD);
         shelf.getResources().setQuantity(0);
     }
 
-    private void placeResourcesOnShelves(List<Resource> resources, boolean leaderShelfActive){
+    private void placeResourcesOnShelves(List<Resource> resources, boolean leaderShelfActive) {
         //TODO: gestire così il parametro va bene?
         //TODO: da completare, è un casino :)
         //sendShelvesConfiguration();
     }
 
-    public void selectMarket(){
+    public void selectMarket() {
         graphicalCLI.printMarket(marketView);
         if(askGoBack())
             return;
@@ -594,7 +592,7 @@ public class CLI {
         mainActionPlayed = true;
     }
 
-    private void selectDevDecks(){ //TODO: dividere in selezione carta (aspettando ack) e selezione spazio?
+    private void selectDevDecks() { //TODO: dividere in selezione carta (aspettando ack) e selezione spazio?
         graphicalCLI.printDevelopmentDecks(developmentDecks);
         if(askGoBack())
             return;
@@ -610,7 +608,7 @@ public class CLI {
         mainActionPlayed = true;
     }
 
-    private DevelopmentCard chooseCardFromDecks(){
+    private DevelopmentCard chooseCardFromDecks() {
         boolean valid;
         String choice;
         int level=0;
@@ -658,7 +656,7 @@ public class CLI {
         return developmentCard;
     }
 
-    private int chooseDevCardSpace(int cardLevel){
+    private int chooseDevCardSpace(int cardLevel) {
         int space = -1;
         boolean valid;
         try{
@@ -686,7 +684,7 @@ public class CLI {
         return space;
     }
 
-    private List<DevelopmentCard> getActiveCardsInSpaces(String nickname){ //TODO: da testare quando funzionerà tutto e si sarà comprata qualche carta
+    private List<DevelopmentCard> getActiveCardsInSpaces(String nickname) { //TODO: da testare quando funzionerà tutto e si sarà comprata qualche carta
         List<DevelopmentCard> activeSpaces = new ArrayList<>();
         try{
              List<Deck> playerSpaces = playerBoardFromNickname(nickname).getDevelopmentBoard().getSpaces();
@@ -700,7 +698,7 @@ public class CLI {
         return activeSpaces;
     }
 
-    public void turnMenu(boolean isPlayerTurn){ //TODO: gestire per far fare comunque altre azioni
+    public void turnMenu(boolean isPlayerTurn) { //TODO: gestire per far fare comunque altre azioni
         int action;
         goBack = false;
         endTurn = false;
@@ -759,7 +757,7 @@ public class CLI {
         }
     }
 
-    private boolean askGoBack(){
+    private boolean askGoBack() {
         graphicalCLI.printString("Do you want to go back and choose another action?\nIf you want to, insert YES: ");
         if(isAnswerYes()){
             goBack = true;
@@ -768,7 +766,7 @@ public class CLI {
         return false;
     }
 
-    public List<RequestResources> chooseStorages(List<Resource> resources){
+    public List<RequestResources> chooseStorages(List<Resource> resources) {
 
         try {
             PlayerBoardView playerBoard = playerBoardFromNickname(nickname);
@@ -815,9 +813,8 @@ public class CLI {
         return requestResources;
     }
   
-    private boolean isAnswerYes(){
+    private boolean isAnswerYes() {
         String command = scanner.next();
         return  command.equalsIgnoreCase("YES") || command.equalsIgnoreCase("Y");
-
     }
 }

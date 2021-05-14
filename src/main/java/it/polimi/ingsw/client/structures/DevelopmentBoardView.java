@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.structures;
 
 import it.polimi.ingsw.server.model.cards.deck.Deck;
+import it.polimi.ingsw.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,8 @@ public class DevelopmentBoardView {
 
     public DevelopmentBoardView(){
         this.spaces = new ArrayList<>();
+        for(int i = 0; i < Constants.BASE_DEVELOPMENT_SPACES.value(); i++)
+            spaces.add(new Deck());
     }
 
     public DevelopmentBoardView(List<Deck> spaces){

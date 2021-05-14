@@ -4,6 +4,7 @@ import it.polimi.ingsw.exceptions.InvalidSpaceException;
 import it.polimi.ingsw.server.model.cards.card.*;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.server.model.storage.Production;
+import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.listeners.Listeners;
 import it.polimi.ingsw.utils.listeners.PlayerListened;
 
@@ -11,14 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DevelopmentBoard extends PlayerListened {
-    private static final int NUMBER_OF_SPACES = 3;
-
     private final List<Deck> spaces;
 
 
     public DevelopmentBoard(){
         spaces = new ArrayList<>();
-        for(int i=0; i<NUMBER_OF_SPACES; i++)
+        for(int i = 0; i < Constants.BASE_DEVELOPMENT_SPACES.value(); i++)
             spaces.add(new Deck());
     }
 
@@ -56,7 +55,7 @@ public class DevelopmentBoard extends PlayerListened {
      * @throws InvalidSpaceException when the selected space is out of the allowed range
      */
     public boolean addDevCard(DevelopmentCard card, int space) throws InvalidSpaceException {
-        if(space<0 || space>=NUMBER_OF_SPACES) throw new InvalidSpaceException();
+        if(space < 0 || space >= Constants.BASE_DEVELOPMENT_SPACES.value()) throw new InvalidSpaceException();
         if((card.getLevel() == 1 && spaces.get(space).isEmpty()) ||
             (!spaces.get(space).isEmpty() &&
             card.getLevel()-1 == ((DevelopmentCard)spaces.get(space).get(0)).getLevel())) {
