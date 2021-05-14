@@ -7,7 +7,7 @@ public enum Listeners {
     BOARD_DEV_SPACES("developmentBoardSpacesListener"),
     BOARD_FAITH_FAITH("faithBoardFaithListener"),
     BOARD_FAITH_POPE("faithBoardPopeListener"),
-    BOARD_LEADER_HAND("leaderBoardHandListener"),
+    BOARD_LEADER_HAND("leaderBoardBoardListener"),
     BOARD_LEADER_BOARD("leaderBoardHandListener"),
     BOARD_STRONGBOX("strongboxListener"),
     BOARD_WAREHOUSE("warehouseListener");
