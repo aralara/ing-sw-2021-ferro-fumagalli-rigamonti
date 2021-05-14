@@ -43,8 +43,15 @@ public class CLI extends ClientController {
         return messageHandler;
     }
 
-    public int getNextInt() {
-        return scanner.nextInt();
+    public int getNextInt() { //TODO: bruttino?
+        int value;
+        String input = scanner.next();
+        while (!(input.matches("^[0-9]*$") && input.length() > 0)){
+            graphicalCLI.printString("Invalid input! Try again: ");
+            input = scanner.next();
+        }
+        value = Integer.parseInt(input);
+        return value;
     }
 
     public void setup() {
@@ -88,7 +95,7 @@ public class CLI extends ClientController {
         do {
             graphicalCLI.printString("Insert the number of players that will play the game " +
                     "(value inserted must between 1 and 4)\n");
-            size = scanner.nextInt();
+            size = getNextInt();
         }while(size <= 0 || size >= 5);
         setNumberOfPlayers(size);
         messageHandler.sendMessage(new NewLobbyMessage(size));
@@ -106,7 +113,7 @@ public class CLI extends ClientController {
             graphicalCLI.printNumberedList(resourceTypes, rt -> graphicalCLI.printString(rt.name()));
             do {
                 graphicalCLI.printString("Please choose a valid resource: ");
-                index = scanner.nextInt()-1;
+                index = getNextInt()-1;
             } while(index < 0 || index>=4);
             return resourceTypes.get(index);
         }
@@ -123,7 +130,7 @@ public class CLI extends ClientController {
             index = -1;
             while(index<0 || index>=4){
                 graphicalCLI.printString("Please choose a valid resource: ");
-                index = scanner.nextInt()-1;
+                index = getNextInt()-1;
             }
 
             if(resources.size()>0 && resources.get(0).getResourceType()==ResourceType.values()[index]){
@@ -336,10 +343,10 @@ public class CLI extends ClientController {
         }
         graphicalCLI.printString("Where do you want to place " + resource.getResourceType()
                 + "? (0 to discard it) ");
-        level = scanner.nextInt();
+        level = getNextInt();
         while (level<0 || level>numberOfShelves){
             graphicalCLI.printString("Choose a valid shelf: ");
-            level = scanner.nextInt();
+            level = getNextInt();
         }
         return level;
     }
@@ -598,10 +605,10 @@ public class CLI extends ClientController {
         int space;
         graphicalCLI.printString("Which space do you want to put the card on? ");
 
-        space = scanner.nextInt()-1;
+        space = getNextInt()-1;
         while (space<0 || space>=3){
             graphicalCLI.printString("Your choice is invalid, please try again ");
-            space = scanner.nextInt()-1;
+            space = getNextInt()-1;
         }
 
         setSpaceToPlace(space);
@@ -614,7 +621,7 @@ public class CLI extends ClientController {
             graphicalCLI.printNumberedList(hand, graphicalCLI::printLeaderCard);
             graphicalCLI.printString("Choose a leader card by selecting the corresponding number: ");
 
-            int index = scanner.nextInt() - 1;
+            int index = getNextInt() - 1;
             List<LeaderCard> temp = new ArrayList<>();
             temp.add(hand.get(index));
             return temp;
@@ -657,7 +664,7 @@ public class CLI extends ClientController {
                     boolean validIndex = true;
                     do {
                         graphicalCLI.printString("Choose a production you want to activate by entering its number: ");
-                        index = scanner.nextInt() - 1;
+                        index = getNextInt() - 1;
                         if (index < 0 || index >= productions.size())
                             validIndex = false;
                     } while (!validIndex);
@@ -725,7 +732,7 @@ public class CLI extends ClientController {
                 goBack = false;
             }
             do {
-                action = scanner.nextInt();
+                action = getNextInt();
             } while (action < 1 || action > 8);
 
             switch (action) {
@@ -818,7 +825,7 @@ public class CLI extends ClientController {
             graphicalCLI.printString(" - Storage number: ");
             do{
                 if(!first) graphicalCLI.printString("Invalid storage number, try again: ");
-                choice = scanner.nextInt();
+                choice = getNextInt();
                 first = choice >= 0 && choice <= 3;
             }while(choice<0 || choice >3);
 
