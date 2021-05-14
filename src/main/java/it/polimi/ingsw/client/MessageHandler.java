@@ -1,6 +1,5 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.utils.messages.Message;
 import it.polimi.ingsw.utils.messages.server.*;
 
@@ -17,13 +16,13 @@ public class MessageHandler implements Runnable{
     private ObjectOutputStream output;
     private ObjectInputStream input;
 
-    private final CLI client;
+    private final ClientController client;
     private final Queue<ServerActionMessage> messageQueue;
 
     private boolean active;
 
 
-    public MessageHandler(CLI client) {
+    public MessageHandler(ClientController client) {
         this.client = client;
         this.messageQueue = new ConcurrentLinkedQueue<>();
         active = false;

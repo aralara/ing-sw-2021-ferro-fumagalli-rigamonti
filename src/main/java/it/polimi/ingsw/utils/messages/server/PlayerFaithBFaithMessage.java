@@ -1,6 +1,6 @@
 package it.polimi.ingsw.utils.messages.server;
 
-import it.polimi.ingsw.client.cli.CLI;
+import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.exceptions.NotExistingNickname;
 
 public class PlayerFaithBFaithMessage implements ServerUpdateMessage {
@@ -24,7 +24,7 @@ public class PlayerFaithBFaithMessage implements ServerUpdateMessage {
     }
 
     @Override
-    public void doUpdate(CLI client) {
+    public void doUpdate(ClientController client) {
         try {
             client.playerBoardFromNickname(nickname).getFaithBoard().setFaith(faith);
         } catch(NotExistingNickname e){

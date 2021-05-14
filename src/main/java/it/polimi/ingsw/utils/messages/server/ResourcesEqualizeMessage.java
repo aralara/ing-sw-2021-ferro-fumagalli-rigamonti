@@ -1,5 +1,6 @@
 package it.polimi.ingsw.utils.messages.server;
 
+import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.GraphicalCLI;
 import it.polimi.ingsw.exceptions.NotExistingNickname;
@@ -18,8 +19,8 @@ public class ResourcesEqualizeMessage extends ResourcesMessage implements Server
 
 
     @Override
-    public void doAction(CLI client) {
-        GraphicalCLI graphicalCLI = client.getGraphicalCLI();
+    public void doAction(ClientController client) {
+        GraphicalCLI graphicalCLI = ((CLI) client).getGraphicalCLI();   //TODO: CAST A CLI ORRENDI, BRUTTI E ASSOLUTAMENTE TEMPORANEI IN TUTTO IL METODO
         List<Resource> newResources = new ArrayList<>();
         for(Resource resource : getResources()) {
             if (resource.getResourceType() == ResourceType.FAITH) {
@@ -33,13 +34,13 @@ public class ResourcesEqualizeMessage extends ResourcesMessage implements Server
                 }
             }
             else if (resource.getResourceType() == ResourceType.WILDCARD){
-                newResources = client.resolveResourcesToEqualize(resource.getQuantity());
+                newResources = ((CLI) client).resolveResourcesToEqualize(resource.getQuantity());
             }
         }
         if(newResources.size() > 0) {
-            client.storeTempResources(newResources);
+            ((CLI) client).storeTempResources(newResources);
             graphicalCLI.printString("Now place the resources on the shelves:\n");
-            client.chooseShelvesManagement(newResources);
+            ((CLI) client).chooseShelvesManagement(newResources);
         }
     }
 }

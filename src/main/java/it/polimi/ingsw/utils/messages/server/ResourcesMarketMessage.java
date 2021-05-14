@@ -1,5 +1,6 @@
 package it.polimi.ingsw.utils.messages.server;
 
+import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.GraphicalCLI;
 import it.polimi.ingsw.server.model.storage.Resource;
@@ -20,8 +21,8 @@ public class ResourcesMarketMessage extends ResourcesMessage implements ServerAc
 
 
     @Override
-    public void doAction(CLI client) {
-        GraphicalCLI graphicalCLI = client.getGraphicalCLI();
+    public void doAction(ClientController client) {
+        GraphicalCLI graphicalCLI = ((CLI) client).getGraphicalCLI();   //TODO: CAST A CLI ORRENDI, BRUTTI E ASSOLUTAMENTE TEMPORANEI IN TUTTO IL METODO
         List<Resource> resources = getResources().stream()
                 .filter(r -> r.getResourceType() != ResourceType.WILDCARD).collect(Collectors.toList());
         int     index,
@@ -37,7 +38,7 @@ public class ResourcesMarketMessage extends ResourcesMessage implements ServerAc
 
             do {
                 graphicalCLI.printString("Please choose a valid resource type for the wildcard:");
-                index = client.getNextInt() - 1;
+                index = ((CLI) client).getNextInt() - 1;
             } while(0 > index || index > availableAbilities.size());
 
             resources.add(new Resource(availableAbilities.get(index), 1));
@@ -45,6 +46,6 @@ public class ResourcesMarketMessage extends ResourcesMessage implements ServerAc
             availableAbilities.remove(index);
             marblesLeft--;
         }
-        client.chooseShelvesManagement(resources);
+        ((CLI) client).chooseShelvesManagement(resources);
     }
 }

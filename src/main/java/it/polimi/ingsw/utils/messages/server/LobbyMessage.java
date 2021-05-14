@@ -1,5 +1,6 @@
 package it.polimi.ingsw.utils.messages.server;
 
+import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.client.cli.GraphicalCLI;
 
@@ -23,10 +24,10 @@ public class LobbyMessage implements ServerActionMessage {
     }
 
     @Override
-    public void doAction(CLI client) {
-        GraphicalCLI graphicalCLI = client.getGraphicalCLI();
+    public void doAction(ClientController client) {
+        GraphicalCLI graphicalCLI = ((CLI) client).getGraphicalCLI();   //TODO: CAST A CLI ORRENDI, BRUTTI E ASSOLUTAMENTE TEMPORANEI IN TUTTO IL METODO
         if (lobbySize == waitingPlayers)
-            client.createNewLobby();
+            ((CLI) client).createNewLobby();
         else {
             graphicalCLI.printString("There's already a " + lobbySize + " player lobby waiting for ");
             if(lobbySize - waitingPlayers == 1)
