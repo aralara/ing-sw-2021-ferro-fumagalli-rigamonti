@@ -1,8 +1,9 @@
 package it.polimi.ingsw.server.model.storage;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class RequestResources implements Storage{
+public class RequestResources implements Storage, Serializable {
 
     private final List<Resource> requestedResources;
     private final StorageType storageType;
