@@ -7,7 +7,7 @@ import it.polimi.ingsw.utils.messages.server.ack.RequestResourcesAckMessage;
 
 import java.util.List;
 
-public class RequestResourcesProdMessage extends ActivateProductionsMessage {
+public class RequestResourcesProdMessage extends CanActivateProductionsMessage {
 
     private final List<RequestResources> requestResources;
 

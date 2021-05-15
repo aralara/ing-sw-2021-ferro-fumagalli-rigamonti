@@ -7,7 +7,7 @@ import java.util.List;
 public class Shelf implements Storage, Serializable {
 
     private ResourceType resourceType;
-    private final Resource resources; //TODO: è giusto che una sola risorsa sia chiamata al plurale?
+    private final Resource resources;
     private final int level;
     private final boolean isLeader;
 

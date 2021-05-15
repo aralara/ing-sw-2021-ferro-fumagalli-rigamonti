@@ -1,6 +1,7 @@
 package it.polimi.ingsw.utils.messages.server;
 
 import it.polimi.ingsw.client.ClientController;
+import it.polimi.ingsw.client.structures.FaithTrackView;
 import it.polimi.ingsw.client.structures.VaticanReportView;
 import it.polimi.ingsw.server.model.faith.*;
 
@@ -28,12 +29,8 @@ public class FaithTrackMessage implements ServerUpdateMessage {
     }
 
     @Override
-    public void doUpdate(ClientController client) {  //TODO: considerare la conversione da VaticanReport a VaticanReportView nel costruttore del messaggio o nel set del FaithTrackView
-        List<VaticanReportView> clientVaticanReports = new ArrayList<>();
-        for(VaticanReport vaticanReport : vaticanReports) {
-            clientVaticanReports.add(new VaticanReportView(vaticanReport.getMin(),
-                    vaticanReport.getMax(), vaticanReport.getPopeValue()));
-        }
-        client.getFaithTrackView().setFaithTrackView(clientVaticanReports, faithSpaces);
+    public void doUpdate(ClientController client) {
+        client.getFaithTrack().setVaticanReports(vaticanReports);
+        client.getFaithTrack().setFaithSpaces(faithSpaces);
     }
 }

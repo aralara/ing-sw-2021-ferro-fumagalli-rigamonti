@@ -18,9 +18,7 @@ import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 import it.polimi.ingsw.server.model.storage.Shelf;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -28,7 +26,7 @@ import static it.polimi.ingsw.utils.Constants.MARKET_COLUMN_SIZE;
 import static it.polimi.ingsw.utils.Constants.MARKET_ROW_SIZE;
 
 
-public class GraphicalCLI {
+public class GraphicalCLI { //TODO: sostituire System.out.println
 
     public static final String RESET = "\033[0m";  // Text Reset
 
@@ -39,8 +37,70 @@ public class GraphicalCLI {
     public static final String PURPLE_BRIGHT = "\033[0;95m"; // PURPLE
     public static final String WHITE_BRIGHT = "\033[0;97m";  // WHITE
 
-    public void printString(String toPrint){
+    private final Scanner scanner;
+
+
+    public GraphicalCLI() {
+        scanner = new Scanner(System.in);
+    }
+
+
+    public int getNextInt() {
+        int value = -1;
+        boolean valid;
+        do {
+            valid = true;
+            try {
+                value = scanner.nextInt();
+            } catch (InputMismatchException e) {
+                printString("Invalid input! Try again: ");
+                scanner.nextLine();
+                valid = false;
+            }
+        } while(!valid);
+        return value;
+    }
+
+    public String getNextLine() {
+        return scanner.nextLine();
+    }
+
+    public void printString(String toPrint) {
         System.out.print(toPrint);
+    }
+
+    public void printlnString(String toPrint) {
+        System.out.println(toPrint);
+    }
+
+    public boolean askGoBack() {
+        printString("Do you want to go back and choose another action?" +
+                "\nIf you want to, insert YES: ");
+        return isAnswerYes();
+    }
+
+    public boolean isAnswerYes() { //TODO: regex
+        String command = getNextLine();
+        return  command.equalsIgnoreCase("YES") || command.equalsIgnoreCase("Y");
+    }
+
+    public ResourceType resourceTypeSelector(List<ResourceType> resourceTypes) {
+        if(resourceTypes.size() > 0) {
+            if(resourceTypes.size() == 1) {
+                ResourceType res = resourceTypes.get(0);
+                printString(res + " is the only resource type available\n");
+                return res;
+            }
+            int index;
+            printString("You can choose a resource type from the following: \n");
+            printNumberedList(resourceTypes, rt -> printString(rt.name()));
+            do {
+                printString("Please choose a valid resource: ");
+                index = getNextInt() - 1;
+            } while(index < 0 || index>=4);
+            return resourceTypes.get(index);
+        }
+        return null;
     }
 
     public <T> void printNumberedList(List<T> list, Consumer<T> printConsumer) {
@@ -50,6 +110,16 @@ public class GraphicalCLI {
                     printString(n + ")");
                     printConsumer.accept(elem);
                 });
+    }
+
+    public void printDevelopmentDeckTop(List<DevelopmentDeckView> developmentDecks) {
+        printString("The development decks:\n");
+        List<DevelopmentCard> developmentCards =  new ArrayList<>();
+        for(DevelopmentDeckView temp : developmentDecks){
+            if(!temp.getDeck().isEmpty())
+                developmentCards.add((DevelopmentCard) temp.getDeck().getCards().get(0));
+        }
+        printNumberedList(developmentCards, this::printDevelopmentCard);
     }
 
     public void printMarket(MarketView market){
@@ -92,7 +162,7 @@ public class GraphicalCLI {
         if(leaderCard.getID() != -1) {
             System.out.println(" LEADER CARD");
             System.out.print(" • Requirements: ");
-            if (leaderCard.getRequirements().get(0) instanceof RequirementDev) {   //TODO: sostituire con strategy quando ci sarà una classe apposita
+            if (leaderCard.getRequirements().get(0) instanceof RequirementDev) {   //TODO: mettere to string alle carte
                 for (Requirement req : leaderCard.getRequirements()) {
                     toPrint = ((!first) ? ", " : "") + ((RequirementDev) req).getNumber() + " " +
                             ((RequirementDev) req).getColor() + " level " +

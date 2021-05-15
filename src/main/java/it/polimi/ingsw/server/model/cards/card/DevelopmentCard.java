@@ -14,6 +14,15 @@ public class DevelopmentCard implements Card {
     private final List<Resource> cost;
 
 
+    public DevelopmentCard() {
+        this.ID = -1;
+        this.VP = 0;
+        this.color = null;
+        this.level = -1;
+        this.production = null;
+        this.cost = null;
+    }
+
     public DevelopmentCard(int ID, int VP, CardColors color, int level, Production production, List<Resource> cost) {
         this.ID = ID;
         this.VP = VP;

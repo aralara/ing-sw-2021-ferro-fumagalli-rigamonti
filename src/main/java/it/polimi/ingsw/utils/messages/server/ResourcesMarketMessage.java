@@ -38,7 +38,7 @@ public class ResourcesMarketMessage extends ResourcesMessage implements ServerAc
 
             do {
                 graphicalCLI.printString("Please choose a valid resource type for the wildcard:");
-                index = ((CLI) client).getNextInt() - 1;
+                index = ((CLI) client).getGraphicalCLI().getNextInt() - 1;
             } while(0 > index || index > availableAbilities.size());
 
             resources.add(new Resource(availableAbilities.get(index), 1));

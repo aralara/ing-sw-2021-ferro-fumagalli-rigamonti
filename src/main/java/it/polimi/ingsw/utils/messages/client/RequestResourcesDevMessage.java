@@ -8,7 +8,7 @@ import it.polimi.ingsw.utils.messages.server.ack.RequestResourcesAckMessage;
 
 import java.util.List;
 
-public class RequestResourcesDevMessage extends BuyDevelopmentCardMessage {
+public class RequestResourcesDevMessage extends CanBuyDevelopmentCardMessage {
 
     private final List<RequestResources> requestResources;
 

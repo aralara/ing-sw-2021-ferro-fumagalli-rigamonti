@@ -84,8 +84,7 @@ public class PlayerBoardSetupMessage implements HiddenMessage, ServerUpdateMessa
 
     @Override
     public void doUpdate(ClientController client) {
-        GraphicalCLI graphicalCLI = ((CLI) client).getGraphicalCLI();   //TODO: ORRENDO, BRUTTO E ASSOLUTAMENTE TEMPORANEO
-        List<PlayerBoardView> clientPlayerBoards = client.getPlayerBoards();
+        List<PlayerBoardView> clientPlayerBoards = client.getPlayerBoards();    //TODO: ORRENDO, BRUTTO E ASSOLUTAMENTE TEMPORANEO
 
         PlayerBoardView playerBoard = new PlayerBoardView(
                 nickname,
@@ -97,8 +96,5 @@ public class PlayerBoardSetupMessage implements HiddenMessage, ServerUpdateMessa
                 inkwell
         );
         clientPlayerBoards.add(playerBoard);
-
-        if(clientPlayerBoards.size() == client.getNumberOfPlayers())
-            graphicalCLI.printString("\nTHE GAME CAN START!\n\n");
     }
 }

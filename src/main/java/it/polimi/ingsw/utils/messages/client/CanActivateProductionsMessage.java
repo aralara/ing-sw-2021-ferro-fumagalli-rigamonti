@@ -3,17 +3,17 @@ package it.polimi.ingsw.utils.messages.client;
 import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.server.view.VirtualView;
-import it.polimi.ingsw.utils.messages.server.ack.ActivateProductionsAckMessage;
+import it.polimi.ingsw.utils.messages.server.ack.CanActivateProductionsAckMessage;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivateProductionsMessage implements ClientActionMessage {
+public class CanActivateProductionsMessage implements ClientActionMessage {
 
     private final List<Production> productions;
 
 
-    public ActivateProductionsMessage(List<Production> productions) {
+    public CanActivateProductionsMessage(List<Production> productions) {
         this.productions = productions;
     }
 
@@ -37,6 +37,6 @@ public class ActivateProductionsMessage implements ClientActionMessage {
     @Override
     public void doAction(VirtualView view, Controller controller) {
         boolean success = controller.canActivateProductions(view.getNickname(), getConsumed());
-        view.sendMessage(new ActivateProductionsAckMessage(success));
+        view.sendMessage(new CanActivateProductionsAckMessage(success));
     }
 }

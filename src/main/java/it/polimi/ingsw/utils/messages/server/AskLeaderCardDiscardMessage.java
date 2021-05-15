@@ -15,7 +15,7 @@ import java.util.List;
 public class AskLeaderCardDiscardMessage implements ServerActionMessage {
 
     @Override
-    public void doAction(ClientController client) {                      //TODO: azioni da delegare alla GraphicalCLI
+    public void doAction(ClientController client) {
         String nickname = client.getNickname();
         MessageHandler messageHandler = client.getPacketHandler();
         GraphicalCLI graphicalCLI = ((CLI) client).getGraphicalCLI();   //TODO: CAST A CLI ORRENDI, BRUTTI E ASSOLUTAMENTE TEMPORANEI IN TUTTO IL METODO
@@ -30,16 +30,16 @@ public class AskLeaderCardDiscardMessage implements ServerActionMessage {
             graphicalCLI.printLeaderHand(playerBoard.getLeaderBoard());
 
             graphicalCLI.printString("Choose the first one by selecting the corresponding number: ");
-            firstOne = ((CLI) client).getNextInt() - 1;
+            firstOne = ((CLI) client).getGraphicalCLI().getNextInt() - 1;
             while(firstOne < 0 || firstOne >= size){
                 graphicalCLI.printString("The chosen number is invalid, please choose another one: ");
-                firstOne = ((CLI) client).getNextInt() - 1;
+                firstOne = ((CLI) client).getGraphicalCLI().getNextInt() - 1;
             }
             graphicalCLI.printString("Choose the second one by selecting the corresponding number: ");
-            secondOne = ((CLI) client).getNextInt() - 1;
+            secondOne = ((CLI) client).getGraphicalCLI().getNextInt() - 1;
             while(secondOne < 0 || secondOne >= size || secondOne == firstOne){
                 graphicalCLI.printString("The chosen number is invalid, please choose another one: ");
-                secondOne = ((CLI) client).getNextInt() - 1;
+                secondOne = ((CLI) client).getGraphicalCLI().getNextInt() - 1;
             }
 
             leaderCards.add((LeaderCard) playerBoard.getLeaderBoard().getHand().get(firstOne));

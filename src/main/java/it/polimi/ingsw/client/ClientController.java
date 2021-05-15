@@ -1,12 +1,10 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.client.cli.GraphicalCLI;
 import it.polimi.ingsw.client.structures.DevelopmentDeckView;
 import it.polimi.ingsw.client.structures.FaithTrackView;
 import it.polimi.ingsw.client.structures.MarketView;
 import it.polimi.ingsw.client.structures.PlayerBoardView;
 import it.polimi.ingsw.exceptions.NotExistingNickname;
-import it.polimi.ingsw.server.model.boards.PlayerBoard;
 import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.model.storage.Production;
 import it.polimi.ingsw.server.model.storage.Resource;
@@ -19,25 +17,46 @@ public abstract class ClientController {
     private int numberOfPlayers;
     private int lorenzoFaith;                   //TODO: gestione lorenzo WIP
     private final List<PlayerBoardView> playerBoards;
-    private final MarketView marketView;
+    private final MarketView market;
     private final List<DevelopmentDeckView> developmentDecks;
-    private final FaithTrackView faithTrackView;
+    private final FaithTrackView faithTrack;
     private List<Resource> resourcesToPut;      //TODO: valutare se serve memorizzare
     private DevelopmentCard cardToBuy;
     private int spaceToPlace;
     private List<Production> productionsToActivate;
-    private boolean mainActionPlayed/*, endTurn*/; //TODO: valutare se serve endTurn
+    private boolean mainActionPlayed, playerTurn;
     private final MessageHandler messageHandler;
+
 
     public ClientController() {
         lorenzoFaith = -1;
         playerBoards = new ArrayList<>();
-        marketView = new MarketView();
+        market = new MarketView();
         developmentDecks = new ArrayList<>();
-        faithTrackView = new FaithTrackView();
+        faithTrack = new FaithTrackView();
         mainActionPlayed = false;
         messageHandler = new MessageHandler(this);
+        playerTurn = false;
     }
+
+
+    public abstract void setup();
+
+    public abstract boolean connect();
+
+    public abstract void run();
+
+    public abstract void askNickname();
+
+    public abstract void askNewLobby();
+
+    public abstract void notifyNewPlayer();
+
+    public abstract void askLeaderDiscard();
+
+    public abstract void askResourceEqualize();
+
+    public abstract void notifyStartTurn();
 
     public String getNickname() {
         return nickname;
@@ -69,16 +88,16 @@ public abstract class ClientController {
         return playerBoards;
     }
 
-    public MarketView getMarketView() {
-        return marketView;
+    public MarketView getMarket() {
+        return market;
     }
 
     public List<DevelopmentDeckView> getDevelopmentDecks() {
         return developmentDecks;
     }
 
-    public FaithTrackView getFaithTrackView() {
-        return faithTrackView;
+    public FaithTrackView getFaithTrack() {
+        return faithTrack;
     }
 
     public List<Resource> getResourcesToPut() {
@@ -136,4 +155,11 @@ public abstract class ClientController {
         return playerBoardFromNickname(nickname);
     }
 
+    public boolean isPlayerTurn() {
+        return playerTurn;
+    }
+
+    public void setPlayerTurn(boolean playerTurn) {
+        this.playerTurn = playerTurn;
+    }
 }

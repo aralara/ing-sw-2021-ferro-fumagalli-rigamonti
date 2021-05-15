@@ -43,18 +43,15 @@ public class MessageHandler implements Runnable{
         try {
             server = new Socket(address, port);
         } catch (IOException e) {
-            System.out.println("Server unreachable");
             return false;
         }
-        System.out.println("Connected");
+
         try {
             output = new ObjectOutputStream(server.getOutputStream());
             input = new ObjectInputStream(server.getInputStream());
 
-        } catch (IOException e) {
-            System.out.println("Server has died");
-        } catch (ClassCastException e) {
-            System.out.println("Protocol violation");
+        } catch (IOException | ClassCastException e) {
+            e.printStackTrace();
         }
         active = true;
         return true;

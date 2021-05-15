@@ -25,7 +25,7 @@ public class MarketMessage implements ServerUpdateMessage {
 
     @Override
     public void doUpdate(ClientController client) {
-        client.getMarketView().setMarbleMatrix(marbleMatrix);
-        client.getMarketView().setFloatingMarble(floatingMarble);
+        client.getMarket().setMarbleMatrix(marbleMatrix);
+        client.getMarket().setFloatingMarble(floatingMarble);
     }
 }

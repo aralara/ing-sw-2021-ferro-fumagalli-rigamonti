@@ -14,7 +14,7 @@ public class ConnectionAckMessage extends AckMessage implements ServerActionMess
     }
 
     @Override
-    public void doAction(ClientController client) {    //TODO: ci sono print nel messaggio
+    public void doAction(ClientController client) {
         if (!isState()) {
             ((CLI) client).getGraphicalCLI().printString("Nickname is not available, please choose another one: ");
             ((CLI) client).askNickname();   //TODO: CAST A CLI ORRENDI, BRUTTI E ASSOLUTAMENTE TEMPORANEI IN TUTTO IL METODO

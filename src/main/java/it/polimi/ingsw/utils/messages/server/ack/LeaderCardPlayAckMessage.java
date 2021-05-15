@@ -12,9 +12,8 @@ public class LeaderCardPlayAckMessage extends LeaderCardAckMessage implements Se
     }
 
     @Override
-    public void doAction(ClientController client) {    //TODO: ci sono print nel messaggio
+    public void doAction(ClientController client) {
         if(!isState()){
-            //TODO: richiesta?
             System.out.println("Something went wrong, please try again");
             //client.askDiscardLeader();
         }

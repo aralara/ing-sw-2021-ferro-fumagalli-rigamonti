@@ -26,7 +26,7 @@ public class ResourcesEqualizeMessage extends ResourcesMessage implements Server
             if (resource.getResourceType() == ResourceType.FAITH) {
                 try {
                     client.playerBoardFromNickname(client.getNickname())
-                            .getFaithBoard().setFaith(resource.getQuantity()); //TODO: Do per scontato che arriverà solo quello del player corretto?
+                            .getFaithBoard().setFaith(resource.getQuantity());
                     graphicalCLI.printString(resource.getQuantity() + " " + resource.getResourceType()
                             + " has been added to your faith board\n");
                 } catch (NotExistingNickname e) {
@@ -38,7 +38,7 @@ public class ResourcesEqualizeMessage extends ResourcesMessage implements Server
             }
         }
         if(newResources.size() > 0) {
-            ((CLI) client).storeTempResources(newResources);
+            ((CLI) client).setResourcesToPut(new ArrayList<>(newResources));
             graphicalCLI.printString("Now place the resources on the shelves:\n");
             ((CLI) client).placeResourcesOnShelves(newResources);
         }
