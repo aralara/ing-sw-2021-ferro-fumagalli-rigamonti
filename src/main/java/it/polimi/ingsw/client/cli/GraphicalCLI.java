@@ -126,7 +126,7 @@ public class GraphicalCLI {
         }
         else {
             System.out.println(" LEADER CARD");
-            System.out.println(" • The leader card is covered, yu can't see it!");
+            System.out.println(" • The leader card is covered, you can't see it!");
         }
     }
 
@@ -277,7 +277,7 @@ public class GraphicalCLI {
             first = false;
         }
         System.out.println();
-        System.out.println(" • Special ability: You gain access to the following production: ");
+        System.out.println(" • Production that can be activated: ");
         printProduction(developmentCard.getProduction());
     }
 
@@ -298,17 +298,27 @@ public class GraphicalCLI {
         printWarehouse(playerBoardView.getWarehouse());
         printExtraShelfLeader(playerBoardView.getWarehouse());
         printStrongbox(playerBoardView.getStrongbox());
-        printNumberedList((List<LeaderCard>)(List<?>)playerBoardView.getLeaderBoard().getHand().getCards(),this::printLeaderCard);
-        printNumberedList((List<LeaderCard>)(List<?>)playerBoardView.getLeaderBoard().getBoard().getCards(),this::printLeaderCard);
-        List<DevelopmentCard> developmentCards = new ArrayList<>();
-        for(Deck deck : playerBoardView.getDevelopmentBoard().getSpaces()){
-            developmentCards.addAll((List<DevelopmentCard>)(List<?>)deck.getCards());
-        }
-        printNumberedList(developmentCards,this::printDevelopmentCard);
+        printLeaderBoard(playerBoardView.getLeaderBoard());
+        printLeaderHand(playerBoardView.getLeaderBoard());
+        printDevelopmentBoard(playerBoardView.getDevelopmentBoard());
         printFaithBoard(playerBoardView, faithTrackView);
     }
 
-    public void printDevelopmentBoard(){
-        //TODO: da fare
+    public void printDevelopmentBoard(DevelopmentBoardView developmentBoard){
+        System.out.println("Development spaces:");
+        List<Deck> spaces = developmentBoard.getSpaces();
+        for(int i=0; i<spaces.size();i++){
+            System.out.print((i+1) + ") ");
+            if(spaces.get(i).isEmpty()) System.out.println("empty");
+            else printDevelopmentCard((DevelopmentCard) spaces.get(i).get(0));
+        }
+    }
+
+    public void printLeaderBoard(LeaderBoardView leaderBoard){
+        printNumberedList((List<LeaderCard>)(List<?>)leaderBoard.getBoard().getCards(),this::printLeaderCard);
+    }
+
+    public void printLeaderHand(LeaderBoardView leaderBoard){
+        printNumberedList((List<LeaderCard>)(List<?>)leaderBoard.getHand().getCards(),this::printLeaderCard);
     }
 }

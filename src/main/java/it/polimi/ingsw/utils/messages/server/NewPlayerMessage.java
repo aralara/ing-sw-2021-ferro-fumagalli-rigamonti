@@ -22,7 +22,7 @@ public class NewPlayerMessage implements ServerActionMessage {
     public void doAction(ClientController client) {
         GraphicalCLI graphicalCLI = ((CLI) client).getGraphicalCLI();   //TODO: CAST A CLI ORRENDI, BRUTTI E ASSOLUTAMENTE TEMPORANEI IN TUTTO IL METODO
         if(!client.getNickname().equals(playerNickname)) {
-            graphicalCLI.printString("The player " + playerNickname + " has joined the game!");
+            graphicalCLI.printString("The player " + playerNickname + " has joined the game!\n");
         }else{
             graphicalCLI.printString("You have been added to the game!\n");
         }

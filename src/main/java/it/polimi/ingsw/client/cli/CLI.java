@@ -78,7 +78,7 @@ public class CLI extends ClientController {
     }
 
     private boolean connect() {
-        graphicalCLI.printString("Insert the IP address of server\n");
+        graphicalCLI.printString("Insert the IP address of server: ");
         String ip = scanner.nextLine();
 
         return messageHandler.connect(ip, Server.SOCKET_PORT);
@@ -146,12 +146,17 @@ public class CLI extends ClientController {
         graphicalCLI.printMarket(getMarketView()); graphicalCLI.printString("\n");
         printDevelopmentDeckTop(); graphicalCLI.printString("\n");
         try {
+            graphicalCLI.printString("Your board:\n");
             PlayerBoardView playerBoard = getLocalPlayerBoard();
             graphicalCLI.printFaithBoard(playerBoard, getFaithTrackView()); graphicalCLI.printString("\n");
-            graphicalCLI.printDevelopmentBoard(); graphicalCLI.printString("\n");
             graphicalCLI.printWarehouse(playerBoard.getWarehouse());
             graphicalCLI.printExtraShelfLeader(playerBoard.getWarehouse()); graphicalCLI.printString("\n");
             graphicalCLI.printStrongbox(playerBoard.getStrongbox()); graphicalCLI.printString("\n");
+            graphicalCLI.printDevelopmentBoard(playerBoard.getDevelopmentBoard()); graphicalCLI.printString("\n");
+            graphicalCLI.printString("Leader in your hand:\n");
+            graphicalCLI.printLeaderHand(playerBoard.getLeaderBoard()); graphicalCLI.printString("\n");
+            graphicalCLI.printString("Leader placed on your board:\n");
+            graphicalCLI.printLeaderBoard(playerBoard.getLeaderBoard()); graphicalCLI.printString("\n");
         }catch(NotExistingNickname e){
             e.printStackTrace();
         }

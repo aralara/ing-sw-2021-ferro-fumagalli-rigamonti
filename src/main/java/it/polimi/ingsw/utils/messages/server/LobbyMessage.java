@@ -31,9 +31,9 @@ public class LobbyMessage implements ServerActionMessage {
         else {
             graphicalCLI.printString("There's already a " + lobbySize + " player lobby waiting for ");
             if(lobbySize - waitingPlayers == 1)
-                graphicalCLI.printString("another player");
+                graphicalCLI.printString("another player\n");
             else
-                graphicalCLI.printString((lobbySize - waitingPlayers) + " more players");
+                graphicalCLI.printString((lobbySize - waitingPlayers) + " more players\n");
             client.setNumberOfPlayers(lobbySize);
         }
     }
