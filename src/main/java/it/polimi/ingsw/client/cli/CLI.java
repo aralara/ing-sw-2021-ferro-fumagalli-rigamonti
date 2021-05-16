@@ -1,7 +1,6 @@
 package it.polimi.ingsw.client.cli;
 
 import it.polimi.ingsw.client.ClientController;
-import it.polimi.ingsw.client.MessageHandler;
 import it.polimi.ingsw.client.UpdateMessageReader;
 import it.polimi.ingsw.client.structures.*;
 import it.polimi.ingsw.exceptions.NotExistingNicknameException;
@@ -176,75 +175,83 @@ public class CLI extends ClientController {
         }
     }
 
-    public void turnMenu() { //TODO: gestire per far fare comunque altre azioni
+    public void turnMenu() {
         int action;
-        List<LeaderCard> leaderCards = new ArrayList<>();
-        refresh();  //TODO: dividere in più visualizzazioni
-        if(isPlayerTurn()) {
-            graphicalCLI.printActions();
+        List<LeaderCard> leaderCards;
+        graphicalCLI.printActions(isPlayerTurn());
+        action = graphicalCLI.getNextInt();
+        while (action < 1 || action > (isPlayerTurn() ? 10 : 4)){
+            graphicalCLI.printString("Invalid choice, please try again: ");
             action = graphicalCLI.getNextInt();
-            while (action < 1 || action > 8){
-                graphicalCLI.printString("Invalid choice, please try again: ");
-                action = graphicalCLI.getNextInt();
-            }
-            switch (action) {
-                case 1:
-                    if (!isMainActionPlayed())
-                        selectMarket();
-                    else {
-                        graphicalCLI.printlnString("You can't play this action on your turn anymore");
+        }
+        if(!isPlayerTurn())
+            action+=5;
+        switch (action) {
+            case 1:
+                if (!isMainActionPlayed())
+                    selectMarket();
+                else {
+                    graphicalCLI.printlnString("You can't play this action on your turn anymore");
+                }
+                break;
+            case 2:
+                if (!isMainActionPlayed()) {
+                    selectDevDecks();
+                    if (isMainActionPlayed()) { //TODO: da spostare in un doAction (togliendo if e controllando ack)
+                        chooseStorages(getCardToBuy().getCost());
                     }
-                    break;
-                case 2:
-                    if (!isMainActionPlayed()) {
-                        selectDevDecks();
-                        if (isMainActionPlayed()) { //TODO: da spostare in un doAction (togliendo if e controllando ack)
-                            chooseStorages(getCardToBuy().getCost());
-                        }
-                    }
-                    else {
-                        graphicalCLI.printlnString("You can't play this action on your turn anymore");
-                    }
-                    break;
-                case 3:
-                    if (!isMainActionPlayed())
-                        selectProductions();
-                    else {
-                        graphicalCLI.printlnString("You can't play this action on your turn anymore");
-                    }
-                    break;
-                case 4:
-                    leaderCards = chooseLeaderCard();
-                    if(leaderCards.size() > 0) {
-                        getMessageHandler().sendMessage(new LeaderCardPlayMessage(leaderCards)); //TODO: controllare se non ho leader da attivare
-                    }
-                    break;
-                case 5:
-                    leaderCards = chooseLeaderCard();
-                    if(leaderCards.size() > 0) {
-                        getMessageHandler().sendMessage(new LeaderCardDiscardMessage(leaderCards)); //TODO: controllare se non ho leader da scartare
-                    }
-                    break;
-                case 6:
-                    if(isWarehouseEmpty()){
-                        graphicalCLI.printlnString("You have no resources to rearrange");
-                    } else {
-                        getMessageHandler().sendMessage(new ShelvesConfigurationMessage(
-                                rearrangeWarehouse(), new ArrayList<>()));
-                    }
-                    //TODO: messaggio per confermare config?
-                    break;
-                case 7:
-                    showOpponents(); //TODO: caso single?
-                    break;
-                case 8:
-                    if (isMainActionPlayed())
-                        //TODO: gestire fine turno
-                        setPlayerTurn(false);
-                        break;
-                default:
-                    break;
-            }
+                }
+                else {
+                    graphicalCLI.printlnString("You can't play this action on your turn anymore");
+                }
+                break;
+            case 3:
+                if (!isMainActionPlayed())
+                    selectProductions();
+                else {
+                    graphicalCLI.printlnString("You can't play this action on your turn anymore");
+                }
+                break;
+            case 4:
+                leaderCards = chooseLeaderCard();
+                if(leaderCards.size() > 0) {
+                    getMessageHandler().sendMessage(new LeaderCardPlayMessage(leaderCards));
+                }
+                break;
+            case 5:
+                leaderCards = chooseLeaderCard();
+                if(leaderCards.size() > 0) {
+                    getMessageHandler().sendMessage(new LeaderCardDiscardMessage(leaderCards));
+                }
+                break;
+            case 6:
+                graphicalCLI.printMarket(getMarket()); graphicalCLI.printlnString("");
+                graphicalCLI.printDevelopmentDeckTop(getDevelopmentDecks()); graphicalCLI.printlnString("");
+                break;
+            case 7:
+                showBoard();
+                break;
+            case 8:
+                showOpponents();
+                break;
+            case 9:
+                if(isWarehouseEmpty()){
+                    graphicalCLI.printlnString("You have no resources to rearrange");
+                } else {
+                    getMessageHandler().sendMessage(new ShelvesConfigurationMessage(
+                            rearrangeWarehouse(), new ArrayList<>()));
+                }
+                //TODO: messaggio per confermare config?
+                break;
+            case 10:
+                if (isMainActionPlayed()) {
+                    setPlayerTurn(false);
+                    getMessageHandler().sendMessage(new EndTurnMessage(getNickname()));
+                }
+                else graphicalCLI.printlnString("You haven't played any main action yet!");
+                break;
+            default:
+                break;
         }
     }
 
@@ -277,7 +284,7 @@ public class CLI extends ClientController {
             if(valid)
                 getMessageHandler().sendMessage(new SelectMarketMessage(row, column));
             else
-                graphicalCLI.printlnString("Your choice is invalid, please try again");
+                graphicalCLI.printString("Invalid choice, please try again: ");
         } while(!valid);
         setMainActionPlayed(true);
     }
@@ -294,7 +301,7 @@ public class CLI extends ClientController {
         graphicalCLI.printString("Which space do you want to put the card on? ");
         space = graphicalCLI.getNextInt() - 1;
         while (space < 0 || space >= 3){
-            graphicalCLI.printString("Your choice is invalid, please try again ");
+            graphicalCLI.printString("Invalid choice, please try again: ");
             space = graphicalCLI.getNextInt() - 1;
         }
         setSpaceToPlace(space);
@@ -342,26 +349,31 @@ public class CLI extends ClientController {
         } catch(NotExistingNicknameException e) {
             e.printStackTrace();
         }
+        //TODO: mettere true solo se si è potuta fare l'azione (no se non si hanno prod da attivare)
         setMainActionPlayed(true); //TODO: mettere a false nel nack
     }
 
     @SuppressWarnings("unchecked")
-    private List<LeaderCard> chooseLeaderCard(){ //TODO: gestire caso non ho leader e mettere nella graphicalCLI
+    private List<LeaderCard> chooseLeaderCard(){ //TODO: mettere nella graphicalCLI
         try {
             List<LeaderCard> hand = (List<LeaderCard>)(List<? extends Card>)
                     getLocalPlayerBoard().getLeaderBoard().getHand().getCards();
-            List<LeaderCard> temp = new ArrayList<>();
+            List<LeaderCard> chosenCard = new ArrayList<>();
             if(hand.size() > 0){
                 graphicalCLI.printNumberedList(hand, graphicalCLI::printLeaderCard);
                 graphicalCLI.printString("Choose a leader card by selecting the corresponding number: ");
 
                 int index = graphicalCLI.getNextInt() - 1;
-                temp.add(hand.get(index));
+                while(index<0 || index>=hand.size()){
+                    graphicalCLI.printString("Invalid choice, please try again: ");
+                    index = graphicalCLI.getNextInt() - 1;
+                }
+                chosenCard.add(hand.get(index));
             }
             else{
                 graphicalCLI.printlnString("You don't have any leader card in your hand!");
             }
-            return temp;
+            return chosenCard;
         }catch(NotExistingNicknameException e){
             e.printStackTrace();
         }
@@ -397,7 +409,7 @@ public class CLI extends ClientController {
                 graphicalCLI.printString("Resources to place: ");
                 graphicalCLI.printGraphicalResources(toPlace);
 
-                level=askWhichShelf(resourceToPlace, shelves.size(), !firstTurn, false);
+                level=graphicalCLI.askWhichShelf(resourceToPlace, shelves.size(), !firstTurn, false);
                 if(firstTurn) firstTurn = !firstTurn;
 
                 if(level>0) {
@@ -423,29 +435,19 @@ public class CLI extends ClientController {
     }
 
     private void showOpponents(){
-        for(PlayerBoardView playerBoardView : getPlayerBoards()){
-            if(!playerBoardView.getNickname().equals(getNickname())){
-                graphicalCLI.printOpponent(playerBoardView, getFaithTrack());
+        if(getNumberOfPlayers()>1) {
+            for (PlayerBoardView playerBoardView : getPlayerBoards()) {
+                if (!playerBoardView.getNickname().equals(getNickname())) {
+                    graphicalCLI.printPlayer(playerBoardView, getFaithTrack());
+                }
             }
-        }
+        } else graphicalCLI.printLorenzo(getLorenzoFaith());
     }
 
-    private void refresh() {
-        graphicalCLI.printMarket(getMarket()); graphicalCLI.printlnString("");
-        graphicalCLI.printDevelopmentDeckTop(getDevelopmentDecks()); graphicalCLI.printlnString("");
-        try {
-            graphicalCLI.printlnString("Your board:");
-            PlayerBoardView playerBoard = getLocalPlayerBoard();
-            graphicalCLI.printFaithBoard(playerBoard, getFaithTrack()); graphicalCLI.printlnString("");
-            graphicalCLI.printWarehouse(playerBoard.getWarehouse());
-            graphicalCLI.printExtraShelfLeader(playerBoard.getWarehouse()); graphicalCLI.printlnString("");
-            graphicalCLI.printStrongbox(playerBoard.getStrongbox()); graphicalCLI.printlnString("");
-            graphicalCLI.printDevelopmentBoard(playerBoard.getDevelopmentBoard()); graphicalCLI.printlnString("");
-            graphicalCLI.printlnString("Leader in your hand:");
-            graphicalCLI.printLeaderHand(playerBoard.getLeaderBoard()); graphicalCLI.printlnString("");
-            graphicalCLI.printlnString("Leader placed on your board:");
-            graphicalCLI.printLeaderBoard(playerBoard.getLeaderBoard()); graphicalCLI.printlnString("");
-        }catch(NotExistingNicknameException e){
+    private void showBoard(){
+        try{
+            graphicalCLI.printPlayer(getLocalPlayerBoard(), getFaithTrack());
+        } catch (NotExistingNicknameException e){
             e.printStackTrace();
         }
     }
@@ -475,7 +477,7 @@ public class CLI extends ClientController {
         List<Resource> toDiscard = new ArrayList<>();
         Shelf selectedShelf;
         Resource resourceToPlace;
-        boolean rearranged = false;
+        boolean rearranged = false, freeSlots = false;
         int level;
 
         try{
@@ -489,7 +491,17 @@ public class CLI extends ClientController {
                 graphicalCLI.printString("Resources to place: ");
                 graphicalCLI.printGraphicalResources(toPlace);
 
-                if (checkFreeSlotInWarehouse()) { //it's possible to place resources
+                if(getLocalPlayerBoard().getWarehouse().getShelves().size()<3)
+                    freeSlots = true;
+                else {
+                    for (Shelf shelf : getLocalPlayerBoard().getWarehouse().getShelves()) {
+                        if (shelf.getResourceType().equals(ResourceType.WILDCARD) ||
+                                shelf.getLevel() > shelf.getResources().getQuantity())
+                            freeSlots = true;
+                    }
+                }
+
+                if (freeSlots) { //it's possible to place resources
                     if (!isShelvesEmpty(shelves)) { //before starting move resources
                         graphicalCLI.printString("Do you want to rearrange the warehouse? ");
                         rearranged = graphicalCLI.isAnswerYes();
@@ -505,7 +517,7 @@ public class CLI extends ClientController {
                             graphicalCLI.printGraphicalResources(toPlace);
                         }
                         resourceToPlace = toPlace.get(0);
-                        level = askWhichShelf(resourceToPlace, shelves.size(), rearranged, true);
+                        level = graphicalCLI.askWhichShelf(resourceToPlace, shelves.size(), rearranged, true);
                         rearranged = true;
 
                         if (level > 0) {
@@ -607,23 +619,6 @@ public class CLI extends ClientController {
             }
         }
         return resourcesOneByOne;
-    }
-
-    private int askWhichShelf(Resource resource, int numberOfShelves, boolean rearranged, boolean canDiscard) { //TODO: spostare nella graphicalCLI
-        int level;
-        if(rearranged) {
-            graphicalCLI.printString("Do you want to restore warehouse to its original configuration? ");
-            if (graphicalCLI.isAnswerYes())
-                return -1;
-        }
-        graphicalCLI.printString("Where do you want to place " + resource.getResourceType()
-                + (canDiscard ? "? (0 to discard it) " : "? "));
-        level = graphicalCLI.getNextInt();
-        while ((canDiscard && level<0) || (!canDiscard && level<=0) || level>numberOfShelves){
-            graphicalCLI.printString("Choose a valid shelf: ");
-            level = graphicalCLI.getNextInt();
-        }
-        return level;
     }
 
     private void emptyShelfManagement(List<Shelf> shelves, List<Resource> toPlace,
@@ -814,13 +809,13 @@ public class CLI extends ClientController {
                         }
                         else
                             graphicalCLI.printString("There's no more cards available from this deck, " +
-                                    "please try again");
+                                    "please try again ");
                         break;
                     }
                 }
             }
             else
-                graphicalCLI.printString("Invalid choice, please try again");
+                graphicalCLI.printString("Invalid choice, please try again: ");
         } while (!valid);
         return developmentCard;
     }

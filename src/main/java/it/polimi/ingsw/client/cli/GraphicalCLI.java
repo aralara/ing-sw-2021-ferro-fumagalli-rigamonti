@@ -85,6 +85,23 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         return getNext().matches("(?i)YES");
     }
 
+    public int askWhichShelf(Resource resource, int numberOfShelves, boolean rearranged, boolean canDiscard) {
+        int level;
+        if(rearranged) {
+            printString("Do you want to restore warehouse to its original configuration? ");
+            if (isAnswerYes())
+                return -1;
+        }
+        printString("Where do you want to place " + resource.getResourceType()
+                + (canDiscard ? "? (0 to discard it) " : "? "));
+        level = getNextInt();
+        while ((canDiscard && level<0) || (!canDiscard && level<=0) || level>numberOfShelves){
+            printString("Choose a valid shelf: ");
+            level = getNextInt();
+        }
+        return level;
+    }
+
     public <T> T objectOptionSelector(List<T> list, Consumer<T> printObject) {
         if(list.size() > 0) {
             if(list.size() == 1) {
@@ -124,7 +141,7 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
     }
 
     public void printMarket(MarketView market){
-        printlnString("The market:");
+        printlnString("\nThe market:");
         String color;
         for(int i= 0; i<MARKET_ROW_SIZE.value();i++){
             for(int j = 0; j<MARKET_COLUMN_SIZE.value();j++){
@@ -238,19 +255,25 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
                 printlnString("active and its value is " + faithTrack.getVaticanReports().get(i).getPopeValue());
             } else printlnString("not active");
         }
+        printlnString("");
     }
 
-    public void printActions(){
+    public void printActions(boolean isPlayerTurn){
         printlnString(" Here's the menu: ");
-        printlnString(" •1) Get resources from market ");
-        printlnString(" •2) Buy a development card ");
-        printlnString(" •3) Activate your productions");
-        printlnString(" •4) Activate a leader card");
-        printlnString(" •5) Discard a leader card");
-        printlnString(" •6) Rearrange Warehouse");
-        printlnString(" •7) View opponents' boards");
-        printlnString(" •8) End turn");
-        printString("Choose an action to do on your turn: ");
+        if(isPlayerTurn) {
+            printlnString(" • 1) Get resources from market ");
+            printlnString(" • 2) Buy a development card ");
+            printlnString(" • 3) Activate your productions");
+            printlnString(" • 4) Activate a leader card");
+            printlnString(" • 5) Discard a leader card");
+        }
+        printlnString((isPlayerTurn ? " • 6" : " •1") + ") View market and development decks");
+        printlnString((isPlayerTurn ? " • 7" : " •2") + ") View your board");
+        printlnString((isPlayerTurn ? " • 8" : " •3") + ") View opponents' boards");
+        printlnString((isPlayerTurn ? " • 9" : " •4") + ") Rearrange Warehouse");
+        if(isPlayerTurn)
+            printlnString(" •10) End turn");
+        printString("Choose an action to do"+ (isPlayerTurn ? " on your turn: " : ": "));
     }
 
     public void printWarehouse(WarehouseView warehouseView){
@@ -280,7 +303,7 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         String color;
         int specialWarehouse = (int)warehouseView.getShelves().stream().filter(Shelf::isLeader).count();
         if(specialWarehouse > 0){
-            printlnString("Special warehouse:");
+            printlnString("\nSpecial warehouse:");
             List<Shelf> specialShelf = warehouseView.getShelves().stream()
                     .filter(x -> x.getLevel() == level && x.isLeader()).collect(Collectors.toList());
             for(int i = 0; i < specialWarehouse;i++){
@@ -293,13 +316,12 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
                     }
                 }
             }
-            printlnString("");
         }
     }
 
     public void printStrongbox(StrongboxView strongboxView){
         String color;
-        printlnString("Strongbox: ");
+        printlnString("\nStrongbox: ");
         if(strongboxView.getResources().size() > 0) {
             for (int i = 0; i < strongboxView.getResources().size(); i++) {
                 printString(" • ");
@@ -312,6 +334,7 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         else{
             printlnString(" • Empty");
         }
+        printlnString("");
     }
 
     public void printGraphicalResources(List<Resource> resources){
@@ -365,15 +388,21 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         printExtraShelfLeader(warehouseView);
     }
 
-    public void printOpponent(PlayerBoardView playerBoardView,FaithTrackView faithTrackView){
-        printlnString(playerBoardView.getNickname() + "'s board:");
+    public void printPlayer(PlayerBoardView playerBoardView,FaithTrackView faithTrackView){
+        printlnString("\n" + playerBoardView.getNickname() + "'s board:");
+        printFaithBoard(playerBoardView, faithTrackView);
         printWarehouse(playerBoardView.getWarehouse());
         printExtraShelfLeader(playerBoardView.getWarehouse());
         printStrongbox(playerBoardView.getStrongbox());
-        printLeaderBoard(playerBoardView.getLeaderBoard());
-        printLeaderHand(playerBoardView.getLeaderBoard());
         printDevelopmentBoard(playerBoardView.getDevelopmentBoard());
-        printFaithBoard(playerBoardView, faithTrackView);
+        printString("Leader in your hand: ");
+        printLeaderHand(playerBoardView.getLeaderBoard());
+        printString("Leader placed on your board: ");
+        printLeaderBoard(playerBoardView.getLeaderBoard());
+    }
+
+    public void printLorenzo(int faith){
+        printlnString("Lorenzo il Magnifico's faith level is " + faith);
     }
 
     public void printDevelopmentBoard(DevelopmentBoardView developmentBoard){
@@ -384,13 +413,23 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
             if(spaces.get(i).isEmpty()) printlnString("empty");
             else printDevelopmentCard((DevelopmentCard) spaces.get(i).get(0));
         }
+        printlnString("");
     }
 
     public void printLeaderBoard(LeaderBoardView leaderBoard){
-        printNumberedList((List<LeaderCard>)(List<?>)leaderBoard.getBoard().getCards(),this::printLeaderCard);
+        if(!leaderBoard.getBoard().getCards().isEmpty()){
+            printlnString("");
+            printNumberedList((List<LeaderCard>)(List<?>)leaderBoard.getBoard().getCards(),this::printLeaderCard);
+        }
+        else printString("empty");
+        printlnString("");
     }
 
     public void printLeaderHand(LeaderBoardView leaderBoard){
-        printNumberedList((List<LeaderCard>)(List<?>)leaderBoard.getHand().getCards(),this::printLeaderCard);
+        if(!leaderBoard.getHand().getCards().isEmpty()) {printlnString("");
+            printNumberedList((List<LeaderCard>) (List<?>) leaderBoard.getHand().getCards(), this::printLeaderCard);
+        }
+        else printString("empty");
+        printlnString("");
     }
 }
