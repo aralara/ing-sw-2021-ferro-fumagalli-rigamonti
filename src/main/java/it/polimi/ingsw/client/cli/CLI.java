@@ -107,6 +107,7 @@ public class CLI extends ClientController {
 
     public void turnMenu() { //TODO: gestire per far fare comunque altre azioni
         int action;
+        List<LeaderCard> leaderCards = new ArrayList<>();
         refresh();  //TODO: dividere in più visualizzazioni
         if(isPlayerTurn()) {
             graphicalCLI.printActions();
@@ -142,10 +143,16 @@ public class CLI extends ClientController {
                     }
                     break;
                 case 4:
-                    messageHandler.sendMessage(new LeaderCardPlayMessage(chooseLeaderCard())); //TODO: controllare se non ho leader da attivare
+                    leaderCards = chooseLeaderCard();
+                    if(leaderCards.size() > 0) {
+                        messageHandler.sendMessage(new LeaderCardPlayMessage(leaderCards)); //TODO: controllare se non ho leader da attivare
+                    }
                     break;
                 case 5:
-                    messageHandler.sendMessage(new LeaderCardDiscardMessage(chooseLeaderCard())); //TODO: controllare se non ho leader da scartare
+                    leaderCards = chooseLeaderCard();
+                    if(leaderCards.size() > 0) {
+                        messageHandler.sendMessage(new LeaderCardDiscardMessage(leaderCards)); //TODO: controllare se non ho leader da scartare
+                    }
                     break;
                 case 6:
                     if(isWarehouseEmpty()){
@@ -269,12 +276,17 @@ public class CLI extends ClientController {
     private List<LeaderCard> chooseLeaderCard(){ //TODO: gestire caso non ho leader e mettere nella graphicalCLI
         try {
             List<LeaderCard> hand = (List<LeaderCard>)(List<?>) getLocalPlayerBoard().getLeaderBoard().getHand().getCards();
-            graphicalCLI.printNumberedList(hand, graphicalCLI::printLeaderCard);
-            graphicalCLI.printString("Choose a leader card by selecting the corresponding number: ");
-
-            int index = graphicalCLI.getNextInt() - 1;
             List<LeaderCard> temp = new ArrayList<>();
-            temp.add(hand.get(index));
+            if(hand.size() > 0){
+                graphicalCLI.printNumberedList(hand, graphicalCLI::printLeaderCard);
+                graphicalCLI.printString("Choose a leader card by selecting the corresponding number: ");
+
+                int index = graphicalCLI.getNextInt() - 1;
+                temp.add(hand.get(index));
+            }
+            else{
+                graphicalCLI.printlnString("You don't have any leader card in your hand!");
+            }
             return temp;
         }catch(NotExistingNickname e){
             e.printStackTrace();
