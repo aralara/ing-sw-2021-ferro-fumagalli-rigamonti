@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.model.cards.ability;
 
 import it.polimi.ingsw.server.model.boards.PlayerBoard;
 import it.polimi.ingsw.server.model.storage.*;
+import it.polimi.ingsw.utils.listeners.Listeners;
 
 
 public class AbilityDiscount implements SpecialAbility {
@@ -25,6 +26,6 @@ public class AbilityDiscount implements SpecialAbility {
     @Override
     public void activateAbility(PlayerBoard board){
         board.getAbilityDiscounts().add(this.resourceType);
-
+        board.fireUpdate(Listeners.BOARD_ABILITY_DISC.value(), board.getAbilityDiscounts());
     }
 }

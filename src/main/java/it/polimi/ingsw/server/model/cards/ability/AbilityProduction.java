@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.model.cards.ability;
 
 import it.polimi.ingsw.server.model.boards.PlayerBoard;
 import it.polimi.ingsw.server.model.storage.Production;
+import it.polimi.ingsw.utils.listeners.Listeners;
 
 public class AbilityProduction implements SpecialAbility {
 
@@ -24,5 +25,6 @@ public class AbilityProduction implements SpecialAbility {
     @Override
     public void activateAbility(PlayerBoard board){
         board.getAbilityProductions().add(this.production);
+        board.fireUpdate(Listeners.BOARD_ABILITY_PROD.value(), board.getAbilityProductions());
     }
 }

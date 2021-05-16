@@ -6,6 +6,7 @@ import it.polimi.ingsw.server.model.cards.requirement.Requirement;
 import it.polimi.ingsw.server.model.faith.FaithTrack;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.server.view.VirtualView;
+import it.polimi.ingsw.utils.listeners.Listened;
 import it.polimi.ingsw.utils.listeners.Listeners;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class PlayerBoard {
+public class PlayerBoard extends Listened {
 
     private final Player player;
     private final DevelopmentBoard developmentBoard;

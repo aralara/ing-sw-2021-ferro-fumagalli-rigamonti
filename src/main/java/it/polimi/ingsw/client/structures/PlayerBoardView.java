@@ -1,5 +1,11 @@
 package it.polimi.ingsw.client.structures;
 
+import it.polimi.ingsw.server.model.storage.Production;
+import it.polimi.ingsw.server.model.storage.ResourceType;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class PlayerBoardView {
 
     private String nickname;
@@ -10,16 +16,14 @@ public class PlayerBoardView {
     private StrongboxView strongbox;
     private boolean inkwell;
 
+    private List<Production> activeAbilityProductions;
+    private List<ResourceType> activeAbilityMarbles;
+    private List<ResourceType> activeAbilityDiscounts;
 
-    public PlayerBoardView() {
-        developmentBoard = new DevelopmentBoardView();
-        leaderBoard = new LeaderBoardView();
-        faithBoard = new FaithBoardView();
-        warehouse = new WarehouseView();
-        strongbox = new StrongboxView();
-    }
 
-    public PlayerBoardView(String nickname, DevelopmentBoardView developmentBoard, LeaderBoardView leaderBoard, FaithBoardView faithBoard, WarehouseView warehouse, StrongboxView strongbox, boolean inkwell) {
+    public PlayerBoardView(String nickname, DevelopmentBoardView developmentBoard, LeaderBoardView leaderBoard,
+                           FaithBoardView faithBoard, WarehouseView warehouse, StrongboxView strongbox,
+                           boolean inkwell) {
         this.nickname = nickname;
         this.developmentBoard = developmentBoard;
         this.leaderBoard = leaderBoard;
@@ -27,6 +31,9 @@ public class PlayerBoardView {
         this.warehouse = warehouse;
         this.strongbox = strongbox;
         this.inkwell = inkwell;
+        this.activeAbilityProductions = new ArrayList<>();
+        this.activeAbilityMarbles = new ArrayList<>();
+        this.activeAbilityDiscounts = new ArrayList<>();
     }
 
     public PlayerBoardView(String nickname) {
@@ -149,5 +156,53 @@ public class PlayerBoardView {
      */
     public void setInkwell(boolean inkwell) {
         this.inkwell = inkwell;
+    }
+
+    /**
+     * Gets the activeAbilityProductions attribute
+     * @return Returns activeAbilityProductions
+     */
+    public List<Production> getActiveAbilityProductions() {
+        return activeAbilityProductions;
+    }
+
+    /**
+     * Sets the activeAbilityProductions attribute
+     * @param activeAbilityProductions New attribute value
+     */
+    public void setActiveAbilityProductions(List<Production> activeAbilityProductions) {
+        this.activeAbilityProductions = activeAbilityProductions;
+    }
+
+    /**
+     * Gets the activeAbilityMarbles attribute
+     * @return Returns activeAbilityMarbles
+     */
+    public List<ResourceType> getActiveAbilityMarbles() {
+        return activeAbilityMarbles;
+    }
+
+    /**
+     * Sets the activeAbilityMarbles attribute
+     * @param activeAbilityMarbles New attribute value
+     */
+    public void setActiveAbilityMarbles(List<ResourceType> activeAbilityMarbles) {
+        this.activeAbilityMarbles = activeAbilityMarbles;
+    }
+
+    /**
+     * Gets the activeAbilityDiscounts attribute
+     * @return Returns activeAbilityDiscounts
+     */
+    public List<ResourceType> getActiveAbilityDiscounts() {
+        return activeAbilityDiscounts;
+    }
+
+    /**
+     * Sets the activeAbilityDiscounts attribute
+     * @param activeAbilityDiscounts New attribute value
+     */
+    public void setActiveAbilityDiscounts(List<ResourceType> activeAbilityDiscounts) {
+        this.activeAbilityDiscounts = activeAbilityDiscounts;
     }
 }

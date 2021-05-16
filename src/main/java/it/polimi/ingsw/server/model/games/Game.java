@@ -402,6 +402,12 @@ public abstract class Game {
             market.addListener(Listeners.GAME_MARKET.value(), new MarketChangeListener(view));
             for(PlayerBoard pBoard : playerBoards){
                 String nickname = pBoard.getPlayer().getNickname();
+                pBoard.addListener(Listeners.BOARD_ABILITY_PROD.value(),
+                        new AbilityProductionsChangeListener(view));
+                pBoard.addListener(Listeners.BOARD_ABILITY_MARB.value(),
+                        new AbilityMarblesChangeListener(view));
+                pBoard.addListener(Listeners.BOARD_ABILITY_DISC.value(),
+                        new AbilityDiscountsChangeListener(view));
                 pBoard.getDevelopmentBoard().setPlayerNickname(nickname);
                 pBoard.getDevelopmentBoard().addListener(Listeners.BOARD_DEV_SPACES.value(),
                         new DevelopmentBSpacesChangeListener(view));
