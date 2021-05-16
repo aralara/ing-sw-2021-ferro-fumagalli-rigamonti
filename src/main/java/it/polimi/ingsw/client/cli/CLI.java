@@ -75,31 +75,85 @@ public class CLI extends ClientController {
     }
 
     @Override
-    public void askNewLobby() { //TODO: integrare messaggio LobbyMessage+ createNewLobby
-    }
-
-    public void createNewLobby() { //TODO: togliere
-        int size;
-        graphicalCLI.printlnString("There isn't any player waiting for a match!");
-        do {
-            graphicalCLI.printString("Insert the number of players that will play the game " +
-                    "(value inserted must between 1 and 4): ");
-            size = graphicalCLI.getNextInt();
-        }while(size <= 0 || size >= 5);
-        setNumberOfPlayers(size);
-        messageHandler.sendMessage(new NewLobbyMessage(size));
-    }
-
-    @Override
-    public void notifyNewPlayer() { //TODO: integrare messaggio NewPlayerMessage
-    }
-
-    @Override
-    public void askLeaderDiscard() {   //TODO: integrare messaggio AskLeaderCardDiscardMessage
+    public void askNewLobby(int lobbySize, int waitingPlayers) {
+        if (lobbySize == waitingPlayers){
+            int size;
+            graphicalCLI.printlnString("There isn't any player waiting for a match!");
+            do {
+                graphicalCLI.printString("Insert the number of players that will play the game " +
+                        "(value inserted must between 1 and 4): ");
+                size = graphicalCLI.getNextInt();
+            }while(size <= 0 || size >= 5);
+            setNumberOfPlayers(size);
+            messageHandler.sendMessage(new NewLobbyMessage(size));
+        }
+        else {
+            graphicalCLI.printlnString("There's already a " + lobbySize + " player lobby waiting for "
+                    + (lobbySize - waitingPlayers) + " more player(s)");
+            setNumberOfPlayers(lobbySize);
+        }
     }
 
     @Override
-    public void askResourceEqualize() { //TODO: integrare messaggio ResourcesEqualizeMessage
+    public void notifyNewPlayer(String nickname) {
+        if(getNickname().equals(nickname))
+            graphicalCLI.printlnString("You have been added to the game!");
+        else
+            graphicalCLI.printlnString("The player " + nickname + " has joined the game!");
+
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void askLeaderDiscard() {
+        try {
+            PlayerBoardView playerBoard = getLocalPlayerBoard();
+            List<LeaderCard> leaderHand = new ArrayList<>(
+                    (List<LeaderCard>)(List<? extends Card>)playerBoard.getLeaderBoard().getHand().getCards());
+            List<LeaderCard> selected = new ArrayList<>();
+
+            graphicalCLI.printlnString("You have to discard 2 leader cards from your hand:");
+            for(int i = 0; i < 2; i++) {
+                LeaderCard selection = graphicalCLI.objectOptionSelector(leaderHand, graphicalCLI::printLeaderCard);
+                selected.add(selection);
+                leaderHand.remove(selection);
+            }
+
+            messageHandler.sendMessage(new LeaderCardDiscardMessage(selected));
+        }catch (NotExistingNickname e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void askResourceEqualize(List<Resource> resources) {
+        List<Resource> newResources = new ArrayList<>();
+        List<ResourceType> possibleResourceTypes = Arrays.asList(ResourceType.values());
+        for(Resource resource : resources) {
+            if (resource.getResourceType() == ResourceType.FAITH) {
+                try {
+                    getLocalPlayerBoard().getFaithBoard().setFaith(resource.getQuantity());
+                    graphicalCLI.printlnString(resource.getQuantity() + " " + resource.getResourceType()
+                            + " has been added to your faith board");
+                } catch (NotExistingNickname e) {
+                    e.printStackTrace();
+                }
+            }
+            else if (resource.getResourceType() == ResourceType.WILDCARD) {
+                for (int num = 0; num < resource.getQuantity(); num++) {
+                    ResourceType resType = graphicalCLI.objectOptionSelector(
+                            possibleResourceTypes,
+                            rt -> graphicalCLI.printlnString(rt.toString()));
+                    newResources.add(new Resource(resType, 1));
+                    possibleResourceTypes.remove(resType);
+                }
+            }
+        }
+        if(newResources.size() > 0) {
+            setResourcesToPut(new ArrayList<>(newResources));
+            graphicalCLI.printlnString("Now place the resources on the shelves:");
+            placeResourcesOnShelves(newResources);
+        }
     }
 
     @Override
@@ -357,28 +411,6 @@ public class CLI extends ClientController {
                 graphicalCLI.printOpponent(playerBoardView, getFaithTrack());
             }
         }
-    }
-
-    public List<Resource> resolveResourcesToEqualize(int wildcardQuantity) {
-        int index;
-        List<Resource> resources = new ArrayList<>();
-        for(int num=0; num<wildcardQuantity; num++){
-            graphicalCLI.printlnString("You can choose a resource from the following: ");
-            for(int i=0;i<4;i++)    //TODO: resourceTypeSelector in graphicalCLI con lista
-                System.out.println((i+1) + ": " + ResourceType.values()[i].toString());
-            index = -1;
-            while(index<0 || index>=4){
-                graphicalCLI.printString("Please choose a valid resource: ");
-                index = graphicalCLI.getNextInt() - 1;
-            }
-
-            if(resources.size()>0 && resources.get(0).getResourceType()==ResourceType.values()[index]){
-                resources.get(0).setQuantity(resources.get(0).getQuantity()+1);
-            } else {
-                resources.add(new Resource(ResourceType.values()[index], 1));
-            }
-        }
-        return resources;
     }
 
     private void refresh() {
@@ -794,14 +826,18 @@ public class CLI extends ClientController {
                 if(consumedWildcards.size() > 0) {
                     graphicalCLI.printlnString("Choose for consumed wildcards:");
                     for (Resource wildcard : consumedWildcards) {
-                        ResourceType chosenType = graphicalCLI.resourceTypeSelector(Arrays.asList(ResourceType.values().clone()));
+                        ResourceType chosenType = graphicalCLI.objectOptionSelector(
+                                Arrays.asList(ResourceType.values().clone()),
+                                rt -> graphicalCLI.printlnString(rt.toString()));
                         consumedResolved.add(new Resource(chosenType, wildcard.getQuantity()));
                     }
                 }
                 if(producedWildcards.size() > 0) {
                     graphicalCLI.printlnString("Choose for produced wildcards:");
                     for (Resource wildcard : producedWildcards) {
-                        ResourceType chosenType = graphicalCLI.resourceTypeSelector(Arrays.asList(ResourceType.values().clone()));
+                        ResourceType chosenType = graphicalCLI.objectOptionSelector(
+                                Arrays.asList(ResourceType.values().clone()),
+                                rt -> graphicalCLI.printlnString(rt.toString()));
                         producedResolved.add(new Resource(chosenType, wildcard.getQuantity()));
                     }
                 }

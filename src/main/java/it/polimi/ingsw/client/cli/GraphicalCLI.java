@@ -1,12 +1,10 @@
 package it.polimi.ingsw.client.cli;
 
 import it.polimi.ingsw.client.structures.*;
-import it.polimi.ingsw.server.model.boards.Player;
 import it.polimi.ingsw.server.model.cards.ability.AbilityDiscount;
 import it.polimi.ingsw.server.model.cards.ability.AbilityMarble;
 import it.polimi.ingsw.server.model.cards.ability.AbilityProduction;
 import it.polimi.ingsw.server.model.cards.ability.AbilityWarehouse;
-import it.polimi.ingsw.server.model.cards.card.Card;
 import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
@@ -79,26 +77,25 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         return isAnswerYes();
     }
 
-    public boolean isAnswerYes() { //TODO: regex
-        String command = getNextLine();
-        return  command.equalsIgnoreCase("YES") || command.equalsIgnoreCase("Y");
+    public boolean isAnswerYes() {
+        return getNextLine().matches("(?i)YES");
     }
 
-    public ResourceType resourceTypeSelector(List<ResourceType> resourceTypes) {
-        if(resourceTypes.size() > 0) {
-            if(resourceTypes.size() == 1) {
-                ResourceType res = resourceTypes.get(0);
-                printlnString(res + " is the only resource type available");
-                return res;
+    public <T> T objectOptionSelector(List<T> list, Consumer<T> printObject) {
+        if(list.size() > 0) {
+            if(list.size() == 1) {
+                T opt = list.get(0);
+                printlnString(opt.toString() + " is the only option available");
+                return opt;
             }
             int index;
-            printlnString("You can choose a resource type from the following: ");
-            printNumberedList(resourceTypes, rt -> printString(rt.name()));
+            printlnString("You can choose an option from the following: ");
+            printNumberedList(list, printObject);
             do {
-                printString("Please choose a valid resource: ");
+                printString("Please choose a valid option: ");
                 index = getNextInt() - 1;
-            } while(index < 0 || index>=4);
-            return resourceTypes.get(index);
+            } while(index < 0 || index >= list.size());
+            return list.get(index);
         }
         return null;
     }
@@ -107,7 +104,7 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         list.stream().collect(HashMap<Integer, T>::new,
                 (m, elem) -> m.put(m.size() + 1, elem),
                 (m1, m2) -> {}).forEach((n, elem) -> {
-                    printString(n + ")");
+                    printString(n + ") ");
                     printConsumer.accept(elem);
                 });
     }

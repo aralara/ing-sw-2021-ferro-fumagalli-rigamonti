@@ -48,13 +48,13 @@ public abstract class ClientController {
 
     public abstract void askNickname();
 
-    public abstract void askNewLobby();
+    public abstract void askNewLobby(int lobbySize, int waitingPlayers);
 
-    public abstract void notifyNewPlayer();
+    public abstract void notifyNewPlayer(String nickname);
 
     public abstract void askLeaderDiscard();
 
-    public abstract void askResourceEqualize();
+    public abstract void askResourceEqualize(List<Resource> resources);
 
     public abstract void notifyStartTurn();
 
