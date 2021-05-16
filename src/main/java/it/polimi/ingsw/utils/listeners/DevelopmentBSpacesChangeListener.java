@@ -14,6 +14,7 @@ public class DevelopmentBSpacesChangeListener extends ModelChangeListener {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void propertyChange(PropertyChangeEvent evt) {
         PlayerProperty newValue = (PlayerProperty) evt.getNewValue();
         getVirtualView().sendMessage(

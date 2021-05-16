@@ -5,6 +5,7 @@ import it.polimi.ingsw.client.MessageHandler;
 import it.polimi.ingsw.client.structures.*;
 import it.polimi.ingsw.exceptions.NotExistingNickname;
 import it.polimi.ingsw.server.Server;
+import it.polimi.ingsw.server.model.cards.card.Card;
 import it.polimi.ingsw.server.model.cards.card.CardColors;
 import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
@@ -273,9 +274,11 @@ public class CLI extends ClientController {
         setMainActionPlayed(true); //TODO: mettere a false nel nack
     }
 
+    @SuppressWarnings("unchecked")
     private List<LeaderCard> chooseLeaderCard(){ //TODO: gestire caso non ho leader e mettere nella graphicalCLI
         try {
-            List<LeaderCard> hand = (List<LeaderCard>)(List<?>) getLocalPlayerBoard().getLeaderBoard().getHand().getCards();
+            List<LeaderCard> hand = (List<LeaderCard>)(List<? extends Card>)
+                    getLocalPlayerBoard().getLeaderBoard().getHand().getCards();
             List<LeaderCard> temp = new ArrayList<>();
             if(hand.size() > 0){
                 graphicalCLI.printNumberedList(hand, graphicalCLI::printLeaderCard);
