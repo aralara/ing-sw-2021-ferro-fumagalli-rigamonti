@@ -26,7 +26,7 @@ public class PlayerFaithBFaithMessage implements ServerUpdateMessage {
     @Override
     public void doUpdate(ClientController client) {
         try {
-            client.playerBoardFromNickname(nickname).getFaithBoard().setFaith(faith);
+            client.playerBoardFromNickname(nickname).getFaithBoard().setFaith(faith); //TODO: aggiungere notifica di aggiunta
         } catch(NotExistingNicknameException e){
             e.printStackTrace();
         }
