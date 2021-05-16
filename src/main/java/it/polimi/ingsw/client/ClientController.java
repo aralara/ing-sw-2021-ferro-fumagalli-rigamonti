@@ -56,7 +56,7 @@ public abstract class ClientController {
 
     public abstract void askResourceEqualize(List<Resource> resources);
 
-    public abstract void notifyStartTurn();
+    public abstract void notifyStartTurn(String nickname);
 
     public String getNickname() {
         return nickname;

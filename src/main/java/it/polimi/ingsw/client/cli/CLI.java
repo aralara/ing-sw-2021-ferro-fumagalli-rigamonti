@@ -88,7 +88,7 @@ public class CLI extends ClientController {
             messageHandler.sendMessage(new NewLobbyMessage(size));
         }
         else {
-            graphicalCLI.printlnString("There's already a " + lobbySize + " player lobby waiting for "
+            graphicalCLI.printlnString("There is already a " + lobbySize + " player lobby waiting for "
                     + (lobbySize - waitingPlayers) + " more player(s)");
             setNumberOfPlayers(lobbySize);
         }
@@ -155,7 +155,18 @@ public class CLI extends ClientController {
     }
 
     @Override
-    public void notifyStartTurn(){  //TODO: integrare messaggio StartTurnMessage
+    public void notifyStartTurn(String nickname){
+        if (nickname.equals(getNickname())) {
+            graphicalCLI.printlnString("\nNOW IT'S YOUR TURN!\n");
+            setMainActionPlayed(false);
+            setPlayerTurn(true);
+            turnMenu();
+        }
+        else {
+            graphicalCLI.printlnString("Now it's " + nickname + "'s turn");
+            setPlayerTurn(false);
+            turnMenu();
+        }
     }
 
     public void turnMenu() { //TODO: gestire per far fare comunque altre azioni
