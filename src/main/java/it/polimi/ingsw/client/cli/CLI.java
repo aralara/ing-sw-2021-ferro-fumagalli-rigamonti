@@ -128,7 +128,6 @@ public class CLI extends ClientController {
     @Override
     public void askResourceEqualize(List<Resource> resources) {
         List<Resource> newResources = new ArrayList<>();
-        List<ResourceType> possibleResourceTypes = Arrays.asList(ResourceType.values());
         for(Resource resource : resources) {
             if (resource.getResourceType() == ResourceType.FAITH) {
                 try {
@@ -142,10 +141,9 @@ public class CLI extends ClientController {
             else if (resource.getResourceType() == ResourceType.WILDCARD) {
                 for (int num = 0; num < resource.getQuantity(); num++) {
                     ResourceType resType = graphicalCLI.objectOptionSelector(
-                            possibleResourceTypes,
+                            ResourceType.getRealValues(),
                             rt -> graphicalCLI.printlnString(rt.toString()));
                     newResources.add(new Resource(resType, 1));
-                    possibleResourceTypes.remove(resType);
                 }
             }
         }
@@ -828,7 +826,7 @@ public class CLI extends ClientController {
                     graphicalCLI.printlnString("Choose for consumed wildcards:");
                     for (Resource wildcard : consumedWildcards) {
                         ResourceType chosenType = graphicalCLI.objectOptionSelector(
-                                Arrays.asList(ResourceType.values().clone()),
+                                ResourceType.getRealValues(),
                                 rt -> graphicalCLI.printlnString(rt.toString()));
                         consumedResolved.add(new Resource(chosenType, wildcard.getQuantity()));
                     }
@@ -837,7 +835,7 @@ public class CLI extends ClientController {
                     graphicalCLI.printlnString("Choose for produced wildcards:");
                     for (Resource wildcard : producedWildcards) {
                         ResourceType chosenType = graphicalCLI.objectOptionSelector(
-                                Arrays.asList(ResourceType.values().clone()),
+                                ResourceType.getRealValues(),
                                 rt -> graphicalCLI.printlnString(rt.toString()));
                         producedResolved.add(new Resource(chosenType, wildcard.getQuantity()));
                     }
