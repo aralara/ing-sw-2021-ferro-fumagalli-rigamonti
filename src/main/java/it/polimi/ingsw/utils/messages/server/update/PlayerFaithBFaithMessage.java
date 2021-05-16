@@ -1,7 +1,7 @@
-package it.polimi.ingsw.utils.messages.server;
+package it.polimi.ingsw.utils.messages.server.update;
 
 import it.polimi.ingsw.client.ClientController;
-import it.polimi.ingsw.exceptions.NotExistingNickname;
+import it.polimi.ingsw.exceptions.NotExistingNicknameException;
 
 public class PlayerFaithBFaithMessage implements ServerUpdateMessage {
 
@@ -26,8 +26,8 @@ public class PlayerFaithBFaithMessage implements ServerUpdateMessage {
     @Override
     public void doUpdate(ClientController client) {
         try {
-            client.playerBoardFromNickname(nickname).getFaithBoard().setFaith(faith); //TODO: aggiungere notifica aggiunta fede
-        } catch(NotExistingNickname e){
+            client.playerBoardFromNickname(nickname).getFaithBoard().setFaith(faith);
+        } catch(NotExistingNicknameException e){
             e.printStackTrace();
         }
     }

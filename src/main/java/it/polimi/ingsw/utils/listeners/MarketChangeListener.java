@@ -2,7 +2,7 @@ package it.polimi.ingsw.utils.listeners;
 
 import it.polimi.ingsw.server.model.market.Market;
 import it.polimi.ingsw.server.view.VirtualView;
-import it.polimi.ingsw.utils.messages.server.MarketMessage;
+import it.polimi.ingsw.utils.messages.server.update.MarketMessage;
 
 import java.beans.PropertyChangeEvent;
 

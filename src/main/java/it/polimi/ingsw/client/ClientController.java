@@ -4,7 +4,7 @@ import it.polimi.ingsw.client.structures.DevelopmentDeckView;
 import it.polimi.ingsw.client.structures.FaithTrackView;
 import it.polimi.ingsw.client.structures.MarketView;
 import it.polimi.ingsw.client.structures.PlayerBoardView;
-import it.polimi.ingsw.exceptions.NotExistingNickname;
+import it.polimi.ingsw.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.model.storage.Production;
 import it.polimi.ingsw.server.model.storage.Resource;
@@ -35,14 +35,14 @@ public abstract class ClientController {
         developmentDecks = new ArrayList<>();
         faithTrack = new FaithTrackView();
         mainActionPlayed = false;
-        messageHandler = new MessageHandler(this);
+        messageHandler = new MessageHandler();
         playerTurn = false;
     }
 
 
     public abstract void setup();
 
-    public abstract boolean connect();
+    public abstract void connect();
 
     public abstract void run();
 
@@ -144,14 +144,14 @@ public abstract class ClientController {
         return messageHandler;
     }
 
-    public PlayerBoardView playerBoardFromNickname(String nickname) throws NotExistingNickname {
+    public PlayerBoardView playerBoardFromNickname(String nickname) throws NotExistingNicknameException {
         for(PlayerBoardView playerBoard : playerBoards)
             if(playerBoard.getNickname().equals(nickname))
                 return playerBoard;
-        throw new NotExistingNickname();
+        throw new NotExistingNicknameException();
     }
 
-    public PlayerBoardView getLocalPlayerBoard() throws NotExistingNickname{
+    public PlayerBoardView getLocalPlayerBoard() throws NotExistingNicknameException {
         return playerBoardFromNickname(nickname);
     }
 
@@ -161,5 +161,9 @@ public abstract class ClientController {
 
     public void setPlayerTurn(boolean playerTurn) {
         this.playerTurn = playerTurn;
+    }
+
+    public MessageHandler getMessageHandler() {
+        return messageHandler;
     }
 }

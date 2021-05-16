@@ -30,8 +30,10 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
 
     public static final String BLACK_BRIGHT = "\033[0;90m";  // BLACK
     public static final String RED_BRIGHT = "\033[0;91m";    // RED
+    public static final String GREEN_BRIGHT = "\033[0;92m";  // GREEN
     public static final String YELLOW_BRIGHT = "\033[0;93m"; // YELLOW
     public static final String BLUE_BRIGHT = "\033[0;94m";   // BLUE
+    public static final String CYAN_BRIGHT = "\033[0;96m";   // CYAN
     public static final String PURPLE_BRIGHT = "\033[0;95m"; // PURPLE
     public static final String WHITE_BRIGHT = "\033[0;97m";  // WHITE
 
@@ -247,7 +249,17 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
     }
 
     public void printFaithBoard(PlayerBoardView player, FaithTrackView faithTrack){
-        printlnString("Faith:");
+        String color;
+        for(int i = 1; i <= faithTrack.getVaticanReports().get(faithTrack.getVaticanReports().size()-1).getMax();i++){
+            if(isVaticanReport(faithTrack,i)){
+                color = PURPLE_BRIGHT;
+            }else{
+                color = CYAN_BRIGHT;
+            }
+            printString(color + ((player.getFaithBoard().getFaith() == i) ?
+                    "[" + RED_BRIGHT + " X " + color +  "]" : "[ • ] ") + color + RESET);
+        }
+        printlnString("");
         printlnString("\t > Faith level is " + player.getFaithBoard().getFaith());
         for(int i=0;i<player.getFaithBoard().getPopeProgression().length;i++){
             printString("\t > Pope’s Favor tiles number "+(i+1)+" is ");
@@ -256,6 +268,15 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
             } else printlnString("not active");
         }
         printlnString("");
+    }
+
+    private boolean isVaticanReport(FaithTrackView faithTrack, int faith){
+        for(int i = 0; i<faithTrack.getVaticanReports().size();i++){
+            if(faith >= faithTrack.getVaticanReports().get(i).getMin() && faith <= faithTrack.getVaticanReports().get(i).getMax()){
+                return true;
+            }
+        }
+        return false;
     }
 
     public void printActions(boolean isPlayerTurn){

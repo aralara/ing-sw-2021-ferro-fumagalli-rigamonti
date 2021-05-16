@@ -2,7 +2,7 @@ package it.polimi.ingsw.utils.listeners;
 
 import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.server.view.VirtualView;
-import it.polimi.ingsw.utils.messages.server.PlayerLeaderBBoardMessage;
+import it.polimi.ingsw.utils.messages.server.update.PlayerLeaderBBoardMessage;
 
 import java.beans.PropertyChangeEvent;
 

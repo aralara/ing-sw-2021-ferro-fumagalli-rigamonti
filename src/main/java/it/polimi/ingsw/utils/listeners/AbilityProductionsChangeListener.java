@@ -2,7 +2,7 @@ package it.polimi.ingsw.utils.listeners;
 
 import it.polimi.ingsw.server.model.storage.Production;
 import it.polimi.ingsw.server.view.VirtualView;
-import it.polimi.ingsw.utils.messages.server.PlayerAbilityProductionsMessage;
+import it.polimi.ingsw.utils.messages.server.update.PlayerAbilityProductionsMessage;
 
 import java.beans.PropertyChangeEvent;
 import java.util.List;

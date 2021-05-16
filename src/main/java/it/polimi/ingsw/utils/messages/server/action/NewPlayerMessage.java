@@ -1,6 +1,7 @@
-package it.polimi.ingsw.utils.messages.server;
+package it.polimi.ingsw.utils.messages.server.action;
 
 import it.polimi.ingsw.client.ClientController;
+import it.polimi.ingsw.utils.messages.server.action.ServerActionMessage;
 
 public class NewPlayerMessage implements ServerActionMessage {
 

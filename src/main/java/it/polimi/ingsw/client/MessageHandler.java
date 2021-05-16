@@ -1,14 +1,16 @@
 package it.polimi.ingsw.client;
 
+import it.polimi.ingsw.exceptions.UnknownMessageException;
 import it.polimi.ingsw.utils.messages.Message;
-import it.polimi.ingsw.utils.messages.server.*;
+import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
+import it.polimi.ingsw.utils.messages.server.action.ServerActionMessage;
+import it.polimi.ingsw.utils.messages.server.update.ServerUpdateMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class MessageHandler implements Runnable{
 
@@ -16,27 +18,41 @@ public class MessageHandler implements Runnable{
     private ObjectOutputStream output;
     private ObjectInputStream input;
 
-    private final ClientController client;
-    private final Queue<ServerActionMessage> messageQueue;
+    private final LinkedBlockingQueue<ServerActionMessage> actionQueue;
+    private final LinkedBlockingQueue<ServerUpdateMessage> updateQueue;
+    private final LinkedBlockingQueue<ServerAckMessage> ackQueue;
 
     private boolean active;
 
 
-    public MessageHandler(ClientController client) {
-        this.client = client;
-        this.messageQueue = new ConcurrentLinkedQueue<>();
+    public MessageHandler() {
+        this.actionQueue = new LinkedBlockingQueue<>();
+        this.updateQueue = new LinkedBlockingQueue<>();
+        this.ackQueue = new LinkedBlockingQueue<>();
         active = false;
     }
 
 
-    public Queue<ServerActionMessage> getQueue() {
-        return messageQueue;
+    public LinkedBlockingQueue<ServerActionMessage> getActionQueue() {
+        return actionQueue;
+    }
+
+    public LinkedBlockingQueue<ServerUpdateMessage> getUpdateQueue() {
+        return updateQueue;
+    }
+
+    public LinkedBlockingQueue<ServerAckMessage> getAckQueue() {
+        return ackQueue;
     }
 
     @Override
     public void run() {
         while(active)
-            managePackets();
+            try {
+                managePackets();
+            } catch(UnknownMessageException e) {
+                e.printStackTrace();
+            }
     }
 
     public boolean connect(String address, int port) {
@@ -57,19 +73,21 @@ public class MessageHandler implements Runnable{
         return true;
     }
 
-    private void managePackets(){
+    private void managePackets() throws UnknownMessageException {
         try {
             Object message;
 
             message = input.readObject();
 
-            if(message instanceof ServerUpdateMessage)  //TODO: gestione alternativa (forse più corretta) metterli nella queue e lasciare che il client si costruisca un thread a parte per leggerli asincronamente
-                ((ServerUpdateMessage) message).doUpdate(client);
+            if(message instanceof ServerUpdateMessage)
+                updateQueue.put((ServerUpdateMessage) message);
+            else if(message instanceof ServerAckMessage)
+                ackQueue.put((ServerAckMessage) message);
             else if(message instanceof ServerActionMessage)
-                messageQueue.add((ServerActionMessage) message);
+                actionQueue.put((ServerActionMessage) message);
             else
-                System.out.println("Received " + message.toString());
-        }catch (IOException | ClassNotFoundException e) {
+                throw new UnknownMessageException();
+        }catch (IOException | ClassNotFoundException | InterruptedException e) {
             e.printStackTrace();
         }
     }

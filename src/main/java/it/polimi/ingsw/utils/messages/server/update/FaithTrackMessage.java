@@ -1,11 +1,8 @@
-package it.polimi.ingsw.utils.messages.server;
+package it.polimi.ingsw.utils.messages.server.update;
 
 import it.polimi.ingsw.client.ClientController;
-import it.polimi.ingsw.client.structures.FaithTrackView;
-import it.polimi.ingsw.client.structures.VaticanReportView;
 import it.polimi.ingsw.server.model.faith.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FaithTrackMessage implements ServerUpdateMessage {
