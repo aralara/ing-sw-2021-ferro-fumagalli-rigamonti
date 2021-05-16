@@ -28,6 +28,14 @@ public class SingleGame extends Game{
         isLorenzoWinner = false;
     }
 
+    @Override
+    public String getPlayingNickname() {
+        if(isLorenzoTurn)
+            return "Lorenzo";   //TODO: uhm... boh
+        else
+            return getPlayerBoards().get(0).getPlayer().getNickname();
+    }
+
     /**
      * Initializes the LorenzoBoard loading tokens from a file
      */

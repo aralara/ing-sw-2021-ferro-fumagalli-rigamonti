@@ -22,6 +22,10 @@ public class MultiGame extends Game{
         lastTurn = false;
     }
 
+    @Override
+    public String getPlayingNickname() {
+        return getPlayerBoards().get(currentPlayer).getPlayer().getNickname();
+    }
 
     /**
      * Gets a list that contains a list of resources (wildcards and fatih) for each player that need to be equalized

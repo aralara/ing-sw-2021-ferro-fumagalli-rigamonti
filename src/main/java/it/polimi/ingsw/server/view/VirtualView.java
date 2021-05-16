@@ -22,6 +22,10 @@ public class VirtualView extends ClientHandler{
         return nickname;
     }
 
+    public GameHandler getGameHandler() {
+        return gameHandler;
+    }
+
     @Override
     public void onMessageReceived(Message message) {
         gameHandler.handleMessage(this, message);
