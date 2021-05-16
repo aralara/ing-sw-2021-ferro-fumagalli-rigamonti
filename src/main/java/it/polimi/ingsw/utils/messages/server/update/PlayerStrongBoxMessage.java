@@ -1,7 +1,7 @@
-package it.polimi.ingsw.utils.messages.server;
+package it.polimi.ingsw.utils.messages.server.update;
 
 import it.polimi.ingsw.client.ClientController;
-import it.polimi.ingsw.exceptions.NotExistingNickname;
+import it.polimi.ingsw.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.model.storage.Resource;
 
 import java.util.List;
@@ -30,7 +30,7 @@ public class PlayerStrongBoxMessage implements ServerUpdateMessage {
     public void doUpdate(ClientController client) {
         try {
             client.playerBoardFromNickname(nickname).getStrongbox().setResources(resources);
-        } catch(NotExistingNickname e){
+        } catch(NotExistingNicknameException e){
             e.printStackTrace();
         }
     }

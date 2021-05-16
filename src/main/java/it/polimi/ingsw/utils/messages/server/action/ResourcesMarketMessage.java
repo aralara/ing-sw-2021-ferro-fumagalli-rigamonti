@@ -1,4 +1,4 @@
-package it.polimi.ingsw.utils.messages.server;
+package it.polimi.ingsw.utils.messages.server.action;
 
 import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.client.cli.CLI;
@@ -10,7 +10,7 @@ import it.polimi.ingsw.utils.messages.ResourcesMessage;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ResourcesMarketMessage extends ResourcesMessage implements ServerActionMessage{
+public class ResourcesMarketMessage extends ResourcesMessage implements ServerActionMessage {
 
     public List<ResourceType> availableAbilities;
 

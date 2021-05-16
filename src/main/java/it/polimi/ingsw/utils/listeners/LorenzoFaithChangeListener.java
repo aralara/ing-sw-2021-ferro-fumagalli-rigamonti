@@ -1,7 +1,7 @@
 package it.polimi.ingsw.utils.listeners;
 
 import it.polimi.ingsw.server.view.VirtualView;
-import it.polimi.ingsw.utils.messages.server.LorenzoFaithMessage;
+import it.polimi.ingsw.utils.messages.server.update.LorenzoFaithMessage;
 
 import java.beans.PropertyChangeEvent;
 

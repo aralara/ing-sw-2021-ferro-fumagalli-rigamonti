@@ -1,8 +1,6 @@
-package it.polimi.ingsw.utils.messages.server;
+package it.polimi.ingsw.utils.messages.server.update;
 
 import it.polimi.ingsw.client.ClientController;
-import it.polimi.ingsw.client.cli.CLI;
-import it.polimi.ingsw.client.cli.GraphicalCLI;
 import it.polimi.ingsw.client.structures.*;
 import it.polimi.ingsw.server.model.boards.*;
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;

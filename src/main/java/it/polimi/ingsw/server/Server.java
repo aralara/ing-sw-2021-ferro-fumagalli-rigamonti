@@ -2,7 +2,7 @@ package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
 import it.polimi.ingsw.utils.messages.client.NewLobbyMessage;
-import it.polimi.ingsw.utils.messages.server.LobbyMessage;
+import it.polimi.ingsw.utils.messages.server.action.LobbyMessage;
 import it.polimi.ingsw.utils.messages.server.ack.ConnectionAckMessage;
 
 import java.io.IOException;

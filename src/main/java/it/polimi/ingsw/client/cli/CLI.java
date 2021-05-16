@@ -1,9 +1,9 @@
 package it.polimi.ingsw.client.cli;
 
 import it.polimi.ingsw.client.ClientController;
-import it.polimi.ingsw.client.MessageHandler;
+import it.polimi.ingsw.client.UpdateMessageReader;
 import it.polimi.ingsw.client.structures.*;
-import it.polimi.ingsw.exceptions.NotExistingNickname;
+import it.polimi.ingsw.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.server.model.cards.card.Card;
 import it.polimi.ingsw.server.model.cards.card.CardColors;
@@ -11,29 +11,29 @@ import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.utils.messages.client.*;
-import it.polimi.ingsw.utils.messages.server.*;
+import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
+import it.polimi.ingsw.utils.messages.server.action.ServerActionMessage;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.stream.Collectors;
 
 public class CLI extends ClientController {
 
     private final GraphicalCLI graphicalCLI;
-    private final MessageHandler messageHandler;
 
 
     public CLI() {
         super();
         graphicalCLI = new GraphicalCLI();
-        messageHandler = new MessageHandler(this);
     }
 
 
     public void setup() {
         while(!connect());  //TODO: busy wait
-        new Thread(messageHandler).start();
+        new Thread(getMessageHandler()).start();
         askNickname();
     }
 
@@ -41,7 +41,7 @@ public class CLI extends ClientController {
     public boolean connect() { //TODO: inserimento porta
         graphicalCLI.printString("Insert the IP address of server: ");
         String ip = graphicalCLI.getNextLine();
-        boolean success = messageHandler.connect(ip, Server.SOCKET_PORT);
+        boolean success = getMessageHandler().connect(ip, Server.SOCKET_PORT);
         if(success)
             graphicalCLI.printlnString("Connected");
         else
@@ -51,15 +51,21 @@ public class CLI extends ClientController {
 
     @Override
     public void run() {
-        Queue<ServerActionMessage> messageQueue = messageHandler.getQueue();
+        new Thread(new UpdateMessageReader(this, getMessageHandler().getUpdateQueue())).start();
+
+        LinkedBlockingQueue<ServerActionMessage> actionQueue = getMessageHandler().getActionQueue();
+        LinkedBlockingQueue<ServerAckMessage> ackQueue = getMessageHandler().getAckQueue();
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));   //TODO: da sistemare
+
+
+
         while(true) {   //TODO: busy wait
             try {
                 if (br.ready()) {
                     turnMenu();
                 }
-                else if (messageQueue.size() > 0) {
-                    messageQueue.remove().doAction(this);
+                else if (actionQueue.size() > 0) {
+                    actionQueue.poll().doAction(this);
                 }
             } catch(Exception e) {
                 e.printStackTrace();
@@ -71,7 +77,7 @@ public class CLI extends ClientController {
     public void askNickname() {
         graphicalCLI.printString("Insert your nickname: ");
         setNickname(graphicalCLI.getNext());
-        messageHandler.sendMessage(new ConnectionMessage(getNickname()));
+        getMessageHandler().sendMessage(new ConnectionMessage(getNickname()));
     }
 
     @Override
@@ -85,7 +91,7 @@ public class CLI extends ClientController {
                 size = graphicalCLI.getNextInt();
             }while(size <= 0 || size >= 5);
             setNumberOfPlayers(size);
-            messageHandler.sendMessage(new NewLobbyMessage(size));
+            getMessageHandler().sendMessage(new NewLobbyMessage(size));
         }
         else {
             graphicalCLI.printlnString("There is already a " + lobbySize + " player lobby waiting for "
@@ -119,8 +125,8 @@ public class CLI extends ClientController {
                 leaderHand.remove(selection);
             }
 
-            messageHandler.sendMessage(new LeaderCardDiscardMessage(selected));
-        }catch (NotExistingNickname e){
+            getMessageHandler().sendMessage(new LeaderCardDiscardMessage(selected));
+        }catch (NotExistingNicknameException e){
             e.printStackTrace();
         }
     }
@@ -134,7 +140,7 @@ public class CLI extends ClientController {
                     getLocalPlayerBoard().getFaithBoard().setFaith(resource.getQuantity());
                     graphicalCLI.printlnString(resource.getQuantity() + " " + resource.getResourceType()
                             + " has been added to your faith board");
-                } catch (NotExistingNickname e) {
+                } catch (NotExistingNicknameException e) {
                     e.printStackTrace();
                 }
             }
@@ -209,13 +215,13 @@ public class CLI extends ClientController {
             case 4:
                 leaderCards = chooseLeaderCard();
                 if(leaderCards.size() > 0) {
-                    messageHandler.sendMessage(new LeaderCardPlayMessage(leaderCards));
+                    getMessageHandler().sendMessage(new LeaderCardPlayMessage(leaderCards));
                 }
                 break;
             case 5:
                 leaderCards = chooseLeaderCard();
                 if(leaderCards.size() > 0) {
-                    messageHandler.sendMessage(new LeaderCardDiscardMessage(leaderCards));
+                    getMessageHandler().sendMessage(new LeaderCardDiscardMessage(leaderCards));
                 }
                 break;
             case 6:
@@ -232,7 +238,7 @@ public class CLI extends ClientController {
                 if(isWarehouseEmpty()){
                     graphicalCLI.printlnString("You have no resources to rearrange");
                 } else {
-                    messageHandler.sendMessage(new ShelvesConfigurationMessage(
+                    getMessageHandler().sendMessage(new ShelvesConfigurationMessage(
                             rearrangeWarehouse(), new ArrayList<>()));
                 }
                 //TODO: messaggio per confermare config?
@@ -240,7 +246,7 @@ public class CLI extends ClientController {
             case 10:
                 if (isMainActionPlayed()) {
                     setPlayerTurn(false);
-                    messageHandler.sendMessage(new EndTurnMessage(getNickname()));
+                    getMessageHandler().sendMessage(new EndTurnMessage(getNickname()));
                 }
                 else graphicalCLI.printlnString("You haven't played any main action yet!");
                 break;
@@ -276,7 +282,7 @@ public class CLI extends ClientController {
                 valid = false;
 
             if(valid)
-                messageHandler.sendMessage(new SelectMarketMessage(row, column));
+                getMessageHandler().sendMessage(new SelectMarketMessage(row, column));
             else
                 graphicalCLI.printString("Invalid choice, please try again: ");
         } while(!valid);
@@ -302,7 +308,7 @@ public class CLI extends ClientController {
 
         setCardToBuy(new DevelopmentCard(developmentCard.getID(),developmentCard.getVP(),developmentCard.getColor(),
                 developmentCard.getLevel(),developmentCard.getProduction(),developmentCard.getCost()));
-        messageHandler.sendMessage(new CanBuyDevelopmentCardMessage(getCardToBuy(), getSpaceToPlace()));
+        getMessageHandler().sendMessage(new CanBuyDevelopmentCardMessage(getCardToBuy(), getSpaceToPlace()));
         setMainActionPlayed(true); //TODO: mettere a false nel nack
     }
 
@@ -336,11 +342,11 @@ public class CLI extends ClientController {
                         endChoice = true;
                 } while (!endChoice);
                 resolveProductionWildcards();
-                messageHandler.sendMessage(new CanActivateProductionsMessage(getProductionsToActivate()));
+                getMessageHandler().sendMessage(new CanActivateProductionsMessage(getProductionsToActivate()));
             }
             else
                 graphicalCLI.printlnString("No productions");
-        } catch(NotExistingNickname e) {
+        } catch(NotExistingNicknameException e) {
             e.printStackTrace();
         }
         //TODO: mettere true solo se si è potuta fare l'azione (no se non si hanno prod da attivare)
@@ -368,7 +374,7 @@ public class CLI extends ClientController {
                 graphicalCLI.printlnString("You don't have any leader card in your hand!");
             }
             return chosenCard;
-        }catch(NotExistingNickname e){
+        }catch(NotExistingNicknameException e){
             e.printStackTrace();
         }
         return null; //TODO: fa schifo tornare null
@@ -422,7 +428,7 @@ public class CLI extends ClientController {
                 }
             }
             return shelves;
-        } catch (NotExistingNickname e){
+        } catch (NotExistingNicknameException e){
             e.printStackTrace();
         }
         return null; //TODO: :(
@@ -441,7 +447,7 @@ public class CLI extends ClientController {
     private void showBoard(){
         try{
             graphicalCLI.printPlayer(getLocalPlayerBoard(), getFaithTrack());
-        } catch (NotExistingNickname e){
+        } catch (NotExistingNicknameException e){
             e.printStackTrace();
         }
     }
@@ -551,8 +557,8 @@ public class CLI extends ClientController {
                     toDiscard.addAll(toPlace);
                 }
             } else graphicalCLI.printlnString("There are no resources to place");
-            messageHandler.sendMessage(new ShelvesConfigurationMessage(shelves, toDiscard));
-        }catch (NotExistingNickname e){
+            getMessageHandler().sendMessage(new ShelvesConfigurationMessage(shelves, toDiscard));
+        }catch (NotExistingNicknameException e){
             e.printStackTrace();
         }
     }
@@ -566,6 +572,21 @@ public class CLI extends ClientController {
             }
     }
 
+    private boolean checkFreeSlotInWarehouse() {    //TODO: accorpare
+        try {
+            if(getLocalPlayerBoard().getWarehouse().getShelves().size()<3)
+                return true;
+            for (Shelf shelf : getLocalPlayerBoard().getWarehouse().getShelves()) {
+                if (shelf.getResourceType().equals(ResourceType.WILDCARD) ||
+                        shelf.getLevel() > shelf.getResources().getQuantity())
+                    return true;
+            }
+        } catch (NotExistingNicknameException e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     private boolean isShelvesEmpty(List<Shelf> shelves){    //TODO: mettere metodi specifici nelle loro classi
         for (Shelf shelf : shelves)
             if(shelf.getResources().getQuantity()>0)
@@ -576,7 +597,7 @@ public class CLI extends ClientController {
     private boolean isWarehouseEmpty(){
         try {
             return isShelvesEmpty(getLocalPlayerBoard().getWarehouse().getShelves());
-        } catch (NotExistingNickname e){
+        } catch (NotExistingNicknameException e){
             e.printStackTrace();
         }
         return false;
@@ -599,8 +620,6 @@ public class CLI extends ClientController {
         }
         return resourcesOneByOne;
     }
-
-
 
     private void emptyShelfManagement(List<Shelf> shelves, List<Resource> toPlace,
                                       Shelf selectedShelf, Resource resourceToPlace) {
@@ -846,7 +865,7 @@ public class CLI extends ClientController {
             graphicalCLI.printWarehouse(playerBoard.getWarehouse());
             graphicalCLI.printExtraShelfLeader(getLocalPlayerBoard().getWarehouse());
             graphicalCLI.printStrongbox(getLocalPlayerBoard().getStrongbox());
-        }catch(NotExistingNickname e){
+        }catch(NotExistingNicknameException e){
             e.printStackTrace();
         }
 
@@ -884,14 +903,10 @@ public class CLI extends ClientController {
         requestResources.add(new RequestResources(strongboxResources,StorageType.STRONGBOX));
 
         //TODO: portarlo nei messaggi per differenziare
-        messageHandler.sendMessage(new RequestResourcesDevMessage(getCardToBuy(), getSpaceToPlace(), requestResources));
+        getMessageHandler().sendMessage(new RequestResourcesDevMessage(getCardToBuy(), getSpaceToPlace(), requestResources));
     }
 
     public GraphicalCLI getGraphicalCLI() {
         return graphicalCLI;
-    }
-
-    public MessageHandler getPacketHandler() {
-        return messageHandler;
     }
 }
