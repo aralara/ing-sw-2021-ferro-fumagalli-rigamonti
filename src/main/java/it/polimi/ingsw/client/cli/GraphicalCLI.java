@@ -85,6 +85,23 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         return getNext().matches("(?i)YES");
     }
 
+    public int askWhichShelf(Resource resource, int numberOfShelves, boolean rearranged, boolean canDiscard) {
+        int level;
+        if(rearranged) {
+            printString("Do you want to restore warehouse to its original configuration? ");
+            if (isAnswerYes())
+                return -1;
+        }
+        printString("Where do you want to place " + resource.getResourceType()
+                + (canDiscard ? "? (0 to discard it) " : "? "));
+        level = getNextInt();
+        while ((canDiscard && level<0) || (!canDiscard && level<=0) || level>numberOfShelves){
+            printString("Choose a valid shelf: ");
+            level = getNextInt();
+        }
+        return level;
+    }
+
     public <T> T objectOptionSelector(List<T> list, Consumer<T> printObject) {
         if(list.size() > 0) {
             if(list.size() == 1) {
@@ -382,6 +399,10 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         printLeaderHand(playerBoardView.getLeaderBoard());
         printString("Leader placed on your board: ");
         printLeaderBoard(playerBoardView.getLeaderBoard());
+    }
+
+    public void printLorenzo(int faith){
+        printlnString("Lorenzo il Magnifico's faith level is " + faith);
     }
 
     public void printDevelopmentBoard(DevelopmentBoardView developmentBoard){
