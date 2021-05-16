@@ -24,10 +24,12 @@ public class StartTurnMessage implements ServerActionMessage {
         if (playingNickname.equals(client.getNickname())) {
             graphicalCLI.printString("\nNOW IT'S YOUR TURN!\n\n");
             client.setMainActionPlayed(false);
+            client.setPlayerTurn(true);
             ((CLI) client).turnMenu();
         }
         else {
             graphicalCLI.printString("Now is " + playingNickname + "'s turn\n");
+            client.setPlayerTurn(false);
             ((CLI) client).turnMenu();
         }
     }

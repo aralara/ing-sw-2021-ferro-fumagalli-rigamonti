@@ -59,6 +59,10 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         return value;
     }
 
+    public String getNext() {
+        return scanner.next();
+    }
+
     public String getNextLine() {
         return scanner.nextLine();
     }
@@ -78,7 +82,7 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
     }
 
     public boolean isAnswerYes() {
-        return getNextLine().matches("(?i)YES");
+        return getNext().matches("(?i)YES");
     }
 
     public <T> T objectOptionSelector(List<T> list, Consumer<T> printObject) {
@@ -237,7 +241,7 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
     }
 
     public void printActions(){
-        printlnString("Choose an action to do on your turn!");
+        printlnString(" Here's the menu: ");
         printlnString(" •1) Get resources from market ");
         printlnString(" •2) Buy a development card ");
         printlnString(" •3) Activate your productions");
@@ -246,6 +250,7 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         printlnString(" •6) Rearrange Warehouse");
         printlnString(" •7) View opponents' boards");
         printlnString(" •8) End turn");
+        printString("Choose an action to do on your turn: ");
     }
 
     public void printWarehouse(WarehouseView warehouseView){

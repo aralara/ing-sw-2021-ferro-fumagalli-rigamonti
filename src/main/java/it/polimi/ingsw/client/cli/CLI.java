@@ -70,7 +70,7 @@ public class CLI extends ClientController {
     @Override
     public void askNickname() {
         graphicalCLI.printString("Insert your nickname: ");
-        setNickname(graphicalCLI.getNextLine());
+        setNickname(graphicalCLI.getNext());
         messageHandler.sendMessage(new ConnectionMessage(getNickname()));
     }
 
@@ -224,6 +224,7 @@ public class CLI extends ClientController {
                 case 8:
                     if (isMainActionPlayed())
                         //TODO: gestire fine turno
+                        setPlayerTurn(false);
                         break;
                 default:
                     break;
@@ -242,7 +243,7 @@ public class CLI extends ClientController {
             int row = -1, column = -1;
             valid = true;
 
-            String choice = graphicalCLI.getNextLine();
+            String choice = graphicalCLI.getNext();
             if(choice.matches("[RCrc][0-4]")) {
                 String rowCol = choice.substring(0, 1).toUpperCase();
                 int number = Integer.parseInt(choice.substring(1, 2));
@@ -769,7 +770,7 @@ public class CLI extends ClientController {
                 "or Y (yellow) followed by a number corresponding to its level: ");
         do {
             valid = false;
-            choice = graphicalCLI.getNextLine();
+            choice = graphicalCLI.getNext();
 
             if(choice.matches("[BGPYbgpy][1-3]")) {
                 String color = choice.substring(0, 1).toUpperCase();

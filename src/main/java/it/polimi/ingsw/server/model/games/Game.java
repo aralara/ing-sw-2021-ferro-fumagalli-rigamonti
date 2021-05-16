@@ -160,8 +160,12 @@ public abstract class Game {
      * @param leaderCards List of leader cards to discard
      */
     public void discardLeader(int player, List<LeaderCard> leaderCards) {
-        for(LeaderCard leaderCard : leaderCards)
+        for(LeaderCard leaderCard : leaderCards){
             playerBoards.get(player).getLeaderBoard().discardLeaderHand(leaderCard);
+            if(playerBoards.get(player).getLeaderBoard().getHand().size() < 2){
+                playerBoards.get(player).getFaithBoard().addFaith(1);
+            }
+        }
     }
 
     /**
