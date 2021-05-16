@@ -112,7 +112,7 @@ public class CLI extends ClientController {
                     (List<LeaderCard>)(List<? extends Card>)playerBoard.getLeaderBoard().getHand().getCards());
             List<LeaderCard> selected = new ArrayList<>();
 
-            graphicalCLI.printlnString("You have to discard 2 leader cards from your hand:");
+            graphicalCLI.printlnString("\nYou have to discard 2 leader cards from your hand:");
             for(int i = 0; i < 2; i++) {
                 LeaderCard selection = graphicalCLI.objectOptionSelector(leaderHand, graphicalCLI::printLeaderCard);
                 selected.add(selection);

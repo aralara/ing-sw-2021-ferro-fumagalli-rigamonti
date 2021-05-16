@@ -41,7 +41,9 @@ public class Warehouse extends PlayerListened implements Storage {
         for (int i = 0; i < configuration.size() - 1; i++) {
             for (int j = 1; j < configuration.size(); j++) {
                 if (!configuration.get(i).isLeader() && !configuration.get(j).isLeader() && i != j) {
-                    if (configuration.get(i).getResourceType() == configuration.get(j).getResourceType()) {
+                    if (!(configuration.get(i).getResourceType().equals(ResourceType.WILDCARD) ||
+                            configuration.get(j).getResourceType().equals(ResourceType.WILDCARD)) &&
+                            (configuration.get(i).getResourceType() == configuration.get(j).getResourceType())) {
                         return false;
                     }
                     if (configuration.get(i).getLevel() == configuration.get(j).getLevel()) {
