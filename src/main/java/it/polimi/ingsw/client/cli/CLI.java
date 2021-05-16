@@ -746,24 +746,16 @@ public class CLI extends ClientController {
         graphicalCLI.printlnString("Warehouse restored");
     }
 
+    /**
+     *
+     * @param resources resources to be placed
+     * @param toDiscard resources to be discarded
+     * @return
+     */
     private boolean isDiscardedResCorrect(List<Resource> resources, List<Resource> toDiscard){
-        if(toDiscard.size()>resources.size())
-            return false;
-        List<Resource> resourcesCopy = getResourcesOneByOne(resources);
-        int found;
-        for (Resource resource : toDiscard){
-            found = -1;
-            for(int i=0;i<resourcesCopy.size();i++){
-                if(resource.getResourceType().equals(resourcesCopy.get(i).getResourceType())){
-                    found=i;
-                    break;
-                }
-            }
-            if(found==-1)
-                return false;
-            resourcesCopy.remove(found);
-        }
-        return true;
+        Storage.aggregateResources(resources);
+        Storage.aggregateResources(toDiscard);
+        return Storage.checkContainedResources(resources,toDiscard);
     }
 
     private DevelopmentCard chooseCardFromDecks() {
