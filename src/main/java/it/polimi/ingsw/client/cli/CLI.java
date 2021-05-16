@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.cli;
 
+import it.polimi.ingsw.client.AckMessageReader;
 import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.client.UpdateMessageReader;
 import it.polimi.ingsw.client.structures.*;
@@ -32,41 +33,40 @@ public class CLI extends ClientController {
 
 
     public void setup() {
-        while(!connect());  //TODO: busy wait
+        connect();
         new Thread(getMessageHandler()).start();
         askNickname();
     }
 
     @Override
-    public boolean connect() { //TODO: inserimento porta
-        graphicalCLI.printString("Insert the IP address of server: ");
-        String ip = graphicalCLI.getNextLine();
-        boolean success = getMessageHandler().connect(ip, Server.SOCKET_PORT);
-        if(success)
-            graphicalCLI.printlnString("Connected");
-        else
-            graphicalCLI.printlnString("Server unreachable");
-        return success;
+    public void connect() { //TODO: inserimento porta
+        boolean success;
+        do {
+            graphicalCLI.printString("Insert the IP address of server: ");
+            String ip = graphicalCLI.getNextLine();
+            graphicalCLI.printlnString("Connecting...");
+            success = getMessageHandler().connect(ip, Server.SOCKET_PORT);
+            if (success)
+                graphicalCLI.printlnString("Connected");
+            else
+                graphicalCLI.printlnString("Server unreachable");
+        } while(!success);
     }
 
     @Override
     public void run() {
-        new Thread(new UpdateMessageReader(this, getMessageHandler().getUpdateQueue())).start();
-
-        LinkedBlockingQueue<ServerActionMessage> actionQueue = getMessageHandler().getActionQueue();
-        LinkedBlockingQueue<ServerAckMessage> ackQueue = getMessageHandler().getAckQueue();
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));   //TODO: da sistemare
+        LinkedBlockingQueue<ServerActionMessage> actionQueue = getMessageHandler().getActionQueue();
 
-
+        new Thread(new UpdateMessageReader(this, getMessageHandler().getUpdateQueue())).start();
+        new Thread(new AckMessageReader(this, getMessageHandler().getAckQueue())).start();
 
         while(true) {   //TODO: busy wait
             try {
-                if (br.ready()) {
+                if (br.ready())
                     turnMenu();
-                }
-                else if (actionQueue.size() > 0) {
+                else if (actionQueue.size() > 0)
                     actionQueue.poll().doAction(this);
-                }
             } catch(Exception e) {
                 e.printStackTrace();
             }
@@ -166,13 +166,12 @@ public class CLI extends ClientController {
             graphicalCLI.printlnString("\nNOW IT'S YOUR TURN!\n");
             setMainActionPlayed(false);
             setPlayerTurn(true);
-            turnMenu();
         }
         else {
             graphicalCLI.printlnString("Now it's " + nickname + "'s turn");
             setPlayerTurn(false);
-            turnMenu();
         }
+        turnMenu();
     }
 
     public void turnMenu() {

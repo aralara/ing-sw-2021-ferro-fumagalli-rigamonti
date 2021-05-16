@@ -42,7 +42,7 @@ public abstract class ClientController {
 
     public abstract void setup();
 
-    public abstract boolean connect();
+    public abstract void connect();
 
     public abstract void run();
 
