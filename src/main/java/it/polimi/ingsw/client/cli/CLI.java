@@ -128,15 +128,10 @@ public class CLI extends ClientController {
     @Override
     public void askResourceEqualize(List<Resource> resources) {
         List<Resource> newResources = new ArrayList<>();
+        graphicalCLI.printlnString("");
         for(Resource resource : resources) {
             if (resource.getResourceType() == ResourceType.FAITH) {
-                try {
-                    getLocalPlayerBoard().getFaithBoard().setFaith(resource.getQuantity());
-                    graphicalCLI.printlnString(resource.getQuantity() + " " + resource.getResourceType()
-                            + " has been added to your faith board");
-                } catch (NotExistingNickname e) {
-                    e.printStackTrace();
-                }
+                newResources.add(new Resource(ResourceType.FAITH, resource.getQuantity()));
             }
             else if (resource.getResourceType() == ResourceType.WILDCARD) {
                 for (int num = 0; num < resource.getQuantity(); num++) {
@@ -149,7 +144,7 @@ public class CLI extends ClientController {
         }
         if(newResources.size() > 0) {
             setResourcesToPut(new ArrayList<>(newResources));
-            graphicalCLI.printlnString("Now place the resources on the shelves:");
+            graphicalCLI.printlnString("\nNow place the resources on the shelves:");
             placeResourcesOnShelves(newResources);
         }
     }
@@ -163,7 +158,7 @@ public class CLI extends ClientController {
             turnMenu();
         }
         else {
-            graphicalCLI.printlnString("Now it's " + nickname + "'s turn");
+            graphicalCLI.printlnString("\nNOW IT'S " + nickname.toUpperCase() + "'S TURN\n");
             setPlayerTurn(false);
             turnMenu();
         }
@@ -399,7 +394,7 @@ public class CLI extends ClientController {
             boolean firstTurn = true;
             while (!toPlace.isEmpty()){
                 resourceToPlace = toPlace.get(0);
-                graphicalCLI.printWarehouseConfiguration(new WarehouseView(shelves));
+                graphicalCLI.printWarehouseConfiguration(new WarehouseView(shelves), true);
                 graphicalCLI.printString("Resources to place: ");
                 graphicalCLI.printGraphicalResources(toPlace);
 
@@ -480,7 +475,7 @@ public class CLI extends ClientController {
 
             WarehouseView warehouse = getLocalPlayerBoard().getWarehouse();
             shelves = getShelvesWarehouseCopy(warehouse.getShelves());
-            graphicalCLI.printWarehouseConfiguration(warehouse);
+            graphicalCLI.printWarehouseConfiguration(warehouse, true);
             if(!toPlace.isEmpty()) {
                 graphicalCLI.printString("Resources to place: ");
                 graphicalCLI.printGraphicalResources(toPlace);
@@ -506,7 +501,7 @@ public class CLI extends ClientController {
 
                     while (!toPlace.isEmpty()) {
                         if (rearranged) {
-                            graphicalCLI.printWarehouseConfiguration(new WarehouseView(shelves));
+                            graphicalCLI.printWarehouseConfiguration(new WarehouseView(shelves), true);
                             graphicalCLI.printString("Resources to place: ");
                             graphicalCLI.printGraphicalResources(toPlace);
                         }
@@ -530,7 +525,7 @@ public class CLI extends ClientController {
                         } else if (level < 0) {
                             restoreConfiguration(warehouse, shelves, resources, toPlace, toDiscard, true);
                             rearranged = false;
-                            graphicalCLI.printWarehouseConfiguration(new WarehouseView(shelves));
+                            graphicalCLI.printWarehouseConfiguration(new WarehouseView(shelves), true);
                             graphicalCLI.printString("Resources to place: ");
                             graphicalCLI.printGraphicalResources(toPlace);
                         }
@@ -541,7 +536,7 @@ public class CLI extends ClientController {
                                     " resources again...");
                             restoreConfiguration(warehouse, shelves, resources, toPlace, toDiscard, true);
                             rearranged = false;
-                            graphicalCLI.printWarehouseConfiguration(new WarehouseView(shelves));
+                            graphicalCLI.printWarehouseConfiguration(new WarehouseView(shelves), true);
                             graphicalCLI.printString("Resources to place: ");
                             graphicalCLI.printGraphicalResources(toPlace);
                         }
@@ -843,8 +838,7 @@ public class CLI extends ClientController {
     public void chooseStorages(List<Resource> resources) {
         try {
             PlayerBoardView playerBoard = getLocalPlayerBoard();
-            graphicalCLI.printWarehouse(playerBoard.getWarehouse());
-            graphicalCLI.printExtraShelfLeader(getLocalPlayerBoard().getWarehouse());
+            graphicalCLI.printWarehouseConfiguration(playerBoard.getWarehouse(), false);
             graphicalCLI.printStrongbox(getLocalPlayerBoard().getStrongbox());
         }catch(NotExistingNickname e){
             e.printStackTrace();

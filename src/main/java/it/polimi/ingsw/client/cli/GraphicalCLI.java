@@ -276,12 +276,15 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         printString("Choose an action to do"+ (isPlayerTurn ? " on your turn: " : ": "));
     }
 
-    public void printWarehouse(WarehouseView warehouseView){
+    public void printWarehouse(WarehouseView warehouseView, boolean showLevel){
         String color;
         int i;
         printlnString("Warehouse:");
         for(i = 1; i <= 3; i++) {
             int finalI = i;
+            if(showLevel){
+                printString(i + ":");
+            }
             printString(" ");
             for(int j = 0; j < i; j++) {
                 if ((warehouseView.getShelves().stream().anyMatch(x -> x.getLevel() == finalI && !x.isLeader())) &&
@@ -298,7 +301,7 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         }
     }
 
-    public void printExtraShelfLeader(WarehouseView warehouseView){  //TODO: va testato in game quando attiviamo delle leader card con abilità warehouse
+    public void printExtraShelfLeader(WarehouseView warehouseView, boolean showLevel){  //TODO: va testato in game quando attiviamo delle leader card con abilità warehouse
         int level = 2;
         String color;
         int specialWarehouse = (int)warehouseView.getShelves().stream().filter(Shelf::isLeader).count();
@@ -307,13 +310,19 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
             List<Shelf> specialShelf = warehouseView.getShelves().stream()
                     .filter(x -> x.getLevel() == level && x.isLeader()).collect(Collectors.toList());
             for(int i = 0; i < specialWarehouse;i++){
+                if(showLevel){
+                    printString((4+i) + ":");
+                }
+                printString(" ");
                 for(int j = 0; j < level; j++){
-                    if (specialShelf.get(i).getResources().getQuantity()>j) {
-                        color = chooseColor(specialShelf.get(i).getResourceType());
+                    color = chooseColor(specialShelf.get(i).getResourceType());
+                    /*if (specialShelf.get(i).getResources().getQuantity()>j) { //TODO: cambiato
                         printString("[ " + color + "■" + color + RESET + " ]");
                     } else {
                         printString("[ x ]");
-                    }
+                    }*/
+                    printString("[ " + color + (specialShelf.get(i).getResources().getQuantity()>j ? "■" : "x")
+                            + color + RESET + " ]");
                 }
             }
         }
@@ -377,27 +386,25 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
     }
 
     public void printChooseStorage(){
-        printlnString("\nChose the storage where remove the resource:");
+        printlnString("\nChoose the storage where remove the resource from:");
         printlnString("•1) Warehouse");
         printlnString("•2) Special Warehouse");
         printlnString("•3) Strongbox");
     }
 
-    public void printWarehouseConfiguration(WarehouseView warehouseView){
-        printWarehouse(warehouseView);
-        printExtraShelfLeader(warehouseView);
+    public void printWarehouseConfiguration(WarehouseView warehouseView, boolean showLevel){
+        printWarehouse(warehouseView, showLevel);
+        printExtraShelfLeader(warehouseView, showLevel);
     }
 
     public void printPlayer(PlayerBoardView playerBoardView,FaithTrackView faithTrackView){
         printlnString("\n" + playerBoardView.getNickname() + "'s board:");
         printFaithBoard(playerBoardView, faithTrackView);
-        printWarehouse(playerBoardView.getWarehouse());
-        printExtraShelfLeader(playerBoardView.getWarehouse());
+        printWarehouseConfiguration(playerBoardView.getWarehouse(), false);
         printStrongbox(playerBoardView.getStrongbox());
         printDevelopmentBoard(playerBoardView.getDevelopmentBoard());
-        printString("Leader in your hand: ");
         printLeaderHand(playerBoardView.getLeaderBoard());
-        printString("Leader placed on your board: ");
+        printString("Leaders placed on the board: ");
         printLeaderBoard(playerBoardView.getLeaderBoard());
     }
 
