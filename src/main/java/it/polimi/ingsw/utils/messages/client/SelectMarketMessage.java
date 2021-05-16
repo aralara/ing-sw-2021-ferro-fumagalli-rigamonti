@@ -1,11 +1,10 @@
 package it.polimi.ingsw.utils.messages.client;
 
 import it.polimi.ingsw.server.controller.Controller;
-import it.polimi.ingsw.server.model.boards.PlayerBoard;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 import it.polimi.ingsw.server.view.VirtualView;
-import it.polimi.ingsw.utils.messages.server.ResourcesMarketMessage;
+import it.polimi.ingsw.utils.messages.server.action.ResourcesMarketMessage;
 
 import java.util.List;
 

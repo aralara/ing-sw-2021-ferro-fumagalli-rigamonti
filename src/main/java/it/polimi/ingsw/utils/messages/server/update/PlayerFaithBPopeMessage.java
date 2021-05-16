@@ -1,7 +1,7 @@
-package it.polimi.ingsw.utils.messages.server;
+package it.polimi.ingsw.utils.messages.server.update;
 
 import it.polimi.ingsw.client.ClientController;
-import it.polimi.ingsw.exceptions.NotExistingNickname;
+import it.polimi.ingsw.exceptions.NotExistingNicknameException;
 
 import static it.polimi.ingsw.utils.Constants.FAITH_TOTAL_VATICAN_REPORTS;
 
@@ -31,7 +31,7 @@ public class PlayerFaithBPopeMessage implements ServerUpdateMessage {
     public void doUpdate(ClientController client) {
         try {
             client.playerBoardFromNickname(nickname).getFaithBoard().setPopeProgression(popeProgression);
-        } catch(NotExistingNickname e){
+        } catch(NotExistingNicknameException e){
             e.printStackTrace();
         }
     }

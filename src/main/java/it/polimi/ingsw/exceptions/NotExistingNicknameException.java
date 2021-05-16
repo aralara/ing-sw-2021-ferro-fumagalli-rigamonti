@@ -1,6 +1,6 @@
 package it.polimi.ingsw.exceptions;
 
-public class NotExistingNickname extends Exception{
+public class NotExistingNicknameException extends Exception{
 
     @Override
     public String getMessage() {

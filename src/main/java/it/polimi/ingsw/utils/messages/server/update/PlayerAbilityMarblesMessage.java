@@ -1,7 +1,7 @@
-package it.polimi.ingsw.utils.messages.server;
+package it.polimi.ingsw.utils.messages.server.update;
 
 import it.polimi.ingsw.client.ClientController;
-import it.polimi.ingsw.exceptions.NotExistingNickname;
+import it.polimi.ingsw.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 
 import java.util.List;
@@ -30,7 +30,7 @@ public class PlayerAbilityMarblesMessage implements ServerUpdateMessage {
     public void doUpdate(ClientController client) {
         try {
             client.playerBoardFromNickname(nickname).setActiveAbilityMarbles(marbles);
-        } catch(NotExistingNickname e){
+        } catch(NotExistingNicknameException e){
             e.printStackTrace();
         }
     }
