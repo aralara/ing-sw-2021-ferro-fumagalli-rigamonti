@@ -28,6 +28,10 @@ public class Controller {
         return game;
     }
 
+    public String getPlayingNickname() {
+        return game.getPlayingNickname();
+    }
+
     public PlayerBoard getPlayerBoard(String nickname) {
         return game.getPlayerBoards().get(game.getPlayerIndexOf(nickname));
     }

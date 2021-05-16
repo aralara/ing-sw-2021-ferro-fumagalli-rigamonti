@@ -44,7 +44,7 @@ public class GameHandler implements Runnable {
         getResourcesToEqualize(); //TODO: RIGA DA TOGLIERE
         sendAll(new StartTurnMessage(clientsVirtualView.get(0).getNickname()));//TODO: RIGA DA TOGLIERE
         while(true) {
-            //TODO: da metterci qualcosa?
+            //TODO: busy wait?
         }
     }
 

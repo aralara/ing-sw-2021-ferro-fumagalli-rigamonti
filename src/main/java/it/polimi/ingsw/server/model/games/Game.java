@@ -68,9 +68,15 @@ public abstract class Game {
      * Gets the number of players in a game
      * @return Returns the number of player boards
      */
-    public int getPlayerNumber () {
+    public int getPlayerNumber() {
         return this.playerBoards.size();
     }
+
+    /**
+     * Gets the nickname of the currently playing player
+     * @return Returns a string containing the nickname
+     */
+    public abstract String getPlayingNickname();
 
     /**
      * Gets the index of the player with a specified nickname
