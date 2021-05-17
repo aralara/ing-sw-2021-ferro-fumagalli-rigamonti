@@ -120,8 +120,17 @@ public class Warehouse extends PlayerListened implements Storage {
     }
 
     @Override
-    public boolean removeResources(List<Resource> resources) {
-        return false;
+    public boolean removeResources(List<Resource> resources) {  //TODO: da testare, scritto perchè lo usiamo anche se volevamo gestire tutto il wh con shelf invece che removeRes
+        Storage.aggregateResources(resources);
+        for (Shelf shelf : shelves) {
+            for (Resource resource : resources) {
+                if (shelf.getResources().getResourceType() == resource.getResourceType()) {
+                    shelf.getResources().setQuantity(shelf.getResources().getQuantity()-resource.getQuantity());
+                }
+            }
+        }
+        fireUpdate(Listeners.BOARD_WAREHOUSE.value(), shelves);
+        return true;
     }
 
     /**
