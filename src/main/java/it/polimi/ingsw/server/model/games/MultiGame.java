@@ -3,6 +3,8 @@ package it.polimi.ingsw.server.model.games;
 import it.polimi.ingsw.server.model.boards.PlayerBoard;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.server.view.VirtualView;
+import it.polimi.ingsw.utils.Constants;
+import it.polimi.ingsw.utils.TurnStatus;
 
 import java.util.*;
 
@@ -50,19 +52,20 @@ public class MultiGame extends Game{
 
     @Override
     public int loadNextTurn(){
-        int actionToDo = 1;
+        int actionToDo = TurnStatus.LOAD_TURN_NORMAL.value();
         getPlayerBoards().get(currentPlayer).setTurnPlayed(false);
         currentPlayer = ++currentPlayer % getPlayerNumber();
         checkFaith();
         if(checkEndGame()){
+            if(lastTurn)
+                actionToDo = TurnStatus.LOAD_TURN_LAST_ROUND.value();
             lastTurn = true;
-            actionToDo = 2;
         }
         if(lastTurn && getPlayerBoards().get(currentPlayer).isFirstPlayer()){
             calculateTotalVP();
             calculateFinalPositions();
             finished = true;
-            actionToDo = 3;
+            actionToDo = TurnStatus.LOAD_TURN_END_GAME.value();
         }
         return actionToDo;
     }

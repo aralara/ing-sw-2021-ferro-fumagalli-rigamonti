@@ -5,8 +5,7 @@ import it.polimi.ingsw.server.model.cards.ability.AbilityDiscount;
 import it.polimi.ingsw.server.model.cards.ability.AbilityMarble;
 import it.polimi.ingsw.server.model.cards.ability.AbilityProduction;
 import it.polimi.ingsw.server.model.cards.ability.AbilityWarehouse;
-import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
-import it.polimi.ingsw.server.model.cards.card.LeaderCard;
+import it.polimi.ingsw.server.model.cards.card.*;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.server.model.cards.requirement.Requirement;
 import it.polimi.ingsw.server.model.cards.requirement.RequirementDev;
@@ -182,7 +181,7 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         if(leaderCard.getID() != -1) {
             printlnString(" LEADER CARD");
             printString(" • Requirements: ");
-            if (leaderCard.getRequirements().get(0) instanceof RequirementDev) {   //TODO: mettere to string alle carte
+            if (leaderCard.getRequirements().get(0) instanceof RequirementDev) {   //TODO: GLI INSTANCEOF NON VANNO BENE
                 for (Requirement req : leaderCard.getRequirements()) {
                     toPrint = ((!first) ? ", " : "") + ((RequirementDev) req).getNumber() + " " +
                             ((RequirementDev) req).getColor() + " level " +
@@ -217,6 +216,21 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         else {
             printlnString(" LEADER CARD");
             printlnString(" • The leader card is covered, you can't see it!");
+        }
+    }
+
+    public void printLorenzoCard(LorenzoCard lorenzoCard){
+        if(lorenzoCard instanceof LorenzoDev) {
+            LorenzoDev lorenzoDev = (LorenzoDev) lorenzoCard;
+            printlnString("Lorenzo removes" + lorenzoDev.getQuantity() + lorenzoDev.getColor().name()
+                    + " development cards from their pile");
+        } else if(lorenzoCard instanceof LorenzoFaith) {    //TODO: GLI INSTANCEOF NON VANNO BENE
+            LorenzoFaith lorenzoFaith = (LorenzoFaith) lorenzoCard;
+            printString("Lorenzo gains " + lorenzoFaith.getAmount() + " faith");
+            if(lorenzoFaith.isRefresh())
+                printlnString(" and shuffles his deck");
+            else
+                printString("\n");
         }
     }
 

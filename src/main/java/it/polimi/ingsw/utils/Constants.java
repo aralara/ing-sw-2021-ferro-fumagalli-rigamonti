@@ -18,5 +18,4 @@ public enum Constants {
     public int value() {
         return value;
     }
-
 }

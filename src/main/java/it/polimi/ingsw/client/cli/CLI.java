@@ -7,10 +7,7 @@ import it.polimi.ingsw.client.structures.*;
 import it.polimi.ingsw.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.server.model.boards.Player;
-import it.polimi.ingsw.server.model.cards.card.Card;
-import it.polimi.ingsw.server.model.cards.card.CardColors;
-import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
-import it.polimi.ingsw.server.model.cards.card.LeaderCard;
+import it.polimi.ingsw.server.model.cards.card.*;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.utils.messages.client.*;
 import it.polimi.ingsw.utils.messages.server.action.ServerActionMessage;
@@ -211,6 +208,12 @@ public class CLI extends ClientController {
         }
         placeResourcesOnShelves(plainResources);
         waiting = true;
+    }
+
+    @Override
+    public void notifyLorenzoCard(LorenzoCard lorenzoCard) {
+        graphicalCLI.printlnString("Lorenzo pulls a card from his deck");
+        graphicalCLI.printLorenzoCard(lorenzoCard);
     }
 
     @Override

@@ -7,6 +7,7 @@ import it.polimi.ingsw.client.structures.PlayerBoardView;
 import it.polimi.ingsw.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.model.boards.Player;
 import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
+import it.polimi.ingsw.server.model.cards.card.LorenzoCard;
 import it.polimi.ingsw.server.model.storage.Production;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
@@ -61,6 +62,8 @@ public abstract class ClientController {
     public abstract void notifyStartTurn(String nickname);
 
     public abstract void addMarketResources(List<Resource> resources, List<ResourceType> availableAbilities);
+
+    public abstract void notifyLorenzoCard(LorenzoCard lorenzoCard);
 
     public abstract void notifyLastRound();
 

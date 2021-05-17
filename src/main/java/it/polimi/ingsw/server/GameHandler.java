@@ -42,17 +42,6 @@ public class GameHandler implements Runnable {
             thread.start();
         }
         setup();
-        sendAll(new AskLeaderCardDiscardMessage());
-        Map<String, List<Resource>> resEqualize = controller.getResourcesToEqualize();
-        if (resEqualize != null) {
-            for (Map.Entry<String, List<Resource>> entry : resEqualize.entrySet())
-                try {
-                    getFromNickname(entry.getKey()).sendMessage(new ResourcesEqualizeMessage(entry.getValue()));
-                } catch (NotExistingNicknameException e) {
-                    e.printStackTrace();
-                }
-        }
-        sendAll(new StartTurnMessage(controller.getGame().getPlayingNickname()));
         while(true) {
             //TODO: busy wait
         }
@@ -63,6 +52,7 @@ public class GameHandler implements Runnable {
 
         Game game = controller.getGame();
         List<PlayerBoard> playerBoards = game.getPlayerBoards();
+
         for (VirtualView virtualView : clientsVirtualView) {
             for(PlayerBoard pBoard : playerBoards) {
                 PlayerBoardSetupMessage pBoardMessage = new PlayerBoardSetupMessage(pBoard);
@@ -79,6 +69,17 @@ public class GameHandler implements Runnable {
             virtualView.sendMessage(new DevelopmentDecksMessage(game.getDevelopmentDecks()));
             virtualView.sendMessage(new FaithTrackMessage(game.getFaithTrack()));
         }
+        sendAll(new AskLeaderCardDiscardMessage());
+        Map<String, List<Resource>> resEqualize = controller.getResourcesToEqualize();
+        if (resEqualize != null) {
+            for (Map.Entry<String, List<Resource>> entry : resEqualize.entrySet())
+                try {
+                    getFromNickname(entry.getKey()).sendMessage(new ResourcesEqualizeMessage(entry.getValue()));
+                } catch (NotExistingNicknameException e) {
+                    e.printStackTrace();
+                }
+        }
+        sendAll(new StartTurnMessage(controller.getGame().getPlayingNickname()));
     }
 
     public void add(Socket client, ObjectOutputStream out, ObjectInputStream in, String nickname) {

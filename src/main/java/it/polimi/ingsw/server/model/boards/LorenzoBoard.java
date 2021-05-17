@@ -86,6 +86,7 @@ public class LorenzoBoard extends Listened {
      */
     public LorenzoCard pickLorenzoCard() {
         LorenzoCard extracted = (LorenzoCard) (lorenzoDeck.extract(new int[] {0})).get(0);
+        fireUpdate(Listeners.GAME_LORENZO_CARD.value(), extracted);
         lorenzoDeck.add(extracted);
         return extracted;
     }

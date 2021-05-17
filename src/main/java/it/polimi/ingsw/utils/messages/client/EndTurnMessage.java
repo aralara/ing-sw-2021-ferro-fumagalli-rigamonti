@@ -1,7 +1,10 @@
 package it.polimi.ingsw.utils.messages.client;
 
 import it.polimi.ingsw.server.controller.Controller;
+import it.polimi.ingsw.server.model.boards.PlayerBoard;
 import it.polimi.ingsw.server.view.VirtualView;
+import it.polimi.ingsw.utils.Constants;
+import it.polimi.ingsw.utils.TurnStatus;
 import it.polimi.ingsw.utils.messages.server.action.EndGameMessage;
 import it.polimi.ingsw.utils.messages.server.action.LastRoundMessage;
 import it.polimi.ingsw.utils.messages.server.action.StartTurnMessage;
@@ -24,15 +27,19 @@ public class EndTurnMessage implements ClientActionMessage {
 
     @Override
     public void doAction(VirtualView view, Controller controller) {
-        int temp = controller.loadNextTurn();
-        if(temp == 1){
-            view.getGameHandler().sendAll(new StartTurnMessage(controller.getPlayingNickname()));
-        }else if (temp == 2){
-            view.getGameHandler().sendAll(new LastRoundMessage());
-            view.getGameHandler().sendAll(new StartTurnMessage(controller.getPlayingNickname()));
-        }else if(temp == 3){
-            view.getGameHandler().sendAll(new EndGameMessage(  //TODO: controllare se va bene o fa schifo
-                    controller.getGame().getPlayerBoards().stream().map(x->x.getPlayer()).collect(Collectors.toList())));
+        TurnStatus ts = TurnStatus.getStatus(controller.loadNextTurn());
+        switch(ts){
+            case LOAD_TURN_NORMAL:
+                view.getGameHandler().sendAll(new StartTurnMessage(controller.getPlayingNickname()));
+                break;
+            case LOAD_TURN_LAST_ROUND:
+                view.getGameHandler().sendAll(new LastRoundMessage());
+                view.getGameHandler().sendAll(new StartTurnMessage(controller.getPlayingNickname()));
+                break;
+            case LOAD_TURN_END_GAME:
+                view.getGameHandler().sendAll(new EndGameMessage(controller.getGame().
+                        getPlayerBoards().stream().map(PlayerBoard::getPlayer).collect(Collectors.toList())));
+                break;
         }
     }
 }

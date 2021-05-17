@@ -4,6 +4,7 @@ public enum Listeners {
     GAME_DEV_DECK("developmentDeckListener"),
     GAME_MARKET("marketListener"),
     GAME_LORENZO_FAITH("lorenzoFaithListener"),
+    GAME_LORENZO_CARD("LorenzoCardListener"),
     BOARD_ABILITY_PROD("playerBoardAbilityProductions"),
     BOARD_ABILITY_MARB("playerBoardAbilityMarbles"),
     BOARD_ABILITY_DISC("playerBoardAbilityDiscounts"),
