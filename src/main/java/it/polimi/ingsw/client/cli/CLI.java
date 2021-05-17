@@ -177,7 +177,7 @@ public class CLI extends ClientController {
             setPlayerTurn(true);
         }
         else {
-            graphicalCLI.printlnString("NOW IT'S " + nickname.toUpperCase() + "'S TURN!");
+            graphicalCLI.printlnString("\nNOW IT'S " + nickname.toUpperCase() + "'S TURN!\n");
             setPlayerTurn(false);
         }
         turnMenu();
