@@ -45,7 +45,8 @@ public class SingleGame extends Game{
     }
 
     @Override
-    public void loadNextTurn(){
+    public int loadNextTurn(){
+        int temp = 1;
         isLorenzoTurn = !isLorenzoTurn;
         getPlayerBoards().get(0).setTurnPlayed(false);
         checkFaith();
@@ -53,7 +54,9 @@ public class SingleGame extends Game{
             calculateTotalVP();
             calculateFinalPositions();
             finished = true;
+            temp = 3;
         }
+        return temp;
     }
 
     @Override

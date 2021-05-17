@@ -49,17 +49,22 @@ public class MultiGame extends Game{
     }
 
     @Override
-    public void loadNextTurn(){
+    public int loadNextTurn(){
+        int temp = 1;
         getPlayerBoards().get(currentPlayer).setTurnPlayed(false);
         currentPlayer = ++currentPlayer % getPlayerNumber();
         checkFaith();
-        if(checkEndGame())
+        if(checkEndGame()){
             lastTurn = true;
+            temp = 2;
+        }
         if(lastTurn && getPlayerBoards().get(currentPlayer).isFirstPlayer()){
             calculateTotalVP();
             calculateFinalPositions();
             finished = true;
+            temp = 3;
         }
+        return temp;
     }
 
     @Override

@@ -51,8 +51,8 @@ public class Controller {
         return game.addResourcesToWarehouse(game.getPlayerIndexOf(player), shelves, extra);
     }
 
-    public void loadNextTurn(){
-        game.loadNextTurn();
+    public int loadNextTurn(){
+        return game.loadNextTurn();
     }
 
     public List<Resource> getFromMarket(String player, int row, int column) {

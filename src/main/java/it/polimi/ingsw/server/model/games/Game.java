@@ -194,8 +194,9 @@ public abstract class Game {
 
     /**
      * Method invoked to let the next player play his turn
+     * @return Returns 2 if it's the last round, 3 if the game is ended, 1 otherwise
      */
-    public abstract void loadNextTurn();
+    public abstract int loadNextTurn();
 
     /**
      * Method invoked to take resources from the market
