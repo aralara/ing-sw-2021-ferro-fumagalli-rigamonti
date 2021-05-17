@@ -1,6 +1,8 @@
 package it.polimi.ingsw.server.model.boards;
 
-public class Player {
+import java.io.Serializable;
+
+public class Player implements Serializable {
 
     private final String nickname;
     private int totalVP, finalPosition;

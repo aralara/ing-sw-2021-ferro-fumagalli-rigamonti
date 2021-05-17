@@ -1,13 +1,14 @@
 package it.polimi.ingsw.utils.messages.server.action;
 
+import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.server.model.boards.Player;
 import it.polimi.ingsw.utils.messages.Message;
 
 import java.util.List;
 
-public class EndGameMessage implements Message {
+public class EndGameMessage implements ServerActionMessage {
 
-    private List<Player> players;
+    private final List<Player> players;
 
 
     public EndGameMessage(List<Player> players) {
@@ -17,5 +18,10 @@ public class EndGameMessage implements Message {
 
     public List<Player> getPlayers() {
         return players;
+    }
+
+    @Override
+    public void doAction(ClientController client) {
+        client.notifyEndGame(players);
     }
 }

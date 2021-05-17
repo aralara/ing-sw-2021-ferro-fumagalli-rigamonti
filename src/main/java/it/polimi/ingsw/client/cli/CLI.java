@@ -6,6 +6,7 @@ import it.polimi.ingsw.client.UpdateMessageReader;
 import it.polimi.ingsw.client.structures.*;
 import it.polimi.ingsw.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.Server;
+import it.polimi.ingsw.server.model.boards.Player;
 import it.polimi.ingsw.server.model.cards.card.Card;
 import it.polimi.ingsw.server.model.cards.card.CardColors;
 import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
@@ -170,8 +171,6 @@ public class CLI extends ClientController {
 
     @Override
     public void notifyStartTurn(String nickname) {
-        if(!waiting)
-            waiting = true;
         if (nickname.equals(getNickname())) {
             graphicalCLI.printlnString("\nNOW IT'S YOUR TURN!\n");
             setMainActionPlayed(false);
@@ -182,6 +181,7 @@ public class CLI extends ClientController {
             setPlayerTurn(false);
         }
         turnMenu();
+        waiting = true;
     }
 
     @Override
@@ -194,8 +194,8 @@ public class CLI extends ClientController {
 
         while (marblesLeft > 0 && availableAbilities.size() > 0) {
 
-            graphicalCLI.printString("You can choose a resource from the following types ( "
-                    + marblesLeft + " wildcards left ):\n");
+            graphicalCLI.printlnString("You can choose a resource from the following types ( "
+                    + marblesLeft + " wildcards left ):");
 
             graphicalCLI.printNumberedList(availableAbilities, rt -> graphicalCLI.printString(rt.name()));
 
@@ -211,6 +211,21 @@ public class CLI extends ClientController {
         }
         placeResourcesOnShelves(plainResources);
         waiting = true;
+    }
+
+    @Override
+    public void notifyLastRound() {
+        graphicalCLI.printlnString("Last round before the game ends!");
+    }
+
+    @Override
+    public void notifyEndGame(List<Player> players) {
+        graphicalCLI.printlnString("THE GAME HAS ENDED!");
+        graphicalCLI.printlnString("Scoreboard:");
+        for(Player player : players.stream()
+                .sorted(Comparator.comparingInt(Player::getFinalPosition)).collect(Collectors.toList()))
+            graphicalCLI.printlnString(player.getFinalPosition() + ": " + player.getNickname() + " with " +
+                    + player.getTotalVP() + " VP");
     }
 
     public void turnMenu() {
