@@ -250,13 +250,15 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
 
     public void printFaithBoard(PlayerBoardView player, FaithTrackView faithTrack){
         String color;
-        for(int i = 1; i <= faithTrack.getVaticanReports().get(faithTrack.getVaticanReports().size()-1).getMax();i++){
+        int maxSize = faithTrack.getVaticanReports().get(faithTrack.getVaticanReports().size()-1).getMax();
+        for(int i = 1; i <= maxSize; i++){
             if(isVaticanReport(faithTrack,i)){
                 color = PURPLE_BRIGHT;
             }else{
                 color = CYAN_BRIGHT;
             }
-            printString(color + ((player.getFaithBoard().getFaith() == i) ?
+            printString(color + (((player.getFaithBoard().getFaith() == i) ||
+                    ((i==maxSize) &&(player.getFaithBoard().getFaith() > maxSize))) ?
                     "[" + RED_BRIGHT + " X " + color +  "]" : "[ • ] ") + color + RESET);
         }
         printlnString("");

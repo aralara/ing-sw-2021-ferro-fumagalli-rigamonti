@@ -224,7 +224,7 @@ public class CLI extends ClientController {
         graphicalCLI.printlnString("Scoreboard:");
         for(Player player : players.stream()
                 .sorted(Comparator.comparingInt(Player::getFinalPosition)).collect(Collectors.toList()))
-            graphicalCLI.printlnString(player.getFinalPosition() + ": " + player.getNickname() + " with " +
+            graphicalCLI.printlnString(player.getFinalPosition()+1 + ": " + player.getNickname() + " with " +
                     + player.getTotalVP() + " VP");
     }
 

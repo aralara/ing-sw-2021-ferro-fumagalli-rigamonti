@@ -50,21 +50,21 @@ public class MultiGame extends Game{
 
     @Override
     public int loadNextTurn(){
-        int temp = 1;
+        int actionToDo = 1;
         getPlayerBoards().get(currentPlayer).setTurnPlayed(false);
         currentPlayer = ++currentPlayer % getPlayerNumber();
         checkFaith();
         if(checkEndGame()){
             lastTurn = true;
-            temp = 2;
+            actionToDo = 2;
         }
         if(lastTurn && getPlayerBoards().get(currentPlayer).isFirstPlayer()){
             calculateTotalVP();
             calculateFinalPositions();
             finished = true;
-            temp = 3;
+            actionToDo = 3;
         }
-        return temp;
+        return actionToDo;
     }
 
     @Override
