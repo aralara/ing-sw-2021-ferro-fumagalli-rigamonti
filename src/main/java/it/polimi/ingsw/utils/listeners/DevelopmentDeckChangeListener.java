@@ -16,6 +16,5 @@ public class DevelopmentDeckChangeListener extends ModelChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         getVirtualView().sendMessage(new DevelopmentDecksMessage(List.of((DevelopmentDeck) evt.getNewValue())));
-        //TODO: ha generato eccezione per il cast deck-developmentDeck quando compro una devCard
     }
 }
