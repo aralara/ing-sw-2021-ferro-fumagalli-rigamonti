@@ -10,13 +10,16 @@ import it.polimi.ingsw.server.view.VirtualView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Controller {
 
+    private final int playerNumber;
     private final Game game;
 
 
     public Controller(int playerNumber) {
+        this.playerNumber = playerNumber;
         if(playerNumber == 1)
             game = new SingleGame();
         else
@@ -78,6 +81,13 @@ public class Controller {
 
     public void discardExtraLeader(String player, LeaderCard card) {
         game.discardExtraLeader(game.getPlayerIndexOf(player), card);
+    }
+
+    public Map<String, List<Resource>> getResourcesToEqualize() {
+        if(playerNumber == 1)
+            return null;
+        else
+            return ((MultiGame) game).getResourcesToEqualize();
     }
 
     public boolean playLeaderCard(String player, List<LeaderCard> cards) { //TODO: da controllare

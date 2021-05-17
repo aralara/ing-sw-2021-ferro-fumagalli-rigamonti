@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.model.boards.PlayerBoard;
 import it.polimi.ingsw.server.model.games.Game;
@@ -22,6 +23,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class GameHandler implements Runnable {
 
@@ -34,43 +36,25 @@ public class GameHandler implements Runnable {
     }
 
     @Override
-    public void run(){
+    public void run() {
         for (VirtualView virtualView : clientsVirtualView) {
             Thread thread = new Thread(virtualView);
             thread.start();
         }
         setup();
         sendAll(new AskLeaderCardDiscardMessage());
-        getResourcesToEqualize(); //TODO: RIGA DA TOGLIERE
-        sendAll(new StartTurnMessage(clientsVirtualView.get(0).getNickname()));//TODO: RIGA DA TOGLIERE
+        Map<String, List<Resource>> resEqualize = controller.getResourcesToEqualize();
+        if (resEqualize != null) {
+            for (Map.Entry<String, List<Resource>> entry : resEqualize.entrySet())
+                try {
+                    getFromNickname(entry.getKey()).sendMessage(new ResourcesEqualizeMessage(entry.getValue()));
+                } catch (NotExistingNicknameException e) {
+                    e.printStackTrace();
+                }
+        }
+        sendAll(new StartTurnMessage(controller.getGame().getPlayingNickname()));
         while(true) {
-            //TODO: busy wait?
-        }
-    }
-
-    private void getResourcesToEqualize(){   //TODO: METODO DA TOGLIERE, solo x test
-        List<Resource> res1 = new ArrayList<>();
-        List<Resource> res2 = new ArrayList<>(); res2.add(new Resource(ResourceType.WILDCARD, 1));
-        List<Resource> res3 = new ArrayList<>(); res3.add(new Resource(ResourceType.WILDCARD, 1));
-                                                 res3.add(new Resource(ResourceType.FAITH, 1));
-        List<Resource> res4 = new ArrayList<>(); res4.add(new Resource(ResourceType.WILDCARD, 2));
-                                                 res4.add(new Resource(ResourceType.FAITH, 1));
-
-        int num = clientsVirtualView.size();
-        ResourcesEqualizeMessage message;
-        message = new ResourcesEqualizeMessage(res1);
-        clientsVirtualView.get(0).sendMessage(message);
-        if(num>1){
-            message = new ResourcesEqualizeMessage(res2);
-            clientsVirtualView.get(1).sendMessage(message);
-        }
-        if(num>2){
-            message = new ResourcesEqualizeMessage(res3);
-            clientsVirtualView.get(2).sendMessage(message);
-        }
-        if(num>3){
-            message = new ResourcesEqualizeMessage(res4);
-            clientsVirtualView.get(3).sendMessage(message);
+            //TODO: busy wait
         }
     }
 
@@ -115,11 +99,19 @@ public class GameHandler implements Runnable {
         }
     }
 
-    public List<String> getAllNicknames(){
+    public List<String> getAllNicknames() {
         List<String> temp = new ArrayList<>();
         for (VirtualView virtualView : clientsVirtualView) {
             temp.add(virtualView.getNickname());
         }
         return temp;
     }
+
+    public VirtualView getFromNickname(String nickname) throws NotExistingNicknameException{
+        for (VirtualView virtualView : clientsVirtualView)
+            if(virtualView.getNickname().equals(nickname))
+                return virtualView;
+        throw new NotExistingNicknameException();
+    }
+
 }

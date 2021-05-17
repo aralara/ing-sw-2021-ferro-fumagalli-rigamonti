@@ -30,22 +30,21 @@ public class MultiGame extends Game{
     /**
      * Gets a list that contains a list of resources (wildcards and fatih) for each player that need to be equalized
      * in the same playing order
-     * @return Returns a list of lists of resources
+     * @return Returns a map of lists of resources using the nickname of the player as a key
      */
-    public List<List<Resource>> getResourcesToEqualize(){   //TODO: da integrare con VIEW
-        List<List<Resource>> equalizeRes = new ArrayList<>();
-        equalizeRes.add(null);
-        equalizeRes.add(new ArrayList<>(){{
-            add(new Resource(ResourceType.WILDCARD, 1));
-        }});
-        equalizeRes.add(new ArrayList<>(){{
-            add(new Resource(ResourceType.WILDCARD, 1));
-            add(new Resource(ResourceType.FAITH, 1));
-        }});
-        equalizeRes.add(new ArrayList<>(){{
-            add(new Resource(ResourceType.WILDCARD, 2));
-            add(new Resource(ResourceType.FAITH, 1));
-        }});
+    @SuppressWarnings("")
+    public Map<String, List<Resource>> getResourcesToEqualize(){    //TODO: hardcoded resources
+        Map<String, List<Resource>> equalizeRes = new HashMap<>();
+        List<List<Resource>> resources = new ArrayList<>();
+        resources.add(Arrays.asList(new Resource(ResourceType.WILDCARD, 1)));
+        resources.add(Arrays.asList(
+                new Resource(ResourceType.WILDCARD, 1),
+                new Resource(ResourceType.FAITH, 1)));
+        resources.add(Arrays.asList(
+                new Resource(ResourceType.WILDCARD, 2),
+                new Resource(ResourceType.FAITH, 1)));
+        for(int i = 1; i < getPlayerNumber(); i++)
+            equalizeRes.put(getPlayerBoards().get(i).getPlayer().getNickname(), resources.get(i - 1));
         return equalizeRes;
     }
 
