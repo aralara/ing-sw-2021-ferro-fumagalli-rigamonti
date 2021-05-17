@@ -3,6 +3,7 @@ package it.polimi.ingsw.utils.messages.server.action;
 import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.server.model.cards.card.LorenzoCard;
 import it.polimi.ingsw.utils.messages.Message;
+import it.polimi.ingsw.utils.messages.client.EndTurnMessage;
 
 public class LorenzoCardMessage implements ServerActionMessage {
 

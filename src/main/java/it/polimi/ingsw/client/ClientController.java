@@ -37,6 +37,8 @@ public abstract class ClientController {
         market = new MarketView();
         developmentDecks = new ArrayList<>();
         faithTrack = new FaithTrackView();
+        resourcesToPut = new ArrayList<>();
+        productionsToActivate = new ArrayList<>();
         mainActionPlayed = false;
         messageHandler = new MessageHandler();
         playerTurn = false;

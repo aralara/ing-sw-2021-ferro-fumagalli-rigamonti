@@ -222,8 +222,8 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
     public void printLorenzoCard(LorenzoCard lorenzoCard){
         if(lorenzoCard instanceof LorenzoDev) {
             LorenzoDev lorenzoDev = (LorenzoDev) lorenzoCard;
-            printlnString("Lorenzo removes" + lorenzoDev.getQuantity() + lorenzoDev.getColor().name()
-                    + " development cards from their pile");
+            printlnString("Lorenzo removes " + lorenzoDev.getQuantity() + " " + lorenzoDev.getColor().name()
+                    + " development cards from the development decks");
         } else if(lorenzoCard instanceof LorenzoFaith) {    //TODO: GLI INSTANCEOF NON VANNO BENE
             LorenzoFaith lorenzoFaith = (LorenzoFaith) lorenzoCard;
             printString("Lorenzo gains " + lorenzoFaith.getAmount() + " faith");

@@ -42,22 +42,26 @@ public class SingleGame extends Game{
     /**
      * Initializes the LorenzoBoard loading tokens from a file
      */
-    public void initLorenzoBoard(){
+    public void initLorenzoBoard() {
         lorenzoBoard = new LorenzoBoard(this);
         lorenzoBoard.initLorenzoDeck(FileNames.LORENZO_DEV_FILE.value(), FileNames.LORENZO_FAITH_FILE.value());
     }
 
     @Override
-    public int loadNextTurn(){
+    public int loadNextTurn() {
         int temp = TurnStatus.LOAD_TURN_NORMAL.value();
         isLorenzoTurn = !isLorenzoTurn;
         getPlayerBoards().get(0).setTurnPlayed(false);
         checkFaith();
-        if(checkEndGame()){
+        if(checkEndGame()) {
             calculateTotalVP();
             calculateFinalPositions();
             finished = true;
             temp = TurnStatus.LOAD_TURN_END_GAME.value();
+        }
+        else if(isLorenzoTurn) {
+            lorenzoBoard.pickLorenzoCard().activateLorenzo(lorenzoBoard);
+            temp = loadNextTurn();
         }
         return temp;
     }

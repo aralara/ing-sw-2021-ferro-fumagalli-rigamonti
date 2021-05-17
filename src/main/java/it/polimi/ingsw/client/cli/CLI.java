@@ -212,8 +212,10 @@ public class CLI extends ClientController {
 
     @Override
     public void notifyLorenzoCard(LorenzoCard lorenzoCard) {
+        graphicalCLI.printlnString("\nNOW IT'S LORENZO'S TURN\n");
         graphicalCLI.printlnString("Lorenzo pulls a card from his deck");
         graphicalCLI.printLorenzoCard(lorenzoCard);
+        waiting = false;
     }
 
     @Override
@@ -303,6 +305,7 @@ public class CLI extends ClientController {
                 if (isMainActionPlayed()) {
                     setPlayerTurn(false);
                     getMessageHandler().sendMessage(new EndTurnMessage(getNickname()));
+                    waiting = false;
                 }
                 else graphicalCLI.printlnString("You haven't played any main action yet!");
                 break;
