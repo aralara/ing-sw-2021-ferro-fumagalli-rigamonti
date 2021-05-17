@@ -351,8 +351,8 @@ public abstract class Game {
         boolean endGame = false;
         for(PlayerBoard pBoard : playerBoards)
             if(!endGame &&
-                    faithTrack.isCompleted(pBoard.getFaithBoard().getFaith()) &&
-                    pBoard.getDevelopmentBoard().numberOfCards() >= 7)
+                    (faithTrack.isCompleted(pBoard.getFaithBoard().getFaith()) ||
+                    pBoard.getDevelopmentBoard().numberOfCards() >= 7))
                 endGame = true;
         return endGame;
     }
