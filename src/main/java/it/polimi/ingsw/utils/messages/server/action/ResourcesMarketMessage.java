@@ -22,30 +22,6 @@ public class ResourcesMarketMessage extends ResourcesMessage implements ServerAc
 
     @Override
     public void doAction(ClientController client) {
-        GraphicalCLI graphicalCLI = ((CLI) client).getGraphicalCLI();   //TODO: CAST A CLI ORRENDI, BRUTTI E ASSOLUTAMENTE TEMPORANEI IN TUTTO IL METODO
-        List<Resource> resources = getResources().stream()
-                .filter(r -> r.getResourceType() != ResourceType.WILDCARD).collect(Collectors.toList());
-        int     index,
-                marblesLeft = (int) getResources().stream()
-                        .filter(r -> r.getResourceType() == ResourceType.WILDCARD).count();
-
-        while (marblesLeft > 0 && availableAbilities.size() > 0) {
-
-            graphicalCLI.printString("You can choose a resource from the following types ( "
-                    + marblesLeft + " wildcards left ):\n");
-
-            graphicalCLI.printNumberedList(availableAbilities, rt -> graphicalCLI.printString(rt.name()));
-
-            do {
-                graphicalCLI.printString("Please choose a valid resource type for the wildcard:");
-                index = ((CLI) client).getGraphicalCLI().getNextInt() - 1;
-            } while(0 > index || index > availableAbilities.size());
-
-            resources.add(new Resource(availableAbilities.get(index), 1));
-
-            availableAbilities.remove(index);
-            marblesLeft--;
-        }
-        ((CLI) client).placeResourcesOnShelves(resources);
+        client.addMarketResources(getResources(), availableAbilities);
     }
 }

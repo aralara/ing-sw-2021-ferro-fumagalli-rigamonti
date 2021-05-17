@@ -8,6 +8,7 @@ import it.polimi.ingsw.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.model.storage.Production;
 import it.polimi.ingsw.server.model.storage.Resource;
+import it.polimi.ingsw.server.model.storage.ResourceType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +58,8 @@ public abstract class ClientController {
     public abstract void askResourceEqualize(List<Resource> resources);
 
     public abstract void notifyStartTurn(String nickname);
+
+    public abstract void addMarketResources(List<Resource> resources, List<ResourceType> availableAbilities);
 
     public String getNickname() {
         return nickname;

@@ -12,7 +12,6 @@ import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.utils.messages.client.*;
-import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 import it.polimi.ingsw.utils.messages.server.action.ServerActionMessage;
 
 import java.io.BufferedReader;
@@ -23,11 +22,13 @@ import java.util.stream.Collectors;
 
 public class CLI extends ClientController {
 
+    boolean waiting;
     private final GraphicalCLI graphicalCLI;
 
 
     public CLI() {
         super();
+        waiting = false;
         graphicalCLI = new GraphicalCLI();
     }
 
@@ -61,12 +62,24 @@ public class CLI extends ClientController {
         new Thread(new UpdateMessageReader(this, getMessageHandler().getUpdateQueue())).start();
         new Thread(new AckMessageReader(this, getMessageHandler().getAckQueue())).start();
 
-        while(true) {   //TODO: busy wait
+        boolean displayMenu = true;
+
+        while(true) {   //TODO: temp
             try {
-                if (br.ready())
-                    turnMenu();
-                else if (actionQueue.size() > 0)
+                if(waiting) {
+                    if (displayMenu) {
+                        graphicalCLI.printlnString("Press ENTER to display action menu");
+                        displayMenu = false;
+                    }
+                    if (br.ready()) {
+                        turnMenu();
+                        displayMenu = true;
+                    }
+                }
+                if (actionQueue.size() > 0) {
                     actionQueue.poll().doAction(this);
+                    displayMenu = true;
+                }
             } catch(Exception e) {
                 e.printStackTrace();
             }
@@ -156,7 +169,9 @@ public class CLI extends ClientController {
     }
 
     @Override
-    public void notifyStartTurn(String nickname){
+    public void notifyStartTurn(String nickname) {
+        if(!waiting)
+            waiting = true;
         if (nickname.equals(getNickname())) {
             graphicalCLI.printlnString("\nNOW IT'S YOUR TURN!\n");
             setMainActionPlayed(false);
@@ -167,6 +182,35 @@ public class CLI extends ClientController {
             setPlayerTurn(false);
         }
         turnMenu();
+    }
+
+    @Override
+    public void addMarketResources(List<Resource> resources, List<ResourceType> availableAbilities) {
+        List<Resource> plainResources = resources.stream()
+                .filter(r -> r.getResourceType() != ResourceType.WILDCARD).collect(Collectors.toList());
+        int     index,
+                marblesLeft = (int) resources.stream()
+                        .filter(r -> r.getResourceType() == ResourceType.WILDCARD).count();
+
+        while (marblesLeft > 0 && availableAbilities.size() > 0) {
+
+            graphicalCLI.printString("You can choose a resource from the following types ( "
+                    + marblesLeft + " wildcards left ):\n");
+
+            graphicalCLI.printNumberedList(availableAbilities, rt -> graphicalCLI.printString(rt.name()));
+
+            do {
+                graphicalCLI.printString("Please choose a valid resource type for the wildcard:");
+                index = graphicalCLI.getNextInt() - 1;
+            } while(0 > index || index > availableAbilities.size());
+
+            plainResources.add(new Resource(availableAbilities.get(index), 1));
+
+            availableAbilities.remove(index);
+            marblesLeft--;
+        }
+        placeResourcesOnShelves(plainResources);
+        waiting = true;
     }
 
     public void turnMenu() {
