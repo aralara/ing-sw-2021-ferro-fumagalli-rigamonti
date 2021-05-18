@@ -384,14 +384,14 @@ public class CLI extends ClientController {
 
     private void selectProductions() {
         try {
-            DevelopmentBoardView developmentBoard = getLocalPlayerBoard().getDevelopmentBoard();
             List<Production> productions = new ArrayList<>();
-            //TODO: gestire leader e basic production
-            productions.add(playerBoardFromNickname(getNickname()).getBasicProduction());
-            developmentBoard.getSpaces()   //TODO: prendiamo tutte le produzioni? Se non sbaglio dovrebbe prendere solo quella dela carta più in alto
-                    .forEach(d -> d.getCards()
-                            .forEach(c -> productions.add(((DevelopmentCard) c).getProduction()))
-                    );
+            setProductionsToActivate(new ArrayList<>());
+
+            productions.add(getLocalPlayerBoard().getBasicProduction());
+            getLocalPlayerBoard().getDevelopmentBoard().getSpaces().stream().filter(d -> !d.isEmpty())
+                    .forEach(d -> productions.add(((DevelopmentCard) d.get(0)).getProduction()));
+            productions.addAll(getLocalPlayerBoard().getActiveAbilityProductions());
+
             graphicalCLI.printlnString("Available productions:");
             graphicalCLI.printNumberedList(productions, graphicalCLI::printProduction);
             boolean endChoice = false;
@@ -404,22 +404,24 @@ public class CLI extends ClientController {
                         index = graphicalCLI.getNextInt() - 1;
                     }
 
-                    getProductionsToActivate().add(productions.get(index));
+                    getProductionsToActivate().add(productions.remove(index));
 
-                    graphicalCLI.printString("Do you want to activate another production? ");
-                    if (!graphicalCLI.isAnswerYes())
+                    if(productions.size() <= 0)
                         endChoice = true;
-                } while (!endChoice);   //TODO: non dobbiamo far scegliere due volte lo stesso numero!
+                    graphicalCLI.printString("Do you want to activate another production? ");
+                    if (!endChoice && !graphicalCLI.isAnswerYes())
+                        endChoice = true;
+                } while (!endChoice);
                 resolveProductionWildcards();
-                getMessageHandler().sendMessage(new CanActivateProductionsMessage(getProductionsToActivate()));
+                if(getProductionsToActivate().size() > 0)
+                    getMessageHandler().sendMessage(new CanActivateProductionsMessage(getProductionsToActivate()));
             }
             else
                 graphicalCLI.printlnString("No productions");
         } catch(NotExistingNicknameException e) {
             e.printStackTrace();
         }
-        //TODO: mettere true solo se si è potuta fare l'azione (no se non si hanno prod da attivare)
-        setMainActionPlayed(true); //TODO: mettere a false nel nack
+        setMainActionPlayed(getProductionsToActivate().size() > 0);
     }
 
     @SuppressWarnings("unchecked")
