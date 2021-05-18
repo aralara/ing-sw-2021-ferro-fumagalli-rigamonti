@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane fx:id="connectionPane" styleClass="connectionPanel" stylesheets="@../css/connectionMenu.css" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllers.ConnectionMenuController">
+   <children>
+      <TextField fx:id="ipAddress_field" focusTraversable="false" alignment="CENTER" layoutX="34.0" layoutY="158.0" prefHeight="42.0" prefWidth="138.0" promptText="Server IP address">
+         <font>
+            <Font name="Pristina" size="18.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="portNumber_field" focusTraversable="false" alignment="CENTER" layoutX="229.0" layoutY="158.0" prefHeight="42.0" prefWidth="138.0" promptText="Server port number">
+         <font>
+            <Font name="Pristina" size="18.0" />
+         </font>
+      </TextField>
+      <Button fx:id="connect_button" focusTraversable="false" layoutX="131.0" layoutY="254.0" mnemonicParsing="false" onAction="#connect" prefHeight="44.0" prefWidth="138.0" text="Connect" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="24.0" />
+         </font>
+      </Button>
+      <Button fx:id="quit_button" focusTraversable="false" layoutX="131.0" layoutY="328.0" mnemonicParsing="false" onAction="#quit" prefHeight="44.0" prefWidth="138.0" text="Quit" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="24.0" />
+         </font>
+      </Button>
+   </children>
+</Pane>
