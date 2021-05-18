@@ -258,11 +258,11 @@ public class CLI extends ClientController {
                 break;
             case 2:
                 if (!isMainActionPlayed()) {
-                    selectDevDecks();
-                    if (isMainActionPlayed()) { //TODO: da spostare in un doAction (togliendo if e controllando ack)
+                    selectDevDecks();/*
+                    if (isMainActionPlayed()) { //TODO: da togliere
                         List<RequestResources> requestResources = chooseStorages(getCardToBuy().getCost());
                         getMessageHandler().sendMessage(new RequestResourcesDevMessage(getCardToBuy(), getSpaceToPlace(), requestResources));
-                    }
+                    }*/
                 }
                 else {
                     graphicalCLI.printlnString("You can't play this action on your turn anymore");
@@ -384,7 +384,7 @@ public class CLI extends ClientController {
 
         setCardToBuy(new DevelopmentCard(developmentCard.getID(),developmentCard.getVP(),developmentCard.getColor(),
                 developmentCard.getLevel(),developmentCard.getProduction(),developmentCard.getCost()));
-        getMessageHandler().sendMessage(new CanBuyDevelopmentCardMessage(getCardToBuy(), getSpaceToPlace()));
+        getMessageHandler().sendActionMessage(new CanBuyDevelopmentCardMessage(getCardToBuy(), getSpaceToPlace()));
         setMainActionPlayed(true); //TODO: mettere a false nel nack se la carta selezionata non può essere acquistata
     }
 
@@ -401,6 +401,10 @@ public class CLI extends ClientController {
 
             graphicalCLI.printlnString("Available productions:");
             graphicalCLI.printNumberedList(productions, graphicalCLI::printProduction);
+
+            if(graphicalCLI.askGoBack())
+                return;
+
             boolean endChoice = false;
             if(productions.size() > 0) {
                 do {

@@ -247,7 +247,9 @@ public abstract class Game {
      * @return Returns true if the card can be added, false otherwise
      */
     public boolean canBuyDevCard(int player, DevelopmentCard card) {
-        return playerBoards.get(player).getDevelopmentBoard().checkDevCardAddable(card);
+        return playerBoards.get(player).getDevelopmentBoard().checkDevCardAddable(card) &&
+                Storage.checkContainedResources(playerBoards.get(player).createResourceStock(),
+                        Storage.mergeResourceList(card.getCost()));
     }
 
     /**
