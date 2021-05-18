@@ -1,0 +1,4 @@
+.connectionPanel {
+    -fx-background-image: url("../imgs/bkg_setup.png");
+    -fx-background-size: stretch;
+}
