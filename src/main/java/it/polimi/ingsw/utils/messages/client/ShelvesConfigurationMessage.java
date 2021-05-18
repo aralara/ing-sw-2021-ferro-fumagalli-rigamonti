@@ -1,5 +1,6 @@
 package it.polimi.ingsw.utils.messages.client;
 
+import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.server.view.VirtualView;
@@ -31,5 +32,15 @@ public class ShelvesConfigurationMessage implements ClientActionMessage {
     public void doAction(VirtualView view, Controller controller) {
         boolean success = controller.addResourcesToWarehouse(view.getNickname(), shelves, extra);
         view.sendMessage(new ShelvesConfigurationAckMessage(success));
+    }
+
+    @Override
+    public void doACKResponseAction(ClientController client) {
+
+    }
+
+    @Override
+    public void doNACKResponseAction(ClientController client) {
+
     }
 }

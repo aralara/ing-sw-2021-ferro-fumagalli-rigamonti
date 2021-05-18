@@ -1,6 +1,5 @@
 package it.polimi.ingsw.client.cli;
 
-import it.polimi.ingsw.client.AckMessageReader;
 import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.client.UpdateMessageReader;
 import it.polimi.ingsw.client.structures.*;
@@ -10,6 +9,7 @@ import it.polimi.ingsw.server.model.boards.Player;
 import it.polimi.ingsw.server.model.cards.card.*;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.utils.messages.client.*;
+import it.polimi.ingsw.utils.messages.server.ServerActionAckMessage;
 import it.polimi.ingsw.utils.messages.server.action.ServerActionMessage;
 
 import java.io.BufferedReader;
@@ -56,9 +56,9 @@ public class CLI extends ClientController {
     public void run() {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));   //TODO: da sistemare
         LinkedBlockingQueue<ServerActionMessage> actionQueue = getMessageHandler().getActionQueue();
+        LinkedBlockingQueue<ServerActionAckMessage> responseQueue = getMessageHandler().getResponseQueue();
 
         new Thread(new UpdateMessageReader(this, getMessageHandler().getUpdateQueue())).start();
-        new Thread(new AckMessageReader(this, getMessageHandler().getAckQueue())).start();
 
         boolean displayMenu = true;
 
@@ -73,6 +73,10 @@ public class CLI extends ClientController {
                         turnMenu();
                         displayMenu = true;
                     }
+                }
+                if (responseQueue.size() > 0) {
+                    responseQueue.poll().activateResponse(this);
+                    displayMenu = true;
                 }
                 if (actionQueue.size() > 0) {
                     actionQueue.poll().doAction(this);
@@ -325,7 +329,7 @@ public class CLI extends ClientController {
         }
     }
 
-    private void selectMarket() {
+    public void selectMarket() {
         graphicalCLI.printMarket(getMarket());
         if(graphicalCLI.askGoBack())
             return;
@@ -359,7 +363,7 @@ public class CLI extends ClientController {
         setMainActionPlayed(true);
     }
 
-    private void selectDevDecks() {
+    public void selectDevDecks() {
         int space;
 
         graphicalCLI.printDevelopmentDeckTop(getDevelopmentDecks());
@@ -382,7 +386,7 @@ public class CLI extends ClientController {
         setMainActionPlayed(true); //TODO: mettere a false nel nack se la carta selezionata non può essere acquistata
     }
 
-    private void selectProductions() {
+    public void selectProductions() {
         try {
             List<Production> productions = new ArrayList<>();
             setProductionsToActivate(new ArrayList<>());

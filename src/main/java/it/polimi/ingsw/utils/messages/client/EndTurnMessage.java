@@ -1,5 +1,6 @@
 package it.polimi.ingsw.utils.messages.client;
 
+import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.model.boards.PlayerBoard;
 import it.polimi.ingsw.server.view.VirtualView;
@@ -41,5 +42,15 @@ public class EndTurnMessage implements ClientActionMessage {
                         getPlayerBoards().stream().map(PlayerBoard::getPlayer).collect(Collectors.toList())));
                 break;
         }
+    }
+
+    @Override
+    public void doACKResponseAction(ClientController client) {
+
+    }
+
+    @Override
+    public void doNACKResponseAction(ClientController client) {
+
     }
 }

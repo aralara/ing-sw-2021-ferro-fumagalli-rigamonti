@@ -1,10 +1,13 @@
 package it.polimi.ingsw.utils.messages;
 
-public class AckMessage implements Message{
+import java.util.UUID;
 
-    private boolean state;  // true: ACK    false: NACK
+public class AckMessage extends IdentifiedMessage {
 
-    public AckMessage(boolean state) {
+    private final boolean state;  // true: ACK    false: NACK
+
+    public AckMessage(UUID uuid, boolean state) {
+        super(uuid);
         this.state = state;
     }
 

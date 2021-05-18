@@ -1,5 +1,6 @@
 package it.polimi.ingsw.utils.messages.client;
 
+import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.model.storage.RequestResources;
@@ -27,5 +28,15 @@ public class RequestResourcesDevMessage extends CanBuyDevelopmentCardMessage {
     public void doAction(VirtualView view, Controller controller) {
         boolean success = controller.buyDevCard(view.getNickname(), getDevelopmentCard(), getSpace(), requestResources);
         view.sendMessage(new RequestResourcesAckMessage(success));
+    }
+
+    @Override
+    public void doACKResponseAction(ClientController client) {
+
+    }
+
+    @Override
+    public void doNACKResponseAction(ClientController client) {
+
     }
 }

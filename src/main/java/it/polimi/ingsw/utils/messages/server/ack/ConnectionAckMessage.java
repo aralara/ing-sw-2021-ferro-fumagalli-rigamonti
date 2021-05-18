@@ -5,11 +5,13 @@ import it.polimi.ingsw.client.cli.CLI;
 import it.polimi.ingsw.utils.messages.AckMessage;
 import it.polimi.ingsw.utils.messages.server.action.ServerActionMessage;
 
+import java.util.UUID;
+
 public class ConnectionAckMessage extends AckMessage implements ServerAckMessage {
 
 
     public ConnectionAckMessage(boolean state) {
-        super(state);
+        super(UUID.randomUUID(), state);
     }
 
     @Override

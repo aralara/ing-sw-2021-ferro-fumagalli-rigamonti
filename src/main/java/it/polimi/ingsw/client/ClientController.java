@@ -11,6 +11,7 @@ import it.polimi.ingsw.server.model.cards.card.LorenzoCard;
 import it.polimi.ingsw.server.model.storage.Production;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
+import it.polimi.ingsw.utils.messages.client.ClientActionMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +41,8 @@ public abstract class ClientController {
         resourcesToPut = new ArrayList<>();
         productionsToActivate = new ArrayList<>();
         mainActionPlayed = false;
-        messageHandler = new MessageHandler();
         playerTurn = false;
+        messageHandler = new MessageHandler();
     }
 
 
@@ -50,6 +51,7 @@ public abstract class ClientController {
     public abstract void connect();
 
     public abstract void run();
+
 
     public abstract void askNickname();
 
@@ -70,6 +72,14 @@ public abstract class ClientController {
     public abstract void notifyLastRound();
 
     public abstract void notifyEndGame(List<Player> players);
+
+
+    public abstract void selectMarket();
+
+    public abstract void selectDevDecks();
+
+    public abstract void selectProductions();
+
 
     public String getNickname() {
         return nickname;
@@ -151,10 +161,6 @@ public abstract class ClientController {
 
     public void setMainActionPlayed(boolean mainActionPlayed) {
         this.mainActionPlayed = mainActionPlayed;
-    }
-
-    public MessageHandler getPacketHandler() {
-        return messageHandler;
     }
 
     public PlayerBoardView playerBoardFromNickname(String nickname) throws NotExistingNicknameException {

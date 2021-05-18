@@ -1,5 +1,6 @@
 package it.polimi.ingsw.utils.messages.client;
 
+import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
@@ -32,5 +33,15 @@ public class SelectMarketMessage implements ClientActionMessage {
         List<Resource> resources = controller.getFromMarket(view.getNickname(), row, column);
         List<ResourceType> availableResources = controller.getPlayerBoard(view.getNickname()).getAbilityMarbles();
         view.sendMessage(new ResourcesMarketMessage(resources, availableResources));
+    }
+
+    @Override
+    public void doACKResponseAction(ClientController client) {
+
+    }
+
+    @Override
+    public void doNACKResponseAction(ClientController client) {
+
     }
 }

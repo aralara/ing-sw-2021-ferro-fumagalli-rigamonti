@@ -1,5 +1,6 @@
 package it.polimi.ingsw.utils.messages.client;
 
+import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.view.VirtualView;
@@ -19,5 +20,15 @@ public class LeaderCardPlayMessage extends LeaderCardMessageClient {
     public void doAction(VirtualView view, Controller controller) {
         boolean success = controller.playLeaderCard(view.getNickname(), getLeaderCards());
         view.sendMessage(new LeaderCardPlayAckMessage(success));
+    }
+
+    @Override
+    public void doACKResponseAction(ClientController client) {
+
+    }
+
+    @Override
+    public void doNACKResponseAction(ClientController client) {
+
     }
 }

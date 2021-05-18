@@ -1,5 +1,6 @@
 package it.polimi.ingsw.utils.messages.client;
 
+import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.server.view.VirtualView;
@@ -38,5 +39,15 @@ public class CanActivateProductionsMessage implements ClientActionMessage {
     public void doAction(VirtualView view, Controller controller) {
         boolean success = controller.canActivateProductions(view.getNickname(), getConsumed());
         view.sendMessage(new CanActivateProductionsAckMessage(success));
+    }
+
+    @Override
+    public void doACKResponseAction(ClientController client) {
+
+    }
+
+    @Override
+    public void doNACKResponseAction(ClientController client) {
+
     }
 }
