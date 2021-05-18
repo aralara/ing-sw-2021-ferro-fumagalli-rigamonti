@@ -24,7 +24,7 @@ public class MasterOfRenaissance {
     }
 
     public static void main(String[] args){
-        System.out.println("Welcome to Master of Renaissance!\nWhat do you want to launch?"); //TODO: copiato sa sonnino pari pari (aggiunto getNextInt)
+        System.out.println("Welcome to Master of Renaissance!\nWhat do you want to launch?"); //TODO: da modificare
         System.out.println("0: SERVER\n1: CLIENT (CLI INTERFACE)\n2: CLIENT (GUI INTERFACE)");
         System.out.print("Type the number of the desired option: ");
         Scanner scanner = new Scanner(System.in);

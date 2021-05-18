@@ -4,19 +4,28 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 
 public class ConnectionMenuController {
+
+    Alert alert;
 
     @FXML
     TextField ipAddress_field;
     @FXML
     TextField portNumber_field;
 
+    public ConnectionMenuController(){
+        alert = new Alert(Alert.AlertType.NONE);
+        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons()
+                .add(new Image(getClass().getResourceAsStream("/imgs/logo.png"))); //TODO: metodo x settare tutte le icon?
+    }
 
     public void connect(ActionEvent actionEvent) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setAlertType(Alert.AlertType.ERROR);
         alert.setTitle("Error");
-        if(ipAddress_field.getText().equals("")){ //TODO:aggiungere controlli sensatis
+        if(ipAddress_field.getText().equals("")){ //TODO:aggiungere controlli sensati
             alert.setHeaderText("Missing field!");
             alert.setContentText("The IP address field is empty, please fill it");
             alert.showAndWait();
@@ -47,7 +56,7 @@ public class ConnectionMenuController {
     }
 
     public void quit(ActionEvent actionEvent) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setAlertType(Alert.AlertType.INFORMATION);
         alert.setTitle("Quit");
         alert.setHeaderText("Thanks to have played Master of Renaissance!");
         alert.showAndWait();
