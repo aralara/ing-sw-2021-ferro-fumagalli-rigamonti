@@ -388,7 +388,7 @@ public class CLI extends ClientController {
             List<Production> productions = new ArrayList<>();
             //TODO: gestire leader e basic production
             productions.add(playerBoardFromNickname(getNickname()).getBasicProduction());
-            developmentBoard.getSpaces()   //TODO: Ste: prendiamo tutte le produzioni? Se non sbaglio dovrebbe prendere solo quella dela carta più in alto
+            developmentBoard.getSpaces()   //TODO: prendiamo tutte le produzioni? Se non sbaglio dovrebbe prendere solo quella dela carta più in alto
                     .forEach(d -> d.getCards()
                             .forEach(c -> productions.add(((DevelopmentCard) c).getProduction()))
                     );
@@ -409,7 +409,7 @@ public class CLI extends ClientController {
                     graphicalCLI.printString("Do you want to activate another production? ");
                     if (!graphicalCLI.isAnswerYes())
                         endChoice = true;
-                } while (!endChoice);
+                } while (!endChoice);   //TODO: non dobbiamo far scegliere due volte lo stesso numero!
                 resolveProductionWildcards();
                 getMessageHandler().sendMessage(new CanActivateProductionsMessage(getProductionsToActivate()));
             }
