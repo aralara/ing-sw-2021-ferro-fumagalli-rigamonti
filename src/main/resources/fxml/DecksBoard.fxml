@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="697.0" prefWidth="537.0" styleClass="decksBoardPanel" stylesheets="@../css/decksBoard.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllers.DecksBoardController">
+   <children>
+      <ImageView fx:id="deckG3_imageView" fitHeight="143.0" fitWidth="95.0" layoutX="59.0" layoutY="83.0" pickOnBounds="true" preserveRatio="true" />
+   </children>
+</Pane>

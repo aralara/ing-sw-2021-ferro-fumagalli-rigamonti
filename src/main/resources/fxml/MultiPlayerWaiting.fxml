@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="400.0" styleClass="multiPlayerWaitingPanel" stylesheets="@../css/multiPlayerWaiting.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllers.MultiPlayerWaitingController">
+   <children>
+      <Label alignment="CENTER" focusTraversable="false" layoutX="33.0" layoutY="153.0" prefHeight="55.0" prefWidth="334.0" text="Waiting for other players to connect" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="22.0" />
+         </font>
+      </Label>
+      <ProgressIndicator fx:id="loadingPlayers_progressIndicator" layoutX="182.0" layoutY="216.0" prefHeight="33.0" prefWidth="37.0" />
+      <Label fx:id="notifyPlayer_label" alignment="CENTER" focusTraversable="false" layoutX="33.0" layoutY="267.0" prefHeight="117.0" prefWidth="334.0" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="22.0" />
+         </font>
+      </Label>
+   </children>
+</Pane>

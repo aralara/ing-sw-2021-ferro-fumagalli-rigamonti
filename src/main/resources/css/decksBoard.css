@@ -1,0 +1,4 @@
+.decksBoardPanel {
+    -fx-background-image: url("../imgs/bkgs/bkg_decks.png");
+    -fx-background-size: stretch;
+}

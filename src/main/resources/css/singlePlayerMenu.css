@@ -1,0 +1,4 @@
+.singlePlayerMenuPanel {
+    -fx-background-image: url("../imgs/bkgs/bkg_setup_dark.png");
+    -fx-background-size: stretch;
+}

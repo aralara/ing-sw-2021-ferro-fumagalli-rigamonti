@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="400.0" styleClass="nicknameMenuPanel" stylesheets="@../css/nicknameMenu.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllers.NicknameMenuController">
+   <children>
+      <Label alignment="CENTER" focusTraversable="false" layoutX="70.0" layoutY="156.0" prefHeight="42.0" prefWidth="261.0" text="Before starting, insert your nickname" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="22.0" />
+         </font>
+      </Label>
+      <TextField fx:id="nickname_field" alignment="CENTER" focusTraversable="false" layoutX="70.0" layoutY="225.0" prefHeight="42.0" prefWidth="261.0" promptText="nickname">
+         <font>
+            <Font name="Pristina" size="18.0" />
+         </font>
+      </TextField>
+      <Button focusTraversable="false" layoutX="131.0" layoutY="328.0" mnemonicParsing="false" onAction="#sendNickname" prefHeight="44.0" prefWidth="138.0" text="Confirm" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="24.0" />
+         </font>
+      </Button>
+   </children>
+</Pane>

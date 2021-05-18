@@ -1,0 +1,4 @@
+.marketBoardPanel {
+    -fx-background-image: url("../imgs/bkgs/bkg_market.png");
+    -fx-background-size: stretch;
+}

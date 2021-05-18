@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="400.0" styleClass="gameModeMenuPanel" stylesheets="@../css/gameModeMenu.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllers.GameModeMenuController">
+   <children>
+      <Label alignment="CENTER" focusTraversable="false" layoutX="40.0" layoutY="155.0" prefHeight="55.0" prefWidth="319.0" text="There is no game waiting for players! " textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="22.0" />
+         </font>
+      </Label>
+      <Label layoutX="93.0" layoutY="217.0" text="You can choose the game mode" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="22.0" />
+         </font>
+      </Label>
+      <Button focusTraversable="false" layoutX="47.0" layoutY="310.0" mnemonicParsing="false" onAction="#startSingleGame" prefHeight="44.0" prefWidth="138.0" text="Single player" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="24.0" />
+         </font>
+      </Button>
+      <Button focusTraversable="false" layoutX="215.0" layoutY="310.0" mnemonicParsing="false" onAction="#startMultiGame" prefHeight="44.0" prefWidth="138.0" text="Multi player" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="24.0" />
+         </font>
+      </Button>
+   </children>
+</Pane>
