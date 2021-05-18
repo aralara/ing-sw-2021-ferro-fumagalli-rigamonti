@@ -256,7 +256,8 @@ public class CLI extends ClientController {
                 if (!isMainActionPlayed()) {
                     selectDevDecks();
                     if (isMainActionPlayed()) { //TODO: da spostare in un doAction (togliendo if e controllando ack)
-                        chooseStorages(getCardToBuy().getCost());
+                        List<RequestResources> requestResources = chooseStorages(getCardToBuy().getCost());
+                        getMessageHandler().sendMessage(new RequestResourcesDevMessage(getCardToBuy(), getSpaceToPlace(), requestResources));
                     }
                 }
                 else {
@@ -264,8 +265,17 @@ public class CLI extends ClientController {
                 }
                 break;
             case 3:
-                if (!isMainActionPlayed())
+                if (!isMainActionPlayed()) {
                     selectProductions();
+                    if (isMainActionPlayed()) { //TODO: da spostare in un doAction (togliendo if e controllando ack)
+                        List<Resource> resources = new ArrayList<>();
+                        for(Production p : getProductionsToActivate()){
+                            resources.addAll(p.getConsumed());
+                        }
+                        List<RequestResources> requestResources = chooseStorages(resources);
+                        getMessageHandler().sendMessage(new RequestResourcesProdMessage(getProductionsToActivate(), requestResources));
+                    }
+                }
                 else {
                     graphicalCLI.printlnString("You can't play this action on your turn anymore");
                 }
@@ -450,12 +460,12 @@ public class CLI extends ClientController {
             Resource resourceToPlace;
             int level;
 
-            for (int i=0; i<shelves.size(); i++) {
-                resources.add(new Resource(shelves.get(i).getResourceType(),shelves.get(i).getResources().getQuantity()));
-                shelves.get(i).getResources().setQuantity(0);
-                if(!shelves.get(i).isLeader()){
-                    shelves.get(i).getResources().setResourceType(ResourceType.WILDCARD);
-                    shelves.get(i).setResourceType(ResourceType.WILDCARD);
+            for (Shelf shelf : shelves) {
+                resources.add(new Resource(shelf.getResourceType(), shelf.getResources().getQuantity()));
+                shelf.getResources().setQuantity(0);
+                if (!shelf.isLeader()) {
+                    shelf.getResources().setResourceType(ResourceType.WILDCARD);
+                    shelf.setResourceType(ResourceType.WILDCARD);
                 }
             }
             temporaryWarehouseShelves = getShelvesWarehouseCopy(shelves);
@@ -910,7 +920,8 @@ public class CLI extends ClientController {
         setProductionsToActivate(resolvedProductions);
     }
 
-    public void chooseStorages(List<Resource> resources) {
+    public List<RequestResources> chooseStorages(List<Resource> resources) {
+        Storage.aggregateResources(resources);
         try {
             PlayerBoardView playerBoard = getLocalPlayerBoard();
             graphicalCLI.printWarehouseConfiguration(playerBoard.getWarehouse(), false);
@@ -952,8 +963,7 @@ public class CLI extends ClientController {
         requestResources.add(new RequestResources(whLeaderResources,StorageType.LEADER));
         requestResources.add(new RequestResources(strongboxResources,StorageType.STRONGBOX));
 
-        //TODO: portarlo nei messaggi per differenziare
-        getMessageHandler().sendMessage(new RequestResourcesDevMessage(getCardToBuy(), getSpaceToPlace(), requestResources));
+        return requestResources;
     }
 
     public GraphicalCLI getGraphicalCLI() {

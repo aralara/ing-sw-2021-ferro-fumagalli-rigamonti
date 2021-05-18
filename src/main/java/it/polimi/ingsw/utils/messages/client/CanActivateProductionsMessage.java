@@ -30,7 +30,7 @@ public class CanActivateProductionsMessage implements ClientActionMessage {
 
     public List<Resource> getProduced() {
         List<Resource> produced = new ArrayList<>();
-        productions.stream().map(Production::getConsumed).forEach(produced::addAll);
+        productions.stream().map(Production::getProduced).forEach(produced::addAll);
         return produced;
     }
 
