@@ -15,6 +15,7 @@ public class PlayerBoardView {
     private WarehouseView warehouse;
     private StrongboxView strongbox;
     private boolean inkwell;
+    private Production basicProduction;  //TODO: come la gestiamo? con gli observer? per ora la metto qui un po a caso
 
     private List<Production> activeAbilityProductions;
     private List<ResourceType> activeAbilityMarbles;
@@ -34,6 +35,7 @@ public class PlayerBoardView {
         this.activeAbilityProductions = new ArrayList<>();
         this.activeAbilityMarbles = new ArrayList<>();
         this.activeAbilityDiscounts = new ArrayList<>();
+        this.basicProduction = new Production();
     }
 
     public PlayerBoardView(String nickname) {
@@ -204,5 +206,13 @@ public class PlayerBoardView {
      */
     public void setActiveAbilityDiscounts(List<ResourceType> activeAbilityDiscounts) {
         this.activeAbilityDiscounts = activeAbilityDiscounts;
+    }
+
+    /**
+     * Gets the basicProduction attribute
+     * @return Returns basicProduction
+     */
+    public Production getBasicProduction() {
+        return basicProduction;
     }
 }

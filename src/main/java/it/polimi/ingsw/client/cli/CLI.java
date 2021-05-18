@@ -386,6 +386,7 @@ public class CLI extends ClientController {
             DevelopmentBoardView developmentBoard = getLocalPlayerBoard().getDevelopmentBoard();
             List<Production> productions = new ArrayList<>();
             //TODO: gestire leader e basic production
+            productions.add(playerBoardFromNickname(getNickname()).getBasicProduction());
             developmentBoard.getSpaces()   //TODO: Ste: prendiamo tutte le produzioni? Se non sbaglio dovrebbe prendere solo quella dela carta più in alto
                     .forEach(d -> d.getCards()
                             .forEach(c -> productions.add(((DevelopmentCard) c).getProduction()))
