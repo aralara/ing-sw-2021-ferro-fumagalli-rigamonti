@@ -25,7 +25,7 @@ public class Strongbox extends PlayerListened implements Storage{
     public boolean addResources(List<Resource> resources) {
         this.resources.addAll(resources);
         Storage.aggregateResources(this.resources);
-        fireUpdate(Listeners.BOARD_STRONGBOX.value(), resources);
+        fireUpdate(Listeners.BOARD_STRONGBOX.value(), this.resources);
         return true;
     }
 
@@ -40,6 +40,7 @@ public class Strongbox extends PlayerListened implements Storage{
                     }
                 }
             }
+            this.resources.removeIf(resource -> resource.getResourceType() == ResourceType.WILDCARD);
             fireUpdate(Listeners.BOARD_STRONGBOX.value(), resources);
             return true;
         }

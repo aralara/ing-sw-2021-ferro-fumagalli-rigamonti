@@ -119,9 +119,9 @@ public class Warehouse extends PlayerListened implements Storage {
         return false;
     }
 
-    @Override
+    @Override //TODO: non dovrebbe servire
     public boolean removeResources(List<Resource> resources) {  //TODO: da testare, scritto perchè lo usiamo anche se volevamo gestire tutto il wh con shelf invece che removeRes
-        Storage.aggregateResources(resources);
+        /*Storage.aggregateResources(resources);
         for (Shelf shelf : shelves) {
             for (Resource resource : resources) {
                 if (shelf.getResources().getResourceType() == resource.getResourceType()) {
@@ -133,7 +133,7 @@ public class Warehouse extends PlayerListened implements Storage {
                 }
             }
         }
-        fireUpdate(Listeners.BOARD_WAREHOUSE.value(), shelves);
+        fireUpdate(Listeners.BOARD_WAREHOUSE.value(), shelves);*/
         return true;
     }
 
@@ -149,8 +149,11 @@ public class Warehouse extends PlayerListened implements Storage {
             for (Shelf shelf : shelves) {
                 if (shelf.isLeader() == isLeader) {
                     for (Resource resource : resources) {
-                        if (shelf.getResourceType() == resource.getResourceType()) {
-                            shelf.removeResources(resources.get(0));
+                        if (shelf.getResources().getResourceType() == resource.getResourceType()) {
+                            shelf.removeResources(resource);
+                            if(shelf.getResources().getQuantity() == 0){
+                                shelf.setResourceType(ResourceType.WILDCARD);
+                            }
                         }
                     }
                 }

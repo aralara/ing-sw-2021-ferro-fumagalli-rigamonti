@@ -246,12 +246,14 @@ public class PlayerBoard extends Listened {
      * Takes the resources from the Storages specified by the RequestResources if all the requests are valid
      * @param requests List of requests containing resource quantity and location for the spent resources
      */
-    private void takeFromStorages(List<RequestResources> requests) {
+    private void takeFromStorages(List<RequestResources> requests) {  //TODO: se prendo da LEADER?
         for(RequestResources request : requests){
             if (request.getStorageType() == StorageType.STRONGBOX)
                 strongbox.removeResources(request.getList());
+            else if (request.getStorageType() == StorageType.LEADER)
+                warehouse.removeResources(request.getList(),true);
             else if (request.getStorageType() == StorageType.WAREHOUSE)
-                warehouse.removeResources(request.getList());
+                warehouse.removeResources(request.getList(),false);
         }
     }
 

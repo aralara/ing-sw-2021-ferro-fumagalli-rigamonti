@@ -49,6 +49,9 @@ public class Resource implements Serializable {
     public boolean sub(Resource r){
         if((this.resourceType == r.getResourceType())&&(this.quantity >= r.getQuantity())) {
             this.quantity -= r.getQuantity();
+            if(this.quantity == 0){
+                this.resourceType = ResourceType.WILDCARD;
+            }
             return true;
         }
         return false;
