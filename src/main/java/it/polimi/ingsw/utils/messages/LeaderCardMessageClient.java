@@ -5,7 +5,7 @@ import it.polimi.ingsw.utils.messages.client.ClientActionMessage;
 
 import java.util.List;
 
-public abstract class LeaderCardMessageClient implements ClientActionMessage {
+public abstract class LeaderCardMessageClient extends ClientActionMessage {
 
     private final List<LeaderCard> leaderCards;
 

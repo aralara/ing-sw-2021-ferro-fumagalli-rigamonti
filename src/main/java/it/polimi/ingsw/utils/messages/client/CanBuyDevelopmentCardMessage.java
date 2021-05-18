@@ -6,7 +6,7 @@ import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.messages.server.ack.CanBuyDevelopmentCardAckMessage;
 
-public class CanBuyDevelopmentCardMessage implements ClientActionMessage {
+public class CanBuyDevelopmentCardMessage extends ClientActionMessage {
 
     private final DevelopmentCard developmentCard;
     private final int space;

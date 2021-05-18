@@ -9,7 +9,7 @@ import it.polimi.ingsw.utils.messages.server.action.ResourcesMarketMessage;
 
 import java.util.List;
 
-public class SelectMarketMessage implements ClientActionMessage {
+public class SelectMarketMessage extends ClientActionMessage {
 
     private final int row, column;
 

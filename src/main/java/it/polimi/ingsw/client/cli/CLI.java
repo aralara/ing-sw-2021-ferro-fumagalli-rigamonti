@@ -270,15 +270,15 @@ public class CLI extends ClientController {
                 break;
             case 3:
                 if (!isMainActionPlayed()) {
-                    selectProductions();
-                    if (isMainActionPlayed()) { //TODO: da spostare in un doAction (togliendo if e controllando ack)
+                    selectProductions();/*
+                    if (isMainActionPlayed()) { //TODO: da togliere
                         List<Resource> resources = new ArrayList<>();
                         for(Production p : getProductionsToActivate()){
                             resources.addAll(p.getConsumed());
                         }
                         List<RequestResources> requestResources = chooseStorages(resources);
                         getMessageHandler().sendMessage(new RequestResourcesProdMessage(getProductionsToActivate(), requestResources));
-                    }
+                    }*/
                 }
                 else {
                     graphicalCLI.printlnString("You can't play this action on your turn anymore");
@@ -329,6 +329,7 @@ public class CLI extends ClientController {
         }
     }
 
+    @Override
     public void selectMarket() {
         graphicalCLI.printMarket(getMarket());
         if(graphicalCLI.askGoBack())
@@ -363,6 +364,7 @@ public class CLI extends ClientController {
         setMainActionPlayed(true);
     }
 
+    @Override
     public void selectDevDecks() {
         int space;
 
@@ -386,10 +388,11 @@ public class CLI extends ClientController {
         setMainActionPlayed(true); //TODO: mettere a false nel nack se la carta selezionata non può essere acquistata
     }
 
+    @Override
     public void selectProductions() {
         try {
             List<Production> productions = new ArrayList<>();
-            setProductionsToActivate(new ArrayList<>());
+            List<Production> productionsToActivate = new ArrayList<>();
 
             productions.add(getLocalPlayerBoard().getBasicProduction());
             getLocalPlayerBoard().getDevelopmentBoard().getSpaces().stream().filter(d -> !d.isEmpty())
@@ -408,24 +411,73 @@ public class CLI extends ClientController {
                         index = graphicalCLI.getNextInt() - 1;
                     }
 
-                    getProductionsToActivate().add(productions.remove(index));
+                    productionsToActivate.add(productions.remove(index));
 
                     if(productions.size() <= 0)
                         endChoice = true;
-                    graphicalCLI.printString("Do you want to activate another production? ");
-                    if (!endChoice && !graphicalCLI.isAnswerYes())
-                        endChoice = true;
+                    else {
+                        graphicalCLI.printString("Do you want to activate another production? ");
+                        if (!graphicalCLI.isAnswerYes())
+                            endChoice = true;
+                    }
                 } while (!endChoice);
-                resolveProductionWildcards();
-                if(getProductionsToActivate().size() > 0)
-                    getMessageHandler().sendMessage(new CanActivateProductionsMessage(getProductionsToActivate()));
+                productionsToActivate = resolveProductionWildcards(productionsToActivate);
+                if(productionsToActivate.size() > 0)
+                    getMessageHandler().sendActionMessage(new CanActivateProductionsMessage(productionsToActivate));
             }
             else
                 graphicalCLI.printlnString("No productions");
         } catch(NotExistingNicknameException e) {
             e.printStackTrace();
         }
-        setMainActionPlayed(getProductionsToActivate().size() > 0);
+        setMainActionPlayed(true);  //TODO: potrebbe ritornare erroneamente true nel caso non venga scelta (non attivata) nessuna produzione
+    }
+
+    @Override
+    public List<RequestResources> chooseStorages(List<Resource> resources) {
+        Storage.aggregateResources(resources);
+        try {
+            PlayerBoardView playerBoard = getLocalPlayerBoard();
+            graphicalCLI.printWarehouseConfiguration(playerBoard.getWarehouse(), false);
+            graphicalCLI.printStrongbox(getLocalPlayerBoard().getStrongbox());
+        }catch(NotExistingNicknameException e){
+            e.printStackTrace();
+        }
+
+        graphicalCLI.printString("You have to take these resources: ");
+        graphicalCLI.printResources(resources);
+
+        int choice;
+        boolean first = true;
+        List<Resource> whResources = new ArrayList<>();
+        List<Resource> whLeaderResources = new ArrayList<>();
+        List<Resource> strongboxResources = new ArrayList<>();
+        List<RequestResources> requestResources = new ArrayList<>();
+        List<Resource> allResources = getResourcesOneByOne(resources);
+        graphicalCLI.printChooseStorage();
+        for(Resource res :allResources){
+            graphicalCLI.printString("Resource: " );
+            graphicalCLI.printResource(res);
+            graphicalCLI.printString(" - Storage number: ");
+            do{
+                if(!first) graphicalCLI.printString("Invalid storage number, try again: ");
+                choice = graphicalCLI.getNextInt();
+                first = choice >= 0 && choice <= 3;
+            }while(choice<0 || choice >3);
+
+            if(choice == 1){
+                whResources.add(res);
+            }else if (choice == 2){
+                whLeaderResources.add(res);
+            }else if(choice == 3){
+                strongboxResources.add(res);
+            }
+        }
+        requestResources.add(new RequestResources(whResources,StorageType.WAREHOUSE));
+        requestResources.add(new RequestResources(whLeaderResources,StorageType.LEADER));
+        requestResources.add(new RequestResources(strongboxResources,StorageType.STRONGBOX));
+
+        return requestResources;
     }
 
     @SuppressWarnings("unchecked")
@@ -887,9 +939,9 @@ public class CLI extends ClientController {
         return developmentCard;
     }
 
-    public void resolveProductionWildcards() {
+    public List<Production> resolveProductionWildcards(List<Production> productions) {
         List<Production> resolvedProductions = new ArrayList<>();
-        for(Production production : getProductionsToActivate()) {
+        for(Production production : productions) {
             List<Resource> consumedResolved =  production.getConsumed().stream()
                     .filter((r -> r.getResourceType() != ResourceType.WILDCARD)).collect(Collectors.toList());
             List<Resource> producedResolved =  production.getProduced().stream()
@@ -926,53 +978,7 @@ public class CLI extends ClientController {
             }
             resolvedProductions.add(new Production(consumedResolved, producedResolved));
         }
-        setProductionsToActivate(resolvedProductions);
-    }
-
-    public List<RequestResources> chooseStorages(List<Resource> resources) {
-        Storage.aggregateResources(resources);
-        try {
-            PlayerBoardView playerBoard = getLocalPlayerBoard();
-            graphicalCLI.printWarehouseConfiguration(playerBoard.getWarehouse(), false);
-            graphicalCLI.printStrongbox(getLocalPlayerBoard().getStrongbox());
-        }catch(NotExistingNicknameException e){
-            e.printStackTrace();
-        }
-
-        graphicalCLI.printString("You have to take these resources: ");
-        graphicalCLI.printResources(resources);
-
-        int choice;
-        boolean first = true;
-        List<Resource> whResources = new ArrayList<>();
-        List<Resource> whLeaderResources = new ArrayList<>();
-        List<Resource> strongboxResources = new ArrayList<>();
-        List<RequestResources> requestResources = new ArrayList<>();
-        List<Resource> allResources = getResourcesOneByOne(resources);
-        graphicalCLI.printChooseStorage();
-        for(Resource res :allResources){
-            graphicalCLI.printString("Resource: " );
-            graphicalCLI.printResource(res);
-            graphicalCLI.printString(" - Storage number: ");
-            do{
-                if(!first) graphicalCLI.printString("Invalid storage number, try again: ");
-                choice = graphicalCLI.getNextInt();
-                first = choice >= 0 && choice <= 3;
-            }while(choice<0 || choice >3);
-
-            if(choice == 1){
-                whResources.add(res);
-            }else if (choice == 2){
-                whLeaderResources.add(res);
-            }else if(choice == 3){
-                strongboxResources.add(res);
-            }
-        }
-        requestResources.add(new RequestResources(whResources,StorageType.WAREHOUSE));
-        requestResources.add(new RequestResources(whLeaderResources,StorageType.LEADER));
-        requestResources.add(new RequestResources(strongboxResources,StorageType.STRONGBOX));
-
-        return requestResources;
+        return resolvedProductions;
     }
 
     public GraphicalCLI getGraphicalCLI() {

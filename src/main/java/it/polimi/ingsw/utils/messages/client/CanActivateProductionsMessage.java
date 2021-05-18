@@ -4,12 +4,12 @@ import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.server.view.VirtualView;
-import it.polimi.ingsw.utils.messages.server.ack.CanActivateProductionsAckMessage;
+import it.polimi.ingsw.utils.messages.server.ServerActionAckMessage;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CanActivateProductionsMessage implements ClientActionMessage {
+public class CanActivateProductionsMessage extends ClientActionMessage {
 
     private final List<Production> productions;
 
@@ -38,16 +38,21 @@ public class CanActivateProductionsMessage implements ClientActionMessage {
     @Override
     public void doAction(VirtualView view, Controller controller) {
         boolean success = controller.canActivateProductions(view.getNickname(), getConsumed());
-        view.sendMessage(new CanActivateProductionsAckMessage(success));
+        //view.sendMessage(new CanActivateProductionsAckMessage(success));
+        view.sendMessage(new ServerActionAckMessage(getUuid(), success));
     }
 
     @Override
     public void doACKResponseAction(ClientController client) {
-
+        List<Resource> resources = new ArrayList<>();
+        productions.forEach(p -> resources.addAll(p.getConsumed()));
+        List<RequestResources> requestResources = client.chooseStorages(resources);
+        client.getMessageHandler().sendMessage(new RequestResourcesProdMessage(productions, requestResources));
     }
 
     @Override
     public void doNACKResponseAction(ClientController client) {
-
+        client.setMainActionPlayed(false);
+        client.selectProductions();
     }
 }

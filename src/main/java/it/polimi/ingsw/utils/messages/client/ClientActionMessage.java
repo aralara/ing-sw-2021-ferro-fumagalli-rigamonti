@@ -3,13 +3,13 @@ package it.polimi.ingsw.utils.messages.client;
 import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.view.VirtualView;
-import it.polimi.ingsw.utils.messages.Message;
+import it.polimi.ingsw.utils.messages.IdentifiedMessage;
 
-public interface ClientActionMessage extends Message {
+public abstract class ClientActionMessage extends IdentifiedMessage {
 
-    void doAction(VirtualView view, Controller controller);
+    public abstract void doAction(VirtualView view, Controller controller);
 
-    void doACKResponseAction(ClientController client);
+    public abstract void doACKResponseAction(ClientController client);
 
-    void doNACKResponseAction(ClientController client);
+    public abstract void doNACKResponseAction(ClientController client);
 }

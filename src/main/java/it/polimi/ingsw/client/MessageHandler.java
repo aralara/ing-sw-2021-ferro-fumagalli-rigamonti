@@ -2,11 +2,9 @@ package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.exceptions.UnknownMessageException;
 import it.polimi.ingsw.utils.messages.AckMessage;
-import it.polimi.ingsw.utils.messages.IdentifiedMessage;
 import it.polimi.ingsw.utils.messages.Message;
 import it.polimi.ingsw.utils.messages.client.ClientActionMessage;
 import it.polimi.ingsw.utils.messages.server.ServerActionAckMessage;
-import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 import it.polimi.ingsw.utils.messages.server.action.ServerActionMessage;
 import it.polimi.ingsw.utils.messages.server.update.ServerUpdateMessage;
 
@@ -118,13 +116,13 @@ public class MessageHandler implements Runnable{
         sendMessage(message);
     }
 
-    private void handleACKMessage(ServerActionAckMessage message) throws UnknownMessageException {
+    private void handleACKMessage(ServerActionAckMessage message) throws UnknownMessageException, InterruptedException {
         ClientActionMessage clientMessage = confirmationList.stream()
-                .filter(m -> message.compareTo((IdentifiedMessage) m))
+                .filter(message::compareTo)
                 .findFirst().orElseThrow(UnknownMessageException::new);
         confirmationList.remove(clientMessage);
         message.setRelativeMessage(clientMessage);
-        responseQueue.add(message);
+        responseQueue.put(message);
     }
 
     public void stop() {

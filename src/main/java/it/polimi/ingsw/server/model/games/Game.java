@@ -276,7 +276,8 @@ public abstract class Game {
      * @return Returns true if the productions can be activated, false otherwise
      */
     public boolean canActivateProductions(int player, List<Resource> consumed) {
-        return Storage.checkContainedResources(playerBoards.get(player).createResourceStock(),consumed);
+        return Storage.checkContainedResources(playerBoards.get(player).createResourceStock(),
+                Storage.mergeResourceList(consumed));
     }
 
     /**

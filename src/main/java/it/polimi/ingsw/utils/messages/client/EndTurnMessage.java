@@ -4,7 +4,6 @@ import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.model.boards.PlayerBoard;
 import it.polimi.ingsw.server.view.VirtualView;
-import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.TurnStatus;
 import it.polimi.ingsw.utils.messages.server.action.EndGameMessage;
 import it.polimi.ingsw.utils.messages.server.action.LastRoundMessage;
@@ -12,7 +11,7 @@ import it.polimi.ingsw.utils.messages.server.action.StartTurnMessage;
 
 import java.util.stream.Collectors;
 
-public class EndTurnMessage implements ClientActionMessage {
+public class EndTurnMessage extends ClientActionMessage {
 
     private final String nickname;
 

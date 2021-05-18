@@ -9,9 +9,9 @@ import it.polimi.ingsw.server.model.boards.Player;
 import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.model.cards.card.LorenzoCard;
 import it.polimi.ingsw.server.model.storage.Production;
+import it.polimi.ingsw.server.model.storage.RequestResources;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
-import it.polimi.ingsw.utils.messages.client.ClientActionMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,6 +79,8 @@ public abstract class ClientController {
     public abstract void selectDevDecks();
 
     public abstract void selectProductions();
+
+    public abstract List<RequestResources> chooseStorages(List<Resource> resources);
 
 
     public String getNickname() {
