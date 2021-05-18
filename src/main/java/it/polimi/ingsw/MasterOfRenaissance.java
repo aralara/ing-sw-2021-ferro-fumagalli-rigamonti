@@ -34,6 +34,7 @@ public class MasterOfRenaissance {
             input = getNextInt(scanner);
         }
         if (input==0) {
+            System.out.println("Server starting...");
             Server.main(null);
         } else {
             String[] arguments = new String[]{Integer.toString(input)};

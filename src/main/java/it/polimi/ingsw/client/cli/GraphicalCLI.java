@@ -263,6 +263,18 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
     }
 
     public void printFaithBoard(PlayerBoardView player, FaithTrackView faithTrack){
+        printFaithTrack(player.getFaithBoard().getFaith(), faithTrack);
+        printlnString("\t > Faith level is " + player.getFaithBoard().getFaith());
+        for(int i=0;i<player.getFaithBoard().getPopeProgression().length;i++){
+            printString("\t > Pope’s Favor tiles number "+(i+1)+" is ");
+            if(player.getFaithBoard().getPopeProgression()[i]){
+                printlnString("active and its value is " + faithTrack.getVaticanReports().get(i).getPopeValue());
+            } else printlnString("not active");
+        }
+        printlnString("");
+    }
+
+    private void printFaithTrack(int faithLevel, FaithTrackView faithTrack){
         String color;
         int maxSize = faithTrack.getVaticanReports().get(faithTrack.getVaticanReports().size()-1).getMax();
         for(int i = 1; i <= maxSize; i++){
@@ -271,17 +283,9 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
             }else{
                 color = CYAN_BRIGHT;
             }
-            printString(color + (((player.getFaithBoard().getFaith() == i) ||
-                    ((i==maxSize) &&(player.getFaithBoard().getFaith() > maxSize))) ?
+            printString(color + (((faithLevel == i) ||
+                    ((i==maxSize) && (faithLevel > maxSize))) ?
                     "[" + RED_BRIGHT + " X " + color +  "]" : "[ • ] ") + color + RESET);
-        }
-        printlnString("");
-        printlnString("\t > Faith level is " + player.getFaithBoard().getFaith());
-        for(int i=0;i<player.getFaithBoard().getPopeProgression().length;i++){
-            printString("\t > Pope’s Favor tiles number "+(i+1)+" is ");
-            if(player.getFaithBoard().getPopeProgression()[i]){
-                printlnString("active and its value is " + faithTrack.getVaticanReports().get(i).getPopeValue());
-            } else printlnString("not active");
         }
         printlnString("");
     }
@@ -445,8 +449,9 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         printLeaderBoard(playerBoardView.getLeaderBoard());
     }
 
-    public void printLorenzo(int faith){
-        printlnString("Lorenzo il Magnifico's faith level is " + faith);
+    public void printLorenzo(int faith, FaithTrackView faithTrack){
+        printFaithTrack(faith, faithTrack);
+        printlnString("\t > Lorenzo il Magnifico's faith level is " + faith);
     }
 
     public void printDevelopmentBoard(DevelopmentBoardView developmentBoard){
@@ -454,15 +459,18 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         List<Deck> spaces = developmentBoard.getSpaces();
         for(int i=0; i<spaces.size();i++){
             printString((i+1) + ") ");
-            if(spaces.get(i).isEmpty()) printlnString("empty");
-            else printDevelopmentCard((DevelopmentCard) spaces.get(i).get(0));
+            if(spaces.get(i).isEmpty()) {
+                printlnString("empty");
+            }
+            else {
+                printDevelopmentCard((DevelopmentCard) spaces.get(i).get(0));
+            }
         }
         printlnString("");
     }
 
     public void printLeaderBoard(LeaderBoardView leaderBoard){
         if(!leaderBoard.getBoard().getCards().isEmpty()){
-            printlnString("");
             printNumberedList((List<LeaderCard>)(List<?>)leaderBoard.getBoard().getCards(),this::printLeaderCard);
         }
         else printString("empty");

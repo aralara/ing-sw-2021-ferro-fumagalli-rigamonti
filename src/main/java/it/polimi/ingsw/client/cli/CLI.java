@@ -143,7 +143,7 @@ public class CLI extends ClientController {
     }
 
     @Override
-    public void askResourceEqualize(List<Resource> resources) {
+    public void askResourceEqualize(List<Resource> resources) { //TODO: prima della scelta delle risorse mostrare i dev decks e il market per lasciare una scelta sensata (dovremo cambiare ordine pacchetti, mandando prima il setup delle cose comuni)
         List<Resource> newResources = new ArrayList<>();
         graphicalCLI.printlnString("");
         for(Resource resource : resources) {
@@ -378,7 +378,7 @@ public class CLI extends ClientController {
         setCardToBuy(new DevelopmentCard(developmentCard.getID(),developmentCard.getVP(),developmentCard.getColor(),
                 developmentCard.getLevel(),developmentCard.getProduction(),developmentCard.getCost()));
         getMessageHandler().sendMessage(new CanBuyDevelopmentCardMessage(getCardToBuy(), getSpaceToPlace()));
-        setMainActionPlayed(true); //TODO: mettere a false nel nack
+        setMainActionPlayed(true); //TODO: mettere a false nel nack se la carta selezionata non può essere acquistata
     }
 
     private void selectProductions() {
@@ -396,14 +396,12 @@ public class CLI extends ClientController {
             boolean endChoice = false;
             if(productions.size() > 0) {
                 do {
-                    int index;
-                    boolean validIndex = true;
-                    do {
-                        graphicalCLI.printString("Choose a production you want to activate by entering its number: ");
+                    graphicalCLI.printString("Choose a production you want to activate by entering its number: ");
+                    int index = graphicalCLI.getNextInt() - 1;
+                    while (index < 0 || index >= productions.size()){
+                        graphicalCLI.printString("Invalid choice, please try again: ");
                         index = graphicalCLI.getNextInt() - 1;
-                        if (index < 0 || index >= productions.size())
-                            validIndex = false;
-                    } while (!validIndex);
+                    }
 
                     getProductionsToActivate().add(productions.get(index));
 
@@ -511,7 +509,7 @@ public class CLI extends ClientController {
                     graphicalCLI.printPlayer(playerBoardView, getFaithTrack());
                 }
             }
-        } else graphicalCLI.printLorenzo(getLorenzoFaith());
+        } else graphicalCLI.printLorenzo(getLorenzoFaith(), getFaithTrack());
     }
 
     private void showBoard(){
