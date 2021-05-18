@@ -313,6 +313,7 @@ public class CLI extends ClientController {
                 break;
             case 10:
                 if (isMainActionPlayed()) {
+                    setProductionsToActivate(new ArrayList<>());
                     setPlayerTurn(false);
                     getMessageHandler().sendMessage(new EndTurnMessage(getNickname()));
                     waiting = false;
@@ -891,6 +892,9 @@ public class CLI extends ClientController {
                     .filter((r -> r.getResourceType() == ResourceType.WILDCARD)).collect(Collectors.toList());
             List<Resource> producedWildcards = production.getProduced().stream()
                     .filter((r -> r.getResourceType() == ResourceType.WILDCARD)).collect(Collectors.toList());
+
+            consumedWildcards = getResourcesOneByOne(consumedWildcards);
+            producedWildcards = getResourcesOneByOne(producedWildcards);
 
             if(consumedWildcards.size() > 0 || producedWildcards.size() > 0) {
                 graphicalCLI.printlnString("Resolve wildcards for the following production:");
