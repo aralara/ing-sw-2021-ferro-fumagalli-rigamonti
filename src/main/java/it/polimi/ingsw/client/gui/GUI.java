@@ -24,6 +24,7 @@ public class GUI extends Application {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ConnectionMenu.fxml"));
             stage.setTitle("Master of Renaissance");
             stage.setScene(new Scene(loader.load()));
+            stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
