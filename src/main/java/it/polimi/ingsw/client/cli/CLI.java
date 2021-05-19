@@ -851,7 +851,7 @@ public class CLI extends ClientController {
      *
      * @param resources resources to be placed
      * @param toDiscard resources to be discarded
-     * @return
+     * @return Returns true if the discarded resource is correct
      */
     private boolean isDiscardedResCorrect(List<Resource> resources, List<Resource> toDiscard){
         Storage.aggregateResources(resources);
@@ -944,6 +944,8 @@ public class CLI extends ClientController {
                     }
                 }
             }
+            Storage.aggregateResources(consumedResolved);
+            Storage.aggregateResources(producedResolved);
             resolvedProductions.add(new Production(consumedResolved, producedResolved));
         }
         return resolvedProductions;
