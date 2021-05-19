@@ -9,7 +9,11 @@ public abstract class ClientActionMessage extends IdentifiedMessage {
 
     public abstract void doAction(VirtualView view, Controller controller);
 
-    public abstract void doACKResponseAction(ClientController client);
+    public void doACKResponseAction(ClientController client) {
+        //TODO: gestionre variabile ACK
+    }
 
-    public abstract void doNACKResponseAction(ClientController client);
+    public void doNACKResponseAction(ClientController client) {
+        //TODO: gestionre variabile ACK
+    }
 }

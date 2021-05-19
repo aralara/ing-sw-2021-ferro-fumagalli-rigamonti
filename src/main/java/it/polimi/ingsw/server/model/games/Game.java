@@ -164,12 +164,14 @@ public abstract class Game {
      * Discards leader cards from the hand of a player
      * @param player Index of the player discarding cards
      * @param leaderCards List of leader cards to discard
+     * @param setup If the setup flag is false, for each leader discarded 1 faith is added to their owner
      */
-    public void discardLeader(int player, List<LeaderCard> leaderCards) {
+    public void discardLeaders(int player, List<LeaderCard> leaderCards, boolean setup) {
         for(LeaderCard leaderCard : leaderCards){
             playerBoards.get(player).getLeaderBoard().discardLeaderHand(leaderCard);
-            if(playerBoards.get(player).getLeaderBoard().getHand().size() < 2){
+            if(!setup) {
                 playerBoards.get(player).getFaithBoard().addFaith(1);
+                checkFaith();
             }
         }
     }
@@ -309,9 +311,7 @@ public abstract class Game {
      * @param card LeaderCard to be discarded
      */
     public void discardExtraLeader(int player, LeaderCard card) {
-        playerBoards.get(player).getLeaderBoard().discardLeaderHand(card);
-        playerBoards.get(player).getFaithBoard().addFaith(1);
-        checkFaith();
+
     }
 
     /**

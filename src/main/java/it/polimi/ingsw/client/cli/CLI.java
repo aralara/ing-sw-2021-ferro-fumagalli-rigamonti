@@ -62,7 +62,7 @@ public class CLI extends ClientController {
 
         boolean displayMenu = true;
 
-        while(true) {   //TODO: temp
+        while(true) {
             try {
                 if(waiting) {
                     if (displayMenu) {
@@ -141,7 +141,7 @@ public class CLI extends ClientController {
                 leaderHand.remove(selection);
             }
 
-            getMessageHandler().sendMessage(new LeaderCardDiscardMessage(selected));
+            getMessageHandler().sendActionMessage(new LeaderCardDiscardMessage(selected, true));
         }catch (NotExistingNicknameException e){
             e.printStackTrace();
         }
@@ -273,13 +273,13 @@ public class CLI extends ClientController {
             case 4:
                 leaderCards = chooseLeaderCard();
                 if(leaderCards.size() > 0) {
-                    getMessageHandler().sendMessage(new LeaderCardPlayMessage(leaderCards));
+                    getMessageHandler().sendActionMessage(new LeaderCardPlayMessage(leaderCards));
                 }
                 break;
             case 5:
                 leaderCards = chooseLeaderCard();
                 if(leaderCards.size() > 0) {
-                    getMessageHandler().sendMessage(new LeaderCardDiscardMessage(leaderCards));
+                    getMessageHandler().sendActionMessage(new LeaderCardDiscardMessage(leaderCards));
                 }
                 break;
             case 6:
