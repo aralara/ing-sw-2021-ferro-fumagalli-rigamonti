@@ -1,28 +1,25 @@
 package it.polimi.ingsw.client.gui.controllers;
 
+import it.polimi.ingsw.client.gui.GUI;
+import it.polimi.ingsw.client.gui.SceneNames;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.stage.Stage;
 
-public class ConnectionMenuController {
+public class ConnectionMenuController implements ControllerInterface {
+    private GUI gui;
 
-    Alert alert;
+    @FXML TextField ipAddress_field;
+    @FXML TextField portNumber_field;
 
-    @FXML
-    TextField ipAddress_field;
-    @FXML
-    TextField portNumber_field;
-
-    public ConnectionMenuController(){
-        alert = new Alert(Alert.AlertType.NONE);
-        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons()
-                .add(new Image(getClass().getResourceAsStream("/imgs/logo.png"))); //TODO: metodo x settare tutte le icon?
+    @Override
+    public void setGui(GUI gui) {
+        this.gui = gui;
     }
 
     public void connect(ActionEvent actionEvent) {
+        Alert alert = gui.getAlert();
         alert.setAlertType(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         if(ipAddress_field.getText().equals("")){ //TODO:aggiungere controlli sensati
@@ -46,16 +43,12 @@ public class ConnectionMenuController {
             alert.showAndWait();
         }
         else{
-            //TODO:cambia schermata
-            alert.setAlertType(Alert.AlertType.INFORMATION);
-            alert.setTitle("OK");
-            alert.setHeaderText("Master of Renaissance starts");
-            alert.showAndWait();
-            System.exit(0);
+            gui.setActiveScene(SceneNames.NICKNAME_MENU);
         }
     }
 
     public void quit(ActionEvent actionEvent) {
+        Alert alert = gui.getAlert();
         alert.setAlertType(Alert.AlertType.INFORMATION);
         alert.setTitle("Quit");
         alert.setHeaderText("Thanks to have played Master of Renaissance!");
