@@ -6,12 +6,8 @@ import it.polimi.ingsw.client.structures.MarketView;
 import it.polimi.ingsw.client.structures.PlayerBoardView;
 import it.polimi.ingsw.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.model.boards.Player;
-import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.model.cards.card.LorenzoCard;
-import it.polimi.ingsw.server.model.storage.Production;
-import it.polimi.ingsw.server.model.storage.RequestResources;
-import it.polimi.ingsw.server.model.storage.Resource;
-import it.polimi.ingsw.server.model.storage.ResourceType;
+import it.polimi.ingsw.server.model.storage.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +20,6 @@ public abstract class ClientController {
     private final MarketView market;
     private final List<DevelopmentDeckView> developmentDecks;
     private final FaithTrackView faithTrack;
-    private List<Resource> resourcesToPut;      //TODO: valutare se serve memorizzare
-    private DevelopmentCard cardToBuy;
-    private int spaceToPlace;
-    private List<Production> productionsToActivate;
     private boolean mainActionPlayed, playerTurn;
     private final MessageHandler messageHandler;
 
@@ -38,8 +30,6 @@ public abstract class ClientController {
         market = new MarketView();
         developmentDecks = new ArrayList<>();
         faithTrack = new FaithTrackView();
-        resourcesToPut = new ArrayList<>();
-        productionsToActivate = new ArrayList<>();
         mainActionPlayed = false;
         playerTurn = false;
         messageHandler = new MessageHandler();
@@ -79,6 +69,8 @@ public abstract class ClientController {
     public abstract void selectDevDecks();
 
     public abstract void selectProductions();
+
+    public abstract void placeResourcesOnShelves(List<Resource> resources);
 
     public abstract List<RequestResources> chooseStorages(List<Resource> resources);
 
@@ -123,38 +115,6 @@ public abstract class ClientController {
 
     public FaithTrackView getFaithTrack() {
         return faithTrack;
-    }
-
-    public List<Resource> getResourcesToPut() {
-        return resourcesToPut;
-    }
-
-    public void setResourcesToPut(List<Resource> resourcesToPut) {
-        this.resourcesToPut = resourcesToPut;
-    }
-
-    public DevelopmentCard getCardToBuy() {
-        return cardToBuy;
-    }
-
-    public void setCardToBuy(DevelopmentCard cardToBuy) {
-        this.cardToBuy = cardToBuy;
-    }
-
-    public int getSpaceToPlace() {
-        return spaceToPlace;
-    }
-
-    public void setSpaceToPlace(int spaceToPlace) {
-        this.spaceToPlace = spaceToPlace;
-    }
-
-    public List<Production> getProductionsToActivate() {
-        return productionsToActivate;
-    }
-
-    public void setProductionsToActivate(List<Production> productionsToActivate) {
-        this.productionsToActivate = productionsToActivate;
     }
 
     public boolean isMainActionPlayed() {
