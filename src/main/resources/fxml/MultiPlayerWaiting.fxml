@@ -4,15 +4,25 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="400.0" styleClass="multiPlayerWaitingPanel" stylesheets="@../css/multiPlayerWaiting.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllers.MultiPlayerWaitingController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="400.0" styleClass="multiPlayerWaitingPanel" stylesheets="@../css/multiPlayerWaiting.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllers.SetupController">
    <children>
-      <Label alignment="CENTER" focusTraversable="false" layoutX="33.0" layoutY="153.0" prefHeight="55.0" prefWidth="334.0" text="Waiting for other players to connect" textFill="#1d60cc">
+      <Label alignment="CENTER" layoutX="33.0" layoutY="153.0" prefHeight="55.0" prefWidth="334.0" text="Waiting for other players to connect" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="22.0" />
          </font>
       </Label>
       <ProgressIndicator layoutX="182.0" layoutY="216.0" prefHeight="33.0" prefWidth="37.0" />
-      <Label fx:id="notifyPlayer_label" alignment="CENTER" focusTraversable="false" layoutX="33.0" layoutY="267.0" prefHeight="117.0" prefWidth="334.0" textFill="#1d60cc">
+      <Label fx:id="notifyPlayer1_label" alignment="CENTER" layoutX="5.0" layoutY="254.0" prefHeight="55.0" prefWidth="392.0" textFill="#1d60cc" visible="false">
+         <font>
+            <Font name="Pristina" size="22.0" />
+         </font>
+      </Label>
+      <Label fx:id="notifyPlayer2_label" alignment="CENTER" layoutX="5.0" layoutY="309.0" prefHeight="55.0" prefWidth="392.0" textFill="#1d60cc" visible="false">
+         <font>
+            <Font name="Pristina" size="22.0" />
+         </font>
+      </Label>
+      <Label fx:id="notifyPlayer3_label" alignment="CENTER" layoutX="5.0" layoutY="364.0" prefHeight="55.0" prefWidth="392.0" textFill="#1d60cc" visible="false">
          <font>
             <Font name="Pristina" size="22.0" />
          </font>

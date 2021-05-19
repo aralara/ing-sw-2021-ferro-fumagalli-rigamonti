@@ -1,86 +1,116 @@
 package it.polimi.ingsw.client.gui;
 
-import it.polimi.ingsw.client.gui.controllers.ControllerInterface;
-import it.polimi.ingsw.server.controller.Controller;
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.image.Image;
-import javafx.stage.Stage;
+import it.polimi.ingsw.client.ClientController;
+import it.polimi.ingsw.server.model.boards.Player;
+import it.polimi.ingsw.server.model.cards.card.LorenzoCard;
+import it.polimi.ingsw.server.model.storage.RequestResources;
+import it.polimi.ingsw.server.model.storage.Resource;
+import it.polimi.ingsw.server.model.storage.ResourceType;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-public class GUI extends Application {
+public class GUI extends ClientController {
 
-    private List<SceneInformation> scenesInformation;
+    private GraphicalGUI graphicalGUI;
 
-    private Scene activeScene;
-    private Stage stage;
-    private Alert alert;
-
-    public GUI() {
+    public GUI(){
         super();
-    }
-
-
-    public static void main(String[] args) {
-        launch(args);
+        //graphicalGUI = new GraphicalGUI();
     }
 
     @Override
-    public void start(Stage stage) {
-        setup(stage);
-        setActiveScene(SceneNames.CONNECTION_MENU);
+    public void setup(){
+        /*connect();
+        new Thread(getMessageHandler()).start();
+        askNickname();*/
     }
 
-    //TODO: mettere suppress
-    private void setup(Stage stage){
-        Image image = new Image(getClass().getResourceAsStream("/imgs/logo.png"));
-        alert = new Alert(Alert.AlertType.NONE);
-        ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(image);
-
-        stage.setTitle("Master of Renaissance");
-        stage.setResizable(false);
-        stage.getIcons().add(image);
-        this.stage = stage;
-
-        try{
-            FXMLLoader loader;
-            Parent root;
-            scenesInformation = new ArrayList<>();
-            for(int i=0; i<SceneNames.values().length; i++) {
-                loader = new FXMLLoader(getClass().getResource(SceneNames.values()[i].value()));
-                root = loader.load(); //TODO: farci qualcosa
-                ControllerInterface controller = loader.getController();
-                controller.setGui(this);
-                scenesInformation.add(new SceneInformation(new Scene(root),
-                        SceneNames.values()[i], controller));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    @Override
+    public void connect(){
+        /*//graphicalGUI.setMessageHandler(getMessageHandler());
+        graphicalGUI.main(null);
+        graphicalGUI.setMessageHandler(getMessageHandler());*/
     }
 
-    public void setActiveScene(SceneNames sceneName){
-        activeScene = scenesInformation.get(getSceneIndex(sceneName)).getScene();
-        stage.setScene(activeScene);
-        stage.show();
+    @Override
+    public void run(){
+
     }
 
-    public Alert getAlert(){
-        return alert;
+    @Override
+    public void askNickname(){
+
     }
 
-    private int getSceneIndex(SceneNames sceneName){ //TODO: brutto? fare classe List a parte e mettere lì il metodo?
-        for(int i=0; i<scenesInformation.size(); i++){
-            if(scenesInformation.get(i).getFileName().equals(sceneName))
-                return i;
-        }
-        return -1; //TODO: potrebbe dare eccezione?
+    @Override
+    public void askNewLobby(int lobbySize, int waitingPlayers){
+
     }
+
+    @Override
+    public void notifyNewPlayer(String nickname){
+
+    }
+
+    @Override
+    public void askLeaderDiscard(){
+
+    }
+
+    @Override
+    public void askResourceEqualize(List<Resource> resources){
+
+    }
+
+    @Override
+    public void notifyStartTurn(String nickname){
+
+    }
+
+    @Override
+    public void addMarketResources(List<Resource> resources, List<ResourceType> availableAbilities){
+
+    }
+
+    @Override
+    public void notifyLorenzoCard(LorenzoCard lorenzoCard){
+
+    }
+
+    @Override
+    public void notifyLastRound(){
+
+    }
+
+    @Override
+    public void notifyEndGame(List<Player> players){
+
+    }
+
+    @Override
+    public void selectMarket(){
+
+    }
+
+    @Override
+    public void selectDevDecks(){
+
+    }
+
+    @Override
+    public void selectProductions(){
+
+    }
+
+    @Override
+    public void placeResourcesOnShelves(List<Resource> resources){
+
+    }
+
+    @Override
+    public List<RequestResources> chooseStorages(List<Resource> resources){
+        return null;
+    }
+
+
 }
-

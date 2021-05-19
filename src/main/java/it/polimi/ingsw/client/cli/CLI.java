@@ -30,7 +30,7 @@ public class CLI extends ClientController {
         graphicalCLI = new GraphicalCLI();
     }
 
-
+    @Override
     public void setup() {
         connect();
         new Thread(getMessageHandler()).start();

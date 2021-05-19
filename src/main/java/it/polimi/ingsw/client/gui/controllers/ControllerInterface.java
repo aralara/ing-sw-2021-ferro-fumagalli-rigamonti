@@ -1,7 +1,7 @@
 package it.polimi.ingsw.client.gui.controllers;
 
-import it.polimi.ingsw.client.gui.GUI;
+import it.polimi.ingsw.client.gui.GraphicalGUI;
 
 public interface ControllerInterface {
-    void setGui(GUI gui);
+    void setGui(GraphicalGUI graphicalGUI);
 }
