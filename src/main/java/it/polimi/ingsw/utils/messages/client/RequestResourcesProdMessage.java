@@ -38,8 +38,6 @@ public class RequestResourcesProdMessage extends CanActivateProductionsMessage {
     @Override
     public void doNACKResponseAction(ClientController client) {
         List<Resource> resources = new ArrayList<>();
-        getProductions().forEach(p ->Storage.aggregateResources(p.getConsumed()));
-        getProductions().forEach(p ->Storage.aggregateResources(p.getProduced()));
         getProductions().forEach(p -> resources.addAll(p.getConsumed()));
         List<RequestResources> requestResources = client.chooseStorages(resources);
         client.getMessageHandler().sendActionMessage(
