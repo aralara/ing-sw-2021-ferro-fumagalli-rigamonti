@@ -46,6 +46,6 @@ public class LorenzoDev implements LorenzoCard{
 
     @Override
     public String cardToString(){
-        return "";
+        return "Lorenzo removes " + quantity + " " +color +" development cards from the development decks \n";
     }
 }

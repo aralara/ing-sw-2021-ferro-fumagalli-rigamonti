@@ -48,6 +48,13 @@ public class LorenzoFaith implements LorenzoCard{
 
     @Override
     public String cardToString(){
-        return "";
+        StringBuilder toPrint;
+        toPrint = new StringBuilder("Lorenzo gains " + amount + " faith");
+        if(isRefresh())
+            toPrint.append(" and shuffles his deck");
+
+        toPrint.append("\n");
+
+        return toPrint.toString();
     }
 }
