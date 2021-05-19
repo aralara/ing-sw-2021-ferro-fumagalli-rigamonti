@@ -29,4 +29,9 @@ public class RequirementRes implements Requirement {
     public boolean checkRequirement(PlayerBoard board){
         return Storage.checkContainedResources(board.createResourceStock(),new ArrayList<>(List.of(resource)));
     }
+
+    @Override
+    public String requirementToString() {
+        return resource.getQuantity() + " " + resource.getResourceType();
+    }
 }

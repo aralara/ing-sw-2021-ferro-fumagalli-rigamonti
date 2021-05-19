@@ -49,7 +49,7 @@ public class SingleGame extends Game{
 
     @Override
     public int loadNextTurn() {
-        int temp = TurnStatus.LOAD_TURN_NORMAL.value();
+        int status = TurnStatus.LOAD_TURN_NORMAL.value();
         isLorenzoTurn = !isLorenzoTurn;
         getPlayerBoards().get(0).setTurnPlayed(false);
         checkFaith();
@@ -57,13 +57,13 @@ public class SingleGame extends Game{
             calculateTotalVP();
             calculateFinalPositions();
             finished = true;
-            temp = TurnStatus.LOAD_TURN_END_GAME.value();
+            status = TurnStatus.LOAD_TURN_END_GAME.value();
         }
         else if(isLorenzoTurn) {
             lorenzoBoard.pickLorenzoCard().activateLorenzo(lorenzoBoard);
-            temp = loadNextTurn();
+            status = loadNextTurn();
         }
-        return temp;
+        return status;
     }
 
     @Override

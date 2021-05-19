@@ -171,47 +171,7 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
     }
 
     public void printLeaderCard(LeaderCard leaderCard){
-        String toPrint;
-        boolean first = true;
-        if(leaderCard.getID() != -1) {
-            printlnString(" LEADER CARD");
-            printString(" • Requirements: ");
-            if (leaderCard.getRequirements().get(0) instanceof RequirementDev) {   //TODO: GLI INSTANCEOF NON VANNO BENE
-                for (Requirement req : leaderCard.getRequirements()) {
-                    toPrint = ((!first) ? ", " : "") + ((RequirementDev) req).getNumber() + " " +
-                            ((RequirementDev) req).getColor() + " level " +
-                            ((RequirementDev) req).getLevel() + " development cards";
-                    printString(toPrint);
-                    first = false;
-                }
-            } else if (leaderCard.getRequirements().get(0) instanceof RequirementRes) {
-                for (Requirement req : leaderCard.getRequirements()) {
-                    printResource(((RequirementRes) req).getResource());
-                }
-            }
-            printlnString("");
-            printlnString(" • Victory points: " + leaderCard.getVP());
-
-            printString(" • Special ability: You ");
-
-            if (leaderCard.getAbility() instanceof AbilityDiscount) {
-                printlnString("can get 1 " + ((AbilityDiscount) leaderCard.getAbility()).getResourceType()
-                        + " off the cost of development cards");
-            } else if (leaderCard.getAbility() instanceof AbilityMarble) {
-                printlnString("can get a " + ((AbilityMarble) leaderCard.getAbility()).getResourceType() +
-                        " from the white marbles in the market");
-            } else if (leaderCard.getAbility() instanceof AbilityProduction) {
-                printlnString("gain access to the following production:  ");
-                printProduction(((AbilityProduction) leaderCard.getAbility()).getProduction());
-            } else if (leaderCard.getAbility() instanceof AbilityWarehouse) {
-                printlnString("gain an extra shelf to contain 2 units of " + ((AbilityWarehouse) leaderCard.getAbility())
-                        .getResourceType());
-            }
-        }
-        else {
-            printlnString(" LEADER CARD");
-            printlnString(" • The leader card is covered, you can't see it!");
-        }
+        printString(leaderCard.cardToString());
     }
 
     public void printLorenzoCard(LorenzoCard lorenzoCard){
@@ -405,20 +365,7 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
     }
 
     public void printDevelopmentCard(DevelopmentCard developmentCard){
-        boolean first = true;
-        printlnString(" DEVELOPMENT CARD");
-        printlnString(" • This is a " + developmentCard.getColor() + " card level " + developmentCard.getLevel());
-
-        printlnString(" • Victory points: " + developmentCard.getVP());
-        printString(" • Cost: ");
-        for(int i = 0; i<developmentCard.getCost().size();i++){
-            printString((!first) ? ", " : "");
-            printResource(developmentCard.getCost().get(i));
-            first = false;
-        }
-        printlnString("");
-        printlnString(" • Production that can be activated: ");
-        printProduction(developmentCard.getProduction());
+        printString(developmentCard.cardToString());
     }
 
     public void printChooseStorage(){

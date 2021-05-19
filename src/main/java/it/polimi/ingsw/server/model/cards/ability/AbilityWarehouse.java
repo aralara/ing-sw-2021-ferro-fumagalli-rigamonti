@@ -26,4 +26,9 @@ public class AbilityWarehouse implements SpecialAbility {
     public void activateAbility(PlayerBoard board){
         board.getWarehouse().addShelf(new Shelf(resourceType, new Resource(resourceType,0), 2, true));
     }
+
+    @Override
+    public String abilityToString(){
+        return  " • Special ability: You can can gain an extra shelf to contain 2 units of " + resourceType + "\n";
+    }
 }

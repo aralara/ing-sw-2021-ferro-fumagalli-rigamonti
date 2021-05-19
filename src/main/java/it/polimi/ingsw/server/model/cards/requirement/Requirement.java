@@ -12,4 +12,10 @@ public interface Requirement extends Serializable {
      * @return Returns true if the requirement is met, false otherwise
      */
     boolean checkRequirement(PlayerBoard board);
+
+    /**
+     * Transform a requirement into a string to be printed
+     * @return A string that contains requirement information
+     */
+    String requirementToString();
 }

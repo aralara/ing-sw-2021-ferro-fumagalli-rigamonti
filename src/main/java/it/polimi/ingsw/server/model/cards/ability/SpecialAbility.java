@@ -11,4 +11,10 @@ public interface SpecialAbility extends Serializable {
      * @param board PlayerBoard where the ability needs to be activated
      */
     void activateAbility(PlayerBoard board);
+
+    /**
+     * Transform an ability into a string to be printed
+     * @return A string that contains ability information
+     */
+    String abilityToString();
 }

@@ -43,4 +43,9 @@ public class LorenzoDev implements LorenzoCard{
     public int getQuantity() {
         return quantity;
     }
+
+    @Override
+    public String cardToString(){
+        return "";
+    }
 }

@@ -46,4 +46,9 @@ public class RequirementDev implements Requirement {
     public boolean checkRequirement(PlayerBoard board) {
         return board.getDevelopmentBoard().checkRequirement(color, level, number);
     }
+
+    @Override
+    public String requirementToString() {
+        return number + " " + color + " level " + level + " development cards";
+    }
 }

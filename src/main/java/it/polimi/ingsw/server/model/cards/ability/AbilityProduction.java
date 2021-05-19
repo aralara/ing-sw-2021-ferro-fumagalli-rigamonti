@@ -27,4 +27,11 @@ public class AbilityProduction implements SpecialAbility {
         board.getAbilityProductions().add(this.production);
         board.fireUpdate(Listeners.BOARD_ABILITY_PROD.value(), board.getAbilityProductions());
     }
+
+    @Override
+    public String abilityToString(){
+
+        return " • Special ability: You can can gain access to the following production: \n "
+                + production.productionToPrint();
+    }
 }

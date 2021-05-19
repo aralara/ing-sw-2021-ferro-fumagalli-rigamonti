@@ -28,4 +28,9 @@ public class AbilityDiscount implements SpecialAbility {
         board.getAbilityDiscounts().add(this.resourceType);
         board.fireUpdate(Listeners.BOARD_ABILITY_DISC.value(), board.getAbilityDiscounts());
     }
+
+    @Override
+    public String abilityToString(){
+        return  " • Special ability: You can get 1 " + resourceType + " off the cost of development cards\n";
+    }
 }

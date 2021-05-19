@@ -45,4 +45,9 @@ public class LorenzoFaith implements LorenzoCard{
     public int getAmount() {
         return amount;
     }
+
+    @Override
+    public String cardToString(){
+        return "";
+    }
 }

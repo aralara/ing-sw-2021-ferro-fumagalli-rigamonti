@@ -27,4 +27,9 @@ public class AbilityMarble implements SpecialAbility {
         board.getAbilityMarbles().add(this.resourceType);
         board.fireUpdate(Listeners.BOARD_ABILITY_MARB.value(), board.getAbilityMarbles());
     }
+
+    @Override
+    public String abilityToString(){
+        return  " • Special ability: You can can get a " + resourceType + " from the white marbles in the market \n";
+    }
 }
