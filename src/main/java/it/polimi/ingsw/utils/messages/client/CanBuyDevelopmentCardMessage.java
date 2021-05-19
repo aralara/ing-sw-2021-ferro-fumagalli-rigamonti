@@ -39,7 +39,7 @@ public class CanBuyDevelopmentCardMessage extends ClientActionMessage {
     @Override
     public void doACKResponseAction(ClientController client) {
         List<RequestResources> requestResources = client.chooseStorages(developmentCard.getCost());
-        client.getMessageHandler().sendMessage(
+        client.getMessageHandler().sendActionMessage(
                 new RequestResourcesDevMessage(developmentCard, space, requestResources));
     }
 

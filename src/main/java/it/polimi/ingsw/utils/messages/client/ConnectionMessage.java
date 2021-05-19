@@ -4,7 +4,7 @@ import it.polimi.ingsw.utils.messages.Message;
 
 public class ConnectionMessage implements Message {
 
-    private String nickname;
+    private final String nickname;
 
 
     public ConnectionMessage(String nickname) {

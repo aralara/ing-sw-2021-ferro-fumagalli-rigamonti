@@ -38,7 +38,6 @@ public class CanActivateProductionsMessage extends ClientActionMessage {
     @Override
     public void doAction(VirtualView view, Controller controller) {
         boolean success = controller.canActivateProductions(view.getNickname(), getConsumed());
-        //view.sendMessage(new CanActivateProductionsAckMessage(success));
         view.sendMessage(new ServerActionAckMessage(getUuid(), success));
     }
 
@@ -47,7 +46,7 @@ public class CanActivateProductionsMessage extends ClientActionMessage {
         List<Resource> resources = new ArrayList<>();
         productions.forEach(p -> resources.addAll(p.getConsumed()));
         List<RequestResources> requestResources = client.chooseStorages(resources);
-        client.getMessageHandler().sendMessage(new RequestResourcesProdMessage(productions, requestResources));
+        client.getMessageHandler().sendActionMessage(new RequestResourcesProdMessage(productions, requestResources));
     }
 
     @Override
