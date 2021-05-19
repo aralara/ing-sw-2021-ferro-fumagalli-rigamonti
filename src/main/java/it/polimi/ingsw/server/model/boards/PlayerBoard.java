@@ -234,9 +234,9 @@ public class PlayerBoard extends Listened {
             if (request.getStorageType() == StorageType.STRONGBOX)
                 containerList = strongbox.getList();
             else if (request.getStorageType() == StorageType.WAREHOUSE)
-                containerList = warehouse.getList();
+                containerList = warehouse.getList(false);
             else
-                containerList = null;
+                containerList = warehouse.getList(true);
             canTake = Storage.checkContainedResources(containerList, request.getList());
         }
         return canTake;

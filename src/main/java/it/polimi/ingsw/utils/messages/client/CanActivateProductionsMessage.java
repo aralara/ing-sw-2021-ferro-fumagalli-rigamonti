@@ -44,6 +44,8 @@ public class CanActivateProductionsMessage extends ClientActionMessage {
     @Override
     public void doACKResponseAction(ClientController client) {
         List<Resource> resources = new ArrayList<>();
+        productions.forEach(p ->Storage.aggregateResources(p.getConsumed()));
+        productions.forEach(p ->Storage.aggregateResources(p.getProduced()));
         productions.forEach(p -> resources.addAll(p.getConsumed()));
         List<RequestResources> requestResources = client.chooseStorages(resources);
         client.getMessageHandler().sendActionMessage(new RequestResourcesProdMessage(productions, requestResources));
