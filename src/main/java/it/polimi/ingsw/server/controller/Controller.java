@@ -8,7 +8,6 @@ import it.polimi.ingsw.server.model.games.SingleGame;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.server.view.VirtualView;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -43,8 +42,8 @@ public class Controller {
         game.initGame(views);
     }
 
-    public void discardLeaders(String player, List<LeaderCard> leaderCards) {
-        game.discardLeader(game.getPlayerIndexOf(player), leaderCards);
+    public void discardLeaders(String player, List<LeaderCard> leaderCards, boolean setup) {
+        game.discardLeaders(game.getPlayerIndexOf(player), leaderCards, setup);
     }
 
     public boolean addResourcesToWarehouse(String player, List<Shelf> shelves, List<Resource> extra) {
@@ -57,10 +56,6 @@ public class Controller {
 
     public List<Resource> getFromMarket(String player, int row, int column) {
         return game.getFromMarket(game.getPlayerIndexOf(player), row, column);
-    }
-
-    public boolean removeDevCard(CardColors color, int level) {
-        return game.removeDevCard(color, level);
     }
 
     public boolean canBuyDevCard(String player, DevelopmentCard card) {
@@ -77,10 +72,6 @@ public class Controller {
 
     public boolean activateProductions(String player, List<Resource> produced, List<RequestResources> requests) {
         return game.activateProductions(game.getPlayerIndexOf(player), produced, requests);
-    }
-
-    public void discardExtraLeader(String player, LeaderCard card) {
-        game.discardExtraLeader(game.getPlayerIndexOf(player), card);
     }
 
     public Map<String, List<Resource>> getResourcesToEqualize() {
