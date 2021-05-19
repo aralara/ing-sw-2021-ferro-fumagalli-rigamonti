@@ -4,7 +4,7 @@ import it.polimi.ingsw.exceptions.UnknownMessageException;
 import it.polimi.ingsw.utils.messages.AckMessage;
 import it.polimi.ingsw.utils.messages.Message;
 import it.polimi.ingsw.utils.messages.client.ClientActionMessage;
-import it.polimi.ingsw.utils.messages.server.ServerActionAckMessage;
+import it.polimi.ingsw.utils.messages.server.ack.ServerActionAckMessage;
 import it.polimi.ingsw.utils.messages.server.action.ServerActionMessage;
 import it.polimi.ingsw.utils.messages.server.update.ServerUpdateMessage;
 

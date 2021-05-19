@@ -53,20 +53,24 @@ public class MultiGame extends Game{
     @Override
     public int loadNextTurn(){
         int actionToDo = TurnStatus.LOAD_TURN_NORMAL.value();
-        getPlayerBoards().get(currentPlayer).setTurnPlayed(false);
-        currentPlayer = ++currentPlayer % getPlayerNumber();
-        checkFaith();
-        if(checkEndGame()){
-            if(lastTurn)
-                actionToDo = TurnStatus.LOAD_TURN_LAST_ROUND.value();
-            lastTurn = true;
+        if(getPlayerBoards().get(currentPlayer).isTurnPlayed()) {
+            getPlayerBoards().get(currentPlayer).setTurnPlayed(false);
+            currentPlayer = ++currentPlayer % getPlayerNumber();
+            checkFaith();
+            if (checkEndGame()) {
+                if (lastTurn)
+                    actionToDo = TurnStatus.LOAD_TURN_LAST_ROUND.value();
+                lastTurn = true;
+            }
+            if (lastTurn && getPlayerBoards().get(currentPlayer).isFirstPlayer()) {
+                calculateTotalVP();
+                calculateFinalPositions();
+                finished = true;
+                actionToDo = TurnStatus.LOAD_TURN_END_GAME.value();
+            }
         }
-        if(lastTurn && getPlayerBoards().get(currentPlayer).isFirstPlayer()){
-            calculateTotalVP();
-            calculateFinalPositions();
-            finished = true;
-            actionToDo = TurnStatus.LOAD_TURN_END_GAME.value();
-        }
+        else
+            actionToDo = TurnStatus.INVALID.value();
         return actionToDo;
     }
 
