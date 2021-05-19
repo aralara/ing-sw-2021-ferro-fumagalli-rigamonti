@@ -5,7 +5,7 @@ import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.messages.LeaderCardMessageClient;
-import it.polimi.ingsw.utils.messages.server.ServerActionAckMessage;
+import it.polimi.ingsw.utils.messages.server.ack.ServerActionAckMessage;
 
 import java.util.List;
 

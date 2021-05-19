@@ -1,8 +1,7 @@
-package it.polimi.ingsw.utils.messages.server;
+package it.polimi.ingsw.utils.messages.server.ack;
 
 import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.utils.messages.AckMessage;
-import it.polimi.ingsw.utils.messages.IdentifiedMessage;
 import it.polimi.ingsw.utils.messages.client.ClientActionMessage;
 
 import java.util.UUID;

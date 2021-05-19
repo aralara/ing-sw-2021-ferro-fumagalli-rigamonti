@@ -1,9 +1,12 @@
 package it.polimi.ingsw.utils;
 
+import it.polimi.ingsw.server.model.FileNames;
+
 import java.util.Arrays;
 
 public enum TurnStatus {
 
+    INVALID(0),
     LOAD_TURN_NORMAL(1),
     LOAD_TURN_LAST_ROUND(2),
     LOAD_TURN_END_GAME(3);

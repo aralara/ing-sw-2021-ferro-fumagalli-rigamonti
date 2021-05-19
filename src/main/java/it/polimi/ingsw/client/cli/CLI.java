@@ -9,7 +9,7 @@ import it.polimi.ingsw.server.model.boards.Player;
 import it.polimi.ingsw.server.model.cards.card.*;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.utils.messages.client.*;
-import it.polimi.ingsw.utils.messages.server.ServerActionAckMessage;
+import it.polimi.ingsw.utils.messages.server.ack.ServerActionAckMessage;
 import it.polimi.ingsw.utils.messages.server.action.ServerActionMessage;
 
 import java.io.BufferedReader;
@@ -303,7 +303,7 @@ public class CLI extends ClientController {
             case 10:
                 if (isMainActionPlayed()) {
                     setPlayerTurn(false);
-                    getMessageHandler().sendMessage(new EndTurnMessage(getNickname()));
+                    getMessageHandler().sendActionMessage(new EndTurnMessage(getNickname()));
                     waiting = false;
                 }
                 else graphicalCLI.printlnString("You haven't played any main action yet!");
