@@ -372,6 +372,9 @@ public class CLI extends ClientController {
     @Override
     public void selectProductions() {
         try {
+            graphicalCLI.printWarehouseConfiguration(getLocalPlayerBoard().getWarehouse(),false);
+            graphicalCLI.printStrongbox(getLocalPlayerBoard().getStrongbox());
+
             List<Production> productions = new ArrayList<>();
             List<Production> productionsToActivate = new ArrayList<>();
 
@@ -926,7 +929,9 @@ public class CLI extends ClientController {
                 graphicalCLI.printlnString("Resolve wildcards for the following production:");
                 graphicalCLI.printProduction(production);
                 if(consumedWildcards.size() > 0) {
-                    graphicalCLI.printlnString("Choose for consumed wildcards:");
+                    graphicalCLI.printString(GraphicalCLI.YELLOW_BRIGHT);
+                    graphicalCLI.printlnString("\nChoose for consumed wildcards:\n");
+                    graphicalCLI.printString(GraphicalCLI.RESET);
                     for (Resource wildcard : consumedWildcards) {
                         ResourceType chosenType = graphicalCLI.objectOptionSelector(
                                 ResourceType.getRealValues(),
@@ -935,7 +940,9 @@ public class CLI extends ClientController {
                     }
                 }
                 if(producedWildcards.size() > 0) {
-                    graphicalCLI.printlnString("Choose for produced wildcards:");
+                    graphicalCLI.printString(GraphicalCLI.YELLOW_BRIGHT);
+                    graphicalCLI.printlnString("\nChoose for produced wildcards:\n");
+                    graphicalCLI.printString(GraphicalCLI.RESET);
                     for (Resource wildcard : producedWildcards) {
                         ResourceType chosenType = graphicalCLI.objectOptionSelector(
                                 ResourceType.getRealValues(),

@@ -428,6 +428,11 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         printlnString("•3) Strongbox");
     }
 
+    /**
+     *
+     * @param warehouseView
+     * @param showLevel true if you want to show a numbered list
+     */
     public void printWarehouseConfiguration(WarehouseView warehouseView, boolean showLevel){
         printWarehouse(warehouseView, showLevel);
         printExtraShelfLeader(warehouseView, showLevel);
