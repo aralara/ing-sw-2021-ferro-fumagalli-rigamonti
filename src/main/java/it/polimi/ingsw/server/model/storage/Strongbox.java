@@ -41,7 +41,7 @@ public class Strongbox extends PlayerListened implements Storage{
                 }
             }
             this.resources.removeIf(resource -> resource.getResourceType() == ResourceType.WILDCARD);
-            fireUpdate(Listeners.BOARD_STRONGBOX.value(), resources);
+            fireUpdate(Listeners.BOARD_STRONGBOX.value(), this.resources);
             return true;
         }
         return false;

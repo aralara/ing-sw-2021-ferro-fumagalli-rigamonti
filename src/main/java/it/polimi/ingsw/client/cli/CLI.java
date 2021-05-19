@@ -517,12 +517,11 @@ public class CLI extends ClientController {
 
     @Override
     public List<RequestResources> chooseStorages(List<Resource> resources) {
-        Storage.aggregateResources(resources);
         try {
             PlayerBoardView playerBoard = getLocalPlayerBoard();
             graphicalCLI.printWarehouseConfiguration(playerBoard.getWarehouse(), false);
             graphicalCLI.printStrongbox(getLocalPlayerBoard().getStrongbox());
-        }catch(NotExistingNicknameException e){
+        } catch(NotExistingNicknameException e) {
             e.printStackTrace();
         }
 
@@ -537,21 +536,21 @@ public class CLI extends ClientController {
         List<RequestResources> requestResources = new ArrayList<>();
         List<Resource> allResources = getResourcesOneByOne(resources);
         graphicalCLI.printChooseStorage();
-        for(Resource res :allResources){
+        for(Resource res : allResources) {
             graphicalCLI.printString("Resource: " );
             graphicalCLI.printResource(res);
             graphicalCLI.printString(" - Storage number: ");
-            do{
+            do {
                 if(!first) graphicalCLI.printString("Invalid storage number, try again: ");
                 choice = graphicalCLI.getNextInt();
                 first = choice >= 0 && choice <= 3;
-            }while(choice<0 || choice >3);
+            } while(choice<0 || choice >3);
 
-            if(choice == 1){
+            if(choice == 1) {
                 whResources.add(res);
-            }else if (choice == 2){
+            }else if (choice == 2) {
                 whLeaderResources.add(res);
-            }else if(choice == 3){
+            }else if(choice == 3) {
                 strongboxResources.add(res);
             }
         }
