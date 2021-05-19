@@ -88,15 +88,10 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
 
     public int askWhichShelf(Resource resource, int numberOfShelves, boolean rearranged, boolean canDiscard) {
         int level;
-        if(rearranged) {
-            printString("Do you want to restore warehouse to its original configuration? ");
-            if (isAnswerYes())
-                return -1;
-        }
         printString("Where do you want to place " + resource.getResourceType()
-                + (canDiscard ? "? (0 to discard it) " : "? "));
+                + (canDiscard ? "? (0 to discard it, " : "? (") + "-1 to restore warehouse): ");
         level = getNextInt();
-        while ((canDiscard && level<0) || (!canDiscard && level<=0) || level>numberOfShelves){
+        while ((canDiscard && level < -1) || (!canDiscard && level == 0) || level > numberOfShelves){
             printString("Choose a valid shelf: ");
             level = getNextInt();
         }
