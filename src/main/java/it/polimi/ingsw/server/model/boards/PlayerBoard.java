@@ -238,6 +238,8 @@ public class PlayerBoard extends Listened {
             else
                 containerList = warehouse.getList(true);
             canTake = Storage.checkContainedResources(containerList, request.getList());
+            if(!canTake)
+                break;
         }
         return canTake;
     }
