@@ -301,16 +301,13 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
                 printString(" ");
                 for(int j = 0; j < level; j++){
                     color = chooseColor(specialShelf.get(i).getResourceType());
-                    /*if (specialShelf.get(i).getResources().getQuantity()>j) { //TODO: cambiato
-                        printString("[ " + color + "■" + color + RESET + " ]");
-                    } else {
-                        printString("[ x ]");
-                    }*/
                     printString("[ " + color + (specialShelf.get(i).getResources().getQuantity()>j ? "■" : "x")
                             + color + RESET + " ]");
                 }
             }
         }
+        printlnString("");
+        printlnString("");
     }
 
     public void printStrongbox(StrongboxView strongboxView){
@@ -381,7 +378,7 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         printStrongbox(playerBoardView.getStrongbox());
         printDevelopmentBoard(playerBoardView.getDevelopmentBoard());
         printLeaderHand(playerBoardView.getLeaderBoard());
-        printString("Leaders placed on the board: ");
+        printString("Leaders placed on the board: \n");
         printLeaderBoard(playerBoardView.getLeaderBoard());
     }
 

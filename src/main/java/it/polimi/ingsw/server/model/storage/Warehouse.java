@@ -151,7 +151,7 @@ public class Warehouse extends PlayerListened implements Storage {
                     for (Resource resource : resources) {
                         if (shelf.getResources().getResourceType() == resource.getResourceType()) {
                             shelf.removeResources(resource);
-                            if(shelf.getResources().getQuantity() == 0){
+                            if(shelf.getResources().getQuantity() == 0 && !shelf.isLeader()){
                                 shelf.setResourceType(ResourceType.WILDCARD);
                             }
                         }
