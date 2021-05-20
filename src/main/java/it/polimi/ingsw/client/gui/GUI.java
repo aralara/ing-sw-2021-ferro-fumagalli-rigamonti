@@ -14,101 +14,99 @@ public class GUI extends ClientController {
 
     //private GraphicalGUI graphicalGUI;
 
-    public GUI(){
+    public GUI() {
         super();
     }
 
     @Override
-    public void setup(){
-        connect();
-        //new Thread(getMessageHandler()).start(); //TODO: da spostare a dopo il connect
-        //askNickname();
+    public void setup() {
+        GraphicalGUI.setup(this);
+    }
+
+    public boolean connect(String address, Integer port) {
+        boolean success = getMessageHandler().connect(address, port);
+        if(success)
+            new Thread(getMessageHandler()).start();
+        return success;
     }
 
     @Override
-    public void connect(){
-        GraphicalGUI.gui = this;
+    public void run() {
         GraphicalGUI.main(null);
+    }
+
+    @Override
+    public void askNickname() {
 
     }
 
     @Override
-    public void run(){
+    public void askNewLobby(int lobbySize, int waitingPlayers) {
 
     }
 
     @Override
-    public void askNickname(){
+    public void notifyNewPlayer(String nickname) {
 
     }
 
     @Override
-    public void askNewLobby(int lobbySize, int waitingPlayers){
+    public void askLeaderDiscard() {
 
     }
 
     @Override
-    public void notifyNewPlayer(String nickname){
+    public void askResourceEqualize(List<Resource> resources) {
 
     }
 
     @Override
-    public void askLeaderDiscard(){
+    public void notifyStartTurn(String nickname) {
 
     }
 
     @Override
-    public void askResourceEqualize(List<Resource> resources){
+    public void addMarketResources(List<Resource> resources, List<ResourceType> availableAbilities) {
 
     }
 
     @Override
-    public void notifyStartTurn(String nickname){
+    public void notifyLorenzoCard(LorenzoCard lorenzoCard) {
 
     }
 
     @Override
-    public void addMarketResources(List<Resource> resources, List<ResourceType> availableAbilities){
+    public void notifyLastRound() {
 
     }
 
     @Override
-    public void notifyLorenzoCard(LorenzoCard lorenzoCard){
+    public void notifyEndGame(List<Player> players) {
 
     }
 
     @Override
-    public void notifyLastRound(){
+    public void selectMarket() {
 
     }
 
     @Override
-    public void notifyEndGame(List<Player> players){
+    public void selectDevDecks() {
 
     }
 
     @Override
-    public void selectMarket(){
+    public void selectProductions() {
 
     }
 
     @Override
-    public void selectDevDecks(){
+    public void placeResourcesOnShelves(List<Resource> resources) {
 
     }
 
     @Override
-    public void selectProductions(){
-
-    }
-
-    @Override
-    public void placeResourcesOnShelves(List<Resource> resources){
-
-    }
-
-    @Override
-    public List<RequestResources> chooseStorages(List<Resource> resources){
+    public List<RequestResources> chooseStorages(List<Resource> resources) {
         return null;
     }
 

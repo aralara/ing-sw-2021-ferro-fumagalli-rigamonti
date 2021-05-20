@@ -37,7 +37,6 @@ public class CLI extends ClientController {
         askNickname();
     }
 
-    @Override
     public void connect() { //TODO: inserimento porta
         boolean success;
         do {

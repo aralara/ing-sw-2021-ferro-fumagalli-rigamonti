@@ -32,34 +32,31 @@ public class SetupController implements ControllerInterface {
         Alert alert = graphicalGUI.getAlert();
         alert.setAlertType(Alert.AlertType.ERROR);
         alert.setTitle("Error");
-        if(ipAddress_field.getText().equals("")){
+        if(ipAddress_field.getText().equals("")) {
             alert.setHeaderText("Missing field!");
             alert.setContentText("The IP address field is empty, please fill it");
             alert.showAndWait();
         }
-        else if(portNumber_field.getText().equals("")){
+        else if(portNumber_field.getText().equals("")) {
             alert.setHeaderText("Missing field!");
             alert.setContentText("The port number field is empty, please fill it");
             alert.showAndWait();
         }
-        else if(!ipAddress_field.getText().matches("[0-9.]*")){
+        else if(!ipAddress_field.getText().matches("[0-9.]*")) {
             alert.setHeaderText("Invalid field!");
             alert.setContentText("The IP address field is invalid, please complete it correctly");
             alert.showAndWait();
         }
-        else if(!portNumber_field.getText().matches("[0-9]*") || portNumber_field.getLength()>4){
+        else if(!portNumber_field.getText().matches("[0-9]*") || portNumber_field.getLength()>4) {
             alert.setHeaderText("Invalid field!");
             alert.setContentText("The port number field is invalid, please complete it correctly");
             alert.showAndWait();
         }
-        else{
+        else {
 
-            if(graphicalGUI.getGUI().getMessageHandler().connect(ipAddress_field.getText(),
-                    Integer.parseInt(portNumber_field.getText()))){
-
+            if(GraphicalGUI.getGUI().connect(ipAddress_field.getText(), Integer.parseInt(portNumber_field.getText())))
                 graphicalGUI.setActiveScene(SceneNames.NICKNAME_MENU);
-            }
-            else{
+            else {
                 alert.setHeaderText("Connection problem");
                 alert.setContentText("Failed connecting to the server, please try again");
                 alert.showAndWait();

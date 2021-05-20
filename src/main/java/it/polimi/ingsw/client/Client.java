@@ -20,7 +20,7 @@ public class Client {
             System.out.println("GUI version starting...");
             GUI gui = new GUI();
             gui.setup();
-            gui.run(); //TODO: è giusto?
+            gui.run();
         }
         else {
             System.out.println("Error in the choice of the game modality occurred!");
