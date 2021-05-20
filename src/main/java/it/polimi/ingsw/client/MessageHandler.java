@@ -52,6 +52,10 @@ public class MessageHandler implements Runnable{
         return responseQueue;
     }
 
+    public List<ClientActionMessage> getConfirmationList() {
+        return confirmationList;
+    }
+
     @Override
     public void run() {
         while(active)

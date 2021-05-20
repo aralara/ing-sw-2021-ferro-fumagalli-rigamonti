@@ -15,7 +15,7 @@ import java.util.List;
 public abstract class ClientController {
     private String nickname;
     private int numberOfPlayers;
-    private int lorenzoFaith;                   //TODO: gestione lorenzo WIP
+    private int lorenzoFaith;
     private final List<PlayerBoardView> playerBoards;
     private final MarketView market;
     private final List<DevelopmentDeckView> developmentDecks;

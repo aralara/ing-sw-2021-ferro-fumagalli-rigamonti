@@ -20,13 +20,13 @@ import java.util.stream.Collectors;
 
 public class CLI extends ClientController {
 
-    boolean waiting;
+    boolean idle;
     private final GraphicalCLI graphicalCLI;
 
 
     public CLI() {
         super();
-        waiting = false;
+        idle = false;
         graphicalCLI = new GraphicalCLI();
     }
 
@@ -57,6 +57,7 @@ public class CLI extends ClientController {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));   //TODO: da sistemare
         LinkedBlockingQueue<ServerActionMessage> actionQueue = getMessageHandler().getActionQueue();
         LinkedBlockingQueue<ServerActionAckMessage> responseQueue = getMessageHandler().getResponseQueue();
+        List<ClientActionMessage> confirmationList = getMessageHandler().getConfirmationList();
 
         new Thread(new UpdateMessageReader(this, getMessageHandler().getUpdateQueue())).start();
 
@@ -64,25 +65,28 @@ public class CLI extends ClientController {
 
         while(true) {
             try {
-                if(waiting) {
-                    if (displayMenu) {
-                        graphicalCLI.printlnString("Press ENTER to display action menu");
-                        displayMenu = false;
-                    }
-                    if (br.ready()) {
-                        turnMenu();
-                        displayMenu = true;
-                    }
-                }
-                if (responseQueue.size() > 0) {
-                    responseQueue.poll().activateResponse(this);
+                if (confirmationList.size() != 0) {
+                    responseQueue.take().activateResponse(this);
                     graphicalCLI.printlnString("New ACK received (temporary message)"); //TODO: temp
                     displayMenu = true;
                 }
-                if (actionQueue.size() > 0) {
-                    actionQueue.poll().doAction(this);
-                    displayMenu = true;
+                else {
+                    if (actionQueue.size() > 0) {
+                        actionQueue.poll().doAction(this);
+                        displayMenu = true;
+                    }
+                    else if(idle) {
+                        if (displayMenu) {
+                            graphicalCLI.printlnString("Press ENTER to display action menu");
+                            displayMenu = false;
+                        }
+                        if (br.ready()) {
+                            turnMenu();
+                            displayMenu = true;
+                        }
+                    }
                 }
+
             } catch(Exception e) {
                 e.printStackTrace();
             }
@@ -122,7 +126,6 @@ public class CLI extends ClientController {
             graphicalCLI.printlnString("You have been added to the game!");
         else
             graphicalCLI.printlnString("The player " + nickname + " has joined the game!");
-
     }
 
     @Override
@@ -133,6 +136,9 @@ public class CLI extends ClientController {
             List<LeaderCard> leaderHand = new ArrayList<>(
                     (List<LeaderCard>)(List<? extends Card>)playerBoard.getLeaderBoard().getHand().getCards());
             List<LeaderCard> selected = new ArrayList<>();
+
+            graphicalCLI.printMarket(getMarket());
+            graphicalCLI.printDevelopmentDeckTop(getDevelopmentDecks());
 
             graphicalCLI.printlnString("\nYou have to discard 2 leader cards from your hand:");
             for(int i = 0; i < 2; i++) {
@@ -182,7 +188,7 @@ public class CLI extends ClientController {
             setPlayerTurn(false);
         }
         turnMenu();
-        waiting = true;
+        idle = true;
     }
 
     @Override
@@ -211,7 +217,7 @@ public class CLI extends ClientController {
             marblesLeft--;
         }
         placeResourcesOnShelves(plainResources);
-        waiting = true;
+        idle = true;
     }
 
     @Override
@@ -219,12 +225,12 @@ public class CLI extends ClientController {
         graphicalCLI.printlnString("\nNOW IT'S LORENZO'S TURN\n");
         graphicalCLI.printlnString("Lorenzo pulls a card from his deck");
         graphicalCLI.printLorenzoCard(lorenzoCard);
-        waiting = false;
     }
 
     @Override
     public void notifyLastRound() {
         graphicalCLI.printlnString("Last round before the game ends!");
+        idle = true;
     }
 
     @Override
@@ -235,6 +241,7 @@ public class CLI extends ClientController {
                 .sorted(Comparator.comparingInt(Player::getFinalPosition)).collect(Collectors.toList()))
             graphicalCLI.printlnString(player.getFinalPosition()+1 + ": " + player.getNickname() + " with " +
                     + player.getTotalVP() + " VP");
+        //TODO: distruzione
     }
 
     public void turnMenu() {
@@ -304,7 +311,6 @@ public class CLI extends ClientController {
                 if (isMainActionPlayed()) {
                     setPlayerTurn(false);
                     getMessageHandler().sendActionMessage(new EndTurnMessage(getNickname()));
-                    waiting = false;
                 }
                 else graphicalCLI.printlnString("You haven't played any main action yet!");
                 break;
@@ -318,6 +324,8 @@ public class CLI extends ClientController {
         graphicalCLI.printMarket(getMarket());
         if(graphicalCLI.askGoBack())
             return;
+        else
+            idle = false;
         graphicalCLI.printlnString("Where do you want to place the marble?\n" +
                 "Choose R (row) or C (column) followed by a number: ");
         boolean valid;
@@ -355,6 +363,8 @@ public class CLI extends ClientController {
         graphicalCLI.printDevelopmentDeckTop(getDevelopmentDecks());
         if(graphicalCLI.askGoBack())
             return;
+        else
+            idle = false;
 
         DevelopmentCard developmentCard = chooseCardFromDecks();
 
@@ -388,6 +398,8 @@ public class CLI extends ClientController {
 
             if(graphicalCLI.askGoBack())
                 return;
+            else
+                idle = false;
 
             boolean endChoice = false;
             if(productions.size() > 0) {
@@ -513,6 +525,7 @@ public class CLI extends ClientController {
         }catch (NotExistingNicknameException e){
             e.printStackTrace();
         }
+        idle = true;
     }
 
     @Override
@@ -557,6 +570,8 @@ public class CLI extends ClientController {
         requestResources.add(new RequestResources(whResources,StorageType.WAREHOUSE));
         requestResources.add(new RequestResources(whLeaderResources,StorageType.LEADER));
         requestResources.add(new RequestResources(strongboxResources,StorageType.STRONGBOX));
+
+        idle = true;
 
         return requestResources;
     }
