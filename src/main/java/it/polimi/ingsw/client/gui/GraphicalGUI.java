@@ -16,9 +16,7 @@ import java.util.List;
 
 public class GraphicalGUI  extends Application {
 
-    private MessageHandler messageHandler;
-    private String ipAddress;
-    private int portNumber;
+    public static GUI gui;
 
     private List<SceneInformation> scenesInformation;
 
@@ -30,11 +28,10 @@ public class GraphicalGUI  extends Application {
         super();
     }
 
-
     public static void main(String[] args) {
-        //TODO: devo settare il messageHandler!!
         launch(args);
     }
+
 
     @Override
     public void start(Stage stage) {
@@ -94,24 +91,7 @@ public class GraphicalGUI  extends Application {
         return scenesInformation.get(getSceneIndex(sceneName)).getController();
     }
 
-    //TODO: da qua in poi è da rivedere
-    public MessageHandler getMessageHandler(){
-        return messageHandler;
-    }
-
-    public void setMessageHandler(MessageHandler messageHandler) {
-        this.messageHandler = messageHandler;
-    }
-
-    public void setIpAddress(String ipAddress){
-        this.ipAddress = ipAddress;
-    }
-
-    public void setPortNumber(int portNumber){
-        this.portNumber = portNumber;
-    }
-
-    public boolean connectV2(){
-        return messageHandler.connect(ipAddress,portNumber);
+    public static GUI getGUI() {
+        return gui;
     }
 }

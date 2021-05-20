@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.gui;
 
 import it.polimi.ingsw.client.ClientController;
+import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.server.model.boards.Player;
 import it.polimi.ingsw.server.model.cards.card.LorenzoCard;
 import it.polimi.ingsw.server.model.storage.RequestResources;
@@ -11,25 +12,24 @@ import java.util.List;
 
 public class GUI extends ClientController {
 
-    private GraphicalGUI graphicalGUI;
+    //private GraphicalGUI graphicalGUI;
 
     public GUI(){
         super();
-        //graphicalGUI = new GraphicalGUI();
     }
 
     @Override
     public void setup(){
-        /*connect();
-        new Thread(getMessageHandler()).start();
-        askNickname();*/
+        connect();
+        //new Thread(getMessageHandler()).start(); //TODO: da spostare a dopo il connect
+        //askNickname();
     }
 
     @Override
     public void connect(){
-        /*//graphicalGUI.setMessageHandler(getMessageHandler());
-        graphicalGUI.main(null);
-        graphicalGUI.setMessageHandler(getMessageHandler());*/
+        GraphicalGUI.gui = this;
+        GraphicalGUI.main(null);
+
     }
 
     @Override

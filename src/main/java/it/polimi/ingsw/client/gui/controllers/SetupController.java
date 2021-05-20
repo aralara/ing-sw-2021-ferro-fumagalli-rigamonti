@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.gui.controllers;
 
 import it.polimi.ingsw.client.gui.GraphicalGUI;
 import it.polimi.ingsw.client.gui.SceneNames;
+import it.polimi.ingsw.server.Server;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -52,15 +53,17 @@ public class SetupController implements ControllerInterface {
             alert.showAndWait();
         }
         else{
-            /*graphicalGUI.setIpAddress(ipAddress_field.getText());
-            graphicalGUI.setPortNumber(Integer.parseInt(portNumber_field.getText()));
-            if (graphicalGUI.connectV2())*/
+
+            if(graphicalGUI.getGUI().getMessageHandler().connect(ipAddress_field.getText(),
+                    Integer.parseInt(portNumber_field.getText()))){
+
                 graphicalGUI.setActiveScene(SceneNames.NICKNAME_MENU);
-            /*else{
+            }
+            else{
                 alert.setHeaderText("Connection problem");
                 alert.setContentText("Failed connecting to the server, please try again");
                 alert.showAndWait();
-            }*/
+            }
         }
     }
 
