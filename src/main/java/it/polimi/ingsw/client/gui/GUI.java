@@ -80,7 +80,8 @@ public class GUI extends ClientController {
 
     @Override
     public void notifyNewPlayer(String nickname) {
-        Platform.runLater(() -> ((SetupController)guiApplication.getController(SceneNames.MULTI_PLAYER_WAITING)).notifyNewPlayer(nickname));
+        Platform.runLater(() -> ((SetupController)guiApplication.
+                getController(SceneNames.MULTI_PLAYER_WAITING)).notifyNewPlayer(nickname));
     }
 
     @Override

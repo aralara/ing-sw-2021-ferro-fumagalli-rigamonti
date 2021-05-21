@@ -4,26 +4,58 @@ import it.polimi.ingsw.client.gui.SceneNames;
 import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
 import it.polimi.ingsw.utils.messages.client.NewLobbyMessage;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
+import javafx.fxml.FXML;;
+import javafx.scene.control.*;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class SetupController extends GenericController {
 
-    private List<Label> notifyPlayer_labels;
+    @FXML private TextField ipAddress_field, portNumber_field, nickname_field;
+    @FXML private ProgressIndicator connecting_progressIndicator, waitingNickname_progressIndicator;
+    @FXML private Button connect_button, quit_button, confirm_button;
+    @FXML private Label nickname_label, notifyPlayers_label;
 
-    @FXML TextField ipAddress_field;
-    @FXML TextField portNumber_field;
-    @FXML TextField nickname_field;
-    @FXML Label notifyPlayer1_label;
-    @FXML Label notifyPlayer2_label;
-    @FXML Label notifyPlayer3_label;
+    public TextField getIpAddress_field() {
+        return ipAddress_field;
+    }
 
-    public void connect(ActionEvent actionEvent) {  //TODO: decidere se lasciare ip e porta vuota (mooooooooooooooooooooooooooolto probabilmente sì)
+    public TextField getPortNumber_field() {
+        return portNumber_field;
+    }
+
+    public TextField getNickname_field() {
+        return nickname_field;
+    }
+
+    public ProgressIndicator getConnecting_progressIndicator() {
+        return connecting_progressIndicator;
+    }
+
+    public ProgressIndicator getWaitingNickname_progressIndicator() {
+        return waitingNickname_progressIndicator;
+    }
+
+    public Button getConnect_button() {
+        return connect_button;
+    }
+
+    public Button getQuit_button() {
+        return quit_button;
+    }
+
+    public Button getConfirm_button() {
+        return confirm_button;
+    }
+
+    public Label getNickname_label() {
+        return nickname_label;
+    }
+
+    public void connect(ActionEvent actionEvent) {  //TODO: decidere se lasciare ip e porta vuota (molto probabilmente sì)
         /*if(ipAddress_field.getText().equals("")) {
             showAlert(Alert.AlertType.ERROR, "Error", "Missing field!",
                     "The IP address field is empty, please fill it");
@@ -41,6 +73,7 @@ public class SetupController extends GenericController {
                     "The port number field is invalid, please complete it correctly");
         }
         else {
+            getGUIApplication().changeConnectionMenuStatus();
             //if(getGUI().connect(ipAddress_field.getText(), Integer.parseInt(portNumber_field.getText()))) {
             if(getGUI().connect(ipAddress_field.getText(), 1919)) {
                 getGUIApplication().setActiveScene(SceneNames.NICKNAME_MENU);
@@ -48,6 +81,7 @@ public class SetupController extends GenericController {
             else {
                 showAlert(Alert.AlertType.ERROR, "Error", "Connection problem",
                         "Failed connecting to the server, please try again");
+                getGUIApplication().changeConnectionMenuStatus();
             }
         }
     }
@@ -69,10 +103,9 @@ public class SetupController extends GenericController {
                     "The nickname field is longer than 20 character,\nplease complete it correctly");
         }
         else{
+            getGUIApplication().changeNicknameMenuStatus(); //TODO: aggiungere controllo nickname errato
             getGUIApplication().getGUI().getMessageHandler().sendClientMessage(
                     new ConnectionMessage(nickname_field.getText()));
-            //TODO: switchare in base a partita già esistente o meno
-
         }
     }
 
@@ -84,47 +117,36 @@ public class SetupController extends GenericController {
         getGUIApplication().setActiveScene(SceneNames.MULTI_PLAYER_MENU);
     }
 
-    public void startOnlineGame(ActionEvent actionEvent) { //TODO: implementare singlegame online
-        getGUIApplication().setActiveScene(SceneNames.PLAYER_BOARD);
+    public void startOnlineGame(ActionEvent actionEvent) {
+        getGUI().getMessageHandler().sendClientMessage(new NewLobbyMessage(1));
+        getGUIApplication().setActiveScene(SceneNames.PLAYER_BOARD); //TODO: da spostare
     }
 
-    public void startOfflineGame(ActionEvent actionEvent) { //TODO: implementare singlegame offline
-        getGUIApplication().setActiveScene(SceneNames.PLAYER_BOARD);
+    public void startOfflineGame(ActionEvent actionEvent) {
+        getGUI().getMessageHandler().sendClientMessage(new NewLobbyMessage(1)); //TODO: implementare singlegame offline (non so se va inviato comunque)
+        getGUIApplication().setActiveScene(SceneNames.PLAYER_BOARD); //TODO: da spostare
     }
 
-    public void choose2Players(ActionEvent actionEvent) { //TODO: settare un solo avversario (#giocatori = 2)
-        setWaitingPlayerScene();
+    public void choose2Players(ActionEvent actionEvent) {
+        getGUIApplication().setActiveScene(SceneNames.MULTI_PLAYER_WAITING);
         getGUI().getMessageHandler().sendClientMessage(new NewLobbyMessage(2));
     }
 
-    public void choose3Players(ActionEvent actionEvent) { //TODO: settare due avversari (#giocatori = 3)
-        setWaitingPlayerScene();
-    }
-
-    public void choose4Players(ActionEvent actionEvent) { //TODO: settare tre avversari (#giocatori = 4)
-        setWaitingPlayerScene();
-    }
-
-    private void setWaitingPlayerScene(){
-        notifyPlayer_labels = new ArrayList<>();
-        notifyPlayer_labels.add(notifyPlayer1_label);
-        notifyPlayer_labels.add(notifyPlayer2_label);
-        notifyPlayer_labels.add(notifyPlayer3_label);
+    public void choose3Players(ActionEvent actionEvent) {
         getGUIApplication().setActiveScene(SceneNames.MULTI_PLAYER_WAITING);
+        getGUI().getMessageHandler().sendClientMessage(new NewLobbyMessage(3));
     }
+
+    public void choose4Players(ActionEvent actionEvent) {
+        getGUIApplication().setActiveScene(SceneNames.MULTI_PLAYER_WAITING);
+        getGUI().getMessageHandler().sendClientMessage(new NewLobbyMessage(4));
+    }
+
 
     public void notifyNewPlayer(String nickname){ //TODO: chiamare quando si aggiunge un giocatore
-        notifyPlayer_labels = new ArrayList<>(0); //TODO: :(
-        notifyPlayer_labels.add(notifyPlayer1_label);
-        notifyPlayer_labels.add(notifyPlayer2_label);
-        notifyPlayer_labels.add(notifyPlayer3_label);
-        for(Label label : notifyPlayer_labels){
-            if(label.getText().equals("")) {
-                label.setText("The player " + nickname + " has joined the game!");
-                label.setVisible(true);
-                break;
-            }
-        }
+        String text = notifyPlayers_label.getText();
+        notifyPlayers_label.setText(text + nickname + (nickname.length()>=16 ? "\n" : " ") + "has joined the game!\n");
+        notifyPlayers_label.setVisible(true);
     }
 
     public void setPlayerBoardScene(){ //TODO: da chiamare quando si è raggiunto il numero di player
