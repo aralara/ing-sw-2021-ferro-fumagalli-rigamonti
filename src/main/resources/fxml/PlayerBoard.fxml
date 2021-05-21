@@ -1,74 +1,176 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="440.0" prefWidth="900.0" styleClass="playerBoardPanel" stylesheets="@../css/playerBoard.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllers.PlayerBoardController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="686.0" prefWidth="1400.0" styleClass="playerBoardPanel" stylesheets="@../css/playerBoard.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllers.PlayerBoardController">
    <children>
-      <GridPane layoutX="240.0" layoutY="156.0" prefHeight="284.0" prefWidth="348.0">
+      <ImageView fx:id="shelfResL1_1_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="112.0" layoutY="296.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="shelfResL2_1_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="76.0" layoutY="355.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="shelfResL2_2_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="134.0" layoutY="355.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="shelfResL3_1_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="66.0" layoutY="416.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="shelfResL3_2_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="107.0" layoutY="416.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="shelfResL3_3_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="148.0" layoutY="416.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="31.0" layoutY="541.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imgs/res/coin.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="coinStrongbox_label" alignment="CENTER" layoutX="71.0" layoutY="545.0" prefHeight="25.0" prefWidth="35.0" styleClass="strongboxLabel" stylesheets="@../css/playerBoard.css" text="x 0" textFill="#ffde00">
+         <font>
+            <Font name="Pristina" size="18.0" />
+         </font>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </Label>
+      <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="109.0" layoutY="541.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imgs/res/servant.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="servantStrongbox_label" alignment="CENTER" layoutX="149.0" layoutY="545.0" prefHeight="25.0" prefWidth="35.0" styleClass="strongboxLabel" stylesheets="@../css/playerBoard.css" text="x 0" textFill="#651d6f">
+         <font>
+            <Font name="Pristina" size="18.0" />
+         </font></Label>
+      <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="33.0" layoutY="578.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imgs/res/shield.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="shieldStrongbox_label" alignment="CENTER" layoutX="71.0" layoutY="584.0" prefHeight="25.0" prefWidth="35.0" styleClass="strongboxLabel" stylesheets="@../css/playerBoard.css" text="x 0" textFill="#87fcff">
+         <font>
+            <Font name="Pristina" size="18.0" />
+         </font></Label>
+      <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="107.0" layoutY="579.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imgs/res/stone.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="stoneStrongbox_label" alignment="CENTER" layoutX="149.0" layoutY="584.0" prefHeight="25.0" prefWidth="35.0" styleClass="strongboxLabel" stylesheets="@../css/playerBoard.css" text="x 0" textFill="#646464">
+         <font>
+            <Font name="Pristina" size="18.0" />
+         </font></Label>
+      <ImageView fx:id="basicPCons1_imageView" fitHeight="35.0" fitWidth="35.0" layoutX="254.0" layoutY="488.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="basicPCons2_imageView" fitHeight="35.0" fitWidth="35.0" layoutX="254.0" layoutY="522.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="basicPProd1_imageView" fitHeight="35.0" fitWidth="35.0" layoutX="313.0" layoutY="505.0" pickOnBounds="true" preserveRatio="true" />
+      <GridPane layoutX="370.0" layoutY="278.0" prefHeight="352.0" prefWidth="544.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="120.0" minWidth="10.0" prefWidth="120.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="136.2" minWidth="10.0" prefWidth="121.80000000000001" />
-          <ColumnConstraints fx:id="devCardMatrix_gridPane" hgrow="SOMETIMES" maxWidth="109.0" minWidth="10.0" prefWidth="100.40000000000003" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="186.6" minWidth="10.0" prefWidth="182.6" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="255.39999999999998" minWidth="10.0" prefWidth="184.19999999999996" />
+          <ColumnConstraints fx:id="devCardMatrix_gridPane" hgrow="SOMETIMES" maxWidth="190.19999999999993" minWidth="10.0" prefWidth="175.19999999999993" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <ImageView fx:id="space1_imageView" fitHeight="152.0" fitWidth="101.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="space1L1_imageView" fitHeight="256.0" fitWidth="170.0" pickOnBounds="true" preserveRatio="true">
                <GridPane.margin>
-                  <Insets />
+                  <Insets left="1.0" top="80.0" />
                </GridPane.margin>
             </ImageView>
-            <ImageView fx:id="space2_imageView" fitHeight="152.0" fitWidth="101.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
-            <ImageView fx:id="space3_imageView" fitHeight="151.0" fitWidth="101.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" />
+            <ImageView fx:id="space1L2_imageView" fitHeight="256.0" fitWidth="170.0" pickOnBounds="true" preserveRatio="true">
+               <GridPane.margin>
+                  <Insets left="1.0" top="-14.0" />
+               </GridPane.margin>
+            </ImageView>
+            <ImageView fx:id="space1L3_imageView" fitHeight="256.0" fitWidth="170.0" pickOnBounds="true" preserveRatio="true">
+               <GridPane.margin>
+                  <Insets left="1.0" top="-108.0" />
+               </GridPane.margin>
+            </ImageView>
+            <ImageView fx:id="space2L1_imageView" fitHeight="256.0" fitWidth="170.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+               <GridPane.margin>
+                  <Insets left="2.0" top="80.0" />
+               </GridPane.margin></ImageView>
+            <ImageView fx:id="space2L2_imageView" fitHeight="256.0" fitWidth="170.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+               <GridPane.margin>
+                  <Insets left="2.0" top="-14.0" />
+               </GridPane.margin>
+            </ImageView>
+            <ImageView fx:id="space2L3_imageView" fitHeight="256.0" fitWidth="170.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+               <GridPane.margin>
+                  <Insets left="2.0" top="-108.0" />
+               </GridPane.margin>
+            </ImageView>
+            <ImageView fx:id="space3L1_imageView" fitHeight="256.0" fitWidth="170.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+               <GridPane.margin>
+                  <Insets left="7.0" top="80.0" />
+               </GridPane.margin></ImageView>
+            <ImageView fx:id="space3L2_imageView" fitHeight="256.0" fitWidth="170.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+               <GridPane.margin>
+                  <Insets left="7.0" top="-14.0" />
+               </GridPane.margin>
+            </ImageView>
+            <ImageView fx:id="space3L3_imageView" fitHeight="256.0" fitWidth="170.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+               <GridPane.margin>
+                  <Insets left="7.0" top="-108.0" />
+               </GridPane.margin>
+            </ImageView>
          </children>
       </GridPane>
-      <GridPane fx:id="activeLeaderMatrix_gridPane" layoutX="656.0" layoutY="222.0" prefHeight="151.0" prefWidth="218.0">
+      <GridPane fx:id="activeLeaderMatrix_gridPane" layoutX="986.0" layoutY="357.0" prefHeight="256.0" prefWidth="400.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="111.0" minWidth="10.0" prefWidth="111.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="99.0" minWidth="10.0" prefWidth="99.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="247.4" minWidth="10.0" prefWidth="208.4" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.2" minWidth="10.0" prefWidth="191.20000000000002" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <ImageView fx:id="spaceLeader1_imageView" fitHeight="152.0" fitWidth="101.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="spaceLeader2_imageView" fitHeight="152.0" fitWidth="101.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+            <ImageView fx:id="spaceLeader1_imageView" fitHeight="256.0" fitWidth="170.0" pickOnBounds="true" preserveRatio="true">
+               <GridPane.margin>
+                  <Insets left="3.0" />
+               </GridPane.margin></ImageView>
+            <ImageView fx:id="spaceLeader2_imageView" fitHeight="256.0" fitWidth="188.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
                <GridPane.margin>
                   <Insets />
                </GridPane.margin>
             </ImageView>
          </children>
       </GridPane>
-      <ImageView fx:id="faithSpace0_imageView" fitHeight="29.0" fitWidth="29.0" layoutX="23.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="faithSpace1_imageView" fitHeight="29.0" fitWidth="29.0" layoutX="54.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="faithSpace2_imageView" fitHeight="29.0" fitWidth="29.0" layoutX="83.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="faithSpace3_imageView" fitHeight="29.0" fitWidth="29.0" layoutX="83.0" layoutY="55.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="faithSpace4_imageView" fitHeight="29.0" fitWidth="29.0" layoutX="83.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="faithSpace5_imageView" fitHeight="29.0" fitWidth="29.0" layoutX="114.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="faithSpace6_imageView" fitHeight="29.0" fitWidth="29.0" layoutX="145.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="faithSpace7_imageView" fitHeight="29.0" fitWidth="29.0" layoutX="175.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="faithSpace8_imageView" fitHeight="29.0" fitWidth="29.0" layoutX="205.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="faithSpace9_imageView" fitHeight="29.0" fitWidth="29.0" layoutX="235.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="faithSpace10_imageView" fitHeight="29.0" fitWidth="29.0" layoutX="235.0" layoutY="55.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="faithSpace11_imageView" fitHeight="29.0" fitWidth="29.0" layoutX="235.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="faithSpace12_imageView" fitHeight="29.0" fitWidth="29.0" layoutX="265.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="faithSpace13_imageView" fitHeight="29.0" fitWidth="29.0" layoutX="296.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="faithSpace14_imageView" fitHeight="29.0" fitWidth="29.0" layoutX="326.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="faithSpace15_imageView" fitHeight="29.0" fitWidth="29.0" layoutX="356.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="faithSpace16_imageView" fitHeight="29.0" fitWidth="29.0" layoutX="387.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="faithSpace17_imageView" fitHeight="29.0" fitWidth="29.0" layoutX="387.0" layoutY="56.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="faithSpace18_imageView" fitHeight="29.0" fitWidth="29.0" layoutX="387.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="faithSpace19_imageView" fitHeight="29.0" fitWidth="29.0" layoutX="416.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="faithSpace20_imageView" fitHeight="29.0" fitWidth="29.0" layoutX="447.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="faithSpace21_imageView" fitHeight="29.0" fitWidth="29.0" layoutX="478.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="faithSpace22_imageView" fitHeight="29.0" fitWidth="29.0" layoutX="507.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="faithSpace23_imageView" fitHeight="29.0" fitWidth="29.0" layoutX="537.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="faithSpace24_imageView" fitHeight="29.0" fitWidth="29.0" layoutX="568.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="popeFavorTile1_imageView" fitHeight="40.0" fitWidth="39.0" layoutX="155.0" layoutY="64.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="popeFavorTile2_imageView" fitHeight="40.0" fitWidth="39.0" layoutX="306.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="popeFavorTile3_imageView" fitHeight="40.0" fitWidth="39.0" layoutX="488.0" layoutY="64.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="faithSpace0_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="39.0" layoutY="135.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imgs/faith/cross_red.png" />
+         </image></ImageView>
+      <ImageView fx:id="faithSpace1_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="86.0" layoutY="135.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="faithSpace2_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="133.0" layoutY="135.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="faithSpace3_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="133.0" layoutY="88.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="faithSpace4_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="133.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="faithSpace5_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="180.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="faithSpace6_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="226.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="faithSpace7_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="273.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="faithSpace8_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="319.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="faithSpace9_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="368.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="faithSpace10_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="368.0" layoutY="89.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="faithSpace11_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="368.0" layoutY="136.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="faithSpace12_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="415.0" layoutY="136.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="faithSpace13_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="462.0" layoutY="136.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="faithSpace14_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="509.0" layoutY="136.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="faithSpace15_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="557.0" layoutY="136.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="faithSpace16_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="603.0" layoutY="136.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="faithSpace17_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="603.0" layoutY="88.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="faithSpace18_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="603.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="faithSpace19_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="651.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="faithSpace20_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="697.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="faithSpace21_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="744.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="faithSpace22_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="791.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="faithSpace23_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="839.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="faithSpace24_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="885.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="popeFavorTile1_imageView" fitHeight="65.0" fitWidth="65.0" layoutX="238.0" layoutY="99.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imgs/faith/tile_2point.png.png" />
+         </image></ImageView>
+      <ImageView fx:id="popeFavorTile2_imageView" fitHeight="65.0" fitWidth="65.0" layoutX="474.0" layoutY="55.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imgs/faith/tile_3point.png" />
+         </image></ImageView>
+      <ImageView fx:id="popeFavorTile3_imageView" fitHeight="65.0" fitWidth="65.0" layoutX="756.0" layoutY="99.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imgs/faith/tile_4point.png.png" />
+         </image></ImageView>
    </children>
 </Pane>

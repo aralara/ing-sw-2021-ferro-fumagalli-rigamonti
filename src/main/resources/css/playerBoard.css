@@ -2,3 +2,7 @@
     -fx-background-image: url("../imgs/bkgs/bkg_board.png");
     -fx-background-size: stretch;
 }
+
+.strongboxLabel {
+    -fx-background-color: rgb(175,162,99);
+}

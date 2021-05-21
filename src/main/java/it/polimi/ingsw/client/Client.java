@@ -15,12 +15,14 @@ public class Client {
             CLI cli = new CLI();
             cli.setup();
             cli.run();
+            //System.exit(0); TODO: anche qua?
         }
         else if(args[0].equals("2")) {
             System.out.println("GUI version starting...");
             GUI gui = new GUI();
             gui.setup();
             gui.run();
+            System.exit(0);
         }
         else {
             System.out.println("Error in the choice of the game modality occurred!");
