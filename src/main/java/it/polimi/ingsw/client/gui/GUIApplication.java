@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.gui;
 
+import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.client.gui.controllers.GenericController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -15,14 +16,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GraphicalGUI extends Application {
+public class GUIApplication extends Application {
 
-    private static GUI gui;
+    private GUI gui;
 
-    private static List<SceneInformation> scenesInformation;
+    private List<SceneInformation> scenesInformation;
 
-    private static Scene activeScene;
-    private static Stage stage;
+    private Scene activeScene;
+    private Stage stage;
     private Alert alert;
 
 
@@ -31,13 +32,16 @@ public class GraphicalGUI extends Application {
     }
 
 
-    public static void setup(GUI _gui) {
-        gui = _gui;
+    public void setup() {
+        this.gui = new GUI();
+        gui.setup();
+        gui.run();
     }
 
     @Override
     public void start(Stage stage) {
         setupStage(stage);
+        setup();
         setActiveScene(SceneNames.CONNECTION_MENU);
     }
 
@@ -60,7 +64,7 @@ public class GraphicalGUI extends Application {
                 loader = new FXMLLoader(getClass().getResource(SceneNames.values()[i].value()));
                 root = loader.load();
                 GenericController controller = loader.getController();
-                controller.setGraphicalGUI(this);
+                controller.setGUIApplication(this);
                 scenesInformation.add(new SceneInformation(new Scene(root), SceneNames.values()[i], controller));
             }
         } catch (IOException e) {
@@ -68,21 +72,18 @@ public class GraphicalGUI extends Application {
         }
     }
 
-    public static void setActiveScene(SceneNames sceneName) {
+    public void setActiveScene(SceneNames sceneName) {
         activeScene = scenesInformation.get(getSceneIndex(sceneName)).getScene();
         stage.setScene(activeScene);
+        stage.centerOnScreen();
         stage.show();
-
-        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-        stage.setX((screenBounds.getWidth() - activeScene.getWidth()) / 2);
-        stage.setY((screenBounds.getHeight() - activeScene.getHeight()) / 2);
     }
 
     public Alert getAlert() {
         return alert;
     }
 
-    private static int getSceneIndex(SceneNames sceneName) { //TODO: brutto? fare classe List a parte e mettere lì il metodo?
+    private int getSceneIndex(SceneNames sceneName) { //TODO: brutto? fare classe List a parte e mettere lì il metodo?
         for(int i = 0; i < scenesInformation.size(); i++){
             if(scenesInformation.get(i).getFileName().equals(sceneName))
                 return i;
@@ -94,7 +95,7 @@ public class GraphicalGUI extends Application {
         return scenesInformation.get(getSceneIndex(sceneName)).getController();
     }
 
-    public static GUI getGUI() {
+    public GUI getGUI() {
         return gui;
     }
 }

@@ -19,7 +19,7 @@
             <Image url="@../imgs/res/coin.png" />
          </image>
       </ImageView>
-      <Label fx:id="coinStrongbox_label" alignment="CENTER" layoutX="71.0" layoutY="545.0" prefHeight="25.0" prefWidth="35.0" styleClass="strongboxLabel" stylesheets="@../css/playerBoard.css" text="x 0" textFill="#ffde00">
+      <Label fx:id="coinStrongbox_label" alignment="CENTER" layoutX="71.0" layoutY="545.0" prefHeight="25.0" prefWidth="35.0" styleClass="strongboxLabel" stylesheets="@../css/playerBoard.css" text="x 0" textFill="#fffe00">
          <font>
             <Font name="Pristina" size="18.0" />
          </font>
@@ -32,7 +32,7 @@
             <Image url="@../imgs/res/servant.png" />
          </image>
       </ImageView>
-      <Label fx:id="servantStrongbox_label" alignment="CENTER" layoutX="149.0" layoutY="545.0" prefHeight="25.0" prefWidth="35.0" styleClass="strongboxLabel" stylesheets="@../css/playerBoard.css" text="x 0" textFill="#651d6f">
+      <Label fx:id="servantStrongbox_label" alignment="CENTER" layoutX="149.0" layoutY="545.0" prefHeight="25.0" prefWidth="35.0" styleClass="strongboxLabel" stylesheets="@../css/playerBoard.css" text="x 0" textFill="#581e6e">
          <font>
             <Font name="Pristina" size="18.0" />
          </font></Label>

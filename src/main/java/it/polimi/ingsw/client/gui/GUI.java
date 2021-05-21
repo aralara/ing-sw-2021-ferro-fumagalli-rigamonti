@@ -11,15 +11,12 @@ import java.util.List;
 
 public class GUI extends ClientController {
 
-    //private GraphicalGUI graphicalGUI;
-
     public GUI() {
         super();
     }
 
     @Override
     public void setup() {
-        GraphicalGUI.setup(this);
     }
 
     public boolean connect(String address, Integer port) {
@@ -31,7 +28,7 @@ public class GUI extends ClientController {
 
     @Override
     public void run() {
-        GraphicalGUI.main(null);
+
     }
 
     @Override

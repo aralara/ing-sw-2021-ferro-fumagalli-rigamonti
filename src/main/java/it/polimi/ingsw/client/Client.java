@@ -1,7 +1,7 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.client.cli.CLI;
-import it.polimi.ingsw.client.gui.GUI;
+import it.polimi.ingsw.client.gui.GUIApplication;
 
 
 public class Client {
@@ -19,9 +19,12 @@ public class Client {
         }
         else if(args[0].equals("2")) {
             System.out.println("GUI version starting...");
+            /*
             GUI gui = new GUI();
             gui.setup();
             gui.run();
+            */
+            GUIApplication.main(null);
             System.exit(0);
         }
         else {
