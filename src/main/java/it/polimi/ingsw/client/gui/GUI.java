@@ -1,7 +1,6 @@
 package it.polimi.ingsw.client.gui;
 
 import it.polimi.ingsw.client.ClientController;
-import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.server.model.boards.Player;
 import it.polimi.ingsw.server.model.cards.card.LorenzoCard;
 import it.polimi.ingsw.server.model.storage.RequestResources;
@@ -42,7 +41,7 @@ public class GUI extends ClientController {
 
     @Override
     public void askNickname() {
-
+        //TODO: nella gui non penso serva
     }
 
     @Override

@@ -12,19 +12,19 @@
          </font>
       </Label>
       <ProgressIndicator layoutX="182.0" layoutY="216.0" prefHeight="33.0" prefWidth="37.0" />
-      <Label fx:id="notifyPlayer1_label" alignment="CENTER" layoutX="5.0" layoutY="254.0" prefHeight="55.0" prefWidth="392.0" textFill="#1d60cc" visible="false">
+      <Label fx:id="notifyPlayer1_label" alignment="CENTER" layoutX="5.0" layoutY="254.0" prefHeight="55.0" prefWidth="392.0" textAlignment="CENTER" textFill="#1d60cc">
          <font>
-            <Font name="Pristina" size="22.0" />
+            <Font name="Pristina" size="19.0" />
          </font>
       </Label>
-      <Label fx:id="notifyPlayer2_label" alignment="CENTER" layoutX="5.0" layoutY="309.0" prefHeight="55.0" prefWidth="392.0" textFill="#1d60cc" visible="false">
+      <Label fx:id="notifyPlayer2_label" alignment="CENTER" layoutX="5.0" layoutY="309.0" prefHeight="55.0" prefWidth="392.0" textAlignment="CENTER" textFill="#1d60cc" visible="false">
          <font>
-            <Font name="Pristina" size="22.0" />
+            <Font name="Pristina" size="19.0" />
          </font>
       </Label>
-      <Label fx:id="notifyPlayer3_label" alignment="CENTER" layoutX="5.0" layoutY="364.0" prefHeight="55.0" prefWidth="392.0" textFill="#1d60cc" visible="false">
+      <Label fx:id="notifyPlayer3_label" alignment="CENTER" layoutX="5.0" layoutY="364.0" prefHeight="55.0" prefWidth="392.0" textAlignment="CENTER" textFill="#1d60cc" visible="false">
          <font>
-            <Font name="Pristina" size="22.0" />
+            <Font name="Pristina" size="19.0" />
          </font>
       </Label>
    </children>

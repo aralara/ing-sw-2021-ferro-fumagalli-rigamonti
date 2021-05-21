@@ -1,14 +1,14 @@
 package it.polimi.ingsw.client.gui;
 
-import it.polimi.ingsw.client.gui.controllers.ControllerInterface;
+import it.polimi.ingsw.client.gui.controllers.GenericController;
 import javafx.scene.Scene;
 
 public class SceneInformation {
     private final Scene scene;
     private final SceneNames fileName;
-    private final ControllerInterface controller;
+    private final GenericController controller;
 
-    public SceneInformation(Scene scene, SceneNames fileName, ControllerInterface controller){
+    public SceneInformation(Scene scene, SceneNames fileName, GenericController controller){
         this.scene = scene;
         this.fileName = fileName;
         this.controller = controller;
@@ -22,7 +22,7 @@ public class SceneInformation {
         return fileName;
     }
 
-    public ControllerInterface getController() {
+    public GenericController getController() {
         return controller;
     }
 }
