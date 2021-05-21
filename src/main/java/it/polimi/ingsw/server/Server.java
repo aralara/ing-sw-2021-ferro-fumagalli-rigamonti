@@ -39,6 +39,7 @@ public class Server {
         try {
             server.socket = new ServerSocket(SOCKET_PORT);
             server.running = true;
+            System.out.println("Server started");
         } catch (IOException e) {
             System.out.println("Error! Cannot open server socket");
             System.exit(1);

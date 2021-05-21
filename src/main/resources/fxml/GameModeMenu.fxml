@@ -5,7 +5,7 @@
 <?import javafx.scene.text.*?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-      prefHeight="450.0" prefWidth="400.0" styleClass="gameModeMenuPanel" stylesheets="@../css/gameModeMenu.css"
+      prefHeight="450.0" prefWidth="400.0" styleClass="setupPanel" stylesheets="@../css/setupWindow.css"
       xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="it.polimi.ingsw.client.gui.controllers.SetupController">
    <children>

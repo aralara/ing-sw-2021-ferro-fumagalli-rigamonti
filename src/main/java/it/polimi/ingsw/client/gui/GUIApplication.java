@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.gui;
 
 import it.polimi.ingsw.client.gui.controllers.GenericController;
+import it.polimi.ingsw.client.gui.controllers.SetupController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -27,7 +28,7 @@ public class GUIApplication extends Application {
     }
 
 
-    public void setup() {
+    private void setup() {
         this.gui = new GUI(this);
         gui.setup();
         new Thread(() -> gui.run()).start();
@@ -69,7 +70,9 @@ public class GUIApplication extends Application {
 
     public void setActiveScene(SceneNames sceneName) {
         stage.setScene(scenesInformation.get(getSceneIndex(sceneName)).getScene());
-        stage.centerOnScreen();
+        if(sceneName.equals(SceneNames.PLAYER_BOARD) || sceneName.equals(SceneNames.MARKET_BOARD) ||
+                sceneName.equals(SceneNames.DECKS_BOARD))
+            stage.centerOnScreen();
         stage.show();
     }
 
@@ -91,5 +94,24 @@ public class GUIApplication extends Application {
 
     public GUI getGUI() {
         return gui;
+    }
+
+    public void changeConnectionMenuStatus(){
+        SetupController controller = (SetupController) getController(SceneNames.CONNECTION_MENU);
+        boolean newDisableValue = !controller.getIpAddress_field().isDisable();
+        controller.getIpAddress_field().setDisable(newDisableValue);
+        controller.getPortNumber_field().setDisable(newDisableValue);
+        controller.getConnect_button().setDisable(newDisableValue);
+        controller.getQuit_button().setDisable(newDisableValue);
+        controller.getConnecting_progressIndicator().setVisible(newDisableValue);
+    }
+
+    public void changeNicknameMenuStatus(){
+        SetupController controller = (SetupController) getController(SceneNames.NICKNAME_MENU);
+        boolean newDisableValue = !controller.getNickname_field().isDisable();
+        controller.getNickname_label().setDisable(newDisableValue);
+        controller.getNickname_field().setDisable(newDisableValue);
+        controller.getConfirm_button().setDisable(newDisableValue);
+        controller.getWaitingNickname_progressIndicator().setVisible(newDisableValue);
     }
 }
