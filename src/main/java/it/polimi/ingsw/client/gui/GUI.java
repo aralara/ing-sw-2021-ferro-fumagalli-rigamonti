@@ -1,22 +1,33 @@
 package it.polimi.ingsw.client.gui;
 
 import it.polimi.ingsw.client.ClientController;
+import it.polimi.ingsw.client.UpdateMessageReader;
+import it.polimi.ingsw.client.gui.controllers.SetupController;
 import it.polimi.ingsw.server.model.boards.Player;
 import it.polimi.ingsw.server.model.cards.card.LorenzoCard;
 import it.polimi.ingsw.server.model.storage.RequestResources;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
+import it.polimi.ingsw.utils.messages.client.ClientMessage;
+import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
+import it.polimi.ingsw.utils.messages.server.action.ServerActionMessage;
+import javafx.application.Platform;
 
 import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class GUI extends ClientController {
 
-    public GUI() {
+    private final GUIApplication guiApplication;
+
+    public GUI(GUIApplication guiApplication) {
         super();
+        this.guiApplication = guiApplication;
     }
 
     @Override
     public void setup() {
+
     }
 
     public boolean connect(String address, Integer port) {
@@ -28,7 +39,22 @@ public class GUI extends ClientController {
 
     @Override
     public void run() {
+        LinkedBlockingQueue<ServerActionMessage> actionQueue = getMessageHandler().getActionQueue();
+        LinkedBlockingQueue<ServerAckMessage> responseQueue = getMessageHandler().getResponseQueue();
+        List<ClientMessage> confirmationList = getMessageHandler().getConfirmationList();
 
+        new Thread(new UpdateMessageReader(this, getMessageHandler().getUpdateQueue())).start();
+
+        while(true) {
+            try {
+                if (confirmationList.size() != 0)
+                    responseQueue.take().activateResponse(this);
+                else if (actionQueue.size() > 0)
+                        actionQueue.poll().doAction(this);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -38,17 +64,23 @@ public class GUI extends ClientController {
 
     @Override
     public void askNickname() {
-        //TODO: nella gui non penso serva
+
     }
 
     @Override
     public void askNewLobby(int lobbySize, int waitingPlayers) {
+        if (lobbySize == waitingPlayers){
+            Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.GAME_MODE_MENU));
+        }
+        else {
+            Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.MULTI_PLAYER_WAITING));
+        }
 
     }
 
     @Override
     public void notifyNewPlayer(String nickname) {
-
+        Platform.runLater(() -> ((SetupController)guiApplication.getController(SceneNames.MULTI_PLAYER_WAITING)).notifyNewPlayer(nickname));
     }
 
     @Override

@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.gui.controllers;
 
 import it.polimi.ingsw.client.gui.SceneNames;
 import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
+import it.polimi.ingsw.utils.messages.client.NewLobbyMessage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -71,8 +72,7 @@ public class SetupController extends GenericController {
             getGUIApplication().getGUI().getMessageHandler().sendClientMessage(
                     new ConnectionMessage(nickname_field.getText()));
             //TODO: switchare in base a partita già esistente o meno
-            getGUIApplication().setActiveScene(SceneNames.GAME_MODE_MENU);
-            //setWaitingPlayerScene();
+
         }
     }
 
@@ -94,6 +94,7 @@ public class SetupController extends GenericController {
 
     public void choose2Players(ActionEvent actionEvent) { //TODO: settare un solo avversario (#giocatori = 2)
         setWaitingPlayerScene();
+        getGUI().getMessageHandler().sendClientMessage(new NewLobbyMessage(2));
     }
 
     public void choose3Players(ActionEvent actionEvent) { //TODO: settare due avversari (#giocatori = 3)
@@ -124,11 +125,6 @@ public class SetupController extends GenericController {
                 break;
             }
         }
-    }
-
-    public void temp(){ //TODO: da spostare nel metodo appropriato che verrà richiamato all'arrivo di un messaggio di notifica nuovo giocatore
-        GenericController controller = getGUIApplication().getController(SceneNames.MULTI_PLAYER_WAITING);
-        ((SetupController)controller).notifyNewPlayer("lara");
     }
 
     public void setPlayerBoardScene(){ //TODO: da chiamare quando si è raggiunto il numero di player

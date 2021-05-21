@@ -19,11 +19,6 @@ public class Client {
         }
         else if(args[0].equals("2")) {
             System.out.println("GUI version starting...");
-            /*
-            GUI gui = new GUI();
-            gui.setup();
-            gui.run();
-            */
             GUIApplication.main(null);
             System.exit(0);
         }

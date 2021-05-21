@@ -1,15 +1,12 @@
 package it.polimi.ingsw.client.gui;
 
-import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.client.gui.controllers.GenericController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -22,10 +19,8 @@ public class GUIApplication extends Application {
 
     private List<SceneInformation> scenesInformation;
 
-    private Scene activeScene;
     private Stage stage;
     private Alert alert;
-
 
     public static void main(String[] args) {
         launch(args);
@@ -33,9 +28,9 @@ public class GUIApplication extends Application {
 
 
     public void setup() {
-        this.gui = new GUI();
+        this.gui = new GUI(this);
         gui.setup();
-        gui.run();
+        new Thread(() -> gui.run()).start();
     }
 
     @Override
@@ -73,8 +68,7 @@ public class GUIApplication extends Application {
     }
 
     public void setActiveScene(SceneNames sceneName) {
-        activeScene = scenesInformation.get(getSceneIndex(sceneName)).getScene();
-        stage.setScene(activeScene);
+        stage.setScene(scenesInformation.get(getSceneIndex(sceneName)).getScene());
         stage.centerOnScreen();
         stage.show();
     }
@@ -83,7 +77,7 @@ public class GUIApplication extends Application {
         return alert;
     }
 
-    private int getSceneIndex(SceneNames sceneName) { //TODO: brutto? fare classe List a parte e mettere lì il metodo?
+    private int getSceneIndex(SceneNames sceneName) {
         for(int i = 0; i < scenesInformation.size(); i++){
             if(scenesInformation.get(i).getFileName().equals(sceneName))
                 return i;
