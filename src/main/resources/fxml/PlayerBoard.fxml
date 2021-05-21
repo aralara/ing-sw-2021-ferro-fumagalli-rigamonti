@@ -8,6 +8,11 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="686.0" prefWidth="1400.0" styleClass="playerBoardPanel" stylesheets="@../css/playerBoard.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllers.PlayerBoardController">
    <children>
+      <ImageView fx:id="inkwell_imageVIew" fitHeight="70.0" fitWidth="70.0" layoutX="25.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true" rotate="-9.5" visible="false">
+         <image>
+            <Image url="@../imgs/icon_inkwell.png" />
+         </image>
+      </ImageView>
       <ImageView fx:id="shelfResL1_1_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="112.0" layoutY="296.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="shelfResL2_1_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="76.0" layoutY="355.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="shelfResL2_2_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="134.0" layoutY="355.0" pickOnBounds="true" preserveRatio="true" />
@@ -112,26 +117,6 @@
             </ImageView>
          </children>
       </GridPane>
-      <GridPane fx:id="activeLeaderMatrix_gridPane" layoutX="986.0" layoutY="357.0" prefHeight="256.0" prefWidth="400.0">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="247.4" minWidth="10.0" prefWidth="208.4" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.2" minWidth="10.0" prefWidth="191.20000000000002" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <ImageView fx:id="spaceLeader1_imageView" fitHeight="256.0" fitWidth="170.0" pickOnBounds="true" preserveRatio="true">
-               <GridPane.margin>
-                  <Insets left="3.0" />
-               </GridPane.margin></ImageView>
-            <ImageView fx:id="spaceLeader2_imageView" fitHeight="256.0" fitWidth="188.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
-               <GridPane.margin>
-                  <Insets />
-               </GridPane.margin>
-            </ImageView>
-         </children>
-      </GridPane>
       <ImageView fx:id="faithSpace0_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="39.0" layoutY="135.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../imgs/faith/cross_red.png" />
@@ -172,5 +157,161 @@
          <image>
             <Image url="@../imgs/faith/tile_4point.png.png" />
          </image></ImageView>
+      <Button focusTraversable="false" layoutX="972.0" layoutY="32.0" mnemonicParsing="false" onAction="#viewOpponents" prefHeight="60.0" prefWidth="60.0" styleClass="opponentButton" stylesheets="@../css/playerBoard.css" />
+      <Label layoutX="1281.0" text="Main actions" textFill="WHITE">
+         <font>
+            <Font name="Pristina" size="24.0" />
+         </font>
+      </Label>
+      <Separator layoutX="1076.0" layoutY="37.0" prefHeight="1.0" prefWidth="306.0" />
+      <Button focusTraversable="false" layoutX="1073.0" layoutY="49.0" mnemonicParsing="false" onAction="#goToMarket" text="Market" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="18.0" />
+         </font>
+      </Button>
+      <Button focusTraversable="false" layoutX="1160.0" layoutY="49.0" mnemonicParsing="false" onAction="#goToDecks" prefHeight="41.0" prefWidth="70.0" text="Decks" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="18.0" />
+         </font>
+      </Button>
+      <Button focusTraversable="false" layoutX="1246.0" layoutY="49.0" mnemonicParsing="false" onAction="#activateProductions" text="Activate productions" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="18.0" />
+         </font>
+      </Button>
+      <Label layoutX="1286.0" layoutY="101.0" text="Other actions" textFill="WHITE">
+         <font>
+            <Font name="Pristina" size="24.0" />
+         </font>
+      </Label>
+      <Separator layoutX="936.0" layoutY="141.0" prefHeight="3.0" prefWidth="446.0" />
+      <Button focusTraversable="false" layoutX="1097.0" layoutY="152.0" mnemonicParsing="false" onAction="#activateLeaderCard" text="Activate leader card" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="18.0" />
+         </font>
+      </Button>
+      <Button focusTraversable="false" layoutX="1249.0" layoutY="152.0" mnemonicParsing="false" onAction="#discardLeaderCard" text="Discard leader card" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="18.0" />
+         </font>
+      </Button>
+      <Button focusTraversable="false" layoutX="934.0" layoutY="152.0" mnemonicParsing="false" onAction="#rearrangeWarehouse" text="Rearrange warehouse" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="18.0" />
+         </font>
+      </Button>
+      <Label layoutX="1248.0" layoutY="225.0" text="Resources to place" textFill="WHITE">
+         <font>
+            <Font name="Pristina" size="24.0" />
+         </font>
+      </Label>
+      <Separator layoutX="987.0" layoutY="267.0" prefHeight="3.0" prefWidth="400.0" />
+      <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="984.0" layoutY="281.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imgs/res/coin.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="resToPlaceCoin_label" alignment="CENTER" layoutX="1028.0" layoutY="278.0" prefWidth="40.0" styleClass="resToPlaceLabel" stylesheets="@../css/playerBoard.css" text="x 0" textFill="#c5b120">
+         <font>
+            <Font name="Pristina" size="24.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="1092.0" layoutY="279.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imgs/res/servant.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="resToPlaceServant_label" alignment="CENTER" layoutX="1135.0" layoutY="278.0" prefWidth="40.0" styleClass="resToPlaceLabel" stylesheets="@../css/playerBoard.css" text="x 0" textFill="#581e6e">
+         <font>
+            <Font name="Pristina" size="24.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="1196.0" layoutY="279.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imgs/res/shield.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="resToPlaceShield_label" alignment="CENTER" layoutX="1236.0" layoutY="278.0" prefWidth="40.0" styleClass="resToPlaceLabel" stylesheets="@../css/playerBoard.css" text="x 0" textFill="#38bdbf">
+         <font>
+            <Font name="Pristina" size="24.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="1301.0" layoutY="278.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imgs/res/stone.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="resToPlaceStone_label" alignment="CENTER" layoutX="1345.0" layoutY="278.0" prefWidth="40.0" styleClass="resToPlaceLabel" stylesheets="@../css/playerBoard.css" text="x 0" textFill="#646464">
+         <font>
+            <Font name="Pristina" size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="1325.0" layoutY="323.0" text="Leaders" textFill="WHITE">
+         <font>
+            <Font name="Pristina" size="24.0" />
+         </font>
+      </Label>
+      <Separator layoutX="1002.0" layoutY="363.0" prefHeight="3.0" prefWidth="384.0" />
+      <GridPane fx:id="activeLeaderMatrix_gridPane" layoutX="986.0" layoutY="357.0" prefHeight="256.0" prefWidth="400.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="247.4" minWidth="10.0" prefWidth="208.4" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.2" minWidth="10.0" prefWidth="191.20000000000002" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <ImageView fx:id="spaceLeader1_imageView" fitHeight="256.0" fitWidth="170.0" pickOnBounds="true" preserveRatio="true">
+               <GridPane.margin>
+                  <Insets left="3.0" />
+               </GridPane.margin></ImageView>
+            <ImageView fx:id="shelfLeader1_1_imageView" disable="true" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <GridPane.margin>
+                  <Insets left="39.0" top="190.0" />
+               </GridPane.margin>
+            </ImageView>
+            <ImageView fx:id="shelfLeader1_2_imageView" disable="true" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <GridPane.margin>
+                  <Insets left="103.0" top="190.0" />
+               </GridPane.margin>
+            </ImageView>
+            <ImageView fx:id="spaceLeader2_imageView" fitHeight="256.0" fitWidth="170.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </ImageView>
+            <ImageView fx:id="shelfLeader2_1_imageView" disable="true" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="1">
+               <GridPane.margin>
+                  <Insets left="37.0" top="190.0" />
+               </GridPane.margin>
+            </ImageView>
+            <ImageView fx:id="shelfLeader2_2_imageView" disable="true" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="1">
+               <GridPane.margin>
+                  <Insets left="100.0" top="190.0" />
+               </GridPane.margin>
+            </ImageView>
+         </children>
+      </GridPane>
+      <GridPane fx:id="handLeaderMatrix_gridPane" layoutX="986.0" layoutY="613.0" prefHeight="30.0" prefWidth="400.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="209.0" minWidth="10.0" prefWidth="206.6" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="197.19999999999996" minWidth="10.0" prefWidth="194.19999999999996" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <ImageView fx:id="handLeader1_imageView" fitHeight="40.0" fitWidth="170.0" pickOnBounds="true" preserveRatio="true">
+               <GridPane.margin>
+                  <Insets left="3.0" />
+               </GridPane.margin>
+            </ImageView>
+            <ImageView fx:id="handLeader2_imageView" fitHeight="40.0" fitWidth="170.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+               <GridPane.margin>
+                  <Insets left="3.0" />
+               </GridPane.margin>
+            </ImageView>
+         </children>
+      </GridPane>
    </children>
 </Pane>

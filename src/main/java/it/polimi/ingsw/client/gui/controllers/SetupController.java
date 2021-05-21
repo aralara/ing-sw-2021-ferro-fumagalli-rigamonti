@@ -9,8 +9,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-
-import java.util.ArrayList;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 public class SetupController extends GenericController {
 
@@ -55,7 +55,7 @@ public class SetupController extends GenericController {
         return nickname_label;
     }
 
-    public void connect(ActionEvent actionEvent) {  //TODO: decidere se lasciare ip e porta vuota (molto probabilmente sì)
+    public void connect() {  //TODO: decidere se lasciare ip e porta vuota (molto probabilmente sì)
         /*if(ipAddress_field.getText().equals("")) {
             showAlert(Alert.AlertType.ERROR, "Error", "Missing field!",
                     "The IP address field is empty, please fill it");
@@ -86,13 +86,19 @@ public class SetupController extends GenericController {
         }
     }
 
-    public void quit(ActionEvent actionEvent) {
+    public void keyConnect(KeyEvent keyEvent) {
+        if (keyEvent.getCode().equals(KeyCode.ENTER)) {
+            connect();
+        }
+    }
+
+    public void quit() {
         showAlert(Alert.AlertType.INFORMATION, "Quit",
                 "Thanks to have played Master of Renaissance!", "");
         System.exit(0);
     }
 
-    public void sendNickname(ActionEvent actionEvent) {
+    public void sendNickname() {
 
         if(nickname_field.getText().equals("")){
             showAlert(Alert.AlertType.ERROR, "Error", "Missing field!",
@@ -109,47 +115,51 @@ public class SetupController extends GenericController {
         }
     }
 
-    public void startSingleGame(ActionEvent actionEvent) {
+    public void keyNickname(KeyEvent keyEvent) {
+        if (keyEvent.getCode().equals(KeyCode.ENTER)) {
+            sendNickname();
+        }
+    }
+
+    public void startSingleGame() {
         getGUIApplication().setActiveScene(SceneNames.SINGLE_PLAYER_MENU);
     }
 
-    public void startMultiGame(ActionEvent actionEvent) {
+    public void startMultiGame() {
         getGUIApplication().setActiveScene(SceneNames.MULTI_PLAYER_MENU);
     }
 
-    public void startOnlineGame(ActionEvent actionEvent) {
+    public void startOnlineGame() {
         getGUI().getMessageHandler().sendClientMessage(new NewLobbyMessage(1));
         getGUIApplication().setActiveScene(SceneNames.PLAYER_BOARD); //TODO: da spostare
     }
 
-    public void startOfflineGame(ActionEvent actionEvent) {
-        getGUI().getMessageHandler().sendClientMessage(new NewLobbyMessage(1)); //TODO: implementare singlegame offline (non so se va inviato comunque)
-        getGUIApplication().setActiveScene(SceneNames.PLAYER_BOARD); //TODO: da spostare
+    public void startOfflineGame() {
+        //TODO: implementare singlegame offline
     }
 
-    public void choose2Players(ActionEvent actionEvent) {
+    public void choose2Players() {
         getGUIApplication().setActiveScene(SceneNames.MULTI_PLAYER_WAITING);
         getGUI().getMessageHandler().sendClientMessage(new NewLobbyMessage(2));
     }
 
-    public void choose3Players(ActionEvent actionEvent) {
+    public void choose3Players() {
         getGUIApplication().setActiveScene(SceneNames.MULTI_PLAYER_WAITING);
         getGUI().getMessageHandler().sendClientMessage(new NewLobbyMessage(3));
     }
 
-    public void choose4Players(ActionEvent actionEvent) {
+    public void choose4Players() {
         getGUIApplication().setActiveScene(SceneNames.MULTI_PLAYER_WAITING);
         getGUI().getMessageHandler().sendClientMessage(new NewLobbyMessage(4));
     }
 
+    public void goBack() {
+        getGUIApplication().setActiveScene(SceneNames.GAME_MODE_MENU);
+    }
 
-    public void notifyNewPlayer(String nickname){ //TODO: chiamare quando si aggiunge un giocatore
+    public void notifyNewPlayer(String nickname){
         String text = notifyPlayers_label.getText();
         notifyPlayers_label.setText(text + nickname + (nickname.length()>=16 ? "\n" : " ") + "has joined the game!\n");
         notifyPlayers_label.setVisible(true);
-    }
-
-    public void setPlayerBoardScene(){ //TODO: da chiamare quando si è raggiunto il numero di player
-        getGUIApplication().setActiveScene(SceneNames.PLAYER_BOARD);
     }
 }

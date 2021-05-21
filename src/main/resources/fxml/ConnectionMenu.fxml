@@ -4,14 +4,14 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="400.0" styleClass="connectionPanel" stylesheets="@../css/connectionMenu.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllers.SetupController">
+<Pane focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="400.0" styleClass="connectionPanel" stylesheets="@../css/connectionMenu.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllers.SetupController">
    <children>
-      <TextField fx:id="ipAddress_field" alignment="CENTER" focusTraversable="false" layoutX="34.0" layoutY="158.0" prefHeight="42.0" prefWidth="138.0" promptText="Server IP address">
+      <TextField fx:id="ipAddress_field" alignment="CENTER" focusTraversable="false" layoutX="34.0" layoutY="158.0" onKeyPressed="#keyConnect" prefHeight="42.0" prefWidth="138.0" promptText="Server IP address">
          <font>
             <Font name="Pristina" size="18.0" />
          </font>
       </TextField>
-      <TextField fx:id="portNumber_field" alignment="CENTER" focusTraversable="false" layoutX="229.0" layoutY="158.0" prefHeight="42.0" prefWidth="138.0" promptText="Server port number">
+      <TextField fx:id="portNumber_field" alignment="CENTER" focusTraversable="false" layoutX="229.0" layoutY="158.0" onKeyPressed="#keyConnect" prefHeight="42.0" prefWidth="138.0" promptText="Server port number">
          <font>
             <Font name="Pristina" size="18.0" />
          </font>

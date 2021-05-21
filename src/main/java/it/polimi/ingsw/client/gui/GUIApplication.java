@@ -43,7 +43,7 @@ public class GUIApplication extends Application {
 
     //TODO: mettere suppress
     private void setupStage(Stage stage) {
-        Image image = new Image(getClass().getResourceAsStream("/imgs/inkwell.png"));
+        Image image = new Image(getClass().getResourceAsStream("/imgs/icon_inkwell.png"));
         alert = new Alert(Alert.AlertType.NONE);
         ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(image);
 

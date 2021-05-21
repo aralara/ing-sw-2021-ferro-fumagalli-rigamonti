@@ -11,7 +11,7 @@
             <Font name="Pristina" size="22.0" />
          </font>
       </Label>
-      <TextField fx:id="nickname_field" alignment="CENTER" focusTraversable="false" layoutX="70.0" layoutY="225.0" prefHeight="42.0" prefWidth="261.0" promptText="nickname">
+      <TextField fx:id="nickname_field" alignment="CENTER" focusTraversable="false" layoutX="70.0" layoutY="225.0" onKeyPressed="#keyNickname" prefHeight="42.0" prefWidth="261.0" promptText="nickname">
          <font>
             <Font name="Pristina" size="18.0" />
          </font>

@@ -26,5 +26,10 @@
             <Font name="Pristina" size="24.0" />
          </font>
       </Button>
+      <Button focusTraversable="false" layoutX="338.0" layoutY="407.0" mnemonicParsing="false" onAction="#goBack" text="Go back" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="12.0" />
+         </font>
+      </Button>
    </children>
 </Pane>
