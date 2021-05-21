@@ -431,6 +431,7 @@ public abstract class Game implements Serializable {
             market.addListener(Listeners.GAME_MARKET.value(), new MarketChangeListener(view));
             for(PlayerBoard pBoard : playerBoards){
                 String nickname = pBoard.getPlayer().getNickname();
+                pBoard.setPlayerNickname(nickname);
                 pBoard.addListener(Listeners.BOARD_ABILITY_PROD.value(),
                         new AbilityProductionsChangeListener(view));
                 pBoard.addListener(Listeners.BOARD_ABILITY_MARB.value(),
