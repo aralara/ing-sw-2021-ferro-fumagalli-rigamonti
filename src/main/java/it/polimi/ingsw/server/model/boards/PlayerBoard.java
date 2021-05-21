@@ -9,12 +9,13 @@ import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.listeners.Listened;
 import it.polimi.ingsw.utils.listeners.Listeners;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class PlayerBoard extends Listened {
+public class PlayerBoard extends Listened implements Serializable {
 
     private final Player player;
     private final DevelopmentBoard developmentBoard;

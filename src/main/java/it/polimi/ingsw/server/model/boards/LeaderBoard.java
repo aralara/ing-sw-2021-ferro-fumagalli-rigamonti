@@ -5,9 +5,10 @@ import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.utils.listeners.Listeners;
 import it.polimi.ingsw.utils.listeners.PlayerListened;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class LeaderBoard extends PlayerListened {
+public class LeaderBoard extends PlayerListened implements Serializable {
 
     private final Deck hand;
     private final Deck board;

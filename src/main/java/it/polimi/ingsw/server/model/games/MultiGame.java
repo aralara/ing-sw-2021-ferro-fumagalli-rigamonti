@@ -6,20 +6,22 @@ import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.TurnStatus;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.*;
 
-public class MultiGame extends Game{
+public class MultiGame extends Game {
 
     private boolean lastTurn;
     private int currentPlayer;
 
 
-    public MultiGame(){
-    }
+    public MultiGame() { }
 
 
     @Override
-    public void initGame(List<VirtualView> views){
+    public void initGame(List<VirtualView> views) {
         super.initGame(views);
         lastTurn = false;
     }
@@ -35,7 +37,7 @@ public class MultiGame extends Game{
      * @return Returns a map of lists of resources using the nickname of the player as a key
      */
     @SuppressWarnings("")
-    public Map<String, List<Resource>> getResourcesToEqualize(){    //TODO: hardcoded resources
+    public Map<String, List<Resource>> getResourcesToEqualize() {    //TODO: hardcoded resources
         Map<String, List<Resource>> equalizeRes = new HashMap<>();
         List<List<Resource>> resources = new ArrayList<>();
         resources.add(Arrays.asList(new Resource(ResourceType.WILDCARD, 1)));
@@ -51,7 +53,7 @@ public class MultiGame extends Game{
     }
 
     @Override
-    public int loadNextTurn(){
+    public int loadNextTurn() {
         int actionToDo = TurnStatus.LOAD_TURN_NORMAL.value();
         if(getPlayerBoards().get(currentPlayer).isTurnPlayed()) {
             getPlayerBoards().get(currentPlayer).setTurnPlayed(false);
@@ -65,7 +67,7 @@ public class MultiGame extends Game{
             if (lastTurn && getPlayerBoards().get(currentPlayer).isFirstPlayer()) {
                 calculateTotalVP();
                 calculateFinalPositions();
-                finished = true;
+                setFinished(true);
                 actionToDo = TurnStatus.LOAD_TURN_END_GAME.value();
             }
         }
@@ -75,7 +77,7 @@ public class MultiGame extends Game{
     }
 
     @Override
-    public void addFaithAll(int playerEx, int quantity){
+    public void addFaithAll(int playerEx, int quantity) {
         List<PlayerBoard> playerBoards = getPlayerBoards();
         for(int i = 0; i < getPlayerNumber(); i++){
             if(i != playerEx)

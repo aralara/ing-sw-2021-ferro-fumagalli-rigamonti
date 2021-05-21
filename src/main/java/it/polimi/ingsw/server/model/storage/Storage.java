@@ -1,10 +1,11 @@
 package it.polimi.ingsw.server.model.storage;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public interface Storage {
+public interface Storage extends Serializable {
 
 
     /**

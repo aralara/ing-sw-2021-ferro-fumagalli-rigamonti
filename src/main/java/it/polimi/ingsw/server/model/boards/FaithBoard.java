@@ -6,12 +6,13 @@ import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.utils.listeners.Listeners;
 import it.polimi.ingsw.utils.listeners.PlayerListened;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.function.Predicate;
 
 import static it.polimi.ingsw.utils.Constants.FAITH_TOTAL_VATICAN_REPORTS;
 
-public class FaithBoard extends PlayerListened {
+public class FaithBoard extends PlayerListened implements Serializable {
 
     private int faith;
     private final boolean[] popeProgression;

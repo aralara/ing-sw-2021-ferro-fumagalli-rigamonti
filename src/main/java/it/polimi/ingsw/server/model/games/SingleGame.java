@@ -11,6 +11,9 @@ import it.polimi.ingsw.utils.listeners.Listeners;
 import it.polimi.ingsw.utils.listeners.LorenzoCardPlayListener;
 import it.polimi.ingsw.utils.listeners.LorenzoFaithChangeListener;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.List;
 
 public class SingleGame extends Game{
@@ -56,7 +59,7 @@ public class SingleGame extends Game{
         if(checkEndGame()) {
             calculateTotalVP();
             calculateFinalPositions();
-            finished = true;
+            setFinished(true);
             status = TurnStatus.LOAD_TURN_END_GAME.value();
         }
         else if(isLorenzoTurn) {

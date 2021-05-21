@@ -10,12 +10,13 @@ import it.polimi.ingsw.utils.listeners.Listeners;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.Serializable;
 import java.util.*;
 
 import static it.polimi.ingsw.utils.Constants.MARKET_COLUMN_SIZE;
 import static it.polimi.ingsw.utils.Constants.MARKET_ROW_SIZE;
 
-public class Market extends Listened {
+public class Market extends Listened implements Serializable {
 
     private final Marble[][] marbleMatrix;
     private Marble floatingMarble;

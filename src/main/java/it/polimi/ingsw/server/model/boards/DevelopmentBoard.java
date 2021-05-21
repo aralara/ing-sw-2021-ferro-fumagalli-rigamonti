@@ -8,10 +8,11 @@ import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.listeners.Listeners;
 import it.polimi.ingsw.utils.listeners.PlayerListened;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DevelopmentBoard extends PlayerListened {
+public class DevelopmentBoard extends PlayerListened implements Serializable {
     private final List<Deck> spaces;
 
 

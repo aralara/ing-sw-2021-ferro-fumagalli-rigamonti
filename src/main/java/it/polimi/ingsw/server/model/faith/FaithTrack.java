@@ -6,10 +6,11 @@ import it.polimi.ingsw.exceptions.NotExistingLastReportTriggeredException;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FaithTrack {
+public class FaithTrack implements Serializable {
 
     private final List<VaticanReport> vaticanReports;
     private final List<FaithSpace> faithSpaces;

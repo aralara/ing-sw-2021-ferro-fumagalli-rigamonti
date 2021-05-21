@@ -13,22 +13,22 @@ import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.listeners.*;
 
+import java.io.*;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public abstract class Game {
+public abstract class Game implements Serializable {
 
     private List<PlayerBoard> playerBoards;
     private Market market;
     private List<DevelopmentDeck> developmentDecks;
     private FaithTrack faithTrack;
-    boolean finished;
+    private boolean finished;
 
 
-    public Game() {
-    }
+    public Game() { }
 
 
     /**
@@ -63,6 +63,21 @@ public abstract class Game {
         return this.faithTrack;
     }
 
+    /**
+     * Gets the finished attribute
+     * @return Returns finished value
+     */
+    public boolean isFinished() {
+        return finished;
+    }
+
+    /**
+     * Sets the finished attribute
+     * @param finished Attribute to be set
+     */
+    public void setFinished(boolean finished) {
+        this.finished = finished;
+    }
 
     /**
      * Gets the number of players in a game

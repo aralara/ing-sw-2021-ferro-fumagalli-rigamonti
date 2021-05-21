@@ -7,7 +7,9 @@ import it.polimi.ingsw.server.model.games.SingleGame;
 import it.polimi.ingsw.utils.listeners.Listened;
 import it.polimi.ingsw.utils.listeners.Listeners;
 
-public class LorenzoBoard extends Listened {
+import java.io.Serializable;
+
+public class LorenzoBoard extends Listened implements Serializable {
 
     private final SingleGame game;
     private final Deck lorenzoDeck;
