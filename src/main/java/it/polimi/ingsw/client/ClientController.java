@@ -32,13 +32,15 @@ public abstract class ClientController {
         faithTrack = new FaithTrackView();
         mainActionPlayed = false;
         playerTurn = false;
-        messageHandler = new MessageHandler();
+        messageHandler = new MessageHandler(this);
     }
 
 
     public abstract void setup();
 
     public abstract void run();
+
+    public abstract void ackNotification(String message);
 
 
     public abstract void askNickname();

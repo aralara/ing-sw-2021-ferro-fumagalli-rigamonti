@@ -27,22 +27,22 @@ import java.util.Map;
 
 public class GameHandler implements Runnable {
 
+    private boolean active;
+    private final int size;
     private final List<VirtualView> clientsVirtualView;
     private final Controller controller;
 
     GameHandler(int size) {
+        this.active = true;
+        this.size = size;
         clientsVirtualView = new ArrayList<>();
         controller = new Controller(size);
     }
 
     @Override
     public void run() {
-        for (VirtualView virtualView : clientsVirtualView) {
-            Thread thread = new Thread(virtualView);
-            thread.start();
-        }
         setup();
-        while(true) {
+        while(active) {
             //TODO: busy wait
         }
     }
@@ -83,7 +83,9 @@ public class GameHandler implements Runnable {
     }
 
     public void add(Socket client, ObjectOutputStream out, ObjectInputStream in, String nickname) {
-        clientsVirtualView.add(new VirtualView(client, out, in, nickname, this));
+        VirtualView view = new VirtualView(client, out, in, nickname, this);
+        clientsVirtualView.add(view);
+        new Thread(view).start();
         sendAll(new NewPlayerMessage(nickname));
     }
 
@@ -98,6 +100,26 @@ public class GameHandler implements Runnable {
         } else {
             System.out.println("Can't handle message");
         }
+    }
+
+    public void stop() {
+        if(active) {
+            active = false;
+            for (VirtualView virtualView : clientsVirtualView)
+                virtualView.stop(false);
+        }
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public boolean isFull() {
+        return size == clientsVirtualView.size();
     }
 
     public List<String> getAllNicknames() {

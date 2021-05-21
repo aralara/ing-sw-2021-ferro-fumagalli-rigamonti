@@ -1,13 +1,15 @@
 package it.polimi.ingsw.server.view;
 
 import it.polimi.ingsw.utils.messages.Message;
+import it.polimi.ingsw.utils.messages.server.action.PlayerDisconnectedMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.concurrent.TimeUnit;
 
-public abstract class ClientHandler implements Runnable{
+public abstract class ClientHandler implements Runnable {
 
     private final Socket client;
     private final ObjectOutputStream output;
@@ -22,17 +24,17 @@ public abstract class ClientHandler implements Runnable{
     }
 
     @Override
-    public void run()
-    {
+    public void run() {
         active = true;
         try {
             handleClientConnection();
         } catch (IOException e) {
             System.out.println("client " + client.getInetAddress() + " connection dropped");
+            stop(true);
         }
     }
 
-    private void handleClientConnection() throws IOException{
+    private void handleClientConnection() throws IOException {
         System.out.println("Connected to " + client.getInetAddress());
 
         Object message;
@@ -47,7 +49,7 @@ public abstract class ClientHandler implements Runnable{
         }
     }
 
-    public void sendMessage(Message message){
+    public void sendMessage(Message message) {
         try{
             output.writeObject(message);
             output.reset();
@@ -58,7 +60,21 @@ public abstract class ClientHandler implements Runnable{
 
     public abstract void onMessageReceived(Message message);
 
-    public void stop() {
-        active = false;
+    public void stop(boolean propagate) {
+        if(active) {
+            if(!propagate)
+                sendMessage(new PlayerDisconnectedMessage());
+            active = false;
+            try {
+                if (client != null && !client.isClosed()) {
+                    TimeUnit.MILLISECONDS.sleep(500);
+                    output.close();
+                    input.close();
+                    client.close();
+                }
+            } catch (IOException | InterruptedException e) {
+                System.out.println("Fatal Error! Unable to close socket");
+            }
+        }
     }
 }

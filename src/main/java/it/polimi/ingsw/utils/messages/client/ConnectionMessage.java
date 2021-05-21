@@ -1,8 +1,8 @@
 package it.polimi.ingsw.utils.messages.client;
 
-import it.polimi.ingsw.utils.messages.Message;
+import it.polimi.ingsw.client.ClientController;
 
-public class ConnectionMessage implements Message {
+public class ConnectionMessage extends ClientSetupMessage {
 
     private final String nickname;
 
@@ -12,7 +12,19 @@ public class ConnectionMessage implements Message {
     }
 
 
-    public String getNickname() {
+    @Override
+    public String doSetup() {
         return nickname;
+    }
+
+    @Override
+    public void doACKResponseAction(ClientController client) {
+        client.ackNotification("Nickname set successfully");
+    }
+
+    @Override
+    public void doNACKResponseAction(ClientController client) {
+        client.ackNotification("The selected nickname is not available, please select another one");
+        client.askNickname();
     }
 }

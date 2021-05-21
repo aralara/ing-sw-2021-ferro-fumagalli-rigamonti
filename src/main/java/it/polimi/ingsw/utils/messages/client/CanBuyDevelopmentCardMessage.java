@@ -5,7 +5,7 @@ import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.model.storage.RequestResources;
 import it.polimi.ingsw.server.view.VirtualView;
-import it.polimi.ingsw.utils.messages.server.ack.ServerActionAckMessage;
+import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 
 import java.util.List;
 
@@ -32,13 +32,13 @@ public class CanBuyDevelopmentCardMessage extends ClientActionMessage {
     @Override
     public void doAction(VirtualView view, Controller controller) {
         boolean success = controller.canBuyDevCard(view.getNickname(), developmentCard);
-        view.sendMessage(new ServerActionAckMessage(getUuid(), success));
+        view.sendMessage(new ServerAckMessage(getUuid(), success));
     }
 
     @Override
     public void doACKResponseAction(ClientController client) {
         List<RequestResources> requestResources = client.chooseStorages(developmentCard.getCost());
-        client.getMessageHandler().sendActionMessage(
+        client.getMessageHandler().sendClientMessage(
                 new RequestResourcesDevMessage(developmentCard, space, requestResources));
     }
 

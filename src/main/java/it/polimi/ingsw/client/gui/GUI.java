@@ -36,6 +36,11 @@ public class GUI extends ClientController {
     }
 
     @Override
+    public void ackNotification(String message) {
+
+    }
+
+    @Override
     public void askNickname() {
 
     }

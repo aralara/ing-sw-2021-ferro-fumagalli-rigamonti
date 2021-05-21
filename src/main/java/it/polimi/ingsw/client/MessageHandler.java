@@ -1,10 +1,10 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.exceptions.UnknownMessageException;
-import it.polimi.ingsw.utils.messages.AckMessage;
 import it.polimi.ingsw.utils.messages.Message;
 import it.polimi.ingsw.utils.messages.client.ClientActionMessage;
-import it.polimi.ingsw.utils.messages.server.ack.ServerActionAckMessage;
+import it.polimi.ingsw.utils.messages.client.ClientMessage;
+import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 import it.polimi.ingsw.utils.messages.server.action.ServerActionMessage;
 import it.polimi.ingsw.utils.messages.server.update.ServerUpdateMessage;
 
@@ -18,20 +18,23 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class MessageHandler implements Runnable{
 
+    private ClientController client;
+
     private Socket server;
     private ObjectOutputStream output;
     private ObjectInputStream input;
 
     private final LinkedBlockingQueue<ServerActionMessage> actionQueue;
     private final LinkedBlockingQueue<ServerUpdateMessage> updateQueue;
-    private final LinkedBlockingQueue<ServerActionAckMessage> responseQueue;
+    private final LinkedBlockingQueue<ServerAckMessage> responseQueue;
 
-    private final List<ClientActionMessage> confirmationList;
+    private final List<ClientMessage> confirmationList;
 
     private boolean active;
 
 
-    public MessageHandler() {
+    public MessageHandler(ClientController client) {
+        this.client = client;
         this.actionQueue = new LinkedBlockingQueue<>();
         this.updateQueue = new LinkedBlockingQueue<>();
         this.responseQueue = new LinkedBlockingQueue<>();
@@ -48,11 +51,11 @@ public class MessageHandler implements Runnable{
         return updateQueue;
     }
 
-    public LinkedBlockingQueue<ServerActionAckMessage> getResponseQueue() {
+    public LinkedBlockingQueue<ServerAckMessage> getResponseQueue() {
         return responseQueue;
     }
 
-    public List<ClientActionMessage> getConfirmationList() {
+    public List<ClientMessage> getConfirmationList() {
         return confirmationList;
     }
 
@@ -94,10 +97,8 @@ public class MessageHandler implements Runnable{
                 updateQueue.put((ServerUpdateMessage) message);
             else if(message instanceof ServerActionMessage)
                 actionQueue.put((ServerActionMessage) message);
-            else if(message instanceof ServerActionAckMessage)
-                handleACKMessage((ServerActionAckMessage) message);
-            else if(message instanceof AckMessage)
-                ;//TODO: temp andrà tolto
+            else if(message instanceof ServerAckMessage)
+                handleACKMessage((ServerAckMessage) message);
             else
                 throw new UnknownMessageException();
         }catch (IOException | ClassNotFoundException | InterruptedException e) {
@@ -115,13 +116,13 @@ public class MessageHandler implements Runnable{
         }
     }
 
-    public void sendActionMessage(ClientActionMessage message) {
+    public void sendClientMessage(ClientMessage message) {
         confirmationList.add(message);
         sendMessage(message);
     }
 
-    private void handleACKMessage(ServerActionAckMessage message) throws UnknownMessageException, InterruptedException {
-        ClientActionMessage clientMessage = confirmationList.stream()
+    private void handleACKMessage(ServerAckMessage message) throws UnknownMessageException, InterruptedException {
+        ClientMessage clientMessage = confirmationList.stream()
                 .filter(message::compareTo)
                 .findFirst().orElseThrow(UnknownMessageException::new);
         confirmationList.remove(clientMessage);

@@ -1,9 +1,12 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.utils.messages.AckMessage;
+import it.polimi.ingsw.utils.messages.client.ClientMessage;
+import it.polimi.ingsw.utils.messages.client.ClientSetupMessage;
 import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
 import it.polimi.ingsw.utils.messages.client.NewLobbyMessage;
+import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 import it.polimi.ingsw.utils.messages.server.action.LobbyMessage;
-import it.polimi.ingsw.utils.messages.server.ack.ConnectionAckMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -17,32 +20,25 @@ public class Server {
 
     public final static int SOCKET_PORT = 1919;
 
-    private boolean lobbyAlreadyExist;
-    private int size;
-    private int connectedPlayers;
-    private List<String> nicknameUsed;
-    private ObjectOutputStream output;
-    private ObjectInputStream input;
-    private List<GameHandler> gameHandlerList;
+    private boolean running;
 
-    public void reset(){
-        lobbyAlreadyExist = false;
-        connectedPlayers = 0;
-        size = 0;
+    private ServerSocket socket;
+
+    private GameHandler waitingGame;
+    private List<GameHandler> gameList;
+
+
+    public Server() {
+        reset();
     }
 
+
     public static void main(String[] args) {
-
         Server server = new Server();
-        server.nicknameUsed = new ArrayList<>();
-        server.gameHandlerList = new ArrayList<>();
-        server.reset();
-
-        ServerSocket socket;
-
 
         try {
-            socket = new ServerSocket(SOCKET_PORT);
+            server.socket = new ServerSocket(SOCKET_PORT);
+            server.running = true;
         } catch (IOException e) {
             System.out.println("Error! Cannot open server socket");
             System.exit(1);
@@ -50,70 +46,80 @@ public class Server {
         }
 
         try {
-            while (true) {
-                Socket client = socket.accept();
-
-                server.output = new ObjectOutputStream(client.getOutputStream());
-                server.input = new ObjectInputStream(client.getInputStream());
-                Object message;
-                String nickname;
-                do {
-                    message = server.input.readObject();
-                    nickname = ((ConnectionMessage) message).getNickname();
-
-                } while (!server.checkValidNickname(nickname));
-                server.nicknameUsed.add(nickname);
-
-
-                server.output.writeObject(new LobbyMessage(server.size, server.connectedPlayers));
-                server.output.reset();
-
-                if (!server.lobbyAlreadyExist) {
-                    message = server.input.readObject();
-                    server.size = ((NewLobbyMessage) message).getLobbySize();
-
-                    server.gameHandlerList.add(new GameHandler(server.size));
-                    server.lobbyAlreadyExist = true;
-
-                }
-
-                server.gameHandlerList.get(server.gameHandlerList.size()-1).add(client, server.output, server.input, nickname);
-                server.connectedPlayers++;
-
-                if (server.connectedPlayers == server.size) {
-                    Thread thread = new Thread(server.gameHandlerList.get(server.gameHandlerList.size()-1));
-                    thread.start();
-                    server.reset();
-                }
+            while (server.running) {
+                Socket client = server.socket.accept();
+                server.handleNewConnection(client);
             }
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException e) {
             System.out.println("Error! Connection dropped");
         }
     }
 
-    public boolean checkValidNickname(String nickname) {
-        List<String> nicknameList;
-        for (GameHandler gameHandler : gameHandlerList) {
-            nicknameList = gameHandler.getAllNicknames();
-            for (String s : nicknameList) {
-                if (s.equals(nickname)) {
-                    try {
-                        output.writeObject(new ConnectionAckMessage(false));
-                        output.reset();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    return false;
-                }
+    public void handleNewConnection(Socket client) {
+        Object message;
+        String nickname = "";
+        ObjectOutputStream output;
+        ObjectInputStream input;
+
+        try {
+            output = new ObjectOutputStream(client.getOutputStream());
+            input = new ObjectInputStream(client.getInputStream());
+
+            boolean success = false;
+            while(!success) {
+                message = input.readObject();
+                ConnectionMessage connectionMessage = (ConnectionMessage) message;
+                nickname = connectionMessage.doSetup();
+                success = checkValidNickname(nickname);
+                writeAck(output, connectionMessage, success);
             }
+
+            if(waitingGame != null) {
+                output.writeObject(new LobbyMessage(waitingGame.getSize(), waitingGame.getAllNicknames().size()));
+                output.reset();
+            }
+            else {
+                output.writeObject(new LobbyMessage(0, 0));
+                output.reset();
+
+                message = input.readObject();
+                NewLobbyMessage lobbyMessage = (NewLobbyMessage) message;
+                waitingGame = new GameHandler(((NewLobbyMessage) message).doSetup());  //TODO: controllare la size ricevuta
+                gameList.add(waitingGame);
+                writeAck(output, lobbyMessage, true);
+            }
+
+            waitingGame.add(client, output, input, nickname);
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Client disconnected during setup");
         }
 
-        try{
-            output.writeObject(new ConnectionAckMessage(true));
-            output.reset();
-        }catch(IOException e) {
-            e.printStackTrace();
+        if (waitingGame != null && waitingGame.isFull()) {
+            new Thread(waitingGame).start();
+            waitingGame = null;
+        }
+    }
+
+    public boolean checkValidNickname(String nickname) {
+        for (GameHandler gameHandler : gameList) {
+            if(gameHandler.isActive()) {
+                for (String s : gameHandler.getAllNicknames())
+                    if (s.equals(nickname))
+                        return false;
+            }
         }
         return true;
+    }
+
+    public void writeAck(ObjectOutputStream output, ClientSetupMessage message, boolean success) throws IOException {
+        ServerAckMessage ack = new ServerAckMessage(message, success);
+        output.writeObject(ack);
+        output.reset();
+    }
+
+    public void reset() {
+        running = false;
+        waitingGame = null;
+        gameList = new ArrayList<>();
     }
 }

@@ -30,4 +30,11 @@ public class VirtualView extends ClientHandler{
     public void onMessageReceived(Message message) {
         gameHandler.handleMessage(this, message);
     }
+
+    @Override
+    public void stop(boolean propagate) {
+        super.stop(propagate);
+        if(propagate)
+            gameHandler.stop();
+    }
 }

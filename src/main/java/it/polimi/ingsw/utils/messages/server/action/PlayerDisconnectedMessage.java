@@ -1,18 +1,12 @@
 package it.polimi.ingsw.utils.messages.server.action;
 
-import it.polimi.ingsw.utils.messages.Message;
+import it.polimi.ingsw.client.ClientController;
+import it.polimi.ingsw.utils.messages.server.update.ServerUpdateMessage;
 
-public class PlayerDisconnectedMessage implements Message {
+public class PlayerDisconnectedMessage implements ServerUpdateMessage {
 
-    private String nickname;
-
-
-    public PlayerDisconnectedMessage(String nickname) {
-        this.nickname = nickname;
-    }
-
-
-    public String getNickname() {
-        return nickname;
+    @Override
+    public void doUpdate(ClientController client) {
+        client.getMessageHandler().stop();
     }
 }
