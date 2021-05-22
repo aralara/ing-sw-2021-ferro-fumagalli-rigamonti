@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class GameLibrary {
 
-    public static final String LIBRARY_PATH = "/saves/";
+    public static final String LIBRARY_PATH = "./saves/";
     public static final String NAME_SEPARATOR = "-";
     public static final String FILE_EXTENSION = ".mor";
 
@@ -39,7 +39,7 @@ public class GameLibrary {
     /**
      * Loads all the saves from the specified library path and adds them to the "saves" set
      */
-    public void loadSaves() {
+    private void loadSaves() {
         if(!loaded) {
             saves = new HashSet<>();
             File directory = new File(LIBRARY_PATH);
@@ -47,8 +47,8 @@ public class GameLibrary {
             if(files != null) {
                 for (String fileName : files)
                     saves.add(new GameSave(fileName));
-                loaded = true;
             }
+            loaded = true;
         }
     }
 
@@ -69,13 +69,15 @@ public class GameLibrary {
     }
 
     /**
-     * Deletes a save from the "saves" set
+     * Deletes a save from the "saves" set and deletes its source file
      * @param save Save object to delete
+     * @return Returns true if the save source file is successfully deleted
      * @throws LibraryNotLoadedException Throws a LibraryNotLoadedException if the library is not loaded
      */
-    public void deleteSave(GameSave save) throws LibraryNotLoadedException {
+    public boolean deleteSave(GameSave save) throws LibraryNotLoadedException {
         checkLoad();
         saves.remove(save);
+        return save.delete();
     }
 
     /**
@@ -88,6 +90,17 @@ public class GameLibrary {
     public GameSave getSave(List<String> players, int id) throws LibraryNotLoadedException { //TODO: Lanciare eccezione?
         checkLoad();
         return saves.stream().filter(s -> s.samePlayers(players) && s.sameId(id)).findFirst().orElse(null);
+    }
+
+    /**
+     * Returns a list of saves given a list of player names
+     * @param players List of player names
+     * @return Returns the saves list
+     * @throws LibraryNotLoadedException Throws a LibraryNotLoadedException if the library is not loaded
+     */
+    public List<GameSave> getSaves(List<String> players) throws LibraryNotLoadedException {
+        checkLoad();
+        return saves.stream().filter(s -> s.samePlayers(players)).collect(Collectors.toList());
     }
 
     /**

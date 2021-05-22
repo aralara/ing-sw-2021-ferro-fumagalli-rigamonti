@@ -52,7 +52,7 @@ public class Production implements Serializable {
     }
 
     /**
-     * Trasform a production into a string
+     * Transform a production into a string
      * @return A string that contains production's information
      */
     public String productionToPrint(){

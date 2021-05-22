@@ -8,6 +8,7 @@ import it.polimi.ingsw.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.model.boards.Player;
 import it.polimi.ingsw.server.model.cards.card.LorenzoCard;
 import it.polimi.ingsw.server.model.storage.*;
+import it.polimi.ingsw.server.saves.GameSave;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +49,8 @@ public abstract class ClientController {
     public abstract void askNewLobby(int lobbySize, int waitingPlayers);
 
     public abstract void notifyNewPlayer(String nickname);
+
+    public abstract void displaySaves(List<GameSave> saves);
 
     public abstract void askLeaderDiscard();
 

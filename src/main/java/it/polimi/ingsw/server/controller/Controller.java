@@ -25,6 +25,11 @@ public class Controller {
             game = new MultiGame();
     }
 
+    public Controller(Game game) {
+        this.game = game;
+        playerNumber = game.getPlayerNumber();
+    }
+
 
     public Game getGame() {
         return game;

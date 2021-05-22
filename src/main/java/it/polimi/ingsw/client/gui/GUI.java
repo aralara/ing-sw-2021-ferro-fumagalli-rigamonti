@@ -8,6 +8,7 @@ import it.polimi.ingsw.server.model.cards.card.LorenzoCard;
 import it.polimi.ingsw.server.model.storage.RequestResources;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
+import it.polimi.ingsw.server.saves.GameSave;
 import it.polimi.ingsw.utils.messages.client.ClientMessage;
 import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 import it.polimi.ingsw.utils.messages.server.action.ServerActionMessage;
@@ -75,6 +76,11 @@ public class GUI extends ClientController {
         else {
             Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.MULTI_PLAYER_WAITING));
         }
+
+    }
+
+    @Override
+    public void displaySaves(List<GameSave> saves) {
 
     }
 

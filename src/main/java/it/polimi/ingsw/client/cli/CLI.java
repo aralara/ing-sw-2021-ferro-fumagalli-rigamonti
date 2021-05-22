@@ -8,6 +8,8 @@ import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.server.model.boards.Player;
 import it.polimi.ingsw.server.model.cards.card.*;
 import it.polimi.ingsw.server.model.storage.*;
+import it.polimi.ingsw.server.saves.GameSave;
+import it.polimi.ingsw.server.saves.SaveInteractions;
 import it.polimi.ingsw.utils.messages.client.*;
 import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 import it.polimi.ingsw.utils.messages.server.action.ServerActionMessage;
@@ -121,6 +123,17 @@ public class CLI extends ClientController {
                     + (lobbySize - waitingPlayers) + " more player(s)");
             setNumberOfPlayers(lobbySize);
         }
+    }
+
+    @Override
+    public void displaySaves(List<GameSave> saves) {
+        graphicalCLI.printlnString("Do you want to load a save?");
+        if (graphicalCLI.isAnswerYes()) {
+            GameSave save = graphicalCLI.objectOptionSelector(saves, s -> graphicalCLI.printlnString(s.getFileName()));
+            getMessageHandler().sendClientMessage(new SaveInteractionMessage(save, SaveInteractions.OPEN_SAVE));
+        }
+        else
+            getMessageHandler().sendClientMessage(new SaveInteractionMessage(null, SaveInteractions.NO_ACTION));
     }
 
     @Override

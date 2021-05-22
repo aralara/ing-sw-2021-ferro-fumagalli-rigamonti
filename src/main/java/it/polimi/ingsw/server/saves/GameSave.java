@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class GameSave {
+public class GameSave implements Serializable {
 
     private final List<String> players;
     private final int id;
@@ -40,7 +40,7 @@ public class GameSave {
     public GameSave(List<String> players, int id, Game game) {
         this.players = players;
         this.id = id;
-        this.fileName = GameLibrary.LIBRARY_PATH
+        this.fileName = ""
                 .concat(String.join(GameLibrary.NAME_SEPARATOR, players))
                 .concat(GameLibrary.NAME_SEPARATOR + id)
                 .concat(GameLibrary.FILE_EXTENSION);
@@ -55,7 +55,8 @@ public class GameSave {
      */
     public void save() throws IOException {
         if(loaded) {
-            ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(fileName));
+            ObjectOutputStream output =
+                    new ObjectOutputStream(new FileOutputStream(GameLibrary.LIBRARY_PATH + fileName));
             output.writeObject(game);
             output.flush();
             output.close();
@@ -68,7 +69,7 @@ public class GameSave {
      * @throws ClassNotFoundException Throws a ClassNotFoundException if the game can't be serialized
      */
     public void load() throws IOException, ClassNotFoundException {
-        ObjectInputStream input = new ObjectInputStream(new FileInputStream(fileName));
+        ObjectInputStream input = new ObjectInputStream(new FileInputStream(GameLibrary.LIBRARY_PATH + fileName));
         if(players.size() == 1)
             game = (SingleGame) input.readObject();
         else
@@ -82,7 +83,7 @@ public class GameSave {
      * @return Returns true if the file is successfully deleted, false otherwise
      */
     public boolean delete() {
-        File file = new File(fileName);
+        File file = new File(GameLibrary.LIBRARY_PATH + fileName);
         return file.delete();
     }
 
@@ -113,11 +114,27 @@ public class GameSave {
     }
 
     /**
+     * Gets the players attribute
+     * @return Returns players value
+     */
+    public List<String> getPlayers() {
+        return players;
+    }
+
+    /**
      * Gets the id attribute
      * @return Returns id value
      */
     public int getId() {
         return id;
+    }
+
+    /**
+     * Gets the fileName attribute
+     * @return Returns fileName value
+     */
+    public String getFileName() {
+        return fileName;
     }
 
     /**
