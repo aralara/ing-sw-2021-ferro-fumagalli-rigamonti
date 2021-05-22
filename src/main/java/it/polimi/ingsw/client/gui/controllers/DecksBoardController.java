@@ -21,36 +21,47 @@ public class DecksBoardController extends GenericController {
     }
 
     public void clickedB3() {
+        selectedDevCard_imageView.setImage(deckB3_imageView.getImage());
     }
 
     public void clickedY3() {
+        selectedDevCard_imageView.setImage(deckY3_imageView.getImage());
     }
 
     public void clickedP3() {
+        selectedDevCard_imageView.setImage(deckP3_imageView.getImage());
     }
 
     public void clickedG2() {
+        selectedDevCard_imageView.setImage(deckG2_imageView.getImage());
     }
 
     public void clickedB2() {
+        selectedDevCard_imageView.setImage(deckB2_imageView.getImage());
     }
 
     public void clickedY2() {
+        selectedDevCard_imageView.setImage(deckY2_imageView.getImage());
     }
 
     public void clickedP2() {
+        selectedDevCard_imageView.setImage(deckP2_imageView.getImage());
     }
 
     public void clickedG1() {
+        selectedDevCard_imageView.setImage(deckG1_imageView.getImage());
     }
 
     public void clickedB1() {
+        selectedDevCard_imageView.setImage(deckB1_imageView.getImage());
     }
 
     public void clickedY1() {
+        selectedDevCard_imageView.setImage(deckY1_imageView.getImage());
     }
 
     public void clickedP1() {
+        selectedDevCard_imageView.setImage(deckP1_imageView.getImage());
     }
 
     public void buyCard() {
