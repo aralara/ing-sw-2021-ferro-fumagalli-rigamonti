@@ -81,15 +81,18 @@
             </ImageView>
          </children>
       </GridPane>
-      <ImageView fx:id="floatingMarble_imageView" fitHeight="50.0" fitWidth="50.0" layoutX="385.0" layoutY="96.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="marbleR0C4_imageView" fitHeight="50.0" fitWidth="50.0" layoutX="403.0" layoutY="155.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="marbleR1C4_imageView" fitHeight="50.0" fitWidth="50.0" layoutX="403.0" layoutY="217.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="marbleR2C4_imageView" fitHeight="50.0" fitWidth="50.0" layoutX="403.0" layoutY="279.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="marbleR3C0_imageView" fitHeight="50.0" fitWidth="50.0" layoutX="154.0" layoutY="343.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="marbleR3C1_imageView" fitHeight="50.0" fitWidth="50.0" layoutX="217.0" layoutY="343.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="marbleR3C2_imageView" fitHeight="50.0" fitWidth="50.0" layoutX="281.0" layoutY="343.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="marbleR3C4_imageView" fitHeight="50.0" fitWidth="50.0" layoutX="344.0" layoutY="343.0" pickOnBounds="true" preserveRatio="true" />
-      <Button focusTraversable="false" layoutX="339.0" layoutY="4.0" mnemonicParsing="false" onAction="#playMarket" text="Take resources" textFill="#1d60cc">
+      <ImageView fx:id="floatingMarble_imageView" fitHeight="50.0" fitWidth="50.0" layoutX="385.0" layoutY="96.0" onDragDetected="#handleDragDetectedFloatingMarble" onDragDropped="#handleDragDroppedFloatingMarble" onDragOver="#handleDragOverFloatingMarble" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imgs/marbles/marble_blue.png" />
+         </image></ImageView>
+      <ImageView fx:id="marbleR0C4_imageView" fitHeight="50.0" fitWidth="50.0" layoutX="403.0" layoutY="155.0" onDragDetected="#handleDragDetectedR0C4" onDragDropped="#handleDragDroppedR0C4" onDragOver="#handleDragOverR0C4" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="marbleR1C4_imageView" fitHeight="50.0" fitWidth="50.0" layoutX="403.0" layoutY="217.0" onDragDetected="#handleDragDetectedR1C4" onDragDropped="#handleDragDroppedR1C4" onDragOver="#handleDragOverR1C4" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="marbleR2C4_imageView" fitHeight="50.0" fitWidth="50.0" layoutX="403.0" layoutY="279.0" onDragDetected="#handleDragDetectedR2C4" onDragDropped="#handleDragDroppedR2C4" onDragOver="#handleDragOverR2C4" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="marbleR3C0_imageView" fitHeight="50.0" fitWidth="50.0" layoutX="154.0" layoutY="343.0" onDragDetected="#handleDragDetectedR3C0" onDragDropped="#handleDragDroppedR3C0" onDragOver="#handleDragOverR3C0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="marbleR3C1_imageView" fitHeight="50.0" fitWidth="50.0" layoutX="217.0" layoutY="343.0" onDragDetected="#handleDragDetectedR3C1" onDragDropped="#handleDragDroppedR3C1" onDragOver="#handleDragOverR3C1" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="marbleR3C2_imageView" fitHeight="50.0" fitWidth="50.0" layoutX="281.0" layoutY="343.0" onDragDetected="#handleDragDetectedR3C2" onDragDropped="#handleDragDroppedR3C2" onDragOver="#handleDragOverR3C2" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="marbleR3C3_imageView" fitHeight="50.0" fitWidth="50.0" layoutX="344.0" layoutY="343.0" onDragDetected="#handleDragDetectedR3C3" onDragDropped="#handleDragDroppedR3C3" onDragOver="#handleDragOverR3C3" pickOnBounds="true" preserveRatio="true" />
+      <Button focusTraversable="false" layoutX="339.0" layoutY="4.0" mnemonicParsing="false" onAction="#takeMarketResources" text="Take resources" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="16.0" />
          </font>
