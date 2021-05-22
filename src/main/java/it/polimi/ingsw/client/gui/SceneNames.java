@@ -7,6 +7,7 @@ public enum SceneNames {
     SINGLE_PLAYER_MENU("/fxml/SinglePlayerMenu.fxml"),
     MULTI_PLAYER_MENU("/fxml/MultiPlayerMenu.fxml"),
     MULTI_PLAYER_WAITING("/fxml/MultiPlayerWaiting.fxml"),
+    LOADING("/fxml/Loading.fxml"),
     PLAYER_BOARD("/fxml/PlayerBoard.fxml"),
     MARKET_BOARD("/fxml/MarketBoard.fxml"),
     DECKS_BOARD("/fxml/DecksBoard.fxml");

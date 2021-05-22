@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="686.0" prefWidth="994.0" styleClass="loadingPanel" stylesheets="@../css/loading.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllers.SetupController">
+   <children>
+      <ProgressBar focusTraversable="false" layoutX="104.0" layoutY="606.0" prefHeight="30.0" prefWidth="787.0" />
+   </children>
+</Pane>

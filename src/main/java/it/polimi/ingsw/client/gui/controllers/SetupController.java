@@ -3,7 +3,6 @@ package it.polimi.ingsw.client.gui.controllers;
 import it.polimi.ingsw.client.gui.SceneNames;
 import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
 import it.polimi.ingsw.utils.messages.client.NewLobbyMessage;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -131,11 +130,13 @@ public class SetupController extends GenericController {
 
     public void startOnlineGame() {
         getGUI().getMessageHandler().sendClientMessage(new NewLobbyMessage(1));
-        getGUIApplication().setActiveScene(SceneNames.PLAYER_BOARD); //TODO: da spostare
+        getGUIApplication().setActiveScene(SceneNames.LOADING);
+        getGUIApplication().setActiveScene(SceneNames.PLAYER_BOARD); //TODO: riga da spostare
     }
 
     public void startOfflineGame() {
         //TODO: implementare singlegame offline
+        getGUIApplication().setActiveScene(SceneNames.LOADING);
     }
 
     public void choose2Players() {

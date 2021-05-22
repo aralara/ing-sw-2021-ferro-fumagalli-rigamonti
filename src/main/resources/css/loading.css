@@ -1,0 +1,4 @@
+.loadingPanel {
+    -fx-background-image: url("../imgs/bkgs/bkg_loading.png");
+    -fx-background-size: stretch;
+}

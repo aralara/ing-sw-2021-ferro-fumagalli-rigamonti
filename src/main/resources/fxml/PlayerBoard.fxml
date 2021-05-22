@@ -8,7 +8,12 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="686.0" prefWidth="1400.0" styleClass="playerBoardPanel" stylesheets="@../css/playerBoard.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllers.PlayerBoardController">
    <children>
-      <ImageView fx:id="inkwell_imageVIew" fitHeight="70.0" fitWidth="70.0" layoutX="25.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true" rotate="-9.5" visible="false">
+      <Label fx:id="player_label" layoutX="8.0" layoutY="-8.0" textFill="WHITE">
+         <font>
+            <Font name="Pristina" size="24.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="inkwell_imageVIew" fitHeight="70.0" fitWidth="70.0" layoutX="25.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true" rotate="-9.5" visible="false">
          <image>
             <Image url="@../imgs/icon_inkwell.png" />
          </image>

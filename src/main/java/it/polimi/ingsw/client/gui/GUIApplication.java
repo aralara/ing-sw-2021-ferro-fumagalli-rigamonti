@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -20,7 +21,7 @@ public class GUIApplication extends Application {
 
     private List<SceneInformation> scenesInformation;
 
-    private Stage stage;
+    private Stage stage, secondStage;
     private Alert alert;
 
     public static void main(String[] args) {
@@ -69,11 +70,34 @@ public class GUIApplication extends Application {
     }
 
     public void setActiveScene(SceneNames sceneName) {
-        stage.setScene(scenesInformation.get(getSceneIndex(sceneName)).getScene());
-        if(sceneName.equals(SceneNames.PLAYER_BOARD) || sceneName.equals(SceneNames.MARKET_BOARD) ||
-                sceneName.equals(SceneNames.DECKS_BOARD))
-            stage.centerOnScreen();
-        stage.show();
+        if(sceneName.equals(SceneNames.MARKET_BOARD) || sceneName.equals(SceneNames.DECKS_BOARD))
+            openSecondStage(scenesInformation.get(getSceneIndex(sceneName)).getScene());
+        else {
+            stage.setScene(scenesInformation.get(getSceneIndex(sceneName)).getScene());
+            if (sceneName.equals(SceneNames.PLAYER_BOARD) || sceneName.equals(SceneNames.LOADING))
+                stage.centerOnScreen();
+            stage.show();
+        }
+    }
+
+    public void openSecondStage(Scene scene){
+        // New window (Stage)
+        secondStage = new Stage();
+        Image image = new Image(getClass().getResourceAsStream("/imgs/icon_inkwell.png"));
+        secondStage.setTitle("Master of Renaissance");
+        secondStage.setResizable(false);
+        secondStage.getIcons().add(image);
+        secondStage.setScene(scene);
+
+        secondStage.initModality(Modality.WINDOW_MODAL);
+        secondStage.initOwner(this.stage);
+        secondStage.centerOnScreen();
+
+        secondStage.show();
+    }
+
+    public void closeSecondStage(){
+        secondStage.hide();
     }
 
     public Alert getAlert() {
