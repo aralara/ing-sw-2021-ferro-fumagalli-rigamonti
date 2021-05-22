@@ -210,7 +210,7 @@ public class CLI extends ClientController {
             graphicalCLI.printNumberedList(availableAbilities, rt -> graphicalCLI.printString(rt.name()));
 
             do {
-                graphicalCLI.printString("Please choose a valid resource type for the wildcard:");
+                graphicalCLI.printString("\nPlease choose a valid resource type for the wildcard:");
                 index = graphicalCLI.getNextInt() - 1;
             } while(0 > index || index > availableAbilities.size());
 
@@ -362,24 +362,29 @@ public class CLI extends ClientController {
     @Override
     public void selectDevDecks() {
         int space;
+        try {
+            graphicalCLI.printWarehouseConfiguration(getLocalPlayerBoard().getWarehouse(), false);
+            graphicalCLI.printStrongbox(getLocalPlayerBoard().getStrongbox());
+            graphicalCLI.printDevelopmentDeckTop(getDevelopmentDecks());
+            if (graphicalCLI.askGoBack())
+                return;
+            else
+                idle = false;
 
-        graphicalCLI.printDevelopmentDeckTop(getDevelopmentDecks());
-        if(graphicalCLI.askGoBack())
-            return;
-        else
-            idle = false;
+            DevelopmentCard developmentCard = chooseCardFromDecks();
 
-        DevelopmentCard developmentCard = chooseCardFromDecks();
-
-        graphicalCLI.printString("Which space do you want to put the card on? ");
-        space = graphicalCLI.getNextInt() - 1;
-        while (space < 0 || space >= 3){
-            graphicalCLI.printString("Invalid choice, please try again: ");
+            graphicalCLI.printString("Which space do you want to put the card on? ");
             space = graphicalCLI.getNextInt() - 1;
-        }
+            while (space < 0 || space >= 3) {
+                graphicalCLI.printString("Invalid choice, please try again: ");
+                space = graphicalCLI.getNextInt() - 1;
+            }
 
-        getMessageHandler().sendClientMessage(new CanBuyDevelopmentCardMessage(developmentCard, space));
-        setMainActionPlayed(true);
+            getMessageHandler().sendClientMessage(new CanBuyDevelopmentCardMessage(developmentCard, space));
+            setMainActionPlayed(true);
+        } catch(NotExistingNicknameException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -407,6 +412,8 @@ public class CLI extends ClientController {
             boolean endChoice = false;
             if(productions.size() > 0) {
                 do {
+
+
                     graphicalCLI.printString("Choose a production you want to activate by entering its number: ");
                     int index = graphicalCLI.getNextInt() - 1;
                     while (index < 0 || index >= productions.size()){
@@ -420,8 +427,13 @@ public class CLI extends ClientController {
                         endChoice = true;
                     else {
                         graphicalCLI.printString("Do you want to activate another production? ");
-                        if (!graphicalCLI.isAnswerYes())
+                        if (!graphicalCLI.isAnswerYes()) {
                             endChoice = true;
+                        }
+                        else{
+                            graphicalCLI.printlnString("Available productions:");
+                            graphicalCLI.printNumberedList(productions, graphicalCLI::printProduction);
+                        }
                     }
                 } while (!endChoice);
                 productionsToActivate = resolveProductionWildcards(productionsToActivate);
@@ -540,7 +552,7 @@ public class CLI extends ClientController {
         } catch(NotExistingNicknameException e) {
             e.printStackTrace();
         }
-
+        Storage.aggregateResources(resources);
         graphicalCLI.printString("You have to take these resources: ");
         graphicalCLI.printResources(resources);
 

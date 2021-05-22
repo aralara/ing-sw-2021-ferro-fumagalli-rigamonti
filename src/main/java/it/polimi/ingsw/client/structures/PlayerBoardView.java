@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.structures;
 
 import it.polimi.ingsw.server.model.storage.Production;
+import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 
 import java.util.ArrayList;
@@ -36,6 +37,10 @@ public class PlayerBoardView {
         this.activeAbilityMarbles = new ArrayList<>();
         this.activeAbilityDiscounts = new ArrayList<>();
         this.basicProduction = new Production();
+        this.basicProduction = new Production(new ArrayList<>(List.of(new Resource(ResourceType.WILDCARD,1))),
+                new ArrayList<>(List.of(new Resource(ResourceType.COIN,100),
+                        new Resource(ResourceType.STONE,100),new Resource(ResourceType.SHIELD,100),
+                        new Resource(ResourceType.SERVANT,100))));
     }
 
     public PlayerBoardView(String nickname) {

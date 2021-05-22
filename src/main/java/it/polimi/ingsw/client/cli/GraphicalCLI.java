@@ -303,10 +303,10 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
                     color = chooseColor(specialShelf.get(i).getResourceType());
                     printString("[ " + color + (specialShelf.get(i).getResources().getQuantity()>j ? "■" : "x")
                             + color + RESET + " ]");
+                    printlnString("");
                 }
             }
         }
-        printlnString("");
         printlnString("");
     }
 
@@ -377,8 +377,9 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         printWarehouseConfiguration(playerBoardView.getWarehouse(), false);
         printStrongbox(playerBoardView.getStrongbox());
         printDevelopmentBoard(playerBoardView.getDevelopmentBoard());
+        printString("Leaders on hand: \n");
         printLeaderHand(playerBoardView.getLeaderBoard());
-        printString("Leaders placed on the board: \n");
+        printlnString("Leaders placed on the board: \n");
         printLeaderBoard(playerBoardView.getLeaderBoard());
     }
 
@@ -406,7 +407,7 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         if(!leaderBoard.getBoard().getCards().isEmpty()){
             printNumberedList((List<LeaderCard>)(List<?>)leaderBoard.getBoard().getCards(),this::printLeaderCard);
         }
-        else printString("empty");
+        else printlnString("empty");
         printlnString("");
     }
 
@@ -414,7 +415,7 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         if(!leaderBoard.getHand().getCards().isEmpty()) {printlnString("");
             printNumberedList((List<LeaderCard>) (List<?>) leaderBoard.getHand().getCards(), this::printLeaderCard);
         }
-        else printString("empty");
+        else printlnString("empty");
         printlnString("");
     }
 }
