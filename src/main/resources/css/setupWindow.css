@@ -2,3 +2,7 @@
     -fx-background-image: url("../imgs/bkgs/bkg_setup_dark.png");
     -fx-background-size: stretch;
 }
+.startingActions {
+    -fx-background-image: url("../imgs/bkgs/bkg_large.png");
+    -fx-background-size: stretch;
+}

@@ -17,13 +17,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GUIApplication extends Application {
+public class GUIApplication extends Application { //TODO: flusso messaggi da richiamare: BOARD con solo viste -> LEADERCHOICE -> *RESCHOICE -> BOARD abilitata
 
     private GUI gui;
 
     private List<SceneInformation> scenesInformation;
 
-    private Stage stage, secondStage, cardStage;
+    private Stage stage, secondStage, cardStage, popUpStage;
     private Alert alert;
 
     public static void main(String[] args) {
@@ -72,7 +72,9 @@ public class GUIApplication extends Application {
     }
 
     public void setActiveScene(SceneNames sceneName) {
-        if(sceneName.equals(SceneNames.MARKET_BOARD) || sceneName.equals(SceneNames.DECKS_BOARD))
+        if(sceneName.equals(SceneNames.LEADER_CHOICE_MENU) || sceneName.equals(SceneNames.RESOURCE_CHOICE_MENU))
+            openPopUpStage(scenesInformation.get(getSceneIndex(sceneName)).getScene());
+        else if(sceneName.equals(SceneNames.MARKET_BOARD) || sceneName.equals(SceneNames.DECKS_BOARD))
             openSecondStage(scenesInformation.get(getSceneIndex(sceneName)).getScene());
         else if(sceneName.equals(SceneNames.CARD))
             openCardStage(scenesInformation.get(getSceneIndex(sceneName)).getScene());
@@ -84,7 +86,25 @@ public class GUIApplication extends Application {
         }
     }
 
-    public void openSecondStage(Scene scene){
+    private void openPopUpStage(Scene scene){
+        // New window (Stage)
+        popUpStage = new Stage();
+        Image image = new Image(getClass().getResourceAsStream("/imgs/icon_inkwell.png"));
+        popUpStage.setTitle("Master of Renaissance");
+        popUpStage.setResizable(false);
+        popUpStage.getIcons().add(image);
+        popUpStage.setScene(scene);
+
+        popUpStage.centerOnScreen();
+
+        popUpStage.show();
+    }
+
+    public void closePopUpStage(){
+        popUpStage.hide();
+    }
+
+    private void openSecondStage(Scene scene){
         // New window (Stage)
         secondStage = new Stage();
         Image image = new Image(getClass().getResourceAsStream("/imgs/icon_inkwell.png"));
@@ -104,7 +124,7 @@ public class GUIApplication extends Application {
         secondStage.hide();
     }
 
-    public void openCardStage(Scene scene){
+    private void openCardStage(Scene scene){
         // New window (Stage)
         cardStage = new Stage();
         Image image = new Image(getClass().getResourceAsStream("/imgs/icon_inkwell.png"));
