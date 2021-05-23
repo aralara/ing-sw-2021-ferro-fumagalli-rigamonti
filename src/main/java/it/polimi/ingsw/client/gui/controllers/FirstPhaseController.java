@@ -56,8 +56,8 @@ public class FirstPhaseController extends GenericController {
 
     public void takeCoin() {
         PlayerBoardController pbc = (PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD);
-        int labelQuantity = (pbc.getResToPlaceCoin_label().getText().charAt(2)-48);
-        pbc.getResToPlaceCoin_label().setText("x "+(labelQuantity+1));
+        int labelQuantity = pbc.getCoinQuantity();
+        pbc.setCoinQuantity(++labelQuantity);
 
         if(coin_label.isVisible() && anotherRes){
             int quantity = coin_label.getText().charAt(2)-48;
@@ -69,8 +69,8 @@ public class FirstPhaseController extends GenericController {
 
     public void takeServant() {
         PlayerBoardController pbc = (PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD);
-        int labelQuantity = (pbc.getResToPlaceServant_label().getText().charAt(2)-48);
-        pbc.getResToPlaceServant_label().setText("x "+(labelQuantity+1));
+        int labelQuantity = pbc.getServantQuantity();
+        pbc.setServantQuantity(++labelQuantity);
 
         if(servant_label.isVisible() && anotherRes){
             int quantity = servant_label.getText().charAt(2)-48;
@@ -82,8 +82,8 @@ public class FirstPhaseController extends GenericController {
 
     public void takeShield() {
         PlayerBoardController pbc = (PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD);
-        int labelQuantity = (pbc.getResToPlaceShield_label().getText().charAt(2)-48);
-        pbc.getResToPlaceShield_label().setText("x "+(labelQuantity+1));
+        int labelQuantity = pbc.getShieldQuantity();
+        pbc.setShieldQuantity(++labelQuantity);
 
         if(shield_label.isVisible() && anotherRes){
             int quantity = shield_label.getText().charAt(2)-48;
@@ -95,8 +95,8 @@ public class FirstPhaseController extends GenericController {
 
     public void takeStone() {
         PlayerBoardController pbc = (PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD);
-        int labelQuantity = (pbc.getResToPlaceStone_label().getText().charAt(2)-48);
-        pbc.getResToPlaceStone_label().setText("x "+(labelQuantity+1));
+        int labelQuantity = pbc.getStoneQuantity();
+        pbc.setStoneQuantity(++labelQuantity);
 
         if(stone_label.isVisible() && anotherRes){
             int quantity = stone_label.getText().charAt(2)-48;
