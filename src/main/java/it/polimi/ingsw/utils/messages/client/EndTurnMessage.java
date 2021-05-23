@@ -50,7 +50,7 @@ public class EndTurnMessage extends ClientActionMessage {
 
     @Override
     public void doACKResponseAction(ClientController client) {
-        //TODO: deve fare qualcosa qui?
+        client.setMainActionPlayed(false);
     }
 
     @Override

@@ -22,6 +22,7 @@ public class PlayerBoardSetupMessage implements HiddenMessage, ServerUpdateMessa
     private final List<Shelf> warehouse;
     private final List<Resource> strongbox;
     private final boolean inkwell;
+    private final boolean turnPlayed;
 
 
     public PlayerBoardSetupMessage(PlayerBoard playerBoard) {
@@ -34,6 +35,7 @@ public class PlayerBoardSetupMessage implements HiddenMessage, ServerUpdateMessa
         this.warehouse = playerBoard.getWarehouse().getShelves();
         this.strongbox = playerBoard.getStrongbox().getList();
         this.inkwell = playerBoard.isFirstPlayer();
+        this.turnPlayed = playerBoard.isTurnPlayed();
     }
 
 
@@ -82,9 +84,9 @@ public class PlayerBoardSetupMessage implements HiddenMessage, ServerUpdateMessa
 
     @Override
     public void doUpdate(ClientController client) {
-        List<PlayerBoardView> clientPlayerBoards = client.getPlayerBoards();    //TODO: ORRENDO, BRUTTO E ASSOLUTAMENTE TEMPORANEO
+        List<PlayerBoardView> clientPlayerBoards = client.getPlayerBoards();
 
-        PlayerBoardView playerBoard = new PlayerBoardView(
+        PlayerBoardView playerBoard = new PlayerBoardView (
                 nickname,
                 new DevelopmentBoardView(developmentBSpaces),
                 new LeaderBoardView(leaderBHand, leaderBBoard),
@@ -94,5 +96,8 @@ public class PlayerBoardSetupMessage implements HiddenMessage, ServerUpdateMessa
                 inkwell
         );
         clientPlayerBoards.add(playerBoard);
+
+        if(client.getNickname().equals(nickname))   //TODO: probabilmente si potrebbe migliorare
+            client.setMainActionPlayed(turnPlayed);
     }
 }

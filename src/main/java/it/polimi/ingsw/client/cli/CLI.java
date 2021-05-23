@@ -197,7 +197,6 @@ public class CLI extends ClientController {
     public void notifyStartTurn(String nickname) {
         if (nickname.equals(getNickname())) {
             graphicalCLI.printlnString("\nNOW IT'S YOUR TURN!\n");
-            setMainActionPlayed(false);
             setPlayerTurn(true);
         }
         else {
