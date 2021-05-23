@@ -10,6 +10,7 @@ import it.polimi.ingsw.server.view.VirtualView;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Controller {
 
@@ -43,8 +44,13 @@ public class Controller {
         return game.getPlayerBoards().get(game.getPlayerIndexOf(nickname));
     }
 
-    public void initGame(List<VirtualView> views) {
-        game.initGame(views);
+    public void initNewGame(List<VirtualView> views) {
+        game.initGame(views.stream().map(VirtualView::getNickname).collect(Collectors.toList()));
+        game.addListeners(views);
+    }
+
+    public void initSavedGame(List<VirtualView> views) {
+        game.addListeners(views);
     }
 
     public void discardLeaders(String player, List<LeaderCard> leaderCards, boolean setup) {

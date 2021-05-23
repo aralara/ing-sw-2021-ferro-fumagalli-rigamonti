@@ -1,15 +1,9 @@
 package it.polimi.ingsw.client.cli;
 
 import it.polimi.ingsw.client.structures.*;
-import it.polimi.ingsw.server.model.cards.ability.AbilityDiscount;
 import it.polimi.ingsw.server.model.cards.ability.AbilityMarble;
-import it.polimi.ingsw.server.model.cards.ability.AbilityProduction;
-import it.polimi.ingsw.server.model.cards.ability.AbilityWarehouse;
 import it.polimi.ingsw.server.model.cards.card.*;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
-import it.polimi.ingsw.server.model.cards.requirement.Requirement;
-import it.polimi.ingsw.server.model.cards.requirement.RequirementDev;
-import it.polimi.ingsw.server.model.cards.requirement.RequirementRes;
 import it.polimi.ingsw.server.model.storage.Production;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
@@ -102,7 +96,8 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         if(list.size() > 0) {
             if(list.size() == 1) {
                 T opt = list.get(0);
-                printlnString(opt.toString() + " is the only option available");
+                printString("Only one option available: ");
+                printObject.accept(opt);
                 return opt;
             }
             int index;

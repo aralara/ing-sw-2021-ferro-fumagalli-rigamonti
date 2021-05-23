@@ -108,18 +108,17 @@ public abstract class Game implements Serializable {
     }
 
     /**
-     * Initializes a game by calling initMarket, initDevelopment, initFaithTrack, initLeaders in this order and adds
-     * listeners to the virtual views
-     * @param views Virtual views of the players
+     * Initializes a game by calling initPlayerBoards, randomizeStartingPLayers, initMarket, initDevelopment,
+     * initFaithTrack, initLeaders in this order
+     * @param players List containing nicknames of the players
      */
-    public void initGame(List<VirtualView> views) {
-        initPlayerBoards(views.stream().map(VirtualView::getNickname).collect(Collectors.toList()));
+    public void initGame(List<String> players) {
+        initPlayerBoards(players);
         randomizeStartingPlayer();
         initMarket();
         initDevelopment();
         initFaithTrack();
         initLeaders();
-        addListeners(views);
         finished = false;
     }
 
@@ -192,8 +191,8 @@ public abstract class Game implements Serializable {
     }
 
     /**
-     * Gets a list that contains a list of resources (wildcards and fatih) for each player that need to be equalized
-     * in the same playing order
+     * Gets a map that contains a list of resources (wildcards and fatih) for each player that need to be equalized,
+     * if the game is single player, it will return an empty map
      * @return Returns a map of lists of resources using the nickname of the player as a key
      */
     public abstract Map<String, List<Resource>> getResourcesToEqualize();

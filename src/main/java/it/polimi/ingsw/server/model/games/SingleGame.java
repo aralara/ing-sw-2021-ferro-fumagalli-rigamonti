@@ -5,17 +5,12 @@ import it.polimi.ingsw.server.model.boards.*;
 import it.polimi.ingsw.server.model.cards.deck.DevelopmentDeck;
 import it.polimi.ingsw.server.model.faith.FaithTrack;
 import it.polimi.ingsw.server.model.storage.Resource;
-import it.polimi.ingsw.server.model.storage.ResourceType;
 import it.polimi.ingsw.server.view.VirtualView;
-import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.TurnStatus;
 import it.polimi.ingsw.utils.listeners.Listeners;
 import it.polimi.ingsw.utils.listeners.LorenzoCardPlayListener;
 import it.polimi.ingsw.utils.listeners.LorenzoFaithChangeListener;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.*;
 
 public class SingleGame extends Game{
@@ -29,9 +24,9 @@ public class SingleGame extends Game{
 
 
     @Override
-    public void initGame(List<VirtualView> views){
+    public void initGame(List<String> players){
         initLorenzoBoard();
-        super.initGame(views);
+        super.initGame(players);
         isLorenzoTurn = false;
         isLorenzoWinner = false;
     }

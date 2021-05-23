@@ -2,13 +2,8 @@ package it.polimi.ingsw.server.model.games;
 
 import it.polimi.ingsw.server.model.boards.PlayerBoard;
 import it.polimi.ingsw.server.model.storage.*;
-import it.polimi.ingsw.server.view.VirtualView;
-import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.TurnStatus;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.*;
 
 public class MultiGame extends Game {
@@ -21,8 +16,8 @@ public class MultiGame extends Game {
 
 
     @Override
-    public void initGame(List<VirtualView> views) {
-        super.initGame(views);
+    public void initGame(List<String> players) {
+        super.initGame(players);
         lastTurn = false;
     }
 

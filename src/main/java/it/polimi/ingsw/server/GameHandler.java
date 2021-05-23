@@ -30,16 +30,16 @@ import java.util.stream.Collectors;
 public class GameHandler implements Runnable {
 
     private boolean active;
-    private AtomicInteger sizeSetup;
     private final int size;
+    private final AtomicInteger sizeSetup;
     private final List<VirtualView> clientsVirtualView;
     private Controller controller;
     private GameSave save;
 
     GameHandler(int size) {
         this.active = true;
-        this.sizeSetup = new AtomicInteger(0);
         this.size = size;
+        this.sizeSetup = new AtomicInteger(0);
         clientsVirtualView = new ArrayList<>();
         controller = null;
         save = null;
@@ -59,13 +59,14 @@ public class GameHandler implements Runnable {
         }
     }
 
-    public void startFromSave(GameSave save) {
-        controller = new Controller(size);  //TODO: controllare se i listener vengono preservati nel salvataggio
+    public void startFromSave(GameSave save) {  //TODO: controllare se i listener vengono preservati nel salvataggio
         this.save = save;
         try {
             save.load();
             Game game = save.getGame();
-            controller.initGame(clientsVirtualView);
+            controller = new Controller(game);
+            controller.initSavedGame(clientsVirtualView);
+            sizeSetup.set(size);
             updateClients(game);
             resumeGame();
         } catch(IOException | ClassNotFoundException e) {
@@ -76,7 +77,7 @@ public class GameHandler implements Runnable {
     public void startNewGame() {
         controller = new Controller(size);
         Game game = controller.getGame();
-        controller.initGame(clientsVirtualView);
+        controller.initNewGame(clientsVirtualView);
         try {
             GameLibrary library = GameLibrary.getInstance();
             save = library.createSave(game);
@@ -84,14 +85,6 @@ public class GameHandler implements Runnable {
             e.printStackTrace();
         }
         updateClients(game);
-        startingSequence();
-    }
-
-    public void resumeGame() {
-        sendAll(new StartTurnMessage(controller.getGame().getPlayingNickname()));
-    }
-
-    private void startingSequence() {
         sendAll(new AskLeaderCardDiscardMessage());
         Map<String, List<Resource>> resEqualize = controller.getResourcesToEqualize();
         if (resEqualize != null) {
@@ -123,6 +116,10 @@ public class GameHandler implements Runnable {
         }
     }
 
+    public void resumeGame() {
+        sendAll(new StartTurnMessage(controller.getGame().getPlayingNickname()));
+    }
+
     public boolean playerFinishedSetup() {
         return sizeSetup.incrementAndGet() == size;
     }
@@ -152,6 +149,20 @@ public class GameHandler implements Runnable {
             active = false;
             for (VirtualView virtualView : clientsVirtualView)
                 virtualView.stop(false);
+            if(sizeSetup.get() == size) {
+                try {
+                    save.save();
+                } catch (IOException e) {
+                    System.out.println("Unable to save game");
+                }
+            }
+            else {
+                try {
+                    GameLibrary.getInstance().deleteSave(save);
+                } catch (LibraryNotLoadedException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
