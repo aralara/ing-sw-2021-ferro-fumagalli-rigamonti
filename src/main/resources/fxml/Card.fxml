@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="311.0" styleClass="setupPanel" stylesheets="@../css/setupWindow.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllers.CardController">
+   <children>
+      <Label layoutX="57.0" layoutY="136.0" text="Development card to place" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="24.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="cardToPlace_imageView" fitHeight="256.0" fitWidth="170.0" layoutX="71.0" layoutY="181.0" onDragDetected="#handleDragDetected" pickOnBounds="true" preserveRatio="true" />
+   </children>
+</Pane>

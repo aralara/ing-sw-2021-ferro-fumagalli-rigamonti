@@ -4,11 +4,13 @@ import it.polimi.ingsw.client.gui.controllers.GenericController;
 import it.polimi.ingsw.client.gui.controllers.SetupController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -21,7 +23,7 @@ public class GUIApplication extends Application {
 
     private List<SceneInformation> scenesInformation;
 
-    private Stage stage, secondStage;
+    private Stage stage, secondStage, cardStage;
     private Alert alert;
 
     public static void main(String[] args) {
@@ -72,6 +74,8 @@ public class GUIApplication extends Application {
     public void setActiveScene(SceneNames sceneName) {
         if(sceneName.equals(SceneNames.MARKET_BOARD) || sceneName.equals(SceneNames.DECKS_BOARD))
             openSecondStage(scenesInformation.get(getSceneIndex(sceneName)).getScene());
+        else if(sceneName.equals(SceneNames.CARD))
+            openCardStage(scenesInformation.get(getSceneIndex(sceneName)).getScene());
         else {
             stage.setScene(scenesInformation.get(getSceneIndex(sceneName)).getScene());
             if (sceneName.equals(SceneNames.PLAYER_BOARD) || sceneName.equals(SceneNames.LOADING))
@@ -98,6 +102,31 @@ public class GUIApplication extends Application {
 
     public void closeSecondStage(){
         secondStage.hide();
+    }
+
+    public void openCardStage(Scene scene){
+        // New window (Stage)
+        cardStage = new Stage();
+        Image image = new Image(getClass().getResourceAsStream("/imgs/icon_inkwell.png"));
+        cardStage.setTitle("Master of Renaissance");
+        cardStage.setResizable(false);
+        cardStage.getIcons().add(image);
+        cardStage.setScene(scene);
+
+        cardStage.initModality(Modality.WINDOW_MODAL);
+        cardStage.initOwner(this.stage);
+
+        Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
+        double x = bounds.getMinX() + (bounds.getWidth() - scene.getWidth()) * 0.705;
+        double y = bounds.getMinY() + (bounds.getHeight() - scene.getHeight()) * 0.25;
+        cardStage.setX(x);
+        cardStage.setY(y);
+
+        cardStage.show();
+    }
+
+    public void closeCardStage(){
+        cardStage.hide();
     }
 
     public Alert getAlert() {

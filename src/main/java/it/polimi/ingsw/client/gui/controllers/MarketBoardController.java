@@ -1,16 +1,17 @@
 package it.polimi.ingsw.client.gui.controllers;
 
+import it.polimi.ingsw.client.gui.SceneNames;
 import it.polimi.ingsw.server.model.market.Marble;
 import it.polimi.ingsw.utils.messages.client.SelectMarketMessage;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class MarketBoardController extends GenericController {
     private List<ImageView> marblePositionList;
     private int selectedRow=0, selectedColumn=0;
 
+    @FXML private Button takeResources_button;
     @FXML private GridPane marbleMatrix_gridPane;
     @FXML private ImageView marbleR0C4_imageView, marbleR1C4_imageView, marbleR2C4_imageView, marbleR3C0_imageView,
             marbleR3C1_imageView, marbleR3C2_imageView, marbleR3C3_imageView, floatingMarble_imageView;
@@ -29,15 +31,16 @@ public class MarketBoardController extends GenericController {
                 (selectedColumn==4 && selectedRow>=0 && selectedRow<=2)) {
             int row = selectedRow==3?-1:selectedRow;
             int col = selectedColumn==4?-1:selectedColumn;
-            getGUI().getMessageHandler().sendClientMessage(new SelectMarketMessage(row, col));
-            disableMarbles();
+            getGUI().getMessageHandler().sendClientMessage(new SelectMarketMessage(row, col)); //TODO: controllare se funziona quand si saranno implementati i messaggi
+            disableMarketAction();
+            ((DecksBoardController)getGUIApplication().getController(SceneNames.DECKS_BOARD)).disableBuyCardAction();
+            ((PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD))
+                    .disableActivateProductionsAction();
             selectedRow=0;
             selectedColumn=0;
+            showAlert(Alert.AlertType.INFORMATION, "Success!", "Resources taken",
+                    "Now you need to place each taken resource");
             getGUIApplication().closeSecondStage();
-            //TODO: disabilitare altre azioni principali e aggiungere controlli anche qua
-            // valutare inoltre se mostrare un msg di avvenuta azione prima di chiudere la finestra
-        } else if(floatingMarble_imageView.isDisable()){
-            showAlert();
         }
     }
 
@@ -52,7 +55,7 @@ public class MarketBoardController extends GenericController {
         getGUIApplication().closeSecondStage();
     }
 
-    public void handleDragDetected(MouseEvent mouseEvent, ImageView srcImageView){
+    private void handleDragDetected(MouseEvent mouseEvent, ImageView srcImageView){
         Dragboard dragboard = srcImageView.startDragAndDrop(TransferMode.MOVE);
         ClipboardContent clipboardContent = new ClipboardContent();
         clipboardContent.putImage(srcImageView.getImage());
@@ -60,7 +63,7 @@ public class MarketBoardController extends GenericController {
         mouseEvent.consume();
     }
 
-    public void handleDragDropped(DragEvent dragEvent, ImageView destImageView, int destRow, int destColumn) {
+    private void handleDragDropped(DragEvent dragEvent, ImageView destImageView, int destRow, int destColumn) {
         Image image = dragEvent.getDragboard().getImage();
         resetAll();
         destImageView.setImage(image);
@@ -68,11 +71,10 @@ public class MarketBoardController extends GenericController {
         selectedColumn = destColumn;
     }
 
-    public void handleDragOver(DragEvent dragEvent) {
+    private void handleDragOver(DragEvent dragEvent) {
         if(dragEvent.getDragboard().hasImage())
             dragEvent.acceptTransferModes(TransferMode.MOVE);
     }
-
 
     public void handleDragDetectedFloatingMarble(MouseEvent mouseEvent) {
         handleDragDetected(mouseEvent, floatingMarble_imageView);
@@ -171,34 +173,33 @@ public class MarketBoardController extends GenericController {
     }
 
 
-    public void updateMarbleMatrix(int row, int column, List<Marble> marbles){
-        int i=0; //TODO: da implementare
+    public void enableMarketAction(){ //TODO: settare all'inizio di ogni (proprio) turno
+        takeResources_button.setDisable(false);
+    }
+
+    public void disableMarketAction(){
+        takeResources_button.setDisable(true);
+    }
+
+    public void updateMarket(List<Marble> marbles, Marble floatingMarble){ //TODO: chiamare per aggiornare market
+        updateMarbleMatrix(marbles);
+        resetAll();
+        updateFloatingMarble(floatingMarble);
+
+    }
+
+    private void updateMarbleMatrix(List<Marble> marbles){
+        int i=0; //TODO: da controllare
         for (Node node : marbleMatrix_gridPane.getChildren()) {
-            if (GridPane.getRowIndex(node) == row && GridPane.getColumnIndex(node) == column) {
-                ((ImageView)node).setImage(new Image(getClass().getResourceAsStream("/imgs/marbles/marble_"
-                        +marbles.get(i).getColor().toString().toLowerCase()+".png")));
-                i++;
-            }
+            ((ImageView)node).setImage(new Image(getClass().getResourceAsStream("/imgs/marbles/marble_"
+                    +marbles.get(i).getColor().toString().toLowerCase()+".png")));
+            i++;
         }
     }
 
-    public void updateFloatingMarble(Marble marble){
+    private void updateFloatingMarble(Marble marble){
         floatingMarble_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/marbles/marble_"
                 +marble.getColor().toString().toLowerCase()+".png")));
-    }
-
-    public void enableMarbles(){
-        floatingMarble_imageView.setDisable(false);
-        fillList();
-        for(ImageView imageView : marblePositionList)
-            imageView.setDisable(false);
-    }
-
-    private void disableMarbles(){
-        floatingMarble_imageView.setDisable(true);
-        fillList();
-        for(ImageView imageView : marblePositionList)
-            imageView.setDisable(true);
     }
 
     private void fillList(){
@@ -224,14 +225,5 @@ public class MarketBoardController extends GenericController {
         for(ImageView imageView : marblePositionList)
             imageView.setImage(null);
         floatingMarble_imageView.setImage(null);
-    }
-
-    private void showAlert(){
-        Alert alert = getGUIApplication().getAlert();
-        alert.setAlertType(Alert.AlertType.ERROR);
-        alert.setTitle("Error!");
-        alert.setHeaderText("Main action already played");
-        alert.setContentText("You can't player any main action in this turn anymore"); //TODO: controllare inglese >_<
-        alert.showAndWait();
     }
 }

@@ -92,7 +92,7 @@
       <ImageView fx:id="marbleR3C1_imageView" fitHeight="50.0" fitWidth="50.0" layoutX="217.0" layoutY="343.0" onDragDetected="#handleDragDetectedR3C1" onDragDropped="#handleDragDroppedR3C1" onDragOver="#handleDragOverR3C1" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="marbleR3C2_imageView" fitHeight="50.0" fitWidth="50.0" layoutX="281.0" layoutY="343.0" onDragDetected="#handleDragDetectedR3C2" onDragDropped="#handleDragDroppedR3C2" onDragOver="#handleDragOverR3C2" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="marbleR3C3_imageView" fitHeight="50.0" fitWidth="50.0" layoutX="344.0" layoutY="343.0" onDragDetected="#handleDragDetectedR3C3" onDragDropped="#handleDragDroppedR3C3" onDragOver="#handleDragOverR3C3" pickOnBounds="true" preserveRatio="true" />
-      <Button focusTraversable="false" layoutX="339.0" layoutY="4.0" mnemonicParsing="false" onAction="#takeMarketResources" text="Take resources" textFill="#1d60cc">
+      <Button fx:id="takeResources_button" focusTraversable="false" layoutX="339.0" layoutY="4.0" mnemonicParsing="false" onAction="#takeMarketResources" text="Take resources" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="16.0" />
          </font>

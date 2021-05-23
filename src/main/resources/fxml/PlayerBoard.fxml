@@ -77,45 +77,48 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <ImageView fx:id="space1L1_imageView" fitHeight="256.0" fitWidth="170.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="space1L1_imageView" disable="true" fitHeight="256.0" fitWidth="170.0" onDragDropped="#handleDragDropped1L1" onDragOver="#handleDragOver1L1" pickOnBounds="true" preserveRatio="true">
                <GridPane.margin>
                   <Insets left="1.0" top="80.0" />
                </GridPane.margin>
+               <image>
+                  <Image url="@../imgs/devCards/2.png" />
+               </image>
             </ImageView>
-            <ImageView fx:id="space1L2_imageView" fitHeight="256.0" fitWidth="170.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="space1L2_imageView" disable="true" fitHeight="256.0" fitWidth="170.0" onDragDropped="#handleDragDropped1L2" onDragOver="#handleDragOver1L2" pickOnBounds="true" preserveRatio="true">
                <GridPane.margin>
                   <Insets left="1.0" top="-14.0" />
                </GridPane.margin>
             </ImageView>
-            <ImageView fx:id="space1L3_imageView" fitHeight="256.0" fitWidth="170.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="space1L3_imageView" disable="true" fitHeight="256.0" fitWidth="170.0" onDragDropped="#handleDragDropped1L3" onDragOver="#handleDragOver1L3" pickOnBounds="true" preserveRatio="true">
                <GridPane.margin>
                   <Insets left="1.0" top="-108.0" />
                </GridPane.margin>
             </ImageView>
-            <ImageView fx:id="space2L1_imageView" fitHeight="256.0" fitWidth="170.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+            <ImageView fx:id="space2L1_imageView" disable="true" fitHeight="256.0" fitWidth="170.0" onDragDropped="#handleDragDropped2L1" onDragOver="#handleDragOver2L1" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
                <GridPane.margin>
                   <Insets left="2.0" top="80.0" />
                </GridPane.margin></ImageView>
-            <ImageView fx:id="space2L2_imageView" fitHeight="256.0" fitWidth="170.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+            <ImageView fx:id="space2L2_imageView" disable="true" fitHeight="256.0" fitWidth="170.0" onDragDropped="#handleDragDropped2L2" onDragOver="#handleDragOver2L2" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
                <GridPane.margin>
                   <Insets left="2.0" top="-14.0" />
                </GridPane.margin>
             </ImageView>
-            <ImageView fx:id="space2L3_imageView" fitHeight="256.0" fitWidth="170.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+            <ImageView fx:id="space2L3_imageView" disable="true" fitHeight="256.0" fitWidth="170.0" onDragDropped="#handleDragDropped2L3" onDragOver="#handleDragOver2L3" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
                <GridPane.margin>
                   <Insets left="2.0" top="-108.0" />
                </GridPane.margin>
             </ImageView>
-            <ImageView fx:id="space3L1_imageView" fitHeight="256.0" fitWidth="170.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+            <ImageView fx:id="space3L1_imageView" disable="true" fitHeight="256.0" fitWidth="170.0" onDragDropped="#handleDragDropped3L1" onDragOver="#handleDragOver3L1" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                <GridPane.margin>
                   <Insets left="7.0" top="80.0" />
                </GridPane.margin></ImageView>
-            <ImageView fx:id="space3L2_imageView" fitHeight="256.0" fitWidth="170.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+            <ImageView fx:id="space3L2_imageView" disable="true" fitHeight="256.0" fitWidth="170.0" onDragDropped="#handleDragDropped3L2" onDragOver="#handleDragOver3L2" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                <GridPane.margin>
                   <Insets left="7.0" top="-14.0" />
                </GridPane.margin>
             </ImageView>
-            <ImageView fx:id="space3L3_imageView" fitHeight="256.0" fitWidth="170.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+            <ImageView fx:id="space3L3_imageView" disable="true" fitHeight="256.0" fitWidth="170.0" onDragDropped="#handleDragDropped3L3" onDragOver="#handleDragOver3L3" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
                <GridPane.margin>
                   <Insets left="7.0" top="-108.0" />
                </GridPane.margin>
@@ -162,24 +165,29 @@
          <image>
             <Image url="@../imgs/faith/tile_4point.png.png" />
          </image></ImageView>
-      <Button focusTraversable="false" layoutX="972.0" layoutY="32.0" mnemonicParsing="false" onAction="#viewOpponents" prefHeight="60.0" prefWidth="60.0" styleClass="opponentButton" stylesheets="@../css/playerBoard.css" />
+      <Button focusTraversable="false" layoutX="877.0" layoutY="151.0" mnemonicParsing="false" onAction="#viewOpponents" prefHeight="44.0" prefWidth="44.0" styleClass="opponentButton" stylesheets="@../css/playerBoard.css" />
       <Label layoutX="1281.0" text="Main actions" textFill="WHITE">
          <font>
             <Font name="Pristina" size="24.0" />
          </font>
       </Label>
-      <Separator layoutX="1076.0" layoutY="37.0" prefHeight="1.0" prefWidth="306.0" />
-      <Button focusTraversable="false" layoutX="1073.0" layoutY="49.0" mnemonicParsing="false" onAction="#goToMarket" text="Market" textFill="#1d60cc">
+      <Separator layoutX="974.0" layoutY="37.0" prefHeight="3.0" prefWidth="408.0" />
+      <Button focusTraversable="false" layoutX="978.0" layoutY="49.0" mnemonicParsing="false" onAction="#goToMarket" text="Market" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="18.0" />
          </font>
       </Button>
-      <Button focusTraversable="false" layoutX="1160.0" layoutY="49.0" mnemonicParsing="false" onAction="#goToDecks" prefHeight="41.0" prefWidth="70.0" text="Decks" textFill="#1d60cc">
+      <Button focusTraversable="false" layoutX="1065.0" layoutY="49.0" mnemonicParsing="false" onAction="#goToDecks" prefHeight="41.0" prefWidth="70.0" text="Decks" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="18.0" />
          </font>
       </Button>
-      <Button focusTraversable="false" layoutX="1246.0" layoutY="49.0" mnemonicParsing="false" onAction="#activateProductions" text="Activate productions" textFill="#1d60cc">
+      <Button fx:id="activateProductions_button" focusTraversable="false" layoutX="1151.0" layoutY="49.0" mnemonicParsing="false" onAction="#activateProductions" text="Activate productions" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="18.0" />
+         </font>
+      </Button>
+      <Button layoutX="1306.0" layoutY="49.0" mnemonicParsing="false" onAction="#endTurn" text="End turn" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="18.0" />
          </font>
