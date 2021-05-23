@@ -30,16 +30,12 @@ public class MultiGame extends Game {
     public String getPlayingNickname() {
         return getPlayerBoards().get(currentPlayer).getPlayer().getNickname();
     }
-
-    /**
-     * Gets a list that contains a list of resources (wildcards and fatih) for each player that need to be equalized
-     * in the same playing order
-     * @return Returns a map of lists of resources using the nickname of the player as a key
-     */
-    @SuppressWarnings("")
+    
+    @Override
     public Map<String, List<Resource>> getResourcesToEqualize() {    //TODO: hardcoded resources
         Map<String, List<Resource>> equalizeRes = new HashMap<>();
         List<List<Resource>> resources = new ArrayList<>();
+        resources.add(new ArrayList<>());
         resources.add(Arrays.asList(new Resource(ResourceType.WILDCARD, 1)));
         resources.add(Arrays.asList(
                 new Resource(ResourceType.WILDCARD, 1),
@@ -47,8 +43,8 @@ public class MultiGame extends Game {
         resources.add(Arrays.asList(
                 new Resource(ResourceType.WILDCARD, 2),
                 new Resource(ResourceType.FAITH, 1)));
-        for(int i = 1; i < getPlayerNumber(); i++)
-            equalizeRes.put(getPlayerBoards().get(i).getPlayer().getNickname(), resources.get(i - 1));
+        for(int i = 0; i < getPlayerNumber(); i++)
+            equalizeRes.put(getPlayerBoards().get(i).getPlayer().getNickname(), resources.get(i));
         return equalizeRes;
     }
 

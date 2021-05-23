@@ -192,6 +192,13 @@ public abstract class Game implements Serializable {
     }
 
     /**
+     * Gets a list that contains a list of resources (wildcards and fatih) for each player that need to be equalized
+     * in the same playing order
+     * @return Returns a map of lists of resources using the nickname of the player as a key
+     */
+    public abstract Map<String, List<Resource>> getResourcesToEqualize();
+
+    /**
      * Adds resources organized in shelves to the specified player's warehouse
      * @param player Index of the player to add resources to
      * @param shelves List of shelves containing resources to add

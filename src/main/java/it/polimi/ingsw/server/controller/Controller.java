@@ -80,10 +80,7 @@ public class Controller {
     }
 
     public Map<String, List<Resource>> getResourcesToEqualize() {
-        if(playerNumber == 1)
-            return null;
-        else
-            return ((MultiGame) game).getResourcesToEqualize();
+        return game.getResourcesToEqualize();
     }
 
     public boolean playLeaderCard(String player, List<LeaderCard> cards) { //TODO: da controllare

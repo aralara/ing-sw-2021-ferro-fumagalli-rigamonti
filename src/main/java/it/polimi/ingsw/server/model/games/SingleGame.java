@@ -4,6 +4,8 @@ import it.polimi.ingsw.server.model.FileNames;
 import it.polimi.ingsw.server.model.boards.*;
 import it.polimi.ingsw.server.model.cards.deck.DevelopmentDeck;
 import it.polimi.ingsw.server.model.faith.FaithTrack;
+import it.polimi.ingsw.server.model.storage.Resource;
+import it.polimi.ingsw.server.model.storage.ResourceType;
 import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.TurnStatus;
@@ -14,7 +16,7 @@ import it.polimi.ingsw.utils.listeners.LorenzoFaithChangeListener;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.List;
+import java.util.*;
 
 public class SingleGame extends Game{
 
@@ -48,6 +50,13 @@ public class SingleGame extends Game{
     public void initLorenzoBoard() {
         lorenzoBoard = new LorenzoBoard(this);
         lorenzoBoard.initLorenzoDeck(FileNames.LORENZO_DEV_FILE.value(), FileNames.LORENZO_FAITH_FILE.value());
+    }
+
+    @Override
+    public Map<String, List<Resource>> getResourcesToEqualize() {    //TODO: hardcoded resources
+        Map<String, List<Resource>> equalizeRes = new HashMap<>();
+        equalizeRes.put(getPlayerBoards().get(0).getPlayer().getNickname(), new ArrayList<>());
+        return equalizeRes;
     }
 
     @Override

@@ -170,7 +170,7 @@ public class CLI extends ClientController {
     }
 
     @Override
-    public void askResourceEqualize(List<Resource> resources) { //TODO: prima della scelta delle risorse mostrare i dev decks e il market per lasciare una scelta sensata (dovremo cambiare ordine pacchetti, mandando prima il setup delle cose comuni)
+    public void askResourceEqualize(List<Resource> resources) {
         List<Resource> newResources = new ArrayList<>();
         graphicalCLI.printlnString("");
         for(Resource resource : resources) {
@@ -190,6 +190,7 @@ public class CLI extends ClientController {
             graphicalCLI.printlnString("Now place the resources on the shelves:");
             placeResourcesOnShelves(newResources);
         }
+        idle = true;
     }
 
     @Override

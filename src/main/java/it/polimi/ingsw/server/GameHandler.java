@@ -6,7 +6,6 @@ import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.model.boards.PlayerBoard;
 import it.polimi.ingsw.server.model.games.Game;
 import it.polimi.ingsw.server.model.storage.Resource;
-import it.polimi.ingsw.server.model.storage.ResourceType;
 import it.polimi.ingsw.server.saves.GameLibrary;
 import it.polimi.ingsw.server.saves.GameSave;
 import it.polimi.ingsw.server.view.VirtualView;
@@ -25,11 +24,13 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class GameHandler implements Runnable {
 
     private boolean active;
+    private AtomicInteger sizeSetup;
     private final int size;
     private final List<VirtualView> clientsVirtualView;
     private Controller controller;
@@ -37,6 +38,7 @@ public class GameHandler implements Runnable {
 
     GameHandler(int size) {
         this.active = true;
+        this.sizeSetup = new AtomicInteger(0);
         this.size = size;
         clientsVirtualView = new ArrayList<>();
         controller = null;
@@ -45,38 +47,33 @@ public class GameHandler implements Runnable {
 
     @Override
     public void run() {
-        setup();
-        //TODO: teoricamente c'era un busy wait ma non so se sia necessario
-    }
-
-    private void setup() {
         try {
             GameLibrary library = GameLibrary.getInstance();
-            List<String> players = clientsVirtualView.stream()
-                    .map(VirtualView::getNickname).collect(Collectors.toList());
+            List<String> players = getAllNicknames();
             if(library.checkSave(players))
                 clientsVirtualView.get(0).sendMessage(new GameSavesMessage(library.getSaves(players)));
             else
-                startingSequenceNewGame();
+                startNewGame();
         } catch(LibraryNotLoadedException e) {
-            startingSequenceNewGame();
+            startNewGame();
         }
     }
 
-    public void startingSequenceFromSave(GameSave save) {
+    public void startFromSave(GameSave save) {
         controller = new Controller(size);  //TODO: controllare se i listener vengono preservati nel salvataggio
         this.save = save;
         try {
             save.load();
             Game game = save.getGame();
             controller.initGame(clientsVirtualView);
-            startingSequence(game);
+            updateClients(game);
+            resumeGame();
         } catch(IOException | ClassNotFoundException e) {
-            startingSequenceNewGame();
+            startNewGame();
         }
     }
 
-    public void startingSequenceNewGame() {
+    public void startNewGame() {
         controller = new Controller(size);
         Game game = controller.getGame();
         controller.initGame(clientsVirtualView);
@@ -86,10 +83,28 @@ public class GameHandler implements Runnable {
         } catch(LibraryNotLoadedException e) {
             e.printStackTrace();
         }
-        startingSequence(game);
+        updateClients(game);
+        startingSequence();
     }
 
-    private void startingSequence(Game game) {
+    public void resumeGame() {
+        sendAll(new StartTurnMessage(controller.getGame().getPlayingNickname()));
+    }
+
+    private void startingSequence() {
+        sendAll(new AskLeaderCardDiscardMessage());
+        Map<String, List<Resource>> resEqualize = controller.getResourcesToEqualize();
+        if (resEqualize != null) {
+            for (Map.Entry<String, List<Resource>> entry : resEqualize.entrySet())
+                try {
+                    getFromNickname(entry.getKey()).sendMessage(new ResourcesEqualizeMessage(entry.getValue()));
+                } catch (NotExistingNicknameException e) {
+                    e.printStackTrace();
+                }
+        }
+    }
+
+    private void updateClients(Game game) {
         List<PlayerBoard> playerBoards = game.getPlayerBoards();
         for (VirtualView virtualView : clientsVirtualView) {
             for(PlayerBoard pBoard : playerBoards) {
@@ -106,17 +121,10 @@ public class GameHandler implements Runnable {
             virtualView.sendMessage(new DevelopmentDecksMessage(game.getDevelopmentDecks()));
             virtualView.sendMessage(new FaithTrackMessage(game.getFaithTrack()));
         }
-        sendAll(new AskLeaderCardDiscardMessage());
-        Map<String, List<Resource>> resEqualize = controller.getResourcesToEqualize();
-        if (resEqualize != null) {
-            for (Map.Entry<String, List<Resource>> entry : resEqualize.entrySet())
-                try {
-                    getFromNickname(entry.getKey()).sendMessage(new ResourcesEqualizeMessage(entry.getValue()));
-                } catch (NotExistingNicknameException e) {
-                    e.printStackTrace();
-                }
-        }
-        sendAll(new StartTurnMessage(controller.getGame().getPlayingNickname()));
+    }
+
+    public boolean playerFinishedSetup() {
+        return sizeSetup.incrementAndGet() == size;
     }
 
     public void add(Socket client, ObjectOutputStream out, ObjectInputStream in, String nickname) {
@@ -160,11 +168,7 @@ public class GameHandler implements Runnable {
     }
 
     public List<String> getAllNicknames() {
-        List<String> temp = new ArrayList<>();
-        for (VirtualView virtualView : clientsVirtualView) {
-            temp.add(virtualView.getNickname());
-        }
-        return temp;
+        return clientsVirtualView.stream().map(VirtualView::getNickname).collect(Collectors.toList());
     }
 
     public VirtualView getFromNickname(String nickname) throws NotExistingNicknameException{
@@ -172,6 +176,10 @@ public class GameHandler implements Runnable {
             if(virtualView.getNickname().equals(nickname))
                 return virtualView;
         throw new NotExistingNicknameException();
+    }
+
+    public Controller getController() {
+        return controller;
     }
 
 }

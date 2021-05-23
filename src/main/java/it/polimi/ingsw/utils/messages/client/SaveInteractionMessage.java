@@ -3,7 +3,6 @@ package it.polimi.ingsw.utils.messages.client;
 import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.exceptions.LibraryNotLoadedException;
 import it.polimi.ingsw.server.controller.Controller;
-import it.polimi.ingsw.server.model.games.Game;
 import it.polimi.ingsw.server.saves.GameLibrary;
 import it.polimi.ingsw.server.saves.GameSave;
 import it.polimi.ingsw.server.saves.SaveInteractions;
@@ -32,11 +31,11 @@ public class SaveInteractionMessage extends ClientActionMessage {
                     break;
                 case OPEN_SAVE:
                     view.sendMessage(new ServerAckMessage(getUuid(), true));
-                    view.getGameHandler().startingSequenceFromSave(save);
+                    view.getGameHandler().startFromSave(save);
                     break;
                 case NO_ACTION:
                     view.sendMessage(new ServerAckMessage(getUuid(), true));
-                    view.getGameHandler().startingSequenceNewGame();
+                    view.getGameHandler().startNewGame();
             }
         } catch(LibraryNotLoadedException e) {
             view.sendMessage(new ServerAckMessage(getUuid(), false));
