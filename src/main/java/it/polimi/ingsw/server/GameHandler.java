@@ -69,6 +69,7 @@ public class GameHandler implements Runnable {
         try {
             save.load();
             Game game = save.getGame();
+            controller.initGame(clientsVirtualView);
             startingSequence(game);
         } catch(IOException | ClassNotFoundException e) {
             startingSequenceNewGame();
@@ -78,6 +79,7 @@ public class GameHandler implements Runnable {
     public void startingSequenceNewGame() {
         controller = new Controller(size);
         Game game = controller.getGame();
+        controller.initGame(clientsVirtualView);
         try {
             GameLibrary library = GameLibrary.getInstance();
             save = library.createSave(game);
@@ -88,7 +90,6 @@ public class GameHandler implements Runnable {
     }
 
     private void startingSequence(Game game) {
-        controller.initGame(clientsVirtualView);
         List<PlayerBoard> playerBoards = game.getPlayerBoards();
         for (VirtualView virtualView : clientsVirtualView) {
             for(PlayerBoard pBoard : playerBoards) {
