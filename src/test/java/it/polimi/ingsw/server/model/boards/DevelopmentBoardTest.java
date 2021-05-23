@@ -188,55 +188,55 @@ public class DevelopmentBoardTest {
 
         try {
             DevelopmentCard developmentCard = new DevelopmentCard(0,3, CardColors.GREEN, 2, production, cost);
-            assertFalse(developmentBoard.checkDevCardAddable(developmentCard));
+            assertFalse(developmentBoard.checkDevCardAddable(developmentCard,0));
 
             developmentCard = new DevelopmentCard(0,3, CardColors.PURPLE, 1, production, cost);
-            assertTrue(developmentBoard.checkDevCardAddable(developmentCard));
+            assertTrue(developmentBoard.checkDevCardAddable(developmentCard,0));
             developmentBoard.addDevCard(developmentCard, 0);
 
             developmentCard = new DevelopmentCard(0,3, CardColors.YELLOW, 1, production, cost);
-            assertTrue(developmentBoard.checkDevCardAddable(developmentCard));
+            assertTrue(developmentBoard.checkDevCardAddable(developmentCard,1));
             developmentBoard.addDevCard(developmentCard, 1);
 
             developmentCard = new DevelopmentCard(0,3, CardColors.GREEN, 3, production, cost);
-            assertFalse(developmentBoard.checkDevCardAddable(developmentCard));
+            assertFalse(developmentBoard.checkDevCardAddable(developmentCard,2));
 
             developmentCard = new DevelopmentCard(0,3, CardColors.YELLOW, 2, production, cost);
-            assertTrue(developmentBoard.checkDevCardAddable(developmentCard));
+            assertTrue(developmentBoard.checkDevCardAddable(developmentCard,1));
             developmentBoard.addDevCard(developmentCard, 1);
 
             developmentCard = new DevelopmentCard(0,3, CardColors.GREEN, 1, production, cost);
-            assertTrue(developmentBoard.checkDevCardAddable(developmentCard));
+            assertTrue(developmentBoard.checkDevCardAddable(developmentCard,2));
             developmentBoard.addDevCard(developmentCard, 2);
 
             developmentCard = new DevelopmentCard(0,3, CardColors.BLUE, 1, production, cost);
-            assertFalse(developmentBoard.checkDevCardAddable(developmentCard));
+            assertFalse(developmentBoard.checkDevCardAddable(developmentCard,0));
 
             developmentCard = new DevelopmentCard(0,3, CardColors.GREEN, 3, production, cost);
-            assertTrue(developmentBoard.checkDevCardAddable(developmentCard));
+            assertTrue(developmentBoard.checkDevCardAddable(developmentCard,1));
             developmentBoard.addDevCard(developmentCard, 1);
 
             developmentCard = new DevelopmentCard(0,3, CardColors.PURPLE, 2, production, cost);
-            assertTrue(developmentBoard.checkDevCardAddable(developmentCard));
+            assertTrue(developmentBoard.checkDevCardAddable(developmentCard,2));
             developmentBoard.addDevCard(developmentCard, 2);
 
             developmentCard = new DevelopmentCard(0,3, CardColors.PURPLE, 2, production, cost);
-            assertTrue(developmentBoard.checkDevCardAddable(developmentCard));
+            assertTrue(developmentBoard.checkDevCardAddable(developmentCard,0));
             developmentBoard.addDevCard(developmentCard, 0);
 
             developmentCard = new DevelopmentCard(0,3, CardColors.GREEN, 2, production, cost);
-            assertFalse(developmentBoard.checkDevCardAddable(developmentCard));
+            assertFalse(developmentBoard.checkDevCardAddable(developmentCard,2));
 
             developmentCard = new DevelopmentCard(0,3, CardColors.PURPLE, 3, production, cost);
-            assertTrue(developmentBoard.checkDevCardAddable(developmentCard));
+            assertTrue(developmentBoard.checkDevCardAddable(developmentCard,0));
             developmentBoard.addDevCard(developmentCard, 0);
 
             developmentCard = new DevelopmentCard(0,3, CardColors.YELLOW, 3, production, cost);
-            assertTrue(developmentBoard.checkDevCardAddable(developmentCard));
+            assertTrue(developmentBoard.checkDevCardAddable(developmentCard,2));
             developmentBoard.addDevCard(developmentCard, 2);
 
             developmentCard = new DevelopmentCard(0,3, CardColors.BLUE, 3, production, cost);
-            assertFalse(developmentBoard.checkDevCardAddable(developmentCard));
+            assertFalse(developmentBoard.checkDevCardAddable(developmentCard,0));
         }
         catch (InvalidSpaceException e){
             e.printStackTrace();

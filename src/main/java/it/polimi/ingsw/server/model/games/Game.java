@@ -269,8 +269,8 @@ public abstract class Game implements Serializable {
      * @param card The development card to be added
      * @return Returns true if the card can be added, false otherwise
      */
-    public boolean canBuyDevCard(int player, DevelopmentCard card) {
-        return playerBoards.get(player).getDevelopmentBoard().checkDevCardAddable(card) &&
+    public boolean canBuyDevCard(int player, DevelopmentCard card, int space) {
+        return playerBoards.get(player).getDevelopmentBoard().checkDevCardAddable(card, space) &&
                 Storage.checkContainedResources(playerBoards.get(player).createResourceStock(),
                         Storage.mergeResourceList(card.getCost()));
     }

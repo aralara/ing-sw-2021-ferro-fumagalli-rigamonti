@@ -69,8 +69,8 @@ public class Controller {
         return game.getFromMarket(game.getPlayerIndexOf(player), row, column);
     }
 
-    public boolean canBuyDevCard(String player, DevelopmentCard card) {
-        return game.canBuyDevCard(game.getPlayerIndexOf(player), card);
+    public boolean canBuyDevCard(String player, DevelopmentCard card, int space) {
+        return game.canBuyDevCard(game.getPlayerIndexOf(player), card, space);
     }
 
     public boolean buyDevCard(String player, DevelopmentCard card, int space, List<RequestResources> requests) {

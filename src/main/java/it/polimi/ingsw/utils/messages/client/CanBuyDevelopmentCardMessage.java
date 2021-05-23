@@ -31,12 +31,13 @@ public class CanBuyDevelopmentCardMessage extends ClientActionMessage {
 
     @Override
     public void doAction(VirtualView view, Controller controller) {
-        boolean success = controller.canBuyDevCard(view.getNickname(), developmentCard);
+        boolean success = controller.canBuyDevCard(view.getNickname(), developmentCard, space);
         view.sendMessage(new ServerAckMessage(getUuid(), success));
     }
 
     @Override
     public void doACKResponseAction(ClientController client) {
+        client.setMainActionPlayed(true);
         List<RequestResources> requestResources = client.chooseStorages(developmentCard.getCost());
         client.getMessageHandler().sendClientMessage(
                 new RequestResourcesDevMessage(developmentCard, space, requestResources));

@@ -394,7 +394,6 @@ public class CLI extends ClientController {
             }
 
             getMessageHandler().sendClientMessage(new CanBuyDevelopmentCardMessage(developmentCard, space));
-            setMainActionPlayed(true);
         } catch(NotExistingNicknameException e) {
             e.printStackTrace();
         }
