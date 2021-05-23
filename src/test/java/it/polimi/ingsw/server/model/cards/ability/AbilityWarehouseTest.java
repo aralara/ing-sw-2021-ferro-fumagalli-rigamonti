@@ -21,15 +21,15 @@ public class AbilityWarehouseTest {
         AbilityWarehouse aw = new AbilityWarehouse(ResourceType.STONE);
         aw.activateAbility(pb);
 
-        assertEquals(1,pb.getWarehouse().getShelves().size());
-        assertEquals(ResourceType.STONE, pb.getWarehouse().getShelves().get(0).getResourceType());
+        assertEquals(4,pb.getWarehouse().getShelves().size());
+        assertEquals(ResourceType.STONE, pb.getWarehouse().getShelves().get(3).getResourceType());
 
         AbilityWarehouse aw2 = new AbilityWarehouse(ResourceType.SERVANT);
 
         aw2.activateAbility(pb);
 
-        assertEquals(2,pb.getWarehouse().getShelves().size());
-        assertEquals(ResourceType.STONE, pb.getWarehouse().getShelves().get(0).getResourceType());
-        assertEquals(ResourceType.SERVANT, pb.getWarehouse().getShelves().get(1).getResourceType());
+        assertEquals(5,pb.getWarehouse().getShelves().size());
+        assertEquals(ResourceType.STONE, pb.getWarehouse().getShelves().get(3).getResourceType());
+        assertEquals(ResourceType.SERVANT, pb.getWarehouse().getShelves().get(4).getResourceType());
     }
 }
