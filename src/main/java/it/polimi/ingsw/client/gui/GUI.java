@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.client.UpdateMessageReader;
 import it.polimi.ingsw.client.gui.controllers.SetupController;
 import it.polimi.ingsw.server.model.boards.Player;
+import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.model.cards.card.LorenzoCard;
 import it.polimi.ingsw.server.model.storage.RequestResources;
 import it.polimi.ingsw.server.model.storage.Resource;
@@ -14,12 +15,14 @@ import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 import it.polimi.ingsw.utils.messages.server.action.ServerActionMessage;
 import javafx.application.Platform;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class GUI extends ClientController {
 
     private final GUIApplication guiApplication;
+    private List<LeaderCard> leadersToDiscard; //TODO: va bene qua?
 
     public GUI(GUIApplication guiApplication) {
         super();
@@ -28,7 +31,7 @@ public class GUI extends ClientController {
 
     @Override
     public void setup() {
-
+        leadersToDiscard = new ArrayList<>();
     }
 
     public boolean connect(String address, Integer port) {
@@ -150,5 +153,9 @@ public class GUI extends ClientController {
         return null;
     }
 
-
+    public boolean addLeaderToDiscard(int i){ //TODO: va bene così?
+        //da fare, quando raggiunge size 2 inviare il messaggio e torna true se ho finito
+        leadersToDiscard.add(new LeaderCard()); //temp.. int ritorna [1,4]
+        return leadersToDiscard.size() == 2;
+    }
 }

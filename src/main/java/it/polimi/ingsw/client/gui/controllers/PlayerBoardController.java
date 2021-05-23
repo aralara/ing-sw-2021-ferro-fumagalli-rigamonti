@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.gui.SceneNames;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
@@ -17,8 +18,25 @@ public class PlayerBoardController extends GenericController {
     private List<ImageView> spaces;
 
     @FXML private Button activateProductions_button;
-    @FXML private ImageView space1L1_imageView, space1L2_imageView, space1L3_imageView, space2L1_imageView, space2L2_imageView,
-            space2L3_imageView, space3L1_imageView, space3L2_imageView, space3L3_imageView; //TODO: disabilitare dopo dragDone
+    @FXML private ImageView space1L1_imageView, space1L2_imageView, space1L3_imageView, space2L1_imageView,
+            space2L2_imageView, space2L3_imageView, space3L1_imageView, space3L2_imageView, space3L3_imageView;
+    @FXML private Label resToPlaceCoin_label, resToPlaceServant_label, resToPlaceShield_label, resToPlaceStone_label;
+
+    public Label getResToPlaceCoin_label() {
+        return resToPlaceCoin_label;
+    }
+
+    public Label getResToPlaceServant_label() {
+        return resToPlaceServant_label;
+    }
+
+    public Label getResToPlaceShield_label() {
+        return resToPlaceShield_label;
+    }
+
+    public Label getResToPlaceStone_label() {
+        return resToPlaceStone_label;
+    }
 
     public void goToMarket(ActionEvent actionEvent) {
         getGUIApplication().setActiveScene(SceneNames.MARKET_BOARD);
@@ -167,6 +185,10 @@ public class PlayerBoardController extends GenericController {
                 break;
             }
         }
+    }
+
+    public void enableActions(){
+
     }
 
     private void fillSpacesList(){

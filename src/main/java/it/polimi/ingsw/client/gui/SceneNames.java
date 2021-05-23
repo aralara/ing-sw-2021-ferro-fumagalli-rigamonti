@@ -8,6 +8,8 @@ public enum SceneNames {
     MULTI_PLAYER_MENU("/fxml/MultiPlayerMenu.fxml"),
     MULTI_PLAYER_WAITING("/fxml/MultiPlayerWaiting.fxml"),
     LOADING("/fxml/Loading.fxml"),
+    LEADER_CHOICE_MENU("/fxml/LeaderChoiceMenu.fxml"),
+    RESOURCE_CHOICE_MENU("/fxml/ResourceChoiceMenu.fxml"),
     PLAYER_BOARD("/fxml/PlayerBoard.fxml"),
     MARKET_BOARD("/fxml/MarketBoard.fxml"),
     CARD("/fxml/Card.fxml"),
