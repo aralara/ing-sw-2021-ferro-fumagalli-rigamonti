@@ -128,13 +128,8 @@ public class SetupController extends GenericController {
     }
 
     public void startOnlineGame() {
-        getGUI().getMessageHandler().sendClientMessage(new NewLobbyMessage(1));
+        getGUI().setLobbySize(1);
         getGUIApplication().setActiveScene(SceneNames.LOADING);
-        //PlayerBoardController pbc = (PlayerBoardController) getGUIApplication().getController(SceneNames.PLAYER_BOARD);
-        ((MarketBoardController) getGUIApplication().getController(SceneNames.MARKET_BOARD)).disableMarketAction();
-        ((DecksBoardController) getGUIApplication().getController(SceneNames.DECKS_BOARD)).disableBuyCardAction();
-        getGUIApplication().setActiveScene(SceneNames.PLAYER_BOARD); //TODO: riga da spostare (e dopo lanciare LEADERCHOICE)
-        getGUIApplication().setActiveScene(SceneNames.LEADER_CHOICE_MENU); //TODO: //
     }
 
     public void startOfflineGame() {

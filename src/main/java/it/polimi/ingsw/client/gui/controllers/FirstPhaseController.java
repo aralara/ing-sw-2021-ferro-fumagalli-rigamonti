@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.gui.controllers;
 
 import it.polimi.ingsw.client.gui.SceneNames;
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
+import it.polimi.ingsw.server.model.storage.ResourceType;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -22,41 +23,49 @@ public class FirstPhaseController extends GenericController {
         return chooseResources_label;
     }
 
+    private void discard(Button button, int index){
+        button.setDisable(true);
+        getGUI().addLeaderToDiscard(index);
+    }
+
     public void discard1() {
-        discard1_button.setDisable(true);
-        if (getGUI().addLeaderToDiscard(1)) {
-            getGUIApplication().closePopUpStage();
-            getGUIApplication().setActiveScene(SceneNames.RESOURCE_CHOICE_MENU); //TODO: da aprire solo se richiesto (controllo da spostare)
-        }
+        discard(discard1_button, 1);
     }
 
     public void discard2() {
-        discard2_button.setDisable(true);
-        if(getGUI().addLeaderToDiscard(2)) {
-            getGUIApplication().closePopUpStage();
-            getGUIApplication().setActiveScene(SceneNames.RESOURCE_CHOICE_MENU); //TODO: da aprire solo se richiesto (controllo da spostare)
-        }
+        discard(discard2_button, 2);
     }
 
     public void discard3() {
-        discard3_button.setDisable(true);
-        if(getGUI().addLeaderToDiscard(3)) {
-            getGUIApplication().closePopUpStage();
-            getGUIApplication().setActiveScene(SceneNames.RESOURCE_CHOICE_MENU); //TODO: da aprire solo se richiesto (controllo da spostare)
-        }
+        discard(discard3_button, 3);
     }
 
     public void discard4() {
-        discard4_button.setDisable(true);
-        if(getGUI().addLeaderToDiscard(4)) {
+        discard(discard4_button, 4);
+    }
+
+    private void finishEqualizeAction(Label label, ResourceType resourceType){
+        PlayerBoardController pbc = (PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD);
+        int labelQuantity = pbc.getCoinQuantity(); //TODO: trasforma in getQuantity generico specificando il paramentro
+        pbc.setCoinQuantity(++labelQuantity);
+
+        /*int labelQuantity = pbc.getQuantity(resourceType);
+        pbc.setQuantity(resourceType, ++labelQuantity);*/
+
+        if(label.isVisible() && anotherRes){
+            int quantity = label.getText().charAt(2)-48;
+            label.setText("x "+(quantity+1));
+            anotherRes=false;
+        }
+        else {
+            pbc.setIsResToPlace(true);
             getGUIApplication().closePopUpStage();
-            getGUIApplication().setActiveScene(SceneNames.RESOURCE_CHOICE_MENU); //TODO: da aprire solo se richiesto (controllo da spostare)
         }
     }
 
     public void takeCoin() {
         PlayerBoardController pbc = (PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD);
-        int labelQuantity = pbc.getCoinQuantity();
+        int labelQuantity = pbc.getCoinQuantity(); //TODO: trasforma in getQuantity generico specificando il paramentro
         pbc.setCoinQuantity(++labelQuantity);
 
         if(coin_label.isVisible() && anotherRes){

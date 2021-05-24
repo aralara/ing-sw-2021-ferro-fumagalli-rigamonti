@@ -8,7 +8,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="686.0" prefWidth="1400.0" styleClass="playerBoardPanel" stylesheets="@../css/playerBoard.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllers.PlayerBoardController">
    <children>
-      <Label fx:id="player_label" layoutX="8.0" layoutY="-8.0" textFill="WHITE">
+      <Label fx:id="player_label" layoutX="8.0" layoutY="-6.0" textFill="WHITE">
          <font>
             <Font name="Pristina" size="24.0" />
          </font>
