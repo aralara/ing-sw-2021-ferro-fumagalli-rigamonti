@@ -2,7 +2,6 @@ package it.polimi.ingsw.utils.messages.client;
 
 import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.server.GameHandler;
-import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 
@@ -12,7 +11,7 @@ public class ConfirmReadyMessage extends ClientActionMessage {
 
 
     @Override
-    public void doAction(VirtualView view, Controller controller) {
+    public void doAction(VirtualView view) {
         GameHandler gameHandler = view.getGameHandler();
         boolean success = view.getGameHandler().playerFinishedSetup();
         view.sendMessage(new ServerAckMessage(getUuid(), success));

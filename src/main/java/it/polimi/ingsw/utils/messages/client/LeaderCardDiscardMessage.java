@@ -1,7 +1,6 @@
 package it.polimi.ingsw.utils.messages.client;
 
 import it.polimi.ingsw.client.ClientController;
-import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.messages.LeaderCardMessageClient;
@@ -25,8 +24,8 @@ public class LeaderCardDiscardMessage extends LeaderCardMessageClient {
 
 
     @Override
-    public void doAction(VirtualView view, Controller controller) {
-        controller.discardLeaders(view.getNickname(), getLeaderCards(), setup);
+    public void doAction(VirtualView view) {
+        view.getGameHandler().getController().discardLeaders(view.getNickname(), getLeaderCards(), setup);
         view.sendMessage(new ServerAckMessage(getUuid(), true));
     }
 

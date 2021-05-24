@@ -138,7 +138,7 @@ public class GameHandler implements Runnable {
 
     public void handleMessage(VirtualView view, Message message) {
         if (message instanceof ClientActionMessage) {
-            ((ClientActionMessage) message).doAction(view, controller);
+            ((ClientActionMessage) message).doAction(view);
         } else {
             System.out.println("Can't handle message");
         }

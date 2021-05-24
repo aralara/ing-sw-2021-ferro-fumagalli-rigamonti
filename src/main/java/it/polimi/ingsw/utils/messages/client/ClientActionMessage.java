@@ -1,12 +1,11 @@
 package it.polimi.ingsw.utils.messages.client;
 
 import it.polimi.ingsw.client.ClientController;
-import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.view.VirtualView;
 
 public abstract class ClientActionMessage extends ClientMessage {
 
-    public abstract void doAction(VirtualView view, Controller controller);
+    public abstract void doAction(VirtualView view);
 
     @Override
     public void doACKResponseAction(ClientController client) {

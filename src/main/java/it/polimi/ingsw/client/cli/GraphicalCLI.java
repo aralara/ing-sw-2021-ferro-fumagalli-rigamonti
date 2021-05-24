@@ -289,7 +289,7 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
             printlnString("\nSpecial warehouse:");
             List<Shelf> specialShelf = warehouseView.getShelves().stream()
                     .filter(x -> x.getLevel() == level && x.isLeader()).collect(Collectors.toList());
-            for(int i = 0; i < specialWarehouse;i++){
+            for(int i = 0; i < specialWarehouse;i++) {
                 if(showLevel){
                     printString((4+i) + ":");
                 }
@@ -298,7 +298,6 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
                     color = chooseColor(specialShelf.get(i).getResourceType());
                     printString("[ " + color + (specialShelf.get(i).getResources().getQuantity()>j ? "■" : "x")
                             + color + RESET + " ]");
-                    printlnString("");
                 }
             }
         }
@@ -356,11 +355,6 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         printlnString("•3) Strongbox");
     }
 
-    /**
-     *
-     * @param warehouseView
-     * @param showLevel true if you want to show a numbered list
-     */
     public void printWarehouseConfiguration(WarehouseView warehouseView, boolean showLevel){
         printWarehouse(warehouseView, showLevel);
         printExtraShelfLeader(warehouseView, showLevel);
@@ -372,7 +366,7 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         printWarehouseConfiguration(playerBoardView.getWarehouse(), false);
         printStrongbox(playerBoardView.getStrongbox());
         printDevelopmentBoard(playerBoardView.getDevelopmentBoard());
-        printString("Leaders on hand: \n");
+        printString("Leaders in hand: \n");
         printLeaderHand(playerBoardView.getLeaderBoard());
         printlnString("Leaders placed on the board: \n");
         printLeaderBoard(playerBoardView.getLeaderBoard());

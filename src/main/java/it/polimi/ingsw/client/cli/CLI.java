@@ -326,7 +326,7 @@ public class CLI extends ClientController {
             case 10:
                 if (isMainActionPlayed()) {
                     setPlayerTurn(false);
-                    getMessageHandler().sendClientMessage(new EndTurnMessage(getNickname()));
+                    getMessageHandler().sendClientMessage(new EndTurnMessage());
                 }
                 else graphicalCLI.printlnString("You haven't played any main action yet!");
                 break;

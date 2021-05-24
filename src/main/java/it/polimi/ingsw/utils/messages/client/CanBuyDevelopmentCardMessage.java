@@ -1,7 +1,6 @@
 package it.polimi.ingsw.utils.messages.client;
 
 import it.polimi.ingsw.client.ClientController;
-import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.model.storage.RequestResources;
 import it.polimi.ingsw.server.view.VirtualView;
@@ -30,8 +29,9 @@ public class CanBuyDevelopmentCardMessage extends ClientActionMessage {
     }
 
     @Override
-    public void doAction(VirtualView view, Controller controller) {
-        boolean success = controller.canBuyDevCard(view.getNickname(), developmentCard, space);
+    public void doAction(VirtualView view) {
+        boolean success = view.getGameHandler().getController()
+                .canBuyDevCard(view.getNickname(), developmentCard, space);
         view.sendMessage(new ServerAckMessage(getUuid(), success));
     }
 

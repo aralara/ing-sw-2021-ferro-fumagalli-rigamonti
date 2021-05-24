@@ -1,7 +1,6 @@
 package it.polimi.ingsw.utils.messages.client;
 
 import it.polimi.ingsw.client.ClientController;
-import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
@@ -20,13 +19,10 @@ public class RequestResourcesProdMessage extends CanActivateProductionsMessage {
     }
 
 
-    public List<RequestResources> getRequestResources() {
-        return requestResources;
-    }
-
     @Override
-    public void doAction(VirtualView view, Controller controller) {
-        boolean success = controller.activateProductions(view.getNickname(), getProduced(), requestResources);
+    public void doAction(VirtualView view) {
+        boolean success = view.getGameHandler().getController()
+                .activateProductions(view.getNickname(), getProduced(), requestResources);
         view.sendMessage(new ServerAckMessage(getUuid(), success));
     }
 
@@ -37,9 +33,7 @@ public class RequestResourcesProdMessage extends CanActivateProductionsMessage {
 
     @Override
     public void doNACKResponseAction(ClientController client) {
-        List<Resource> resources = new ArrayList<>();
-        getProductions().forEach(p -> resources.addAll(p.getConsumed()));
-        List<RequestResources> requestResources = client.chooseStorages(resources);
+        List<RequestResources> requestResources = client.chooseStorages(getConsumed());
         client.getMessageHandler().sendClientMessage(
                 new RequestResourcesProdMessage(getProductions(), requestResources));
     }

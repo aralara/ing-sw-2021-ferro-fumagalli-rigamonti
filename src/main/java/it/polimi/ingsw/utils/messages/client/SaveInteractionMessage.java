@@ -2,7 +2,6 @@ package it.polimi.ingsw.utils.messages.client;
 
 import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.exceptions.LibraryNotLoadedException;
-import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.saves.GameLibrary;
 import it.polimi.ingsw.server.saves.GameSave;
 import it.polimi.ingsw.server.saves.SaveInteractions;
@@ -22,7 +21,7 @@ public class SaveInteractionMessage extends ClientActionMessage {
 
 
     @Override
-    public void doAction(VirtualView view, Controller controller) {
+    public void doAction(VirtualView view) {
         try {
             switch (interaction) {
                 case DELETE_SAVE:

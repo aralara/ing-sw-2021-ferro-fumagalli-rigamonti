@@ -21,16 +21,9 @@ public class SelectMarketMessage extends ClientActionMessage {
     }
 
 
-    public int getRow() {
-        return row;
-    }
-
-    public int getColumn() {
-        return column;
-    }
-
     @Override
-    public void doAction(VirtualView view, Controller controller) {
+    public void doAction(VirtualView view) {
+        Controller controller = view.getGameHandler().getController();
         List<Resource> resources = controller.getFromMarket(view.getNickname(), row, column);
         List<ResourceType> availableResources = controller.getPlayerBoard(view.getNickname()).getAbilityMarbles();
         view.sendMessage(new ServerAckMessage(getUuid(), true));
