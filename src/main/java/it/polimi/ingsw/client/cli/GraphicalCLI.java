@@ -17,7 +17,7 @@ import static it.polimi.ingsw.utils.Constants.MARKET_COLUMN_SIZE;
 import static it.polimi.ingsw.utils.Constants.MARKET_ROW_SIZE;
 
 
-public class GraphicalCLI { //TODO: sostituire System.out.println
+public class GraphicalCLI {
 
     public static final String RESET = "\033[0m";  // Text Reset
 
@@ -37,7 +37,10 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         scanner = new Scanner(System.in);
     }
 
-
+    /**
+     * Read an int from input
+     * @return The value entered by the user
+     */
     public int getNextInt() {
         int value = -1;
         boolean valid;
@@ -54,33 +57,64 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         return value;
     }
 
+    /**
+     * Read a string by the scanner
+     * @return The string read by the scanner
+     */
     public String getNext() {
         return scanner.next();
     }
 
+    /**
+     * Read a line by the scanner
+     * @return The line read by the scanner
+     */
     public String getNextLine() {
         return scanner.nextLine();
     }
 
+    /**
+     * Print a string passed by parameters
+     * @param toPrint String to be printed
+     */
     public void printString(String toPrint) {
         System.out.print(toPrint);
     }
 
+    /**
+     * Print a string passed by parameters with a new line
+     * @param toPrint String to be printed
+     */
     public void printlnString(String toPrint) {
         System.out.println(toPrint);
     }
 
+    /**
+     * Ask the user if he wants to go back and choose another action
+     * @return The user's answer
+     */
     public boolean askGoBack() {
         printString("Do you want to go back and choose another action?" +
                 "\nIf you want to, insert YES: ");
         return isAnswerYes();
     }
 
+    /**
+     * Check if the user insert yes
+     * @return true if the answer is yes, false otherwise
+     */
     public boolean isAnswerYes() {
         return getNext().matches("(?i)YES");
     }
 
-    public int askWhichShelf(Resource resource, int numberOfShelves, boolean rearranged, boolean canDiscard) {
+    /**
+     * Ask the user on witch shelf he wants to place some resources
+     * @param resource Resource to be placed
+     * @param numberOfShelves Number of shelf in the warehouse
+     * @param canDiscard true if the user can discard the resourcce, false otherwise
+     * @return The shelf choosen by the user
+     */
+    public int askWhichShelf(Resource resource, int numberOfShelves, boolean canDiscard) {
         int level;
         printString("Where do you want to place " + resource.getResourceType()
                 + (canDiscard ? "? (0 to discard it, " : "? (") + "-1 to restore warehouse): ");
@@ -121,16 +155,44 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
                 });
     }
 
-    public void printDevelopmentDeckTop(List<DevelopmentDeckView> developmentDecks) {
-        printlnString("The development decks:");
-        List<DevelopmentCard> developmentCards =  new ArrayList<>();
-        for(DevelopmentDeckView temp : developmentDecks){
-            if(!temp.getDeck().isEmpty())
-                developmentCards.add((DevelopmentCard) temp.getDeck().getCards().get(0));
+    /**
+     * Print a list of resources with graphical (■)
+     * @param resources Resources to be printed
+     */
+    public void printGraphicalResources(List<Resource> resources){
+        String color;
+        for(Resource res : resources){
+            color = chooseColor(res.getResourceType());
+            printString(color + " ■ " + color + RESET);
         }
-        printNumberedList(developmentCards, this::printDevelopmentCard);
+        printlnString("");
     }
 
+    /**
+     * Print a resource with text
+     * @param resource Resource to be printed
+     */
+    public void printResource(Resource resource){
+        printString(resource.getQuantity() + " " + resource.getResourceType());
+    }
+
+    /**
+     * Print a list of resources
+     * @param resources List of resources to be printed
+     */
+    public void printResources(List<Resource> resources){
+        boolean first = true;
+        for(Resource res : resources){
+            printString(first ? "" : ", ");
+            printResource(res);
+            first = false;
+        }
+    }
+
+    /**
+     * Print the market
+     * @param market Market to be printed
+     */
     public void printMarket(MarketView market){
         printlnString("\nThe market:");
         String color;
@@ -142,12 +204,16 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
             printlnString(" [ " + (i+1) + " ]");
         }
         printlnString("[ 1 ][ 2 ][ 3 ][ 4 ]");
-
         color = chooseColor(market.getFloatingMarble().getResourceType());
         printlnString("Extra marble: " + color + "■" + color);
         printString(RESET);
     }
 
+    /**
+     * Choose a color to print string
+     * @param resourceType Resource that correspond to a color
+     * @return The color choosen
+     */
     private String chooseColor(ResourceType resourceType){
         if(resourceType == ResourceType.SHIELD){
             return BLUE_BRIGHT;
@@ -165,12 +231,66 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         else return RESET;
     }
 
+    /**
+     * Print a leader card
+     * @param leaderCard Leader card to be printed
+     */
     public void printLeaderCard(LeaderCard leaderCard){
         printString(leaderCard.cardToString());
     }
 
+    /**
+     * Print a development card
+     * @param developmentCard Development card to be printed
+     */
+    public void printDevelopmentCard(DevelopmentCard developmentCard){
+        printString(developmentCard.cardToString());
+    }
+
+    /**
+     * Print a Lorenzo Card
+     * @param lorenzoCard Lorenzo card to be printed
+     */
     public void printLorenzoCard(LorenzoCard lorenzoCard){
         printString(lorenzoCard.cardToString());
+    }
+
+    /**
+     * Print a leader board
+     * @param leaderBoard Leader board to be printed
+     */
+    public void printLeaderBoard(LeaderBoardView leaderBoard){
+        if(!leaderBoard.getBoard().getCards().isEmpty()){
+            printNumberedList((List<LeaderCard>)(List<?>)leaderBoard.getBoard().getCards(),this::printLeaderCard);
+        }
+        else printlnString(" • Empty");
+        printlnString("");
+    }
+
+    /**
+     * Print a leader hand
+     * @param leaderBoard Leader hand to be printed
+     */
+    public void printLeaderHand(LeaderBoardView leaderBoard){
+        if(!leaderBoard.getHand().getCards().isEmpty()) {printlnString("");
+            printNumberedList((List<LeaderCard>) (List<?>) leaderBoard.getHand().getCards(), this::printLeaderCard);
+        }
+        else printlnString(" • Empty");
+        printlnString("");
+    }
+
+    /**
+     * Print the first development card for each development deck
+     * @param developmentDecks List of development deck to be printed
+     */
+    public void printDevelopmentDeckTop(List<DevelopmentDeckView> developmentDecks) {
+        printlnString("The development decks:");
+        List<DevelopmentCard> developmentCards =  new ArrayList<>();
+        for(DevelopmentDeckView temp : developmentDecks){
+            if(!temp.getDeck().isEmpty())
+                developmentCards.add((DevelopmentCard) temp.getDeck().getCards().get(0));
+        }
+        printNumberedList(developmentCards, this::printDevelopmentCard);
     }
 
     public void printLeaderAbilityMarble(List<AbilityMarble> abilities){
@@ -181,26 +301,19 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         }
     }
 
+    /**
+     * Print a production
+     * @param production Production to be printed
+     */
     public void printProduction(Production production){
-        printString("\tConsumed: ");
-        boolean first = true;
-        String toPrint;
-        for(int i = 0; i< production.getConsumed().size(); i++){
-            printString(((!first) ? "\t          " :"") + " > ");
-            printResource(production.getConsumed().get(i));
-            printlnString("");
-            first = false;
-        }
-        printString("\tProduced: ");
-        first = true;
-        for(int i = 0; i< production.getProduced().size(); i++){
-            printString(((!first) ? "\t          " :"") + " > ");
-            printResource(production.getProduced().get(i));
-            printlnString("");
-            first = false;
-        }
+        printString(production.productionToPrint());
     }
 
+    /**
+     * Print a faith board
+     * @param player Player board to be printed
+     * @param faithTrack Faithtrack information
+     */
     public void printFaithBoard(PlayerBoardView player, FaithTrackView faithTrack){
         printFaithTrack(player.getFaithBoard().getFaith(), faithTrack);
         printlnString("\t > Faith level is " + player.getFaithBoard().getFaith());
@@ -213,6 +326,11 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         printlnString("");
     }
 
+    /**
+     * Print a faithTrack
+     * @param faithLevel Faith level of the user
+     * @param faithTrack Faithtrack information
+     */
     private void printFaithTrack(int faithLevel, FaithTrackView faithTrack){
         String color;
         int maxSize = faithTrack.getVaticanReports().get(faithTrack.getVaticanReports().size()-1).getMax();
@@ -229,6 +347,12 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         printlnString("");
     }
 
+    /**
+     * Check if a space in the faith track is a vatican report
+     * @param faithTrack Faithtrack information
+     * @param faith Level of space to be checked
+     * @return True if the space is a vatican report, false otherwise
+     */
     private boolean isVaticanReport(FaithTrackView faithTrack, int faith){
         for(int i = 0; i<faithTrack.getVaticanReports().size();i++){
             if(faith >= faithTrack.getVaticanReports().get(i).getMin() && faith <= faithTrack.getVaticanReports().get(i).getMax()){
@@ -238,6 +362,10 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         return false;
     }
 
+    /**
+     * Print a menu with a list of action
+     * @param isPlayerTurn true if it's the player turn, false otherwise
+     */
     public void printActions(boolean isPlayerTurn){
         printlnString(" Here's the menu: ");
         if(isPlayerTurn) {
@@ -256,6 +384,11 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         printString("Choose an action to do"+ (isPlayerTurn ? " on your turn: " : ": "));
     }
 
+    /**
+     * Print a warehouse
+     * @param warehouseView Warehouse to be printed
+     * @param showLevel True if we want to show levels, false otherwise
+     */
     public void printWarehouse(WarehouseView warehouseView, boolean showLevel){
         String color;
         int i;
@@ -281,6 +414,11 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         }
     }
 
+    /**
+     * Print special leader's shelves
+     * @param warehouseView Warehouse to be printed
+     * @param showLevel True if we want to show levels, false otherwise
+     */
     public void printExtraShelfLeader(WarehouseView warehouseView, boolean showLevel){  //TODO: va testato in game quando attiviamo delle leader card con abilità warehouse
         int level = 2;
         String color;
@@ -304,6 +442,10 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         printlnString("");
     }
 
+    /**
+     * Print a strongbox
+     * @param strongboxView Strongbox to be printed
+     */
     public void printStrongbox(StrongboxView strongboxView){
         String color;
         printlnString("\nStrongbox: ");
@@ -322,32 +464,9 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         printlnString("");
     }
 
-    public void printGraphicalResources(List<Resource> resources){
-        String color;
-        for(Resource res : resources){
-            color = chooseColor(res.getResourceType());
-            printString(color + " ■ " + color + RESET);
-        }
-        printlnString("");
-    }
-
-    public void printResource(Resource resource){
-        printString(resource.getQuantity() + " " + resource.getResourceType());
-    }
-
-    public void printResources(List<Resource> resources){
-        boolean first = true;
-        for(Resource res : resources){
-            printString(first ? "" : ", ");
-            printResource(res);
-            first = false;
-        }
-    }
-
-    public void printDevelopmentCard(DevelopmentCard developmentCard){
-        printString(developmentCard.cardToString());
-    }
-
+    /**
+     * Print a list that contains different storages
+     */
     public void printChooseStorage(){
         printlnString("\nChoose the storage where remove the resource from:");
         printlnString("•1) Warehouse");
@@ -355,11 +474,21 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         printlnString("•3) Strongbox");
     }
 
+    /**
+     * Print warehouse with every shelf (special and not)
+     * @param warehouseView Warehouse to be printed
+     * @param showLevel True if you want to show a numbered list
+     */
     public void printWarehouseConfiguration(WarehouseView warehouseView, boolean showLevel){
         printWarehouse(warehouseView, showLevel);
         printExtraShelfLeader(warehouseView, showLevel);
     }
 
+    /**
+     * Print a player's information
+     * @param playerBoardView player board that contains all the information
+     * @param faithTrackView Faithtrack information
+     */
     public void printPlayer(PlayerBoardView playerBoardView,FaithTrackView faithTrackView){
         printlnString("\n" + playerBoardView.getNickname() + "'s board:");
         printFaithBoard(playerBoardView, faithTrackView);
@@ -372,11 +501,20 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
         printLeaderBoard(playerBoardView.getLeaderBoard());
     }
 
+    /**
+     * Print the board of Lorenzo
+     * @param faith Lorenzo's faith level
+     * @param faithTrack Faithtrack information
+     */
     public void printLorenzo(int faith, FaithTrackView faithTrack){
         printFaithTrack(faith, faithTrack);
         printlnString("\t > Lorenzo il Magnifico's faith level is " + faith);
     }
 
+    /**
+     * Print a development board
+     * @param developmentBoard Development board to be printed
+     */
     public void printDevelopmentBoard(DevelopmentBoardView developmentBoard){
         printlnString("Development spaces:");
         List<Deck> spaces = developmentBoard.getSpaces();
@@ -389,22 +527,6 @@ public class GraphicalCLI { //TODO: sostituire System.out.println
                 printDevelopmentCard((DevelopmentCard) spaces.get(i).get(0));
             }
         }
-        printlnString("");
-    }
-
-    public void printLeaderBoard(LeaderBoardView leaderBoard){
-        if(!leaderBoard.getBoard().getCards().isEmpty()){
-            printNumberedList((List<LeaderCard>)(List<?>)leaderBoard.getBoard().getCards(),this::printLeaderCard);
-        }
-        else printlnString("empty");
-        printlnString("");
-    }
-
-    public void printLeaderHand(LeaderBoardView leaderBoard){
-        if(!leaderBoard.getHand().getCards().isEmpty()) {printlnString("");
-            printNumberedList((List<LeaderCard>) (List<?>) leaderBoard.getHand().getCards(), this::printLeaderCard);
-        }
-        else printlnString("empty");
         printlnString("");
     }
 }

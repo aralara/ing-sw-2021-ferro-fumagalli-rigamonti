@@ -70,6 +70,7 @@ public class DevelopmentBoard extends PlayerListened implements Serializable {
     /**
      * Checks if a DevelopmentCard can be placed on the board
      * @param card The development card to be added
+     * @param space The space where the card will be added
      * @return Returns true if the card can be added, false otherwise
      */
     public boolean checkDevCardAddable(DevelopmentCard card, int space) {
