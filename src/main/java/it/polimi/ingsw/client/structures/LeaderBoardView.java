@@ -1,8 +1,11 @@
 package it.polimi.ingsw.client.structures;
 
+import it.polimi.ingsw.server.model.boards.LeaderBoard;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
 
-public class LeaderBoardView {
+import java.io.Serializable;
+
+public class LeaderBoardView implements Serializable {
 
     private Deck hand;
     private Deck board;
@@ -13,9 +16,9 @@ public class LeaderBoardView {
         this.board = new Deck();
     }
 
-    public LeaderBoardView(Deck hand, Deck board) {
-        this.hand = hand;
-        this.board = board;
+    public LeaderBoardView(LeaderBoard leaderBoard) {
+        this.hand = leaderBoard.getHand();
+        this.board = leaderBoard.getBoard();
     }
 
 

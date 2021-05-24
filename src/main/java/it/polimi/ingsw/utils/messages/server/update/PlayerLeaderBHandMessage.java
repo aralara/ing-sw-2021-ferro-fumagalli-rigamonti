@@ -21,14 +21,6 @@ public class PlayerLeaderBHandMessage implements HiddenMessage, ServerUpdateMess
     }
 
 
-    public Deck getHand() {
-        return hand;
-    }
-
-    public String getNickname(){
-        return nickname;
-    }
-
     @Override
     public void hide() {
         List<LeaderCard> newList = new ArrayList<>();

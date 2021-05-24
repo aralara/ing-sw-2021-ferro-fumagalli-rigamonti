@@ -1,31 +1,20 @@
 package it.polimi.ingsw.utils.messages.server.update;
 
 import it.polimi.ingsw.client.ClientController;
+import it.polimi.ingsw.client.structures.MarketView;
 import it.polimi.ingsw.server.model.market.*;
 
 public class MarketMessage implements ServerUpdateMessage {
 
-    private final Marble[][] marbleMatrix;
-    private final Marble floatingMarble;
+    private final MarketView market;
 
 
     public MarketMessage(Market market) {
-        this.marbleMatrix = market.getMarbleMatrix();
-        this.floatingMarble = market.getFloatingMarble();
-    }
-
-
-    public Marble[][] getMarbleMatrix() {
-        return marbleMatrix;
-    }
-
-    public Marble getFloatingMarble() {
-        return floatingMarble;
+        this.market = new MarketView(market);
     }
 
     @Override
     public void doUpdate(ClientController client) {
-        client.getMarket().setMarbleMatrix(marbleMatrix);
-        client.getMarket().setFloatingMarble(floatingMarble);
+        client.setMarket(market);
     }
 }

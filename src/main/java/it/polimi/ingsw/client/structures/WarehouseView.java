@@ -1,12 +1,14 @@
 package it.polimi.ingsw.client.structures;
 
 import it.polimi.ingsw.server.model.storage.Shelf;
+import it.polimi.ingsw.server.model.storage.Warehouse;
 import it.polimi.ingsw.utils.Constants;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WarehouseView {
+public class WarehouseView implements Serializable {
 
     private List<Shelf> shelves;
 
@@ -17,7 +19,11 @@ public class WarehouseView {
             shelves.add(new Shelf(i + 1));
     }
 
-    public WarehouseView(List<Shelf> shelves) {
+    public WarehouseView(Warehouse warehouse) {
+        this.shelves = warehouse.getShelves();
+    }
+
+    public WarehouseView(List<Shelf> shelves) { //TODO: sistemare chiamate a questo metodo nella CLI (preferibilmente toglierle)
         this.shelves = shelves;
     }
 

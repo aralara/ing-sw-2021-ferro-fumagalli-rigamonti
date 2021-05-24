@@ -5,46 +5,37 @@ import it.polimi.ingsw.client.structures.DevelopmentDeckView;
 import it.polimi.ingsw.server.model.cards.deck.DevelopmentDeck;
 import it.polimi.ingsw.utils.Constants;
 
-import javax.swing.*;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class DevelopmentDecksMessage implements ServerUpdateMessage {
 
-    private final List<DevelopmentDeck> developmentDecks;
+    private final List<DevelopmentDeckView> developmentDecks;
 
 
     public DevelopmentDecksMessage(List<DevelopmentDeck> developmentDecks) {
-        this.developmentDecks = developmentDecks;
+        this.developmentDecks = new ArrayList<>();
+        developmentDecks.forEach(d -> this.developmentDecks.add(new DevelopmentDeckView(d)));
     }
 
-
-    public List<DevelopmentDeck> getDevelopmentDecks() {
-        return developmentDecks;
-    }
 
     @Override
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void doUpdate(ClientController client) {
-        List<DevelopmentDeckView> clientDevelopmentDecks = client.getDevelopmentDecks();
-        if(clientDevelopmentDecks.size() == Constants.DEVELOPMENT_DECK_NUMBER.value() && developmentDecks.size() == 1) {
-            DevelopmentDeckView serverDevelopmentDeck = new DevelopmentDeckView(
-                    developmentDecks.get(0).getDeck(),
-                    developmentDecks.get(0).getDeckColor(),
-                    developmentDecks.get(0).getDeckLevel()
-            );
-            for (DevelopmentDeckView clientDevelopmentDeck : clientDevelopmentDecks) {
-                if (clientDevelopmentDeck.getDeckColor() == serverDevelopmentDeck.getDeckColor() &&
-                        clientDevelopmentDeck.getDeckLevel() == serverDevelopmentDeck.getDeckLevel()) {
-                    Collections.replaceAll(clientDevelopmentDecks, clientDevelopmentDeck, serverDevelopmentDeck);
+        List<DevelopmentDeckView> clientDecks = client.getDevelopmentDecks();
+        //If this message is sent as an update for a single DevelopmentDeck it will only update the corresponding deck
+        if(clientDecks.size() == Constants.DEVELOPMENT_DECK_NUMBER.value() && developmentDecks.size() == 1) {
+            DevelopmentDeckView serverDeck = developmentDecks.get(0);
+            for (DevelopmentDeckView clientDeck : clientDecks) {
+                if (clientDeck.getDeckColor() == serverDeck.getDeckColor() &&
+                        clientDeck.getDeckLevel() == serverDeck.getDeckLevel()) {
+                    Collections.replaceAll(clientDecks, clientDeck, serverDeck);
                     break;
                 }
             }
         }
-        else{
-            for (DevelopmentDeck developmentDeck : developmentDecks)
-                clientDevelopmentDecks.add(new DevelopmentDeckView(developmentDeck.getDeck(),
-                        developmentDeck.getDeckColor(), developmentDeck.getDeckLevel()));
-        }
+        else
+            client.setDevelopmentDecks(developmentDecks);
     }
 }

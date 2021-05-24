@@ -18,14 +18,6 @@ public class PlayerAbilityDiscountsMessage implements ServerUpdateMessage {
     }
 
 
-    public List<ResourceType> getDiscounts() {
-        return discounts;
-    }
-
-    public String getNickname(){
-        return nickname;
-    }
-
     @Override
     public void doUpdate(ClientController client) {
         try {

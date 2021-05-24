@@ -18,12 +18,17 @@
             <Image url="@../imgs/icon_inkwell.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="shelfResL1_1_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="112.0" layoutY="296.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="shelfResL2_1_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="76.0" layoutY="355.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="shelfResL2_2_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="134.0" layoutY="355.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="shelfResL3_1_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="66.0" layoutY="416.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="shelfResL3_2_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="107.0" layoutY="416.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="shelfResL3_3_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="148.0" layoutY="416.0" pickOnBounds="true" preserveRatio="true" />
+      <Button fx:id="restoreWarehouse_button" layoutX="9.0" layoutY="244.0" mnemonicParsing="false" onAction="#restoreWarehouse" opacity="0.85" text="Restore" textFill="#1d60cc" visible="false">
+         <font>
+            <Font name="Pristina" size="18.0" />
+         </font>
+      </Button>
+      <ImageView fx:id="shelfResL1_1_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="112.0" layoutY="296.0" onDragDetected="#handleDragDetectedShelfResL1_1" onDragDropped="#handleDragDroppedShelfResL1_1" onDragOver="#handleDragOverShelfResL1_1" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="shelfResL2_1_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="76.0" layoutY="355.0" onDragDetected="#handleDragDetectedShelfResL2_1" onDragDropped="#handleDragDroppedShelfResL2_1" onDragOver="#handleDragOverShelfResL2_1" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="shelfResL2_2_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="134.0" layoutY="355.0" onDragDetected="#handleDragDetectedShelfResL2_2" onDragDropped="#handleDragDroppedShelfResL2_2" onDragOver="#handleDragOverShelfResL2_2" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="shelfResL3_1_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="66.0" layoutY="416.0" onDragDetected="#handleDragDetectedShelfResL3_1" onDragDropped="#handleDragDroppedShelfResL3_1" onDragOver="#handleDragOverShelfResL3_1" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="shelfResL3_2_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="107.0" layoutY="416.0" onDragDetected="#handleDragDetectedShelfResL3_2" onDragDropped="#handleDragDroppedShelfResL3_2" onDragOver="#handleDragOverShelfResL3_2" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="shelfResL3_3_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="148.0" layoutY="416.0" onDragDetected="#handleDragDetectedShelfResL3_3" onDragDropped="#handleDragDroppedShelfResL3_3" onDragOver="#handleDragOverShelfResL3_3" pickOnBounds="true" preserveRatio="true" />
       <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="31.0" layoutY="541.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../imgs/res/coin.png" />
@@ -64,6 +69,12 @@
          <font>
             <Font name="Pristina" size="18.0" />
          </font></Label>
+      <ImageView fitHeight="29.0" fitWidth="144.0" layoutX="24.0" layoutY="648.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imgs/icon_hole.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="35.0" fitWidth="102.0" layoutX="20.0" layoutY="645.0" onDragDropped="#handleDragDroppedHole" onDragOver="#handleDragOverHole" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="basicPCons1_imageView" fitHeight="35.0" fitWidth="35.0" layoutX="254.0" layoutY="488.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="basicPCons2_imageView" fitHeight="35.0" fitWidth="35.0" layoutX="254.0" layoutY="522.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="basicPProd1_imageView" fitHeight="35.0" fitWidth="35.0" layoutX="313.0" layoutY="505.0" pickOnBounds="true" preserveRatio="true" />
@@ -162,7 +173,7 @@
          <image>
             <Image url="@../imgs/faith/tile_4point.png.png" />
          </image></ImageView>
-      <Button disable="true" focusTraversable="false" layoutX="877.0" layoutY="151.0" mnemonicParsing="false" onAction="#viewOpponents" prefHeight="44.0" prefWidth="44.0" styleClass="opponentButton" stylesheets="@../css/playerBoard.css" />
+      <Button fx:id="viewOpponents_button" disable="true" focusTraversable="false" layoutX="877.0" layoutY="151.0" mnemonicParsing="false" onAction="#viewOpponents" prefHeight="44.0" prefWidth="44.0" styleClass="opponentButton" stylesheets="@../css/playerBoard.css" />
       <Label layoutX="1281.0" text="Main actions" textFill="WHITE">
          <font>
             <Font name="Pristina" size="24.0" />
@@ -184,7 +195,7 @@
             <Font name="Pristina" size="18.0" />
          </font>
       </Button>
-      <Button disable="true" layoutX="1306.0" layoutY="49.0" mnemonicParsing="false" onAction="#endTurn" text="End turn" textFill="#1d60cc">
+      <Button fx:id="endTurn_button" disable="true" layoutX="1306.0" layoutY="49.0" mnemonicParsing="false" onAction="#endTurn" text="End turn" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="18.0" />
          </font>
@@ -195,17 +206,17 @@
          </font>
       </Label>
       <Separator layoutX="936.0" layoutY="141.0" prefHeight="3.0" prefWidth="446.0" />
-      <Button disable="true" focusTraversable="false" layoutX="1097.0" layoutY="152.0" mnemonicParsing="false" onAction="#activateLeaderCard" text="Activate leader card" textFill="#1d60cc">
+      <Button fx:id="activeLeaderCard_button" disable="true" focusTraversable="false" layoutX="1097.0" layoutY="152.0" mnemonicParsing="false" onAction="#activateLeaderCard" text="Activate leader card" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="18.0" />
          </font>
       </Button>
-      <Button disable="true" focusTraversable="false" layoutX="1249.0" layoutY="152.0" mnemonicParsing="false" onAction="#discardLeaderCard" text="Discard leader card" textFill="#1d60cc">
+      <Button fx:id="discardLeaderCard_button" disable="true" focusTraversable="false" layoutX="1249.0" layoutY="152.0" mnemonicParsing="false" onAction="#discardLeaderCard" text="Discard leader card" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="18.0" />
          </font>
       </Button>
-      <Button disable="true" focusTraversable="false" layoutX="934.0" layoutY="152.0" mnemonicParsing="false" onAction="#rearrangeWarehouse" text="Rearrange warehouse" textFill="#1d60cc">
+      <Button fx:id="rearrangeWarehouse_button" disable="true" focusTraversable="false" layoutX="934.0" layoutY="152.0" mnemonicParsing="false" onAction="#rearrangeWarehouse" text="Rearrange warehouse" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="18.0" />
          </font>
@@ -216,7 +227,7 @@
          </font>
       </Label>
       <Separator layoutX="987.0" layoutY="267.0" prefHeight="3.0" prefWidth="400.0" />
-      <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="984.0" layoutY="281.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="coinToPlace_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="984.0" layoutY="281.0" onDragDetected="#handleDragDetectedCoinToPlace" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../imgs/res/coin.png" />
          </image>
@@ -226,7 +237,7 @@
             <Font name="Pristina" size="24.0" />
          </font>
       </Label>
-      <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="1092.0" layoutY="279.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="servantToPlace_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="1092.0" layoutY="279.0" onDragDetected="#handleDragDetectedServantToPlace" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../imgs/res/servant.png" />
          </image>
@@ -236,7 +247,7 @@
             <Font name="Pristina" size="24.0" />
          </font>
       </Label>
-      <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="1196.0" layoutY="279.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="shieldToPlace_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="1196.0" layoutY="279.0" onDragDetected="#handleDragDetectedShieldToPlace" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../imgs/res/shield.png" />
          </image>
@@ -246,7 +257,7 @@
             <Font name="Pristina" size="24.0" />
          </font>
       </Label>
-      <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="1301.0" layoutY="278.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="stoneToPlace_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="1301.0" layoutY="278.0" onDragDetected="#handleDragDetectedStoneToPlace" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../imgs/res/stone.png" />
          </image>

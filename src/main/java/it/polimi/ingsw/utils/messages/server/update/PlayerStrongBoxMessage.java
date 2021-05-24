@@ -18,14 +18,6 @@ public class PlayerStrongBoxMessage implements ServerUpdateMessage {
     }
 
 
-    public List<Resource> getResources() {
-        return resources;
-    }
-
-    public String getNickname(){
-        return nickname;
-    }
-
     @Override
     public void doUpdate(ClientController client) {
         try {
