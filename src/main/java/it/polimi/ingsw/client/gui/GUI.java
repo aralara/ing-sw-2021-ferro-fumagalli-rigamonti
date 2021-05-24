@@ -40,6 +40,7 @@ public class GUI extends ClientController {
     private final GUIApplication guiApplication;
     private List<LeaderCard> leadersToDiscard; //TODO: va bene qua?
     private List<Resource> resourcesToPlace;
+    private int waitingPlayers;
 
     public GUI(GUIApplication guiApplication) {
         super();
@@ -99,7 +100,7 @@ public class GUI extends ClientController {
         else {
             Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.MULTI_PLAYER_WAITING));
         }
-
+        this.waitingPlayers = waitingPlayers;
     }
 
     @Override
@@ -111,6 +112,10 @@ public class GUI extends ClientController {
     public void notifyNewPlayer(String nickname) {
         Platform.runLater(() -> ((SetupController)guiApplication.
                 getController(SceneNames.MULTI_PLAYER_WAITING)).notifyNewPlayer(nickname));
+
+        if(getNumberOfPlayers() == ++this.waitingPlayers){
+            Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.LOADING));
+        }
     }
 
     @Override
@@ -119,6 +124,14 @@ public class GUI extends ClientController {
         updateMarket();
         updateDevDecks();
         updateLeaderHandToDiscard();
+        try {
+            if (getLocalPlayerBoard().isInkwell()) {
+                Platform.runLater(() -> ((PlayerBoardController) guiApplication.
+                        getController(SceneNames.PLAYER_BOARD)).enableInkwell());
+            }
+        }catch(NotExistingNicknameException e){
+            e.printStackTrace();
+        }
         //altro?
 
         //???
@@ -136,7 +149,21 @@ public class GUI extends ClientController {
 
     @Override
     public void askResourceEqualize(List<Resource> resources) {
-
+        int size = resources.size();
+        String title;
+        if(size > 0) {
+            if(size > 1) {
+                title = "Choose two cards to take";
+                Platform.runLater(() -> ((FirstPhaseController) guiApplication.getController(SceneNames.RESOURCE_CHOICE_MENU)).
+                        enableLabels());
+            }
+            else{
+                title = "Choose one card to take";
+            }
+            Platform.runLater(() -> ((FirstPhaseController) guiApplication.getController(SceneNames.RESOURCE_CHOICE_MENU)).
+                    setChooseResources_label(title));
+            Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.RESOURCE_CHOICE_MENU));
+        }
     }
 
     @Override
@@ -236,7 +263,6 @@ public class GUI extends ClientController {
             if(leadersToDiscard.size() == 2){
                 getMessageHandler().sendClientMessage(new LeaderCardDiscardMessage(leadersToDiscard));
                 guiApplication.closePopUpStage();
-                guiApplication.setActiveScene(SceneNames.RESOURCE_CHOICE_MENU);
             }
         } catch (NotExistingNicknameException e) {
             e.printStackTrace();

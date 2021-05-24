@@ -17,7 +17,7 @@ public class LorenzoFaithFactory implements CardFactory {
 
     @Override
     public List<LorenzoFaith> loadCardFromFile(String fileName) {
-        int i = 0;
+        int i = 1;
         Gson gson = new Gson();
         List<LorenzoFaith> lorenzoFaithDeck = new ArrayList<>();
 

@@ -22,7 +22,7 @@ public class LeaderCardFactory implements CardFactory {
 
     @Override
     public List<LeaderCard> loadCardFromFile(String fileName) {
-        int i = 0;
+        int i = 1;
         RuntimeTypeAdapterFactory<Requirement> requirementAdapterFactory
                 = RuntimeTypeAdapterFactory.of(Requirement.class, "RequirementType");
         RuntimeTypeAdapterFactory<SpecialAbility> abilityAdapterFactory

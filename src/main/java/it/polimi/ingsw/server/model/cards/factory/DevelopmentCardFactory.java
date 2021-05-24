@@ -17,7 +17,7 @@ public class DevelopmentCardFactory implements CardFactory {
 
     @Override
     public List<DevelopmentCard> loadCardFromFile(String fileName){
-        int i=0;
+        int i=1;
         Gson gson = new Gson();
         List<DevelopmentCard> developmentCardList = new ArrayList<>();
 

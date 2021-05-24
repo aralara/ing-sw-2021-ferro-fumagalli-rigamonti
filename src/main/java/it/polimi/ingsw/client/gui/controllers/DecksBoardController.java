@@ -117,17 +117,17 @@ public class DecksBoardController extends GenericController {
 
     private void fillList(){
         decks = new ArrayList<>();
-        decks.add(deckY1_imageView);
         decks.add(deckG1_imageView);
         decks.add(deckP1_imageView);
         decks.add(deckB1_imageView);
-        decks.add(deckY2_imageView);
+        decks.add(deckY1_imageView);
         decks.add(deckG2_imageView);
         decks.add(deckP2_imageView);
         decks.add(deckB2_imageView);
-        decks.add(deckY3_imageView);
+        decks.add(deckY2_imageView);
         decks.add(deckG3_imageView);
         decks.add(deckP3_imageView);
         decks.add(deckB3_imageView);
+        decks.add(deckY3_imageView);
     }
 }

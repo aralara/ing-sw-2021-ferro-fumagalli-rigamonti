@@ -24,7 +24,8 @@ public class PlayerBoardController extends GenericController {
     @FXML private ImageView space1L1_imageView, space1L2_imageView, space1L3_imageView, space2L1_imageView,
             space2L2_imageView, space2L3_imageView, space3L1_imageView, space3L2_imageView, space3L3_imageView;
     @FXML private Label player_label, resToPlaceCoin_label, resToPlaceServant_label, resToPlaceShield_label, resToPlaceStone_label;
-    @FXML private ImageView coinToPlace_imageView, servantToPlace_imageView, shieldToPlace_imageView, stoneToPlace_imageView;
+    @FXML private ImageView inkwell_imageVIew, coinToPlace_imageView, servantToPlace_imageView, shieldToPlace_imageView,
+            stoneToPlace_imageView;
     @FXML private ImageView shelfResL1_1_imageView, shelfResL2_1_imageView, shelfResL2_2_imageView,
             shelfResL3_1_imageView, shelfResL3_2_imageView, shelfResL3_3_imageView;
 
@@ -50,9 +51,7 @@ public class PlayerBoardController extends GenericController {
 
     public void setMainActionPlayed(boolean played){
         mainActionPlayed=played;
-        if(mainActionPlayed)
-            endTurn_button.setDisable(false);
-        else endTurn_button.setDisable(true);
+        endTurn_button.setDisable(!mainActionPlayed);
     }
 
     public boolean getWarehouseIsDisabled(){
@@ -76,6 +75,10 @@ public class PlayerBoardController extends GenericController {
     public void setPlayer_label(String player_label){
         this.player_label.setText(player_label);
         this.player_label.setVisible(true);
+    }
+
+    public void enableInkwell(){
+        this.inkwell_imageVIew.setVisible(true);
     }
 
     public Label getResToPlaceCoin_label() {

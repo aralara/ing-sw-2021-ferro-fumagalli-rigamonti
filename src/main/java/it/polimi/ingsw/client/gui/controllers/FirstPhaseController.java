@@ -23,6 +23,10 @@ public class FirstPhaseController extends GenericController {
         return chooseResources_label;
     }
 
+    public void setChooseResources_label(String title){
+        this.chooseResources_label.setText(title);
+    }
+
     private void discard(Button button, int index){
         button.setDisable(true);
         getGUI().addLeaderToDiscard(index);
