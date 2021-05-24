@@ -18,14 +18,6 @@ public class PlayerWarehouseMessage implements ServerUpdateMessage {
     }
 
 
-    public List<Shelf> getShelves() {
-        return shelves;
-    }
-
-    public String getNickname(){
-        return nickname;
-    }
-
     @Override
     public void doUpdate(ClientController client) {
         try {

@@ -18,9 +18,9 @@ public abstract class ClientController {
     private int numberOfPlayers;
     private int lorenzoFaith;
     private final List<PlayerBoardView> playerBoards;
-    private final MarketView market;
-    private final List<DevelopmentDeckView> developmentDecks;
-    private final FaithTrackView faithTrack;
+    private MarketView market;
+    private List<DevelopmentDeckView> developmentDecks;
+    private FaithTrackView faithTrack;
     private boolean mainActionPlayed, playerTurn;
     private final MessageHandler messageHandler;
 
@@ -28,9 +28,9 @@ public abstract class ClientController {
     public ClientController() {
         lorenzoFaith = -1;
         playerBoards = new ArrayList<>();
-        market = new MarketView();
+        market = null;
         developmentDecks = new ArrayList<>();
-        faithTrack = new FaithTrackView();
+        faithTrack = null;
         mainActionPlayed = false;
         playerTurn = false;
         messageHandler = new MessageHandler(this);
@@ -112,12 +112,24 @@ public abstract class ClientController {
         return market;
     }
 
+    public void setMarket(MarketView market) {
+        this.market = market;
+    }
+
     public List<DevelopmentDeckView> getDevelopmentDecks() {
         return developmentDecks;
     }
 
+    public void setDevelopmentDecks(List<DevelopmentDeckView> developmentDecks) {
+        this.developmentDecks = developmentDecks;
+    }
+
     public FaithTrackView getFaithTrack() {
         return faithTrack;
+    }
+
+    public void setFaithTrack(FaithTrackView faithTrack) {
+        this.faithTrack = faithTrack;
     }
 
     public boolean isMainActionPlayed() {

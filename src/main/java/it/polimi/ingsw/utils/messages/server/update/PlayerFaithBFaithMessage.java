@@ -14,19 +14,10 @@ public class PlayerFaithBFaithMessage implements ServerUpdateMessage {
         this.nickname = nickname;
     }
 
-
-    public int getFaith() {
-        return faith;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
     @Override
     public void doUpdate(ClientController client) {
         try {
-            client.playerBoardFromNickname(nickname).getFaithBoard().setFaith(faith); //TODO: aggiungere notifica di aggiunta
+            client.playerBoardFromNickname(nickname).getFaithBoard().setFaith(faith);
         } catch(NotExistingNicknameException e){
             e.printStackTrace();
         }

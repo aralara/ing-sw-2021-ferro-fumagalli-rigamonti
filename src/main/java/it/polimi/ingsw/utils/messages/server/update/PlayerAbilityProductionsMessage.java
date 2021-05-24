@@ -18,14 +18,6 @@ public class PlayerAbilityProductionsMessage implements ServerUpdateMessage {
     }
 
 
-    public List<Production> getProductions() {
-        return productions;
-    }
-
-    public String getNickname(){
-        return nickname;
-    }
-
     @Override
     public void doUpdate(ClientController client) {
         try {

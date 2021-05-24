@@ -18,14 +18,6 @@ public class PlayerDevelopmentBSpacesMessage implements ServerUpdateMessage {
     }
 
 
-    public List<Deck> getSpaces() {
-        return spaces;
-    }
-
-    public String getNickname(){
-        return nickname;
-    }
-
     @Override
     public void doUpdate(ClientController client) {
         try {

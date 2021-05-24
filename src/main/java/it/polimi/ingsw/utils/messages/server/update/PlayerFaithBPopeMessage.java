@@ -17,16 +17,6 @@ public class PlayerFaithBPopeMessage implements ServerUpdateMessage {
     }
 
 
-    public boolean[] getPopeProgression() {
-        boolean[] popeProgressionCopy = new boolean[FAITH_TOTAL_VATICAN_REPORTS.value()];
-        System.arraycopy(this.popeProgression, 0, popeProgressionCopy, 0, FAITH_TOTAL_VATICAN_REPORTS.value());
-        return popeProgressionCopy;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
     @Override
     public void doUpdate(ClientController client) {
         try {

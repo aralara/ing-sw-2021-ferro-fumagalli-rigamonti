@@ -16,14 +16,6 @@ public class PlayerLeaderBBoardMessage implements ServerUpdateMessage {
     }
 
 
-    public Deck getBoard() {
-        return board;
-    }
-
-    public String getNickname(){
-        return nickname;
-    }
-
     @Override
     public void doUpdate(ClientController client) {
         try {

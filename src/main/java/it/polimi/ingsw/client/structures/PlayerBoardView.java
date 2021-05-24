@@ -1,56 +1,50 @@
 package it.polimi.ingsw.client.structures;
 
+import it.polimi.ingsw.server.model.boards.PlayerBoard;
 import it.polimi.ingsw.server.model.storage.Production;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayerBoardView {
+public class PlayerBoardView implements Serializable {
 
     private String nickname;
-    private DevelopmentBoardView developmentBoard;
-    private LeaderBoardView leaderBoard;
-    private FaithBoardView faithBoard;
-    private WarehouseView warehouse;
-    private StrongboxView strongbox;
+    private final DevelopmentBoardView developmentBoard;
+    private final LeaderBoardView leaderBoard;
+    private final FaithBoardView faithBoard;
+    private final WarehouseView warehouse;
+    private final StrongboxView strongbox;
     private boolean inkwell;
-    private Production basicProduction;  //TODO: come la gestiamo? con gli observer? per ora la metto qui un po a caso
+    private Production basicProduction;
 
     private List<Production> activeAbilityProductions;
     private List<ResourceType> activeAbilityMarbles;
     private List<ResourceType> activeAbilityDiscounts;
 
 
-    public PlayerBoardView(String nickname, DevelopmentBoardView developmentBoard, LeaderBoardView leaderBoard,
-                           FaithBoardView faithBoard, WarehouseView warehouse, StrongboxView strongbox,
-                           boolean inkwell) {
-        this.nickname = nickname;
-        this.developmentBoard = developmentBoard;
-        this.leaderBoard = leaderBoard;
-        this.faithBoard = faithBoard;
-        this.warehouse = warehouse;
-        this.strongbox = strongbox;
-        this.inkwell = inkwell;
-        this.activeAbilityProductions = new ArrayList<>();
-        this.activeAbilityMarbles = new ArrayList<>();
-        this.activeAbilityDiscounts = new ArrayList<>();
+    public PlayerBoardView(PlayerBoard playerBoard) {
+        this.nickname = playerBoard.getPlayer().getNickname();
+        this.developmentBoard = new DevelopmentBoardView(playerBoard.getDevelopmentBoard());
+        this.leaderBoard = new LeaderBoardView(playerBoard.getLeaderBoard());
+        this.faithBoard = new FaithBoardView(playerBoard.getFaithBoard());
+        this.warehouse = new WarehouseView(playerBoard.getWarehouse());
+        this.strongbox = new StrongboxView(playerBoard.getStrongbox());
+        this.inkwell = playerBoard.isFirstPlayer();
+        this.activeAbilityProductions = playerBoard.getAbilityProductions();
+        this.activeAbilityDiscounts = playerBoard.getAbilityDiscounts();
+        this.activeAbilityMarbles = playerBoard.getAbilityMarbles();
         this.basicProduction = new Production();
-        this.basicProduction = new Production(new ArrayList<>(List.of(new Resource(ResourceType.WILDCARD,1))),
-                new ArrayList<>(List.of(new Resource(ResourceType.COIN,100),
-                        new Resource(ResourceType.STONE,100),new Resource(ResourceType.SHIELD,100),
+        this.basicProduction = new Production(
+                new ArrayList<>(List.of(new Resource(ResourceType.WILDCARD,1))),
+                new ArrayList<>(List.of(
+                        new Resource(ResourceType.COIN,100),
+                        new Resource(ResourceType.STONE,100),
+                        new Resource(ResourceType.SHIELD,100),
                         new Resource(ResourceType.SERVANT,100))));
         //TODO: inserita per testare, da togliere quando la CLI sarà PERFETTA (come Bonucci)
-    }
-
-    public PlayerBoardView(String nickname) {
-        this.nickname = nickname;
-        developmentBoard = new DevelopmentBoardView();
-        leaderBoard = new LeaderBoardView();
-        faithBoard = new FaithBoardView();
-        warehouse = new WarehouseView();
-        strongbox = new StrongboxView();
     }
 
 
@@ -79,27 +73,11 @@ public class PlayerBoardView {
     }
 
     /**
-     * Sets the developmentBoard attribute
-     * @param developmentBoard New attribute value
-     */
-    public void setDevelopmentBoard(DevelopmentBoardView developmentBoard) {
-        this.developmentBoard = developmentBoard;
-    }
-
-    /**
      * Gets the leaderBoard attribute
      * @return Returns leaderBoard
      */
     public LeaderBoardView getLeaderBoard() {
         return leaderBoard;
-    }
-
-    /**
-     * Sets the leaderBoard attribute
-     * @param leaderBoard New attribute value
-     */
-    public void setLeaderBoard(LeaderBoardView leaderBoard) {
-        this.leaderBoard = leaderBoard;
     }
 
     /**
@@ -111,14 +89,6 @@ public class PlayerBoardView {
     }
 
     /**
-     * Sets the faithBoard attribute
-     * @param faithBoard New attribute value
-     */
-    public void setFaithBoard(FaithBoardView faithBoard) {
-        this.faithBoard = faithBoard;
-    }
-
-    /**
      * Gets the warehouse attribute
      * @return Returns warehouse
      */
@@ -127,27 +97,11 @@ public class PlayerBoardView {
     }
 
     /**
-     * Sets the warehouse attribute
-     * @param warehouse New attribute value
-     */
-    public void setWarehouse(WarehouseView warehouse) {
-        this.warehouse = warehouse;
-    }
-
-    /**
      * Gets the strongbox attribute
      * @return Returns strongbox
      */
     public StrongboxView getStrongbox() {
         return strongbox;
-    }
-
-    /**
-     * Sets the strongbox attribute
-     * @param strongbox New attribute value
-     */
-    public void setStrongbox(StrongboxView strongbox) {
-        this.strongbox = strongbox;
     }
 
     /**

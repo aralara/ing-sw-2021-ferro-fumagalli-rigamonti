@@ -1,15 +1,19 @@
 package it.polimi.ingsw.client.structures;
 
-public class VaticanReportView {
+import it.polimi.ingsw.server.model.faith.VaticanReport;
+
+import java.io.Serializable;
+
+public class VaticanReportView implements Serializable {
 
     private final int min, max;
     private final int popeValue;
 
 
-    public VaticanReportView(int min, int max, int popeValue) {
-        this.min = min;
-        this.max = max;
-        this.popeValue = popeValue;
+    public VaticanReportView(VaticanReport vaticanReport) {
+        this.min = vaticanReport.getMin();
+        this.max = vaticanReport.getMax();
+        this.popeValue = vaticanReport.getPopeValue();
     }
 
 

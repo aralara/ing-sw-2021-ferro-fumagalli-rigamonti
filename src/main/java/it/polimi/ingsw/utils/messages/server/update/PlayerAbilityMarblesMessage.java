@@ -18,14 +18,6 @@ public class PlayerAbilityMarblesMessage implements ServerUpdateMessage {
     }
 
 
-    public List<ResourceType> getMarbles() {
-        return marbles;
-    }
-
-    public String getNickname(){
-        return nickname;
-    }
-
     @Override
     public void doUpdate(ClientController client) {
         try {

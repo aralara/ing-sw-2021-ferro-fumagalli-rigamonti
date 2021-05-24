@@ -2,21 +2,25 @@ package it.polimi.ingsw.client.structures;
 
 import it.polimi.ingsw.server.model.cards.card.CardColors;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
+import it.polimi.ingsw.server.model.cards.deck.DevelopmentDeck;
 
-public class DevelopmentDeckView {
+import java.io.Serializable;
+
+public class DevelopmentDeckView implements Serializable {
 
     private Deck deck;
     private CardColors deckColor;
     private int deckLevel;
 
-    public DevelopmentDeckView(){
+
+    public DevelopmentDeckView() {
         this.deck = new Deck();
     }
 
-    public DevelopmentDeckView(Deck deck, CardColors deckColor, int deckLevel){
-        this.deck = deck;
-        this.deckColor = deckColor;
-        this.deckLevel = deckLevel;
+    public DevelopmentDeckView(DevelopmentDeck deck) {
+        this.deck = deck.getDeck();
+        this.deckColor = deck.getDeckColor();
+        this.deckLevel = deck.getDeckLevel();
     }
 
 
@@ -45,26 +49,10 @@ public class DevelopmentDeckView {
     }
 
     /**
-     * Sets the deckColor attribute
-     * @param deckColor New attribute value
-     */
-    public void setDeckColor(CardColors deckColor) {
-        this.deckColor = deckColor;
-    }
-
-    /**
      * Gets the deckLevel attribute
      * @return Returns deckLevel
      */
     public int getDeckLevel() {
         return deckLevel;
-    }
-
-    /**
-     * Sets the deckLevel attribute
-     * @param deckLevel New attribute value
-     */
-    public void setDeckLevel(int deckLevel) {
-        this.deckLevel = deckLevel;
     }
 }
