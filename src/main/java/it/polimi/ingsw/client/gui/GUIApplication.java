@@ -71,6 +71,10 @@ public class GUIApplication extends Application { //TODO: flusso messaggi da ric
         }
     }
 
+    public SceneNames getActiveSceneName(){
+        return getNameByScene(stage.getScene());
+    }
+
     public void setActiveScene(SceneNames sceneName) {
         if(sceneName.equals(SceneNames.LEADER_CHOICE_MENU) || sceneName.equals(SceneNames.RESOURCE_CHOICE_MENU))
             openPopUpStage(scenesInformation.get(getSceneIndex(sceneName)).getScene());
@@ -161,6 +165,14 @@ public class GUIApplication extends Application { //TODO: flusso messaggi da ric
         return -1; //TODO: potrebbe dare eccezione?
     }
 
+    private SceneNames getNameByScene(Scene scene){
+        for(int i = 0; i < scenesInformation.size(); i++){
+            if(scenesInformation.get(i).getScene().equals(scene))
+                return scenesInformation.get(i).getFileName();
+        }
+        return null;  //TODO: potrebbe dare eccezione?
+    }
+
     public GenericController getController(SceneNames sceneName) {
         return scenesInformation.get(getSceneIndex(sceneName)).getController();
     }
@@ -169,6 +181,9 @@ public class GUIApplication extends Application { //TODO: flusso messaggi da ric
         return gui;
     }
 
+    /**
+     * Disable buttons after the first click until a message (ack/nack) is received
+     */
     public void changeConnectionMenuStatus(){
         SetupController controller = (SetupController) getController(SceneNames.CONNECTION_MENU);
         boolean newDisableValue = !controller.getIpAddress_field().isDisable();
@@ -179,6 +194,9 @@ public class GUIApplication extends Application { //TODO: flusso messaggi da ric
         controller.getConnecting_progressIndicator().setVisible(newDisableValue);
     }
 
+    /**
+     * Disable buttons after the first click until a message (ack/nack) is received
+     */
     public void changeNicknameMenuStatus(){
         SetupController controller = (SetupController) getController(SceneNames.NICKNAME_MENU);
         boolean newDisableValue = !controller.getNickname_field().isDisable();

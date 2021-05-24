@@ -109,8 +109,7 @@ public class SetupController extends GenericController {
         }
         else{
             getGUIApplication().changeNicknameMenuStatus(); //TODO: aggiungere controllo nickname errato
-            getGUIApplication().getGUI().getMessageHandler().sendClientMessage(
-                    new ConnectionMessage(nickname_field.getText()));
+            getGUIApplication().getGUI().sendNickname(nickname_field.getText());
         }
     }
 

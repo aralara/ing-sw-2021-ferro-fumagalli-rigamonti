@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.gui;
 
 import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.client.UpdateMessageReader;
+import it.polimi.ingsw.client.gui.controllers.PlayerBoardController;
 import it.polimi.ingsw.client.gui.controllers.SetupController;
 import it.polimi.ingsw.server.model.boards.Player;
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
@@ -11,9 +12,11 @@ import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 import it.polimi.ingsw.server.saves.GameSave;
 import it.polimi.ingsw.utils.messages.client.ClientMessage;
+import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
 import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 import it.polimi.ingsw.utils.messages.server.action.ServerActionMessage;
 import javafx.application.Platform;
+import javafx.scene.control.Alert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,12 +66,14 @@ public class GUI extends ClientController {
 
     @Override
     public void ackNotification(String message) {
-
+        //messaggio ricevuto da ack
+        Platform.runLater(() -> guiApplication.getController(guiApplication.getActiveSceneName()).
+                 showAlert(Alert.AlertType.INFORMATION,"Notification","Event notification", message));
     }
 
     @Override
     public void askNickname() {
-
+        guiApplication.changeNicknameMenuStatus();
     }
 
     @Override
@@ -157,5 +162,11 @@ public class GUI extends ClientController {
         //da fare, quando raggiunge size 2 inviare il messaggio e torna true se ho finito
         leadersToDiscard.add(new LeaderCard()); //temp.. int ritorna [1,4]
         return leadersToDiscard.size() == 2;
+    }
+
+    public void sendNickname(String nickname){
+        getMessageHandler().sendClientMessage(new ConnectionMessage(nickname));
+        setNickname(nickname);
+        ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD)).setPlayer_label(nickname);
     }
 }
