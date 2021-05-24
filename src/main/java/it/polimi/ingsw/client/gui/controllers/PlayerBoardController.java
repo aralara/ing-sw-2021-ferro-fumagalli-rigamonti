@@ -16,8 +16,11 @@ public class PlayerBoardController extends GenericController {
 
     private List<ImageView> spaces;
     private String resToPlace;
+    private boolean isResToPlaceAction=false, mainActionPlayed=false, warehouseIsDisabled=false;
+    private int srcWarehousePosition;
 
-    @FXML private Button activateProductions_button;
+    @FXML private Button restoreWarehouse_button, activateProductions_button, endTurn_button, activeLeaderCard_button, discardLeaderCard_button,
+            rearrangeWarehouse_button, viewOpponents_button;
     @FXML private ImageView space1L1_imageView, space1L2_imageView, space1L3_imageView, space2L1_imageView,
             space2L2_imageView, space2L3_imageView, space3L1_imageView, space3L2_imageView, space3L3_imageView;
     @FXML private Label resToPlaceCoin_label, resToPlaceServant_label, resToPlaceShield_label, resToPlaceStone_label;
@@ -31,6 +34,41 @@ public class PlayerBoardController extends GenericController {
 
     public void setResToPlace(String resToPlace){
         this.resToPlace=resToPlace;
+    }
+
+    public boolean getIsResToPlaceAction(){
+        return isResToPlaceAction;
+    }
+
+    public void setIsResToPlace(boolean isResToPlaceAction){
+        this.isResToPlaceAction=isResToPlaceAction;
+    }
+
+    public boolean getMainActionPlayed(){
+        return mainActionPlayed;
+    }
+
+    public void setMainActionPlayed(boolean played){
+        mainActionPlayed=played;
+        if(mainActionPlayed)
+            endTurn_button.setDisable(false);
+        else endTurn_button.setDisable(true);
+    }
+
+    public boolean getWarehouseIsDisabled(){
+        return warehouseIsDisabled;
+    }
+
+    public void setSrcWarehousePosition(int position){
+        srcWarehousePosition=position;
+    }
+
+    public int getSrcWarehousePosition(){
+        return srcWarehousePosition;
+    }
+
+    public void setWarehouseIsDisabled(boolean isDisabled){
+        warehouseIsDisabled=isDisabled;
     }
 
     public Label getResToPlaceCoin_label() {
@@ -55,6 +93,11 @@ public class PlayerBoardController extends GenericController {
 
     public void goToDecks(ActionEvent actionEvent) {
         getGUIApplication().setActiveScene(SceneNames.DECKS_BOARD);
+    }
+
+    public void restoreWarehouse(ActionEvent actionEvent) {
+        //fare
+        restoreWarehouse_button.setVisible(false);
     }
 
     public void activateProductions(ActionEvent actionEvent) {
@@ -87,6 +130,8 @@ public class PlayerBoardController extends GenericController {
         disableSpaces();
         getGUIApplication().closeCardStage();
         //TODO: vedere se l'azione va a buon fine, altrimenti rimettere giusti i parametri
+        setMainActionPlayed(true);
+        setWarehouseIsDisabled(false);
     }
 
     public void handleDragOver1L1(DragEvent dragEvent) {
@@ -209,36 +254,45 @@ public class PlayerBoardController extends GenericController {
         }
     }
 
+    private void handleDragOverShelf(DragEvent dragEvent){
+        if(!warehouseIsDisabled)
+            handleDragOver(dragEvent);
+    }
+
     public void handleDragOverShelfResL1_1(DragEvent dragEvent) {
-        handleDragOver(dragEvent);
+        handleDragOverShelf(dragEvent);
     }
 
     public void handleDragOverShelfResL2_1(DragEvent dragEvent) {
-        handleDragOver(dragEvent);
+        handleDragOverShelf(dragEvent);
     }
 
     public void handleDragOverShelfResL2_2(DragEvent dragEvent) {
-        handleDragOver(dragEvent);
+        handleDragOverShelf(dragEvent);
     }
 
     public void handleDragOverShelfResL3_1(DragEvent dragEvent) {
-        handleDragOver(dragEvent);
+        handleDragOverShelf(dragEvent);
     }
 
     public void handleDragOverShelfResL3_2(DragEvent dragEvent) {
-        handleDragOver(dragEvent);
+        handleDragOverShelf(dragEvent);
     }
 
     public void handleDragOverShelfResL3_3(DragEvent dragEvent) {
-        handleDragOver(dragEvent);
+        handleDragOverShelf(dragEvent);
     }
 
     private void handleDragDroppedShelf(DragEvent dragEvent, ImageView imageView){
-        Image image = dragEvent.getDragboard().getImage();
-        imageView.setImage(image);
+        if(resToPlace.equals("") || imageView.getImage()==null) {
+            Image image = dragEvent.getDragboard().getImage();
+            manageResToPlace(imageView.getImage());
+            imageView.setImage(image);
+            //TODO: mandare messaggio
+        }
+    }
 
-        String resToPlace = ((PlayerBoardController)getGUIApplication()
-                .getController(SceneNames.PLAYER_BOARD)).getResToPlace();
+    private void manageResToPlace(Image image){
         switch (resToPlace){
             case "coin":
                 setCoinQuantity(getCoinQuantity()-1);
@@ -256,9 +310,34 @@ public class PlayerBoardController extends GenericController {
                 setStoneQuantity(getStoneQuantity()-1);
                 ((PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD)).setResToPlace("");
                 break;
-            default: //TODO: scambio di shelf
+            default:
+                switchWarehouseResource(image);
+                restoreWarehouse_button.setVisible(true);
         }
-        //TODO: mandare messaggio
+    }
+
+    private void switchWarehouseResource(Image destImage){
+        switch (srcWarehousePosition){
+            case 11:
+                shelfResL1_1_imageView.setImage(destImage);
+                break;
+            case 21:
+                shelfResL2_1_imageView.setImage(destImage);
+                break;
+            case 22:
+                shelfResL2_2_imageView.setImage(destImage);
+                break;
+            case 31:
+                shelfResL3_1_imageView.setImage(destImage);
+                break;
+            case 32:
+                shelfResL3_2_imageView.setImage(destImage);
+                break;
+            case 33:
+                shelfResL3_3_imageView.setImage(destImage);
+                break;
+            default:break;
+        }
     }
 
     public void handleDragDroppedShelfResL1_1(DragEvent dragEvent) {
@@ -284,6 +363,51 @@ public class PlayerBoardController extends GenericController {
     public void handleDragDroppedShelfResL3_3(DragEvent dragEvent) {
         handleDragDroppedShelf(dragEvent, shelfResL3_3_imageView);
     }
+
+    public void handleDragDetectedShelf(MouseEvent mouseEvent, ImageView imageView, int position) {
+        Dragboard dragboard = imageView.startDragAndDrop(TransferMode.MOVE);
+        ClipboardContent clipboardContent = new ClipboardContent();
+        clipboardContent.putImage(imageView.getImage());
+        dragboard.setContent(clipboardContent);
+        setSrcWarehousePosition(position);
+        setResToPlace("");
+        mouseEvent.consume();
+    }
+
+    public void handleDragDetectedShelfResL1_1(MouseEvent mouseEvent) {
+        handleDragDetectedShelf(mouseEvent, shelfResL1_1_imageView, 11);
+    }
+
+    public void handleDragDetectedShelfResL2_1(MouseEvent mouseEvent) {
+        handleDragDetectedShelf(mouseEvent, shelfResL2_1_imageView, 21);
+    }
+
+    public void handleDragDetectedShelfResL2_2(MouseEvent mouseEvent) {
+        handleDragDetectedShelf(mouseEvent, shelfResL2_2_imageView, 22);
+    }
+
+    public void handleDragDetectedShelfResL3_1(MouseEvent mouseEvent) {
+        handleDragDetectedShelf(mouseEvent, shelfResL3_1_imageView, 31);
+    }
+
+    public void handleDragDetectedShelfResL3_2(MouseEvent mouseEvent) {
+        handleDragDetectedShelf(mouseEvent, shelfResL3_2_imageView, 32);
+    }
+
+    public void handleDragDetectedShelfResL3_3(MouseEvent mouseEvent) {
+        handleDragDetectedShelf(mouseEvent, shelfResL3_3_imageView,33);
+    }
+
+    public void handleDragDroppedHole(DragEvent dragEvent) {
+        manageResToPlace(null);
+        //TODO: messaggio risorse da scartare
+    }
+
+    public void handleDragOverHole(DragEvent dragEvent) {
+        if(isResToPlaceAction)
+            handleDragOver(dragEvent);
+    }
+
 
     public void enableActivateProductionsAction(){ //TODO: settare all'inizio di ogni (proprio) turno
         activateProductions_button.setDisable(false);
@@ -346,6 +470,10 @@ public class PlayerBoardController extends GenericController {
     public void setCoinQuantity(int quantity){
         PlayerBoardController pbc = (PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD);
         pbc.getResToPlaceCoin_label().setText("x "+quantity);
+        if(quantity>0)
+            disableButtons();
+        else if (quantity == 0)
+            checkEnableButtons();
     }
 
     public int getServantQuantity(){
@@ -356,6 +484,10 @@ public class PlayerBoardController extends GenericController {
     public void setServantQuantity(int quantity){
         PlayerBoardController pbc = (PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD);
         pbc.getResToPlaceServant_label().setText("x "+quantity);
+        if(quantity>0)
+            disableButtons();
+        else if (quantity == 0)
+            checkEnableButtons();
     }
 
     public int getShieldQuantity(){
@@ -366,6 +498,10 @@ public class PlayerBoardController extends GenericController {
     public void setShieldQuantity(int quantity){
         PlayerBoardController pbc = (PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD);
         pbc.getResToPlaceShield_label().setText("x "+quantity);
+        if(quantity>0)
+            disableButtons();
+        else if (quantity == 0)
+            checkEnableButtons();
     }
 
     public int getStoneQuantity(){
@@ -376,5 +512,41 @@ public class PlayerBoardController extends GenericController {
     public void setStoneQuantity(int quantity){
         PlayerBoardController pbc = (PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD);
         pbc.getResToPlaceStone_label().setText("x "+quantity);
+        if(quantity>0)
+            disableButtons();
+        else if (quantity == 0)
+            checkEnableButtons();
+    }
+
+    private void checkEnableButtons(){
+        if(getCoinQuantity()==0 && getServantQuantity()==0 && getShieldQuantity()==0 && getStoneQuantity()==0){
+            isResToPlaceAction=false;
+            enableButtons();
+        }
+    }
+
+    public void disableButtons(){
+        ((MarketBoardController)getGUIApplication().getController(SceneNames.MARKET_BOARD)).disableMarketAction();
+        ((DecksBoardController)getGUIApplication().getController(SceneNames.DECKS_BOARD)).disableBuyCardAction();
+        activateProductions_button.setDisable(true);
+        endTurn_button.setDisable(true);
+        activeLeaderCard_button.setDisable(true);
+        discardLeaderCard_button.setDisable(true);
+        rearrangeWarehouse_button.setDisable(true);
+        viewOpponents_button.setDisable(true);
+    }
+
+    public void enableButtons(){
+        if(!mainActionPlayed) {
+            ((MarketBoardController) getGUIApplication().getController(SceneNames.MARKET_BOARD)).enableMarketAction();
+            ((DecksBoardController) getGUIApplication().getController(SceneNames.DECKS_BOARD)).enableBuyCardAction();
+            activateProductions_button.setDisable(false);
+        }
+        if(mainActionPlayed)
+            endTurn_button.setDisable(false);
+        activeLeaderCard_button.setDisable(false);
+        discardLeaderCard_button.setDisable(false);
+        rearrangeWarehouse_button.setDisable(false);
+        viewOpponents_button.setDisable(false);
     }
 }

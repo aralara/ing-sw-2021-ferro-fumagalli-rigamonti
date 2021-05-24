@@ -25,6 +25,7 @@ public class DecksBoardController extends GenericController {
         getGUIApplication().closeSecondStage();
         ((CardController)getGUIApplication().getController(SceneNames.CARD))
                 .setImage(selectedDevCard_imageView.getImage());
+        ((PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD)).setWarehouseIsDisabled(true);
         getGUIApplication().setActiveScene(SceneNames.CARD);
         //TODO: vedere se l'azione va a buon fine, altrimenti rimettere giusti i parametri
     }

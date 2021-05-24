@@ -64,7 +64,10 @@ public class FirstPhaseController extends GenericController {
             coin_label.setText("x "+(quantity+1));
             anotherRes=false;
         }
-        else getGUIApplication().closePopUpStage();
+        else {
+            pbc.setIsResToPlace(true);
+            getGUIApplication().closePopUpStage();
+        }
     }
 
     public void takeServant() {
@@ -77,7 +80,10 @@ public class FirstPhaseController extends GenericController {
             servant_label.setText("x "+(quantity+1));
             anotherRes=false;
         }
-        else getGUIApplication().closePopUpStage();
+        else {
+            pbc.setIsResToPlace(true);
+            getGUIApplication().closePopUpStage();
+        }
     }
 
     public void takeShield() {
@@ -90,7 +96,10 @@ public class FirstPhaseController extends GenericController {
             shield_label.setText("x "+(quantity+1));
             anotherRes=false;
         }
-        else getGUIApplication().closePopUpStage();
+        else {
+            pbc.setIsResToPlace(true);
+            getGUIApplication().closePopUpStage();
+        }
     }
 
     public void takeStone() {
@@ -103,7 +112,10 @@ public class FirstPhaseController extends GenericController {
             stone_label.setText("x "+(quantity+1));
             anotherRes=false;
         }
-        else getGUIApplication().closePopUpStage();
+        else {
+            pbc.setIsResToPlace(true);
+            getGUIApplication().closePopUpStage();
+        }
     }
 
     public void setLeaders(List<LeaderCard> leaders){
