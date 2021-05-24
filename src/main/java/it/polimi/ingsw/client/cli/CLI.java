@@ -508,7 +508,7 @@ public class CLI extends ClientController {
                             graphicalCLI.printGraphicalResources(toPlace);
                         }
                         resourceToPlace = toPlace.get(0);
-                        level = graphicalCLI.askWhichShelf(resourceToPlace, shelves.size(), rearranged, true);
+                        level = graphicalCLI.askWhichShelf(resourceToPlace, shelves.size(), true);
                         rearranged = true;
 
                         if (level > 0) {
@@ -687,7 +687,7 @@ public class CLI extends ClientController {
                 graphicalCLI.printString("Resources to place: ");
                 graphicalCLI.printGraphicalResources(toPlace);
 
-                level=graphicalCLI.askWhichShelf(resourceToPlace, shelves.size(), !firstTurn, false);
+                level=graphicalCLI.askWhichShelf(resourceToPlace, shelves.size(), false);
                 if(firstTurn) firstTurn = !firstTurn;
 
                 if(level>0) {
