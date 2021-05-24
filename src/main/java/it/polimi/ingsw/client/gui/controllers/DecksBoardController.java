@@ -1,15 +1,26 @@
 package it.polimi.ingsw.client.gui.controllers;
 
 import it.polimi.ingsw.client.gui.SceneNames;
+import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
+import it.polimi.ingsw.server.model.cards.deck.Deck;
+import it.polimi.ingsw.server.model.cards.deck.DevelopmentDeck;
+import it.polimi.ingsw.server.model.market.MarbleColors;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DecksBoardController extends GenericController {
 
-    @FXML Button buyCard_button;
-    @FXML ImageView deckG3_imageView, deckB3_imageView, deckY3_imageView, deckP3_imageView,
+    private List<ImageView> decks;
+
+    @FXML private Button buyCard_button;
+    @FXML private ImageView deckG3_imageView, deckB3_imageView, deckY3_imageView, deckP3_imageView,
             deckG2_imageView, deckB2_imageView, deckY2_imageView, deckP2_imageView,
             deckG1_imageView, deckB1_imageView, deckY1_imageView, deckP1_imageView, selectedDevCard_imageView;
 
@@ -94,5 +105,29 @@ public class DecksBoardController extends GenericController {
 
     public void disableBuyCardAction(){
         buyCard_button.setDisable(true);
+    }
+
+    public void updateDevDecks(List<Integer> devCardsId){
+        fillList();
+        for (int i=0; i<decks.size(); i++) {
+            String resPath = "/imgs/devCards/"+devCardsId.get(i)+".png";
+            decks.get(i).setImage(new Image(getClass().getResourceAsStream(resPath)));
+        }
+    }
+
+    private void fillList(){
+        decks = new ArrayList<>();
+        decks.add(deckY1_imageView);
+        decks.add(deckG1_imageView);
+        decks.add(deckP1_imageView);
+        decks.add(deckB1_imageView);
+        decks.add(deckY2_imageView);
+        decks.add(deckG2_imageView);
+        decks.add(deckP2_imageView);
+        decks.add(deckB2_imageView);
+        decks.add(deckY3_imageView);
+        decks.add(deckG3_imageView);
+        decks.add(deckP3_imageView);
+        decks.add(deckB3_imageView);
     }
 }

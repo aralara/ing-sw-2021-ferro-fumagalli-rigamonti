@@ -81,10 +81,7 @@
             </ImageView>
          </children>
       </GridPane>
-      <ImageView fx:id="floatingMarble_imageView" fitHeight="50.0" fitWidth="50.0" layoutX="385.0" layoutY="96.0" onDragDetected="#handleDragDetectedFloatingMarble" onDragDropped="#handleDragDroppedFloatingMarble" onDragOver="#handleDragOverFloatingMarble" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../imgs/marbles/marble_blue.png" />
-         </image></ImageView>
+      <ImageView fx:id="floatingMarble_imageView" fitHeight="50.0" fitWidth="50.0" layoutX="385.0" layoutY="96.0" onDragDetected="#handleDragDetectedFloatingMarble" onDragDropped="#handleDragDroppedFloatingMarble" onDragOver="#handleDragOverFloatingMarble" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="marbleR0C4_imageView" fitHeight="50.0" fitWidth="50.0" layoutX="403.0" layoutY="155.0" onDragDetected="#handleDragDetectedR0C4" onDragDropped="#handleDragDroppedR0C4" onDragOver="#handleDragOverR0C4" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="marbleR1C4_imageView" fitHeight="50.0" fitWidth="50.0" layoutX="403.0" layoutY="217.0" onDragDetected="#handleDragDetectedR1C4" onDragDropped="#handleDragDroppedR1C4" onDragOver="#handleDragOverR1C4" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="marbleR2C4_imageView" fitHeight="50.0" fitWidth="50.0" layoutX="403.0" layoutY="279.0" onDragDetected="#handleDragDetectedR2C4" onDragDropped="#handleDragDroppedR2C4" onDragOver="#handleDragOverR2C4" pickOnBounds="true" preserveRatio="true" />

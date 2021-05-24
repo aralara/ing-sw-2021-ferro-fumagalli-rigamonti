@@ -127,15 +127,15 @@ public class FirstPhaseController extends GenericController {
         }
     }
 
-    public void setLeaders(List<LeaderCard> leaders){
+    public void setLeaders(List<Integer> leaders){
         leader1_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
-                +leaders.get(0).getID()+".png")));
+                +leaders.get(0)+".png")));
         leader2_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
-                +leaders.get(1).getID()+".png")));
+                +leaders.get(1)+".png")));
         leader3_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
-                +leaders.get(2).getID()+".png")));
+                +leaders.get(2)+".png")));
         leader4_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
-                +leaders.get(3).getID()+".png")));
+                +leaders.get(3)+".png")));
     }
 
     public void enableLabels(){ //TODO: se deve scegliere 2 risorse

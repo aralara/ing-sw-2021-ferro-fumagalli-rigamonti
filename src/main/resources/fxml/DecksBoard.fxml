@@ -7,54 +7,18 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="686.0" prefWidth="998.0" styleClass="decksBoardPanel" stylesheets="@../css/decksBoard.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllers.DecksBoardController">
     <children>
-        <ImageView fx:id="deckG3_imageView" fitHeight="172.0" fitWidth="114.0" layoutX="49.0" layoutY="60.0" onMouseClicked="#clickedG3" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../imgs/devCards/41.png" />
-         </image></ImageView>
-        <ImageView fx:id="deckB3_imageView" fitHeight="172.0" fitWidth="114.0" layoutX="197.0" layoutY="60.0" onMouseClicked="#clickedB3" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../imgs/devCards/43.png" />
-         </image></ImageView>
-        <ImageView fx:id="deckY3_imageView" fitHeight="172.0" fitWidth="114.0" layoutX="346.0" layoutY="60.0" onMouseClicked="#clickedY3" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../imgs/devCards/48.png" />
-         </image></ImageView>
-        <ImageView fx:id="deckP3_imageView" fitHeight="172.0" fitWidth="114.0" layoutX="497.0" layoutY="60.0" onMouseClicked="#clickedP3" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../imgs/devCards/46.png" />
-         </image></ImageView>
-        <ImageView fx:id="deckG2_imageView" fitHeight="172.0" fitWidth="114.0" layoutX="50.0" layoutY="270.0" onMouseClicked="#clickedG2" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../imgs/devCards/29.png" />
-         </image></ImageView>
-        <ImageView fx:id="deckB2_imageView" fitHeight="172.0" fitWidth="114.0" layoutX="199.0" layoutY="270.0" onMouseClicked="#clickedB2" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../imgs/devCards/23.png" />
-         </image></ImageView>
-        <ImageView fx:id="deckY2_imageView" fitHeight="172.0" fitWidth="114.0" layoutX="345.0" layoutY="270.0" onMouseClicked="#clickedY2" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../imgs/devCards/20.png" />
-         </image></ImageView>
-        <ImageView fx:id="deckP2_imageView" fitHeight="172.0" fitWidth="114.0" layoutX="496.0" layoutY="270.0" onMouseClicked="#clickedP2" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../imgs/devCards/18.png" />
-         </image></ImageView>
-        <ImageView fx:id="deckG1_imageView" fitHeight="172.0" fitWidth="114.0" layoutX="49.0" layoutY="483.0" onMouseClicked="#clickedG1" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../imgs/devCards/9.png" />
-         </image></ImageView>
-        <ImageView fx:id="deckB1_imageView" fitHeight="172.0" fitWidth="114.0" layoutX="199.0" layoutY="483.0" onMouseClicked="#clickedB1" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../imgs/devCards/3.png" />
-         </image></ImageView>
-        <ImageView fx:id="deckY1_imageView" fitHeight="172.0" fitWidth="114.0" layoutX="348.0" layoutY="483.0" onMouseClicked="#clickedY1" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../imgs/devCards/12.png" />
-         </image></ImageView>
-        <ImageView fx:id="deckP1_imageView" fitHeight="172.0" fitWidth="114.0" layoutX="497.0" layoutY="483.0" onMouseClicked="#clickedP1" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../imgs/devCards/14.png" />
-         </image></ImageView>
+        <ImageView fx:id="deckG3_imageView" fitHeight="172.0" fitWidth="114.0" layoutX="49.0" layoutY="60.0" onMouseClicked="#clickedG3" pickOnBounds="true" preserveRatio="true" />
+        <ImageView fx:id="deckB3_imageView" fitHeight="172.0" fitWidth="114.0" layoutX="197.0" layoutY="60.0" onMouseClicked="#clickedB3" pickOnBounds="true" preserveRatio="true" />
+        <ImageView fx:id="deckY3_imageView" fitHeight="172.0" fitWidth="114.0" layoutX="346.0" layoutY="60.0" onMouseClicked="#clickedY3" pickOnBounds="true" preserveRatio="true" />
+        <ImageView fx:id="deckP3_imageView" fitHeight="172.0" fitWidth="114.0" layoutX="497.0" layoutY="60.0" onMouseClicked="#clickedP3" pickOnBounds="true" preserveRatio="true" />
+        <ImageView fx:id="deckG2_imageView" fitHeight="172.0" fitWidth="114.0" layoutX="50.0" layoutY="270.0" onMouseClicked="#clickedG2" pickOnBounds="true" preserveRatio="true" />
+        <ImageView fx:id="deckB2_imageView" fitHeight="172.0" fitWidth="114.0" layoutX="199.0" layoutY="270.0" onMouseClicked="#clickedB2" pickOnBounds="true" preserveRatio="true" />
+        <ImageView fx:id="deckY2_imageView" fitHeight="172.0" fitWidth="114.0" layoutX="345.0" layoutY="270.0" onMouseClicked="#clickedY2" pickOnBounds="true" preserveRatio="true" />
+        <ImageView fx:id="deckP2_imageView" fitHeight="172.0" fitWidth="114.0" layoutX="496.0" layoutY="270.0" onMouseClicked="#clickedP2" pickOnBounds="true" preserveRatio="true" />
+        <ImageView fx:id="deckG1_imageView" fitHeight="172.0" fitWidth="114.0" layoutX="49.0" layoutY="483.0" onMouseClicked="#clickedG1" pickOnBounds="true" preserveRatio="true" />
+        <ImageView fx:id="deckB1_imageView" fitHeight="172.0" fitWidth="114.0" layoutX="199.0" layoutY="483.0" onMouseClicked="#clickedB1" pickOnBounds="true" preserveRatio="true" />
+        <ImageView fx:id="deckY1_imageView" fitHeight="172.0" fitWidth="114.0" layoutX="348.0" layoutY="483.0" onMouseClicked="#clickedY1" pickOnBounds="true" preserveRatio="true" />
+        <ImageView fx:id="deckP1_imageView" fitHeight="172.0" fitWidth="114.0" layoutX="497.0" layoutY="483.0" onMouseClicked="#clickedP1" pickOnBounds="true" preserveRatio="true" />
       <Button focusTraversable="false" layoutX="910.0" layoutY="8.0" mnemonicParsing="false" onAction="#goBack" prefHeight="26.0" prefWidth="71.0" text="Go back" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="16.0" />

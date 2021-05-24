@@ -129,7 +129,6 @@ public class SetupController extends GenericController {
 
     public void startOnlineGame() {
         getGUI().setLobbySize(1);
-        getGUIApplication().setActiveScene(SceneNames.LOADING);
     }
 
     public void startOfflineGame() {
