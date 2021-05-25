@@ -28,7 +28,8 @@ public class PlayerBoardController extends GenericController {
     @FXML private ImageView inkwell_imageVIew, coinToPlace_imageView, servantToPlace_imageView, shieldToPlace_imageView,
             stoneToPlace_imageView;
     @FXML private ImageView shelfResL1_1_imageView, shelfResL2_1_imageView, shelfResL2_2_imageView,
-            shelfResL3_1_imageView, shelfResL3_2_imageView, shelfResL3_3_imageView;
+            shelfResL3_1_imageView, shelfResL3_2_imageView, shelfResL3_3_imageView, handLeader1_imageView, handLeader2_imageView,
+            spaceLeader1_imageView, spaceLeader2_imageView;
 
     public String getResToPlace(){
         return resToPlace;
@@ -481,9 +482,10 @@ public class PlayerBoardController extends GenericController {
             return Integer.parseInt(pbc.getResToPlaceServant_label().getText().substring(2));
         }else if (resourceType == ResourceType.SHIELD) {
             return Integer.parseInt(pbc.getResToPlaceShield_label().getText().substring(2));
-        }else {
+        }else if (resourceType == ResourceType.STONE){
             return Integer.parseInt(pbc.getResToPlaceStone_label().getText().substring(2));
         }
+        return 0;
     }
 
     public void setQuantity(ResourceType resourceType, int quantity){
@@ -495,7 +497,7 @@ public class PlayerBoardController extends GenericController {
             pbc.getResToPlaceServant_label().setText("x "+quantity);
         }else if (resourceType == ResourceType.SHIELD) {
             pbc.getResToPlaceShield_label().setText("x "+quantity);
-        }else {
+        }else if (resourceType == ResourceType.STONE){
             pbc.getResToPlaceStone_label().setText("x "+quantity);
         }
 
@@ -505,63 +507,6 @@ public class PlayerBoardController extends GenericController {
             checkEnableButtons();
     }
 
-/*
-    public int getCoinQuantity(){
-        PlayerBoardController pbc = (PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD);
-        return Integer.parseInt(pbc.getResToPlaceCoin_label().getText().substring(2));
-    }
-
-    public void setCoinQuantity(int quantity){
-        PlayerBoardController pbc = (PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD);
-        pbc.getResToPlaceCoin_label().setText("x "+quantity);
-        if(quantity>0)
-            disableButtons();
-        else if (quantity == 0)
-            checkEnableButtons();
-    }
-
-    public int getServantQuantity(){
-        PlayerBoardController pbc = (PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD);
-        return Integer.parseInt(pbc.getResToPlaceServant_label().getText().substring(2));
-    }
-
-    public void setServantQuantity(int quantity){
-        PlayerBoardController pbc = (PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD);
-        pbc.getResToPlaceServant_label().setText("x "+quantity);
-        if(quantity>0)
-            disableButtons();
-        else if (quantity == 0)
-            checkEnableButtons();
-    }
-
-    public int getShieldQuantity(){
-        PlayerBoardController pbc = (PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD);
-        return Integer.parseInt(pbc.getResToPlaceShield_label().getText().substring(2));
-    }
-
-    public void setShieldQuantity(int quantity){
-        PlayerBoardController pbc = (PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD);
-        pbc.getResToPlaceShield_label().setText("x "+quantity);
-        if(quantity>0)
-            disableButtons();
-        else if (quantity == 0)
-            checkEnableButtons();
-    }
-
-    public int getStoneQuantity(){
-        PlayerBoardController pbc = (PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD);
-        return Integer.parseInt(pbc.getResToPlaceStone_label().getText().substring(2));
-    }
-
-    public void setStoneQuantity(int quantity){
-        PlayerBoardController pbc = (PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD);
-        pbc.getResToPlaceStone_label().setText("x "+quantity);
-        if(quantity>0)
-            disableButtons();
-        else if (quantity == 0)
-            checkEnableButtons();
-    }
-*/
     private void checkEnableButtons(){
         if(getQuantity(ResourceType.COIN)==0 && getQuantity(ResourceType.SERVANT)==0 && getQuantity(ResourceType.SHIELD)==0
                 && getQuantity(ResourceType.STONE)==0){
@@ -598,5 +543,31 @@ public class PlayerBoardController extends GenericController {
 
     public void confirm(ActionEvent actionEvent) {
         getGUI().sendShelfConfiguration();
+    }
+
+    public void setLeaderHand(List<Integer> idList){
+        for(Integer id : idList) {
+            if (handLeader1_imageView.getImage() == null &&spaceLeader1_imageView.getImage() == null){
+                handLeader1_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/cost_"
+                        + id + ".png")));
+            }
+            else if(handLeader2_imageView.getImage() == null &&spaceLeader2_imageView.getImage() == null){
+                handLeader2_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/cost_"
+                        + id + ".png")));
+            }
+        }
+    }
+
+    public void setLeaderBoard(List<Integer> idList){
+        for(Integer id : idList) {
+            if (spaceLeader1_imageView.getImage() == null && handLeader1_imageView.getImage() == null){
+                spaceLeader1_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
+                        + id + ".png")));
+            }
+            else if(spaceLeader2_imageView.getImage() == null && handLeader2_imageView.getImage() == null){
+                spaceLeader2_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
+                        + id + ".png")));
+            }
+        }
     }
 }

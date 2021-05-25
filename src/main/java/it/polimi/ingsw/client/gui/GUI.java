@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.client.UpdateMessageReader;
 import it.polimi.ingsw.client.gui.controllers.*;
 import it.polimi.ingsw.client.structures.DevelopmentDeckView;
+import it.polimi.ingsw.client.structures.LeaderBoardView;
 import it.polimi.ingsw.client.structures.MarketView;
 import it.polimi.ingsw.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.model.boards.Player;
@@ -297,6 +298,35 @@ public class GUI extends ClientController {
             Platform.runLater(() -> ((FirstPhaseController) guiApplication.getController(SceneNames.RESOURCE_CHOICE_MENU)).
                     setChooseResources_label(title));
             Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.RESOURCE_CHOICE_MENU));
+        }
+    }
+
+
+    //TODO: provare a mettere listener per aggiornare sulla GUI ogni volta che c'e' un cambiamento
+    private void showLeaderHand(){
+        try {
+            List<Integer> idList = new ArrayList<>();
+            for (LeaderCard leaderCard : (List<LeaderCard>)(List<? extends Card>) getLocalPlayerBoard().getLeaderBoard().getHand().getCards()) {
+                idList.add(leaderCard.getID());
+            }
+            Platform.runLater(() -> ((PlayerBoardController) guiApplication.getController(SceneNames.PLAYER_BOARD)).
+                    setLeaderHand(idList));
+        }catch(NotExistingNicknameException e){
+            e.printStackTrace();
+        }
+    }
+
+    //TODO: provare a mettere listener per aggiornare sulla GUI ogni volta che c'e' un cambiamento
+    private void showLeaderBoard(){
+        try {
+            List<Integer> idList = new ArrayList<>();
+            for (LeaderCard leaderCard : (List<LeaderCard>)(List<? extends Card>) getLocalPlayerBoard().getLeaderBoard().getBoard().getCards()) {
+                idList.add(leaderCard.getID());
+            }
+            Platform.runLater(() -> ((PlayerBoardController) guiApplication.getController(SceneNames.PLAYER_BOARD)).
+                    setLeaderBoard(idList));
+        }catch(NotExistingNicknameException e){
+            e.printStackTrace();
         }
     }
 

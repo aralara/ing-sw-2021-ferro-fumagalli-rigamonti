@@ -278,7 +278,7 @@
          </font>
       </Label>
       <Separator layoutX="1002.0" layoutY="363.0" prefHeight="3.0" prefWidth="384.0" />
-      <GridPane fx:id="activeLeaderMatrix_gridPane" layoutX="986.0" layoutY="357.0" prefHeight="256.0" prefWidth="400.0">
+      <GridPane fx:id="activeLeaderMatrix_gridPane" layoutX="986.0" layoutY="370.0" prefHeight="256.0" prefWidth="400.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="247.4" minWidth="10.0" prefWidth="208.4" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.2" minWidth="10.0" prefWidth="191.20000000000002" />
@@ -318,7 +318,7 @@
             </ImageView>
          </children>
       </GridPane>
-      <GridPane fx:id="handLeaderMatrix_gridPane" layoutX="986.0" layoutY="613.0" prefHeight="30.0" prefWidth="400.0">
+      <GridPane fx:id="handLeaderMatrix_gridPane" layoutX="986.0" layoutY="635.0" prefHeight="30.0" prefWidth="400.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="209.0" minWidth="10.0" prefWidth="206.6" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="197.19999999999996" minWidth="10.0" prefWidth="194.19999999999996" />
