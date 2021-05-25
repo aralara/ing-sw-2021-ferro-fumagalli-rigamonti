@@ -8,8 +8,8 @@ import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.TurnStatus;
 import it.polimi.ingsw.utils.listeners.Listeners;
-import it.polimi.ingsw.utils.listeners.LorenzoCardPlayListener;
-import it.polimi.ingsw.utils.listeners.LorenzoFaithChangeListener;
+import it.polimi.ingsw.utils.listeners.server.LorenzoCardPlayListener;
+import it.polimi.ingsw.utils.listeners.server.LorenzoFaithChangeListener;
 
 import java.util.*;
 

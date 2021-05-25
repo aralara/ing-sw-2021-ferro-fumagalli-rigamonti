@@ -1,15 +1,15 @@
-package it.polimi.ingsw.utils.listeners;
+package it.polimi.ingsw.utils.listeners.server;
 
 import it.polimi.ingsw.server.model.storage.ResourceType;
 import it.polimi.ingsw.server.view.VirtualView;
-import it.polimi.ingsw.utils.messages.server.update.PlayerAbilityDiscountsMessage;
+import it.polimi.ingsw.utils.messages.server.update.PlayerAbilityMarblesMessage;
 
 import java.beans.PropertyChangeEvent;
 import java.util.List;
 
-public class AbilityDiscountsChangeListener extends ModelChangeListener {
+public class AbilityMarblesChangeListener extends ModelChangeListener {
 
-    public AbilityDiscountsChangeListener(VirtualView virtualView) {
+    public AbilityMarblesChangeListener(VirtualView virtualView) {
         super(virtualView);
     }
 
@@ -18,6 +18,6 @@ public class AbilityDiscountsChangeListener extends ModelChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         PlayerProperty newValue = (PlayerProperty) evt.getNewValue();
         getVirtualView().sendMessage(
-                new PlayerAbilityDiscountsMessage((List<ResourceType>) newValue.getProperty(), newValue.getNickname()));
+                new PlayerAbilityMarblesMessage((List<ResourceType>) newValue.getProperty(), newValue.getNickname()));
     }
 }

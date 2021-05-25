@@ -1,4 +1,4 @@
-package it.polimi.ingsw.utils.listeners;
+package it.polimi.ingsw.utils.listeners.server;
 
 import it.polimi.ingsw.server.model.storage.Production;
 import it.polimi.ingsw.server.view.VirtualView;

@@ -1,4 +1,6 @@
-package it.polimi.ingsw.utils.listeners;
+package it.polimi.ingsw.utils.listeners.server;
+
+import it.polimi.ingsw.utils.listeners.Listened;
 
 public abstract class PlayerListened extends Listened {
 

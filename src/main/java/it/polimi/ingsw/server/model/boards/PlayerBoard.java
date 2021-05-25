@@ -5,10 +5,7 @@ import it.polimi.ingsw.server.model.cards.card.*;
 import it.polimi.ingsw.server.model.cards.requirement.Requirement;
 import it.polimi.ingsw.server.model.faith.FaithTrack;
 import it.polimi.ingsw.server.model.storage.*;
-import it.polimi.ingsw.server.view.VirtualView;
-import it.polimi.ingsw.utils.listeners.Listened;
-import it.polimi.ingsw.utils.listeners.Listeners;
-import it.polimi.ingsw.utils.listeners.PlayerListened;
+import it.polimi.ingsw.utils.listeners.server.PlayerListened;
 
 import java.io.Serializable;
 import java.util.ArrayList;

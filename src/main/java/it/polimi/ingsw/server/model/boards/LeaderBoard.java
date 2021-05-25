@@ -3,7 +3,7 @@ package it.polimi.ingsw.server.model.boards;
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.utils.listeners.Listeners;
-import it.polimi.ingsw.utils.listeners.PlayerListened;
+import it.polimi.ingsw.utils.listeners.server.PlayerListened;
 
 import java.io.Serializable;
 import java.util.List;

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.utils.listeners;
+package it.polimi.ingsw.utils.listeners.server;
 
 public class PlayerProperty {
 

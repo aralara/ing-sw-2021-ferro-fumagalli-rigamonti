@@ -4,7 +4,7 @@ import it.polimi.ingsw.exceptions.NotExistingLastReportTriggeredException;
 import it.polimi.ingsw.server.model.faith.FaithTrack;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.utils.listeners.Listeners;
-import it.polimi.ingsw.utils.listeners.PlayerListened;
+import it.polimi.ingsw.utils.listeners.server.PlayerListened;
 
 import java.io.Serializable;
 import java.util.List;

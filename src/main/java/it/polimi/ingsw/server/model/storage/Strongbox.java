@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server.model.storage;
 
 import it.polimi.ingsw.utils.listeners.Listeners;
-import it.polimi.ingsw.utils.listeners.PlayerListened;
+import it.polimi.ingsw.utils.listeners.server.PlayerListened;
 
 import java.util.ArrayList;
 import java.util.List;
