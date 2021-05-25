@@ -39,7 +39,7 @@ public class GUI extends ClientController {
 
     private final GUIApplication guiApplication;
     private List<LeaderCard> leadersToDiscard; //TODO: va bene qua?
-    private List<Resource> resourcesToPlace;
+    private List<Resource> resourcesToPlace, resourcesToDiscard, resourcesToEqualize;
     private int waitingPlayers;
 
     public GUI(GUIApplication guiApplication) {
@@ -51,6 +51,8 @@ public class GUI extends ClientController {
     public void setup() {
         leadersToDiscard = new ArrayList<>();
         resourcesToPlace = new ArrayList<>();
+        resourcesToDiscard = new ArrayList<>();
+        resourcesToEqualize = new ArrayList<>();
     }
 
     public boolean connect(String address, Integer port) {
@@ -149,21 +151,8 @@ public class GUI extends ClientController {
 
     @Override
     public void askResourceEqualize(List<Resource> resources) {
-        int size = resources.size();
-        String title;
-        if(size > 0) {
-            if(size > 1) {
-                title = "Choose two cards to take";
-                Platform.runLater(() -> ((FirstPhaseController) guiApplication.getController(SceneNames.RESOURCE_CHOICE_MENU)).
-                        enableLabels());
-            }
-            else{
-                title = "Choose one card to take";
-            }
-            Platform.runLater(() -> ((FirstPhaseController) guiApplication.getController(SceneNames.RESOURCE_CHOICE_MENU)).
-                    setChooseResources_label(title));
-            Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.RESOURCE_CHOICE_MENU));
-        }
+        resourcesToEqualize.addAll(resources);
+
     }
 
     @Override
@@ -263,10 +252,39 @@ public class GUI extends ClientController {
             if(leadersToDiscard.size() == 2){
                 getMessageHandler().sendClientMessage(new LeaderCardDiscardMessage(leadersToDiscard));
                 guiApplication.closePopUpStage();
+                callAskResourceToEqualize();
             }
         } catch (NotExistingNicknameException e) {
             e.printStackTrace();
         }
+    }
+
+    private void callAskResourceToEqualize(){
+        for(Resource resource : resourcesToEqualize){
+            if(resource.getResourceType() == ResourceType.FAITH){
+                addResourceToDiscard(resource);
+                resourcesToEqualize.remove(resource);
+            }
+        }
+        int size = resourcesToEqualize.size();
+        String title;
+        if(size > 0) {
+            if(size > 1) {
+                title = "Choose two cards to take";
+                Platform.runLater(() -> ((FirstPhaseController) guiApplication.getController(SceneNames.RESOURCE_CHOICE_MENU)).
+                        enableLabels());
+            }
+            else{
+                title = "Choose one card to take";
+            }
+            Platform.runLater(() -> ((FirstPhaseController) guiApplication.getController(SceneNames.RESOURCE_CHOICE_MENU)).
+                    setChooseResources_label(title));
+            Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.RESOURCE_CHOICE_MENU));
+        }
+    }
+
+    public void addResourceToDiscard(Resource toDiscard){
+        this.resourcesToDiscard.add(toDiscard);
     }
 
     public void addResourceToPlace(ResourceType resourceType){
