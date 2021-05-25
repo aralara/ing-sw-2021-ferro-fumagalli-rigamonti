@@ -37,7 +37,7 @@ public class ShelvesConfigurationMessage extends ClientActionMessage {
 
     @Override
     public void doACKResponseAction(ClientController client) {
-        //TODO: deve fare qualcosa qui?
+        //TODO: gestione ACK
     }
 
     @Override
@@ -45,7 +45,7 @@ public class ShelvesConfigurationMessage extends ClientActionMessage {
         if(placed.size() > 0)   // true if the warehouse has been rearranged while adding resources to it
             client.placeResourcesOnShelves(placed);
         else {
-            //TODO: deve fare altro qui?
+            //TODO: gestione NACK
         }
     }
 }

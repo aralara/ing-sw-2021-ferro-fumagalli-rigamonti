@@ -43,12 +43,17 @@ public class GameLibrary {
         if(!loaded) {
             saves = new HashSet<>();
             File directory = new File(LIBRARY_PATH);
-            String[] files = directory.list();
-            if(files != null) {
-                for (String fileName : files)
-                    saves.add(new GameSave(fileName));
+            boolean directoryExists = directory.exists();
+            if(!directoryExists)
+                directoryExists = directory.mkdir();
+            if(directoryExists) {
+                String[] files = directory.list();
+                if (files != null) {
+                    for (String fileName : files)
+                        saves.add(new GameSave(fileName));
+                }
+                loaded = true;
             }
-            loaded = true;
         }
     }
 
@@ -76,8 +81,11 @@ public class GameLibrary {
      */
     public boolean deleteSave(GameSave save) throws LibraryNotLoadedException {
         checkLoad();
-        saves.remove(save);
-        return save.delete();
+        if(save != null) {
+            saves.remove(save);
+            return save.delete();
+        }
+        return false;
     }
 
     /**

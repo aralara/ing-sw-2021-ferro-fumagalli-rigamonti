@@ -19,11 +19,12 @@ public class NewLobbyMessage extends ClientSetupMessage {
 
     @Override
     public void doACKResponseAction(ClientController client) {
-        //client.ackNotification("Lobby size set successfully");  //TODO: tolta perchè nella gui rimane brutto, meglio avere meno opo up, tanto si capisce se uno ha settato la size in maniera corretta, meglio mandare messaggio solo di nack
+        client.ackNotification("Lobby size set successfully", false);
     }
 
     @Override
     public void doNACKResponseAction(ClientController client) {
-        client.ackNotification("Error in setting lobby size");
+        client.ackNotification("Error in setting lobby size", true);
+        client.askNewLobby(0, 0);   // Simulating a new lobby message
     }
 }

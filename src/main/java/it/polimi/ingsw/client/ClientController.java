@@ -43,7 +43,7 @@ public abstract class ClientController {
 
     public abstract void run();
 
-    public abstract void ackNotification(String message);
+    public abstract void ackNotification(String message, boolean visual);
 
 
     public abstract void askNickname();

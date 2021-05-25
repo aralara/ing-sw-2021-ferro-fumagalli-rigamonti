@@ -1,4 +1,4 @@
-package it.polimi.ingsw.utils.messages;
+package it.polimi.ingsw.utils.messages.client;
 
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.utils.messages.client.ClientActionMessage;

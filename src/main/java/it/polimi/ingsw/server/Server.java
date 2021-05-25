@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server;
 
 import it.polimi.ingsw.server.saves.GameLibrary;
+import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.messages.AckMessage;
 import it.polimi.ingsw.utils.messages.client.ClientMessage;
 import it.polimi.ingsw.utils.messages.client.ClientSetupMessage;
@@ -60,6 +61,7 @@ public class Server {
     public void handleNewConnection(Socket client) {
         Object message;
         String nickname = "";
+        int lobbySize = 1;
         ObjectOutputStream output;
         ObjectInputStream input;
 
@@ -84,11 +86,16 @@ public class Server {
                 output.writeObject(new LobbyMessage(0, 0));
                 output.reset();
 
-                message = input.readObject();
-                NewLobbyMessage lobbyMessage = (NewLobbyMessage) message;
-                waitingGame = new GameHandler(((NewLobbyMessage) message).doSetup());  //TODO: controllare la size ricevuta
+                success = false;
+                while(!success) {
+                    message = input.readObject();
+                    NewLobbyMessage lobbyMessage = (NewLobbyMessage) message;
+                    lobbySize = lobbyMessage.doSetup();
+                    success = checkValidSize(lobbySize);
+                    writeAck(output, lobbyMessage, success);
+                }
+                waitingGame = new GameHandler(lobbySize);
                 gameList.add(waitingGame);
-                writeAck(output, lobbyMessage, true);
             }
 
             waitingGame.add(client, output, input, nickname);
@@ -111,6 +118,10 @@ public class Server {
             }
         }
         return true;
+    }
+
+    public boolean checkValidSize(int size) {
+        return size >= Constants.MIN_LOBBY_SIZE.value() && size <= Constants.MAX_LOBBY_SIZE.value();
     }
 
     public void writeAck(ObjectOutputStream output, ClientSetupMessage message, boolean success) throws IOException {

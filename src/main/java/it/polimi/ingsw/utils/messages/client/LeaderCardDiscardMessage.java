@@ -3,7 +3,6 @@ package it.polimi.ingsw.utils.messages.client;
 import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.view.VirtualView;
-import it.polimi.ingsw.utils.messages.LeaderCardMessageClient;
 import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 
 import java.util.List;
@@ -31,11 +30,11 @@ public class LeaderCardDiscardMessage extends LeaderCardMessageClient {
 
     @Override
     public void doACKResponseAction(ClientController client) {
-        //TODO: deve fare qualcosa qui?
+        //TODO: gestione ACK
     }
 
     @Override
     public void doNACKResponseAction(ClientController client) {
-        //TODO: deve fare qualcosa qui?
+        //TODO: gestione NACK
     }
 }

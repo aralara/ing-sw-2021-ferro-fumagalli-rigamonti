@@ -1,7 +1,5 @@
 package it.polimi.ingsw.utils;
 
-import it.polimi.ingsw.server.model.FileNames;
-
 import java.util.Arrays;
 
 public enum TurnStatus {

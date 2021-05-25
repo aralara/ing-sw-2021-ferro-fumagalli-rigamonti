@@ -43,20 +43,22 @@ public class SaveInteractionMessage extends ClientActionMessage {
 
     @Override
     public void doACKResponseAction(ClientController client) {
+        String message = "";
         switch (interaction) {
             case DELETE_SAVE:
-                client.ackNotification("Save deleted successfully");
+                message = "Save deleted successfully";
                 break;
             case OPEN_SAVE:
-                client.ackNotification("Save loaded successfully");
+                message = "Save loaded successfully";
                 break;
             case NO_ACTION:
-                client.ackNotification("Proceeding to create a game");
+                message = "Proceeding to create a game";
         }
+        client.ackNotification(message, true);
     }
 
     @Override
     public void doNACKResponseAction(ClientController client) {
-        client.ackNotification("Unable to delete the selected save");
+        client.ackNotification("Unable to delete the selected save", true);
     }
 }

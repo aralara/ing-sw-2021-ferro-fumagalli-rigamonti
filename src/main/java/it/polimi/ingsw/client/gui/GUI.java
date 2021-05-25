@@ -105,10 +105,11 @@ public class GUI extends ClientController {
     }
 
     @Override
-    public void ackNotification(String message) {
+    public void ackNotification(String message, boolean visual) {
         //messaggio ricevuto da ack
-        Platform.runLater(() -> guiApplication.getController(guiApplication.getActiveSceneName()).
-                 showAlert(Alert.AlertType.INFORMATION,"Notification","Event notification", message));
+        if(visual)
+            Platform.runLater(() -> guiApplication.getController(guiApplication.getActiveSceneName()).
+                    showAlert(Alert.AlertType.INFORMATION,"Notification","Event notification", message));
     }
 
     @Override

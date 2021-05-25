@@ -59,7 +59,7 @@ public class GameHandler implements Runnable {
         }
     }
 
-    public void startFromSave(GameSave save) {  //TODO: controllare se i listener vengono preservati nel salvataggio
+    public void startFromSave(GameSave save) {
         this.save = save;
         try {
             save.load();

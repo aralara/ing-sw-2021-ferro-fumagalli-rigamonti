@@ -20,7 +20,12 @@ public class ConfirmReadyMessage extends ClientActionMessage {
     }
 
     @Override
+    public void doACKResponseAction(ClientController client) {
+        //TODO: gestione ACK
+    }
+
+    @Override
     public void doNACKResponseAction(ClientController client) {
-        client.ackNotification("Waiting for other players to finish their setup actions");
+        client.ackNotification("Waiting for other players to finish their setup actions", true);
     }
 }

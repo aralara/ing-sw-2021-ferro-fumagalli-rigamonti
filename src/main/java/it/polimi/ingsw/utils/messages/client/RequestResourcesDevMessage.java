@@ -28,7 +28,7 @@ public class RequestResourcesDevMessage extends CanBuyDevelopmentCardMessage {
 
     @Override
     public void doACKResponseAction(ClientController client) {
-        //TODO: deve fare qualcosa qui?
+        //TODO: gestione ACK
     }
 
     @Override

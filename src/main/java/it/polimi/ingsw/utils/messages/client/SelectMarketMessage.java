@@ -32,11 +32,11 @@ public class SelectMarketMessage extends ClientActionMessage {
 
     @Override
     public void doACKResponseAction(ClientController client) {
-        //TODO: deve fare qualcosa qui?
+        //TODO: gestione ACK
     }
 
     @Override
     public void doNACKResponseAction(ClientController client) {
-        //TODO: deve fare qualcosa qui?
+        //TODO: gestione NACK
     }
 }

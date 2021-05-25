@@ -28,7 +28,7 @@ public class RequestResourcesProdMessage extends CanActivateProductionsMessage {
 
     @Override
     public void doACKResponseAction(ClientController client) {
-        //TODO: deve fare qualcosa qui?
+        //TODO: gestione ACK
     }
 
     @Override

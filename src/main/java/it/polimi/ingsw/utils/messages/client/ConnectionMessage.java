@@ -19,12 +19,12 @@ public class ConnectionMessage extends ClientSetupMessage {
 
     @Override
     public void doACKResponseAction(ClientController client) {
-        client.ackNotification("Nickname set successfully");
+        client.ackNotification("Nickname set successfully", false);
     }
 
     @Override
     public void doNACKResponseAction(ClientController client) {
-        client.ackNotification("The selected nickname is not available");
+        client.ackNotification("The selected nickname is not available", true);
         client.askNickname();
     }
 }

@@ -53,7 +53,7 @@ public class GameSave implements Serializable {
      * Saves the currently loaded game to the referenced file if a game is loaded
      * @throws IOException Throws an IOException if an I/O error occurs
      */
-    public void save() throws IOException { //TODO: creare la cartella saves se non esiste
+    public void save() throws IOException {
         if(loaded) {
             ObjectOutputStream output =
                     new ObjectOutputStream(new FileOutputStream(GameLibrary.LIBRARY_PATH + fileName));

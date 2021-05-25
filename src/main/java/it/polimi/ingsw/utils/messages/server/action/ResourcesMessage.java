@@ -1,10 +1,11 @@
-package it.polimi.ingsw.utils.messages;
+package it.polimi.ingsw.utils.messages.server.action;
 
 import it.polimi.ingsw.server.model.storage.Resource;
+import it.polimi.ingsw.utils.messages.Message;
 
 import java.util.List;
 
-public class ResourcesMessage implements Message {
+public abstract class ResourcesMessage implements Message {
 
     private final List<Resource> resources;
 

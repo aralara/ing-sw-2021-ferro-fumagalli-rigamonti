@@ -102,7 +102,7 @@ public class CLI extends ClientController {
     }
 
     @Override
-    public void ackNotification(String message) {
+    public void ackNotification(String message, boolean visual) {
         graphicalCLI.printlnString(message);
     }
 
@@ -122,7 +122,7 @@ public class CLI extends ClientController {
                 graphicalCLI.printString("Insert the number of desired players for the game " +
                         "(value inserted must between 1 and 4): ");
                 size = graphicalCLI.getNextInt();
-            }while(size <= 0 || size >= 5);
+            }while(size <= 0 || size >= 6);
             setNumberOfPlayers(size);
             getMessageHandler().sendClientMessage(new NewLobbyMessage(size));
         }

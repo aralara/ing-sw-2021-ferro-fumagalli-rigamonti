@@ -49,6 +49,6 @@ public class EndTurnMessage extends ClientActionMessage {
 
     @Override
     public void doNACKResponseAction(ClientController client) {
-        //TODO: deve fare qualcosa qui?
+        //TODO: gestione NACK
     }
 }
