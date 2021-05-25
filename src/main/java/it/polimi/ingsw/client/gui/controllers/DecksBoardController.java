@@ -1,12 +1,7 @@
 package it.polimi.ingsw.client.gui.controllers;
 
 import it.polimi.ingsw.client.gui.SceneNames;
-import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
-import it.polimi.ingsw.server.model.cards.deck.Deck;
-import it.polimi.ingsw.server.model.cards.deck.DevelopmentDeck;
-import it.polimi.ingsw.server.model.market.MarbleColors;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -129,5 +124,9 @@ public class DecksBoardController extends GenericController {
         decks.add(deckP3_imageView);
         decks.add(deckB3_imageView);
         decks.add(deckY3_imageView);
+    }
+
+    public void setDevelopmentDeck(List<Integer> idList) {
+        //TODO: stub (fare attenzione! update per development deck singolo)
     }
 }

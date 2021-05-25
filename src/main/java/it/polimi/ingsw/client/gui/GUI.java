@@ -1,33 +1,28 @@
 package it.polimi.ingsw.client.gui;
 
 import it.polimi.ingsw.client.ClientController;
-import it.polimi.ingsw.client.UpdateMessageReader;
 import it.polimi.ingsw.client.gui.controllers.*;
 import it.polimi.ingsw.client.structures.DevelopmentDeckView;
-import it.polimi.ingsw.client.structures.LeaderBoardView;
 import it.polimi.ingsw.client.structures.MarketView;
 import it.polimi.ingsw.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.model.boards.Player;
 import it.polimi.ingsw.server.model.cards.card.Card;
-import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.model.cards.card.LorenzoCard;
-import it.polimi.ingsw.server.model.cards.deck.Deck;
-import it.polimi.ingsw.server.model.market.Marble;
 import it.polimi.ingsw.server.model.market.MarbleColors;
 import it.polimi.ingsw.server.model.storage.RequestResources;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 import it.polimi.ingsw.server.saves.GameSave;
+import it.polimi.ingsw.utils.listeners.Listeners;
+import it.polimi.ingsw.utils.listeners.client.*;
 import it.polimi.ingsw.utils.messages.client.*;
 import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 import it.polimi.ingsw.utils.messages.server.action.ServerActionMessage;
-import it.polimi.ingsw.server.model.cards.card.Card;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -54,6 +49,34 @@ public class GUI extends ClientController {
         resourcesToEqualize = new ArrayList<>();
     }
 
+    public void attachListeners() {
+        PlayerBoardController playerBoardController = (PlayerBoardController) guiApplication
+                .getController(SceneNames.PLAYER_BOARD);
+        DecksBoardController developmentDecksController = (DecksBoardController) guiApplication
+                .getController(SceneNames.DECKS_BOARD);
+        MarketBoardController marketController = (MarketBoardController) guiApplication
+                .getController(SceneNames.MARKET_BOARD);
+        getPlayerBoards().forEach(pb -> {
+                pb.getLeaderBoard().addListener(Listeners.BOARD_LEADER_BOARD.value(),
+                        new LeaderBBoardViewListener(playerBoardController));
+                pb.getLeaderBoard().addListener(Listeners.BOARD_LEADER_HAND.value(),
+                        new LeaderBHandViewListener(playerBoardController));
+                pb.getFaithBoard().addListener(Listeners.BOARD_FAITH_FAITH.value(),
+                        new FaithBFaithViewListener(playerBoardController));
+                pb.getFaithBoard().addListener(Listeners.BOARD_FAITH_POPE.value(),
+                        new FaithBPopeChangeViewListener(playerBoardController));
+                pb.getWarehouse().addListener(Listeners.BOARD_WAREHOUSE.value(),
+                        new WarehouseViewListener(playerBoardController));
+                pb.getStrongbox().addListener(Listeners.BOARD_STRONGBOX.value(),
+                        new StrongboxViewListener(playerBoardController));
+        });
+        getDevelopmentDecks().forEach(dd ->
+                dd.addListener(Listeners.GAME_DEV_DECK.value(),
+                        new DevelopmentDeckViewListener(developmentDecksController)));
+        getMarket().addListener(Listeners.GAME_MARKET.value(),
+                new MarketViewListener(marketController));
+    }
+
     public boolean connect(String address, Integer port) {
         boolean success = getMessageHandler().connect(address, port);
         if(success)
@@ -67,7 +90,7 @@ public class GUI extends ClientController {
         LinkedBlockingQueue<ServerAckMessage> responseQueue = getMessageHandler().getResponseQueue();
         List<ClientMessage> confirmationList = getMessageHandler().getConfirmationList();
 
-        new Thread(new UpdateMessageReader(this, getMessageHandler().getUpdateQueue())).start();
+        new Thread(getUpdateMessageReader()).start();
 
         while(true) {
             try {
@@ -123,6 +146,7 @@ public class GUI extends ClientController {
     public void askLeaderDiscard() {
         //TODO:settare parti gioco
         // TODO: override dei metodi del client contorller perche quando faccio un set ho bisogno di fare anche un update (copio da market lb19)
+        attachListeners();  //TODO: TEMPORANEO, non valido quando si carica un gioco dal salvataggio
         updateLeaderHandToDiscard();
         try {
             if (getLocalPlayerBoard().isInkwell()) {
@@ -310,7 +334,7 @@ public class GUI extends ClientController {
                 idList.add(leaderCard.getID());
             }
             Platform.runLater(() -> ((PlayerBoardController) guiApplication.getController(SceneNames.PLAYER_BOARD)).
-                    setLeaderHand(idList));
+                    setLeaderBHand(idList));
         }catch(NotExistingNicknameException e){
             e.printStackTrace();
         }
@@ -324,7 +348,7 @@ public class GUI extends ClientController {
                 idList.add(leaderCard.getID());
             }
             Platform.runLater(() -> ((PlayerBoardController) guiApplication.getController(SceneNames.PLAYER_BOARD)).
-                    setLeaderBoard(idList));
+                    setLeaderBBoard(idList));
         }catch(NotExistingNicknameException e){
             e.printStackTrace();
         }

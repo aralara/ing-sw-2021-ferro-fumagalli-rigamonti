@@ -1,9 +1,8 @@
 package it.polimi.ingsw.client.gui.controllers;
 
 import it.polimi.ingsw.client.gui.SceneNames;
-import it.polimi.ingsw.server.model.market.Marble;
+import it.polimi.ingsw.client.structures.MarketView;
 import it.polimi.ingsw.server.model.market.MarbleColors;
-import it.polimi.ingsw.utils.messages.client.SelectMarketMessage;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -231,5 +230,9 @@ public class MarketBoardController extends GenericController {
         for(ImageView imageView : marblePositionList)
             imageView.setImage(null);
         floatingMarble_imageView.setImage(null);
+    }
+
+    public void setMarket(MarketView market) {
+        //TODO: stub
     }
 }

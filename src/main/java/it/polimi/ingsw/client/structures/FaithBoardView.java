@@ -1,12 +1,14 @@
 package it.polimi.ingsw.client.structures;
 
 import it.polimi.ingsw.server.model.boards.FaithBoard;
+import it.polimi.ingsw.utils.listeners.Listened;
+import it.polimi.ingsw.utils.listeners.Listeners;
 
 import java.io.Serializable;
 
 import static it.polimi.ingsw.utils.Constants.FAITH_TOTAL_VATICAN_REPORTS;
 
-public class FaithBoardView implements Serializable {
+public class FaithBoardView extends Listened implements Serializable {
 
     private int faith;
     private boolean[] popeProgression;
@@ -37,6 +39,8 @@ public class FaithBoardView implements Serializable {
      */
     public void setFaith(int faith) {
         this.faith = faith;
+        if(hasListeners())
+            fireUpdate(Listeners.BOARD_FAITH_FAITH.value(), faith);
     }
 
     /**
@@ -53,5 +57,7 @@ public class FaithBoardView implements Serializable {
      */
     public void setPopeProgression(boolean[] popeProgression) {
         this.popeProgression = popeProgression;
+        if(hasListeners())
+            fireUpdate(Listeners.BOARD_FAITH_POPE.value(), popeProgression);
     }
 }

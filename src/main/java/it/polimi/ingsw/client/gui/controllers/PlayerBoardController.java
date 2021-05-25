@@ -1,7 +1,9 @@
 package it.polimi.ingsw.client.gui.controllers;
 
 import it.polimi.ingsw.client.gui.SceneNames;
+import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
+import it.polimi.ingsw.server.model.storage.Shelf;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -545,7 +547,19 @@ public class PlayerBoardController extends GenericController {
         getGUI().sendShelfConfiguration();
     }
 
-    public void setLeaderHand(List<Integer> idList){
+    public void setDevelopmentBSpaces(List<List<Integer>> idList) {
+        //TODO: stub
+    }
+
+    public void setFaithBFaith(int faith) {
+        //TODO: stub
+    }
+
+    public void setFaithBPope(boolean[] popeProgression) {
+        //TODO: stub
+    }
+
+    public void setLeaderBHand(List<Integer> idList){
         for(Integer id : idList) {
             if (handLeader1_imageView.getImage() == null &&spaceLeader1_imageView.getImage() == null){
                 handLeader1_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/cost_"
@@ -558,7 +572,7 @@ public class PlayerBoardController extends GenericController {
         }
     }
 
-    public void setLeaderBoard(List<Integer> idList){
+    public void setLeaderBBoard(List<Integer> idList){
         for(Integer id : idList) {
             if (spaceLeader1_imageView.getImage() == null && handLeader1_imageView.getImage() == null){
                 spaceLeader1_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
@@ -569,5 +583,13 @@ public class PlayerBoardController extends GenericController {
                         + id + ".png")));
             }
         }
+    }
+
+    public void setStrongbox(List<Resource> resources) {
+        //TODO: stub
+    }
+
+    public void setWarehouse(List<Shelf> shelves) {
+        //TODO: stub
     }
 }

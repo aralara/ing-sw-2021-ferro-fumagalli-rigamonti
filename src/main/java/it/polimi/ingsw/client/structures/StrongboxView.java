@@ -2,12 +2,14 @@ package it.polimi.ingsw.client.structures;
 
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.Strongbox;
+import it.polimi.ingsw.utils.listeners.Listened;
+import it.polimi.ingsw.utils.listeners.Listeners;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StrongboxView implements Serializable {
+public class StrongboxView extends Listened implements Serializable {
 
     private List<Resource> resources;
 
@@ -34,5 +36,7 @@ public class StrongboxView implements Serializable {
      */
     public void setResources(List<Resource> resources) {
         this.resources = resources;
+        if(hasListeners())
+            fireUpdate(Listeners.BOARD_STRONGBOX.value(), resources);
     }
 }

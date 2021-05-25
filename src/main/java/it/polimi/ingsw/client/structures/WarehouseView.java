@@ -3,12 +3,14 @@ package it.polimi.ingsw.client.structures;
 import it.polimi.ingsw.server.model.storage.Shelf;
 import it.polimi.ingsw.server.model.storage.Warehouse;
 import it.polimi.ingsw.utils.Constants;
+import it.polimi.ingsw.utils.listeners.Listened;
+import it.polimi.ingsw.utils.listeners.Listeners;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WarehouseView implements Serializable {
+public class WarehouseView extends Listened implements Serializable {
 
     private List<Shelf> shelves;
 
@@ -42,5 +44,7 @@ public class WarehouseView implements Serializable {
      */
     public void setShelves(List<Shelf> shelves) {
         this.shelves = shelves;
+        if(hasListeners())
+            fireUpdate(Listeners.BOARD_WAREHOUSE.value(), shelves);
     }
 }
