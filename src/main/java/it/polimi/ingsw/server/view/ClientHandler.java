@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server.view;
 
 import it.polimi.ingsw.utils.messages.Message;
-import it.polimi.ingsw.utils.messages.server.action.PlayerDisconnectedMessage;
+import it.polimi.ingsw.utils.messages.server.update.PlayerDisconnectedMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

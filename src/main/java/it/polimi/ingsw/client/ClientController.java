@@ -23,6 +23,7 @@ public abstract class ClientController {
     private FaithTrackView faithTrack;
     private boolean mainActionPlayed, playerTurn;
     private final MessageHandler messageHandler;
+    private final UpdateMessageReader updateMessageReader;
 
 
     public ClientController() {
@@ -33,7 +34,8 @@ public abstract class ClientController {
         faithTrack = null;
         mainActionPlayed = false;
         playerTurn = false;
-        messageHandler = new MessageHandler(this);
+        messageHandler = new MessageHandler();
+        updateMessageReader = new UpdateMessageReader(this, messageHandler.getUpdateQueue());
     }
 
 
@@ -76,6 +78,11 @@ public abstract class ClientController {
     public abstract void placeResourcesOnShelves(List<Resource> resources);
 
     public abstract List<RequestResources> chooseStorages(List<Resource> resources);
+
+    public void destroy() {
+        messageHandler.stop();
+        updateMessageReader.stop();
+    }
 
 
     public String getNickname() {
@@ -161,5 +168,9 @@ public abstract class ClientController {
 
     public MessageHandler getMessageHandler() {
         return messageHandler;
+    }
+
+    public UpdateMessageReader getUpdateMessageReader() {
+        return updateMessageReader;
     }
 }
