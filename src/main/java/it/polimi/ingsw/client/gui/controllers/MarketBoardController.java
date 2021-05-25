@@ -32,7 +32,7 @@ public class MarketBoardController extends GenericController {
                 (selectedColumn==4 && selectedRow>=0 && selectedRow<=2)) {
             int row = selectedRow==3?-1:selectedRow;
             int col = selectedColumn==4?-1:selectedColumn;
-            getGUI().getMessageHandler().sendClientMessage(new SelectMarketMessage(row, col)); //TODO: controllare se funziona quand si saranno implementati i messaggi
+            getGUI().sendMarketMessage(row, col);
             disableMarketAction();
             ((DecksBoardController)getGUIApplication().getController(SceneNames.DECKS_BOARD)).disableBuyCardAction();
             ((PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD))
@@ -41,6 +41,7 @@ public class MarketBoardController extends GenericController {
             ((PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD)).setWarehouseIsDisabled(false);
             selectedRow=0;
             selectedColumn=0;
+            resetAll();
             //TODO: da spostare nella chiamata del metodo dopo messaggio
             ((PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD)).setIsResToPlace(true);
             showAlert(Alert.AlertType.INFORMATION, "Success!", "Resources taken",

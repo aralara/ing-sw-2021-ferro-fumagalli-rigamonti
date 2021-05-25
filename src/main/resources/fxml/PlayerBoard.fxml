@@ -18,7 +18,12 @@
             <Image url="@../imgs/icon_inkwell.png" />
          </image>
       </ImageView>
-      <Button fx:id="restoreWarehouse_button" layoutX="9.0" layoutY="244.0" mnemonicParsing="false" onAction="#restoreWarehouse" opacity="0.85" text="Restore" textFill="#1d60cc" visible="false">
+      <Button fx:id="confirm_button" focusTraversable="false" layoutX="138.0" layoutY="244.0" mnemonicParsing="false" onAction="#confirm" opacity="0.85" text="Confirm" textFill="#1d60cc" visible="false">
+         <font>
+            <Font name="Pristina" size="18.0" />
+         </font>
+      </Button>
+      <Button fx:id="restoreWarehouse_button" focusTraversable="false" layoutX="9.0" layoutY="244.0" mnemonicParsing="false" onAction="#restoreWarehouse" opacity="0.85" text="Restore" textFill="#1d60cc" visible="false">
          <font>
             <Font name="Pristina" size="18.0" />
          </font>

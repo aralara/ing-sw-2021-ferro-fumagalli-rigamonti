@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.gui.controllers;
 
 import it.polimi.ingsw.client.gui.SceneNames;
+import it.polimi.ingsw.server.model.storage.ResourceType;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -19,7 +20,7 @@ public class PlayerBoardController extends GenericController {
     private boolean isResToPlaceAction=false, mainActionPlayed=false, warehouseIsDisabled=false;
     private int srcWarehousePosition;
 
-    @FXML private Button restoreWarehouse_button, activateProductions_button, endTurn_button, activeLeaderCard_button, discardLeaderCard_button,
+    @FXML private Button confirm_button, restoreWarehouse_button, activateProductions_button, endTurn_button, activeLeaderCard_button, discardLeaderCard_button,
             rearrangeWarehouse_button, viewOpponents_button;
     @FXML private ImageView space1L1_imageView, space1L2_imageView, space1L3_imageView, space2L1_imageView,
             space2L2_imageView, space2L3_imageView, space3L1_imageView, space3L2_imageView, space3L3_imageView;
@@ -305,19 +306,19 @@ public class PlayerBoardController extends GenericController {
     private void manageResToPlace(Image image){
         switch (resToPlace){
             case "coin":
-                setCoinQuantity(getCoinQuantity()-1);
+                setQuantity(ResourceType.COIN,getQuantity(ResourceType.COIN)-1);
                 ((PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD)).setResToPlace("");
                 break;
             case "servant":
-                setServantQuantity(getServantQuantity()-1);
+                setQuantity(ResourceType.SERVANT,getQuantity(ResourceType.SERVANT)-1);
                 ((PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD)).setResToPlace("");
                 break;
             case "shield":
-                setShieldQuantity(getShieldQuantity()-1);
+                setQuantity(ResourceType.SHIELD,getQuantity(ResourceType.SHIELD)-1);
                 ((PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD)).setResToPlace("");
                 break;
             case "stone":
-                setStoneQuantity(getStoneQuantity()-1);
+                setQuantity(ResourceType.STONE,getQuantity(ResourceType.STONE)-1);
                 ((PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD)).setResToPlace("");
                 break;
             default:
@@ -472,6 +473,39 @@ public class PlayerBoardController extends GenericController {
         spaces.add(space3L3_imageView);
     }
 
+    public int getQuantity(ResourceType resourceType) {
+        PlayerBoardController pbc = (PlayerBoardController) getGUIApplication().getController(SceneNames.PLAYER_BOARD);
+        if (resourceType == ResourceType.COIN) {
+            return Integer.parseInt(pbc.getResToPlaceCoin_label().getText().substring(2));
+        } else if (resourceType == ResourceType.SERVANT) {
+            return Integer.parseInt(pbc.getResToPlaceServant_label().getText().substring(2));
+        }else if (resourceType == ResourceType.SHIELD) {
+            return Integer.parseInt(pbc.getResToPlaceShield_label().getText().substring(2));
+        }else {
+            return Integer.parseInt(pbc.getResToPlaceStone_label().getText().substring(2));
+        }
+    }
+
+    public void setQuantity(ResourceType resourceType, int quantity){
+        PlayerBoardController pbc = (PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD);
+
+        if(resourceType == ResourceType.COIN) {
+            pbc.getResToPlaceCoin_label().setText("x " + quantity);
+        }else if (resourceType == ResourceType.SERVANT) {
+            pbc.getResToPlaceServant_label().setText("x "+quantity);
+        }else if (resourceType == ResourceType.SHIELD) {
+            pbc.getResToPlaceShield_label().setText("x "+quantity);
+        }else {
+            pbc.getResToPlaceStone_label().setText("x "+quantity);
+        }
+
+        if(quantity>0)
+            disableButtons();
+        else if (quantity == 0)
+            checkEnableButtons();
+    }
+
+/*
     public int getCoinQuantity(){
         PlayerBoardController pbc = (PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD);
         return Integer.parseInt(pbc.getResToPlaceCoin_label().getText().substring(2));
@@ -527,11 +561,13 @@ public class PlayerBoardController extends GenericController {
         else if (quantity == 0)
             checkEnableButtons();
     }
-
+*/
     private void checkEnableButtons(){
-        if(getCoinQuantity()==0 && getServantQuantity()==0 && getShieldQuantity()==0 && getStoneQuantity()==0){
+        if(getQuantity(ResourceType.COIN)==0 && getQuantity(ResourceType.SERVANT)==0 && getQuantity(ResourceType.SHIELD)==0
+                && getQuantity(ResourceType.STONE)==0){
             isResToPlaceAction=false;
-            enableButtons();
+            //enableButtons();  dove lo sposto?
+            confirm_button.setVisible(true);
         }
     }
 
@@ -558,5 +594,9 @@ public class PlayerBoardController extends GenericController {
         discardLeaderCard_button.setDisable(false);
         rearrangeWarehouse_button.setDisable(false);
         viewOpponents_button.setDisable(false);
+    }
+
+    public void confirm(ActionEvent actionEvent) {
+        getGUI().sendShelfConfiguration();
     }
 }

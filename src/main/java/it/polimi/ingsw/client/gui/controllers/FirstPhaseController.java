@@ -48,13 +48,11 @@ public class FirstPhaseController extends GenericController {
         discard(discard4_button, 4);
     }
 
-    private void finishEqualizeAction(Label label, ResourceType resourceType){
+    private void takeResource(Label label, ResourceType resourceType){
         PlayerBoardController pbc = (PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD);
-        int labelQuantity = pbc.getCoinQuantity(); //TODO: trasforma in getQuantity generico specificando il paramentro
-        pbc.setCoinQuantity(++labelQuantity);
 
-        /*int labelQuantity = pbc.getQuantity(resourceType);
-        pbc.setQuantity(resourceType, ++labelQuantity);*/
+        int labelQuantity = pbc.getQuantity(resourceType);
+        pbc.setQuantity(resourceType, ++labelQuantity);
 
         if(label.isVisible() && anotherRes){
             int quantity = label.getText().charAt(2)-48;
@@ -68,67 +66,19 @@ public class FirstPhaseController extends GenericController {
     }
 
     public void takeCoin() {
-        PlayerBoardController pbc = (PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD);
-        int labelQuantity = pbc.getCoinQuantity(); //TODO: trasforma in getQuantity generico specificando il paramentro
-        pbc.setCoinQuantity(++labelQuantity);
-
-        if(coin_label.isVisible() && anotherRes){
-            int quantity = coin_label.getText().charAt(2)-48;
-            coin_label.setText("x "+(quantity+1));
-            anotherRes=false;
-        }
-        else {
-            pbc.setIsResToPlace(true);
-            getGUIApplication().closePopUpStage();
-        }
+        takeResource(coin_label,ResourceType.COIN);
     }
 
     public void takeServant() {
-        PlayerBoardController pbc = (PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD);
-        int labelQuantity = pbc.getServantQuantity();
-        pbc.setServantQuantity(++labelQuantity);
-
-        if(servant_label.isVisible() && anotherRes){
-            int quantity = servant_label.getText().charAt(2)-48;
-            servant_label.setText("x "+(quantity+1));
-            anotherRes=false;
-        }
-        else {
-            pbc.setIsResToPlace(true);
-            getGUIApplication().closePopUpStage();
-        }
+        takeResource(servant_label,ResourceType.SERVANT);
     }
 
     public void takeShield() {
-        PlayerBoardController pbc = (PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD);
-        int labelQuantity = pbc.getShieldQuantity();
-        pbc.setShieldQuantity(++labelQuantity);
-
-        if(shield_label.isVisible() && anotherRes){
-            int quantity = shield_label.getText().charAt(2)-48;
-            shield_label.setText("x "+(quantity+1));
-            anotherRes=false;
-        }
-        else {
-            pbc.setIsResToPlace(true);
-            getGUIApplication().closePopUpStage();
-        }
+        takeResource(shield_label,ResourceType.SHIELD);
     }
 
     public void takeStone() {
-        PlayerBoardController pbc = (PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD);
-        int labelQuantity = pbc.getStoneQuantity();
-        pbc.setStoneQuantity(++labelQuantity);
-
-        if(stone_label.isVisible() && anotherRes){
-            int quantity = stone_label.getText().charAt(2)-48;
-            stone_label.setText("x "+(quantity+1));
-            anotherRes=false;
-        }
-        else {
-            pbc.setIsResToPlace(true);
-            getGUIApplication().closePopUpStage();
-        }
+        takeResource(stone_label,ResourceType.STONE);
     }
 
     public void setLeaders(List<Integer> leaders){

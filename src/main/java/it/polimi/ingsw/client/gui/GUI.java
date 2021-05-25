@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.client.UpdateMessageReader;
 import it.polimi.ingsw.client.gui.controllers.*;
 import it.polimi.ingsw.client.structures.DevelopmentDeckView;
+import it.polimi.ingsw.client.structures.MarketView;
 import it.polimi.ingsw.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.model.boards.Player;
 import it.polimi.ingsw.server.model.cards.card.Card;
@@ -17,10 +18,7 @@ import it.polimi.ingsw.server.model.storage.RequestResources;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 import it.polimi.ingsw.server.saves.GameSave;
-import it.polimi.ingsw.utils.messages.client.ClientMessage;
-import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
-import it.polimi.ingsw.utils.messages.client.LeaderCardDiscardMessage;
-import it.polimi.ingsw.utils.messages.client.NewLobbyMessage;
+import it.polimi.ingsw.utils.messages.client.*;
 import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 import it.polimi.ingsw.utils.messages.server.action.ServerActionMessage;
 import it.polimi.ingsw.server.model.cards.card.Card;
@@ -123,8 +121,7 @@ public class GUI extends ClientController {
     @Override
     public void askLeaderDiscard() {
         //TODO:settare parti gioco
-        updateMarket();
-        updateDevDecks();
+        // TODO: override dei metodi del client contorller perche quando faccio un set ho bisogno di fare anche un update (copio da market lb19)
         updateLeaderHandToDiscard();
         try {
             if (getLocalPlayerBoard().isInkwell()) {
@@ -157,12 +154,16 @@ public class GUI extends ClientController {
 
     @Override
     public void notifyStartTurn(String nickname) {
-
+        Platform.runLater(() -> ((PlayerBoardController) guiApplication.
+                getController(SceneNames.PLAYER_BOARD)).enableButtons());
     }
 
     @Override
     public void addMarketResources(List<Resource> resources, List<ResourceType> availableAbilities) {
-
+        for(Resource resource : resources){ //TODO: controllare che le risorse siano davvero sempre zero quando si settano
+            Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
+                    .setQuantity(resource.getResourceType(),resource.getQuantity()));
+        }
     }
 
     @Override
@@ -204,6 +205,19 @@ public class GUI extends ClientController {
     public List<RequestResources> chooseStorages(List<Resource> resources) {
         return null;
     }
+
+    @Override
+    public void setMarket(MarketView market) {
+        super.setMarket(market);
+        updateMarket();
+    }
+
+    @Override
+    public void setDevelopmentDecks(List<DevelopmentDeckView> developmentDecks) {
+        super.setDevelopmentDecks(developmentDecks);
+        updateDevDecks();
+    }
+
 
     public void sendNickname(String nickname){
         getMessageHandler().sendClientMessage(new ConnectionMessage(nickname));
@@ -292,5 +306,14 @@ public class GUI extends ClientController {
 
     public void addResourceToPlace(ResourceType resourceType){
 
+    }
+
+    public void sendShelfConfiguration(){
+        //TODO: da inserire modo per creare lista di shelf dal nostro wh e una lista do shelves
+        //getMessageHandler().sendClientMessage(new ShelvesConfigurationMessage());
+    }
+
+    public void sendMarketMessage(int row, int col){
+        getMessageHandler().sendClientMessage(new SelectMarketMessage(row, col));
     }
 }
