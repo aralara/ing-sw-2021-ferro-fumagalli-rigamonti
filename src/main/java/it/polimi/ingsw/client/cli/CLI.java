@@ -22,12 +22,13 @@ import java.util.stream.Collectors;
 
 public class CLI extends ClientController {
 
-    boolean idle;
+    boolean idle, alive;
     private final GraphicalCLI graphicalCLI;
 
 
     public CLI() {
         super();
+        alive = true;
         idle = false;
         graphicalCLI = new GraphicalCLI();
     }
@@ -60,11 +61,11 @@ public class CLI extends ClientController {
         LinkedBlockingQueue<ServerAckMessage> responseQueue = getMessageHandler().getResponseQueue();
         List<ClientMessage> confirmationList = getMessageHandler().getConfirmationList();
 
-        new Thread(new UpdateMessageReader(this, getMessageHandler().getUpdateQueue())).start();
+        new Thread(getUpdateMessageReader()).start();
 
         boolean displayMenu = true;
 
-        while(true) {
+        while(alive) {
             try {
                 if (confirmationList.size() != 0) {
                     responseQueue.take().activateResponse(this);
@@ -86,11 +87,19 @@ public class CLI extends ClientController {
                         }
                     }
                 }
-
             } catch(Exception e) {
                 e.printStackTrace();
             }
         }
+
+        graphicalCLI.printlnString("Game ended");   //TODO: temp
+
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        alive = false;
     }
 
     @Override
@@ -255,9 +264,8 @@ public class CLI extends ClientController {
         graphicalCLI.printlnString("Scoreboard:");
         for(Player player : players.stream()
                 .sorted(Comparator.comparingInt(Player::getFinalPosition)).collect(Collectors.toList()))
-            graphicalCLI.printlnString(player.getFinalPosition()+1 + ": " + player.getNickname() + " with " +
+            graphicalCLI.printlnString(player.getFinalPosition() + ": " + player.getNickname() + " with " +
                     + player.getTotalVP() + " VP");
-        //TODO: distruzione
     }
 
     public void turnMenu() {

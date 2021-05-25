@@ -6,6 +6,7 @@ import it.polimi.ingsw.utils.messages.client.ClientActionMessage;
 import it.polimi.ingsw.utils.messages.client.ClientMessage;
 import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 import it.polimi.ingsw.utils.messages.server.action.ServerActionMessage;
+import it.polimi.ingsw.utils.messages.server.update.PlayerDisconnectedMessage;
 import it.polimi.ingsw.utils.messages.server.update.ServerUpdateMessage;
 
 import java.io.IOException;
@@ -15,10 +16,9 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MessageHandler implements Runnable{
-
-    private ClientController client;
 
     private Socket server;
     private ObjectOutputStream output;
@@ -30,16 +30,15 @@ public class MessageHandler implements Runnable{
 
     private final List<ClientMessage> confirmationList;
 
-    private boolean active;
+    private AtomicBoolean active;
 
 
-    public MessageHandler(ClientController client) {
-        this.client = client;
+    public MessageHandler() {
         this.actionQueue = new LinkedBlockingQueue<>();
         this.updateQueue = new LinkedBlockingQueue<>();
         this.responseQueue = new LinkedBlockingQueue<>();
         this.confirmationList = new ArrayList<>();
-        active = false;
+        active = new AtomicBoolean(false);
     }
 
 
@@ -61,11 +60,13 @@ public class MessageHandler implements Runnable{
 
     @Override
     public void run() {
-        while(active)
+        while(active.get())
             try {
                 managePackets();
+            } catch(IOException | ClassNotFoundException | InterruptedException e) {
+                stop();
             } catch(UnknownMessageException e) {
-                e.printStackTrace();
+                e.printStackTrace();    //TODO: errore?
             }
     }
 
@@ -75,22 +76,21 @@ public class MessageHandler implements Runnable{
         } catch (IOException e) {
             return false;
         }
-
         try {
             output = new ObjectOutputStream(server.getOutputStream());
             input = new ObjectInputStream(server.getInputStream());
-
         } catch (IOException | ClassCastException e) {
-            e.printStackTrace();
+            server = null;
+            return false;
         }
-        active = true;
+        active.set(true);
         return true;
     }
 
-    private void managePackets() throws UnknownMessageException {
-        try {
-            Object message;
+    private void managePackets()
+            throws IOException, ClassNotFoundException, InterruptedException, UnknownMessageException {
 
+            Object message;
             message = input.readObject();
 
             if(message instanceof ServerUpdateMessage)
@@ -101,9 +101,6 @@ public class MessageHandler implements Runnable{
                 handleACKMessage((ServerAckMessage) message);
             else
                 throw new UnknownMessageException();
-        }catch (IOException | ClassNotFoundException | InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     public void sendMessage(Message message) {
@@ -112,7 +109,7 @@ public class MessageHandler implements Runnable{
             output.reset();
         }
         catch(IOException e) {
-            e.printStackTrace();
+            stop();
         }
     }
 
@@ -131,6 +128,18 @@ public class MessageHandler implements Runnable{
     }
 
     public void stop() {
-        active = false;
+        if(active.getAndSet(false)) {
+            try {
+                updateQueue.put(new PlayerDisconnectedMessage());
+                if (server != null && !server.isClosed())
+                    server.close();
+                if (input != null)
+                    input.close();
+                if (output != null)
+                    output.close();
+            } catch (InterruptedException | IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

@@ -424,7 +424,7 @@ public abstract class Game implements Serializable {
         }
 
         for(int i = 0; i < playerNumber; i++)
-            playerBoards.get(i).getPlayer().setFinalPosition(playersPositions[i]);
+            playerBoards.get(i).getPlayer().setFinalPosition(playersPositions[i] + 1);
     }
 
     /**

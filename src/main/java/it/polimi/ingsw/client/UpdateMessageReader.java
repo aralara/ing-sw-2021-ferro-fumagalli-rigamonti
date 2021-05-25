@@ -27,11 +27,13 @@ public class UpdateMessageReader implements Runnable{
                 message.doUpdate(client);
             }
         } catch(InterruptedException e) {
-            e.printStackTrace();
+            if(active)
+                e.printStackTrace();
         }
     }
 
     public void stop() {
         active = false;
+        Thread.currentThread().interrupt();
     }
 }

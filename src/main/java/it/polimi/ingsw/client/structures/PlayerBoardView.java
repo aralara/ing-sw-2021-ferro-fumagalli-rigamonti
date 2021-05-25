@@ -39,13 +39,15 @@ public class PlayerBoardView implements Serializable {
         this.basicProduction = new Production();
 
 
-        /*this.basicProduction = new Production(
+        this.basicProduction = new Production(
                 new ArrayList<>(List.of(new Resource(ResourceType.WILDCARD,1))),
                 new ArrayList<>(List.of(
                         new Resource(ResourceType.COIN,100),
                         new Resource(ResourceType.STONE,100),
                         new Resource(ResourceType.SHIELD,100),
-                        new Resource(ResourceType.SERVANT,100))));*/
+                        new Resource(ResourceType.SERVANT,100)
+                        ,new Resource(ResourceType.FAITH, 23)
+                )));
 
         //TODO: inserita per testare, da togliere quando la CLI sarà PERFETTA (come Bonucci)
     }
