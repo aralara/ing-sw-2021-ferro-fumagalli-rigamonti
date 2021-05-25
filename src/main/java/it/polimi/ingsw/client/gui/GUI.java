@@ -260,13 +260,16 @@ public class GUI extends ClientController {
     }
 
     private void callAskResourceToEqualize(){
+        int size = 0;
         for(Resource resource : resourcesToEqualize){
             if(resource.getResourceType() == ResourceType.FAITH){
                 addResourceToDiscard(resource);
                 resourcesToEqualize.remove(resource);
+                break;
             }
+            else
+                size += resource.getQuantity();
         }
-        int size = resourcesToEqualize.size();
         String title;
         if(size > 0) {
             if(size > 1) {
