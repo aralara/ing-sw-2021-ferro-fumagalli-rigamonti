@@ -13,6 +13,7 @@ import it.polimi.ingsw.server.model.market.MarbleColors;
 import it.polimi.ingsw.server.model.storage.RequestResources;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
+import it.polimi.ingsw.server.model.storage.Shelf;
 import it.polimi.ingsw.server.saves.GameSave;
 import it.polimi.ingsw.utils.listeners.Listeners;
 import it.polimi.ingsw.utils.listeners.client.*;
@@ -32,7 +33,7 @@ import static it.polimi.ingsw.utils.Constants.MARKET_ROW_SIZE;
 public class GUI extends ClientController {
 
     private final GUIApplication guiApplication;
-    private List<Resource> resourcesToPlace, resourcesToDiscard, resourcesToEqualize;
+    private List<Resource> resourcesToEqualize; //TODO: serve per memorizzare le risorse che si devono equalizzare e usarle al momento opportuno
     private int waitingPlayers;
 
     public GUI(GUIApplication guiApplication) {
@@ -42,9 +43,6 @@ public class GUI extends ClientController {
 
     @Override
     public void setup() {
-        //leadersToDiscard = new ArrayList<>();
-        resourcesToPlace = new ArrayList<>();
-        resourcesToDiscard = new ArrayList<>();
         resourcesToEqualize = new ArrayList<>();
     }
 
@@ -307,12 +305,12 @@ public class GUI extends ClientController {
     private void callAskResourceToEqualize(){
         int size = 0;
         for(Resource resource : resourcesToEqualize){
-            if(resource.getResourceType() == ResourceType.FAITH){
-                addResourceToDiscard(resource);
-                resourcesToEqualize.remove(resource);
+            if(resource.getResourceType() != ResourceType.FAITH)//{
+                //addResourceToDiscard(resource);
+                /*resourcesToEqualize.remove(resource);
                 break;
             }
-            else
+            else*/
                 size += resource.getQuantity();
         }
         String title;
@@ -360,20 +358,49 @@ public class GUI extends ClientController {
         }
     }
 
-    public void addResourceToDiscard(Resource toDiscard){
+    /*public void addResourceToDiscard(Resource toDiscard){
         this.resourcesToDiscard.add(toDiscard);
-    }
+    }*/
 
     public void addResourceToPlace(ResourceType resourceType){
 
     }
 
-    public void sendShelfConfiguration(){
+    public void sendShelvesConfigurationMessage(List<Shelf> shelves, List<Resource> toDiscard){
         //TODO: da inserire modo per creare lista di shelf dal nostro wh e una lista do shelves
-        //getMessageHandler().sendClientMessage(new ShelvesConfigurationMessage());
+        checkFaithToEqualize(toDiscard);
+        getMessageHandler().sendMessage(new ShelvesConfigurationMessage(shelves, new ArrayList<Resource>(), toDiscard)); //TODO: temp
+    }
+
+    private void checkFaithToEqualize(List<Resource> toDiscard){
+        if(resourcesToEqualize!= null && !resourcesToEqualize.isEmpty()){
+            int isFaith=-1, i=0;
+            for(Resource resource : resourcesToEqualize){
+                if(resource.getResourceType() == ResourceType.FAITH){
+                    isFaith=i;
+                    break;
+                }
+                i++;
+            }
+            if (isFaith>=0)
+                toDiscard.add(resourcesToEqualize.get(isFaith));
+            resourcesToEqualize.clear();
+        }
     }
 
     public void sendMarketMessage(int row, int col){
         getMessageHandler().sendClientMessage(new SelectMarketMessage(row, col));
+    }
+
+    public List<Shelf> getWarehouseShelvesCopy(){
+        List<Shelf> shelvesCopy = new ArrayList<>();
+        try {
+            for(Shelf shelf : getLocalPlayerBoard().getWarehouse().getShelves())
+                shelvesCopy.add(new Shelf(shelf.getResourceType(), new Resource(shelf.getResources().getResourceType(),
+                        shelf.getResources().getQuantity()), shelf.getLevel(), shelf.isLeader()));
+        } catch (NotExistingNicknameException e) {
+            e.printStackTrace();
+        }
+        return shelvesCopy;
     }
 }
