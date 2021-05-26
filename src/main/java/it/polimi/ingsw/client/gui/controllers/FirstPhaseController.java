@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.gui.controllers;
 
 import it.polimi.ingsw.client.gui.SceneNames;
+import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -14,6 +15,7 @@ import java.util.List;
 public class FirstPhaseController extends GenericController {
 
     private List<Integer> leaderIndexesToDiscard;
+    private List<Resource> resourcesToPlace;
     private boolean anotherRes=false;
 
     @FXML private ImageView leader1_imageView, leader2_imageView, leader3_imageView, leader4_imageView;
@@ -54,6 +56,9 @@ public class FirstPhaseController extends GenericController {
 
         int labelQuantity = pbc.getQuantity(resourceType);
         pbc.setQuantity(resourceType, ++labelQuantity);
+        if(resourcesToPlace==null)
+            resourcesToPlace = new ArrayList<>();
+        resourcesToPlace.add(new Resource(resourceType, 1));
 
         if(label.isVisible() && anotherRes){
             int quantity = label.getText().charAt(2)-48;
@@ -62,6 +67,7 @@ public class FirstPhaseController extends GenericController {
         }
         else {
             pbc.setIsResToPlace(true);
+            getGUI().setResourcesToPlace(resourcesToPlace);
             getGUIApplication().closePopUpStage();
         }
     }
