@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.gui.controllers;
 
 import it.polimi.ingsw.client.gui.SceneNames;
 import it.polimi.ingsw.client.structures.MarketView;
+import it.polimi.ingsw.server.model.market.Marble;
 import it.polimi.ingsw.server.model.market.MarbleColors;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -13,7 +14,11 @@ import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import static it.polimi.ingsw.utils.Constants.MARKET_COLUMN_SIZE;
+import static it.polimi.ingsw.utils.Constants.MARKET_ROW_SIZE;
 
 public class MarketBoardController extends GenericController {
 
@@ -186,25 +191,24 @@ public class MarketBoardController extends GenericController {
         takeResources_button.setDisable(true);
     }
 
-    public void updateMarket(List<MarbleColors> marbles, MarbleColors floatingMarble){
+    /*public void updateMarket(List<MarbleColors> marbles, MarbleColors floatingMarble){
         updateMarbleMatrix(marbles);
         resetAll();
         updateFloatingMarble(floatingMarble);
+    }*/
 
-    }
-
-    private void updateMarbleMatrix(List<MarbleColors> marbleColors){
+    private void updateMarbleMatrix(List<Marble> marble){
         int i=0;
         for (Node node : marbleMatrix_gridPane.getChildren()) {
-            String resPath = "/imgs/marbles/marble_"+ marbleColors.get(i).toString().toLowerCase()+".png";
+            String resPath = "/imgs/marbles/marble_"+ marble.get(i).getColor().toString().toLowerCase()+".png";
             ((ImageView)node).setImage(new Image(getClass().getResourceAsStream(resPath)));
             i++;
         }
     }
 
-    private void updateFloatingMarble(MarbleColors marblecolor){
+    private void updateFloatingMarble(Marble marble){
         floatingMarble_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/marbles/marble_"
-                +marblecolor.toString().toLowerCase()+".png")));
+                +marble.getColor().toString().toLowerCase()+".png")));
     }
 
     private void fillList(){
@@ -233,6 +237,12 @@ public class MarketBoardController extends GenericController {
     }
 
     public void setMarket(MarketView market) {
-        //TODO: stub
+        List<Marble> marbles = new ArrayList<>();
+        for(int row = 0; row < MARKET_ROW_SIZE.value(); row++)
+            for(int col = 0; col < MARKET_COLUMN_SIZE.value(); col++)
+                marbles.add(market.getMarbleMatrix()[row][col]);
+        updateMarbleMatrix(marbles);
+        resetAll();
+        updateFloatingMarble(market.getFloatingMarble());
     }
 }
