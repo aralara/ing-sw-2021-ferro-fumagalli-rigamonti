@@ -128,17 +128,16 @@ public class GraphicalCLI {
 
     /**
      * Generic method to let the user choose an object from a list of possible options
+     * @param <T> Type of the objects
      * @param list List of possible options
      * @param printObject Consumer function that is called to visualize a single option
      * @param printMessage Runnable function that is called to visualize the first message
-     * @param repeatMessage Runnable function that is called to visualize information at every iteration
      * @param printInput Runnable function that is called to visualize the input message
      * @param printOnlyOption Runnable function that is called to visualize the only option notification
-     * @param <T> Type of the objects
      * @return Returns the object chosen by the user
      */
     public <T> T objectOptionSelector(List<T> list, Consumer<T> printObject,
-                                      Runnable printMessage, Runnable repeatMessage,
+                                      Runnable printMessage,
                                       Runnable printInput, Runnable printOnlyOption) {
         if(list.size() > 0) {
             if(list.size() == 1) {
@@ -157,12 +156,10 @@ public class GraphicalCLI {
                 printlnString("You can choose an option from the following: ");
             printNumberedList(list, printObject);
             do {
-                if(repeatMessage != null)
-                    repeatMessage.run();
                 if(printInput != null)
                     printInput.run();
                 else
-                    printString("Please choose a valid option: ");
+                    printString("Choose a valid option: ");
                 index = getNextInt() - 1;
             } while(index < 0 || index >= list.size());
             return list.get(index);
