@@ -288,7 +288,7 @@ public class GUI extends ClientController {
             List<LeaderCard> leadersToDiscard = new ArrayList<>();
             for(int index : indexes)
                 leadersToDiscard.add((LeaderCard) getLocalPlayerBoard().getLeaderBoard().getHand().get(index));
-            getMessageHandler().sendClientMessage(new LeaderCardDiscardMessage(leadersToDiscard));
+            getMessageHandler().sendClientMessage(new LeaderCardDiscardMessage(leadersToDiscard, true));
             guiApplication.closePopUpStage();
             callAskResourceToEqualize();
         } catch (NotExistingNicknameException e) {

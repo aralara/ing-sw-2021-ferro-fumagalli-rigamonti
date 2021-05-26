@@ -20,7 +20,7 @@ public class PlayerBoardController extends GenericController {
     private List<Shelf> shelves;
     private List<Resource> toDiscard;
 
-    private List<ImageView> spaces;
+    private List<ImageView> spaces, faithSpaces;
     private String resToPlace;
     private boolean isResToPlaceAction=false, mainActionPlayed=false, warehouseIsDisabled=false;
     private int srcWarehousePosition;
@@ -29,6 +29,12 @@ public class PlayerBoardController extends GenericController {
             rearrangeWarehouse_button, viewOpponents_button;
     @FXML private ImageView space1L1_imageView, space1L2_imageView, space1L3_imageView, space2L1_imageView,
             space2L2_imageView, space2L3_imageView, space3L1_imageView, space3L2_imageView, space3L3_imageView;
+    @FXML private ImageView faithSpace0_imageView, faithSpace1_imageView, faithSpace2_imageView, faithSpace3_imageView, faithSpace4_imageView,
+    faithSpace5_imageView, faithSpace6_imageView, faithSpace7_imageView ,faithSpace8_imageView, faithSpace9_imageView,
+    faithSpace10_imageView, faithSpace11_imageView, faithSpace12_imageView, faithSpace13_imageView, faithSpace14_imageView,
+    faithSpace15_imageView, faithSpace16_imageView, faithSpace17_imageView, faithSpace18_imageView, faithSpace19_imageView,
+    faithSpace20_imageView, faithSpace21_imageView, faithSpace22_imageView, faithSpace23_imageView, faithSpace24_imageView;
+
     @FXML private Label player_label, resToPlaceCoin_label, resToPlaceServant_label, resToPlaceShield_label, resToPlaceStone_label;
     @FXML private ImageView inkwell_imageVIew, coinToPlace_imageView, servantToPlace_imageView, shieldToPlace_imageView,
             stoneToPlace_imageView;
@@ -479,6 +485,35 @@ public class PlayerBoardController extends GenericController {
         spaces.add(space3L3_imageView);
     }
 
+    private void fillFaithSpaces(){
+        faithSpaces = new ArrayList<>();
+        faithSpaces.add(faithSpace0_imageView);
+        faithSpaces.add(faithSpace1_imageView);
+        faithSpaces.add(faithSpace2_imageView);
+        faithSpaces.add(faithSpace3_imageView);
+        faithSpaces.add(faithSpace4_imageView);
+        faithSpaces.add(faithSpace5_imageView);
+        faithSpaces.add(faithSpace6_imageView);
+        faithSpaces.add(faithSpace7_imageView);
+        faithSpaces.add(faithSpace8_imageView);
+        faithSpaces.add(faithSpace9_imageView);
+        faithSpaces.add(faithSpace10_imageView);
+        faithSpaces.add(faithSpace11_imageView);
+        faithSpaces.add(faithSpace12_imageView);
+        faithSpaces.add(faithSpace13_imageView);
+        faithSpaces.add( faithSpace14_imageView);
+        faithSpaces.add(faithSpace15_imageView);
+        faithSpaces.add(faithSpace16_imageView);
+        faithSpaces.add(faithSpace17_imageView);
+        faithSpaces.add(faithSpace18_imageView);
+        faithSpaces.add(faithSpace19_imageView);
+        faithSpaces.add(faithSpace20_imageView);
+        faithSpaces.add(faithSpace21_imageView);
+        faithSpaces.add(faithSpace22_imageView);
+        faithSpaces.add(faithSpace23_imageView);
+        faithSpaces.add(faithSpace24_imageView);
+    }
+
     public int getQuantity(ResourceType resourceType) {
         PlayerBoardController pbc = (PlayerBoardController) getGUIApplication().getController(SceneNames.PLAYER_BOARD);
         if (resourceType == ResourceType.COIN) {
@@ -558,7 +593,16 @@ public class PlayerBoardController extends GenericController {
     }
 
     public void setFaithBFaith(int faith) {
-        //TODO: stub
+        fillFaithSpaces();
+        resetFaith();
+        Image cross = new Image(getClass().getResourceAsStream("/imgs/faith/cross_red.png"));
+        if(faith > 24) faith = 24;
+        faithSpaces.get(faith).setImage(cross);
+    }
+
+    private void resetFaith(){  //TODO: si può fare in modo migliore?
+        for(ImageView imageView : faithSpaces)
+            imageView.setImage(null);
     }
 
     public void setFaithBPope(boolean[] popeProgression) {
