@@ -12,6 +12,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -99,7 +100,13 @@ public class GUIApplication extends Application { //TODO: flusso messaggi da ric
         popUpStage.getIcons().add(image);
         popUpStage.setScene(scene);
 
-        popUpStage.centerOnScreen();
+        Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
+        double x = bounds.getMinX() + (bounds.getWidth() - scene.getWidth()) * 0.25;
+        double y = bounds.getMinY() + (bounds.getHeight() - scene.getHeight()) * 0.25;
+        popUpStage.setX(x);
+        popUpStage.setY(y);
+
+        popUpStage.initStyle(StageStyle.UNDECORATED);
 
         popUpStage.show();
     }
@@ -120,6 +127,8 @@ public class GUIApplication extends Application { //TODO: flusso messaggi da ric
         secondStage.initModality(Modality.WINDOW_MODAL);
         secondStage.initOwner(this.stage);
         secondStage.centerOnScreen();
+
+        secondStage.initStyle(StageStyle.UNDECORATED);
 
         secondStage.show();
     }
@@ -145,6 +154,8 @@ public class GUIApplication extends Application { //TODO: flusso messaggi da ric
         double y = bounds.getMinY() + (bounds.getHeight() - scene.getHeight()) * 0.25;
         cardStage.setX(x);
         cardStage.setY(y);
+
+        cardStage.initStyle(StageStyle.UNDECORATED);
 
         cardStage.show();
     }

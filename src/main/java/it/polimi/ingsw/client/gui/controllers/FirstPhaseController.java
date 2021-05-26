@@ -1,7 +1,6 @@
 package it.polimi.ingsw.client.gui.controllers;
 
 import it.polimi.ingsw.client.gui.SceneNames;
-import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -81,15 +80,15 @@ public class FirstPhaseController extends GenericController {
         takeResource(stone_label,ResourceType.STONE);
     }
 
-    public void setLeaders(List<Integer> leaders){
+    public void setLeaders(List<Integer> idLeaders){
         leader1_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
-                +leaders.get(0)+".png")));
+                + idLeaders.get(0)+".png")));
         leader2_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
-                +leaders.get(1)+".png")));
+                + idLeaders.get(1)+".png")));
         leader3_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
-                +leaders.get(2)+".png")));
+                + idLeaders.get(2)+".png")));
         leader4_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
-                +leaders.get(3)+".png")));
+                + idLeaders.get(3)+".png")));
     }
 
     public void enableLabels(){ //TODO: se deve scegliere 2 risorse

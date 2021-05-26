@@ -560,6 +560,8 @@ public class PlayerBoardController extends GenericController {
     }
 
     public void setLeaderBHand(List<Integer> idList){
+        handLeader1_imageView.setImage(null);
+        handLeader2_imageView.setImage(null);
         for(Integer id : idList) {
             if (handLeader1_imageView.getImage() == null &&spaceLeader1_imageView.getImage() == null){
                 handLeader1_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/cost_"
@@ -573,6 +575,8 @@ public class PlayerBoardController extends GenericController {
     }
 
     public void setLeaderBBoard(List<Integer> idList){
+        spaceLeader1_imageView.setImage(null);
+        spaceLeader2_imageView.setImage(null);
         for(Integer id : idList) {
             if (spaceLeader1_imageView.getImage() == null && handLeader1_imageView.getImage() == null){
                 spaceLeader1_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
