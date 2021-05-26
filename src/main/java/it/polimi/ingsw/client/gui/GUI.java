@@ -32,7 +32,6 @@ import static it.polimi.ingsw.utils.Constants.MARKET_ROW_SIZE;
 public class GUI extends ClientController {
 
     private final GUIApplication guiApplication;
-    private List<LeaderCard> leadersToDiscard; //TODO: va bene qua?
     private List<Resource> resourcesToPlace, resourcesToDiscard, resourcesToEqualize;
     private int waitingPlayers;
 
@@ -43,7 +42,7 @@ public class GUI extends ClientController {
 
     @Override
     public void setup() {
-        leadersToDiscard = new ArrayList<>();
+        //leadersToDiscard = new ArrayList<>();
         resourcesToPlace = new ArrayList<>();
         resourcesToDiscard = new ArrayList<>();
         resourcesToEqualize = new ArrayList<>();
@@ -286,17 +285,23 @@ public class GUI extends ClientController {
         }
     }
 
-    public void addLeaderToDiscard(int index){
+    public void sendLeaderCardDiscardMessage(List<Integer> indexes){
         try {
-            leadersToDiscard.add((LeaderCard) getLocalPlayerBoard().getLeaderBoard().getHand().get(index-1));
-            if(leadersToDiscard.size() == 2){
-                getMessageHandler().sendClientMessage(new LeaderCardDiscardMessage(leadersToDiscard));
-                guiApplication.closePopUpStage();
-                callAskResourceToEqualize();
-            }
+            List<LeaderCard> leadersToDiscard = new ArrayList<>();
+            for(int index : indexes)
+                leadersToDiscard.add((LeaderCard) getLocalPlayerBoard().getLeaderBoard().getHand().get(index));
+            getMessageHandler().sendClientMessage(new LeaderCardDiscardMessage(leadersToDiscard));
+            guiApplication.closePopUpStage();
+            callAskResourceToEqualize();
         } catch (NotExistingNicknameException e) {
             e.printStackTrace();
         }
+    }
+
+    public void sendLeaderCardDiscardMessage(int index){
+        List<Integer> oneElementList = new ArrayList<>();
+        oneElementList.add(index);
+        sendLeaderCardDiscardMessage(oneElementList);
     }
 
     private void callAskResourceToEqualize(){

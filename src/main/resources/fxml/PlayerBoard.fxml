@@ -28,12 +28,12 @@
             <Font name="Pristina" size="18.0" />
          </font>
       </Button>
-      <ImageView fx:id="shelfResL1_1_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="112.0" layoutY="296.0" onDragDetected="#handleDragDetectedShelfResL1_1" onDragDropped="#handleDragDroppedShelfResL1_1" onDragOver="#handleDragOverShelfResL1_1" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="shelfResL2_1_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="76.0" layoutY="355.0" onDragDetected="#handleDragDetectedShelfResL2_1" onDragDropped="#handleDragDroppedShelfResL2_1" onDragOver="#handleDragOverShelfResL2_1" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="shelfResL2_2_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="134.0" layoutY="355.0" onDragDetected="#handleDragDetectedShelfResL2_2" onDragDropped="#handleDragDroppedShelfResL2_2" onDragOver="#handleDragOverShelfResL2_2" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="shelfResL3_1_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="66.0" layoutY="416.0" onDragDetected="#handleDragDetectedShelfResL3_1" onDragDropped="#handleDragDroppedShelfResL3_1" onDragOver="#handleDragOverShelfResL3_1" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="shelfResL3_2_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="107.0" layoutY="416.0" onDragDetected="#handleDragDetectedShelfResL3_2" onDragDropped="#handleDragDroppedShelfResL3_2" onDragOver="#handleDragOverShelfResL3_2" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="shelfResL3_3_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="148.0" layoutY="416.0" onDragDetected="#handleDragDetectedShelfResL3_3" onDragDropped="#handleDragDroppedShelfResL3_3" onDragOver="#handleDragOverShelfResL3_3" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="shelfResL1_1_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="112.0" layoutY="296.0" onDragDropped="#handleDragDroppedShelfResL1_1" onDragOver="#handleDragOverShelfResL1_1" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="shelfResL2_1_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="76.0" layoutY="355.0" onDragDropped="#handleDragDroppedShelfResL2_1" onDragOver="#handleDragOverShelfResL2_1" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="shelfResL2_2_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="134.0" layoutY="355.0" onDragDropped="#handleDragDroppedShelfResL2_2" onDragOver="#handleDragOverShelfResL2_2" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="shelfResL3_1_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="66.0" layoutY="416.0" onDragDropped="#handleDragDroppedShelfResL3_1" onDragOver="#handleDragOverShelfResL3_1" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="shelfResL3_2_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="107.0" layoutY="416.0" onDragDropped="#handleDragDroppedShelfResL3_2" onDragOver="#handleDragOverShelfResL3_2" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="shelfResL3_3_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="148.0" layoutY="416.0" onDragDropped="#handleDragDroppedShelfResL3_3" onDragOver="#handleDragOverShelfResL3_3" pickOnBounds="true" preserveRatio="true" />
       <ImageView fitHeight="40.0" fitWidth="40.0" layoutX="31.0" layoutY="541.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../imgs/res/coin.png" />

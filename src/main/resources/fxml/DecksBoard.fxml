@@ -25,7 +25,7 @@
          </font>
       </Button>
       <ImageView fx:id="selectedDevCard_imageView" disable="true" fitHeight="468.0" fitWidth="309.0" layoutX="672.0" layoutY="69.0" pickOnBounds="true" preserveRatio="true" />
-      <Button fx:id="buyCard_button" focusTraversable="false" layoutX="759.0" layoutY="569.0" mnemonicParsing="false" onAction="#buyCard" text="Buy this card" textFill="#1d60cc">
+      <Button fx:id="buyCard_button" disable="true" focusTraversable="false" layoutX="759.0" layoutY="569.0" mnemonicParsing="false" onAction="#buyCard" text="Buy this card" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="24.0" />
          </font>

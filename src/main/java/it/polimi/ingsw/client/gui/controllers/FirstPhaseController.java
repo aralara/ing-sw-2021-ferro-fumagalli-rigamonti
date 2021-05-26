@@ -8,10 +8,12 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FirstPhaseController extends GenericController {
 
+    private List<Integer> leaderIndexesToDiscard;
     private boolean anotherRes=false;
 
     @FXML private ImageView leader1_imageView, leader2_imageView, leader3_imageView, leader4_imageView;
@@ -28,7 +30,7 @@ public class FirstPhaseController extends GenericController {
 
     private void discard(Button button, int index){
         button.setDisable(true);
-        getGUI().addLeaderToDiscard(index);
+        addLeaderToDiscard(index);
     }
 
     public void discard1() {
@@ -97,5 +99,13 @@ public class FirstPhaseController extends GenericController {
         shield_label.setVisible(true);
         stone_label.setVisible(true);
         anotherRes=true;
+    }
+
+    private void addLeaderToDiscard(int buttonPosition){
+        if(leaderIndexesToDiscard == null)
+            leaderIndexesToDiscard = new ArrayList<>();
+        leaderIndexesToDiscard.add(buttonPosition-1);
+        if(leaderIndexesToDiscard.size()==2)
+            getGUI().sendLeaderCardDiscardMessage(leaderIndexesToDiscard);
     }
 }
