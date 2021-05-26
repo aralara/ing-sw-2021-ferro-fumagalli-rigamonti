@@ -565,32 +565,36 @@ public class PlayerBoardController extends GenericController {
         //TODO: stub
     }
 
-    public void setLeaderBHand(List<Integer> idList){
-        handLeader1_imageView.setImage(null);
-        handLeader2_imageView.setImage(null);
-        for(Integer id : idList) {
-            if (handLeader1_imageView.getImage() == null &&spaceLeader1_imageView.getImage() == null){
-                handLeader1_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/cost_"
-                        + id + ".png")));
-            }
-            else if(handLeader2_imageView.getImage() == null &&spaceLeader2_imageView.getImage() == null){
-                handLeader2_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/cost_"
-                        + id + ".png")));
+    public void setLeaderBHand(List<Integer> idList){  //TODO: mi arriva sia per le mie leader sia per quelle degli oppo, va bene
+
+        if(idList.stream().noneMatch(x -> x == -1)) {
+            handLeader1_imageView.setImage(null);
+            handLeader2_imageView.setImage(null);
+            for (Integer id : idList) {
+                if (handLeader1_imageView.getImage() == null && spaceLeader1_imageView.getImage() == null) {
+                    handLeader1_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/cost_"
+                            + id + ".png")));
+                } else if (handLeader2_imageView.getImage() == null && spaceLeader2_imageView.getImage() == null) {
+                    handLeader2_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/cost_"
+                            + id + ".png")));
+                }
             }
         }
     }
 
-    public void setLeaderBBoard(List<Integer> idList){
-        spaceLeader1_imageView.setImage(null);
-        spaceLeader2_imageView.setImage(null);
-        for(Integer id : idList) {
-            if (spaceLeader1_imageView.getImage() == null && handLeader1_imageView.getImage() == null){
-                spaceLeader1_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
-                        + id + ".png")));
-            }
-            else if(spaceLeader2_imageView.getImage() == null && handLeader2_imageView.getImage() == null){
-                spaceLeader2_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
-                        + id + ".png")));
+    public void setLeaderBBoard(List<Integer> idList){  //TODO: mi arriva sia per le mie leader sia per quelle degli oppo, va bene?
+
+        if(idList.stream().noneMatch(x -> x == -1)) {
+            spaceLeader1_imageView.setImage(null);
+            spaceLeader2_imageView.setImage(null);
+            for(Integer id : idList) {
+                if (spaceLeader1_imageView.getImage() == null && handLeader1_imageView.getImage() == null) {
+                    spaceLeader1_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
+                            + id + ".png")));
+                } else if (spaceLeader2_imageView.getImage() == null && handLeader2_imageView.getImage() == null) {
+                    spaceLeader2_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
+                            + id + ".png")));
+                }
             }
         }
     }
