@@ -130,22 +130,39 @@ public class GraphicalCLI {
      * Generic method to let the user choose an object from a list of possible options
      * @param list List of possible options
      * @param printObject Consumer function that is called to visualize a single option
+     * @param printMessage Runnable function that is called to visualize the first message
+     * @param repeatMessage Runnable function that is called to visualize information at every iteration
+     * @param printInput Runnable function that is called to visualize the input message
+     * @param printOnlyOption Runnable function that is called to visualize the only option notification
      * @param <T> Type of the objects
      * @return Returns the object chosen by the user
      */
-    public <T> T objectOptionSelector(List<T> list, Consumer<T> printObject) {
+    public <T> T objectOptionSelector(List<T> list, Consumer<T> printObject,
+                                      Runnable printMessage, Runnable repeatMessage,
+                                      Runnable printInput, Runnable printOnlyOption) {
         if(list.size() > 0) {
             if(list.size() == 1) {
                 T opt = list.get(0);
-                printString("Only one option available: ");
+                if(printOnlyOption != null)
+                    printOnlyOption.run();
+                else
+                    printString("Only one option available: ");
                 printObject.accept(opt);
                 return opt;
             }
             int index;
-            printlnString("You can choose an option from the following: ");
+            if(printMessage != null)
+                printMessage.run();
+            else
+                printlnString("You can choose an option from the following: ");
             printNumberedList(list, printObject);
             do {
-                printString("Please choose a valid option: ");
+                if(repeatMessage != null)
+                    repeatMessage.run();
+                if(printInput != null)
+                    printInput.run();
+                else
+                    printString("Please choose a valid option: ");
                 index = getNextInt() - 1;
             } while(index < 0 || index >= list.size());
             return list.get(index);
@@ -373,28 +390,6 @@ public class GraphicalCLI {
             }
         }
         return false;
-    }
-
-    /**
-     * Prints a menu containing a list of actions
-     * @param isPlayerTurn true if it's the player turn, false otherwise
-     */
-    public void printActions(boolean isPlayerTurn){
-        printlnString(" Here's the menu: ");
-        if(isPlayerTurn) {
-            printlnString(" • 1) Get resources from market ");
-            printlnString(" • 2) Buy a development card ");
-            printlnString(" • 3) Activate your productions");
-            printlnString(" • 4) Activate a leader card");
-            printlnString(" • 5) Discard a leader card");
-        }
-        printlnString((isPlayerTurn ? " • 6" : " •1") + ") View market and development decks");
-        printlnString((isPlayerTurn ? " • 7" : " •2") + ") View your board");
-        printlnString((isPlayerTurn ? " • 8" : " •3") + ") View opponents' boards");
-        printlnString((isPlayerTurn ? " • 9" : " •4") + ") Rearrange Warehouse");
-        if(isPlayerTurn)
-            printlnString(" •10) End turn");
-        printString("Choose an action to do"+ (isPlayerTurn ? " on your turn: " : ": "));
     }
 
     /**

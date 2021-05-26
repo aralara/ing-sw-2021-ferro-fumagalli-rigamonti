@@ -138,10 +138,7 @@
             </ImageView>
          </children>
       </GridPane>
-      <ImageView fx:id="faithSpace0_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="39.0" layoutY="135.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../imgs/faith/cross_red.png" />
-         </image></ImageView>
+      <ImageView fx:id="faithSpace0_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="39.0" layoutY="135.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="faithSpace1_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="86.0" layoutY="135.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="faithSpace2_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="133.0" layoutY="135.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="faithSpace3_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="133.0" layoutY="88.0" pickOnBounds="true" preserveRatio="true" />
