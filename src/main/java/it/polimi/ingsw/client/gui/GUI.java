@@ -9,7 +9,6 @@ import it.polimi.ingsw.server.model.boards.Player;
 import it.polimi.ingsw.server.model.cards.card.Card;
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.model.cards.card.LorenzoCard;
-import it.polimi.ingsw.server.model.market.MarbleColors;
 import it.polimi.ingsw.server.model.storage.RequestResources;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
@@ -27,13 +26,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import static it.polimi.ingsw.utils.Constants.MARKET_COLUMN_SIZE;
-import static it.polimi.ingsw.utils.Constants.MARKET_ROW_SIZE;
 
 public class GUI extends ClientController {
 
     private final GUIApplication guiApplication;
     private List<Resource> resourcesToEqualize; //TODO: serve per memorizzare le risorse che si devono equalizzare e usarle al momento opportuno
+    private List<Resource> resourcesToPlace; //TODO: serve per memorizzare le risorse che si devono piazzare se viene richiamato il restore e devono essere rimesse
+    private List<Resource> resourcesToDiscard; //TODO: serve per memorizzare le risorse che si devono scartare e se c'è della fede la immagazzina
     private int waitingPlayers;
 
     public GUI(GUIApplication guiApplication) {
@@ -44,6 +43,8 @@ public class GUI extends ClientController {
     @Override
     public void setup() {
         resourcesToEqualize = new ArrayList<>();
+        resourcesToPlace = new ArrayList<>();
+        resourcesToDiscard = new ArrayList<>();
     }
 
     public void attachListeners() {
@@ -120,6 +121,7 @@ public class GUI extends ClientController {
             Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.GAME_MODE_MENU));
         }
         else {
+            setNumberOfPlayers(lobbySize);
             Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.MULTI_PLAYER_WAITING));
         }
         this.waitingPlayers = waitingPlayers;
@@ -172,7 +174,7 @@ public class GUI extends ClientController {
     @Override
     public void askResourceEqualize(List<Resource> resources) {
         resourcesToEqualize.addAll(resources);
-
+        checkFaithResource(resourcesToEqualize);
     }
 
     @Override
@@ -183,10 +185,12 @@ public class GUI extends ClientController {
 
     @Override
     public void addMarketResources(List<Resource> resources, List<ResourceType> availableAbilities) {
-        for(Resource resource : resources){ //TODO: controllare che le risorse siano davvero sempre zero quando si settano
-            Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
-                    .setQuantity(resource.getResourceType(),resource.getQuantity()));
-        }
+        //TODO: manca gestiione abilità
+
+        resourcesToPlace.clear();
+        resourcesToPlace.addAll(resources);
+        checkFaithResource(resourcesToPlace);
+        updateResourcesToPlace();
     }
 
     @Override
@@ -232,7 +236,9 @@ public class GUI extends ClientController {
     @Override
     public void setMarket(MarketView market) {
         super.setMarket(market);
-        updateMarket();
+        //updateMarket();
+        Platform.runLater(() -> ((MarketBoardController)guiApplication.getController(SceneNames.MARKET_BOARD))
+                .setMarket(market));
     }
 
     @Override
@@ -249,19 +255,20 @@ public class GUI extends ClientController {
     }
 
     public void setLobbySize(int size){
+        setNumberOfPlayers(size);
         getMessageHandler().sendClientMessage(new NewLobbyMessage(size));
         if(size==1)
             guiApplication.setActiveScene(SceneNames.LOADING);
     }
 
-    public void updateMarket(){
+    /*public void updateMarket(){
         List<MarbleColors> marbleColors = new ArrayList<>();
         for(int row = 0; row < MARKET_ROW_SIZE.value(); row++)
             for(int col = 0; col < MARKET_COLUMN_SIZE.value(); col++)
                 marbleColors.add(getMarket().getMarbleMatrix()[row][col].getColor());
         Platform.runLater(() -> ((MarketBoardController)guiApplication.getController(SceneNames.MARKET_BOARD))
                 .updateMarket(marbleColors, getMarket().getFloatingMarble().getColor()));
-    }
+    }*/
 
     public void updateDevDecks(){
         List<Integer> listID = new ArrayList<>();
@@ -304,15 +311,9 @@ public class GUI extends ClientController {
 
     private void callAskResourceToEqualize(){
         int size = 0;
-        for(Resource resource : resourcesToEqualize){
-            if(resource.getResourceType() != ResourceType.FAITH)//{
-                //addResourceToDiscard(resource);
-                /*resourcesToEqualize.remove(resource);
-                break;
-            }
-            else*/
+        for(Resource resource : resourcesToEqualize)
+            if(resource.getResourceType() != ResourceType.FAITH)
                 size += resource.getQuantity();
-        }
         String title;
         if(size > 0) {
             if(size > 1) {
@@ -329,63 +330,23 @@ public class GUI extends ClientController {
         }
     }
 
-
-    //TODO: provare a mettere listener per aggiornare sulla GUI ogni volta che c'e' un cambiamento
-    private void showLeaderHand(){
-        try {
-            List<Integer> idList = new ArrayList<>();
-            for (LeaderCard leaderCard : (List<LeaderCard>)(List<? extends Card>) getLocalPlayerBoard().getLeaderBoard().getHand().getCards()) {
-                idList.add(leaderCard.getID());
-            }
-            Platform.runLater(() -> ((PlayerBoardController) guiApplication.getController(SceneNames.PLAYER_BOARD)).
-                    setLeaderBHand(idList));
-        }catch(NotExistingNicknameException e){
-            e.printStackTrace();
-        }
-    }
-
-    //TODO: provare a mettere listener per aggiornare sulla GUI ogni volta che c'e' un cambiamento
-    private void showLeaderBoard(){
-        try {
-            List<Integer> idList = new ArrayList<>();
-            for (LeaderCard leaderCard : (List<LeaderCard>)(List<? extends Card>) getLocalPlayerBoard().getLeaderBoard().getBoard().getCards()) {
-                idList.add(leaderCard.getID());
-            }
-            Platform.runLater(() -> ((PlayerBoardController) guiApplication.getController(SceneNames.PLAYER_BOARD)).
-                    setLeaderBBoard(idList));
-        }catch(NotExistingNicknameException e){
-            e.printStackTrace();
-        }
-    }
-
-    /*public void addResourceToDiscard(Resource toDiscard){
-        this.resourcesToDiscard.add(toDiscard);
-    }*/
-
-    public void addResourceToPlace(ResourceType resourceType){
-
-    }
-
     public void sendShelvesConfigurationMessage(List<Shelf> shelves, List<Resource> toDiscard){
         //TODO: da inserire modo per creare lista di shelf dal nostro wh e una lista do shelves
-        checkFaithToEqualize(toDiscard);
-        getMessageHandler().sendMessage(new ShelvesConfigurationMessage(shelves, new ArrayList<Resource>(), toDiscard)); //TODO: temp
+        resourcesToDiscard.addAll(toDiscard);
+        getMessageHandler().sendClientMessage(new ShelvesConfigurationMessage(shelves, resourcesToPlace, resourcesToDiscard)); //TODO: giusto?
+        //TODO: ripulire resourcesToDiscard e resourcesToPlace?
+        resourcesToPlace.clear();
+        resourcesToDiscard.clear();
     }
 
-    private void checkFaithToEqualize(List<Resource> toDiscard){
-        if(resourcesToEqualize!= null && !resourcesToEqualize.isEmpty()){
-            int isFaith=-1, i=0;
-            for(Resource resource : resourcesToEqualize){
-                if(resource.getResourceType() == ResourceType.FAITH){
-                    isFaith=i;
-                    break;
-                }
-                i++;
-            }
-            if (isFaith>=0)
-                toDiscard.add(resourcesToEqualize.get(isFaith));
-            resourcesToEqualize.clear();
+    private void checkFaithResource(List<Resource> resources){
+        int faithQuantity=0;
+        for(Resource resource : resources){
+            if(resource.getResourceType() == ResourceType.FAITH)
+                faithQuantity++;
         }
+        if (faithQuantity>0)
+            resourcesToDiscard.add(new Resource(ResourceType.FAITH, faithQuantity));
     }
 
     public void sendMarketMessage(int row, int col){
@@ -402,5 +363,27 @@ public class GUI extends ClientController {
             e.printStackTrace();
         }
         return shelvesCopy;
+    }
+
+    public void updateResourcesToPlace(){
+        for(Resource resource : resourcesToPlace){
+            Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
+                    .setQuantity(resource.getResourceType(),resource.getQuantity()));
+        }
+    }
+
+    public void updateWarehouse(){
+        Platform.runLater(() -> {
+            try {
+                ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
+                        .setWarehouse(getLocalPlayerBoard().getWarehouse().getShelves());
+            } catch (NotExistingNicknameException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public void setResourcesToPlace(List<Resource> resources){
+        resourcesToPlace=resources;
     }
 }
