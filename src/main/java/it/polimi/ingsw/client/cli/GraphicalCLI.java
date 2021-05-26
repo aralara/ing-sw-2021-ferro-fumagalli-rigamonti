@@ -393,28 +393,6 @@ public class GraphicalCLI {
     }
 
     /**
-     * Prints a menu containing a list of actions
-     * @param isPlayerTurn true if it's the player turn, false otherwise
-     */
-    public void printActions(boolean isPlayerTurn){
-        printlnString(" Here's the menu: ");
-        if(isPlayerTurn) {
-            printlnString(" • 1) Get resources from market ");
-            printlnString(" • 2) Buy a development card ");
-            printlnString(" • 3) Activate your productions");
-            printlnString(" • 4) Activate a leader card");
-            printlnString(" • 5) Discard a leader card");
-        }
-        printlnString((isPlayerTurn ? " • 6" : " •1") + ") View market and development decks");
-        printlnString((isPlayerTurn ? " • 7" : " •2") + ") View your board");
-        printlnString((isPlayerTurn ? " • 8" : " •3") + ") View opponents' boards");
-        printlnString((isPlayerTurn ? " • 9" : " •4") + ") Rearrange Warehouse");
-        if(isPlayerTurn)
-            printlnString(" •10) End turn");
-        printString("Choose an action to do"+ (isPlayerTurn ? " on your turn: " : ": "));
-    }
-
-    /**
      * Prints a warehouse object
      * @param warehouseView Warehouse to be printed
      * @param showLevel True if levels need to be shown, false otherwise
