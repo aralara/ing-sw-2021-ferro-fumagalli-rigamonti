@@ -17,6 +17,9 @@ import java.util.List;
 
 public class PlayerBoardController extends GenericController {
 
+    private List<Shelf> shelves;
+    private List<Resource> toDiscard;
+
     private List<ImageView> spaces;
     private String resToPlace;
     private boolean isResToPlaceAction=false, mainActionPlayed=false, warehouseIsDisabled=false;
@@ -544,7 +547,10 @@ public class PlayerBoardController extends GenericController {
     }
 
     public void confirm(ActionEvent actionEvent) {
-        getGUI().sendShelfConfiguration();
+        getGUI().sendShelvesConfigurationMessage(shelves,toDiscard);
+        //TODO: serve tenere memorizzato prima dell'ack o rimanda tutto il server?
+        toDiscard.clear();
+        shelves.clear();
     }
 
     public void setDevelopmentBSpaces(List<List<Integer>> idList) {
@@ -595,5 +601,17 @@ public class PlayerBoardController extends GenericController {
 
     public void setWarehouse(List<Shelf> shelves) {
         //TODO: stub
+    }
+
+    private void addToDiscardedResources(ResourceType resourceType){
+        if(toDiscard==null)
+            toDiscard = new ArrayList<>();
+        toDiscard.add(new Resource(resourceType,1));
+    }
+
+    private void addToWarehouse(ResourceType resourceType, int level){ //3,4 x leader
+        if(shelves==null || shelves.isEmpty())
+            shelves = getGUI().getWarehouseShelvesCopy();
+        //TODO: gestire
     }
 }
