@@ -137,7 +137,12 @@ public class CLI extends ClientController {
     public void displaySaves(List<GameSave> saves) {
         graphicalCLI.printlnString("Do you want to load a save?");
         if (graphicalCLI.isAnswerYes()) {
-            GameSave save = graphicalCLI.objectOptionSelector(saves, s -> graphicalCLI.printlnString(s.getFileName()));
+            GameSave save = graphicalCLI.objectOptionSelector(saves,
+                    s -> graphicalCLI.printlnString(s.getFileName()),
+                    () -> graphicalCLI.printlnString("Choose a save file to load or delete"),
+                    null,
+                    null,
+                    () -> graphicalCLI.printString("Found only one save:"));
             getMessageHandler().sendClientMessage(new SaveInteractionMessage(save, SaveInteractions.OPEN_SAVE));
         }
         else
@@ -164,9 +169,16 @@ public class CLI extends ClientController {
             graphicalCLI.printMarket(getMarket());
             graphicalCLI.printDevelopmentDeckTop(getDevelopmentDecks());
 
-            graphicalCLI.printlnString("\nYou have to discard 2 leader cards from your hand:");
-            for(int i = 0; i < 2; i++) {
-                LeaderCard selection = graphicalCLI.objectOptionSelector(leaderHand, graphicalCLI::printLeaderCard);
+
+            for(int i = 2; i > 0; i--) {
+                final int index = i;
+                LeaderCard selection = graphicalCLI.objectOptionSelector(leaderHand,
+                        graphicalCLI::printLeaderCard,
+                        () -> graphicalCLI.printlnString("\nYou have to discard "
+                                + index + " leader card(s) from your hand:"),
+                        null,
+                        null,
+                        null);
                 selected.add(selection);
                 leaderHand.remove(selection);
             }
@@ -187,9 +199,12 @@ public class CLI extends ClientController {
             }
             else if (resource.getResourceType() == ResourceType.WILDCARD) {
                 for (int num = 0; num < resource.getQuantity(); num++) {
-                    ResourceType resType = graphicalCLI.objectOptionSelector(
-                            ResourceType.getRealValues(),
-                            rt -> graphicalCLI.printlnString(rt.toString()));
+                    ResourceType resType = graphicalCLI.objectOptionSelector(ResourceType.getRealValues(),  //TODO: mettere a posto la selezione
+                            rt -> graphicalCLI.printlnString(rt.toString()),
+                            null,
+                            null,
+                            null,
+                            null);
                     newResources.add(new Resource(resType, 1));
                 }
             }
@@ -335,7 +350,8 @@ public class CLI extends ClientController {
                     setPlayerTurn(false);
                     getMessageHandler().sendClientMessage(new EndTurnMessage());
                 }
-                else graphicalCLI.printlnString("You haven't played any main action yet!");
+                else
+                    graphicalCLI.printlnString("You haven't played any main action yet!");
                 break;
             default:
                 break;
@@ -981,9 +997,12 @@ public class CLI extends ClientController {
                     graphicalCLI.printlnString("\nChoose for consumed wildcards:\n");
                     graphicalCLI.printString(GraphicalCLI.RESET);
                     for (Resource wildcard : consumedWildcards) {
-                        ResourceType chosenType = graphicalCLI.objectOptionSelector(
-                                ResourceType.getRealValues(),
-                                rt -> graphicalCLI.printlnString(rt.toString()));
+                        ResourceType chosenType = graphicalCLI.objectOptionSelector(ResourceType.getRealValues(),
+                                rt -> graphicalCLI.printlnString(rt.toString()),
+                                null,
+                                null,
+                                null,
+                                null);
                         consumedResolved.add(new Resource(chosenType, wildcard.getQuantity()));
                     }
                 }
@@ -992,9 +1011,12 @@ public class CLI extends ClientController {
                     graphicalCLI.printlnString("\nChoose for produced wildcards:\n");
                     graphicalCLI.printString(GraphicalCLI.RESET);
                     for (Resource wildcard : producedWildcards) {
-                        ResourceType chosenType = graphicalCLI.objectOptionSelector(
-                                ResourceType.getRealValues(),
-                                rt -> graphicalCLI.printlnString(rt.toString()));
+                        ResourceType chosenType = graphicalCLI.objectOptionSelector(ResourceType.getRealValues(),   //TODO: mettere a posto la selezione
+                                rt -> graphicalCLI.printlnString(rt.toString()),
+                                null,
+                                null,
+                                null,
+                                null);
                         producedResolved.add(new Resource(chosenType, wildcard.getQuantity()));
                     }
                 }
