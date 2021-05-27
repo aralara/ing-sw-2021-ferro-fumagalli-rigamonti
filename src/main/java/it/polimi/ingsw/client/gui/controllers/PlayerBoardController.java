@@ -5,6 +5,7 @@ import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 import it.polimi.ingsw.server.model.storage.Shelf;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -279,7 +280,7 @@ public class PlayerBoardController extends GenericController {
     }
 
     private void handleDragDroppedShelf(DragEvent dragEvent, ImageView imageView, int shelfLevel){
-        if(addToWarehouse(resToPlace, shelfLevel)) {
+        if(addToWarehouse(resToPlace, shelfLevel-1)) {
             Image image = dragEvent.getDragboard().getImage();
             imageView.setImage(image);
             setQuantity(resToPlace, getQuantity(resToPlace) - 1);
@@ -550,12 +551,10 @@ public class PlayerBoardController extends GenericController {
                     case(1):
                         if(shelf.getResourceType() != ResourceType.WILDCARD) {
                             resType = shelf.getResourceType().toString()+".png";
-                            image = new Image(getClass().getResourceAsStream(resPath+resType));
+                            shelfResL1_1_imageView.setImage(new Image(getClass().getResourceAsStream(resPath+resType)));
                         }
-                        else {
-                            image = null;
-                            shelfResL1_1_imageView.setImage(image);
-                        }
+                        else
+                            shelfResL1_1_imageView.setImage(null);
                         break;
                     case(2):
                         if(shelf.getResourceType() != ResourceType.WILDCARD) {
@@ -622,7 +621,141 @@ public class PlayerBoardController extends GenericController {
     private boolean addToWarehouse(ResourceType resourceType, int level){ //3,4 x leader
         if(shelves==null || shelves.isEmpty())
             shelves = getGUI().getWarehouseShelvesCopy();
-        //TODO: gestire
-        return true;
+        if(checkFreeSpace()){
+            if (shelves.get(level).getResourceType().equals(ResourceType.WILDCARD)) //empty shelf
+                return emptyShelfManagement(shelves.get(level), resourceType);
+            else if (shelves.get(level).getResourceType().equals(resourceType)) //shelf with the same resource type
+                return sameResTypeShelfManagement(shelves.get(level), resourceType);
+            else if (!shelves.get(level).isLeader()) //shelf with different resource type
+                return differentResTypeShelfManagement(shelves.get(level), resourceType);
+            else {
+                showAlert(Alert.AlertType.ERROR, "Error", "Wrong slot",
+                        "You can't place this resource here");
+                return false;
+            }
+        }
+        else {
+            showAlert(Alert.AlertType.ERROR, "Error", "No more free slots",
+                    "You can't place any resources anymore");
+            return false;
+        }
+    }
+
+    private boolean checkFreeSpace(){
+        for (Shelf shelf : shelves) {
+            if (shelf.getResourceType().equals(ResourceType.WILDCARD) ||
+                    shelf.getLevel() > shelf.getResources().getQuantity()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean emptyShelfManagement(Shelf selectedShelf, ResourceType resourceToPlace) {
+        if(isResourceTypeUnique(shelves,resourceToPlace)) { //there are no shelves with the same resource type
+            placeResource(selectedShelf, resourceToPlace);
+            return true;
+        }
+        else {//there are shelves with the same resource type
+            if(isShelfRearrangeable(shelves, resourceToPlace)) {
+                Shelf otherShelf = getShelfWithSameResource(shelves, resourceToPlace);
+                addQuantity(otherShelf.getResources().getResourceType(),otherShelf.getResources().getQuantity());
+                resetShelfImageView(otherShelf.getLevel());
+                resetShelf(otherShelf);
+                placeResource(selectedShelf, resourceToPlace);
+                return true;
+            }
+            return  false;
+        }
+    }
+
+    private boolean sameResTypeShelfManagement(Shelf selectedShelf, ResourceType resourceToPlace){
+        if (selectedShelf.getResources().getQuantity() <= selectedShelf.getLevel() - 1) { //shelf not completely full
+            placeResource(selectedShelf, resourceToPlace);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean differentResTypeShelfManagement(Shelf selectedShelf, ResourceType resourceToPlace) {
+        if (isResourceTypeUnique(shelves, resourceToPlace)) { //there are no shelves with the same resource type
+            addQuantity(selectedShelf.getResources().getResourceType(),selectedShelf.getResources().getQuantity());
+            resetShelfImageView(selectedShelf.getLevel());
+            placeResource(selectedShelf, resourceToPlace);
+            return true;
+        }
+        else {//there are shelves with the same resource type
+            if (isShelfRearrangeable(shelves, resourceToPlace)) { //it's possible to rearrange shelves
+                Shelf otherShelf = getShelfWithSameResource(shelves, resourceToPlace);
+                addQuantity(otherShelf.getResources().getResourceType(),otherShelf.getResources().getQuantity());
+                resetShelfImageView(otherShelf.getLevel());
+                resetShelf(otherShelf);
+                addQuantity(selectedShelf.getResources().getResourceType(),selectedShelf.getResources().getQuantity());
+                resetShelfImageView(selectedShelf.getLevel());
+                placeResource(selectedShelf, resourceToPlace);
+                return true;
+            }
+            return false;
+        }
+    }
+
+    private boolean isResourceTypeUnique(List<Shelf> shelves, ResourceType resourceType) {
+        return shelves.stream().noneMatch(shelf -> !shelf.isLeader() && shelf.getResourceType().equals(resourceType));
+    }
+
+    private boolean isShelfRearrangeable(List<Shelf> shelves, ResourceType resourceType){
+        Shelf shelfWithResources = getShelfWithSameResource(shelves, resourceType);
+        int totalLeaderShelves = 2*(int)(shelves.stream().filter(shelf -> shelf.isLeader() && shelf.getResourceType()
+                .equals(resourceType)).count());
+        return shelfWithResources.getResources().getQuantity()+1 <= 3 + totalLeaderShelves;
+    }
+
+    private Shelf getShelfWithSameResource(List<Shelf> shelves, ResourceType resourceType){
+        for(Shelf shelf : shelves){
+            if(!shelf.isLeader() && shelf.getResourceType().equals(resourceType))
+                return shelf;
+        }
+        return null; //TODO: brutto?
+    }
+
+    private void placeResource(Shelf shelf, ResourceType resourceType){
+        if(shelf.getResourceType().equals(resourceType)){ //shelf with the same resource type
+            shelf.getResources().setQuantity(shelf.getResources().getQuantity() + 1);
+        }
+        else { //empty shelf or with a different resource type
+            shelf.setResourceType(resourceType);
+            shelf.getResources().setResourceType(resourceType);
+            shelf.getResources().setQuantity(1);
+        }
+    }
+
+    private void resetShelf(Shelf shelf) {
+        if(!shelf.isLeader()) {
+            shelf.setResourceType(ResourceType.WILDCARD);
+            shelf.getResources().setResourceType(ResourceType.WILDCARD);
+        }
+        shelf.getResources().setQuantity(0);
+    }
+
+    private void addQuantity(ResourceType resourceType, int quantity){
+        setQuantity(resourceType, getQuantity(resourceType) + quantity);
+    }
+
+    private void resetShelfImageView(int level){ //TODO: manca leader
+        switch (level){
+            case(1):
+                shelfResL1_1_imageView.setImage(null);
+                break;
+            case(2):
+                shelfResL2_1_imageView.setImage(null);
+                shelfResL2_2_imageView.setImage(null);
+                break;
+            case(3):
+                shelfResL3_1_imageView.setImage(null);
+                shelfResL3_2_imageView.setImage(null);
+                shelfResL3_3_imageView.setImage(null);
+                break;
+            default: break;
+        }
     }
 }
