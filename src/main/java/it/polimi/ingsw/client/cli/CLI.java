@@ -34,60 +34,6 @@ public class CLI extends ClientController {
         graphicalCLI = new GraphicalCLI();
     }
 
-    private void initMenus() {
-        playerTurnMenu = new ArrayList<>();
-        opponentTurnMenu = new ArrayList<>();
-        List<MenuOption> shared = Arrays.asList(
-                new MenuOption("View market and development decks", () -> {
-                    graphicalCLI.printMarket(getMarket()); graphicalCLI.printlnString("");
-                    graphicalCLI.printDevelopmentDeckTop(getDevelopmentDecks()); graphicalCLI.printlnString("");
-                }),
-                new MenuOption("View your board", this::showBoard),
-                new MenuOption("View opponents' boards", this::showOpponents),
-                new MenuOption("Rearrange Warehouse", () -> {
-                    if(!isWarehouseEmpty()) {
-                        List<Shelf> shelves = rearrangeWarehouse();
-                        getMessageHandler().sendClientMessage(new ShelvesConfigurationMessage(shelves));
-                    } else graphicalCLI.printlnString("You have no resources to rearrange");
-                })
-        );
-        playerTurnMenu.addAll( Arrays.asList(
-                new MenuOption("Get resources from market", () -> {
-                    if (!isMainActionPlayed()) selectMarket(); else graphicalCLI.printlnString("You can't play this action on your turn anymore");
-                }),
-                new MenuOption("Buy a development card", () -> {
-                    if (!isMainActionPlayed()) selectDevDecks(); else graphicalCLI.printlnString("You can't play this action on your turn anymore");
-                }),
-                new MenuOption("Activate your productions", () -> {
-                    if (!isMainActionPlayed()) selectProductions(); else graphicalCLI.printlnString("You can't play this action on your turn anymore");
-                }),
-                new MenuOption("Activate a leader card", () -> {
-                    List<LeaderCard> leaderCards = chooseLeaderCard();
-                    if(leaderCards.size() > 0) getMessageHandler().sendClientMessage(new LeaderCardPlayMessage(leaderCards));
-                }),
-                new MenuOption("Discard a leader card", () -> {
-                    List<LeaderCard> leaderCards = chooseLeaderCard();
-                    if(leaderCards.size() > 0) getMessageHandler().sendClientMessage(new LeaderCardDiscardMessage(leaderCards));
-                })
-        ));
-        playerTurnMenu.addAll(shared);
-        playerTurnMenu.add(
-                new MenuOption("End turn", () -> {
-                    if (isMainActionPlayed()) {
-                        setPlayerTurn(false);
-                        getMessageHandler().sendClientMessage(new EndTurnMessage());
-                    }
-                    else graphicalCLI.printlnString("You haven't played any main action yet!");
-                })
-        );
-        opponentTurnMenu.add(
-                new MenuOption("Wait for my turn", () -> {
-                    graphicalCLI.printlnString("Waiting for your turn...");
-                })
-        );
-        opponentTurnMenu.addAll(shared);
-
-    }
 
     @Override
     public void setup() {
@@ -192,15 +138,25 @@ public class CLI extends ClientController {
 
     @Override
     public void displaySaves(List<GameSave> saves) {
-        graphicalCLI.printlnString("Do you want to load a save?");
-        if (graphicalCLI.isAnswerYes()) {
-            GameSave save = graphicalCLI.objectOptionSelector(saves,
-                    s -> graphicalCLI.printlnString(s.getFileName()),
-                    () -> graphicalCLI.printlnString("Choose a save file to load or delete"),
-                    null,
-                    null,
-                    () -> graphicalCLI.printString("Found only one save:"));
-            getMessageHandler().sendClientMessage(new SaveInteractionMessage(save, SaveInteractions.OPEN_SAVE));
+        if(saves.size() > 0) {
+            graphicalCLI.printString("Do you want to load a save? ");
+            if (graphicalCLI.isAnswerYes()) {
+                GameSave save = graphicalCLI.objectOptionSelector(saves,
+                        s -> graphicalCLI.printlnString(s.getFileName()),
+                        () -> graphicalCLI.printlnString("Choose a save file to load or delete: "),
+                        null,
+                        () -> graphicalCLI.printString("Found only one save: "));
+                String option = graphicalCLI.objectOptionSelector(List.of("Load", "Delete"),
+                        graphicalCLI::printlnString,
+                        () -> graphicalCLI.printlnString("Do you want to load it or delete it?"),
+                        null,
+                        null);
+                if (option.equals("Delete"))
+                    getMessageHandler().sendClientMessage(new SaveInteractionMessage(save, SaveInteractions.DELETE_SAVE));
+                else
+                    getMessageHandler().sendClientMessage(new SaveInteractionMessage(save, SaveInteractions.OPEN_SAVE));
+            } else
+                getMessageHandler().sendClientMessage(new SaveInteractionMessage(null, SaveInteractions.NO_ACTION));
         }
         else
             getMessageHandler().sendClientMessage(new SaveInteractionMessage(null, SaveInteractions.NO_ACTION));
@@ -226,15 +182,13 @@ public class CLI extends ClientController {
             graphicalCLI.printMarket(getMarket());
             graphicalCLI.printDevelopmentDeckTop(getDevelopmentDecks());
 
-
             for(int i = 2; i > 0; i--) {
                 final int index = i;
                 LeaderCard selection = graphicalCLI.objectOptionSelector(leaderHand,
                         graphicalCLI::printLeaderCard,
                         () -> graphicalCLI.printlnString("\nYou have to discard "
                                 + index + " leader card(s) from your hand:"),
-                        null,
-                        null,
+                        () -> graphicalCLI.printString("Choose a valid card to discard: "),
                         null);
                 selected.add(selection);
                 leaderHand.remove(selection);
@@ -255,12 +209,13 @@ public class CLI extends ClientController {
                 newResources.add(new Resource(ResourceType.FAITH, resource.getQuantity()));
             }
             else if (resource.getResourceType() == ResourceType.WILDCARD) {
-                for (int num = 0; num < resource.getQuantity(); num++) {
-                    ResourceType resType = graphicalCLI.objectOptionSelector(ResourceType.getRealValues(),  //TODO: mettere a posto la selezione
+                for (int num = resource.getQuantity(); num > 0; num--) {
+                    final int index = num;
+                    ResourceType resType = graphicalCLI.objectOptionSelector(ResourceType.getRealValues(),
                             rt -> graphicalCLI.printlnString(rt.toString()),
-                            null,
-                            null,
-                            null,
+                            () -> graphicalCLI.printlnString("You can add " + index +
+                                    " resource(s) to your warehouse since you are not the first player"),
+                            () -> graphicalCLI.printString("Choose a valid resource to add: "),
                             null);
                     newResources.add(new Resource(resType, 1));
                 }
@@ -345,7 +300,6 @@ public class CLI extends ClientController {
             result = graphicalCLI.objectOptionSelector(playerTurnMenu,
                     m -> graphicalCLI.printlnString(m.getTitle()),
                     () -> graphicalCLI.printlnString("MENU:\n"),
-                    null,
                     () -> graphicalCLI.printString("\nChoose an action to do on your turn: "),
                     null
             );
@@ -353,7 +307,6 @@ public class CLI extends ClientController {
             result = graphicalCLI.objectOptionSelector(opponentTurnMenu,
                     m -> graphicalCLI.printlnString(m.getTitle()),
                     () -> graphicalCLI.printlnString("MENU:\n"),
-                    null,
                     () -> graphicalCLI.printString("\nChoose an action to do: "),
                     null
             );
@@ -992,19 +945,22 @@ public class CLI extends ClientController {
             producedWildcards = getResourcesOneByOne(producedWildcards);
 
             if(consumedWildcards.size() > 0 || producedWildcards.size() > 0) {
-                graphicalCLI.printlnString("Resolve wildcards for the following production:");
+                graphicalCLI.printString(GraphicalCLI.YELLOW_BRIGHT);
+                graphicalCLI.printlnString("\nResolve wildcards for the following production:\n");
+                graphicalCLI.printString(GraphicalCLI.RESET);
                 graphicalCLI.printProduction(production);
                 if(consumedWildcards.size() > 0) {
                     graphicalCLI.printString(GraphicalCLI.YELLOW_BRIGHT);
-                    graphicalCLI.printlnString("\nChoose for consumed wildcards:\n");
+                    graphicalCLI.printlnString("\nChoose resource types for the consumed wildcards:\n");
                     graphicalCLI.printString(GraphicalCLI.RESET);
                     for (Resource wildcard : consumedWildcards) {
+                        final int index = consumedWildcards.indexOf(wildcard);
                         ResourceType chosenType = graphicalCLI.objectOptionSelector(ResourceType.getRealValues(),
                                 rt -> graphicalCLI.printlnString(rt.toString()),
-                                null,
-                                null,
-                                null,
-                                null);
+                                () -> graphicalCLI.printlnString("Consumed wildcard N°" + (index + 1)),
+                                () -> graphicalCLI.printString("Choose a valid resource type: "),
+                                null
+                        );
                         consumedResolved.add(new Resource(chosenType, wildcard.getQuantity()));
                     }
                 }
@@ -1013,12 +969,13 @@ public class CLI extends ClientController {
                     graphicalCLI.printlnString("\nChoose for produced wildcards:\n");
                     graphicalCLI.printString(GraphicalCLI.RESET);
                     for (Resource wildcard : producedWildcards) {
-                        ResourceType chosenType = graphicalCLI.objectOptionSelector(ResourceType.getRealValues(),   //TODO: mettere a posto la selezione
+                        final int index = consumedWildcards.indexOf(wildcard);
+                        ResourceType chosenType = graphicalCLI.objectOptionSelector(ResourceType.getRealValues(),
                                 rt -> graphicalCLI.printlnString(rt.toString()),
-                                null,
-                                null,
-                                null,
-                                null);
+                                () -> graphicalCLI.printlnString("Produced wildcard N°" + (index + 1)),
+                                () -> graphicalCLI.printString("Choose a valid resource type: "),
+                                null
+                        );
                         producedResolved.add(new Resource(chosenType, wildcard.getQuantity()));
                     }
                 }
@@ -1030,7 +987,57 @@ public class CLI extends ClientController {
         return resolvedProductions;
     }
 
-    public GraphicalCLI getGraphicalCLI() {
-        return graphicalCLI;
+    private void initMenus() {
+        playerTurnMenu = new ArrayList<>();
+        opponentTurnMenu = new ArrayList<>();
+        List<MenuOption> shared = Arrays.asList(
+                new MenuOption("View market and development decks", () -> {
+                    graphicalCLI.printMarket(getMarket()); graphicalCLI.printlnString("");
+                    graphicalCLI.printDevelopmentDeckTop(getDevelopmentDecks()); graphicalCLI.printlnString("");
+                }),
+                new MenuOption("View your board", this::showBoard),
+                new MenuOption("View opponents' boards", this::showOpponents),
+                new MenuOption("Rearrange Warehouse", () -> {
+                    if(!isWarehouseEmpty()) {
+                        List<Shelf> shelves = rearrangeWarehouse();
+                        getMessageHandler().sendClientMessage(new ShelvesConfigurationMessage(shelves));
+                    } else graphicalCLI.printlnString("You have no resources to rearrange");
+                })
+        );
+        playerTurnMenu.addAll( Arrays.asList(
+                new MenuOption("Get resources from market", () -> {
+                    if (!isMainActionPlayed()) selectMarket(); else graphicalCLI.printlnString("You can't play this action on your turn anymore");
+                }),
+                new MenuOption("Buy a development card", () -> {
+                    if (!isMainActionPlayed()) selectDevDecks(); else graphicalCLI.printlnString("You can't play this action on your turn anymore");
+                }),
+                new MenuOption("Activate your productions", () -> {
+                    if (!isMainActionPlayed()) selectProductions(); else graphicalCLI.printlnString("You can't play this action on your turn anymore");
+                }),
+                new MenuOption("Activate a leader card", () -> {
+                    List<LeaderCard> leaderCards = chooseLeaderCard();
+                    if(leaderCards.size() > 0) getMessageHandler().sendClientMessage(new LeaderCardPlayMessage(leaderCards));
+                }),
+                new MenuOption("Discard a leader card", () -> {
+                    List<LeaderCard> leaderCards = chooseLeaderCard();
+                    if(leaderCards.size() > 0) getMessageHandler().sendClientMessage(new LeaderCardDiscardMessage(leaderCards));
+                })
+        ));
+        playerTurnMenu.addAll(shared);
+        playerTurnMenu.add(
+                new MenuOption("End turn", () -> {
+                    if (isMainActionPlayed()) {
+                        setPlayerTurn(false);
+                        getMessageHandler().sendClientMessage(new EndTurnMessage());
+                    }
+                    else graphicalCLI.printlnString("You haven't played any main action yet!");
+                })
+        );
+        opponentTurnMenu.add(
+                new MenuOption("Wait for my turn", () -> {
+                    graphicalCLI.printlnString("Waiting for your turn...");
+                })
+        );
+        opponentTurnMenu.addAll(shared);
     }
 }

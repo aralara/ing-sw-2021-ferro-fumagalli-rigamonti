@@ -13,9 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DevelopmentBoard extends PlayerListened implements Serializable {
+
     private final List<Deck> spaces;
 
 
+    /**
+     * Default constructor for DevelopmentBoard, initializes a list of empty decks
+     */
     public DevelopmentBoard(){
         spaces = new ArrayList<>();
         for(int i = 0; i < Constants.BASE_DEVELOPMENT_SPACES.value(); i++)
@@ -24,27 +28,18 @@ public class DevelopmentBoard extends PlayerListened implements Serializable {
 
 
     /**
-     * Gets the spaces attribute
-     * @return Returns spaces
-     */
-    public List<Deck> getSpaces() {
-        return spaces;
-    }
-
-    /**
      * Gets all the productions that can be activated from the top card of each deck
      * @return Returns a list of Production
      */
     public List<Production> getActiveProductions() {
         List<Production> activeProductions = new ArrayList<>();
 
-        for(Deck deck : spaces){
+        for(Deck deck : spaces) {
             if(!deck.isEmpty()) {
                 DevelopmentCard developmentCard = (DevelopmentCard) deck.get(0);
                 activeProductions.add(developmentCard.getProduction());
             }
         }
-
         return activeProductions;
     }
 
@@ -53,13 +48,13 @@ public class DevelopmentBoard extends PlayerListened implements Serializable {
      * @param card The development card to be added
      * @param space Position of the space on the board
      * @return Returns true if the card is added correctly
-     * @throws InvalidSpaceException when the selected space is out of the allowed range
+     * @throws InvalidSpaceException When the selected space is out of the allowed range
      */
     public boolean addDevCard(DevelopmentCard card, int space) throws InvalidSpaceException {
         if(space < 0 || space >= Constants.BASE_DEVELOPMENT_SPACES.value()) throw new InvalidSpaceException();
         if((card.getLevel() == 1 && spaces.get(space).isEmpty()) ||
-            (!spaces.get(space).isEmpty() &&
-            card.getLevel()-1 == ((DevelopmentCard)spaces.get(space).get(0)).getLevel())) {
+                (!spaces.get(space).isEmpty() &&
+                        card.getLevel()-1 == ((DevelopmentCard)spaces.get(space).get(0)).getLevel())) {
                 spaces.get(space).addOnTop(card);
                 fireUpdate(Listeners.BOARD_DEV_SPACES.value(), spaces);
                 return true;
@@ -75,6 +70,7 @@ public class DevelopmentBoard extends PlayerListened implements Serializable {
      */
     public boolean checkDevCardAddable(DevelopmentCard card, int space) {
         Deck deck = spaces.get(space);
+
         return (card.getLevel() == 1 && deck.isEmpty()) ||
                 (!deck.isEmpty() &&
                         card.getLevel() - 1 == ((DevelopmentCard) deck.get(0)).getLevel());
@@ -88,14 +84,13 @@ public class DevelopmentBoard extends PlayerListened implements Serializable {
      * @return Returns true if there are at least the correct quantity, false otherwise
      */
     public boolean checkRequirement(CardColors color, int level, int number) {
-        int cardRequested=0;
+        int cardRequested = 0;
 
         for (Deck deck : spaces)
             for(Card card : deck)
                 if ((((DevelopmentCard)card).getColor() == color)
-                        && (level==1 || (((DevelopmentCard)card).getLevel()) == level))
+                        && (level == 1 || (((DevelopmentCard)card).getLevel()) == level))
                     cardRequested++;
-
         return cardRequested >= number;
     }
 
@@ -103,12 +98,11 @@ public class DevelopmentBoard extends PlayerListened implements Serializable {
      * Gets the total number of cards contained in all the decks of the spaces list
      * @return Returns the number of cards
      */
-    public int numberOfCards(){
+    public int numberOfCards() {
         int totalNum = 0;
 
         for(Deck deck : spaces)
             totalNum += deck.size();
-
         return totalNum;
     }
 
@@ -116,13 +110,20 @@ public class DevelopmentBoard extends PlayerListened implements Serializable {
      * Calculates total VPs given by the activated development cards for a player
      * @return Returns total VP amount
      */
-    public int calculateVP(){
+    public int calculateVP() {
         int vpAmount = 0;
 
         for(Deck deck : spaces)
             for(Card card : deck)
                 vpAmount += ((DevelopmentCard)card).getVP();
-
         return vpAmount;
+    }
+
+    /**
+     * Gets the spaces attribute
+     * @return Returns spaces value
+     */
+    public List<Deck> getSpaces() {
+        return spaces;
     }
 }

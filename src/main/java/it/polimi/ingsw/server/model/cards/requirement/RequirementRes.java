@@ -12,10 +12,24 @@ public class RequirementRes implements Requirement {
     private final Resource resource;
 
 
+    /**
+     * Constructor for a RequirementRes object
+     * @param resource Resource required
+     */
     public RequirementRes(Resource resource) {
         this.resource = resource;
     }
 
+
+    @Override
+    public boolean checkRequirement(PlayerBoard board) {
+        return Storage.checkContainedResources(board.createResourceStock(),new ArrayList<>(List.of(resource)));
+    }
+
+    @Override
+    public String requirementToString() {
+        return resource.getQuantity() + " " + resource.getResourceType();
+    }
 
     /**
      * Gets the resource attribute
@@ -23,15 +37,5 @@ public class RequirementRes implements Requirement {
      */
     public Resource getResource() {
         return resource;
-    }
-
-    @Override
-    public boolean checkRequirement(PlayerBoard board){
-        return Storage.checkContainedResources(board.createResourceStock(),new ArrayList<>(List.of(resource)));
-    }
-
-    @Override
-    public String requirementToString() {
-        return resource.getQuantity() + " " + resource.getResourceType();
     }
 }

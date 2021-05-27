@@ -2,7 +2,6 @@ package it.polimi.ingsw.server.model.boards;
 
 import it.polimi.ingsw.server.model.cards.card.*;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
-import it.polimi.ingsw.server.model.cards.factory.*;
 import it.polimi.ingsw.server.model.games.SingleGame;
 import it.polimi.ingsw.utils.listeners.Listened;
 import it.polimi.ingsw.utils.listeners.Listeners;
@@ -16,28 +15,16 @@ public class LorenzoBoard extends Listened implements Serializable {
     private int faith;
 
 
+    /**
+     * LorenzoBoard constructor given a SingleGame reference
+     * @param game Game that will use the board
+     */
     public LorenzoBoard(SingleGame game) {
         this.game = game;
         lorenzoDeck = new Deck();
         faith = 0;
     }
 
-
-    /**
-     * Gets the lorenzoDeck attribute
-     * @return Returns lorenzoDeck value
-     */
-    public Deck getDeck() {
-        return lorenzoDeck;
-    }
-
-    /**
-     * Gets the faith attribute
-     * @return Returns faith value
-     */
-    public int getFaith() {
-        return faith;
-    }
 
     /**
      * Adds a set amount of faith to Lorenzo
@@ -54,7 +41,7 @@ public class LorenzoBoard extends Listened implements Serializable {
      * @param quantity Quantity of cards to be removed
      */
     public void takeDevCard(CardColors color, int quantity) {
-        for(int i=0; i<quantity; i++)
+        for(int i = 0; i < quantity; i++)
             game.removeDevCard(color, 0);
     }
 
@@ -65,19 +52,15 @@ public class LorenzoBoard extends Listened implements Serializable {
      * @param fileNameFaith File containing the LorenzoFaith cards
      */
     public void initLorenzoDeck(String fileNameDev, String fileNameFaith) {
-        LorenzoDevFactory lorenzoDevFactory = new LorenzoDevFactory();
-        LorenzoFaithFactory lorenzoFaithFactory = new LorenzoFaithFactory();
         Deck cardsFromFactory;
 
-        cardsFromFactory = new Deck(lorenzoDevFactory.loadCardFromFile(fileNameDev));
-        for(Card card : cardsFromFactory){
+        cardsFromFactory = new Deck(CardFactory.getInstance().loadLorenzoDevCardsFromFile(fileNameDev));
+        for(Card card : cardsFromFactory)
             lorenzoDeck.add(card);
-        }
 
-        cardsFromFactory = new Deck(lorenzoFaithFactory.loadCardFromFile(fileNameFaith));
-        for(Card card : cardsFromFactory){
+        cardsFromFactory = new Deck(CardFactory.getInstance().loadLorenzoFaithCardsFromFile(fileNameFaith));
+        for(Card card : cardsFromFactory)
             lorenzoDeck.add(card);
-        }
 
         refreshDeck();
     }
@@ -99,4 +82,21 @@ public class LorenzoBoard extends Listened implements Serializable {
     public void refreshDeck() {
         lorenzoDeck.shuffle();
     }
+
+    /**
+     * Gets the lorenzoDeck attribute
+     * @return Returns lorenzoDeck value
+     */
+    public Deck getDeck() {
+        return lorenzoDeck;
+    }
+
+    /**
+     * Gets the faith attribute
+     * @return Returns faith value
+     */
+    public int getFaith() {
+        return faith;
+    }
+
 }

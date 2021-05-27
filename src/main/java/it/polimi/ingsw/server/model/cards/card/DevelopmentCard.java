@@ -4,9 +4,8 @@ import it.polimi.ingsw.server.model.storage.*;
 
 import java.util.List;
 
-public class DevelopmentCard implements Card {
+public class DevelopmentCard extends Card {
 
-    private final int ID;
     private final int VP;
     private final CardColors color;
     private final int level;
@@ -14,8 +13,11 @@ public class DevelopmentCard implements Card {
     private final List<Resource> cost;
 
 
+    /**
+     * Default constructor for a DevelopmentCard having ID = -1 which is used to denote a hidden card
+     */
     public DevelopmentCard() {
-        this.ID = -1;
+        setID(-1);
         this.VP = 0;
         this.color = null;
         this.level = -1;
@@ -23,8 +25,17 @@ public class DevelopmentCard implements Card {
         this.cost = null;
     }
 
+    /**
+     * Constructor for a DevelopmentCard card
+     * @param ID Unique ID reference for the card
+     * @param VP Victory points given by the card
+     * @param color Color of the card
+     * @param level Level of the card
+     * @param production Production given by the card
+     * @param cost Cost of the card
+     */
     public DevelopmentCard(int ID, int VP, CardColors color, int level, Production production, List<Resource> cost) {
-        this.ID = ID;
+        setID(ID);
         this.VP = VP;
         this.color = color;
         this.level = level;
@@ -33,12 +44,19 @@ public class DevelopmentCard implements Card {
     }
 
 
-    /**
-     * Gets the ID value
-     * @return Returns ID
-     */
-    public int getID() {
-        return ID;
+    @Override
+    public String cardToString() {
+        boolean first = true;
+        StringBuilder toPrint;
+        toPrint = new StringBuilder(" DEVELOPMENT CARD \n • This is a " + color + " card level " + level +
+                "\n • Victory points: " + VP + "\n • Cost: ");
+        for (Resource resource : cost) {
+            toPrint.append((!first) ? ", " : "").append(resource.getQuantity()).append(" ").append(resource.getResourceType());
+            first = false;
+        }
+
+        toPrint.append("\n • Production that can be activated:\n ").append(production.productionToPrint());
+        return toPrint.toString();
     }
 
     /**
@@ -79,20 +97,5 @@ public class DevelopmentCard implements Card {
      */
     public Production getProduction() {
         return production;
-    }
-
-    @Override
-    public String cardToString(){
-        boolean first = true;
-        StringBuilder toPrint;
-        toPrint = new StringBuilder(" DEVELOPMENT CARD \n • This is a " + color + " card level " + level +
-                "\n • Victory points: " + VP + "\n • Cost: ");
-        for (Resource resource : cost) {
-            toPrint.append((!first) ? ", " : "").append(resource.getQuantity()).append(" ").append(resource.getResourceType());
-            first = false;
-        }
-
-        toPrint.append("\n • Production that can be activated:\n ").append(production.productionToPrint());
-        return toPrint.toString();
     }
 }

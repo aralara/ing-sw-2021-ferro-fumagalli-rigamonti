@@ -14,8 +14,8 @@ public interface Requirement extends Serializable {
     boolean checkRequirement(PlayerBoard board);
 
     /**
-     * Transform a requirement into a string to be printed
-     * @return A string that contains requirement information
+     * Transforms a requirement into a printable string
+     * @return Returns a string that contains all of the requirement information
      */
     String requirementToString();
 }

@@ -11,10 +11,17 @@ public class Deck implements Iterable<Card>, Serializable {
     private final List<Card> cards;
 
 
+    /**
+     * Default Deck constructor
+     */
     public Deck(){
         cards = new ArrayList<>();
     }
 
+    /**
+     * Constructor for Deck given a list of cards
+     * @param cards List of cards to make a deck
+     */
     public Deck(List<? extends Card> cards) {
         this.cards = new ArrayList<>(cards);
     }
@@ -42,16 +49,9 @@ public class Deck implements Iterable<Card>, Serializable {
      * @param card Card to get the index
      * @return Returns the index of the card
      */
-    public int indexOf(Card card){
-        return IntStream.range(0, cards.size()).filter(i -> cards.get(i).getID() == card.getID()).findFirst().orElse(-1);
-    }
-
-    /**
-     * Gets the cards attribute
-     * @return Returns cards value
-     */
-    public List<Card> getCards() {
-        return cards;
+    public int indexOf(Card card) {
+        return IntStream.range(0, cards.size())
+                .filter(i -> cards.get(i).getID() == card.getID()).findFirst().orElse(-1);
     }
 
     /**
@@ -102,5 +102,13 @@ public class Deck implements Iterable<Card>, Serializable {
     @Override
     public Iterator<Card> iterator() {
         return cards.iterator();
+    }
+
+    /**
+     * Gets the cards attribute
+     * @return Returns cards value
+     */
+    public List<Card> getCards() {
+        return cards;
     }
 }

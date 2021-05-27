@@ -6,7 +6,6 @@ import it.polimi.ingsw.server.model.FileNames;
 import it.polimi.ingsw.server.model.boards.PlayerBoard;
 import it.polimi.ingsw.server.model.cards.card.*;
 import it.polimi.ingsw.server.model.cards.deck.*;
-import it.polimi.ingsw.server.model.cards.factory.*;
 import it.polimi.ingsw.server.model.faith.FaithTrack;
 import it.polimi.ingsw.server.model.market.Market;
 import it.polimi.ingsw.server.model.storage.*;
@@ -142,12 +141,12 @@ public abstract class Game implements Serializable {
     }
 
     /**
-     * Loads development cards from their file utilizing DevelopmentCardFactory and split them into 12 DevelopmentDeck
+     * Loads development cards from their file utilizing CardFactory and splits them into 12 DevelopmentDeck
      */
     private void initDevelopment() {
         this.developmentDecks = new ArrayList<>();
-        DevelopmentCardFactory devCardFactory = new DevelopmentCardFactory();
-        Deck devCardDeck = new Deck(devCardFactory.loadCardFromFile(FileNames.DEV_CARD_FILE.value()));
+        Deck devCardDeck =
+                new Deck(CardFactory.getInstance().loadDevelopmentCardsFromFile(FileNames.DEV_CARD_FILE.value()));
         while(!devCardDeck.isEmpty())
             developmentDecks.add(new DevelopmentDeck(devCardDeck));
     }
@@ -161,12 +160,12 @@ public abstract class Game implements Serializable {
     }
 
     /**
-     * Loads leader cards from their file utilizing LeaderCardFactory and sends four random cards to each player
+     * Loads leader cards from their file utilizing CardFactory and sends four random cards to each player
      */
     private void initLeaders() {
         int[] first4 = new int[]{0, 1, 2, 3};   //TODO: Si potrebbe migliorare
-        LeaderCardFactory leadCardFactory = new LeaderCardFactory();
-        Deck leadCardDeck = new Deck(leadCardFactory.loadCardFromFile(FileNames.LEADER_CARD_FILE.value()));
+        Deck leadCardDeck =
+                new Deck(CardFactory.getInstance().loadLeaderCardsFromFile(FileNames.LEADER_CARD_FILE.value()));
         leadCardDeck.shuffle();
         for(PlayerBoard pBoard : playerBoards){
             List<LeaderCard> leadCardsPlayer = leadCardDeck.extract(first4).stream().map(s -> (LeaderCard)s)

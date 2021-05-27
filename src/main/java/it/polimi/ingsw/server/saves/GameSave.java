@@ -7,6 +7,7 @@ import it.polimi.ingsw.server.model.games.SingleGame;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.StringTokenizer;
 
 public class GameSave implements Serializable {
@@ -103,6 +104,20 @@ public class GameSave implements Serializable {
      */
     public boolean sameId(int id) {
         return this.id == id;
+    }
+
+    @Override
+    @SuppressWarnings("RedundantIfStatement")
+    public boolean equals(Object obj) {
+        if(obj == null || this.getClass() != obj.getClass()) return false;
+        final GameSave gameSave = (GameSave) obj;
+        if(!this.samePlayers(gameSave.getPlayers()) || !this.sameId(gameSave.getId())) return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fileName);
     }
 
     /**

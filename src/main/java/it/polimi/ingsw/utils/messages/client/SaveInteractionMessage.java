@@ -7,6 +7,7 @@ import it.polimi.ingsw.server.saves.GameSave;
 import it.polimi.ingsw.server.saves.SaveInteractions;
 import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
+import it.polimi.ingsw.utils.messages.server.action.GameSavesMessage;
 
 public class SaveInteractionMessage extends ClientActionMessage {
 
@@ -25,8 +26,11 @@ public class SaveInteractionMessage extends ClientActionMessage {
         try {
             switch (interaction) {
                 case DELETE_SAVE:
-                    boolean success = GameLibrary.getInstance().deleteSave(save);
+                    GameLibrary gameLibrary = GameLibrary.getInstance();
+                    boolean success = gameLibrary.deleteSave(save);
                     view.sendMessage(new ServerAckMessage(getUuid(), success));
+                    view.sendMessage(
+                            new GameSavesMessage(gameLibrary.getSaves(view.getGameHandler().getAllNicknames())));
                     break;
                 case OPEN_SAVE:
                     view.sendMessage(new ServerAckMessage(getUuid(), true));

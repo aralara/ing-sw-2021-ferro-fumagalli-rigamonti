@@ -9,29 +9,32 @@ public class AbilityProduction implements SpecialAbility {
     private final Production production;
 
 
-    public AbilityProduction(Production production){
+    /**
+     * Constructor for an AbilityProduction
+     * @param production Production to add to the possible productions
+     */
+    public AbilityProduction(Production production) {
         this.production = production;
     }
 
 
-    /**
-     * Gets the resource attribute
-     * @return Returns resource value
-     */
-    public Production getProduction() {
-        return production;
-    }
-
     @Override
-    public void activateAbility(PlayerBoard board){
+    public void activateAbility(PlayerBoard board) {
         board.getAbilityProductions().add(this.production);
         board.fireUpdate(Listeners.BOARD_ABILITY_PROD.value(), board.getAbilityProductions());
     }
 
     @Override
-    public String abilityToString(){
-
+    public String abilityToString() {
         return " • Special ability: You can can gain access to the following production: \n "
                 + production.productionToPrint();
+    }
+
+    /**
+     * Gets the production attribute
+     * @return Returns production value
+     */
+    public Production getProduction() {
+        return production;
     }
 }

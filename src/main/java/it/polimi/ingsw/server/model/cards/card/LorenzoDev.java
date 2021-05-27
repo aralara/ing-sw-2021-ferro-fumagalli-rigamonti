@@ -2,25 +2,28 @@ package it.polimi.ingsw.server.model.cards.card;
 
 import it.polimi.ingsw.server.model.boards.LorenzoBoard;
 
-public class LorenzoDev implements LorenzoCard{
+public class LorenzoDev extends LorenzoCard {
 
     private final CardColors color;
-    private final int quantity,ID;
+    private final int quantity;
 
 
+    /**
+     * Constructor for a LorenzoDev card
+     * @param ID Unique ID reference for the card
+     * @param color Color of the development cards to discard
+     * @param quantity Quantity of the development cards to discard
+     */
     public LorenzoDev(int ID, CardColors color, int quantity) {
-        this.ID = ID;
+        setID(ID);
         this.color = color;
         this.quantity = quantity;
     }
 
 
-    /**
-     * Gets the ID value
-     * @return Returns ID
-     */
-    public int getID() {
-        return ID;
+    @Override
+    public String cardToString() {
+        return "Lorenzo removes " + quantity + " " +color +" development cards from the development decks \n";
     }
 
     @Override
@@ -42,10 +45,5 @@ public class LorenzoDev implements LorenzoCard{
      */
     public int getQuantity() {
         return quantity;
-    }
-
-    @Override
-    public String cardToString(){
-        return "Lorenzo removes " + quantity + " " +color +" development cards from the development decks \n";
     }
 }
