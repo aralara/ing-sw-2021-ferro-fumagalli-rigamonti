@@ -64,22 +64,6 @@ public class PlayerBoardController extends GenericController {
         this.inkwell_imageVIew.setVisible(true);
     }
 
-    public Label getResToPlaceCoin_label() {
-        return resToPlaceCoin_label;
-    }
-
-    public Label getResToPlaceServant_label() {
-        return resToPlaceServant_label;
-    }
-
-    public Label getResToPlaceShield_label() {
-        return resToPlaceShield_label;
-    }
-
-    public Label getResToPlaceStone_label() {
-        return resToPlaceStone_label;
-    }
-
     public void goToMarket() {
         getGUIApplication().setActiveScene(SceneNames.MARKET_BOARD);
     }
@@ -88,34 +72,61 @@ public class PlayerBoardController extends GenericController {
         getGUIApplication().setActiveScene(SceneNames.DECKS_BOARD);
     }
 
-    public void restoreWarehouse() {
-        //fare
+    public void restoreWarehouse() { //TODO: mettere a posto
         if(toDiscard!=null)
             toDiscard.clear();
         shelves = getGUI().getWarehouseShelvesCopy();
+        resetResLabels();
         getGUI().updateResourcesToPlace();
         getGUI().updateWarehouse();
         confirm_button.setVisible(false);
         restoreWarehouse_button.setVisible(false);
+        rearrangeWarehouse_button.setDisable(false);
+        if(mainActionPlayed)
+            endTurn_button.setDisable(false);
     }
 
     public void activateProductions() {
+        //TODO: da fare
+        ((MarketBoardController)getGUIApplication().getController(SceneNames.MARKET_BOARD)).disableMarketAction();
+        ((DecksBoardController)getGUIApplication().getController(SceneNames.DECKS_BOARD)).disableBuyCardAction();
+        disableActivateProductionsAction();
+        disableActivateLeaderAction();
+        disableDiscardLeaderAction();
+        setWarehouseIsDisabled(true);
+        //TODO: disabilitare checkBox leader e devSpace, drag strongbox, abilitare leader warehouse
     }
 
     public void endTurn() {
+        disableButtons();
+        mainActionPlayed=false;
+        //TODO: disabilitare checkBox leader e devSpace, drag strongbox, abilitare leader warehouse
+        getGUI().sendEndTurnMessage();
     }
 
     public void activateLeaderCard() {
+        //TODO:da fare
     }
 
     public void discardLeaderCard() {
+        //TODO:da fare
     }
 
     public void rearrangeWarehouse() {
-        //TODO: svuota e reinserisci tutto
+        if(!warehouseIsEmpty()) {
+            for (Shelf shelf : shelves) {
+                addQuantity(shelf.getResources().getResourceType(), shelf.getResources().getQuantity());
+                resetShelfImageView(shelf.getLevel());
+                resetShelf(shelf);
+            }
+            rearrangeWarehouse_button.setDisable(true);
+            restoreWarehouse_button.setVisible(true);
+            confirm_button.setVisible(false);
+        }
     }
 
     public void viewOpponents() {
+        //TODO:da fare
     }
 
     public void handleDragOver(DragEvent dragEvent) {
@@ -130,7 +141,7 @@ public class PlayerBoardController extends GenericController {
         disableSpaces();
         getGUIApplication().closeCardStage();
         //TODO: vedere se l'azione va a buon fine, altrimenti rimettere giusti i parametri
-        setMainActionPlayed(true);
+        mainActionPlayed = true;
         setWarehouseIsDisabled(false);
     }
 
@@ -215,7 +226,7 @@ public class PlayerBoardController extends GenericController {
     }
 
     public void handleDragDetectedCoinToPlace(MouseEvent mouseEvent) {
-        String label = getResToPlaceCoin_label().getText().substring(2);
+        String label = resToPlaceCoin_label.getText().substring(2);
         int labelQuantity = Integer.parseInt(label);
         if(labelQuantity>0) {
             handleDragDetectedToPlace(mouseEvent, coinToPlace_imageView);
@@ -224,7 +235,7 @@ public class PlayerBoardController extends GenericController {
     }
 
     public void handleDragDetectedServantToPlace(MouseEvent mouseEvent) {
-        String label = getResToPlaceServant_label().getText().substring(2);
+        String label = resToPlaceServant_label.getText().substring(2);
         int labelQuantity = Integer.parseInt(label);
         if(labelQuantity>0) {
             handleDragDetectedToPlace(mouseEvent, servantToPlace_imageView);
@@ -233,7 +244,7 @@ public class PlayerBoardController extends GenericController {
     }
 
     public void handleDragDetectedShieldToPlace(MouseEvent mouseEvent) {
-        String label = getResToPlaceShield_label().getText().substring(2);
+        String label = resToPlaceShield_label.getText().substring(2);
         int labelQuantity = Integer.parseInt(label);
         if(labelQuantity>0) {
             handleDragDetectedToPlace(mouseEvent, shieldToPlace_imageView);
@@ -242,7 +253,7 @@ public class PlayerBoardController extends GenericController {
     }
 
     public void handleDragDetectedStoneToPlace(MouseEvent mouseEvent) {
-        String label = getResToPlaceStone_label().getText().substring(2);
+        String label = resToPlaceStone_label.getText().substring(2);
         int labelQuantity = Integer.parseInt(label);
         if(labelQuantity>0) {
             handleDragDetectedToPlace(mouseEvent, stoneToPlace_imageView);
@@ -285,6 +296,7 @@ public class PlayerBoardController extends GenericController {
             imageView.setImage(image);
             setQuantity(resToPlace, getQuantity(resToPlace) - 1);
             restoreWarehouse_button.setVisible(true);
+            rearrangeWarehouse_button.setDisable(true);
         }
     }
 
@@ -314,6 +326,7 @@ public class PlayerBoardController extends GenericController {
 
     public void handleDragDroppedHole() {
         addToDiscardedResources(resToPlace);
+        restoreWarehouse_button.setVisible(true);
         setQuantity(resToPlace, getQuantity(resToPlace) - 1);
     }
 
@@ -322,15 +335,19 @@ public class PlayerBoardController extends GenericController {
             handleDragOver(dragEvent);
     }
 
-    public void enableActivateProductionsAction(){ //TODO: settare all'inizio di ogni (proprio) turno
-        activateProductions_button.setDisable(false);
-    }
-
     public void disableActivateProductionsAction(){
         activateProductions_button.setDisable(true);
     }
 
-    public void disableSpaces(){
+    public void disableActivateLeaderAction(){
+        activeLeaderCard_button.setDisable(true);
+    }
+
+    public void disableDiscardLeaderAction(){
+        discardLeaderCard_button.setDisable(true);
+    }
+
+    private void disableSpaces(){
         fillSpacesList();
         for(ImageView imageView : spaces)
             imageView.setDisable(true);
@@ -356,10 +373,6 @@ public class PlayerBoardController extends GenericController {
                 break;
             }
         }
-    }
-
-    public void enableActions(){
-        //TODO: fare
     }
 
     private void fillSpacesList(){
@@ -405,30 +418,27 @@ public class PlayerBoardController extends GenericController {
     }
 
     public int getQuantity(ResourceType resourceType) {
-        PlayerBoardController pbc = (PlayerBoardController) getGUIApplication().getController(SceneNames.PLAYER_BOARD);
         if (resourceType == ResourceType.COIN) {
-            return Integer.parseInt(pbc.getResToPlaceCoin_label().getText().substring(2));
+            return Integer.parseInt(resToPlaceCoin_label.getText().substring(2));
         } else if (resourceType == ResourceType.SERVANT) {
-            return Integer.parseInt(pbc.getResToPlaceServant_label().getText().substring(2));
+            return Integer.parseInt(resToPlaceServant_label.getText().substring(2));
         }else if (resourceType == ResourceType.SHIELD) {
-            return Integer.parseInt(pbc.getResToPlaceShield_label().getText().substring(2));
+            return Integer.parseInt(resToPlaceShield_label.getText().substring(2));
         }else if (resourceType == ResourceType.STONE){
-            return Integer.parseInt(pbc.getResToPlaceStone_label().getText().substring(2));
+            return Integer.parseInt(resToPlaceStone_label.getText().substring(2));
         }
         return 0;
     }
 
     public void setQuantity(ResourceType resourceType, int quantity){
-        PlayerBoardController pbc = (PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD);
-
         if(resourceType == ResourceType.COIN) {
-            pbc.getResToPlaceCoin_label().setText("x " + quantity);
+            resToPlaceCoin_label.setText("x " + quantity);
         }else if (resourceType == ResourceType.SERVANT) {
-            pbc.getResToPlaceServant_label().setText("x "+quantity);
+            resToPlaceServant_label.setText("x "+quantity);
         }else if (resourceType == ResourceType.SHIELD) {
-            pbc.getResToPlaceShield_label().setText("x "+quantity);
+            resToPlaceShield_label.setText("x "+quantity);
         }else if (resourceType == ResourceType.STONE){
-            pbc.getResToPlaceStone_label().setText("x "+quantity);
+            resToPlaceStone_label.setText("x "+quantity);
         }
 
         if(quantity>0)
@@ -452,7 +462,7 @@ public class PlayerBoardController extends GenericController {
         endTurn_button.setDisable(true);
         activeLeaderCard_button.setDisable(true);
         discardLeaderCard_button.setDisable(true);
-        rearrangeWarehouse_button.setDisable(true);
+        //rearrangeWarehouse_button.setDisable(true);
         viewOpponents_button.setDisable(true);
     }
 
@@ -481,6 +491,9 @@ public class PlayerBoardController extends GenericController {
             shelves.clear();
         restoreWarehouse_button.setVisible(false);
         confirm_button.setVisible(false);
+        rearrangeWarehouse_button.setDisable(false);
+        if(mainActionPlayed)
+            endTurn_button.setDisable(false);
     }
 
     public void setDevelopmentBSpaces(List<List<Integer>> idList) {
@@ -488,7 +501,6 @@ public class PlayerBoardController extends GenericController {
     }
 
     public void setFaithBFaith(int faith) {
-        fillFaithSpaces();
         resetFaith();
         Image cross = new Image(getClass().getResourceAsStream("/imgs/faith/cross_red.png"));
         if(faith > 24) faith = 24;
@@ -496,6 +508,7 @@ public class PlayerBoardController extends GenericController {
     }
 
     private void resetFaith(){  //TODO: si può fare in modo migliore?
+        fillFaithSpaces();
         for(ImageView imageView : faithSpaces)
             imageView.setImage(null);
     }
@@ -541,6 +554,7 @@ public class PlayerBoardController extends GenericController {
     }
 
     public void setWarehouse(List<Shelf> shelves) { //TODO: aggiungere caricamento leader
+        this.shelves=getGUI().getWarehouseShelvesCopy();
         Image image;
         Shelf shelf;
         String resPath = "/imgs/res/", resType;
@@ -757,5 +771,24 @@ public class PlayerBoardController extends GenericController {
                 break;
             default: break;
         }
+    }
+
+    private boolean warehouseIsEmpty(){
+        if(shelves==null || shelves.isEmpty())
+            shelves=getGUI().getWarehouseShelvesCopy();
+        for(Shelf shelf : shelves) {
+            if (!shelf.isLeader() && shelf.getResourceType() != ResourceType.WILDCARD)
+                return false;
+            else if(shelf.isLeader() && shelf.getResources().getQuantity()>0)
+                return false;
+        }
+        return true;
+    }
+
+    private void resetResLabels(){
+        setQuantity(ResourceType.COIN,0);
+        setQuantity(ResourceType.SERVANT,0);
+        setQuantity(ResourceType.SHIELD,0);
+        setQuantity(ResourceType.STONE,0);
     }
 }

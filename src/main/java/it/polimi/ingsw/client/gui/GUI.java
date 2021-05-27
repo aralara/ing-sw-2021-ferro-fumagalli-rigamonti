@@ -386,4 +386,8 @@ public class GUI extends ClientController {
     public void setResourcesToPlace(List<Resource> resources){
         resourcesToPlace=resources;
     }
+
+    public void sendEndTurnMessage(){
+        getMessageHandler().sendClientMessage(new EndTurnMessage());
+    }
 }

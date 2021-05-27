@@ -138,7 +138,10 @@
             </ImageView>
          </children>
       </GridPane>
-      <ImageView fx:id="faithSpace0_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="39.0" layoutY="135.0" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="faithSpace0_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="39.0" layoutY="135.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imgs/faith/cross_red.png" />
+         </image></ImageView>
       <ImageView fx:id="faithSpace1_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="86.0" layoutY="135.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="faithSpace2_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="133.0" layoutY="135.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="faithSpace3_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="133.0" layoutY="88.0" pickOnBounds="true" preserveRatio="true" />
@@ -165,7 +168,7 @@
       <ImageView fx:id="faithSpace24_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="885.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="popeFavorTile1_imageView" fitHeight="65.0" fitWidth="65.0" layoutX="238.0" layoutY="99.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../imgs/faith/tile_2point.png.png" />
+            <Image url="@../imgs/faith/tile_2point.png" />
          </image></ImageView>
       <ImageView fx:id="popeFavorTile2_imageView" fitHeight="65.0" fitWidth="65.0" layoutX="474.0" layoutY="55.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -173,7 +176,7 @@
          </image></ImageView>
       <ImageView fx:id="popeFavorTile3_imageView" fitHeight="65.0" fitWidth="65.0" layoutX="756.0" layoutY="99.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../imgs/faith/tile_4point.png.png" />
+            <Image url="@../imgs/faith/tile_4point.png" />
          </image></ImageView>
       <Button fx:id="viewOpponents_button" disable="true" focusTraversable="false" layoutX="877.0" layoutY="151.0" mnemonicParsing="false" onAction="#viewOpponents" prefHeight="44.0" prefWidth="44.0" styleClass="opponentButton" stylesheets="@../css/playerBoard.css" />
       <Label layoutX="1281.0" text="Main actions" textFill="WHITE">

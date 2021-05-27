@@ -21,19 +21,24 @@ public class DecksBoardController extends GenericController {
 
 
     public void buyCard() {
-        showAlert(Alert.AlertType.INFORMATION, "Buy card", "Complete buying action",
-                "Now you can drag and drop the card in the desired space");
-        disableBuyCardAction();
-        ((MarketBoardController)getGUIApplication().getController(SceneNames.MARKET_BOARD)).disableMarketAction();
-        ((PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD))
-                .disableActivateProductionsAction();
-        ((PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD)).enableSpaces();
-        getGUIApplication().closeSecondStage();
-        ((CardController)getGUIApplication().getController(SceneNames.CARD))
-                .setImage(selectedDevCard_imageView.getImage());
-        ((PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD)).setWarehouseIsDisabled(true);
-        getGUIApplication().setActiveScene(SceneNames.CARD);
-        //TODO: vedere se l'azione va a buon fine, altrimenti rimettere giusti i parametri
+        if(selectedDevCard_imageView.getImage()!=null) {
+            ((CardController) getGUIApplication().getController(SceneNames.CARD))
+                    .setImage(selectedDevCard_imageView.getImage());
+            disableBuyCardAction();
+            ((MarketBoardController) getGUIApplication().getController(SceneNames.MARKET_BOARD)).disableMarketAction();
+            PlayerBoardController pbc = ((PlayerBoardController) getGUIApplication().getController(SceneNames.PLAYER_BOARD));
+            pbc.disableActivateProductionsAction();
+            pbc.enableSpaces();
+            pbc.setWarehouseIsDisabled(true);
+            pbc.disableActivateLeaderAction();
+            pbc.disableDiscardLeaderAction();
+            //TODO: disabilitare checkBox leader e devSpace, drag strongbox, leader warehouse
+            showAlert(Alert.AlertType.INFORMATION, "Buy card", "Complete buying action",
+                    "Now you can drag and drop the card in the desired space");
+            getGUIApplication().closeSecondStage();
+            getGUIApplication().setActiveScene(SceneNames.CARD);
+            //TODO: vedere se l'azione va a buon fine, altrimenti rimettere giusti i parametri
+        }
     }
 
     public void goBack() {

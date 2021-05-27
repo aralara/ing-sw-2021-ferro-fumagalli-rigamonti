@@ -3,7 +3,6 @@ package it.polimi.ingsw.client.gui.controllers;
 import it.polimi.ingsw.client.gui.SceneNames;
 import it.polimi.ingsw.client.structures.MarketView;
 import it.polimi.ingsw.server.model.market.Marble;
-import it.polimi.ingsw.server.model.market.MarbleColors;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -14,7 +13,6 @@ import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static it.polimi.ingsw.utils.Constants.MARKET_COLUMN_SIZE;
@@ -36,18 +34,20 @@ public class MarketBoardController extends GenericController {
                 (selectedColumn==4 && selectedRow>=0 && selectedRow<=2)) {
             int row = selectedRow==3?-1:selectedRow;
             int col = selectedColumn==4?-1:selectedColumn;
-            getGUI().sendMarketMessage(row, col);
-            disableMarketAction();
-            ((DecksBoardController)getGUIApplication().getController(SceneNames.DECKS_BOARD)).disableBuyCardAction();
-            ((PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD))
-                    .disableActivateProductionsAction();
-            ((PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD)).setMainActionPlayed(true);
-            ((PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD)).setWarehouseIsDisabled(false);
             selectedRow=0;
             selectedColumn=0;
+            disableMarketAction();
+            ((DecksBoardController)getGUIApplication().getController(SceneNames.DECKS_BOARD)).disableBuyCardAction();
+            PlayerBoardController pbc = ((PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD));
+            pbc.disableActivateProductionsAction();
+            pbc.disableActivateLeaderAction();
+            pbc.disableDiscardLeaderAction();
+            pbc.setWarehouseIsDisabled(false);
+            pbc.setMainActionPlayed(true);
+            pbc.setIsResToPlace(true);
+            //TODO: disabilitare checkBox leader e devSpace, drag strongbox, abilitare leader warehouse
             resetAll();
-            //TODO: da spostare nella chiamata del metodo dopo messaggio
-            ((PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD)).setIsResToPlace(true);
+            getGUI().sendMarketMessage(row, col);
             showAlert(Alert.AlertType.INFORMATION, "Success!", "Resources taken",
                     "Now you need to place each taken resource");
             getGUIApplication().closeSecondStage();
