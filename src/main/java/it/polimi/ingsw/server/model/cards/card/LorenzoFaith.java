@@ -2,25 +2,33 @@ package it.polimi.ingsw.server.model.cards.card;
 
 import it.polimi.ingsw.server.model.boards.LorenzoBoard;
 
-public class LorenzoFaith implements LorenzoCard{
+public class LorenzoFaith extends LorenzoCard {
 
     private final boolean refresh;
-    private final int amount, ID;
+    private final int amount;
 
 
+    /**
+     * Constructor for a LorenzoFaith card
+     * @param ID Unique ID reference for the card
+     * @param refresh Value that indicates if the card should refresh the Lorenzo card pile
+     * @param amount Amount of faith that the card grants to Lorenzo
+     */
     public LorenzoFaith(int ID, boolean refresh, int amount) {
-        this.ID = ID;
+        setID(ID);
         this.refresh = refresh;
         this.amount = amount;
     }
 
 
-    /**
-     * Gets the ID value
-     * @return Returns ID
-     */
-    public int getID() {
-        return ID;
+    @Override
+    public String cardToString(){
+        StringBuilder toPrint;
+        toPrint = new StringBuilder("Lorenzo gains " + amount + " faith");
+        if(isRefresh())
+            toPrint.append(" and shuffles his deck");
+        toPrint.append("\n");
+        return toPrint.toString();
     }
 
     @Override
@@ -44,17 +52,5 @@ public class LorenzoFaith implements LorenzoCard{
      */
     public int getAmount() {
         return amount;
-    }
-
-    @Override
-    public String cardToString(){
-        StringBuilder toPrint;
-        toPrint = new StringBuilder("Lorenzo gains " + amount + " faith");
-        if(isRefresh())
-            toPrint.append(" and shuffles his deck");
-
-        toPrint.append("\n");
-
-        return toPrint.toString();
     }
 }

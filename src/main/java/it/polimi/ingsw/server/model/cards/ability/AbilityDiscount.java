@@ -10,27 +10,31 @@ public class AbilityDiscount implements SpecialAbility {
     private final ResourceType resourceType;
 
 
-    public AbilityDiscount(ResourceType resourceType){
+    /**
+     * Constructor for an AbilityDiscount
+     * @param resourceType Resource type of the development card discount
+     */
+    public AbilityDiscount(ResourceType resourceType) {
         this.resourceType = resourceType;
     }
 
 
-    /**
-     * Gets the resource attribute
-     * @return Returns resource value
-     */
-    public ResourceType getResourceType() {
-        return resourceType;
-    }
-
     @Override
-    public void activateAbility(PlayerBoard board){
+    public void activateAbility(PlayerBoard board) {
         board.getAbilityDiscounts().add(this.resourceType);
         board.fireUpdate(Listeners.BOARD_ABILITY_DISC.value(), board.getAbilityDiscounts());
     }
 
     @Override
-    public String abilityToString(){
+    public String abilityToString() {
         return  " • Special ability: You can get 1 " + resourceType + " off the cost of development cards\n";
+    }
+
+    /**
+     * Gets the resourceType attribute
+     * @return Returns resourceType value
+     */
+    public ResourceType getResourceType() {
+        return resourceType;
     }
 }

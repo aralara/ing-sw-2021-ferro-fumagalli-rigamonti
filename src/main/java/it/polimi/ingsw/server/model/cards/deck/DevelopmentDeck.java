@@ -16,6 +16,10 @@ public class DevelopmentDeck extends Listened implements Serializable {
     private final int deckLevel;
 
 
+    /**
+     * Constructor for Deck given a Deck
+     * @param deck Deck containing a list of cards
+     */
     public DevelopmentDeck(Deck deck) {
         DevelopmentCard firstCard = (DevelopmentCard) deck.get(0);
         this.deckColor = firstCard.getColor();
@@ -45,6 +49,23 @@ public class DevelopmentDeck extends Listened implements Serializable {
         return retList;
     }
 
+    /**
+     * Checks if the development deck is empty
+     * @return Returns true if the deck has no cards, false otherwise
+     */
+    public boolean isEmpty() {
+        return deck.isEmpty();
+    }
+
+    /**
+     * Extracts the first card from the DevelopmentDeck
+     * @return Returns the first card
+     */
+    public DevelopmentCard removeFirst() {
+        DevelopmentCard removed = (DevelopmentCard) deck.extract(new int[]{0}).get(0);
+        fireUpdate(Listeners.GAME_DEV_DECK.value(), this);
+        return removed;
+    }
 
     /**
      * Gets the deck attribute
@@ -68,23 +89,5 @@ public class DevelopmentDeck extends Listened implements Serializable {
      */
     public int getDeckLevel() {
         return this.deckLevel;
-    }
-
-    /**
-     * Checks if the development deck is empty
-     * @return Returns true if the deck has no cards, false otherwise
-     */
-    public boolean isEmpty() {
-        return deck.isEmpty();
-    }
-
-    /**
-     * Extracts the first card from the DevelopmentDeck
-     * @return Returns the first card
-     */
-    public DevelopmentCard removeFirst() {
-        DevelopmentCard removed = (DevelopmentCard) deck.extract(new int[]{0}).get(0);
-        fireUpdate(Listeners.GAME_DEV_DECK.value(), this);
-        return removed;
     }
 }

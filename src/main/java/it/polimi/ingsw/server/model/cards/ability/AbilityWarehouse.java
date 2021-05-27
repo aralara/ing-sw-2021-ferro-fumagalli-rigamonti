@@ -9,10 +9,24 @@ public class AbilityWarehouse implements SpecialAbility {
     private final ResourceType resourceType;
 
 
-    public AbilityWarehouse(ResourceType resourceType){
+    /**
+     * Constructor for an AbilityWarehouse
+     * @param resourceType Resource type for the leader warehouse
+     */
+    public AbilityWarehouse(ResourceType resourceType) {
         this.resourceType = resourceType;
     }
 
+
+    @Override
+    public void activateAbility(PlayerBoard board) {
+        board.getWarehouse().addShelf(new Shelf(resourceType, new Resource(resourceType,0), 2, true));
+    }
+
+    @Override
+    public String abilityToString() {
+        return  " • Special ability: You can can gain an extra shelf to contain 2 units of " + resourceType + "\n";
+    }
 
     /**
      * Gets the resourceType attribute
@@ -20,15 +34,5 @@ public class AbilityWarehouse implements SpecialAbility {
      */
     public ResourceType getResourceType() {
         return resourceType;
-    }
-
-    @Override
-    public void activateAbility(PlayerBoard board){
-        board.getWarehouse().addShelf(new Shelf(resourceType, new Resource(resourceType,0), 2, true));
-    }
-
-    @Override
-    public String abilityToString(){
-        return  " • Special ability: You can can gain an extra shelf to contain 2 units of " + resourceType + "\n";
     }
 }

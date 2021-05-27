@@ -14,27 +14,14 @@ public class LeaderBoard extends PlayerListened implements Serializable {
     private final Deck board;
 
 
+    /**
+     * Default constructor for LeaderBoard
+     */
     public LeaderBoard() {
         hand = new Deck();
         board = new Deck();
     }
 
-
-    /**
-     * Gets the hand attribute
-     * @return Returns hand
-     */
-    public Deck getHand() {
-        return hand;
-    }
-
-    /**
-     * Gets the board attribute
-     * @return Returns board
-     */
-    public Deck getBoard() {
-        return board;
-    }
 
     /**
      * Gives a hand of leader cards to the player
@@ -59,7 +46,7 @@ public class LeaderBoard extends PlayerListened implements Serializable {
      * Puts a LeaderCard from the hand to the board
      * @param leaderCard LeaderCard to be played
      */
-    public void playLeaderHand(LeaderCard leaderCard){
+    public void playLeaderHand(LeaderCard leaderCard) {
         int index = hand.indexOf(leaderCard);
         board.add(hand.extract(new int[] {index}).get(0));
         fireUpdate(Listeners.BOARD_LEADER_HAND.value(), hand);
@@ -70,12 +57,26 @@ public class LeaderBoard extends PlayerListened implements Serializable {
      * Calculates total VPs given by the activated leader cards for a player
      * @return Returns total VP amount
      */
-    public int calculateVP(){
+    public int calculateVP() {
         int vpAmount = 0;
-
-        for(int i=0; i<board.size(); i++)
+        for(int i = 0; i < board.size(); i++)
             vpAmount += ((LeaderCard)board.get(i)).getVP();
-
         return vpAmount;
+    }
+
+    /**
+     * Gets the hand attribute
+     * @return Returns hand value
+     */
+    public Deck getHand() {
+        return hand;
+    }
+
+    /**
+     * Gets the board attribute
+     * @return Returns board value
+     */
+    public Deck getBoard() {
+        return board;
     }
 }

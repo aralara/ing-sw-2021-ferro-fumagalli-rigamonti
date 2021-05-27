@@ -18,6 +18,9 @@ public class FaithBoard extends PlayerListened implements Serializable {
     private final boolean[] popeProgression;
 
 
+    /**
+     * Default constructor for FaithBoard
+     */
     public FaithBoard() {
         faith = 0;
         popeProgression = new boolean[FAITH_TOTAL_VATICAN_REPORTS.value()];
@@ -34,31 +37,6 @@ public class FaithBoard extends PlayerListened implements Serializable {
     }
 
     /**
-     * Gets the faith attribute
-     * @return Returns faith
-     */
-    public int getFaith() {
-        return this.faith;
-    }
-
-    /**
-     * Gets the popeProgression attribute
-     * @return Returns popeProgression
-     */
-    public boolean[] getPopeProgression() {
-        return this.popeProgression;
-    }
-
-    /**
-     * Calculates total VPs given by the faithBoard for a player
-     * @param faithTrack FaithTrack utilized to calculate total VPs
-     * @return Returns VP amount
-     */
-    public int calculateVP(FaithTrack faithTrack) {
-        return faithTrack.calculateVP(faith, popeProgression);
-    }
-
-    /**
      * Handles the activation of a VaticanReport updating popeProgression values
      * @param faithTrack FaithTrack relative to the VaticanReport
      */
@@ -66,8 +44,7 @@ public class FaithBoard extends PlayerListened implements Serializable {
         int lastReportTriggered = faithTrack.getLastReportTriggered();
         try {
             this.popeProgression[lastReportTriggered] = faithTrack.checkPlayerReportPosition(faith);
-        }
-        catch (NotExistingLastReportTriggeredException e){
+        } catch (NotExistingLastReportTriggeredException e) {
             e.printStackTrace();
         }
         fireUpdate(Listeners.BOARD_FAITH_POPE.value(), this.popeProgression);
@@ -83,4 +60,28 @@ public class FaithBoard extends PlayerListened implements Serializable {
         resources.removeIf(isFaith);
     }
 
+    /**
+     * Calculates total VPs given by the faithBoard for a player
+     * @param faithTrack FaithTrack utilized to calculate total VPs
+     * @return Returns VP amount
+     */
+    public int calculateVP(FaithTrack faithTrack) {
+        return faithTrack.calculateVP(faith, popeProgression);
+    }
+
+    /**
+     * Gets the faith attribute
+     * @return Returns faith value
+     */
+    public int getFaith() {
+        return this.faith;
+    }
+
+    /**
+     * Gets the popeProgression attribute
+     * @return Returns popeProgression value
+     */
+    public boolean[] getPopeProgression() {
+        return this.popeProgression;
+    }
 }

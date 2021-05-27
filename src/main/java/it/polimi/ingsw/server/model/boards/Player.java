@@ -8,7 +8,11 @@ public class Player implements Serializable {
     private int totalVP, finalPosition;
 
 
-    public Player(String nickname){
+    /**
+     * Player constructor given the nickname of a player
+     * @param nickname Nickname of the player
+     */
+    public Player(String nickname) {
         this.nickname = nickname;
         totalVP = 0;
         finalPosition = 0;
@@ -17,17 +21,17 @@ public class Player implements Serializable {
 
     /**
      * Gets the nickname attribute
-     * @return Returns nickname
+     * @return Returns nickname value
      */
-    public String getNickname(){
+    public String getNickname() {
         return nickname;
     }
 
     /**
      * Gets the totalVp attribute
-     * @return Returns totalVP
+     * @return Returns totalVP amount
      */
-    public int getTotalVP(){
+    public int getTotalVP() {
         return totalVP;
     }
 
@@ -35,15 +39,15 @@ public class Player implements Serializable {
      * Sets the totalVP attribute
      * @param totalVP New attribute value
      */
-    public void setTotalVP(int totalVP){
+    public void setTotalVP(int totalVP) {
         this.totalVP = totalVP;
     }
 
     /**
      * Gets the finalPosition attribute
-     * @return Returns finalPosition
+     * @return Returns finalPosition value
      */
-    public int getFinalPosition(){
+    public int getFinalPosition() {
         return finalPosition;
     }
 
@@ -51,7 +55,7 @@ public class Player implements Serializable {
      * Sets the finalPosition attribute
      * @param finalPosition New attribute value
      */
-    public void setFinalPosition(int finalPosition){
+    public void setFinalPosition(int finalPosition) {
         this.finalPosition = finalPosition;
     }
 }

@@ -13,8 +13,8 @@ public interface SpecialAbility extends Serializable {
     void activateAbility(PlayerBoard board);
 
     /**
-     * Transform an ability into a string to be printed
-     * @return A string that contains ability information
+     * Transforms an ability into a printable string
+     * @return Returns a string that containing all of the ability information
      */
     String abilityToString();
 }

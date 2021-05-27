@@ -30,6 +30,10 @@ public class PlayerBoard extends PlayerListened implements Serializable {
     private final List<ResourceType> activeAbilityDiscounts;
 
 
+    /**
+     * PlayerBoard constructor that, given the nickname of its player, initializes all of its components
+     * @param player Nickname of the player
+     */
     public PlayerBoard(String player) {
         this.player = new Player(player);
         this.developmentBoard = new DevelopmentBoard();
@@ -45,6 +49,133 @@ public class PlayerBoard extends PlayerListened implements Serializable {
         this.activeAbilityDiscounts = new ArrayList<>();
     }
 
+
+    /**
+     * Creates a list containing all of the player resources
+     * @return Returns a list of resources
+     */
+    public List<Resource> createResourceStock() {
+        return Storage.mergeResourceList(warehouse.getList(), strongbox.getList());
+    }
+
+    /**
+     * Creates a list containing all of the player productions
+     * @return Returns a list of productions
+     */
+    public List<Production> createProductionStock() {
+        return Stream.of(
+                List.of(basicProduction).stream(),
+                activeAbilityProductions.stream(),
+                developmentBoard.getActiveProductions().stream()
+        ).reduce(Stream::concat).orElseGet(Stream::empty).collect(Collectors.toList());
+    }
+
+    /**
+     * Calculates total VPs for the player checking the FaithTrack, leader cards, development cards and resources and
+     * saves the result to the player attribute
+     * @param faithTrack FaithTrack reference to calculate faith-based VPs
+     */
+    public void calculateVP(FaithTrack faithTrack) {
+        player.setTotalVP(
+                faithBoard.calculateVP(faithTrack) +
+                leaderBoard.calculateVP() +
+                developmentBoard.calculateVP() +
+                (int) Math.floor((double) createResourceStock().stream().mapToInt(Resource::getQuantity).sum() / 5)
+        );
+    }
+
+    /**
+     * Puts a development card at the top of one of the spaces specified by the parameter
+     * @param card The development card to be added
+     * @param space Position of the space on the board
+     * @param requests List of requests containing resource quantity and location
+     * @return Returns true if the card is bought, false otherwise
+     */
+    public boolean buyDevCard(DevelopmentCard card, int space, List<RequestResources> requests) {
+        boolean bought = canTakeFromStorages(requests);
+        if(bought) {
+            takeFromStorages(requests);
+            try {
+                developmentBoard.addDevCard(card, space);
+            } catch (InvalidSpaceException e) {
+                e.printStackTrace();
+            }
+        }
+        return bought;
+    }
+
+    /**
+     * If the resources contained in the requests match the actual available resources detained by the current player,
+     * activates the productions for said player by adding the produced resources to their Strongbox
+     * @param produced List of resources to produce
+     * @param requests List of requests containing resource quantity and location for the spent resources
+     * @return Returns true if the productions can be activated, false otherwise
+     */
+    public boolean activateProductions(List<Resource> produced, List<RequestResources> requests) {
+        boolean activated = canTakeFromStorages(requests);
+        if(activated) {
+            takeFromStorages(requests);
+            strongbox.addResources(produced);
+        }
+        return activated;
+    }
+
+    /**
+     * Checks if the resources from the Storages specified by the RequestResources can be taken
+     * @param requests List of requests containing resource quantity and location for the spent resources
+     * @return Returns true if the resources can be taken, false otherwise
+     */
+    public boolean canTakeFromStorages(List<RequestResources> requests) {
+        boolean canTake = true;
+        List<Resource> containerList;
+        for(int i = 0; i < requests.size() && canTake; i++){
+            RequestResources request = requests.get(i);
+            if (request.getStorageType() == StorageType.STRONGBOX)
+                containerList = strongbox.getList();
+            else if (request.getStorageType() == StorageType.WAREHOUSE)
+                containerList = warehouse.getList(false);
+            else
+                containerList = warehouse.getList(true);
+            canTake = Storage.checkContainedResources(containerList, request.getList());
+        }
+        return canTake;
+    }
+
+    /**
+     * Takes the resources from the Storages specified by the RequestResources if all the requests are valid
+     * @param requests List of requests containing resource quantity and location for the spent resources
+     */
+    private void takeFromStorages(List<RequestResources> requests) {  //TODO: se prendo da LEADER?
+        for(RequestResources request : requests) {                      //TODO: idea per trasformare i RequestResources in strategy
+            if (request.getStorageType() == StorageType.STRONGBOX)
+                strongbox.removeResources(request.getList());
+            else if (request.getStorageType() == StorageType.LEADER)
+                warehouse.removeResources(request.getList(),true);
+            else if (request.getStorageType() == StorageType.WAREHOUSE)
+                warehouse.removeResources(request.getList(),false);
+        }
+    }
+
+    /**
+     * Plays a LeaderCard from the hand to the board
+     * @param leaderCard LeaderCard to be played
+     * @return Returns true if the LeaderCard can be played, false otherwise
+     */
+    public boolean playLeaderCard(LeaderCard leaderCard) {
+        boolean canPlay = false, flag = true;
+        for(Requirement req : leaderCard.getRequirements()) {
+            if(flag) {
+                canPlay = req.checkRequirement(this);
+                if(!canPlay)
+                    flag = false;
+            }
+        }
+        if(canPlay) {
+            leaderCard.getAbility().activateAbility(this);
+            leaderBoard.playLeaderHand(leaderCard);
+        }
+        return canPlay;
+    }
 
     /**
      * Gets the player attribute
@@ -126,154 +257,26 @@ public class PlayerBoard extends PlayerListened implements Serializable {
     }
 
     /**
-     * Gets all the possible productions from the activeAbilityProductions
-     * @return Returns a list of the Production
+     * Gets the activeAbilityProductions attribute
+     * @return Returns activeAbilityProductions value
      */
     public List<Production> getAbilityProductions() {
         return activeAbilityProductions;
     }
 
     /**
-     * Gets all the possible resource types from the activeAbilityMarbles
-     * @return Returns a list of the ResourceType
+     * Gets the activeAbilityMarbles attribute
+     * @return Returns activeAbilityMarbles value
      */
     public List<ResourceType> getAbilityMarbles() {
         return activeAbilityMarbles;
     }
 
     /**
-     * Gets all the possible resource types from the activeAbilityDiscounts
-     * @return Returns a list of the ResourceType
+     * Gets the activeAbilityDiscounts attribute
+     * @return Returns activeAbilityDiscounts value
      */
     public List<ResourceType> getAbilityDiscounts() {
         return activeAbilityDiscounts;
-    }
-
-    /**
-     * Creates a list containing all of the player resources
-     * @return Returns a list of resources
-     */
-    public List<Resource> createResourceStock() {
-        return Storage.mergeResourceList(warehouse.getList(), strongbox.getList());
-    }
-
-    /**
-     * Creates a list containing all of the player productions
-     * @return Returns a list of productions
-     */
-    public List<Production> createProductionStock() {
-        return Stream.of(
-                List.of(basicProduction).stream(),
-                activeAbilityProductions.stream(),
-                developmentBoard.getActiveProductions().stream()
-        ).reduce(Stream::concat).orElseGet(Stream::empty).collect(Collectors.toList());
-    }
-
-    /**
-     * Calculates total VPs for the player checking the FaithTrack, leader cards, development cards and resources and
-     * saves the result to the player attribute
-     * @param faithTrack FaithTrack reference to calculate faith-based VPs
-     */
-    public void calculateVP(FaithTrack faithTrack) {
-        player.setTotalVP(
-                faithBoard.calculateVP(faithTrack) +
-                leaderBoard.calculateVP() +
-                developmentBoard.calculateVP() +
-                (int) Math.floor((double) createResourceStock().stream().mapToInt(Resource::getQuantity).sum() / 5)
-        );
-    }
-
-    /**
-     * Puts a development card at the top of one of the spaces specified by the parameter
-     * @param card The development card to be added
-     * @param space Position of the space on the board
-     * @param requests List of requests containing resource quantity and location
-     * @return Returns true if the card is bought, false otherwise
-     */
-    public boolean buyDevCard(DevelopmentCard card, int space, List<RequestResources> requests) {
-        boolean bought = canTakeFromStorages(requests);
-        if(bought) {
-            takeFromStorages(requests);
-            try {
-                developmentBoard.addDevCard(card, space);
-            }
-            catch (InvalidSpaceException e){
-                e.printStackTrace();
-            }
-        }
-        return bought;
-    }
-
-    /**
-     * If the resources contained in the requests match the actual available resources detained by the current player,
-     * activates the productions for said player by adding the produced resources to their Strongbox
-     * @param produced List of resources to produce
-     * @param requests List of requests containing resource quantity and location for the spent resources
-     * @return Returns true if the productions can be activated, false otherwise
-     */
-    public boolean activateProductions(List<Resource> produced, List<RequestResources> requests) {
-        boolean activated = canTakeFromStorages(requests);
-        if(activated) {
-            takeFromStorages(requests);
-            strongbox.addResources(produced);
-        }
-        return activated;
-    }
-
-    /**
-     * Checks if the resources from the Storages specified by the RequestResources can be taken
-     * @param requests List of requests containing resource quantity and location for the spent resources
-     * @return Returns true if the resources can be taken, false otherwise
-     */
-    public boolean canTakeFromStorages(List<RequestResources> requests) {
-        boolean canTake = true;
-        List<Resource> containerList;
-        for(int i = 0; i < requests.size() && canTake; i++){
-            RequestResources request = requests.get(i);
-            if (request.getStorageType() == StorageType.STRONGBOX)
-                containerList = strongbox.getList();
-            else if (request.getStorageType() == StorageType.WAREHOUSE)
-                containerList = warehouse.getList(false);
-            else
-                containerList = warehouse.getList(true);
-            canTake = Storage.checkContainedResources(containerList, request.getList());
-        }
-        return canTake;
-    }
-
-    /**
-     * Takes the resources from the Storages specified by the RequestResources if all the requests are valid
-     * @param requests List of requests containing resource quantity and location for the spent resources
-     */
-    private void takeFromStorages(List<RequestResources> requests) {  //TODO: se prendo da LEADER?
-        for(RequestResources request : requests){
-            if (request.getStorageType() == StorageType.STRONGBOX)
-                strongbox.removeResources(request.getList());
-            else if (request.getStorageType() == StorageType.LEADER)
-                warehouse.removeResources(request.getList(),true);
-            else if (request.getStorageType() == StorageType.WAREHOUSE)
-                warehouse.removeResources(request.getList(),false);
-        }
-    }
-
-    /**
-     * Plays a LeaderCard from the hand to the board
-     * @param leaderCard LeaderCard to be played
-     * @return Returns true if the LeaderCard can be played, false otherwise
-     */
-    public boolean playLeaderCard(LeaderCard leaderCard) {
-        boolean canPlay = false, flag = true;
-        for(Requirement req : leaderCard.getRequirements()){
-            if(flag) {
-                canPlay = req.checkRequirement(this);
-                if(!canPlay)
-                    flag = false;
-            }
-        }
-        if(canPlay) {
-            leaderCard.getAbility().activateAbility(this);
-            leaderBoard.playLeaderHand(leaderCard);
-        }
-        return canPlay;
     }
 }

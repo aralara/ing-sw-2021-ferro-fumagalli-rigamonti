@@ -11,12 +11,28 @@ public class RequirementDev implements Requirement {
     private final int number;
 
 
+    /**
+     * Constructor for a RequirementDev object
+     * @param color Color of the required development cards
+     * @param level Level of the required development cards
+     * @param number Number of the required development cards
+     */
     public RequirementDev(CardColors color, int level, int number) {
         this.color = color;
         this.level = level;
         this.number = number;
     }
 
+
+    @Override
+    public boolean checkRequirement(PlayerBoard board) {
+        return board.getDevelopmentBoard().checkRequirement(color, level, number);
+    }
+
+    @Override
+    public String requirementToString() {
+        return number + " " + color + " level " + level + " development cards";
+    }
 
     /**
      * Gets the color attribute
@@ -40,15 +56,5 @@ public class RequirementDev implements Requirement {
      */
     public int getNumber() {
         return number;
-    }
-
-    @Override
-    public boolean checkRequirement(PlayerBoard board) {
-        return board.getDevelopmentBoard().checkRequirement(color, level, number);
-    }
-
-    @Override
-    public String requirementToString() {
-        return number + " " + color + " level " + level + " development cards";
     }
 }

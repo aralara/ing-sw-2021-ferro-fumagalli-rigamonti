@@ -5,39 +5,54 @@ import it.polimi.ingsw.server.model.cards.requirement.Requirement;
 
 import java.util.List;
 
-public class LeaderCard implements Card {
+public class LeaderCard extends Card {
 
-    private final int VP, ID;
+    private final int VP;
     private final List<Requirement> requirements;
     private final SpecialAbility ability;
 
 
     /**
-     * Constructor that creates a default LeaderCard having ID = -1 which is used to denote a hidden card
+     * Default constructor for a LeaderCard having ID = -1 which is used to denote a hidden card
      */
     public LeaderCard() {
-        this.ID = -1;
+        setID(-1);
         this.VP = 0;
         this.requirements = null;
         this.ability = null;
     }
 
+    /**
+     * Constructor for a LeaderCard card
+     * @param ID Unique ID reference for the card
+     * @param VP Victory points given by the card
+     * @param requirements Requirements to play the card
+     * @param ability Ability of the card
+     */
     public LeaderCard(int ID, int VP, List<Requirement> requirements, SpecialAbility ability) {
-        this.ID = ID;
+        setID(ID);
         this.VP = VP;
         this.requirements = requirements;
         this.ability = ability;
     }
 
 
-    /**
-     * Gets the ID value
-     * @return Returns ID
-     */
-    public int getID() {
-        return ID;
+    @Override
+    public String cardToString(){
+        StringBuilder toPrint;
+        boolean first = true;
+        if(getID() != -1) {
+            toPrint = new StringBuilder(" LEADER CARD \n • Requirements: ");
+            for (Requirement req : requirements) {
+                toPrint.append((!first) ? ", " : "").append(req.requirementToString());
+                first = false;
+            }
+            toPrint.append("\n • Victory points: ").append(VP).append("\n").append(ability.abilityToString());
+        }
+        else
+            toPrint = new StringBuilder(" LEADER CARD \n• The leader card is covered, you can't see it!");
+        return toPrint.toString();
     }
-
 
     /**
      * Gets the VP amount
@@ -61,23 +76,5 @@ public class LeaderCard implements Card {
      */
     public SpecialAbility getAbility() {
         return ability;
-    }
-
-    @Override
-    public String cardToString(){
-        StringBuilder toPrint;
-        boolean first = true;
-        if(ID != -1) {
-            toPrint = new StringBuilder(" LEADER CARD \n • Requirements: ");
-            for (Requirement req : requirements) {
-                toPrint.append((!first) ? ", " : "").append(req.requirementToString());
-                first = false;
-            }
-            toPrint.append("\n • Victory points: ").append(VP).append("\n").append(ability.abilityToString());
-        }
-        else {
-            toPrint = new StringBuilder(" LEADER CARD \n• The leader card is covered, you can't see it!");
-        }
-        return toPrint.toString();
     }
 }
