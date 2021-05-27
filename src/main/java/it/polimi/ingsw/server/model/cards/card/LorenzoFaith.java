@@ -22,7 +22,7 @@ public class LorenzoFaith extends LorenzoCard {
 
 
     @Override
-    public String cardToString(){
+    public String toString(){
         StringBuilder toPrint;
         toPrint = new StringBuilder("Lorenzo gains " + amount + " faith");
         if(isRefresh())

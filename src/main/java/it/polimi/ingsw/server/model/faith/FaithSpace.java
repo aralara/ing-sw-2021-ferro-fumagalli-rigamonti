@@ -8,6 +8,11 @@ public class FaithSpace implements Serializable {
     private final int position;
 
 
+    /**
+     * FaithSpace constructor with parameters
+     * @param VP Victory points granted by the FaithSpace
+     * @param position Position of the FaithSpace inside the FaithTrack
+     */
     public FaithSpace(int VP, int position) {
         this.VP = VP;
         this.position = position;

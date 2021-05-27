@@ -22,6 +22,9 @@ public class Market extends Listened implements Serializable {
     private Marble floatingMarble;
 
 
+    /**
+     * Default constructor for Market that initializes the marble matrix with its default dimensions
+     */
     public Market() {
         marbleMatrix = new Marble [MARKET_ROW_SIZE.value()][MARKET_COLUMN_SIZE.value()];
         floatingMarble = null;
@@ -57,8 +60,8 @@ public class Market extends Listened implements Serializable {
      */
     private void randomizeMarbles(Stack<Marble> buffer) {
         Collections.shuffle(buffer);
-        for(int row=0; row<MARKET_ROW_SIZE.value(); row++)
-            for(int column=0; column<MARKET_COLUMN_SIZE.value(); column++)
+        for(int row = 0; row < MARKET_ROW_SIZE.value(); row++)
+            for(int column = 0; column < MARKET_COLUMN_SIZE.value(); column++)
                 marbleMatrix[row][column] = buffer.pop();
         floatingMarble = buffer.pop();
     }
@@ -71,19 +74,19 @@ public class Market extends Listened implements Serializable {
      * @throws InvalidRowException when the selected row is out of the maximum ROWS value
      * @throws InvalidColumnException when the selected column is out of the maximum COLUMNS value
      */
-    public List<Resource> chooseCoordinates(int row, int column)
-            throws InvalidRowException, InvalidColumnException {
+    public List<Resource> chooseCoordinates(int row, int column) throws InvalidRowException, InvalidColumnException {
         List<Resource> marbleResources = new ArrayList<>();
 
-        if(row>=0){
+        //Row chosen
+        if(row >= 0) {
             if (row >= MARKET_ROW_SIZE.value()) throw new InvalidRowException();
-            for(int resColumn=0; resColumn<MARKET_COLUMN_SIZE.value(); resColumn++) {
+            for(int resColumn = 0; resColumn < MARKET_COLUMN_SIZE.value(); resColumn++)
                 marbleResources.add(new Resource(marbleMatrix[row][resColumn].getResourceType(), 1));
-            }
         }
+        //Column chosen
         else {
             if (column >= MARKET_COLUMN_SIZE.value()) throw new InvalidColumnException();
-            for(int resRow=0; resRow<MARKET_ROW_SIZE.value(); resRow++) {
+            for(int resRow = 0; resRow < MARKET_ROW_SIZE.value(); resRow++) {
                 marbleResources.add(new Resource(marbleMatrix[resRow][column].getResourceType(), 1));
             }
         }
@@ -101,25 +104,23 @@ public class Market extends Listened implements Serializable {
      * @param row Row chosen by the player, if the player chose a column it is -1
      * @param column Column chosen by the player, if the player chose a row it is -1
      */
+    @SuppressWarnings("ManualArrayCopy")
     private void moveFloatingMarble(int row, int column) {
         Marble newFloatingMarble;
-
-        if(row>=0){
+        //Row chosen
+        if(row >= 0){
             newFloatingMarble = marbleMatrix[row][0];
-            //noinspection ManualArrayCopy
-            for(int resColumn=0; resColumn<MARKET_COLUMN_SIZE.value()-1; resColumn++) {
-                marbleMatrix[row][resColumn] = marbleMatrix[row][resColumn+1];
-            }
-            marbleMatrix[row][MARKET_COLUMN_SIZE.value()-1] = floatingMarble;
+            for(int resColumn = 0; resColumn < MARKET_COLUMN_SIZE.value() - 1; resColumn++)
+                marbleMatrix[row][resColumn] = marbleMatrix[row][resColumn + 1];
+            marbleMatrix[row][MARKET_COLUMN_SIZE.value() - 1] = floatingMarble;
         }
+        //Column chosen
         else {
             newFloatingMarble = marbleMatrix[0][column];
-            for(int resRow=0; resRow<MARKET_ROW_SIZE.value()-1; resRow++) {
-                marbleMatrix[resRow][column] = marbleMatrix[resRow+1][column];
-            }
-            marbleMatrix[MARKET_ROW_SIZE.value()-1][column] = floatingMarble;
+            for(int resRow = 0; resRow < MARKET_ROW_SIZE.value() - 1; resRow++)
+                marbleMatrix[resRow][column] = marbleMatrix[resRow + 1][column];
+            marbleMatrix[MARKET_ROW_SIZE.value() - 1][column] = floatingMarble;
         }
-
         floatingMarble = newFloatingMarble;
     }
 

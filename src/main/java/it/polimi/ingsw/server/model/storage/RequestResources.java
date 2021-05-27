@@ -9,25 +9,16 @@ public class RequestResources implements Storage, Serializable {
     private final StorageType storageType;
 
 
+    /**
+     * RequestResources constructor with parameters
+     * @param requestedResources List of requested resources
+     * @param storageType Type of requested storage
+     */
     public RequestResources(List<Resource> requestedResources, StorageType storageType) {
         this.requestedResources = requestedResources;
         this.storageType = storageType;
     }
 
-
-    /**
-     * Gets the storageType attribute
-     * @return Returns storageType value
-     */
-    public StorageType getStorageType() {
-        return this.storageType;
-    }
-
-    @Override
-    public List<Resource> getList() {
-        Storage.aggregateResources(this.requestedResources);
-        return this.requestedResources;
-    }
 
     @Override
     public boolean addResources(List<Resource> resources) {
@@ -53,5 +44,19 @@ public class RequestResources implements Storage, Serializable {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<Resource> getList() {
+        Storage.aggregateResources(this.requestedResources);
+        return this.requestedResources;
+    }
+
+    /**
+     * Gets the storageType attribute
+     * @return Returns storageType value
+     */
+    public StorageType getStorageType() {
+        return this.storageType;
     }
 }

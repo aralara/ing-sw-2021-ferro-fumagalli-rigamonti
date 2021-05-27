@@ -22,7 +22,7 @@ public class LorenzoDev extends LorenzoCard {
 
 
     @Override
-    public String cardToString() {
+    public String toString() {
         return "Lorenzo removes " + quantity + " " +color +" development cards from the development decks \n";
     }
 

@@ -12,6 +12,9 @@ public class MultiGame extends Game {
     private int currentPlayer;
 
 
+    /**
+     * Default constructor for MultiGame
+     */
     public MultiGame() { }
 
 
@@ -22,40 +25,22 @@ public class MultiGame extends Game {
     }
 
     @Override
-    public String getPlayingNickname() {
-        return getPlayerBoards().get(currentPlayer).getPlayer().getNickname();
-    }
-    
-    @Override
-    public Map<String, List<Resource>> getResourcesToEqualize() {    //TODO: hardcoded resources
-        Map<String, List<Resource>> equalizeRes = new HashMap<>();
-        List<List<Resource>> resources = new ArrayList<>();
-        resources.add(new ArrayList<>());
-        resources.add(Arrays.asList(new Resource(ResourceType.WILDCARD, 1)));
-        resources.add(Arrays.asList(
-                new Resource(ResourceType.WILDCARD, 1),
-                new Resource(ResourceType.FAITH, 1)));
-        resources.add(Arrays.asList(
-                new Resource(ResourceType.WILDCARD, 2),
-                new Resource(ResourceType.FAITH, 1)));
-        for(int i = 0; i < getPlayerNumber(); i++)
-            equalizeRes.put(getPlayerBoards().get(i).getPlayer().getNickname(), resources.get(i));
-        return equalizeRes;
-    }
-
-    @Override
     public int loadNextTurn() {
         int actionToDo = TurnStatus.LOAD_TURN_NORMAL.value();
         if(getPlayerBoards().get(currentPlayer).isTurnPlayed()) {
             getPlayerBoards().get(currentPlayer).setTurnPlayed(false);
+            //Calculates the index for the next player
             currentPlayer = ++currentPlayer % getPlayerNumber();
             checkFaith();
+            //Checks if the game is ending (if it's the last round)
             if (checkEndGame()) {
                 if (lastTurn)
                     actionToDo = TurnStatus.LOAD_TURN_LAST_ROUND.value();
                 lastTurn = true;
             }
+            //Checks if the game has ended
             if (lastTurn && getPlayerBoards().get(currentPlayer).isFirstPlayer()) {
+                //Updates the player boards with the results
                 calculateTotalVP();
                 calculateFinalPositions();
                 setFinished(true);
@@ -74,5 +59,10 @@ public class MultiGame extends Game {
             if(i != playerEx)
                 playerBoards.get(i).getFaithBoard().addFaith(quantity);
         }
+    }
+
+    @Override
+    public String getPlayingNickname() {
+        return getPlayerBoards().get(currentPlayer).getPlayer().getNickname();
     }
 }

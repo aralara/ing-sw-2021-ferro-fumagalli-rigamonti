@@ -9,6 +9,12 @@ public class VaticanReport implements Serializable {
     private boolean triggered;
 
 
+    /**
+     * VaticanReport constructor with parameters
+     * @param min Lower limit for the VaticanReport
+     * @param max Upper limit for the VaticanReport
+     * @param popeValue Value of the pope card on the VaticanReport
+     */
     public VaticanReport(int min, int max, int popeValue) {
         this.min = min;
         this.max = max;
@@ -22,32 +28,8 @@ public class VaticanReport implements Serializable {
      * @param position Player position
      * @return Returns true if it is in range, false otherwise
      */
-    public boolean inRange(int position) { //!!
+    public boolean inRange(int position) {
         return position >= min;
-    }
-
-    /**
-     * Gets the popeValue attribute
-     * @return Returns popeValue
-     */
-    public int getPopeValue() {
-        return this.popeValue;
-    }
-
-    /**
-     * Sets the triggered attribute
-     * @param triggered New attribute value
-     */
-    public void setTriggered(boolean triggered) {
-        this.triggered = triggered;
-    }
-
-    /**
-     * Gets the triggered attribute
-     * @return Returns triggered value
-     */
-    public boolean getTriggered() {
-        return this.triggered;
     }
 
     /**
@@ -64,5 +46,29 @@ public class VaticanReport implements Serializable {
      */
     public int getMin() {
         return this.min;
+    }
+
+    /**
+     * Gets the popeValue attribute
+     * @return Returns popeValue
+     */
+    public int getPopeValue() {
+        return this.popeValue;
+    }
+
+    /**
+     * Gets the triggered attribute
+     * @return Returns triggered value
+     */
+    public boolean getTriggered() {
+        return this.triggered;
+    }
+
+    /**
+     * Sets the triggered attribute
+     * @param triggered New attribute value
+     */
+    public void setTriggered(boolean triggered) {
+        this.triggered = triggered;
     }
 }

@@ -45,7 +45,7 @@ public class DevelopmentCard extends Card {
 
 
     @Override
-    public String cardToString() {
+    public String toString() {
         boolean first = true;
         StringBuilder toPrint;
         toPrint = new StringBuilder(" DEVELOPMENT CARD \n • This is a " + color + " card level " + level +
@@ -55,7 +55,7 @@ public class DevelopmentCard extends Card {
             first = false;
         }
 
-        toPrint.append("\n • Production that can be activated:\n ").append(production.productionToPrint());
+        toPrint.append("\n • Production that can be activated:\n ").append(production.toString());
         return toPrint.toString();
     }
 

@@ -263,7 +263,7 @@ public class GraphicalCLI {
      * @param leaderCard Leader card to be printed
      */
     public void printLeaderCard(LeaderCard leaderCard){
-        printString(leaderCard.cardToString());
+        printString(leaderCard.toString());
     }
 
     /**
@@ -271,7 +271,7 @@ public class GraphicalCLI {
      * @param developmentCard Development card to be printed
      */
     public void printDevelopmentCard(DevelopmentCard developmentCard){
-        printString(developmentCard.cardToString());
+        printString(developmentCard.toString());
     }
 
     /**
@@ -279,7 +279,7 @@ public class GraphicalCLI {
      * @param lorenzoCard Lorenzo card to be printed
      */
     public void printLorenzoCard(LorenzoCard lorenzoCard){
-        printString(lorenzoCard.cardToString());
+        printString(lorenzoCard.toString());
     }
 
     /**
@@ -333,7 +333,7 @@ public class GraphicalCLI {
      * @param production Production to be printed
      */
     public void printProduction(Production production){
-        printString(production.productionToPrint());
+        printString(production.toString());
     }
 
     /**

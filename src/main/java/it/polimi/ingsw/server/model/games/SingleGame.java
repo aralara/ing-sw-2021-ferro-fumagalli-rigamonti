@@ -13,30 +13,25 @@ import it.polimi.ingsw.utils.listeners.server.LorenzoFaithChangeListener;
 
 import java.util.*;
 
-public class SingleGame extends Game{
+public class SingleGame extends Game {
 
     private LorenzoBoard lorenzoBoard;
     private boolean isLorenzoTurn, isLorenzoWinner;
 
 
-    public SingleGame(){
+    /**
+     * Default constructor for SingleGame
+     */
+    public SingleGame() {
     }
 
 
     @Override
-    public void initGame(List<String> players){
+    public void initGame(List<String> players) {
         initLorenzoBoard();
         super.initGame(players);
         isLorenzoTurn = false;
         isLorenzoWinner = false;
-    }
-
-    @Override
-    public String getPlayingNickname() {
-        if(isLorenzoTurn)
-            return "Lorenzo";   //TODO: uhm... boh
-        else
-            return getPlayerBoards().get(0).getPlayer().getNickname();
     }
 
     /**
@@ -48,25 +43,21 @@ public class SingleGame extends Game{
     }
 
     @Override
-    public Map<String, List<Resource>> getResourcesToEqualize() {    //TODO: hardcoded resources
-        Map<String, List<Resource>> equalizeRes = new HashMap<>();
-        equalizeRes.put(getPlayerBoards().get(0).getPlayer().getNickname(), new ArrayList<>());
-        return equalizeRes;
-    }
-
-    @Override
     public int loadNextTurn() {
         int status = TurnStatus.LOAD_TURN_NORMAL.value();
-        isLorenzoTurn = !isLorenzoTurn;
         getPlayerBoards().get(0).setTurnPlayed(false);
+        isLorenzoTurn = !isLorenzoTurn;
         checkFaith();
+        //Checks if the game has ended
         if(checkEndGame()) {
+            //Updates the player boards with the results
             calculateTotalVP();
             calculateFinalPositions();
             setFinished(true);
             status = TurnStatus.LOAD_TURN_END_GAME.value();
         }
         else if(isLorenzoTurn) {
+            //Plays Lorenzo's turn and loads next turn
             lorenzoBoard.pickLorenzoCard().activateLorenzo(lorenzoBoard);
             status = loadNextTurn();
         }
@@ -74,7 +65,7 @@ public class SingleGame extends Game{
     }
 
     @Override
-    void checkFaith(){
+    void checkFaith() {
         FaithTrack faithTrack = getFaithTrack();
         PlayerBoard playerBoard = getPlayerBoards().get(0);
         boolean vatReport = getFaithTrack().checkReportActivation(playerBoard.getFaithBoard().getFaith());
@@ -85,19 +76,22 @@ public class SingleGame extends Game{
     }
 
     @Override
-    public void addFaithAll(int playerEx, int quantity){
+    public void addFaithAll(int playerEx, int quantity) {
         lorenzoBoard.addFaith(quantity);
     }
 
     @Override
     boolean checkEndGame(){
+        //Checks standard winning conditions
         boolean endGame = super.checkEndGame();
+        //Checks if a development card pile has been emptied
         for(DevelopmentDeck dDeck : getDevelopmentDecks()) {
             if (!endGame && dDeck.getDeckLevel() == 3 && dDeck.isEmpty()) {
                 endGame = true;
                 isLorenzoWinner = true;
             }
         }
+        //Checks if Lorenzo has reached the end of the FaithTrack
         if(!endGame && getFaithTrack().isCompleted(lorenzoBoard.getFaith())){
             endGame = true;
             isLorenzoWinner = true;
@@ -120,10 +114,20 @@ public class SingleGame extends Game{
 
     @Override
     public void addListeners(List<VirtualView> virtualViews) {
+        //Standard listeners
         super.addListeners(virtualViews);
+        //LorenzoBoard
         lorenzoBoard.addListener(Listeners.GAME_LORENZO_FAITH.value(),
                 new LorenzoFaithChangeListener(virtualViews.get(0)));
         lorenzoBoard.addListener(Listeners.GAME_LORENZO_CARD.value(),
                 new LorenzoCardPlayListener(virtualViews.get(0)));
+    }
+
+    @Override
+    public String getPlayingNickname() {
+        if(isLorenzoTurn)
+            return "Lorenzo";   //TODO: uhm... boh
+        else
+            return getPlayerBoards().get(0).getPlayer().getNickname();
     }
 }

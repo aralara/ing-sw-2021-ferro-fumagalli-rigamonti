@@ -27,7 +27,7 @@ public class AbilityProduction implements SpecialAbility {
     @Override
     public String abilityToString() {
         return " • Special ability: You can can gain access to the following production: \n "
-                + production.productionToPrint();
+                + production.toString();
     }
 
     /**

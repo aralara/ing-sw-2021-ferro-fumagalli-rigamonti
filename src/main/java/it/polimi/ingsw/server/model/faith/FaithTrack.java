@@ -17,24 +17,15 @@ public class FaithTrack implements Serializable {
     private int lastReportTriggered;
 
 
+    /**
+     * Default constructor for a FaithTrack object
+     */
     public FaithTrack() {
         vaticanReports = new ArrayList<>();
         faithSpaces = new ArrayList<>();
         lastReportTriggered = -1;
     }
 
-
-    public List<VaticanReport> getVaticanReports() {
-        return vaticanReports;
-    }
-
-    public List<FaithSpace> getFaithSpaces() {
-        return faithSpaces;
-    }
-
-    public int getLastReportTriggered() {
-        return lastReportTriggered;
-    }
 
     /**
      * Loads faithSpaces and vaticanReports from the files calling loadVaticanReports and loadFaithSpaces
@@ -52,7 +43,6 @@ public class FaithTrack implements Serializable {
      */
     private void loadVaticanReports(String fileName){
         Gson gson = new Gson();
-
         try {
             VaticanReport[] jsonReports;
             JsonReader reader = new JsonReader(new FileReader(fileName));
@@ -73,7 +63,6 @@ public class FaithTrack implements Serializable {
      */
     private void loadFaithSpaces(String fileName){
         Gson gson = new Gson();
-
         try {
             FaithSpace[] jsonSpaces;
             JsonReader reader = new JsonReader(new FileReader(fileName));
@@ -94,8 +83,8 @@ public class FaithTrack implements Serializable {
      * @return Returns true if a vatican report is triggered, false otherwise
      */
     public boolean checkReportActivation(int position) {
-        for(int i=lastReportTriggered+1; i<vaticanReports.size(); i++)
-            if(position>=vaticanReports.get(i).getMax()) {
+        for(int i = lastReportTriggered + 1; i < vaticanReports.size(); i++)
+            if(position >= vaticanReports.get(i).getMax()) {
                 vaticanReports.get(i).setTriggered(true);
                 lastReportTriggered = i;
                 return true;
@@ -132,8 +121,8 @@ public class FaithTrack implements Serializable {
      * @return Returns VP amount
      */
     private int calculateFaithSpaceVP(int position) {
-        for(int i=faithSpaces.size()-1; i>=0; i--){
-            if(position>=faithSpaces.get(i).getPosition()) {
+        for(int i = faithSpaces.size() - 1; i >= 0; i--){
+            if(position >= faithSpaces.get(i).getPosition()) {
                 return faithSpaces.get(i).getVP();
             }
         }
@@ -147,7 +136,7 @@ public class FaithTrack implements Serializable {
      */
     private int calculateReportVP(boolean[] popeProgression) {
         int sumVP = 0;
-        for(int i=0; i<vaticanReports.size(); i++)
+        for(int i = 0; i < vaticanReports.size(); i++)
             if(popeProgression[i])
                 sumVP += vaticanReports.get(i).getPopeValue();
         return sumVP;
@@ -159,5 +148,29 @@ public class FaithTrack implements Serializable {
      */
     public boolean isCompleted(int faith) {
         return faith >= vaticanReports.get(vaticanReports.size()-1).getMax();
+    }
+
+    /**
+     * Gets the vaticanReports attribute
+     * @return Returns vaticanReports
+     */
+    public List<VaticanReport> getVaticanReports() {
+        return vaticanReports;
+    }
+
+    /**
+     * Gets the faithSpaces attribute
+     * @return Returns faithSpaces
+     */
+    public List<FaithSpace> getFaithSpaces() {
+        return faithSpaces;
+    }
+
+    /**
+     * Gets the lastReportTriggered attribute
+     * @return Returns lastReportTriggered
+     */
+    public int getLastReportTriggered() {
+        return lastReportTriggered;
     }
 }

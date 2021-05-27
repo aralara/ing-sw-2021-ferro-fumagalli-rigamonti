@@ -38,7 +38,7 @@ public class LeaderCard extends Card {
 
 
     @Override
-    public String cardToString(){
+    public String toString(){
         StringBuilder toPrint;
         boolean first = true;
         if(getID() != -1) {

@@ -11,15 +11,13 @@ public class Strongbox extends PlayerListened implements Storage {
     private final List<Resource> resources;
 
 
+    /**
+     * Strongbox default constructor
+     */
     public Strongbox() {
         resources = new ArrayList<>();
     }
 
-
-    @Override
-    public List<Resource> getList() {
-        return this.resources;
-    }
 
     @Override
     public boolean addResources(List<Resource> resources) {
@@ -35,9 +33,8 @@ public class Strongbox extends PlayerListened implements Storage {
         if(Storage.checkContainedResources(this.getList(), resources)) {
             for (Resource resource : this.resources) {
                 for (Resource value : resources) {
-                    if (resource.getResourceType() == value.getResourceType()) {
+                    if (resource.getResourceType() == value.getResourceType())
                         resource.sub(value);
-                    }
                 }
             }
             this.resources.removeIf(resource -> resource.getResourceType() == ResourceType.WILDCARD);
@@ -45,5 +42,10 @@ public class Strongbox extends PlayerListened implements Storage {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<Resource> getList() {
+        return this.resources;
     }
 }

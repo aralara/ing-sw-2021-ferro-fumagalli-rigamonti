@@ -10,6 +10,11 @@ public class Marble implements Serializable {
     private final ResourceType resourceType;
 
 
+    /**
+     * Marble constructor with parameters
+     * @param color Color of the Marble
+     * @param resourceType Resource type of the marble
+     */
     public Marble(MarbleColors color, ResourceType resourceType) {
         this.color = color;
         this.resourceType = resourceType;

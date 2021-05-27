@@ -6,11 +6,8 @@ public abstract class Card implements Serializable {
 
     private int ID;
 
-    /**
-     * Transform a card into a string to be printed
-     * @return A string that contains card information
-     */
-    public abstract String cardToString();
+    @Override
+    public abstract String toString();
 
     /**
      * Gets the ID attribute

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.model;
 
 public enum FileNames {
+
     MARKET_FILE("src/main/resources/json/Market_File.json"),
     DEV_CARD_FILE("src/main/resources/json/Dev_Card_File.json"),
     LEADER_CARD_FILE("src/main/resources/json/Leader_Card_File.json"),
@@ -11,10 +12,18 @@ public enum FileNames {
 
     private final String value;
 
+    /**
+     * Constructor for a FileNames entry
+     * @param value Value of the entry
+     */
     FileNames(final String value) {
         this.value = value;
     }
 
+    /**
+     * Gets the value of an entry
+     * @return Returns the value
+     */
     public String value() {
         return value;
     }
