@@ -25,6 +25,7 @@ public class PlayerBoardController extends GenericController {
     private List<ImageView> spaces, faithSpaces;
     private ResourceType resToPlace;
     private boolean isResToPlaceAction=false, mainActionPlayed=false, warehouseIsDisabled=false;
+    private ResourceType leader1WarehouseType=null, leader2WarehouseType=null; //TODO: brutto
 
     @FXML private Label player_label,
             coinStrongbox_label, servantStrongbox_label, shieldStrongbox_label, stoneStrongbox_label,
@@ -46,6 +47,7 @@ public class PlayerBoardController extends GenericController {
             space1L1_imageView, space1L2_imageView, space1L3_imageView, space2L1_imageView, space2L2_imageView,
             space2L3_imageView, space3L1_imageView, space3L2_imageView, space3L3_imageView,
             handLeader1_imageView, handLeader2_imageView, boardLeader1_imageView, boardLeader2_imageView,
+            shelfLeader1_1_imageView, shelfLeader1_2_imageView, shelfLeader2_1_imageView, shelfLeader2_2_imageView,
             coinToPlace_imageView, servantToPlace_imageView, shieldToPlace_imageView, stoneToPlace_imageView;
 
 
@@ -145,9 +147,9 @@ public class PlayerBoardController extends GenericController {
         if(!warehouseIsEmpty()) {
             for (Shelf shelf : shelves) {
                 addQuantity(shelf.getResources().getResourceType(), shelf.getResources().getQuantity());
-                resetShelfImageView(shelf.getLevel());
                 resetShelf(shelf);
             }
+            resetShelvesImageView();
             rearrangeWarehouse_button.setDisable(true);
             restoreWarehouse_button.setVisible(true);
             confirm_button.setVisible(false);
@@ -319,6 +321,26 @@ public class PlayerBoardController extends GenericController {
         handleDragOverShelf(dragEvent);
     }
 
+    public void handleDragOverShelfLeader1_1(DragEvent dragEvent) {
+        if(leader1WarehouseType!=null)
+            handleDragOverShelf(dragEvent);
+    }
+
+    public void handleDragOverShelfLeader1_2(DragEvent dragEvent) {
+        if(leader1WarehouseType!=null)
+            handleDragOverShelf(dragEvent);
+    }
+
+    public void handleDragOverShelfLeader2_1(DragEvent dragEvent) {
+        if(leader2WarehouseType!=null)
+            handleDragOverShelf(dragEvent);
+    }
+
+    public void handleDragOverShelfLeader2_2(DragEvent dragEvent) {
+        if(leader2WarehouseType!=null)
+            handleDragOverShelf(dragEvent);
+    }
+
     private void handleDragDroppedShelf(DragEvent dragEvent, ImageView imageView, int shelfLevel){
         if(addToWarehouse(resToPlace, shelfLevel-1)) {
             Image image = dragEvent.getDragboard().getImage();
@@ -351,6 +373,26 @@ public class PlayerBoardController extends GenericController {
 
     public void handleDragDroppedShelfResL3_3(DragEvent dragEvent) {
         handleDragDroppedShelf(dragEvent, shelfResL3_3_imageView, 3);
+    }
+
+    public void handleDragDroppedShelfLeader1_1(DragEvent dragEvent) { //TODO: da testare
+        handleDragDroppedShelf(dragEvent, shelfLeader1_1_imageView,
+                getGUI().getLeaderShelfPosition(leader1WarehouseType)+1);
+    }
+
+    public void handleDragDroppedShelfLeader1_2(DragEvent dragEvent) { //TODO: da testare
+        handleDragDroppedShelf(dragEvent, shelfLeader1_2_imageView,
+                getGUI().getLeaderShelfPosition(leader1WarehouseType)+1);
+    }
+
+    public void handleDragDroppedShelfLeader2_1(DragEvent dragEvent) { //TODO: da testare
+        handleDragDroppedShelf(dragEvent, shelfLeader2_1_imageView,
+                getGUI().getLeaderShelfPosition(leader2WarehouseType)+1);
+    }
+
+    public void handleDragDroppedShelfLeader2_2(DragEvent dragEvent) { //TODO: da testare
+        handleDragDroppedShelf(dragEvent, shelfLeader2_2_imageView,
+                getGUI().getLeaderShelfPosition(leader2WarehouseType)+1);
     }
 
     public void handleDragDroppedHole() {
@@ -605,13 +647,34 @@ public class PlayerBoardController extends GenericController {
                 if (boardLeader1_imageView.getImage() == null && handLeader1_imageView.getImage() == null) {
                     boardLeader1_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
                             + id + ".png")));
+                    enableLeaderWarehouseImageView(id, 1);
                 } else if (boardLeader2_imageView.getImage() == null && handLeader2_imageView.getImage() == null) {
                     boardLeader2_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
                             + id + ".png")));
+                    enableLeaderWarehouseImageView(id, 2);
                 }
             }
         }
         showLeaderCheckBoxes();
+    }
+
+    private void enableLeaderWarehouseImageView(int id, int space){ //TODO: metodo bruttissimo ma non posso fare altrimenti
+        ResourceType resourceType;
+        if(id==5) resourceType=ResourceType.STONE;
+        else if(id==6) resourceType=ResourceType.SERVANT;
+        else if(id==7) resourceType=ResourceType.SHIELD;
+        else if(id==8) resourceType=ResourceType.COIN;
+        else return;
+        if(space==1) {
+            leader1WarehouseType = resourceType;
+            shelfLeader1_1_imageView.setDisable(false);
+            shelfLeader1_2_imageView.setDisable(false);
+        }
+        else {
+            leader2WarehouseType = resourceType;
+            shelfLeader2_1_imageView.setDisable(false);
+            shelfLeader2_2_imageView.setDisable(false);
+        }
     }
 
     public void setStrongbox(List<Resource> resources) { //TODO: il parametro non mi serve
@@ -619,14 +682,13 @@ public class PlayerBoardController extends GenericController {
     }
 
     public void setWarehouse(List<Shelf> shelvesList) {  //TODO: il parametro non mi serve
-        //TODO: aggiungere caricamento leader
         shelves = getGUI().getWarehouseShelvesCopy();
         Image image;
         Shelf shelf;
         String resPath = "/imgs/res/", resType;
         for(int i = 0; i < shelves.size(); i++){
             shelf = shelves.get(i);
-            if(i<3){
+            if(i<3){ //basic
                 switch (shelf.getLevel()){
                     case(1):
                         if(shelf.getResourceType() != ResourceType.WILDCARD) {
@@ -683,11 +745,37 @@ public class PlayerBoardController extends GenericController {
                     default: break;
                 }
             }
-            else if(i==3){
-
-            }
-            else if(i==4){
-
+            else { //leader //TODO: da testare
+                resType = shelf.getResourceType().toString()+".png";
+                image = new Image(getClass().getResourceAsStream(resPath+resType));
+                if(shelf.getResourceType()==leader1WarehouseType){
+                    if(shelf.getResources().getQuantity()==1){
+                        shelfLeader1_1_imageView.setImage(image);
+                        shelfLeader1_2_imageView.setImage(null);
+                    }
+                    else if(shelf.getResources().getQuantity()==2) {
+                        shelfLeader1_1_imageView.setImage(image);
+                        shelfLeader1_2_imageView.setImage(image);
+                    }
+                    else {
+                        shelfLeader1_1_imageView.setImage(null);
+                        shelfLeader1_2_imageView.setImage(null);
+                    }
+                }
+                else if(shelf.getResourceType()==leader2WarehouseType){
+                    if(shelf.getResources().getQuantity()==1){
+                        shelfLeader2_1_imageView.setImage(image);
+                        shelfLeader2_2_imageView.setImage(null);
+                    }
+                    else if(shelf.getResources().getQuantity()==2) {
+                        shelfLeader2_1_imageView.setImage(image);
+                        shelfLeader2_2_imageView.setImage(image);
+                    }
+                    else {
+                        shelfLeader2_1_imageView.setImage(null);
+                        shelfLeader2_2_imageView.setImage(null);
+                    }
+                }
             }
         }
     }
@@ -698,16 +786,16 @@ public class PlayerBoardController extends GenericController {
         toDiscard.add(new Resource(resourceType,1));
     }
 
-    private boolean addToWarehouse(ResourceType resourceType, int level){ //3,4 leader
+    private boolean addToWarehouse(ResourceType resourceType, int position){
         if(shelves==null || shelves.isEmpty())
             shelves = getGUI().getWarehouseShelvesCopy();
         if(checkFreeSpace()){
-            if (shelves.get(level).getResourceType().equals(ResourceType.WILDCARD)) //empty shelf
-                return emptyShelfManagement(shelves.get(level), resourceType);
-            else if (shelves.get(level).getResourceType().equals(resourceType)) //shelf with the same resource type
-                return sameResTypeShelfManagement(shelves.get(level), resourceType);
-            else if (!shelves.get(level).isLeader()) //shelf with different resource type
-                return differentResTypeShelfManagement(shelves.get(level), resourceType);
+            if (shelves.get(position).getResourceType().equals(ResourceType.WILDCARD)) //empty shelf
+                return emptyShelfManagement(shelves.get(position), resourceType);
+            else if (shelves.get(position).getResourceType().equals(resourceType)) //shelf with the same resource type
+                return sameResTypeShelfManagement(shelves.get(position), resourceType);
+            else if (!shelves.get(position).isLeader()) //shelf with different resource type
+                return differentResTypeShelfManagement(shelves.get(position), resourceType);
             else {
                 showAlert(Alert.AlertType.ERROR, "Error", "Wrong slot",
                         "You can't place this resource here");
@@ -821,7 +909,7 @@ public class PlayerBoardController extends GenericController {
         setResToPlaceQuantity(resourceType, getResToPlaceQuantity(resourceType) + quantity);
     }
 
-    private void resetShelfImageView(int level){ //TODO: manca leader
+    private void resetShelfImageView(int level){
         switch (level){
             case(1):
                 shelfResL1_1_imageView.setImage(null);
@@ -837,6 +925,19 @@ public class PlayerBoardController extends GenericController {
                 break;
             default: break;
         }
+    }
+
+    private void resetShelvesImageView(){
+        shelfResL1_1_imageView.setImage(null);
+        shelfResL2_1_imageView.setImage(null);
+        shelfResL2_2_imageView.setImage(null);
+        shelfResL3_1_imageView.setImage(null);
+        shelfResL3_2_imageView.setImage(null);
+        shelfResL3_3_imageView.setImage(null);
+        shelfLeader1_1_imageView.setImage(null);
+        shelfLeader1_2_imageView.setImage(null);
+        shelfLeader2_1_imageView.setImage(null);
+        shelfLeader2_2_imageView.setImage(null);
     }
 
     private boolean warehouseIsEmpty(){
