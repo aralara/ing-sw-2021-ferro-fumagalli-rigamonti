@@ -37,9 +37,19 @@ public class CLI extends ClientController {
 
     @Override
     public void setup() {
-        connect();
-        new Thread(getMessageHandler()).start();
-        askNickname();
+        if(askMultiplayer()) {
+            connect();
+            new Thread(getMessageHandler()).start();
+            askNickname();
+        }
+        else {
+            //Local game
+        }
+    }
+
+    public boolean askMultiplayer() {
+        graphicalCLI.printString("Do you want to connect to the server? ");
+        return graphicalCLI.isAnswerYes();
     }
 
     public void connect() {
