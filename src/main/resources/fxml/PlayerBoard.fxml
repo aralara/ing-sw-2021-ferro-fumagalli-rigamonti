@@ -80,9 +80,10 @@
          </image>
       </ImageView>
       <ImageView fitHeight="35.0" fitWidth="102.0" layoutX="20.0" layoutY="645.0" onDragDropped="#handleDragDroppedHole" onDragOver="#handleDragOverHole" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="basicPCons1_imageView" fitHeight="35.0" fitWidth="35.0" layoutX="254.0" layoutY="488.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="basicPCons2_imageView" fitHeight="35.0" fitWidth="35.0" layoutX="254.0" layoutY="522.0" pickOnBounds="true" preserveRatio="true" />
-      <ImageView fx:id="basicPProd1_imageView" fitHeight="35.0" fitWidth="35.0" layoutX="313.0" layoutY="505.0" pickOnBounds="true" preserveRatio="true" />
+      <CheckBox fx:id="basicProduction_checkBox" layoutX="330.0" layoutY="620.0" mnemonicParsing="false">
+         <font>
+            <Font size="16.0" />
+         </font></CheckBox>
       <GridPane layoutX="370.0" layoutY="278.0" prefHeight="352.0" prefWidth="544.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="186.6" minWidth="10.0" prefWidth="182.6" />
@@ -138,6 +139,21 @@
             </ImageView>
          </children>
       </GridPane>
+      <CheckBox fx:id="devSpace1_checkBox" layoutX="518.0" layoutY="620.0" mnemonicParsing="false">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </CheckBox>
+      <CheckBox fx:id="devSpace2_checkBox" layoutX="703.0" layoutY="620.0" mnemonicParsing="false">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </CheckBox>
+      <CheckBox fx:id="devSpace3_checkBox" layoutX="891.0" layoutY="620.0" mnemonicParsing="false">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </CheckBox>
       <ImageView fx:id="faithSpace0_imageView" fitHeight="41.0" fitWidth="41.0" layoutX="39.0" layoutY="135.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../imgs/faith/cross_red.png" />
@@ -339,5 +355,15 @@
             </ImageView>
          </children>
       </GridPane>
+      <CheckBox fx:id="leader1_checkBox" layoutX="1147.0" layoutY="620.0" mnemonicParsing="false">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </CheckBox>
+      <CheckBox fx:id="leader2_checkBox" layoutX="1355.0" layoutY="620.0" mnemonicParsing="false">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </CheckBox>
    </children>
 </Pane>

@@ -8,6 +8,7 @@ import it.polimi.ingsw.server.model.storage.Shelf;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -34,13 +35,14 @@ public class PlayerBoardController extends GenericController {
     faithSpace10_imageView, faithSpace11_imageView, faithSpace12_imageView, faithSpace13_imageView, faithSpace14_imageView,
     faithSpace15_imageView, faithSpace16_imageView, faithSpace17_imageView, faithSpace18_imageView, faithSpace19_imageView,
     faithSpace20_imageView, faithSpace21_imageView, faithSpace22_imageView, faithSpace23_imageView, faithSpace24_imageView;
-
     @FXML private Label player_label, resToPlaceCoin_label, resToPlaceServant_label, resToPlaceShield_label, resToPlaceStone_label;
     @FXML private ImageView inkwell_imageVIew, coinToPlace_imageView, servantToPlace_imageView, shieldToPlace_imageView,
             stoneToPlace_imageView;
     @FXML private ImageView shelfResL1_1_imageView, shelfResL2_1_imageView, shelfResL2_2_imageView,
             shelfResL3_1_imageView, shelfResL3_2_imageView, shelfResL3_3_imageView, handLeader1_imageView, handLeader2_imageView,
             spaceLeader1_imageView, spaceLeader2_imageView;
+    @FXML private CheckBox basicProduction_checkBox, devSpace1_checkBox, devSpace2_checkBox, devSpace3_checkBox,
+            leader1_checkBox, leader2_checkBox;
 
 
     public void setIsResToPlace(boolean isResToPlaceAction){
