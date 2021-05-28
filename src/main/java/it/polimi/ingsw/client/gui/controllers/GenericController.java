@@ -27,4 +27,5 @@ public class GenericController {
     public void setGUIApplication(GUIApplication guiApplication) {
         this.guiApplication = guiApplication;
     }
+
 }

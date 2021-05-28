@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.gui.controllers;
 
 import it.polimi.ingsw.client.gui.SceneNames;
+import it.polimi.ingsw.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 import it.polimi.ingsw.server.model.storage.Shelf;
@@ -500,11 +501,17 @@ public class PlayerBoardController extends GenericController {
         //TODO: stub
     }
 
-    public void setFaithBFaith(int faith) {
+    public void setFaithBFaith(int faith){
         resetFaith();
         Image cross = new Image(getClass().getResourceAsStream("/imgs/faith/cross_red.png"));
-        if(faith > 24) faith = 24;
-        faithSpaces.get(faith).setImage(cross);
+        int myFaith = 0;
+        try {
+            myFaith = getGUI().getLocalPlayerBoard().getFaithBoard().getFaith();
+        }catch(NotExistingNicknameException e){
+            e.printStackTrace();
+        }
+        if(myFaith > 24) myFaith = 24;
+        faithSpaces.get(myFaith).setImage(cross);
     }
 
     private void resetFaith(){  //TODO: si può fare in modo migliore?
@@ -553,12 +560,12 @@ public class PlayerBoardController extends GenericController {
         //TODO: stub
     }
 
-    public void setWarehouse(List<Shelf> shelves) { //TODO: aggiungere caricamento leader
-        this.shelves=getGUI().getWarehouseShelvesCopy();
+    public void setWarehouse(List<Shelf> shelvesList) { //TODO: aggiungere caricamento leader
+        shelves = getGUI().getWarehouseShelvesCopy();
         Image image;
         Shelf shelf;
         String resPath = "/imgs/res/", resType;
-        for(int i=0; i<shelves.size(); i++){
+        for(int i = 0; i < shelves.size(); i++){
             shelf = shelves.get(i);
             if(i<3){
                 switch (shelf.getLevel()){
