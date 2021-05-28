@@ -1,0 +1,8 @@
+.depotsPanel {
+    -fx-background-image: url("../imgs/bkgs/bkg_depots.png");
+    -fx-background-size: stretch;
+}
+
+.resToTakeLabel {
+    -fx-background-color: rgb(223,223,202);
+}

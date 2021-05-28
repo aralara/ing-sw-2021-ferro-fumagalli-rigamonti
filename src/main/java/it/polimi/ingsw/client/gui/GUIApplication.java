@@ -79,7 +79,8 @@ public class GUIApplication extends Application { //TODO: flusso messaggi da ric
     public void setActiveScene(SceneNames sceneName) {
         if(sceneName.equals(SceneNames.LEADER_CHOICE_MENU) || sceneName.equals(SceneNames.RESOURCE_CHOICE_MENU))
             openPopUpStage(scenesInformation.get(getSceneIndex(sceneName)).getScene());
-        else if(sceneName.equals(SceneNames.MARKET_BOARD) || sceneName.equals(SceneNames.DECKS_BOARD))
+        else if(sceneName.equals(SceneNames.MARKET_BOARD) || sceneName.equals(SceneNames.DECKS_BOARD) ||
+                sceneName.equals(SceneNames.DEPOTS))
             openSecondStage(scenesInformation.get(getSceneIndex(sceneName)).getScene());
         else if(sceneName.equals(SceneNames.CARD))
             openCardStage(scenesInformation.get(getSceneIndex(sceneName)).getScene());

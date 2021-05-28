@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="686.0" prefWidth="791.0" styleClass="depotsPanel" stylesheets="@../css/depots.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllers.DepotsController">
+   <children>
+      <Label layoutX="35.0" layoutY="75.0" text="Choose where to take the resources from" textFill="WHITE">
+         <font>
+            <Font name="Pristina" size="36.0" />
+         </font>
+      </Label>
+      <Button fx:id="restore_button" focusTraversable="false" layoutX="82.0" layoutY="178.0" mnemonicParsing="false" onAction="#restore" opacity="0.85" text="Restore" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="24.0" />
+         </font>
+      </Button>
+      <Button fx:id="confirm_button" focusTraversable="false" layoutX="267.0" layoutY="178.0" mnemonicParsing="false" onAction="#confirm" opacity="0.85" text="Confirm" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="24.0" />
+         </font>
+      </Button>
+      <ImageView fx:id="areaResToTake_imageView" fitHeight="175.0" fitWidth="325.0" layoutX="68.0" layoutY="301.0" onDragDropped="#handleDragDropped" onDragOver="#handleDragOver" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="84.0" layoutY="319.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imgs/res/coin.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="coinToTake_label" layoutX="152.0" layoutY="321.0" styleClass="resToTakeLabel" stylesheets="@../css/depots.css" text="0/0" textFill="#c5b120">
+         <font>
+            <Font name="Pristina" size="24.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="267.0" layoutY="318.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imgs/res/servant.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="servantToTake_label" layoutX="333.0" layoutY="321.0" styleClass="resToTakeLabel" stylesheets="@../css/depots.css" text="0/0" textFill="#581e6e">
+         <font>
+            <Font name="Pristina" size="24.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="88.0" layoutY="413.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imgs/res/shield.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="shieldToTake_label" layoutX="152.0" layoutY="418.0" styleClass="resToTakeLabel" stylesheets="@../css/depots.css" text="0/0" textFill="#38bdbf">
+         <font>
+            <Font name="Pristina" size="24.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="267.0" layoutY="415.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imgs/res/stone.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="stoneToTake_label" layoutX="333.0" layoutY="419.0" styleClass="resToTakeLabel" stylesheets="@../css/depots.css" text="0/0" textFill="#646464">
+         <font>
+            <Font name="Pristina" size="24.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="whShelf1_1_imageView" fitHeight="60.0" fitWidth="60.0" layoutX="637.0" layoutY="121.0" onDragDetected="#handleDragDetectedWhShelf1_1" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="whShelf2_1_imageView" fitHeight="60.0" fitWidth="60.0" layoutX="596.0" layoutY="219.0" onDragDetected="#handleDragDetectedWhShelf2_1" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="whShelf2_2_imageView" fitHeight="60.0" fitWidth="60.0" layoutX="669.0" layoutY="219.0" onDragDetected="#handleDragDetectedWhShelf2_2" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="whShelf3_1_imageView" fitHeight="60.0" fitWidth="60.0" layoutX="569.0" layoutY="315.0" onDragDetected="#handleDragDetectedWhShelf3_1" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="whShelf3_2_imageView" fitHeight="60.0" fitWidth="60.0" layoutX="630.0" layoutY="315.0" onDragDetected="#handleDragDetectedWhShelf3_2" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="whShelf3_3_imageView" fitHeight="60.0" fitWidth="60.0" layoutX="693.0" layoutY="315.0" onDragDetected="#handleDragDetectedWhShelf3_3" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="leaderShelf1_1_imageView" fitHeight="60.0" fitWidth="60.0" layoutX="40.0" layoutY="589.0" onDragDetected="#handleDragDetectedLeaderShelf1_1" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="leaderShelf1_2_imageView" fitHeight="60.0" fitWidth="60.0" layoutX="136.0" layoutY="591.0" onDragDetected="#handleDragDetectedLeaderShelf1_2" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="leaderShelf2_1_imageView" fitHeight="60.0" fitWidth="60.0" layoutX="267.0" layoutY="587.0" onDragDetected="#handleDragDetectedLeaderShelf2_1" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="leaderShelf2_2_imageView" fitHeight="60.0" fitWidth="60.0" layoutX="361.0" layoutY="590.0" onDragDetected="#handleDragDetectedLeaderShelf2_2" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="strongboxCoin_imageView" fitHeight="60.0" fitWidth="60.0" layoutX="536.0" layoutY="538.0" onDragDetected="#handleDragDetectedStrongboxCoin" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imgs/res/coin.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="strongboxServant_imageView" fitHeight="60.0" fitWidth="60.0" layoutX="673.0" layoutY="538.0" onDragDetected="#handleDragDetectedStrongboxServant" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imgs/res/servant.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="strongboxShield_imageView" fitHeight="60.0" fitWidth="60.0" layoutX="541.0" layoutY="603.0" onDragDetected="#handleDragDetectedStrongboxShield" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imgs/res/shield.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="strongboxStone_imageView" fitHeight="60.0" fitWidth="60.0" layoutX="671.0" layoutY="604.0" onDragDetected="#handleDragDetectedStrongboxStone" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../imgs/res/stone.png" />
+         </image>
+      </ImageView>
+   </children>
+</Pane>

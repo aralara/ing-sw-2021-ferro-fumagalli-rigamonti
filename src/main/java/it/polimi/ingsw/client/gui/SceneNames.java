@@ -11,7 +11,8 @@ public enum SceneNames {
     PLAYER_BOARD("/fxml/PlayerBoard.fxml"),
     MARKET_BOARD("/fxml/MarketBoard.fxml"),
     CARD("/fxml/Card.fxml"),
-    DECKS_BOARD("/fxml/DecksBoard.fxml");
+    DECKS_BOARD("/fxml/DecksBoard.fxml"),
+    DEPOTS("/fxml/Depots.fxml");
 
     private final String value;
 
