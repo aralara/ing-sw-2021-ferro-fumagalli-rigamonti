@@ -451,7 +451,7 @@ public class PlayerBoardController extends GenericController {
     private void checkEnableButtons(){
         if(getQuantity(ResourceType.COIN)==0 && getQuantity(ResourceType.SERVANT)==0
                 && getQuantity(ResourceType.SHIELD)==0 && getQuantity(ResourceType.STONE)==0){
-            isResToPlaceAction=false;
+            //isResToPlaceAction=false;
             confirm_button.setVisible(true);
         }
     }
@@ -495,6 +495,7 @@ public class PlayerBoardController extends GenericController {
         rearrangeWarehouse_button.setDisable(false);
         if(mainActionPlayed)
             endTurn_button.setDisable(false);
+        isResToPlaceAction=false;
     }
 
     public void setDevelopmentBSpaces(List<List<Integer>> idList) {
