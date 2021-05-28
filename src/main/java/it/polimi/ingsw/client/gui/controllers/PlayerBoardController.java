@@ -2,6 +2,9 @@ package it.polimi.ingsw.client.gui.controllers;
 
 import it.polimi.ingsw.client.gui.SceneNames;
 import it.polimi.ingsw.exceptions.NotExistingNicknameException;
+import it.polimi.ingsw.server.model.cards.card.Card;
+import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
+import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 import it.polimi.ingsw.server.model.storage.Shelf;
@@ -48,7 +51,8 @@ public class PlayerBoardController extends GenericController {
             space2L3_imageView, space3L1_imageView, space3L2_imageView, space3L3_imageView,
             handLeader1_imageView, handLeader2_imageView, boardLeader1_imageView, boardLeader2_imageView,
             shelfLeader1_1_imageView, shelfLeader1_2_imageView, shelfLeader2_1_imageView, shelfLeader2_2_imageView,
-            coinToPlace_imageView, servantToPlace_imageView, shieldToPlace_imageView, stoneToPlace_imageView;
+            coinToPlace_imageView, servantToPlace_imageView, shieldToPlace_imageView, stoneToPlace_imageView,
+            popeFavorTile1_imageView, popeFavorTile2_imageView, popeFavorTile3_imageView;
 
 
     public void setIsResToPlace(boolean isResToPlaceAction){
@@ -488,6 +492,32 @@ public class PlayerBoardController extends GenericController {
         faithSpaces.add(faithSpace24_imageView);
     }
 
+    private ImageView getDevSpace(int space, int level) {
+        if (space == 0) {
+            if (level == 1)
+                return space1L1_imageView;
+            if (level == 2)
+                return space1L2_imageView;
+            if (level == 3)
+                return space1L2_imageView;
+        } else if (space == 1) {
+            if (level == 1)
+                return space2L1_imageView;
+            if (level == 2)
+                return space2L2_imageView;
+            if (level == 3)
+                return space2L2_imageView;
+        }else if (space == 2) {
+            if (level == 1)
+                return space3L1_imageView;
+            if (level == 2)
+                return space3L2_imageView;
+            if (level == 3)
+                return space3L2_imageView;
+        }
+        return null;
+    }
+
     public int getResToPlaceQuantity(ResourceType resourceType) {
         if (resourceType == ResourceType.COIN) {
             return Integer.parseInt(resToPlaceCoin_label.getText().substring(2));
@@ -596,7 +626,22 @@ public class PlayerBoardController extends GenericController {
     }
 
     public void setDevelopmentBSpaces(List<List<Integer>> idList) { //TODO: il parametro non mi serve
+        //TODO: va testato appena si potranno comprare le dev!
         //TODO: stub
+        int id, maxLevel = 3;
+        try {
+            List<Deck> tempDevDeck = getGUI().getLocalPlayerBoard().getDevelopmentBoard().getSpaces();
+            for(int i = 0; i< tempDevDeck.size(); i++){
+                for(int level = 1; i <= maxLevel; i++) {
+                    id = tempDevDeck.stream().map(x -> (DevelopmentCard) x.getCards()).filter(x -> x.getLevel() == level).
+                            map(Card::getID).findFirst().orElse(-1);
+                    getDevSpace(i,level).setImage(new Image((id > -1) ?
+                            getClass().getResourceAsStream("/imgs/devCards/" + id + ".png") : null));
+                }
+            }
+        }catch (NotExistingNicknameException e){
+            e.printStackTrace();
+        }
     }
 
     public void setFaithBFaith(int faith){ //TODO: il parametro non mi serve
@@ -619,7 +664,27 @@ public class PlayerBoardController extends GenericController {
     }
 
     public void setFaithBPope(boolean[] popeProgression) { //TODO: il parametro non mi serve
-        //TODO: stub
+        try {
+            boolean [] popeCopy = getGUI().getLocalPlayerBoard().getFaithBoard().getPopeProgression();
+            for (int i=0; i < popeCopy.length; i++) {
+                if (i == 0) {
+                    popeFavorTile1_imageView.setImage(new Image(
+                            (popeCopy[i]) ? getClass().getResourceAsStream("/imgs/faith/tile_2pointUp.png") :
+                                    getClass().getResourceAsStream("/imgs/faith/tile_2point.png")));
+                }else if (i == 1){
+                    popeFavorTile2_imageView.setImage(new Image(
+                            (popeCopy[i]) ? getClass().getResourceAsStream("/imgs/faith/tile_3pointUp.png") :
+                                    getClass().getResourceAsStream("/imgs/faith/tile_3point.png")));
+                } else if (i == 2) {
+                    popeFavorTile3_imageView.setImage(new Image(
+                            (popeCopy[i]) ? getClass().getResourceAsStream("/imgs/faith/tile_4pointUp.png") :
+                                    getClass().getResourceAsStream("/imgs/faith/tile_4point.png")));
+                }
+            }
+
+        }catch(NotExistingNicknameException e){
+            e.printStackTrace();
+        }
     }
 
     public void setLeaderBHand(List<Integer> idList){  //TODO: mi arriva sia per le mie leader sia per quelle degli oppo, va bene
@@ -658,7 +723,7 @@ public class PlayerBoardController extends GenericController {
         showLeaderCheckBoxes();
     }
 
-    private void enableLeaderWarehouseImageView(int id, int space){ //TODO: metodo bruttissimo ma non posso fare altrimenti
+    private void enableLeaderWarehouseImageView(int id, int space){ //TODO: prendere risorse e info dalla carta, non le diamo cosi per scontato
         ResourceType resourceType;
         if(id==5) resourceType=ResourceType.STONE;
         else if(id==6) resourceType=ResourceType.SERVANT;
@@ -678,7 +743,21 @@ public class PlayerBoardController extends GenericController {
     }
 
     public void setStrongbox(List<Resource> resources) { //TODO: il parametro non mi serve
-        //TODO: stub
+        try {
+            for (Resource resource : getGUI().getLocalPlayerBoard().getStrongbox().getResources()){
+                if(resource.getResourceType() == ResourceType.COIN){
+                    coinStrongbox_label.setText("x " + resource.getQuantity());
+                } else if(resource.getResourceType() == ResourceType.SERVANT){
+                    servantStrongbox_label.setText("x " + resource.getQuantity());
+                }else if(resource.getResourceType() == ResourceType.STONE){
+                    stoneStrongbox_label.setText("x " + resource.getQuantity());
+                }else if(resource.getResourceType() == ResourceType.SHIELD){
+                    shieldStrongbox_label.setText("x " + resource.getQuantity());
+                }
+            }
+        } catch(NotExistingNicknameException e){
+            e.printStackTrace();
+        }
     }
 
     public void setWarehouse(List<Shelf> shelvesList) {  //TODO: il parametro non mi serve

@@ -188,7 +188,7 @@ public class GUI extends ClientController {
         //TODO: manca gestiione abilità
 
         resourcesToPlace.clear();
-        resourcesToPlace.addAll(resources);
+        resourcesToPlace.addAll(resources);  //TODO: a volte lancia un'eccezione perchè: "Cannot invoke "java.util.Collection.toArray()" because "c" is null"
         checkFaithResource(resourcesToPlace);
         updateResourcesToPlace();
     }
