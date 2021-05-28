@@ -412,4 +412,16 @@ public class GUI extends ClientController {
         else
             getMessageHandler().sendClientMessage(new LeaderCardDiscardMessage(leaderCards));
     }
+
+    public int getLeaderShelfPosition(ResourceType resourceType){
+        try {
+            List<Shelf> shelves = getLocalPlayerBoard().getWarehouse().getShelves();
+            for(int i=0; i<shelves.size();i++)
+                if(shelves.get(i).isLeader() && shelves.get(i).getResourceType()==resourceType)
+                    return i;
+        } catch (NotExistingNicknameException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
 }

@@ -307,12 +307,12 @@
                <GridPane.margin>
                   <Insets left="3.0" />
                </GridPane.margin></ImageView>
-            <ImageView fx:id="shelfLeader1_1_imageView" disable="true" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false">
+            <ImageView fx:id="shelfLeader1_1_imageView" disable="true" fitHeight="35.0" fitWidth="35.0" onDragDropped="#handleDragDroppedShelfLeader1_1" onDragOver="#handleDragOverShelfLeader1_1" pickOnBounds="true" preserveRatio="true">
                <GridPane.margin>
                   <Insets left="39.0" top="190.0" />
                </GridPane.margin>
             </ImageView>
-            <ImageView fx:id="shelfLeader1_2_imageView" disable="true" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false">
+            <ImageView fx:id="shelfLeader1_2_imageView" disable="true" fitHeight="35.0" fitWidth="35.0" onDragDropped="#handleDragDroppedShelfLeader1_2" onDragOver="#handleDragOverShelfLeader1_2" pickOnBounds="true" preserveRatio="true">
                <GridPane.margin>
                   <Insets left="103.0" top="190.0" />
                </GridPane.margin>
@@ -322,12 +322,12 @@
                   <Insets />
                </GridPane.margin>
             </ImageView>
-            <ImageView fx:id="shelfLeader2_1_imageView" disable="true" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="1">
+            <ImageView fx:id="shelfLeader2_1_imageView" disable="true" fitHeight="35.0" fitWidth="35.0" onDragDropped="#handleDragDroppedShelfLeader2_1" onDragOver="#handleDragOverShelfLeader2_1" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
                <GridPane.margin>
                   <Insets left="37.0" top="190.0" />
                </GridPane.margin>
             </ImageView>
-            <ImageView fx:id="shelfLeader2_2_imageView" disable="true" fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true" visible="false" GridPane.columnIndex="1">
+            <ImageView fx:id="shelfLeader2_2_imageView" disable="true" fitHeight="35.0" fitWidth="35.0" onDragDropped="#handleDragDroppedShelfLeader2_2" onDragOver="#handleDragOverShelfLeader2_2" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
                <GridPane.margin>
                   <Insets left="100.0" top="190.0" />
                </GridPane.margin>
