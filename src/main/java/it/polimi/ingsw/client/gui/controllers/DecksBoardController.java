@@ -32,7 +32,9 @@ public class DecksBoardController extends GenericController {
             pbc.setWarehouseIsDisabled(true);
             pbc.disableActivateLeaderAction();
             pbc.disableDiscardLeaderAction();
-            //TODO: disabilitare checkBox leader e devSpace, drag strongbox, leader warehouse
+            pbc.hideProductionCheckBoxes();
+            pbc.hideLeaderCheckBoxes();
+            //TODO: disabilitare drag strongbox, leader warehouse
             showAlert(Alert.AlertType.INFORMATION, "Buy card", "Complete buying action",
                     "Now you can drag and drop the card in the desired space");
             getGUIApplication().closeSecondStage();
@@ -99,7 +101,7 @@ public class DecksBoardController extends GenericController {
     }
 
 
-    public void enableBuyCardAction(){ //TODO: settare all'inizio di ogni (proprio) turno
+    public void enableBuyCardAction(){
         buyCard_button.setDisable(false);
     }
 

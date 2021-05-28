@@ -46,11 +46,11 @@ public class WarehouseTest{
         Warehouse wh = new Warehouse();
         Shelf s1 = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,false);
         wh.addShelf(s1);
-        assertEquals(2,wh.getList().get(0).getQuantity());
+        assertEquals(2,wh.getList().get(0).getResToPlaceQuantity());
         assertEquals(ResourceType.COIN,wh.getList().get(0).getResourceType());
 
         wh = new Warehouse(new ArrayList<>(List.of(new Shelf(ResourceType.SHIELD,new Resource(ResourceType.SHIELD,1),2,false))));
-        assertEquals(1,wh.getList().get(0).getQuantity());
+        assertEquals(1,wh.getList().get(0).getResToPlaceQuantity());
         assertEquals(ResourceType.SHIELD,wh.getList().get(0).getResourceType());*/
     }
 
@@ -145,20 +145,20 @@ public class WarehouseTest{
         assertTrue(wh.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.SHIELD,1))),false));
 /*  TODO:cambiata la gestione del warehouse, test veccchi
 
-        assertEquals(0,wh.getList(false).get(0).getQuantity());
+        assertEquals(0,wh.getList(false).get(0).getResToPlaceQuantity());
         assertEquals(ResourceType.COIN,wh.getList(false).get(3).getResourceType());
-        assertEquals(0,wh.getList(false).get(4).getQuantity());
+        assertEquals(0,wh.getList(false).get(4).getResToPlaceQuantity());
         assertEquals(ResourceType.SHIELD,wh.getList(false).get(4).getResourceType());
-        assertEquals(1,wh.getList(false).get(5).getQuantity());
+        assertEquals(1,wh.getList(false).get(5).getResToPlaceQuantity());
         assertEquals(ResourceType.STONE,wh.getList(false).get(5).getResourceType());
 
         assertFalse(wh.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN,1))),false));
 
         assertTrue(wh.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN,1))),true));
 
-        assertEquals(2,wh.getList(true).get(3).getQuantity());
+        assertEquals(2,wh.getList(true).get(3).getResToPlaceQuantity());
         assertEquals(ResourceType.SHIELD,wh.getList(true).get(3).getResourceType());
-        assertEquals(1,wh.getList(true).get(4).getQuantity());
+        assertEquals(1,wh.getList(true).get(4).getResToPlaceQuantity());
         assertEquals(ResourceType.COIN,wh.getList(true).get(4).getResourceType());
 
 

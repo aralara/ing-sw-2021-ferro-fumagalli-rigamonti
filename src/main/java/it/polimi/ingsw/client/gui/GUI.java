@@ -259,6 +259,8 @@ public class GUI extends ClientController {
         getMessageHandler().sendClientMessage(new NewLobbyMessage(size));
         if(size==1)
             guiApplication.setActiveScene(SceneNames.LOADING);
+        else
+            guiApplication.setActiveScene(SceneNames.MULTI_PLAYER_WAITING);
     }
 
     /*public void updateMarket(){
@@ -368,7 +370,7 @@ public class GUI extends ClientController {
     public void updateResourcesToPlace(){
         for(Resource resource : resourcesToPlace){
             Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
-                    .setQuantity(resource.getResourceType(),resource.getQuantity()));
+                    .setResToPlaceQuantity(resource.getResourceType(),resource.getQuantity()));
         }
     }
 
@@ -389,5 +391,25 @@ public class GUI extends ClientController {
 
     public void sendEndTurnMessage(){
         getMessageHandler().sendClientMessage(new EndTurnMessage());
+    }
+
+    public void sendLeaderMessage(List<Integer> positions, boolean toActivate){
+        List<LeaderCard> leaderHand = new ArrayList<>(), leaderCards = new ArrayList<>();
+        try {
+            for(Card card : getLocalPlayerBoard().getLeaderBoard().getHand())
+                leaderHand.add((LeaderCard)card);
+        } catch (NotExistingNicknameException e) {
+            e.printStackTrace();
+        }
+        if (positions.size() == 1 && leaderHand.size()>1)
+            leaderCards.add(leaderHand.get(positions.get(0)));
+        else if (positions.size() == 1 && leaderHand.size()==1)
+            leaderCards.add(leaderHand.get(0));
+        else
+            leaderCards.addAll(leaderHand);
+        if(toActivate)
+            getMessageHandler().sendClientMessage(new LeaderCardPlayMessage(leaderCards));
+        else
+            getMessageHandler().sendClientMessage(new LeaderCardDiscardMessage(leaderCards));
     }
 }

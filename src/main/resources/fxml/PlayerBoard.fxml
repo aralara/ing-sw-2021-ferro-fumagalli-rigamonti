@@ -80,7 +80,7 @@
          </image>
       </ImageView>
       <ImageView fitHeight="35.0" fitWidth="102.0" layoutX="20.0" layoutY="645.0" onDragDropped="#handleDragDroppedHole" onDragOver="#handleDragOverHole" pickOnBounds="true" preserveRatio="true" />
-      <CheckBox fx:id="basicProduction_checkBox" layoutX="330.0" layoutY="620.0" mnemonicParsing="false">
+      <CheckBox fx:id="basicProduction_checkBox" focusTraversable="false" layoutX="330.0" layoutY="620.0" mnemonicParsing="false" opacity="0.85" visible="false">
          <font>
             <Font size="16.0" />
          </font></CheckBox>
@@ -139,17 +139,17 @@
             </ImageView>
          </children>
       </GridPane>
-      <CheckBox fx:id="devSpace1_checkBox" layoutX="518.0" layoutY="620.0" mnemonicParsing="false">
+      <CheckBox fx:id="devSpace1_checkBox" focusTraversable="false" layoutX="518.0" layoutY="620.0" mnemonicParsing="false" opacity="0.85" visible="false">
          <font>
             <Font size="16.0" />
          </font>
       </CheckBox>
-      <CheckBox fx:id="devSpace2_checkBox" layoutX="703.0" layoutY="620.0" mnemonicParsing="false">
+      <CheckBox fx:id="devSpace2_checkBox" focusTraversable="false" layoutX="703.0" layoutY="620.0" mnemonicParsing="false" opacity="0.85" visible="false">
          <font>
             <Font size="16.0" />
          </font>
       </CheckBox>
-      <CheckBox fx:id="devSpace3_checkBox" layoutX="891.0" layoutY="620.0" mnemonicParsing="false">
+      <CheckBox fx:id="devSpace3_checkBox" focusTraversable="false" layoutX="891.0" layoutY="620.0" mnemonicParsing="false" opacity="0.85" visible="false">
          <font>
             <Font size="16.0" />
          </font>
@@ -303,7 +303,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <ImageView fx:id="spaceLeader1_imageView" fitHeight="256.0" fitWidth="170.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="boardLeader1_imageView" fitHeight="256.0" fitWidth="170.0" pickOnBounds="true" preserveRatio="true">
                <GridPane.margin>
                   <Insets left="3.0" />
                </GridPane.margin></ImageView>
@@ -317,7 +317,7 @@
                   <Insets left="103.0" top="190.0" />
                </GridPane.margin>
             </ImageView>
-            <ImageView fx:id="spaceLeader2_imageView" fitHeight="256.0" fitWidth="170.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+            <ImageView fx:id="boardLeader2_imageView" fitHeight="256.0" fitWidth="170.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
                <GridPane.margin>
                   <Insets />
                </GridPane.margin>
@@ -355,12 +355,12 @@
             </ImageView>
          </children>
       </GridPane>
-      <CheckBox fx:id="leader1_checkBox" layoutX="1147.0" layoutY="620.0" mnemonicParsing="false">
+      <CheckBox fx:id="leader1_checkBox" focusTraversable="false" layoutX="1147.0" layoutY="620.0" mnemonicParsing="false" opacity="0.85" visible="false">
          <font>
             <Font size="16.0" />
          </font>
       </CheckBox>
-      <CheckBox fx:id="leader2_checkBox" layoutX="1355.0" layoutY="620.0" mnemonicParsing="false">
+      <CheckBox fx:id="leader2_checkBox" focusTraversable="false" layoutX="1355.0" layoutY="620.0" mnemonicParsing="false" opacity="0.85" visible="false">
          <font>
             <Font size="16.0" />
          </font>

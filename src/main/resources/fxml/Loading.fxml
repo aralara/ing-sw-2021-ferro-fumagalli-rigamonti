@@ -2,10 +2,20 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
+<?import javafx.scene.text.*?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="686.0" prefWidth="994.0" styleClass="loadingPanel" stylesheets="@../css/loading.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllers.SetupController">
    <children>
-      <ProgressBar focusTraversable="false" layoutX="104.0" layoutY="606.0" prefHeight="30.0" prefWidth="787.0" />
+      <Button fx:id="playOnline_button" focusTraversable="false" layoutX="220.0" layoutY="316.0" mnemonicParsing="false" onAction="#playOnline" text="Play online" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="24.0" />
+         </font>
+      </Button>
+      <Button fx:id="playOffline_button" focusTraversable="false" layoutX="654.0" layoutY="316.0" mnemonicParsing="false" onAction="#playOffline" text="Play offline" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="24.0" />
+         </font>
+      </Button>
+      <ProgressBar fx:id="loading_bar" focusTraversable="false" layoutX="104.0" layoutY="606.0" prefHeight="30.0" prefWidth="787.0" visible="false" />
    </children>
 </Pane>

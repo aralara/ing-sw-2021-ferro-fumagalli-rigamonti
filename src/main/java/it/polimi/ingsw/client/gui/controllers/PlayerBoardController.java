@@ -26,23 +26,27 @@ public class PlayerBoardController extends GenericController {
     private ResourceType resToPlace;
     private boolean isResToPlaceAction=false, mainActionPlayed=false, warehouseIsDisabled=false;
 
-    @FXML private Button confirm_button, restoreWarehouse_button, activateProductions_button, endTurn_button, activeLeaderCard_button, discardLeaderCard_button,
-            rearrangeWarehouse_button, viewOpponents_button;
-    @FXML private ImageView space1L1_imageView, space1L2_imageView, space1L3_imageView, space2L1_imageView,
-            space2L2_imageView, space2L3_imageView, space3L1_imageView, space3L2_imageView, space3L3_imageView;
-    @FXML private ImageView faithSpace0_imageView, faithSpace1_imageView, faithSpace2_imageView, faithSpace3_imageView, faithSpace4_imageView,
-    faithSpace5_imageView, faithSpace6_imageView, faithSpace7_imageView ,faithSpace8_imageView, faithSpace9_imageView,
-    faithSpace10_imageView, faithSpace11_imageView, faithSpace12_imageView, faithSpace13_imageView, faithSpace14_imageView,
-    faithSpace15_imageView, faithSpace16_imageView, faithSpace17_imageView, faithSpace18_imageView, faithSpace19_imageView,
-    faithSpace20_imageView, faithSpace21_imageView, faithSpace22_imageView, faithSpace23_imageView, faithSpace24_imageView;
-    @FXML private Label player_label, resToPlaceCoin_label, resToPlaceServant_label, resToPlaceShield_label, resToPlaceStone_label;
-    @FXML private ImageView inkwell_imageVIew, coinToPlace_imageView, servantToPlace_imageView, shieldToPlace_imageView,
-            stoneToPlace_imageView;
-    @FXML private ImageView shelfResL1_1_imageView, shelfResL2_1_imageView, shelfResL2_2_imageView,
-            shelfResL3_1_imageView, shelfResL3_2_imageView, shelfResL3_3_imageView, handLeader1_imageView, handLeader2_imageView,
-            spaceLeader1_imageView, spaceLeader2_imageView;
+    @FXML private Label player_label,
+            coinStrongbox_label, servantStrongbox_label, shieldStrongbox_label, stoneStrongbox_label,
+            resToPlaceCoin_label, resToPlaceServant_label, resToPlaceShield_label, resToPlaceStone_label;
+    @FXML private Button confirm_button, restoreWarehouse_button, activateProductions_button, endTurn_button,
+            activeLeaderCard_button, discardLeaderCard_button, rearrangeWarehouse_button, viewOpponents_button;
     @FXML private CheckBox basicProduction_checkBox, devSpace1_checkBox, devSpace2_checkBox, devSpace3_checkBox,
             leader1_checkBox, leader2_checkBox;
+    @FXML private ImageView inkwell_imageVIew,
+            faithSpace0_imageView, faithSpace1_imageView, faithSpace2_imageView, faithSpace3_imageView,
+            faithSpace4_imageView, faithSpace5_imageView, faithSpace6_imageView, faithSpace7_imageView,
+            faithSpace8_imageView, faithSpace9_imageView, faithSpace10_imageView, faithSpace11_imageView,
+            faithSpace12_imageView, faithSpace13_imageView, faithSpace14_imageView, faithSpace15_imageView,
+            faithSpace16_imageView, faithSpace17_imageView, faithSpace18_imageView, faithSpace19_imageView,
+            faithSpace20_imageView, faithSpace21_imageView, faithSpace22_imageView, faithSpace23_imageView,
+            faithSpace24_imageView,
+            shelfResL1_1_imageView, shelfResL2_1_imageView, shelfResL2_2_imageView,
+            shelfResL3_1_imageView, shelfResL3_2_imageView, shelfResL3_3_imageView,
+            space1L1_imageView, space1L2_imageView, space1L3_imageView, space2L1_imageView, space2L2_imageView,
+            space2L3_imageView, space3L1_imageView, space3L2_imageView, space3L3_imageView,
+            handLeader1_imageView, handLeader2_imageView, boardLeader1_imageView, boardLeader2_imageView,
+            coinToPlace_imageView, servantToPlace_imageView, shieldToPlace_imageView, stoneToPlace_imageView;
 
 
     public void setIsResToPlace(boolean isResToPlaceAction){
@@ -75,7 +79,7 @@ public class PlayerBoardController extends GenericController {
         getGUIApplication().setActiveScene(SceneNames.DECKS_BOARD);
     }
 
-    public void restoreWarehouse() { //TODO: mettere a posto
+    public void restoreWarehouse() {
         if(toDiscard!=null)
             toDiscard.clear();
         shelves = getGUI().getWarehouseShelvesCopy();
@@ -85,8 +89,11 @@ public class PlayerBoardController extends GenericController {
         confirm_button.setVisible(false);
         restoreWarehouse_button.setVisible(false);
         rearrangeWarehouse_button.setDisable(false);
-        if(mainActionPlayed)
+        if(mainActionPlayed){
+            showProductionCheckBoxes();
+            showLeaderCheckBoxes();
             endTurn_button.setDisable(false);
+        }
     }
 
     public void activateProductions() {
@@ -97,22 +104,41 @@ public class PlayerBoardController extends GenericController {
         disableActivateLeaderAction();
         disableDiscardLeaderAction();
         setWarehouseIsDisabled(true);
-        //TODO: disabilitare checkBox leader e devSpace, drag strongbox, abilitare leader warehouse
+        hideProductionCheckBoxes();
+        hideLeaderCheckBoxes();
+        //TODO: disabilitare drag strongbox, abilitare leader warehouse
     }
 
     public void endTurn() {
         disableButtons();
         mainActionPlayed=false;
-        //TODO: disabilitare checkBox leader e devSpace, drag strongbox, abilitare leader warehouse
+        hideProductionCheckBoxes();
+        hideLeaderCheckBoxes();
+        //TODO: disabilitare strongbox, abilitare leader warehouse
         getGUI().sendEndTurnMessage();
     }
 
     public void activateLeaderCard() {
-        //TODO:da fare
+        sendLeaderMessage(true);
     }
 
     public void discardLeaderCard() {
-        //TODO:da fare
+        sendLeaderMessage(false);
+    }
+
+    private void sendLeaderMessage(boolean toActivate){
+        List<Integer> leaders = new ArrayList<>();
+        if(leader1_checkBox.isSelected())
+            leaders.add(0);
+        if(leader2_checkBox.isSelected())
+            leaders.add(1);
+        if(!leaders.isEmpty()) {
+            leader1_checkBox.setSelected(false);
+            leader1_checkBox.setVisible(false);
+            leader2_checkBox.setSelected(false);
+            leader2_checkBox.setVisible(false);
+            getGUI().sendLeaderMessage(leaders, toActivate);
+        }
     }
 
     public void rearrangeWarehouse() {
@@ -137,6 +163,42 @@ public class PlayerBoardController extends GenericController {
             dragEvent.acceptTransferModes(TransferMode.MOVE);
     }
 
+    public void handleDragOver1L1(DragEvent dragEvent) {
+        handleDragOver(dragEvent);
+    }
+
+    public void handleDragOver1L2(DragEvent dragEvent) {
+        handleDragOver(dragEvent);
+    }
+
+    public void handleDragOver1L3(DragEvent dragEvent) {
+        handleDragOver(dragEvent);
+    }
+
+    public void handleDragOver2L1(DragEvent dragEvent) {
+        handleDragOver(dragEvent);
+    }
+
+    public void handleDragOver2L2(DragEvent dragEvent) {
+        handleDragOver(dragEvent);
+    }
+
+    public void handleDragOver2L3(DragEvent dragEvent) {
+        handleDragOver(dragEvent);
+    }
+
+    public void handleDragOver3L1(DragEvent dragEvent) {
+        handleDragOver(dragEvent);
+    }
+
+    public void handleDragOver3L2(DragEvent dragEvent) {
+        handleDragOver(dragEvent);
+    }
+
+    public void handleDragOver3L3(DragEvent dragEvent) {
+        handleDragOver(dragEvent);
+    }
+
     private void handleDragDroppedSpace(DragEvent dragEvent, ImageView imageView) {
         Image image = dragEvent.getDragboard().getImage();
         imageView.setImage(image);
@@ -148,72 +210,36 @@ public class PlayerBoardController extends GenericController {
         setWarehouseIsDisabled(false);
     }
 
-    public void handleDragOver1L1(DragEvent dragEvent) {
-        handleDragOver(dragEvent);
-    }
-
     public void handleDragDropped1L1(DragEvent dragEvent) {
         handleDragDroppedSpace(dragEvent, space1L1_imageView);
-    }
-
-    public void handleDragOver1L2(DragEvent dragEvent) {
-        handleDragOver(dragEvent);
     }
 
     public void handleDragDropped1L2(DragEvent dragEvent) {
         handleDragDroppedSpace(dragEvent, space1L2_imageView);
     }
 
-    public void handleDragOver1L3(DragEvent dragEvent) {
-        handleDragOver(dragEvent);
-    }
-
     public void handleDragDropped1L3(DragEvent dragEvent) {
         handleDragDroppedSpace(dragEvent, space1L3_imageView);
-    }
-
-    public void handleDragOver2L1(DragEvent dragEvent) {
-        handleDragOver(dragEvent);
     }
 
     public void handleDragDropped2L1(DragEvent dragEvent) {
         handleDragDroppedSpace(dragEvent, space2L1_imageView);
     }
 
-    public void handleDragOver2L2(DragEvent dragEvent) {
-        handleDragOver(dragEvent);
-    }
-
     public void handleDragDropped2L2(DragEvent dragEvent) {
         handleDragDroppedSpace(dragEvent, space2L2_imageView);
-    }
-
-    public void handleDragOver2L3(DragEvent dragEvent) {
-        handleDragOver(dragEvent);
     }
 
     public void handleDragDropped2L3(DragEvent dragEvent) {
         handleDragDroppedSpace(dragEvent, space2L3_imageView);
     }
 
-    public void handleDragOver3L1(DragEvent dragEvent) {
-        handleDragOver(dragEvent);
-    }
-
     public void handleDragDropped3L1(DragEvent dragEvent) {
         handleDragDroppedSpace(dragEvent, space3L1_imageView);
     }
 
-    public void handleDragOver3L2(DragEvent dragEvent) {
-        handleDragOver(dragEvent);
-    }
-
     public void handleDragDropped3L2(DragEvent dragEvent) {
         handleDragDroppedSpace(dragEvent, space3L2_imageView);
-    }
-
-    public void handleDragOver3L3(DragEvent dragEvent) {
-        handleDragOver(dragEvent);
     }
 
     public void handleDragDropped3L3(DragEvent dragEvent) {
@@ -297,7 +323,7 @@ public class PlayerBoardController extends GenericController {
         if(addToWarehouse(resToPlace, shelfLevel-1)) {
             Image image = dragEvent.getDragboard().getImage();
             imageView.setImage(image);
-            setQuantity(resToPlace, getQuantity(resToPlace) - 1);
+            setResToPlaceQuantity(resToPlace, getResToPlaceQuantity(resToPlace) - 1);
             restoreWarehouse_button.setVisible(true);
             rearrangeWarehouse_button.setDisable(true);
         }
@@ -330,7 +356,7 @@ public class PlayerBoardController extends GenericController {
     public void handleDragDroppedHole() {
         addToDiscardedResources(resToPlace);
         restoreWarehouse_button.setVisible(true);
-        setQuantity(resToPlace, getQuantity(resToPlace) - 1);
+        setResToPlaceQuantity(resToPlace, getResToPlaceQuantity(resToPlace) - 1);
     }
 
     public void handleDragOverHole(DragEvent dragEvent) {
@@ -420,7 +446,7 @@ public class PlayerBoardController extends GenericController {
         faithSpaces.add(faithSpace24_imageView);
     }
 
-    public int getQuantity(ResourceType resourceType) {
+    public int getResToPlaceQuantity(ResourceType resourceType) {
         if (resourceType == ResourceType.COIN) {
             return Integer.parseInt(resToPlaceCoin_label.getText().substring(2));
         } else if (resourceType == ResourceType.SERVANT) {
@@ -433,7 +459,7 @@ public class PlayerBoardController extends GenericController {
         return 0;
     }
 
-    public void setQuantity(ResourceType resourceType, int quantity){
+    public void setResToPlaceQuantity(ResourceType resourceType, int quantity){
         if(resourceType == ResourceType.COIN) {
             resToPlaceCoin_label.setText("x " + quantity);
         }else if (resourceType == ResourceType.SERVANT) {
@@ -450,10 +476,34 @@ public class PlayerBoardController extends GenericController {
             checkEnableButtons();
     }
 
+    public int getStrongboxQuantity(ResourceType resourceType) {
+        if (resourceType == ResourceType.COIN) {
+            return Integer.parseInt(coinStrongbox_label.getText().substring(2));
+        } else if (resourceType == ResourceType.SERVANT) {
+            return Integer.parseInt(servantStrongbox_label.getText().substring(2));
+        }else if (resourceType == ResourceType.SHIELD) {
+            return Integer.parseInt(shieldStrongbox_label.getText().substring(2));
+        }else if (resourceType == ResourceType.STONE){
+            return Integer.parseInt(stoneStrongbox_label.getText().substring(2));
+        }
+        return 0;
+    }
+
+    public void setStrongboxQuantity(ResourceType resourceType, int quantity){
+        if(resourceType == ResourceType.COIN) {
+            coinStrongbox_label.setText("x " + quantity);
+        }else if (resourceType == ResourceType.SERVANT) {
+            servantStrongbox_label.setText("x "+quantity);
+        }else if (resourceType == ResourceType.SHIELD) {
+            shieldStrongbox_label.setText("x "+quantity);
+        }else if (resourceType == ResourceType.STONE){
+            stoneStrongbox_label.setText("x "+quantity);
+        }
+    }
+
     private void checkEnableButtons(){
-        if(getQuantity(ResourceType.COIN)==0 && getQuantity(ResourceType.SERVANT)==0
-                && getQuantity(ResourceType.SHIELD)==0 && getQuantity(ResourceType.STONE)==0){
-            //isResToPlaceAction=false;
+        if(getResToPlaceQuantity(ResourceType.COIN)==0 && getResToPlaceQuantity(ResourceType.SERVANT)==0
+                && getResToPlaceQuantity(ResourceType.SHIELD)==0 && getResToPlaceQuantity(ResourceType.STONE)==0){
             confirm_button.setVisible(true);
         }
     }
@@ -465,8 +515,9 @@ public class PlayerBoardController extends GenericController {
         endTurn_button.setDisable(true);
         activeLeaderCard_button.setDisable(true);
         discardLeaderCard_button.setDisable(true);
-        //rearrangeWarehouse_button.setDisable(true);
         viewOpponents_button.setDisable(true);
+        hideProductionCheckBoxes();
+        hideLeaderCheckBoxes();
     }
 
     public void enableButtons(){
@@ -481,6 +532,8 @@ public class PlayerBoardController extends GenericController {
         discardLeaderCard_button.setDisable(false);
         rearrangeWarehouse_button.setDisable(false);
         viewOpponents_button.setDisable(false);
+        showProductionCheckBoxes();
+        showLeaderCheckBoxes();
     }
 
     public void confirm() {
@@ -500,11 +553,11 @@ public class PlayerBoardController extends GenericController {
         isResToPlaceAction=false;
     }
 
-    public void setDevelopmentBSpaces(List<List<Integer>> idList) {
+    public void setDevelopmentBSpaces(List<List<Integer>> idList) { //TODO: il parametro non mi serve
         //TODO: stub
     }
 
-    public void setFaithBFaith(int faith){
+    public void setFaithBFaith(int faith){ //TODO: il parametro non mi serve
         resetFaith();
         Image cross = new Image(getClass().getResourceAsStream("/imgs/faith/cross_red.png"));
         int myFaith = 0;
@@ -517,13 +570,13 @@ public class PlayerBoardController extends GenericController {
         faithSpaces.get(myFaith).setImage(cross);
     }
 
-    private void resetFaith(){  //TODO: si può fare in modo migliore?
+    private void resetFaith(){
         fillFaithSpaces();
         for(ImageView imageView : faithSpaces)
             imageView.setImage(null);
     }
 
-    public void setFaithBPope(boolean[] popeProgression) {
+    public void setFaithBPope(boolean[] popeProgression) { //TODO: il parametro non mi serve
         //TODO: stub
     }
 
@@ -532,38 +585,41 @@ public class PlayerBoardController extends GenericController {
             handLeader1_imageView.setImage(null);
             handLeader2_imageView.setImage(null);
             for (Integer id : idList) {
-                if (handLeader1_imageView.getImage() == null && spaceLeader1_imageView.getImage() == null) {
+                if (handLeader1_imageView.getImage() == null && boardLeader1_imageView.getImage() == null) {
                     handLeader1_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/cost_"
                             + id + ".png")));
-                } else if (handLeader2_imageView.getImage() == null && spaceLeader2_imageView.getImage() == null) {
+                } else if (handLeader2_imageView.getImage() == null && boardLeader2_imageView.getImage() == null) {
                     handLeader2_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/cost_"
                             + id + ".png")));
                 }
             }
         }
+        showLeaderCheckBoxes();
     }
 
     public void setLeaderBBoard(List<Integer> idList){  //TODO: mi arriva sia per le mie leader sia per quelle degli oppo, va bene?
         if(idList.stream().noneMatch(x -> x == -1)) {
-            spaceLeader1_imageView.setImage(null);
-            spaceLeader2_imageView.setImage(null);
+            boardLeader1_imageView.setImage(null);
+            boardLeader2_imageView.setImage(null);
             for(Integer id : idList) {
-                if (spaceLeader1_imageView.getImage() == null && handLeader1_imageView.getImage() == null) {
-                    spaceLeader1_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
+                if (boardLeader1_imageView.getImage() == null && handLeader1_imageView.getImage() == null) {
+                    boardLeader1_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
                             + id + ".png")));
-                } else if (spaceLeader2_imageView.getImage() == null && handLeader2_imageView.getImage() == null) {
-                    spaceLeader2_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
+                } else if (boardLeader2_imageView.getImage() == null && handLeader2_imageView.getImage() == null) {
+                    boardLeader2_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
                             + id + ".png")));
                 }
             }
         }
+        showLeaderCheckBoxes();
     }
 
-    public void setStrongbox(List<Resource> resources) {
+    public void setStrongbox(List<Resource> resources) { //TODO: il parametro non mi serve
         //TODO: stub
     }
 
-    public void setWarehouse(List<Shelf> shelvesList) { //TODO: aggiungere caricamento leader
+    public void setWarehouse(List<Shelf> shelvesList) {  //TODO: il parametro non mi serve
+        //TODO: aggiungere caricamento leader
         shelves = getGUI().getWarehouseShelvesCopy();
         Image image;
         Shelf shelf;
@@ -642,7 +698,7 @@ public class PlayerBoardController extends GenericController {
         toDiscard.add(new Resource(resourceType,1));
     }
 
-    private boolean addToWarehouse(ResourceType resourceType, int level){ //3,4 x leader
+    private boolean addToWarehouse(ResourceType resourceType, int level){ //3,4 leader
         if(shelves==null || shelves.isEmpty())
             shelves = getGUI().getWarehouseShelvesCopy();
         if(checkFreeSpace()){
@@ -762,7 +818,7 @@ public class PlayerBoardController extends GenericController {
     }
 
     private void addQuantity(ResourceType resourceType, int quantity){
-        setQuantity(resourceType, getQuantity(resourceType) + quantity);
+        setResToPlaceQuantity(resourceType, getResToPlaceQuantity(resourceType) + quantity);
     }
 
     private void resetShelfImageView(int level){ //TODO: manca leader
@@ -796,9 +852,51 @@ public class PlayerBoardController extends GenericController {
     }
 
     private void resetResLabels(){
-        setQuantity(ResourceType.COIN,0);
-        setQuantity(ResourceType.SERVANT,0);
-        setQuantity(ResourceType.SHIELD,0);
-        setQuantity(ResourceType.STONE,0);
+        setResToPlaceQuantity(ResourceType.COIN,0);
+        setResToPlaceQuantity(ResourceType.SERVANT,0);
+        setResToPlaceQuantity(ResourceType.SHIELD,0);
+        setResToPlaceQuantity(ResourceType.STONE,0);
+    }
+
+    /*private boolean isResourceQuantityGreaterThan(int max){
+        int total = 0;
+        if(shelves==null || shelves.isEmpty())
+            shelves=getGUI().getWarehouseShelvesCopy();
+        for(Shelf shelf : shelves)
+            total += shelf.getResources().getQuantity();
+        total += getStrongboxQuantity(ResourceType.COIN);
+        total += getStrongboxQuantity(ResourceType.SERVANT);
+        total += getStrongboxQuantity(ResourceType.SHIELD);
+        total += getStrongboxQuantity(ResourceType.STONE);
+        return total > max;
+    }*/
+
+    public void showProductionCheckBoxes(){
+        basicProduction_checkBox.setVisible(true);
+        if(space1L1_imageView.getImage()!=null)
+            devSpace1_checkBox.setVisible(true);
+        if(space2L1_imageView.getImage()!=null)
+            devSpace1_checkBox.setVisible(true);
+        if(space3L1_imageView.getImage()!=null)
+            devSpace1_checkBox.setVisible(true);
+    }
+
+    public void showLeaderCheckBoxes(){
+        if(handLeader1_imageView.getImage()!=null && boardLeader1_imageView.getImage()==null)
+            leader1_checkBox.setVisible(true);
+        if(handLeader2_imageView.getImage()!=null && boardLeader2_imageView.getImage()==null)
+            leader2_checkBox.setVisible(true);
+    }
+
+    public void hideProductionCheckBoxes(){
+        basicProduction_checkBox.setVisible(false);
+        devSpace1_checkBox.setVisible(false);
+        devSpace1_checkBox.setVisible(false);
+        devSpace1_checkBox.setVisible(false);
+    }
+
+    public void hideLeaderCheckBoxes(){
+        leader1_checkBox.setVisible(false);
+        leader2_checkBox.setVisible(false);
     }
 }

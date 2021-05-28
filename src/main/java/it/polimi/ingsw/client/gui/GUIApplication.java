@@ -42,7 +42,7 @@ public class GUIApplication extends Application { //TODO: flusso messaggi da ric
     public void start(Stage stage) {
         setupStage(stage);
         setup();
-        setActiveScene(SceneNames.CONNECTION_MENU);
+        setActiveScene(SceneNames.LOADING);
     }
 
     //TODO: mettere suppress
@@ -85,7 +85,8 @@ public class GUIApplication extends Application { //TODO: flusso messaggi da ric
             openCardStage(scenesInformation.get(getSceneIndex(sceneName)).getScene());
         else {
             stage.setScene(scenesInformation.get(getSceneIndex(sceneName)).getScene());
-            if (sceneName.equals(SceneNames.PLAYER_BOARD) || sceneName.equals(SceneNames.LOADING))
+            if (sceneName.equals(SceneNames.PLAYER_BOARD) || sceneName.equals(SceneNames.LOADING) ||
+                    sceneName.equals(SceneNames.CONNECTION_MENU))
                 stage.centerOnScreen();
             stage.show();
         }

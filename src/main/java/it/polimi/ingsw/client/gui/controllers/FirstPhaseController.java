@@ -22,7 +22,7 @@ public class FirstPhaseController extends GenericController {
     @FXML private Button discard1_button, discard2_button, discard3_button, discard4_button;
     @FXML private Label chooseResources_label, coin_label, servant_label, shield_label, stone_label;
 
-    public Label getChooseResources_label(){ //TODO: se ricevo 1/2 risorse cambio titolo di conseguenza
+    public Label getChooseResources_label(){
         return chooseResources_label;
     }
 
@@ -54,8 +54,8 @@ public class FirstPhaseController extends GenericController {
     private void takeResource(Label label, ResourceType resourceType){
         PlayerBoardController pbc = (PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD);
 
-        int labelQuantity = pbc.getQuantity(resourceType);
-        pbc.setQuantity(resourceType, ++labelQuantity);
+        int labelQuantity = pbc.getResToPlaceQuantity(resourceType);
+        pbc.setResToPlaceQuantity(resourceType, ++labelQuantity);
         if(resourcesToPlace==null)
             resourcesToPlace = new ArrayList<>();
         resourcesToPlace.add(new Resource(resourceType, 1));
@@ -99,7 +99,7 @@ public class FirstPhaseController extends GenericController {
                 + idLeaders.get(3)+".png")));
     }
 
-    public void enableLabels(){ //TODO: se deve scegliere 2 risorse
+    public void enableLabels(){
         coin_label.setVisible(true);
         servant_label.setVisible(true);
         shield_label.setVisible(true);

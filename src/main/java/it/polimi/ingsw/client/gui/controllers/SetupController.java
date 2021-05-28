@@ -2,7 +2,6 @@ package it.polimi.ingsw.client.gui.controllers;
 
 import it.polimi.ingsw.client.gui.SceneNames;
 import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
-import it.polimi.ingsw.utils.messages.client.NewLobbyMessage;
 import javafx.fxml.FXML;;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -15,8 +14,9 @@ public class SetupController extends GenericController {
 
     @FXML private TextField ipAddress_field, portNumber_field, nickname_field;
     @FXML private ProgressIndicator connecting_progressIndicator, waitingNickname_progressIndicator;
-    @FXML private Button connect_button, quit_button, confirm_button;
+    @FXML private Button playOnline_button, playOffline_button, connect_button, quit_button, confirm_button;
     @FXML private Label nickname_label, notifyPlayers_label;
+    @FXML private ProgressBar loading_bar;
 
     public TextField getIpAddress_field() {
         return ipAddress_field;
@@ -52,6 +52,20 @@ public class SetupController extends GenericController {
 
     public Label getNickname_label() {
         return nickname_label;
+    }
+
+    public void playOnline() {
+        playOnline_button.setVisible(false);
+        playOffline_button.setVisible(false);
+        loading_bar.setVisible(true);
+        getGUIApplication().setActiveScene(SceneNames.CONNECTION_MENU);
+    }
+
+    public void playOffline() {
+        //TODO: implementare singlegame offline
+        playOnline_button.setVisible(false);
+        playOffline_button.setVisible(false);
+        loading_bar.setVisible(true);
     }
 
     public void connect() {  //TODO: decidere se lasciare ip e porta vuota (molto probabilmente sì)
@@ -119,40 +133,20 @@ public class SetupController extends GenericController {
         }
     }
 
-    public void startSingleGame() {
-        getGUIApplication().setActiveScene(SceneNames.SINGLE_PLAYER_MENU);
-    }
-
-    public void startMultiGame() {
-        getGUIApplication().setActiveScene(SceneNames.MULTI_PLAYER_MENU);
-    }
-
-    public void startOnlineGame() {
+    public void choose1Players() {
         getGUI().setLobbySize(1);
     }
 
-    public void startOfflineGame() {
-        //TODO: implementare singlegame offline
-        getGUIApplication().setActiveScene(SceneNames.LOADING);
-    }
-
     public void choose2Players() {
-        getGUIApplication().setActiveScene(SceneNames.MULTI_PLAYER_WAITING);
-        getGUI().getMessageHandler().sendClientMessage(new NewLobbyMessage(2));
+        getGUI().setLobbySize(2);
     }
 
     public void choose3Players() {
-        getGUIApplication().setActiveScene(SceneNames.MULTI_PLAYER_WAITING);
-        getGUI().getMessageHandler().sendClientMessage(new NewLobbyMessage(3));
+        getGUI().setLobbySize(3);
     }
 
     public void choose4Players() {
-        getGUIApplication().setActiveScene(SceneNames.MULTI_PLAYER_WAITING);
-        getGUI().getMessageHandler().sendClientMessage(new NewLobbyMessage(4));
-    }
-
-    public void goBack() {
-        getGUIApplication().setActiveScene(SceneNames.GAME_MODE_MENU);
+        getGUI().setLobbySize(4);
     }
 
     public void notifyNewPlayer(String nickname){

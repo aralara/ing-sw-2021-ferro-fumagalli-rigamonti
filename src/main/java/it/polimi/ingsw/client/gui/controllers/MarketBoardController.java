@@ -45,7 +45,9 @@ public class MarketBoardController extends GenericController {
             pbc.setWarehouseIsDisabled(false);
             pbc.setMainActionPlayed(true);
             pbc.setIsResToPlace(true);
-            //TODO: disabilitare checkBox leader e devSpace, drag strongbox, abilitare leader warehouse
+            pbc.hideProductionCheckBoxes();
+            pbc.hideLeaderCheckBoxes();
+            //TODO: disabilitare drag strongbox, abilitare leader warehouse
             resetAll();
             getGUI().sendMarketMessage(row, col);
             showAlert(Alert.AlertType.INFORMATION, "Success!", "Resources taken",
@@ -183,7 +185,7 @@ public class MarketBoardController extends GenericController {
     }
 
 
-    public void enableMarketAction(){ //TODO: settare all'inizio di ogni (proprio) turno
+    public void enableMarketAction(){
         takeResources_button.setDisable(false);
     }
 

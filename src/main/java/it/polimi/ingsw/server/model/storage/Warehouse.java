@@ -82,8 +82,8 @@ public class Warehouse extends PlayerListened implements Storage {
         for (Shelf shelf : shelves) {
             for (Resource resource : resources) {
                 if (shelf.getResources().getResourceType() == resource.getResourceType()) {
-                    shelf.getResources().setQuantity(shelf.getResources().getQuantity()-resource.getQuantity());
-                    if(shelf.getResources().getQuantity()==0){
+                    shelf.getResources().setResToPlaceQuantity(shelf.getResources().getResToPlaceQuantity()-resource.getResToPlaceQuantity());
+                    if(shelf.getResources().getResToPlaceQuantity()==0){
                         shelf.setResourceType(ResourceType.WILDCARD);
                         shelf.getResources().setResourceType(ResourceType.WILDCARD);
                     }
