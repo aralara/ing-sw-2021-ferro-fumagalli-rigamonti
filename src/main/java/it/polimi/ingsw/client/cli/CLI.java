@@ -42,13 +42,16 @@ public class CLI extends ClientController {
         askNickname();
     }
 
-    public void connect() { //TODO: inserimento porta
+    public void connect() {
         boolean success;
         do {
-            graphicalCLI.printString("Insert the IP address of server: ");
+            graphicalCLI.printString("Insert the IP address of the server: ");
             String ip = graphicalCLI.getNextLine();
+            graphicalCLI.printString("Insert the port of the server: ");
+            int port = graphicalCLI.getNextInt();
             graphicalCLI.printlnString("Connecting...");
-            success = getMessageHandler().connect(ip, Server.SOCKET_PORT);
+            if(port <= 0) port = Server.SOCKET_PORT;    //TODO: temporaneo per testare
+            success = getMessageHandler().connect(ip, port);
             if (success)
                 graphicalCLI.printlnString("Connected");
             else
@@ -58,7 +61,7 @@ public class CLI extends ClientController {
 
     @Override
     public void run() {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));   //TODO: da sistemare
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         LinkedBlockingQueue<ServerActionMessage> actionQueue = getMessageHandler().getActionQueue();
         LinkedBlockingQueue<ServerAckMessage> responseQueue = getMessageHandler().getResponseQueue();
         List<ClientMessage> confirmationList = getMessageHandler().getConfirmationList();
