@@ -50,8 +50,6 @@ public class MarketBoardController extends GenericController {
             //TODO: disabilitare drag strongbox, abilitare leader warehouse
             resetAll();
             getGUI().sendMarketMessage(row, col);
-            showAlert(Alert.AlertType.INFORMATION, "Success!", "Resources taken",
-                    "Now you need to place each taken resource");
             getGUIApplication().closeSecondStage();
         }
     }

@@ -185,12 +185,35 @@ public class GUI extends ClientController {
 
     @Override
     public void addMarketResources(List<Resource> resources, List<ResourceType> availableAbilities) {
-        //TODO: manca gestiione abilità
-
         resourcesToPlace.clear();
         resourcesToPlace.addAll(resources);  //TODO: a volte lancia un'eccezione perchè: "Cannot invoke "java.util.Collection.toArray()" because "c" is null"
-        checkFaithResource(resourcesToPlace);
-        updateResourcesToPlace();
+        resolveAbilityMarble(availableAbilities);
+        boolean faith = checkFaithResource(resourcesToPlace);
+        if(!checkOnlyWildcard(resourcesToPlace)) {
+            Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
+                    .showAlert(Alert.AlertType.INFORMATION, "Success!", "Resources taken",
+                            "Now you need to place each taken resource"));
+            updateResourcesToPlace();
+        }
+        else if(faith) {
+            Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
+                .showAlert(Alert.AlertType.INFORMATION, "Success!", "Resources taken",
+                        "Your faith has been updated"));
+            Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
+                    .enableButtons());
+            try {
+                sendShelvesConfigurationMessage(getLocalPlayerBoard().getWarehouse().getShelves(),new ArrayList<>());
+            } catch (NotExistingNicknameException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
+                    .showAlert(Alert.AlertType.INFORMATION, "Success!", "Resources taken",
+                            "You've nothing to place"));
+            Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
+                    .enableButtons());
+        }
     }
 
     @Override
@@ -341,14 +364,17 @@ public class GUI extends ClientController {
         resourcesToDiscard.clear();
     }
 
-    private void checkFaithResource(List<Resource> resources){
+    private boolean checkFaithResource(List<Resource> resources){
         int faithQuantity=0;
         for(Resource resource : resources){
             if(resource.getResourceType() == ResourceType.FAITH)
                 faithQuantity++;
         }
-        if (faithQuantity>0)
+        if (faithQuantity>0) {
             resourcesToDiscard.add(new Resource(ResourceType.FAITH, faithQuantity));
+            return true;
+        }
+        return false;
     }
 
     public void sendMarketMessage(int row, int col){
@@ -423,5 +449,19 @@ public class GUI extends ClientController {
             e.printStackTrace();
         }
         return -1;
+    }
+
+    private void resolveAbilityMarble(List<ResourceType> availableAbilities){
+        //TODO: fare
+    }
+
+    private boolean checkOnlyWildcard(List<Resource> resources){
+        boolean onlyWildcard = true;
+        for(Resource resource : resources)
+            if(resource.getResourceType() != ResourceType.WILDCARD && resource.getResourceType() != ResourceType.FAITH) {
+                onlyWildcard = false;
+                break;
+            }
+        return onlyWildcard;
     }
 }
