@@ -5,83 +5,83 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="355.0" prefWidth="583.0" styleClass="startingActions" stylesheets="@../css/setupWindow.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllers.WildcardResolverController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="355.0" prefWidth="761.0" styleClass="startingActions" stylesheets="@../css/setupWindow.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllers.WildcardResolverController">
     <children>
-        <Label fx:id="chooseResources_label" alignment="CENTER" layoutX="170.0" layoutY="24.0" prefHeight="39.0" prefWidth="244.0" textFill="#1d60cc">
+        <Label fx:id="chooseResources_label" alignment="CENTER" layoutX="259.0" layoutY="25.0" prefHeight="39.0" prefWidth="244.0" textFill="#1d60cc">
             <font>
                 <Font name="Pristina" size="24.0" />
             </font>
         </Label>
-        <ImageView fitHeight="90.0" fitWidth="100.0" layoutX="44.0" layoutY="90.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="90.0" fitWidth="100.0" layoutX="88.0" layoutY="90.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../imgs/res/coin.png" />
             </image></ImageView>
-      <Label fx:id="coin_label" layoutX="126.0" layoutY="155.0" text="x 0" textFill="#1d60cc">
+      <Label fx:id="coin_label" layoutX="170.0" layoutY="155.0" text="x 0" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="24.0" />
          </font>
       </Label>
-        <Button focusTraversable="false" layoutX="68.0" layoutY="200.0" mnemonicParsing="false" onAction="#takeCoin" text="Take" textFill="#1d60cc">
+        <Button focusTraversable="false" layoutX="112.0" layoutY="200.0" mnemonicParsing="false" onAction="#takeCoin" text="Take" textFill="#1d60cc">
             <font>
                 <Font name="Pristina" size="18.0" />
             </font>
         </Button>
-        <ImageView fitHeight="90.0" fitWidth="100.0" layoutX="176.0" layoutY="88.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="90.0" fitWidth="100.0" layoutX="250.0" layoutY="88.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../imgs/res/servant.png" />
             </image>
         </ImageView>
-      <Label fx:id="servant_label" layoutX="273.0" layoutY="155.0" text="x 0" textFill="#1d60cc">
+      <Label fx:id="servant_label" layoutX="347.0" layoutY="155.0" text="x 0" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="24.0" />
          </font>
       </Label>
-        <Button focusTraversable="false" layoutX="200.0" layoutY="200.0" mnemonicParsing="false" onAction="#takeServant" text="Take" textFill="#1d60cc">
+        <Button focusTraversable="false" layoutX="274.0" layoutY="200.0" mnemonicParsing="false" onAction="#takeServant" text="Take" textFill="#1d60cc">
             <font>
                 <Font name="Pristina" size="18.0" />
             </font>
         </Button>
-        <ImageView fitHeight="90.0" fitWidth="100.0" layoutX="320.0" layoutY="88.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="90.0" fitWidth="100.0" layoutX="418.0" layoutY="88.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../imgs/res/shield.png" />
             </image>
         </ImageView>
-      <Label fx:id="shield_label" layoutX="380.0" layoutY="155.0" text="x 0" textFill="#1d60cc">
+      <Label fx:id="shield_label" layoutX="478.0" layoutY="155.0" text="x 0" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="24.0" />
          </font>
       </Label>
-        <Button focusTraversable="false" layoutX="332.0" layoutY="200.0" mnemonicParsing="false" onAction="#takeShield" text="Take" textFill="#1d60cc">
+        <Button focusTraversable="false" layoutX="430.0" layoutY="200.0" mnemonicParsing="false" onAction="#takeShield" text="Take" textFill="#1d60cc">
             <font>
                 <Font name="Pristina" size="18.0" />
             </font>
         </Button>
-        <ImageView fitHeight="90.0" fitWidth="100.0" layoutX="437.0" layoutY="88.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="90.0" fitWidth="100.0" layoutX="552.0" layoutY="88.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../imgs/res/stone.png" />
             </image>
         </ImageView>
-      <Label fx:id="stone_label" layoutX="529.0" layoutY="155.0" text="x 0" textFill="#1d60cc">
+      <Label fx:id="stone_label" layoutX="644.0" layoutY="155.0" text="x 0" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="24.0" />
          </font>
       </Label>
-        <Button focusTraversable="false" layoutX="459.0" layoutY="200.0" mnemonicParsing="false" onAction="#takeStone" text="Take" textFill="#1d60cc">
+        <Button focusTraversable="false" layoutX="574.0" layoutY="200.0" mnemonicParsing="false" onAction="#takeStone" text="Take" textFill="#1d60cc">
             <font>
                 <Font name="Pristina" size="18.0" />
             </font>
         </Button>
-      <Button fx:id="confirm_button" disable="true" focusTraversable="false" layoutX="213.0" layoutY="285.0" mnemonicParsing="false" onAction="#confirm" text="Confirm" textFill="#1d60cc">
+      <Button fx:id="confirm_button" disable="true" focusTraversable="false" layoutX="281.0" layoutY="285.0" mnemonicParsing="false" onAction="#confirm" text="Confirm" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="18.0" />
          </font>
       </Button>
-      <Button fx:id="restore_button" disable="true" focusTraversable="false" layoutX="301.0" layoutY="285.0" mnemonicParsing="false" onAction="#restore" text="Restore" textFill="#1d60cc">
+      <Button fx:id="restore_button" disable="true" focusTraversable="false" layoutX="413.0" layoutY="285.0" mnemonicParsing="false" onAction="#restore" text="Restore" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="18.0" />
          </font>
       </Button>
-      <Button fx:id="goBack_button" focusTraversable="false" layoutX="509.0" layoutY="6.0" mnemonicParsing="false" onAction="#goBack" prefHeight="39.0" prefWidth="68.0" text="Go back" textFill="#1d60cc" visible="false">
+      <Button fx:id="goBack_button" focusTraversable="false" layoutX="688.0" layoutY="5.0" mnemonicParsing="false" onAction="#goBack" prefHeight="39.0" prefWidth="68.0" text="Go back" textFill="#1d60cc" visible="false">
          <font>
             <Font name="Pristina" size="16.0" />
          </font>
