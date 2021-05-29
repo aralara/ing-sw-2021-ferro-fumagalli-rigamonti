@@ -18,9 +18,6 @@ import it.polimi.ingsw.utils.messages.server.update.MarketMessage;
 import it.polimi.ingsw.utils.messages.server.update.PlayerBoardSetupMessage;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +33,7 @@ public class GameHandler implements Runnable {
     private Controller controller;
     private GameSave save;
 
-    GameHandler(int size) {
+    public GameHandler(int size) {
         this.active = true;
         this.size = size;
         this.sizeSetup = new AtomicInteger(0);
@@ -124,11 +121,11 @@ public class GameHandler implements Runnable {
         return sizeSetup.incrementAndGet() == size;
     }
 
-    public void add(Socket client, ObjectOutputStream out, ObjectInputStream in, String nickname) {
-        VirtualView view = new VirtualView(client, out, in, nickname, this);
+    public void add(VirtualView view) {
+        view.setGameHandler(this);
         clientsVirtualView.add(view);
         new Thread(view).start();
-        sendAll(new NewPlayerMessage(nickname));
+        sendAll(new NewPlayerMessage(view.getNickname()));
     }
 
     public void sendAll(Message message) {

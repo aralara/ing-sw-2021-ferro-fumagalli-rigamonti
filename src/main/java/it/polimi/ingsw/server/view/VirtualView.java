@@ -3,38 +3,37 @@ package it.polimi.ingsw.server.view;
 import it.polimi.ingsw.server.GameHandler;
 import it.polimi.ingsw.utils.messages.Message;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
+public abstract class VirtualView implements Runnable {
 
-public class VirtualView extends ClientHandler{
+    private String nickname;
+    private GameHandler gameHandler;
 
-    private final String nickname;
-    private final GameHandler gameHandler;
+    public abstract void sendMessage(Message message);
 
-    public VirtualView(Socket client, ObjectOutputStream out, ObjectInputStream in, String nickname, GameHandler gameHandler) {
-        super(client, out, in);
-        this.nickname = nickname;
-        this.gameHandler = gameHandler;
+    public abstract void onMessageReceived(Message message);
+
+    @Override
+    public void run() {
+
+    }
+
+    public void stop(boolean propagate) {
+
     }
 
     public String getNickname() {
         return nickname;
     }
 
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
     public GameHandler getGameHandler() {
-        return gameHandler;
+        return  gameHandler;
     }
 
-    @Override
-    public void onMessageReceived(Message message) {
-        gameHandler.handleMessage(this, message);
-    }
-
-    @Override
-    public void stop(boolean propagate) {
-        super.stop(propagate);
-        if(propagate)
-            gameHandler.stop();
+    public void setGameHandler(GameHandler gameHandler) {
+        this.gameHandler = gameHandler;
     }
 }

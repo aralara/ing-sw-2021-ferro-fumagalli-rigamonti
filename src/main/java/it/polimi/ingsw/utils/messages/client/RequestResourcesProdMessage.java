@@ -5,7 +5,6 @@ import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RequestResourcesProdMessage extends CanActivateProductionsMessage {

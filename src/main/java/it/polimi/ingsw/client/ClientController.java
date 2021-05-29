@@ -5,6 +5,7 @@ import it.polimi.ingsw.client.structures.FaithTrackView;
 import it.polimi.ingsw.client.structures.MarketView;
 import it.polimi.ingsw.client.structures.PlayerBoardView;
 import it.polimi.ingsw.exceptions.NotExistingNicknameException;
+import it.polimi.ingsw.server.GameHandler;
 import it.polimi.ingsw.server.model.boards.Player;
 import it.polimi.ingsw.server.model.cards.card.LorenzoCard;
 import it.polimi.ingsw.server.model.storage.*;
@@ -25,6 +26,8 @@ public abstract class ClientController {
     private final MessageHandler messageHandler;
     private final UpdateMessageReader updateMessageReader;
 
+    private GameHandler gameHandler;
+
 
     public ClientController() {
         lorenzoFaith = -1;
@@ -36,6 +39,7 @@ public abstract class ClientController {
         playerTurn = false;
         messageHandler = new MessageHandler();
         updateMessageReader = new UpdateMessageReader(this, messageHandler.getUpdateQueue());
+        gameHandler = null;
     }
 
 
@@ -172,5 +176,13 @@ public abstract class ClientController {
 
     public UpdateMessageReader getUpdateMessageReader() {
         return updateMessageReader;
+    }
+
+    public GameHandler getLocalGameHandler() {
+        return gameHandler;
+    }
+
+    public void setLocalGameHandler(GameHandler gameHandler) {
+        this.gameHandler = gameHandler;
     }
 }

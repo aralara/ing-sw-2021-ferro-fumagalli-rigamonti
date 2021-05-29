@@ -9,19 +9,22 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.concurrent.TimeUnit;
 
-public abstract class ClientHandler implements Runnable {
+public class RemoteVirtualView extends VirtualView implements Runnable {
 
     private final Socket client;
     private final ObjectOutputStream output;
     private final ObjectInputStream input;
     private boolean active;
 
-    public ClientHandler(Socket client, ObjectOutputStream out, ObjectInputStream in) {
+
+    public RemoteVirtualView(Socket client, ObjectOutputStream out, ObjectInputStream in, String nickname) {
+        setNickname(nickname);
         this.client = client;
         this.output = out;
         this.input = in;
         this.active = false;
     }
+
 
     @Override
     public void run() {
@@ -36,19 +39,18 @@ public abstract class ClientHandler implements Runnable {
 
     private void handleClientConnection() throws IOException {
         System.out.println("Connected to " + client.getInetAddress());
-
         Object message;
-
         try {
-            while (active){
+            while (active) {
                 message = input.readObject();
                 onMessageReceived((Message) message);
             }
-        }catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
+    @Override
     public void sendMessage(Message message) {
         try{
             output.writeObject(message);
@@ -58,7 +60,10 @@ public abstract class ClientHandler implements Runnable {
         }
     }
 
-    public abstract void onMessageReceived(Message message);
+    @Override
+    public void onMessageReceived(Message message) {
+        getGameHandler().handleMessage(this, message);
+    }
 
     public void stop(boolean propagate) {
         if(active) {
@@ -76,5 +81,7 @@ public abstract class ClientHandler implements Runnable {
                 System.out.println("Fatal Error! Unable to close socket");
             }
         }
+        if(propagate)
+            getGameHandler().stop();
     }
 }

@@ -3,12 +3,14 @@ package it.polimi.ingsw.client.cli;
 import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.client.structures.*;
 import it.polimi.ingsw.exceptions.NotExistingNicknameException;
+import it.polimi.ingsw.server.GameHandler;
 import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.server.model.boards.Player;
 import it.polimi.ingsw.server.model.cards.card.*;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.server.saves.GameSave;
 import it.polimi.ingsw.server.saves.SaveInteractions;
+import it.polimi.ingsw.server.view.LocalVirtualView;
 import it.polimi.ingsw.utils.messages.client.*;
 import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 import it.polimi.ingsw.utils.messages.server.action.ServerActionMessage;
@@ -42,14 +44,21 @@ public class CLI extends ClientController {
             new Thread(getMessageHandler()).start();
             askNickname();
         }
-        else {
-            //Local game
-        }
+        else
+            localSetup();
     }
 
     public boolean askMultiplayer() {
         graphicalCLI.printString("Do you want to connect to the server? ");
         return graphicalCLI.isAnswerYes();
+    }
+
+    public void localSetup() {
+        setLocalGameHandler(new GameHandler(1));
+        graphicalCLI.printString("Insert your nickname: ");
+        setNickname(graphicalCLI.getNextLine());
+        getLocalGameHandler().add(new LocalVirtualView(getNickname()));
+        getLocalGameHandler().startNewGame();
     }
 
     public void connect() {

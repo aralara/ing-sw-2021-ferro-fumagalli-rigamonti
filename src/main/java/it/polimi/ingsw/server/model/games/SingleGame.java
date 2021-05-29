@@ -4,7 +4,6 @@ import it.polimi.ingsw.server.model.FileNames;
 import it.polimi.ingsw.server.model.boards.*;
 import it.polimi.ingsw.server.model.cards.deck.DevelopmentDeck;
 import it.polimi.ingsw.server.model.faith.FaithTrack;
-import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.TurnStatus;
 import it.polimi.ingsw.utils.listeners.Listeners;
