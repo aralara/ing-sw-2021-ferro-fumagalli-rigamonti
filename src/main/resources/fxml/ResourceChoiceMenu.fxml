@@ -5,9 +5,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="283.0" prefWidth="583.0" styleClass="startingActions" stylesheets="@../css/setupWindow.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllers.FirstPhaseController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="355.0" prefWidth="583.0" styleClass="startingActions" stylesheets="@../css/setupWindow.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllers.WildcardResolverController">
     <children>
-        <Label fx:id="chooseResources_label" alignment="CENTER" layoutX="170.0" layoutY="24.0" prefHeight="39.0" prefWidth="244.0" text="Choose x card* to take" textFill="#1d60cc">
+        <Label fx:id="chooseResources_label" alignment="CENTER" layoutX="170.0" layoutY="24.0" prefHeight="39.0" prefWidth="244.0" textFill="#1d60cc">
             <font>
                 <Font name="Pristina" size="24.0" />
             </font>
@@ -16,7 +16,7 @@
             <image>
                 <Image url="@../imgs/res/coin.png" />
             </image></ImageView>
-      <Label fx:id="coin_label" layoutX="126.0" layoutY="155.0" text="x 0" textFill="#1d60cc" visible="false">
+      <Label fx:id="coin_label" layoutX="126.0" layoutY="155.0" text="x 0" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="24.0" />
          </font>
@@ -31,7 +31,7 @@
                 <Image url="@../imgs/res/servant.png" />
             </image>
         </ImageView>
-      <Label fx:id="servant_label" layoutX="273.0" layoutY="155.0" text="x 0" textFill="#1d60cc" visible="false">
+      <Label fx:id="servant_label" layoutX="273.0" layoutY="155.0" text="x 0" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="24.0" />
          </font>
@@ -46,7 +46,7 @@
                 <Image url="@../imgs/res/shield.png" />
             </image>
         </ImageView>
-      <Label fx:id="shield_label" layoutX="380.0" layoutY="155.0" text="x 0" textFill="#1d60cc" visible="false">
+      <Label fx:id="shield_label" layoutX="380.0" layoutY="155.0" text="x 0" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="24.0" />
          </font>
@@ -61,7 +61,7 @@
                 <Image url="@../imgs/res/stone.png" />
             </image>
         </ImageView>
-      <Label fx:id="stone_label" layoutX="529.0" layoutY="155.0" text="x 0" textFill="#1d60cc" visible="false">
+      <Label fx:id="stone_label" layoutX="529.0" layoutY="155.0" text="x 0" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="24.0" />
          </font>
@@ -71,5 +71,20 @@
                 <Font name="Pristina" size="18.0" />
             </font>
         </Button>
+      <Button fx:id="confirm_button" disable="true" focusTraversable="false" layoutX="213.0" layoutY="285.0" mnemonicParsing="false" onAction="#confirm" text="Confirm" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="18.0" />
+         </font>
+      </Button>
+      <Button fx:id="restore_button" disable="true" focusTraversable="false" layoutX="301.0" layoutY="285.0" mnemonicParsing="false" onAction="#restore" text="Restore" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="18.0" />
+         </font>
+      </Button>
+      <Button fx:id="goBack_button" focusTraversable="false" layoutX="509.0" layoutY="6.0" mnemonicParsing="false" onAction="#goBack" prefHeight="39.0" prefWidth="68.0" text="Go back" textFill="#1d60cc" visible="false">
+         <font>
+            <Font name="Pristina" size="16.0" />
+         </font>
+      </Button>
     </children>
 </Pane>

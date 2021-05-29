@@ -342,15 +342,16 @@ public class GUI extends ClientController {
         String title;
         if(size > 0) {
             if(size > 1) {
-                title = "Choose two cards to take";
-                Platform.runLater(() -> ((FirstPhaseController) guiApplication.getController(SceneNames.RESOURCE_CHOICE_MENU)).
-                        enableLabels());
+                title = "Choose two resources to take";
             }
             else{
-                title = "Choose one card to take";
+                title = "Choose one resource to take";
             }
-            Platform.runLater(() -> ((FirstPhaseController) guiApplication.getController(SceneNames.RESOURCE_CHOICE_MENU)).
-                    setChooseResources_label(title));
+            int finalSize = size;
+            Platform.runLater(() -> ((WildcardResolverController) guiApplication.
+                    getController(SceneNames.RESOURCE_CHOICE_MENU)).setTotalResources(finalSize));
+            Platform.runLater(() -> ((WildcardResolverController) guiApplication.
+                    getController(SceneNames.RESOURCE_CHOICE_MENU)).setChooseResources_label(title));
             Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.RESOURCE_CHOICE_MENU));
         }
     }

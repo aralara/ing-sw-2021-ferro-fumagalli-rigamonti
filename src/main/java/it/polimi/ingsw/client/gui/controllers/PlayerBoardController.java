@@ -28,7 +28,8 @@ public class PlayerBoardController extends GenericController {
     private List<ImageView> spaces, faithSpaces;
     private ResourceType resToPlace;
     private boolean isResToPlaceAction=false, mainActionPlayed=false, warehouseIsDisabled=false;
-    private ResourceType leader1WarehouseType=null, leader2WarehouseType=null; //TODO: brutto
+    private ResourceType leader1WarehouseType=null, leader2WarehouseType=null,
+            leader1ProductionConsumedType=null, leader2ProductionConsumedType=null; //TODO: brutto?
 
     @FXML private Label player_label,
             coinStrongbox_label, servantStrongbox_label, shieldStrongbox_label, stoneStrongbox_label,
@@ -96,8 +97,7 @@ public class PlayerBoardController extends GenericController {
         restoreWarehouse_button.setVisible(false);
         rearrangeWarehouse_button.setDisable(false);
         if(mainActionPlayed){
-            showProductionCheckBoxes();
-            showLeaderCheckBoxes();
+            showCheckBoxes();
             endTurn_button.setDisable(false);
         }
     }
@@ -110,16 +110,13 @@ public class PlayerBoardController extends GenericController {
         disableActivateLeaderAction();
         disableDiscardLeaderAction();
         setWarehouseIsDisabled(true);
-        hideProductionCheckBoxes();
-        hideLeaderCheckBoxes();
-        //TODO: disabilitare drag strongbox, abilitare leader warehouse
+        hideCheckBoxes();
     }
 
     public void endTurn() {
         disableButtons();
         mainActionPlayed=false;
-        hideProductionCheckBoxes();
-        hideLeaderCheckBoxes();
+        hideCheckBoxes();
         //TODO: disabilitare strongbox, abilitare leader warehouse
         getGUI().sendEndTurnMessage();
     }
@@ -528,7 +525,7 @@ public class PlayerBoardController extends GenericController {
         }else if (resourceType == ResourceType.STONE){
             return Integer.parseInt(resToPlaceStone_label.getText().substring(2));
         }
-        return 0;
+        return -1;
     }
 
     public void setResToPlaceQuantity(ResourceType resourceType, int quantity){
@@ -588,8 +585,7 @@ public class PlayerBoardController extends GenericController {
         activeLeaderCard_button.setDisable(true);
         discardLeaderCard_button.setDisable(true);
         viewOpponents_button.setDisable(true);
-        hideProductionCheckBoxes();
-        hideLeaderCheckBoxes();
+        hideCheckBoxes();
     }
 
     public void enableButtons(){
@@ -604,8 +600,7 @@ public class PlayerBoardController extends GenericController {
         discardLeaderCard_button.setDisable(false);
         rearrangeWarehouse_button.setDisable(false);
         viewOpponents_button.setDisable(false);
-        showProductionCheckBoxes();
-        showLeaderCheckBoxes();
+        showCheckBoxes();
     }
 
     public void confirm() {
@@ -712,18 +707,18 @@ public class PlayerBoardController extends GenericController {
                 if (boardLeader1_imageView.getImage() == null && handLeader1_imageView.getImage() == null) {
                     boardLeader1_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
                             + id + ".png")));
-                    enableLeaderWarehouseImageView(id, 1);
+                    enableLeaderAbility(id, 1);
                 } else if (boardLeader2_imageView.getImage() == null && handLeader2_imageView.getImage() == null) {
                     boardLeader2_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
                             + id + ".png")));
-                    enableLeaderWarehouseImageView(id, 2);
+                    enableLeaderAbility(id, 2);
                 }
             }
         }
         showLeaderCheckBoxes();
     }
 
-    private void enableLeaderWarehouseImageView(int id, int space){ //TODO: prendere risorse e info dalla carta, non le diamo cosi per scontato
+    private void enableLeaderAbility(int id, int space){ //TODO: prendere risorse e info dalla carta, non le diamo cosi per scontato
         ResourceType resourceType;
         if(id==5) resourceType=ResourceType.STONE;
         else if(id==6) resourceType=ResourceType.SERVANT;
@@ -740,6 +735,8 @@ public class PlayerBoardController extends GenericController {
             shelfLeader2_1_imageView.setDisable(false);
             shelfLeader2_2_imageView.setDisable(false);
         }
+        //aggiungere controllo se sono delle produzioni
+        /*esempio: if(id è una produzione && space==1) leader1ProductionConsumedType!=null=resourceType*/
     }
 
     public void setStrongbox(List<Resource> resources) { //TODO: il parametro non mi serve
@@ -1051,7 +1048,7 @@ public class PlayerBoardController extends GenericController {
         return total > max;
     }*/
 
-    public void showProductionCheckBoxes(){
+    public void showCheckBoxes(){
         basicProduction_checkBox.setVisible(true);
         if(space1L1_imageView.getImage()!=null)
             devSpace1_checkBox.setVisible(true);
@@ -1059,23 +1056,23 @@ public class PlayerBoardController extends GenericController {
             devSpace1_checkBox.setVisible(true);
         if(space3L1_imageView.getImage()!=null)
             devSpace1_checkBox.setVisible(true);
+        showLeaderCheckBoxes();
     }
 
-    public void showLeaderCheckBoxes(){
-        if(handLeader1_imageView.getImage()!=null && boardLeader1_imageView.getImage()==null)
+    private void showLeaderCheckBoxes(){
+        if(handLeader1_imageView.getImage()!=null && boardLeader1_imageView.getImage()==null ||
+                leader1ProductionConsumedType!=null)
             leader1_checkBox.setVisible(true);
-        if(handLeader2_imageView.getImage()!=null && boardLeader2_imageView.getImage()==null)
+        if(handLeader2_imageView.getImage()!=null && boardLeader2_imageView.getImage()==null ||
+                leader2ProductionConsumedType!=null)
             leader2_checkBox.setVisible(true);
     }
 
-    public void hideProductionCheckBoxes(){
+    public void hideCheckBoxes(){
         basicProduction_checkBox.setVisible(false);
         devSpace1_checkBox.setVisible(false);
         devSpace1_checkBox.setVisible(false);
         devSpace1_checkBox.setVisible(false);
-    }
-
-    public void hideLeaderCheckBoxes(){
         leader1_checkBox.setVisible(false);
         leader2_checkBox.setVisible(false);
     }

@@ -1,11 +1,7 @@
 package it.polimi.ingsw.client.gui.controllers;
 
-import it.polimi.ingsw.client.gui.SceneNames;
-import it.polimi.ingsw.server.model.storage.Resource;
-import it.polimi.ingsw.server.model.storage.ResourceType;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -15,20 +11,9 @@ import java.util.List;
 public class FirstPhaseController extends GenericController {
 
     private List<Integer> leaderIndexesToDiscard;
-    private List<Resource> resourcesToPlace;
-    private boolean anotherRes=false;
 
     @FXML private ImageView leader1_imageView, leader2_imageView, leader3_imageView, leader4_imageView;
     @FXML private Button discard1_button, discard2_button, discard3_button, discard4_button;
-    @FXML private Label chooseResources_label, coin_label, servant_label, shield_label, stone_label;
-
-    public Label getChooseResources_label(){
-        return chooseResources_label;
-    }
-
-    public void setChooseResources_label(String title){
-        this.chooseResources_label.setText(title);
-    }
 
     private void discard(Button button, int index){
         button.setDisable(true);
@@ -51,43 +36,6 @@ public class FirstPhaseController extends GenericController {
         discard(discard4_button, 4);
     }
 
-    private void takeResource(Label label, ResourceType resourceType){
-        PlayerBoardController pbc = (PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD);
-
-        int labelQuantity = pbc.getResToPlaceQuantity(resourceType);
-        pbc.setResToPlaceQuantity(resourceType, ++labelQuantity);
-        if(resourcesToPlace==null)
-            resourcesToPlace = new ArrayList<>();
-        resourcesToPlace.add(new Resource(resourceType, 1));
-
-        if(label.isVisible() && anotherRes){
-            int quantity = label.getText().charAt(2)-48;
-            label.setText("x "+(quantity+1));
-            anotherRes=false;
-        }
-        else {
-            pbc.setIsResToPlace(true);
-            getGUI().setResourcesToPlace(resourcesToPlace);
-            getGUIApplication().closePopUpStage();
-        }
-    }
-
-    public void takeCoin() {
-        takeResource(coin_label,ResourceType.COIN);
-    }
-
-    public void takeServant() {
-        takeResource(servant_label,ResourceType.SERVANT);
-    }
-
-    public void takeShield() {
-        takeResource(shield_label,ResourceType.SHIELD);
-    }
-
-    public void takeStone() {
-        takeResource(stone_label,ResourceType.STONE);
-    }
-
     public void setLeaders(List<Integer> idLeaders){
         leader1_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
                 + idLeaders.get(0)+".png")));
@@ -97,14 +45,6 @@ public class FirstPhaseController extends GenericController {
                 + idLeaders.get(2)+".png")));
         leader4_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
                 + idLeaders.get(3)+".png")));
-    }
-
-    public void enableLabels(){
-        coin_label.setVisible(true);
-        servant_label.setVisible(true);
-        shield_label.setVisible(true);
-        stone_label.setVisible(true);
-        anotherRes=true;
     }
 
     private void addLeaderToDiscard(int buttonPosition){

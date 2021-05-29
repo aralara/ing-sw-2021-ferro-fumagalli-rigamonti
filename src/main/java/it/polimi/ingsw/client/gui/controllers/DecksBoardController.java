@@ -32,8 +32,7 @@ public class DecksBoardController extends GenericController {
             pbc.setWarehouseIsDisabled(true);
             pbc.disableActivateLeaderAction();
             pbc.disableDiscardLeaderAction();
-            pbc.hideProductionCheckBoxes();
-            pbc.hideLeaderCheckBoxes();
+            pbc.hideCheckBoxes();
             //TODO: disabilitare drag strongbox, leader warehouse
             showAlert(Alert.AlertType.INFORMATION, "Buy card", "Complete buying action",
                     "Now you can drag and drop the card in the desired space");
