@@ -47,22 +47,13 @@ public class GraphicalCLI {
         do {
             valid = true;
             try {
-                value = scanner.nextInt();
-            } catch (InputMismatchException e) {
+                value = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
                 printString("Invalid input! Try again: ");
-                scanner.nextLine();
                 valid = false;
             }
         } while(!valid);
         return value;
-    }
-
-    /**
-     * Reads a string from the standard input, utilizing a blocking scanner
-     * @return The string read by the scanner
-     */
-    public String getNext() {
-        return scanner.next();
     }
 
     /**
@@ -104,7 +95,7 @@ public class GraphicalCLI {
      * @return true if the answer is yes, false otherwise
      */
     public boolean isAnswerYes() {
-        return getNext().matches("(?i)^y(?:es)?$");
+        return getNextLine().matches("(?i)^y(?:es)?$");
     }
 
     /**

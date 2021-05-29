@@ -97,6 +97,8 @@ public class CLI extends ClientController {
                             displayMenu = false;
                         }
                         if (br.ready()) {
+                            while(br.ready())   //Clear buffer
+                                br.readLine();
                             turnMenu();
                             displayMenu = true;
                         }
@@ -125,7 +127,7 @@ public class CLI extends ClientController {
     @Override
     public void askNickname() {
         graphicalCLI.printString("Insert your nickname: ");
-        setNickname(graphicalCLI.getNext());
+        setNickname(graphicalCLI.getNextLine());
         getMessageHandler().sendClientMessage(new ConnectionMessage(getNickname()));
     }
 
@@ -206,7 +208,6 @@ public class CLI extends ClientController {
                 selected.add(selection);
                 leaderHand.remove(selection);
             }
-
             getMessageHandler().sendClientMessage(new LeaderCardDiscardMessage(selected, true));
         }catch (NotExistingNicknameException e){
             e.printStackTrace();
@@ -252,7 +253,6 @@ public class CLI extends ClientController {
             setPlayerTurn(false);
         }
         turnMenu();
-        idle = true;
     }
 
     @Override
@@ -333,14 +333,14 @@ public class CLI extends ClientController {
             return;
         else
             idle = false;
-        graphicalCLI.printlnString("Where do you want to place the marble?\n" +
+        graphicalCLI.printString("Where do you want to place the marble?\n" +
                 "Choose R (row) or C (column) followed by a number: ");
         boolean valid;
         do {
             int row = -1, column = -1;
             valid = true;
 
-            String choice = graphicalCLI.getNext();
+            String choice = graphicalCLI.getNextLine();
             if(choice.matches("[RCrc][0-4]")) {
                 String rowCol = choice.substring(0, 1).toUpperCase();
                 int number = Integer.parseInt(choice.substring(1, 2));
@@ -903,7 +903,7 @@ public class CLI extends ClientController {
                 "or Y (yellow) followed by a number corresponding to its level: ");
         do {
             valid = false;
-            choice = graphicalCLI.getNext();
+            choice = graphicalCLI.getNextLine();
 
             if(choice.matches("[BGPYbgpy][1-3]")) {
                 String color = choice.substring(0, 1).toUpperCase();
