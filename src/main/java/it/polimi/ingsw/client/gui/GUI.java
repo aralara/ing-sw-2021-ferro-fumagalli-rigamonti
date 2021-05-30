@@ -6,9 +6,8 @@ import it.polimi.ingsw.client.structures.DevelopmentDeckView;
 import it.polimi.ingsw.client.structures.MarketView;
 import it.polimi.ingsw.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.model.boards.Player;
-import it.polimi.ingsw.server.model.cards.card.Card;
-import it.polimi.ingsw.server.model.cards.card.LeaderCard;
-import it.polimi.ingsw.server.model.cards.card.LorenzoCard;
+import it.polimi.ingsw.server.model.cards.card.*;
+import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.server.model.storage.RequestResources;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
@@ -34,6 +33,7 @@ public class GUI extends ClientController {
     private List<Resource> resourcesToPlace; //TODO: serve per memorizzare le risorse che si devono piazzare se viene richiamato il restore e devono essere rimesse
     private List<Resource> resourcesToDiscard; //TODO: serve per memorizzare le risorse che si devono scartare e se c'è della fede la immagazzina
     private int waitingPlayers;
+    List<RequestResources> requestResources;
 
     public GUI(GUIApplication guiApplication) {
         super();
@@ -45,6 +45,7 @@ public class GUI extends ClientController {
         resourcesToEqualize = new ArrayList<>();
         resourcesToPlace = new ArrayList<>();
         resourcesToDiscard = new ArrayList<>();
+        requestResources = new ArrayList<>();
     }
 
     public void attachListeners() {
@@ -250,7 +251,12 @@ public class GUI extends ClientController {
 
     @Override
     public void selectDevDecks() {
-
+        Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
+            .setDevelopmentBSpaces(null)); //TODO: cambiare il null
+        Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.DECKS_BOARD));
+        Platform.runLater(() -> guiApplication.getController(SceneNames.DECKS_BOARD).showAlert(Alert.AlertType.ERROR,
+                "Error", "You can't buy this card and place in the selected space",
+                "Please choose another card or another space"));
     }
 
     @Override
@@ -265,6 +271,12 @@ public class GUI extends ClientController {
 
     @Override
     public List<RequestResources> chooseStorages(List<Resource> resources) {
+        requestResources.clear();
+        Platform.runLater(() -> ((DepotsController)guiApplication.getController(SceneNames.DEPOTS))
+                .setResourcesLabels(resources));
+        Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.DEPOTS));
+        //while(requestResources.isEmpty()){}//TODO: brutto e non funzionante
+        //return requestResources;
         return null;
     }
 
@@ -279,9 +291,15 @@ public class GUI extends ClientController {
     @Override
     public void setDevelopmentDecks(List<DevelopmentDeckView> developmentDecks) {
         super.setDevelopmentDecks(developmentDecks);
-        updateDevDecks();
+        //updateDevDecks();
+        Platform.runLater(() -> ((DecksBoardController)guiApplication.getController(SceneNames.DECKS_BOARD))
+                .setDevelopmentDeck(null)); //TODO: null temporaneo
     }
 
+    public void setMainActionPlayed(boolean mainActionPlayed) {
+        super.setMainActionPlayed(mainActionPlayed);
+        ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD)).setMainActionPlayed(mainActionPlayed);
+    }
 
     public void sendNickname(String nickname){
         getMessageHandler().sendClientMessage(new ConnectionMessage(nickname));
@@ -293,9 +311,9 @@ public class GUI extends ClientController {
         setNumberOfPlayers(size);
         getMessageHandler().sendClientMessage(new NewLobbyMessage(size));
         if(size==1)
-            guiApplication.setActiveScene(SceneNames.LOADING);
+            Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.LOADING));
         else
-            guiApplication.setActiveScene(SceneNames.MULTI_PLAYER_WAITING);
+            Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.MULTI_PLAYER_WAITING));
     }
 
     /*public void updateMarket(){
@@ -307,13 +325,13 @@ public class GUI extends ClientController {
                 .updateMarket(marbleColors, getMarket().getFloatingMarble().getColor()));
     }*/
 
-    public void updateDevDecks(){
+    /*public void updateDevDecks(){
         List<Integer> listID = new ArrayList<>();
         for(DevelopmentDeckView deck : getDevelopmentDecks())
             listID.add(deck.getDeck().get(0).getID());
         Platform.runLater(() -> ((DecksBoardController)guiApplication.getController(SceneNames.DECKS_BOARD))
                 .updateDevDecks(listID));
-    }
+    }*/
 
     public void updateLeaderHandToDiscard(){
         try {
@@ -476,5 +494,32 @@ public class GUI extends ClientController {
                 break;
             }
         return onlyWildcard;
+    }
+
+    public void sendBuyDevelopmentCardMessage(CardColors devColor, int devLevel, int space){
+        getMessageHandler().sendClientMessage(new CanBuyDevelopmentCardMessage(
+                getDevelopmentCard(devColor, devLevel), space));
+    }
+
+    private DevelopmentCard getDevelopmentCard(CardColors devColor, int devLevel){
+        for(int i=0; i<getDevelopmentDecks().size(); i++){
+            DevelopmentDeckView developmentDeck = getDevelopmentDecks().get(i);
+            if(developmentDeck.getDeckColor()==devColor && developmentDeck.getDeckLevel()==devLevel)
+                return (DevelopmentCard) developmentDeck.getDeck().get(0);
+        }
+        return null;
+    }
+
+    public void setRequestResources(List<RequestResources> requestResources){
+        this.requestResources = requestResources;
+    }
+
+    public List<Deck> getDevelopmentBoard(){
+        try {
+            return getLocalPlayerBoard().getDevelopmentBoard().getSpaces();
+        } catch (NotExistingNicknameException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
     }
 }

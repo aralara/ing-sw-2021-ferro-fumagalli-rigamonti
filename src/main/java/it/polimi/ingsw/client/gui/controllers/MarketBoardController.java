@@ -46,7 +46,6 @@ public class MarketBoardController extends GenericController {
             pbc.setMainActionPlayed(true);
             pbc.setIsResToPlace(true);
             pbc.hideCheckBoxes();
-            //TODO: disabilitare drag strongbox, abilitare leader warehouse
             resetAll();
             getGUI().sendMarketMessage(row, col);
             getGUIApplication().closeSecondStage();
