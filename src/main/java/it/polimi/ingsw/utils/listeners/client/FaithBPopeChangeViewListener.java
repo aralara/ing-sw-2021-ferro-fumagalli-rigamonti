@@ -13,6 +13,6 @@ public class FaithBPopeChangeViewListener extends PlayerBoardViewChangeListener 
     @Override
     @SuppressWarnings("unchecked")
     public void propertyChange(PropertyChangeEvent evt) {
-        getPlayerBoardController().setFaithBPope((boolean[]) evt.getNewValue());
+        getPlayerBoardController().showFaithBPope();
     }
 }

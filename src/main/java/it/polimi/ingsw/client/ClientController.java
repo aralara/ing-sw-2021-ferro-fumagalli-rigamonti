@@ -7,6 +7,7 @@ import it.polimi.ingsw.client.structures.PlayerBoardView;
 import it.polimi.ingsw.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.GameHandler;
 import it.polimi.ingsw.server.model.boards.Player;
+import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.model.cards.card.LorenzoCard;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.server.saves.GameSave;
@@ -25,6 +26,9 @@ public abstract class ClientController {
     private boolean mainActionPlayed, playerTurn;
     private final MessageHandler messageHandler;
     private final UpdateMessageReader updateMessageReader;
+    private DevelopmentCard developmentCardToBuy;
+    private int spaceToPlace;
+    private List<Production> productionsToActivate;
 
     private GameHandler gameHandler;
 
@@ -81,7 +85,13 @@ public abstract class ClientController {
 
     public abstract void placeResourcesOnShelves(List<Resource> resources);
 
-    public abstract List<RequestResources> chooseStorages(List<Resource> resources);
+    /**
+     *
+     * @param resources
+     * @param action 1 if we have to buy a dev card, 2 if we have to activare some productions
+     * @return
+     */
+    public abstract List<RequestResources> chooseStorages(List<Resource> resources, int action);
 
     public void destroy() {
         messageHandler.stop();
@@ -184,5 +194,29 @@ public abstract class ClientController {
 
     public void setLocalGameHandler(GameHandler gameHandler) {
         this.gameHandler = gameHandler;
+    }
+
+    public DevelopmentCard getDevelopmentCardToBuy() {
+        return developmentCardToBuy;
+    }
+
+    public void setDevelopmentCardToBuy(DevelopmentCard developmentCardToBuy) {
+        this.developmentCardToBuy = developmentCardToBuy;
+    }
+
+    public int getSpaceToPlace() {
+        return spaceToPlace;
+    }
+
+    public void setSpaceToPlace(int spaceToPlace) {
+        this.spaceToPlace = spaceToPlace;
+    }
+
+    public List<Production> getProductionsToActivate() {
+        return productionsToActivate;
+    }
+
+    public void setProductionsToActivate(List<Production> productionsToActivate) {
+        this.productionsToActivate = productionsToActivate;
     }
 }

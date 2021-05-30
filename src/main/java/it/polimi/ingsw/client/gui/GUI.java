@@ -33,7 +33,6 @@ public class GUI extends ClientController {
     private List<Resource> resourcesToPlace; //TODO: serve per memorizzare le risorse che si devono piazzare se viene richiamato il restore e devono essere rimesse
     private List<Resource> resourcesToDiscard; //TODO: serve per memorizzare le risorse che si devono scartare e se c'è della fede la immagazzina
     private int waitingPlayers;
-    List<RequestResources> requestResources;
 
     public GUI(GUIApplication guiApplication) {
         super();
@@ -45,7 +44,6 @@ public class GUI extends ClientController {
         resourcesToEqualize = new ArrayList<>();
         resourcesToPlace = new ArrayList<>();
         resourcesToDiscard = new ArrayList<>();
-        requestResources = new ArrayList<>();
     }
 
     public void attachListeners() {
@@ -203,13 +201,13 @@ public class GUI extends ClientController {
         resolveAbilityMarble(availableAbilities);
         boolean faith = checkFaithResource(resourcesToPlace);
         if(!checkOnlyWildcard(resourcesToPlace)) {
-            Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
+            Platform.runLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD))
                     .showAlert(Alert.AlertType.INFORMATION, "Success!", "Resources taken",
                             "Now you need to place each taken resource"));
             updateResourcesToPlace();
         }
         else if(faith) {
-            Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
+            Platform.runLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD))
                 .showAlert(Alert.AlertType.INFORMATION, "Success!", "Resources taken",
                         "Your faith has been updated"));
             Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
@@ -221,7 +219,7 @@ public class GUI extends ClientController {
             }
         }
         else {
-            Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
+            Platform.runLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD))
                     .showAlert(Alert.AlertType.INFORMATION, "Success!", "Resources taken",
                             "You've nothing to place"));
             Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
@@ -252,7 +250,7 @@ public class GUI extends ClientController {
     @Override
     public void selectDevDecks() {
         Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
-            .setDevelopmentBSpaces(null)); //TODO: cambiare il null
+            .showDevelopmentBSpaces()); //TODO: cambiare il null
         Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.DECKS_BOARD));
         Platform.runLater(() -> guiApplication.getController(SceneNames.DECKS_BOARD).showAlert(Alert.AlertType.ERROR,
                 "Error", "You can't buy this card and place in the selected space",
@@ -272,10 +270,12 @@ public class GUI extends ClientController {
     }
 
     @Override
-    public List<RequestResources> chooseStorages(List<Resource> resources) {
-        requestResources.clear();
+    public List<RequestResources> chooseStorages(List<Resource> resources, int action) {
+
         Platform.runLater(() -> ((DepotsController)guiApplication.getController(SceneNames.DEPOTS))
                 .setResourcesLabels(resources));
+        Platform.runLater(() -> ((DepotsController)guiApplication.getController(SceneNames.DEPOTS))
+                .setAction(action));
         Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.DEPOTS));
         while(requestResources.isEmpty()){}//TODO: brutto e non funzionante
         return requestResources;
@@ -285,17 +285,15 @@ public class GUI extends ClientController {
     @Override
     public void setMarket(MarketView market) {
         super.setMarket(market);
-        //updateMarket();
         Platform.runLater(() -> ((MarketBoardController)guiApplication.getController(SceneNames.MARKET_BOARD))
-                .setMarket(market));
+                .showMarket(market));
     }
 
     @Override
     public void setDevelopmentDecks(List<DevelopmentDeckView> developmentDecks) {
         super.setDevelopmentDecks(developmentDecks);
-        //updateDevDecks();
         Platform.runLater(() -> ((DecksBoardController)guiApplication.getController(SceneNames.DECKS_BOARD))
-                .setDevelopmentDeck(null)); //TODO: null temporaneo
+                .showDevelopmentDeck()); //TODO: null temporaneo
     }
 
     public void setMainActionPlayed(boolean mainActionPlayed) {
@@ -317,23 +315,6 @@ public class GUI extends ClientController {
         else
             Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.MULTI_PLAYER_WAITING));
     }
-
-    /*public void updateMarket(){
-        List<MarbleColors> marbleColors = new ArrayList<>();
-        for(int row = 0; row < MARKET_ROW_SIZE.value(); row++)
-            for(int col = 0; col < MARKET_COLUMN_SIZE.value(); col++)
-                marbleColors.add(getMarket().getMarbleMatrix()[row][col].getColor());
-        Platform.runLater(() -> ((MarketBoardController)guiApplication.getController(SceneNames.MARKET_BOARD))
-                .updateMarket(marbleColors, getMarket().getFloatingMarble().getColor()));
-    }*/
-
-    /*public void updateDevDecks(){
-        List<Integer> listID = new ArrayList<>();
-        for(DevelopmentDeckView deck : getDevelopmentDecks())
-            listID.add(deck.getDeck().get(0).getID());
-        Platform.runLater(() -> ((DecksBoardController)guiApplication.getController(SceneNames.DECKS_BOARD))
-                .updateDevDecks(listID));
-    }*/
 
     public void updateLeaderHandToDiscard(){
         try {
@@ -436,14 +417,8 @@ public class GUI extends ClientController {
     }
 
     public void updateWarehouse(){
-        Platform.runLater(() -> {
-            try {
-                ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
-                        .setWarehouse(getLocalPlayerBoard().getWarehouse().getShelves());
-            } catch (NotExistingNicknameException e) {
-                e.printStackTrace();
-            }
-        });
+        Platform.runLater(() ->
+                ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD)).showWarehouse());
     }
 
     public void setResourcesToPlace(List<Resource> resources){
@@ -530,10 +505,6 @@ public class GUI extends ClientController {
         return null;
     }
 
-    public void setRequestResources(List<RequestResources> requestResources){
-        this.requestResources = requestResources;
-    }
-
     public List<Deck> getDevelopmentBoard(){
         try {
             return getLocalPlayerBoard().getDevelopmentBoard().getSpaces();
@@ -564,5 +535,9 @@ public class GUI extends ClientController {
 
     public void sendCanActivateProductionsMessage(List<Production> productions){
         getMessageHandler().sendClientMessage(new CanActivateProductionsMessage(productions));
+    }
+  
+    public void sendRequestResourcesDevMessage(List<RequestResources> requestResources){
+        getMessageHandler().sendClientMessage(new RequestResourcesDevMessage(getDevelopmentCardToBuy(), getSpaceToPlace(), requestResources));
     }
 }

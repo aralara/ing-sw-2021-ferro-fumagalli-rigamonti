@@ -8,6 +8,7 @@ import it.polimi.ingsw.server.model.storage.Production;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 import it.polimi.ingsw.server.model.storage.Shelf;
+import it.polimi.ingsw.server.saves.GameLibrary;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -81,6 +82,23 @@ public class GraphicalCLI {
     }
 
     /**
+     * Asks the user for their nickname and returns it
+     * @return Returns a string containing the user's nickname
+     */
+    public String askNickname() {
+        String nickname;
+        boolean success;
+        do {
+            printString("Insert your nickname: ");
+            nickname = getNextLine();
+            success = !nickname.matches(GameLibrary.NONVALID_REGEX);
+            if(!success)
+                printlnString("The selected nickname contains unsupported characters");
+        } while(!success);
+        return nickname;
+    }
+
+    /**
      * Asks the user if he wants to go back and choose another action
      * @return The user's answer
      */
@@ -95,7 +113,7 @@ public class GraphicalCLI {
      * @return true if the answer is yes, false otherwise
      */
     public boolean isAnswerYes() {
-        return getNextLine().matches("(?i)^y(?:es)?$");
+        return getNextLine().matches("(?i)(^y(?:es)?$)|(^$)");
     }
 
     /**

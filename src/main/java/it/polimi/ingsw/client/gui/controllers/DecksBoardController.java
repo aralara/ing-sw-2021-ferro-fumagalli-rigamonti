@@ -119,14 +119,6 @@ public class DecksBoardController extends GenericController {
         buyCard_button.setDisable(true);
     }
 
-    /*public void updateDevDecks(List<Integer> devCardsId){
-        fillList();
-        for (int i=0; i<decks.size(); i++) {
-            String resPath = "/imgs/devCards/"+devCardsId.get(i)+".png";
-            decks.get(i).setImage(new Image(getClass().getResourceAsStream(resPath)));
-        }
-    }*/
-
     private void fillList(){
         decks = new ArrayList<>();
         decks.add(deckG1_imageView);
@@ -143,11 +135,7 @@ public class DecksBoardController extends GenericController {
         decks.add(deckY3_imageView);
     }
 
-    /*public void setDevelopmentDeck(List<Integer> idList) {
-        //TODO: stub (fare attenzione! update per development deck singolo)
-    }*/
-
-    public void setDevelopmentDeck(List<Integer> idList) {
+    public void showDevelopmentDeck() {  //TODO: da gestire un deck che vinee svuotato da lorenzo
         fillList();
         List<DevelopmentDeckView> devDecks = getGUI().getDevelopmentDecks();
         for (int i=0; i<devDecks.size(); i++) {

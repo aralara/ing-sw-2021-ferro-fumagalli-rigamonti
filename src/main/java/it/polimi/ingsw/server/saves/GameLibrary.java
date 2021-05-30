@@ -13,6 +13,7 @@ public class GameLibrary {
     public static final String LIBRARY_PATH = "./saves/";
     public static final String NAME_SEPARATOR = "-";
     public static final String FILE_EXTENSION = ".mor";
+    public static final String NONVALID_REGEX = "(.*[<>:/\\\\|?*-]+.*)|(^$)";
 
     private static GameLibrary instance = null;
 

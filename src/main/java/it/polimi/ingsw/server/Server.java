@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.server.saves.GameLibrary;
 import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.messages.client.ClientSetupMessage;
@@ -108,6 +109,8 @@ public class Server {
     }
 
     public boolean checkValidNickname(String nickname) {
+        if(nickname.matches(GameLibrary.NONVALID_REGEX))
+            return false;
         for (GameHandler gameHandler : gameList) {
             if(gameHandler.isActive()) {
                 for (String s : gameHandler.getAllNicknames())

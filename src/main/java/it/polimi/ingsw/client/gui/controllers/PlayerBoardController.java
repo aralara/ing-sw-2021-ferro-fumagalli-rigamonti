@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.gui.controllers;
 
+import it.polimi.ingsw.client.gui.GUIApplication;
 import it.polimi.ingsw.client.gui.SceneNames;
 import it.polimi.ingsw.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.model.cards.card.Card;
@@ -97,6 +98,7 @@ public class PlayerBoardController extends GenericController {
     }
 
     public void goToDecks() {
+        ((DecksBoardController)getGUIApplication().getController(SceneNames.DECKS_BOARD)).showDevelopmentDeck();
         getGUIApplication().setActiveScene(SceneNames.DECKS_BOARD);
     }
 
@@ -650,7 +652,7 @@ public class PlayerBoardController extends GenericController {
         isResToPlaceAction=false;
     }
 
-    public void setDevelopmentBSpaces(List<List<Integer>> idList) { //TODO: il parametro non mi serve
+    public void showDevelopmentBSpaces() {
         //TODO: va testato appena si potranno comprare le dev!
         //TODO: stub
         int id, maxLevel = 3;
@@ -667,7 +669,7 @@ public class PlayerBoardController extends GenericController {
         showCheckBoxes();
     }
 
-    public void setFaithBFaith(int faith){ //TODO: il parametro non mi serve
+    public void showFaithBoard(){
         resetFaith();
         Image cross = new Image(getClass().getResourceAsStream("/imgs/faith/cross_red.png"));
         int myFaith = 0;
@@ -686,7 +688,7 @@ public class PlayerBoardController extends GenericController {
             imageView.setImage(null);
     }
 
-    public void setFaithBPope(boolean[] popeProgression) { //TODO: il parametro non mi serve
+    public void showFaithBPope() {
         try {
             boolean [] popeCopy = getGUI().getLocalPlayerBoard().getFaithBoard().getPopeProgression();
             for (int i=0; i < popeCopy.length; i++) {
@@ -767,7 +769,7 @@ public class PlayerBoardController extends GenericController {
         /*esempio: if(id è una produzione && space==1) leader1ProductionConsumedType!=null=resourceType*/
     }
 
-    public void setStrongbox(List<Resource> resources) { //TODO: il parametro non mi serve
+    public void showStrongbox() {
         try {
             for (Resource resource : getGUI().getLocalPlayerBoard().getStrongbox().getResources()){
                 if(resource.getResourceType() == ResourceType.COIN){
@@ -785,7 +787,7 @@ public class PlayerBoardController extends GenericController {
         }
     }
 
-    public void setWarehouse(List<Shelf> shelvesList) {  //TODO: il parametro non mi serve
+    public void showWarehouse() {
         shelves = getGUI().getWarehouseShelvesCopy();
         Image image;
         Shelf shelf;

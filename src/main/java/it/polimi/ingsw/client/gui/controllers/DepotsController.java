@@ -18,7 +18,7 @@ public class DepotsController extends GenericController {
     private List<Resource> resourcesToTake, strongbox, warehouse, leaders;
     private ResourceType resToTakeType;
     private StorageType storageType;
-    private int totalResourcesToTake, totalTakenResources;
+    private int totalResourcesToTake, totalTakenResources, action;
 
     @FXML private Label coinToTake_label, servantToTake_label, shieldToTake_label, stoneToTake_label;
     @FXML private Button restore_button, confirm_button;
@@ -37,7 +37,11 @@ public class DepotsController extends GenericController {
         requestResources.add(new RequestResources(warehouse, StorageType.WAREHOUSE));
         requestResources.add(new RequestResources(leaders, StorageType.LEADER));
         getGUIApplication().closeSecondStage();
-        getGUI().setRequestResources(requestResources);
+        if(action == 1) {
+            getGUI().sendRequestResourcesDevMessage(requestResources);
+        }else if (action == 2){
+            //TODO: invio sendRequestResourcesProdMessage
+        }
     }
 
     public void handleDragDropped() {
@@ -317,7 +321,7 @@ public class DepotsController extends GenericController {
     }
 
     private void setTotalResourcesToTake(){
-        totalResourcesToTake = resourcesToTake.stream().map(x->x.getQuantity()).reduce(0, Integer::sum);
+        totalResourcesToTake = resourcesToTake.stream().map(Resource::getQuantity).reduce(0, Integer::sum);
     }
 
     private boolean isToTake(ResourceType resourceType){
@@ -325,5 +329,9 @@ public class DepotsController extends GenericController {
             if(resource.getResourceType()==resourceType)
               return true;
         return false;
+    }
+
+    public void setAction(int action){
+        this.action = action;
     }
 }
