@@ -22,7 +22,6 @@
             <Font name="Pristina" size="24.0" />
          </font>
       </Button>
-      <ImageView fx:id="areaResToTake_imageView" fitHeight="175.0" fitWidth="325.0" layoutX="68.0" layoutY="301.0" onDragDropped="#handleDragDropped" onDragOver="#handleDragOver" pickOnBounds="true" preserveRatio="true" />
       <ImageView fitHeight="50.0" fitWidth="50.0" layoutX="84.0" layoutY="319.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../imgs/res/coin.png" />
@@ -93,5 +92,6 @@
             <Image url="@../imgs/res/stone.png" />
          </image>
       </ImageView>
+      <ImageView fx:id="areaResToTake_imageView" fitHeight="175.0" fitWidth="325.0" layoutX="68.0" layoutY="301.0" onDragDropped="#handleDragDropped" onDragOver="#handleDragOver" pickOnBounds="true" preserveRatio="true" />
    </children>
 </Pane>

@@ -75,9 +75,9 @@ public class PlayerBoardController extends GenericController {
         this.isResToPlaceAction=isResToPlaceAction;
     }
 
-    public void setMainActionPlayed(boolean played){
+    public void setMainActionPlayed(boolean played){ //TODO: aggiornare tutti gli elementi visti, per sicurezza, e aggiornare tutti i bottoni
         mainActionPlayed=played;
-        endTurn_button.setDisable(!mainActionPlayed);
+        enableButtons();
     }
 
     public void setWarehouseIsDisabled(boolean isDisabled){
@@ -217,51 +217,50 @@ public class PlayerBoardController extends GenericController {
         handleDragOver(dragEvent);
     }
 
-    private void handleDragDroppedSpace(DragEvent dragEvent, ImageView imageView) {
+    private void handleDragDroppedSpace(DragEvent dragEvent, ImageView imageView, int space) {
+        DecksBoardController dbc = (DecksBoardController) getGUIApplication().getController(SceneNames.DECKS_BOARD);
         Image image = dragEvent.getDragboard().getImage();
         imageView.setImage(image);
-        //TODO:inviare messaggio
         disableSpaces();
         getGUIApplication().closeCardStage();
+        getGUI().sendBuyDevelopmentCardMessage(dbc.getSelectedCardColor(), dbc.getSelectedLevel(), space-1);
         //TODO: vedere se l'azione va a buon fine, altrimenti rimettere giusti i parametri
-        mainActionPlayed = true;
-        setWarehouseIsDisabled(false);
     }
 
     public void handleDragDropped1L1(DragEvent dragEvent) {
-        handleDragDroppedSpace(dragEvent, space1L1_imageView);
+        handleDragDroppedSpace(dragEvent, space1L1_imageView, 1);
     }
 
     public void handleDragDropped1L2(DragEvent dragEvent) {
-        handleDragDroppedSpace(dragEvent, space1L2_imageView);
+        handleDragDroppedSpace(dragEvent, space1L2_imageView, 1);
     }
 
     public void handleDragDropped1L3(DragEvent dragEvent) {
-        handleDragDroppedSpace(dragEvent, space1L3_imageView);
+        handleDragDroppedSpace(dragEvent, space1L3_imageView, 1);
     }
 
     public void handleDragDropped2L1(DragEvent dragEvent) {
-        handleDragDroppedSpace(dragEvent, space2L1_imageView);
+        handleDragDroppedSpace(dragEvent, space2L1_imageView, 2);
     }
 
     public void handleDragDropped2L2(DragEvent dragEvent) {
-        handleDragDroppedSpace(dragEvent, space2L2_imageView);
+        handleDragDroppedSpace(dragEvent, space2L2_imageView, 2);
     }
 
     public void handleDragDropped2L3(DragEvent dragEvent) {
-        handleDragDroppedSpace(dragEvent, space2L3_imageView);
+        handleDragDroppedSpace(dragEvent, space2L3_imageView, 2);
     }
 
     public void handleDragDropped3L1(DragEvent dragEvent) {
-        handleDragDroppedSpace(dragEvent, space3L1_imageView);
+        handleDragDroppedSpace(dragEvent, space3L1_imageView, 3);
     }
 
     public void handleDragDropped3L2(DragEvent dragEvent) {
-        handleDragDroppedSpace(dragEvent, space3L2_imageView);
+        handleDragDroppedSpace(dragEvent, space3L2_imageView, 3);
     }
 
     public void handleDragDropped3L3(DragEvent dragEvent) {
-        handleDragDroppedSpace(dragEvent, space3L3_imageView);
+        handleDragDroppedSpace(dragEvent, space3L3_imageView, 3);
     }
 
     public void handleDragDetectedToPlace(MouseEvent mouseEvent, ImageView imageView) {
@@ -357,14 +356,16 @@ public class PlayerBoardController extends GenericController {
             handleDragOverShelf(dragEvent);
     }
 
-    private void handleDragDroppedShelf(DragEvent dragEvent, ImageView imageView, int shelfLevel){
+    private boolean handleDragDroppedShelf(DragEvent dragEvent, ImageView imageView, int shelfLevel){
         if(addToWarehouse(resToPlace, shelfLevel-1)) {
             Image image = dragEvent.getDragboard().getImage();
             imageView.setImage(image);
             setResToPlaceQuantity(resToPlace, getResToPlaceQuantity(resToPlace) - 1);
             restoreWarehouse_button.setVisible(true);
             rearrangeWarehouse_button.setDisable(true);
+            return true;
         }
+        return false;
     }
 
     public void handleDragDroppedShelfResL1_1(DragEvent dragEvent) {
@@ -372,43 +373,53 @@ public class PlayerBoardController extends GenericController {
     }
 
     public void handleDragDroppedShelfResL2_1(DragEvent dragEvent) {
-        handleDragDroppedShelf(dragEvent, shelfResL2_1_imageView, 2);
+        if(handleDragDroppedShelf(dragEvent, shelfResL2_1_imageView, 2)){
+            setWhShelvesImages(2);
+        }
     }
 
     public void handleDragDroppedShelfResL2_2(DragEvent dragEvent) {
-        handleDragDroppedShelf(dragEvent, shelfResL2_2_imageView, 2);
+        if(handleDragDroppedShelf(dragEvent, shelfResL2_2_imageView, 2))
+            setWhShelvesImages(2);
     }
 
     public void handleDragDroppedShelfResL3_1(DragEvent dragEvent) {
-        handleDragDroppedShelf(dragEvent, shelfResL3_1_imageView, 3);
+        if(handleDragDroppedShelf(dragEvent, shelfResL3_1_imageView, 3))
+            setWhShelvesImages(3);
     }
 
     public void handleDragDroppedShelfResL3_2(DragEvent dragEvent) {
-        handleDragDroppedShelf(dragEvent, shelfResL3_2_imageView, 3);
+        if(handleDragDroppedShelf(dragEvent, shelfResL3_2_imageView, 3))
+            setWhShelvesImages(3);
     }
 
     public void handleDragDroppedShelfResL3_3(DragEvent dragEvent) {
-        handleDragDroppedShelf(dragEvent, shelfResL3_3_imageView, 3);
+        if(handleDragDroppedShelf(dragEvent, shelfResL3_3_imageView, 3))
+            setWhShelvesImages(3);
     }
 
     public void handleDragDroppedShelfLeader1_1(DragEvent dragEvent) { //TODO: da testare
-        handleDragDroppedShelf(dragEvent, shelfLeader1_1_imageView,
-                getGUI().getLeaderShelfPosition(leader1WarehouseType)+1);
+        int position = getGUI().getLeaderShelfPosition(leader1WarehouseType)+1;
+        if(handleDragDroppedShelf(dragEvent, shelfLeader1_1_imageView, position))
+            setWhLeadersImages(position, 1);
     }
 
     public void handleDragDroppedShelfLeader1_2(DragEvent dragEvent) { //TODO: da testare
-        handleDragDroppedShelf(dragEvent, shelfLeader1_2_imageView,
-                getGUI().getLeaderShelfPosition(leader1WarehouseType)+1);
+        int position = getGUI().getLeaderShelfPosition(leader1WarehouseType)+1;
+        if(handleDragDroppedShelf(dragEvent, shelfLeader1_2_imageView, position))
+            setWhLeadersImages(position, 1);
     }
 
     public void handleDragDroppedShelfLeader2_1(DragEvent dragEvent) { //TODO: da testare
-        handleDragDroppedShelf(dragEvent, shelfLeader2_1_imageView,
-                getGUI().getLeaderShelfPosition(leader2WarehouseType)+1);
+        int position = getGUI().getLeaderShelfPosition(leader2WarehouseType)+1;
+        if(handleDragDroppedShelf(dragEvent, shelfLeader2_1_imageView, position))
+            setWhLeadersImages(position, 2);
     }
 
     public void handleDragDroppedShelfLeader2_2(DragEvent dragEvent) { //TODO: da testare
-        handleDragDroppedShelf(dragEvent, shelfLeader2_2_imageView,
-                getGUI().getLeaderShelfPosition(leader2WarehouseType)+1);
+        int position = getGUI().getLeaderShelfPosition(leader2WarehouseType)+1;
+        if(handleDragDroppedShelf(dragEvent, shelfLeader2_2_imageView, position))
+            setWhLeadersImages(position, 2);
     }
 
     public void handleDragDroppedHole() {
@@ -640,19 +651,17 @@ public class PlayerBoardController extends GenericController {
         //TODO: va testato appena si potranno comprare le dev!
         //TODO: stub
         int id, maxLevel = 3;
-        try {
-            List<Deck> tempDevDeck = getGUI().getLocalPlayerBoard().getDevelopmentBoard().getSpaces();
-            for(int i = 0; i< tempDevDeck.size(); i++){
-                for(int level = 1; i <= maxLevel; i++) {
-                    id = tempDevDeck.stream().map(x -> (DevelopmentCard) x.getCards()).filter(x -> x.getLevel() == level).
-                            map(Card::getID).findFirst().orElse(-1);
-                    getDevSpace(i,level).setImage(new Image((id > -1) ?
-                            getClass().getResourceAsStream("/imgs/devCards/" + id + ".png") : null));
-                }
+        List<Deck> tempDevDeck = getGUI().getDevelopmentBoard();
+        for(int i = 0; i< tempDevDeck.size(); i++){
+            for(int level = 1; level <= maxLevel; level++) {
+                int finalLevel = level;
+                id = tempDevDeck.get(i).getCards().stream().map(x -> (DevelopmentCard)x).filter(x -> x.getLevel() == finalLevel).
+                        map(Card::getID).findFirst().orElse(-1);
+                getDevSpace(i,level).setImage((id > -1) ? new Image(
+                        getClass().getResourceAsStream("/imgs/devCards/" + id + ".png")) : null);
             }
-        }catch (NotExistingNicknameException e){
-            e.printStackTrace();
         }
+        showCheckBoxes();
     }
 
     public void setFaithBFaith(int faith){ //TODO: il parametro non mi serve
@@ -869,6 +878,97 @@ public class PlayerBoardController extends GenericController {
                     }
                 }
             }
+        }
+    }
+
+    private void setWhShelvesImages(int level){
+        int resQuantity = shelves.get(level-1).getResources().getQuantity();
+        switch (level){
+            case(2):
+                if(resQuantity>0) {
+                    Image image;
+                    if (shelfResL2_1_imageView.getImage() != null)
+                        image = shelfResL2_1_imageView.getImage();
+                    else
+                        image = shelfResL2_2_imageView.getImage();
+                    if(resQuantity==1){
+                        shelfResL2_1_imageView.setImage(image);
+                        shelfResL2_2_imageView.setImage(null);
+                    }
+                    else {
+                        shelfResL2_1_imageView.setImage(image);
+                        shelfResL2_2_imageView.setImage(image);
+                    }
+                }
+                break;
+            case (3):
+                if(resQuantity>0) {
+                    Image image;
+                    if (shelfResL3_1_imageView.getImage() != null)
+                        image = shelfResL3_1_imageView.getImage();
+                    else if (shelfResL3_2_imageView.getImage() != null)
+                        image = shelfResL3_2_imageView.getImage();
+                    else
+                        image = shelfResL3_3_imageView.getImage();
+                    if(resQuantity==1){
+                        shelfResL3_1_imageView.setImage(image);
+                        shelfResL3_2_imageView.setImage(null);
+                        shelfResL3_3_imageView.setImage(null);
+                    }
+                    else if(resQuantity==2){
+                        shelfResL3_1_imageView.setImage(image);
+                        shelfResL3_2_imageView.setImage(image);
+                        shelfResL3_3_imageView.setImage(null);
+                    }
+                    else {
+                        shelfResL3_1_imageView.setImage(image);
+                        shelfResL3_2_imageView.setImage(image);
+                        shelfResL3_3_imageView.setImage(image);
+                    }
+                }
+                break;
+            default:break;
+        }
+    }
+
+    private void setWhLeadersImages(int level, int leader){
+        int resQuantity = shelves.get(level-1).getResources().getQuantity();
+        switch (leader){
+            case(1):
+                if(resQuantity>0) {
+                    Image image;
+                    if (shelfLeader1_1_imageView.getImage() != null)
+                        image = shelfLeader1_1_imageView.getImage();
+                    else
+                        image = shelfLeader1_2_imageView.getImage();
+                    if(resQuantity==1){
+                        shelfLeader1_1_imageView.setImage(image);
+                        shelfLeader1_2_imageView.setImage(null);
+                    }
+                    else {
+                        shelfLeader1_1_imageView.setImage(image);
+                        shelfLeader1_2_imageView.setImage(image);
+                    }
+                }
+                break;
+            case (2):
+                if(resQuantity>0) {
+                    Image image;
+                    if (shelfLeader2_1_imageView.getImage() != null)
+                        image = shelfLeader2_1_imageView.getImage();
+                    else
+                        image = shelfLeader2_2_imageView.getImage();
+                    if(resQuantity==1){
+                        shelfLeader2_1_imageView.setImage(image);
+                        shelfLeader2_2_imageView.setImage(null);
+                    }
+                    else {
+                        shelfLeader2_1_imageView.setImage(image);
+                        shelfLeader2_2_imageView.setImage(image);
+                    }
+                }
+                break;
+            default:break;
         }
     }
 
