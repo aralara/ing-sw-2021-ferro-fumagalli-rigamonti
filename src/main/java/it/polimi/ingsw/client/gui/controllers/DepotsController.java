@@ -40,7 +40,7 @@ public class DepotsController extends GenericController {
         if(action == 1) {
             getGUI().sendRequestResourcesDevMessage(requestResources);
         }else if (action == 2){
-            //TODO: invio sendRequestResourcesProdMessage
+            getGUI().sendRequestResourcesProdMessage(requestResources);
         }
     }
 

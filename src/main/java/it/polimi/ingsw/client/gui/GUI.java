@@ -2,9 +2,7 @@ package it.polimi.ingsw.client.gui;
 
 import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.client.gui.controllers.*;
-import it.polimi.ingsw.client.structures.DevelopmentBoardView;
 import it.polimi.ingsw.client.structures.DevelopmentDeckView;
-import it.polimi.ingsw.client.structures.LeaderBoardView;
 import it.polimi.ingsw.client.structures.MarketView;
 import it.polimi.ingsw.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.model.boards.Player;
@@ -250,7 +248,7 @@ public class GUI extends ClientController {
     @Override
     public void selectDevDecks() {
         Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
-            .showDevelopmentBSpaces()); //TODO: cambiare il null
+            .showDevelopmentBSpaces());
         Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.DECKS_BOARD));
         Platform.runLater(() -> guiApplication.getController(SceneNames.DECKS_BOARD).showAlert(Alert.AlertType.ERROR,
                 "Error", "You can't buy this card and place in the selected space",
@@ -260,7 +258,7 @@ public class GUI extends ClientController {
     @Override
     public void selectProductions() {
         Platform.runLater(() -> guiApplication.getController(SceneNames.PLAYER_BOARD).showAlert(Alert.AlertType.ERROR,
-                "Error", "You can't activate the selected cards",
+                "Error", "You can't activate the selected productions",
                 "Please choose another configuration"));
     }
 
@@ -277,9 +275,7 @@ public class GUI extends ClientController {
         Platform.runLater(() -> ((DepotsController)guiApplication.getController(SceneNames.DEPOTS))
                 .setAction(action));
         Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.DEPOTS));
-        while(requestResources.isEmpty()){}//TODO: brutto e non funzionante
-        return requestResources;
-        //return null;
+        return null;
     }
 
     @Override
@@ -293,7 +289,7 @@ public class GUI extends ClientController {
     public void setDevelopmentDecks(List<DevelopmentDeckView> developmentDecks) {
         super.setDevelopmentDecks(developmentDecks);
         Platform.runLater(() -> ((DecksBoardController)guiApplication.getController(SceneNames.DECKS_BOARD))
-                .showDevelopmentDeck()); //TODO: null temporaneo
+                .showDevelopmentDeck());
     }
 
     public void setMainActionPlayed(boolean mainActionPlayed) {
@@ -539,5 +535,9 @@ public class GUI extends ClientController {
   
     public void sendRequestResourcesDevMessage(List<RequestResources> requestResources){
         getMessageHandler().sendClientMessage(new RequestResourcesDevMessage(getDevelopmentCardToBuy(), getSpaceToPlace(), requestResources));
+    }
+
+    public void sendRequestResourcesProdMessage(List<RequestResources> requestResources){
+        getMessageHandler().sendClientMessage(new RequestResourcesProdMessage(getProductionsToActivate(), requestResources));
     }
 }
