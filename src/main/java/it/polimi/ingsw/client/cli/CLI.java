@@ -15,6 +15,7 @@ import it.polimi.ingsw.utils.PipedPair;
 import it.polimi.ingsw.utils.messages.client.*;
 import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 import it.polimi.ingsw.utils.messages.server.action.ServerActionMessage;
+import it.polimi.ingsw.utils.messages.server.update.ServerUpdateMessage;
 
 import java.io.*;
 import java.util.*;
@@ -32,8 +33,8 @@ public class CLI extends ClientController {
         super();
         alive = true;
         idle = false;
-        initMenus();
         graphicalCLI = new GraphicalCLI();
+        initMenus();
     }
 
 
@@ -102,6 +103,7 @@ public class CLI extends ClientController {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         LinkedBlockingQueue<ServerActionMessage> actionQueue = getMessageHandler().getActionQueue();
         LinkedBlockingQueue<ServerAckMessage> responseQueue = getMessageHandler().getResponseQueue();
+        LinkedBlockingQueue<ServerUpdateMessage> updateQueue = getMessageHandler().getUpdateQueue();
         List<ClientMessage> confirmationList = getMessageHandler().getConfirmationList();
 
         new Thread(getUpdateMessageReader()).start();
@@ -109,31 +111,35 @@ public class CLI extends ClientController {
         boolean displayMenu = true;
 
         while(alive) {
-            try {
-                if (confirmationList.size() != 0) {
+            if (confirmationList.size() != 0 && updateQueue.isEmpty()) {
+                try {
                     responseQueue.take().activateResponse(this);
                     displayMenu = true;
+                } catch(InterruptedException e) {
+                    e.printStackTrace();
                 }
-                else {
-                    if (actionQueue.size() > 0) {
-                        actionQueue.poll().doAction(this);
-                        displayMenu = true;
+            }
+            else {
+                if (actionQueue.size() > 0 && updateQueue.isEmpty()) {
+                    actionQueue.poll().doAction(this);
+                    displayMenu = true;
+                }
+                else if(idle) {
+                    if (displayMenu) {
+                        graphicalCLI.printlnString("Press ENTER to display action menu");
+                        displayMenu = false;
                     }
-                    else if(idle) {
-                        if (displayMenu) {
-                            graphicalCLI.printlnString("Press ENTER to display action menu");
-                            displayMenu = false;
-                        }
+                    try {
                         if (br.ready()) {
                             while(br.ready())   //Clear buffer
                                 br.readLine();
                             turnMenu();
                             displayMenu = true;
                         }
+                    } catch(Exception e) {
+                        e.printStackTrace();
                     }
                 }
-            } catch(Exception e) {
-                e.printStackTrace();
             }
         }
 

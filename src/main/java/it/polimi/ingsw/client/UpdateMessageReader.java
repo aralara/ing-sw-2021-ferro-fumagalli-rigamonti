@@ -4,7 +4,7 @@ import it.polimi.ingsw.utils.messages.server.update.ServerUpdateMessage;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class UpdateMessageReader implements Runnable{
+public class UpdateMessageReader implements Runnable {
 
     private final ClientController client;
     private final LinkedBlockingQueue<ServerUpdateMessage> updateQueue;
