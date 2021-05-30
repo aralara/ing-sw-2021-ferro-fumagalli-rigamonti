@@ -4,7 +4,9 @@ import it.polimi.ingsw.client.gui.SceneNames;
 import it.polimi.ingsw.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.model.cards.card.Card;
 import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
+import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
+import it.polimi.ingsw.server.model.storage.Production;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 import it.polimi.ingsw.server.model.storage.Shelf;
@@ -19,6 +21,7 @@ import javafx.scene.input.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PlayerBoardController extends GenericController {
 
@@ -65,10 +68,6 @@ public class PlayerBoardController extends GenericController {
         else {
             disableButtons();
         }
-    }
-
-    public boolean getIsPlayerTurn(){
-        return isPlayerTurn;
     }
 
     public void setIsResToPlace(boolean isResToPlaceAction){
@@ -119,13 +118,17 @@ public class PlayerBoardController extends GenericController {
 
     public void activateProductions() {
         //TODO: da fare
-        ((MarketBoardController)getGUIApplication().getController(SceneNames.MARKET_BOARD)).disableMarketAction();
-        ((DecksBoardController)getGUIApplication().getController(SceneNames.DECKS_BOARD)).disableBuyCardAction();
-        disableActivateProductionsAction();
-        disableActivateLeaderAction();
-        disableDiscardLeaderAction();
-        setWarehouseIsDisabled(true);
-        hideCheckBoxes();
+        if (checkSelectedCheckBoxes()) {
+            /*((MarketBoardController) getGUIApplication().getController(SceneNames.MARKET_BOARD)).disableMarketAction();
+            ((DecksBoardController) getGUIApplication().getController(SceneNames.DECKS_BOARD)).disableBuyCardAction();
+            disableActivateProductionsAction();
+            disableActivateLeaderAction();
+            disableDiscardLeaderAction();
+            setWarehouseIsDisabled(true);
+            hideCheckBoxes();*/
+            getActivatedProductions();
+            resetCheckBoxes();
+        }
     }
 
     public void endTurn() {
@@ -1191,5 +1194,56 @@ public class PlayerBoardController extends GenericController {
         devSpace3_checkBox.setVisible(false);
         leader1_checkBox.setVisible(false);
         leader2_checkBox.setVisible(false);
+    }
+
+    private void resetCheckBoxes(){
+        basicProduction_checkBox.setSelected(false);
+        devSpace1_checkBox.setSelected(false);
+        devSpace2_checkBox.setSelected(false);
+        devSpace3_checkBox.setSelected(false);
+        leader1_checkBox.setSelected(false);
+        leader2_checkBox.setSelected(false);
+    }
+
+    private boolean checkSelectedCheckBoxes(){
+        return basicProduction_checkBox.isSelected() || devSpace1_checkBox.isSelected() ||
+                devSpace2_checkBox.isSelected() || devSpace3_checkBox.isSelected() ||
+                leader1ProductionConsumedType!=null && leader1_checkBox.isSelected() ||
+                leader2ProductionConsumedType!=null && leader2_checkBox.isSelected(); //TODO: leaders da controllare
+    }
+
+    private void getActivatedProductions(){ //TODO: vedere se migliorabile
+        List<Production> activatedProductions = new ArrayList<>();
+        if(basicProduction_checkBox.isSelected())
+            activatedProductions.add(getGUI().getBasicProduction());
+        if(devSpace1_checkBox.isSelected())
+            activatedProductions.add(((DevelopmentCard)getGUI().getDevelopmentBoard().get(0).get(0)).getProduction());
+        if(devSpace2_checkBox.isSelected())
+            activatedProductions.add(((DevelopmentCard)getGUI().getDevelopmentBoard().get(1).get(0)).getProduction());
+        if(devSpace3_checkBox.isSelected())
+            activatedProductions.add(((DevelopmentCard)getGUI().getDevelopmentBoard().get(2).get(0)).getProduction());
+        if(leader1ProductionConsumedType!=null && leader1_checkBox.isSelected())
+            activatedProductions.add(getGUI().getLeaderProduction(getGUI().
+                    getLeaderProductionPosition(leader1ProductionConsumedType)));
+        if(leader2ProductionConsumedType!=null && leader2_checkBox.isSelected())
+            activatedProductions.add(getGUI().getLeaderProduction(getGUI().
+                    getLeaderProductionPosition(leader2ProductionConsumedType)));
+        resolveWildcard(activatedProductions);
+    }
+
+    private void resolveWildcard(List<Production> productions){
+        List<Resource> consumedWildcards = new ArrayList<>(), producedWildcards = new ArrayList<>();
+        for(Production production : productions) {
+            consumedWildcards = production.getConsumed().stream()
+                    .filter((r -> r.getResourceType() == ResourceType.WILDCARD)).collect(Collectors.toList());
+            producedWildcards = production.getProduced().stream()
+                    .filter((r -> r.getResourceType() == ResourceType.WILDCARD)).collect(Collectors.toList());
+        }
+        if(!consumedWildcards.isEmpty() || !producedWildcards.isEmpty()) {
+            ((WildcardResolverController) getGUIApplication().getController(SceneNames.RESOURCE_CHOICE_MENU)).
+                    resolveWildcard(productions, consumedWildcards, producedWildcards); //TODO: aggiustare il passaggio delle risorse da attivare(solo già ok)
+            getGUIApplication().setActiveScene(SceneNames.RESOURCE_CHOICE_MENU);
+        }
+        else getGUI().sendCanActivateProductionsMessage(productions);
     }
 }

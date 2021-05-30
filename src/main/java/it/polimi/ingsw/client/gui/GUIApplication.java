@@ -94,22 +94,22 @@ public class GUIApplication extends Application { //TODO: flusso messaggi da ric
     }
 
     private void openPopUpStage(Scene scene){
-        // New window (Stage)
-        popUpStage = new Stage();
-        Image image = new Image(getClass().getResourceAsStream("/imgs/icon_inkwell.png"));
-        popUpStage.setTitle("Master of Renaissance");
-        popUpStage.setResizable(false);
-        popUpStage.getIcons().add(image);
-        popUpStage.setScene(scene);
+        if(popUpStage==null || popUpStage.getScene()!=scene) {
+            popUpStage = new Stage();
+            Image image = new Image(getClass().getResourceAsStream("/imgs/icon_inkwell.png"));
+            popUpStage.setTitle("Master of Renaissance");
+            popUpStage.setResizable(false);
+            popUpStage.getIcons().add(image);
+            popUpStage.setScene(scene);
 
-        Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
-        double x = bounds.getMinX() + (bounds.getWidth() - scene.getWidth()) * 0.25;
-        double y = bounds.getMinY() + (bounds.getHeight() - scene.getHeight()) * 0.25;
-        popUpStage.setX(x);
-        popUpStage.setY(y);
+            Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
+            double x = bounds.getMinX() + (bounds.getWidth() - scene.getWidth()) * 0.25;
+            double y = bounds.getMinY() + (bounds.getHeight() - scene.getHeight()) * 0.25;
+            popUpStage.setX(x);
+            popUpStage.setY(y);
 
-        popUpStage.initStyle(StageStyle.UNDECORATED);
-
+            popUpStage.initStyle(StageStyle.UNDECORATED);
+        }
         popUpStage.show();
     }
 
@@ -118,7 +118,6 @@ public class GUIApplication extends Application { //TODO: flusso messaggi da ric
     }
 
     private void openSecondStage(Scene scene){
-        // New window (Stage)
         secondStage = new Stage();
         Image image = new Image(getClass().getResourceAsStream("/imgs/icon_inkwell.png"));
         secondStage.setTitle("Master of Renaissance");
@@ -131,7 +130,6 @@ public class GUIApplication extends Application { //TODO: flusso messaggi da ric
         secondStage.centerOnScreen();
 
         secondStage.initStyle(StageStyle.UNDECORATED);
-
         secondStage.show();
     }
 
@@ -140,25 +138,25 @@ public class GUIApplication extends Application { //TODO: flusso messaggi da ric
     }
 
     private void openCardStage(Scene scene){
-        // New window (Stage)
-        cardStage = new Stage();
-        Image image = new Image(getClass().getResourceAsStream("/imgs/icon_inkwell.png"));
-        cardStage.setTitle("Master of Renaissance");
-        cardStage.setResizable(false);
-        cardStage.getIcons().add(image);
-        cardStage.setScene(scene);
+        if(cardStage==null) {
+            cardStage = new Stage();
+            Image image = new Image(getClass().getResourceAsStream("/imgs/icon_inkwell.png"));
+            cardStage.setTitle("Master of Renaissance");
+            cardStage.setResizable(false);
+            cardStage.getIcons().add(image);
+            cardStage.setScene(scene);
 
-        cardStage.initModality(Modality.WINDOW_MODAL);
-        cardStage.initOwner(this.stage);
+            cardStage.initModality(Modality.WINDOW_MODAL);
+            cardStage.initOwner(this.stage);
 
-        Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
-        double x = bounds.getMinX() + (bounds.getWidth() - scene.getWidth()) * 0.705;
-        double y = bounds.getMinY() + (bounds.getHeight() - scene.getHeight()) * 0.25;
-        cardStage.setX(x);
-        cardStage.setY(y);
+            Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
+            double x = bounds.getMinX() + (bounds.getWidth() - scene.getWidth()) * 0.705;
+            double y = bounds.getMinY() + (bounds.getHeight() - scene.getHeight()) * 0.25;
+            cardStage.setX(x);
+            cardStage.setY(y);
 
-        cardStage.initStyle(StageStyle.UNDECORATED);
-
+            cardStage.initStyle(StageStyle.UNDECORATED);
+        }
         cardStage.show();
     }
 
