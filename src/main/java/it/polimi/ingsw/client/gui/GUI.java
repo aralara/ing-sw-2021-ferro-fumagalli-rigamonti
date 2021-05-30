@@ -291,7 +291,9 @@ public class GUI extends ClientController {
     @Override
     public void setDevelopmentDecks(List<DevelopmentDeckView> developmentDecks) {
         super.setDevelopmentDecks(developmentDecks);
-        updateDevDecks();
+        //updateDevDecks();
+        Platform.runLater(() -> ((DecksBoardController)guiApplication.getController(SceneNames.DECKS_BOARD))
+                .setDevelopmentDeck(null)); //TODO: null temporaneo
     }
 
     public void setMainActionPlayed(boolean mainActionPlayed) {
@@ -323,13 +325,13 @@ public class GUI extends ClientController {
                 .updateMarket(marbleColors, getMarket().getFloatingMarble().getColor()));
     }*/
 
-    public void updateDevDecks(){
+    /*public void updateDevDecks(){
         List<Integer> listID = new ArrayList<>();
         for(DevelopmentDeckView deck : getDevelopmentDecks())
             listID.add(deck.getDeck().get(0).getID());
         Platform.runLater(() -> ((DecksBoardController)guiApplication.getController(SceneNames.DECKS_BOARD))
                 .updateDevDecks(listID));
-    }
+    }*/
 
     public void updateLeaderHandToDiscard(){
         try {

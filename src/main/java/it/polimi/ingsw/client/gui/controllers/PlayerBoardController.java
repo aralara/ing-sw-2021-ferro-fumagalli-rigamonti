@@ -1169,9 +1169,9 @@ public class PlayerBoardController extends GenericController {
         if(space1L1_imageView.getImage()!=null)
             devSpace1_checkBox.setVisible(true);
         if(space2L1_imageView.getImage()!=null)
-            devSpace1_checkBox.setVisible(true);
+            devSpace2_checkBox.setVisible(true);
         if(space3L1_imageView.getImage()!=null)
-            devSpace1_checkBox.setVisible(true);
+            devSpace3_checkBox.setVisible(true);
         showLeaderCheckBoxes();
     }
 
@@ -1187,8 +1187,8 @@ public class PlayerBoardController extends GenericController {
     public void hideCheckBoxes(){
         basicProduction_checkBox.setVisible(false);
         devSpace1_checkBox.setVisible(false);
-        devSpace1_checkBox.setVisible(false);
-        devSpace1_checkBox.setVisible(false);
+        devSpace2_checkBox.setVisible(false);
+        devSpace3_checkBox.setVisible(false);
         leader1_checkBox.setVisible(false);
         leader2_checkBox.setVisible(false);
     }

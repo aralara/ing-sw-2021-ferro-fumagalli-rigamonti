@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.gui.controllers;
 
 import it.polimi.ingsw.client.gui.SceneNames;
+import it.polimi.ingsw.client.structures.DevelopmentDeckView;
 import it.polimi.ingsw.server.model.cards.card.CardColors;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -118,13 +119,13 @@ public class DecksBoardController extends GenericController {
         buyCard_button.setDisable(true);
     }
 
-    public void updateDevDecks(List<Integer> devCardsId){
+    /*public void updateDevDecks(List<Integer> devCardsId){
         fillList();
         for (int i=0; i<decks.size(); i++) {
             String resPath = "/imgs/devCards/"+devCardsId.get(i)+".png";
             decks.get(i).setImage(new Image(getClass().getResourceAsStream(resPath)));
         }
-    }
+    }*/
 
     private void fillList(){
         decks = new ArrayList<>();
@@ -142,7 +143,16 @@ public class DecksBoardController extends GenericController {
         decks.add(deckY3_imageView);
     }
 
-    public void setDevelopmentDeck(List<Integer> idList) {
+    /*public void setDevelopmentDeck(List<Integer> idList) {
         //TODO: stub (fare attenzione! update per development deck singolo)
+    }*/
+
+    public void setDevelopmentDeck(List<Integer> idList) {
+        fillList();
+        List<DevelopmentDeckView> devDecks = getGUI().getDevelopmentDecks();
+        for (int i=0; i<devDecks.size(); i++) {
+            String resPath = "/imgs/devCards/"+devDecks.get(i).getDeck().get(0).getID()+".png";
+            decks.get(i).setImage(new Image(getClass().getResourceAsStream(resPath)));
+        }
     }
 }
