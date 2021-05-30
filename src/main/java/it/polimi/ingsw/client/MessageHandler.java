@@ -1,24 +1,22 @@
 package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.exceptions.UnknownMessageException;
+import it.polimi.ingsw.utils.PipedPair;
 import it.polimi.ingsw.utils.messages.Message;
-import it.polimi.ingsw.utils.messages.client.ClientActionMessage;
 import it.polimi.ingsw.utils.messages.client.ClientMessage;
 import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 import it.polimi.ingsw.utils.messages.server.action.ServerActionMessage;
 import it.polimi.ingsw.utils.messages.server.update.PlayerDisconnectedMessage;
 import it.polimi.ingsw.utils.messages.server.update.ServerUpdateMessage;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class MessageHandler implements Runnable{
+public class MessageHandler implements Runnable {
 
     private Socket server;
     private ObjectOutputStream output;
@@ -30,7 +28,7 @@ public class MessageHandler implements Runnable{
 
     private final List<ClientMessage> confirmationList;
 
-    private AtomicBoolean active;
+    private final AtomicBoolean active;
 
 
     public MessageHandler() {
@@ -41,22 +39,6 @@ public class MessageHandler implements Runnable{
         active = new AtomicBoolean(false);
     }
 
-
-    public LinkedBlockingQueue<ServerActionMessage> getActionQueue() {
-        return actionQueue;
-    }
-
-    public LinkedBlockingQueue<ServerUpdateMessage> getUpdateQueue() {
-        return updateQueue;
-    }
-
-    public LinkedBlockingQueue<ServerAckMessage> getResponseQueue() {
-        return responseQueue;
-    }
-
-    public List<ClientMessage> getConfirmationList() {
-        return confirmationList;
-    }
 
     @Override
     public void run() {
@@ -87,6 +69,25 @@ public class MessageHandler implements Runnable{
         return true;
     }
 
+    public boolean connect(PipedPair pipedPair) {
+        PipedInputStream pipeIn = new PipedInputStream();
+        PipedOutputStream pipeOut = new PipedOutputStream();
+        try {
+            pipeIn.connect(pipedPair.getPipeOut());
+            pipeOut.connect(pipedPair.getPipeIn());
+        } catch (IOException e) {
+            return false;
+        }
+        try {
+            output = new ObjectOutputStream(pipeOut);
+            input = new ObjectInputStream(pipeIn);
+        } catch (IOException | ClassCastException e) {
+            return false;
+        }
+        active.set(true);
+        return true;
+    }
+
     private void managePackets()
             throws IOException, ClassNotFoundException, InterruptedException, UnknownMessageException {
 
@@ -107,6 +108,7 @@ public class MessageHandler implements Runnable{
         try{
             output.writeObject(message);
             output.reset();
+            output.flush();
         }
         catch(IOException e) {
             stop();
@@ -141,5 +143,21 @@ public class MessageHandler implements Runnable{
                 e.printStackTrace();
             }
         }
+    }
+
+    public LinkedBlockingQueue<ServerActionMessage> getActionQueue() {
+        return actionQueue;
+    }
+
+    public LinkedBlockingQueue<ServerUpdateMessage> getUpdateQueue() {
+        return updateQueue;
+    }
+
+    public LinkedBlockingQueue<ServerAckMessage> getResponseQueue() {
+        return responseQueue;
+    }
+
+    public List<ClientMessage> getConfirmationList() {
+        return confirmationList;
     }
 }

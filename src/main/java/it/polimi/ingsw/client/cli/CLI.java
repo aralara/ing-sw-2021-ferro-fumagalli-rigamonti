@@ -10,13 +10,13 @@ import it.polimi.ingsw.server.model.cards.card.*;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.server.saves.GameSave;
 import it.polimi.ingsw.server.saves.SaveInteractions;
-import it.polimi.ingsw.server.view.LocalVirtualView;
+import it.polimi.ingsw.server.view.VirtualView;
+import it.polimi.ingsw.utils.PipedPair;
 import it.polimi.ingsw.utils.messages.client.*;
 import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 import it.polimi.ingsw.utils.messages.server.action.ServerActionMessage;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.stream.Collectors;
@@ -44,8 +44,10 @@ public class CLI extends ClientController {
             new Thread(getMessageHandler()).start();
             askNickname();
         }
-        else
+        else {
             localSetup();
+        }
+
     }
 
     public boolean askMultiplayer() {
@@ -54,11 +56,28 @@ public class CLI extends ClientController {
     }
 
     public void localSetup() {
-        setLocalGameHandler(new GameHandler(1));
         graphicalCLI.printString("Insert your nickname: ");
         setNickname(graphicalCLI.getNextLine());
-        getLocalGameHandler().add(new LocalVirtualView(getNickname()));
-        getLocalGameHandler().startNewGame();
+        try {
+            PipedPair pipedPair = new PipedPair();
+            Thread t = new Thread(() -> {
+                boolean success;
+                do
+                    success = getMessageHandler().connect(pipedPair);
+                while(!success);
+                getMessageHandler().run();
+            });
+            t.start();
+            VirtualView virtualView = new VirtualView(
+                    new ObjectOutputStream(pipedPair.getPipeOut()),
+                    new ObjectInputStream(pipedPair.getPipeIn()),
+                    getNickname());
+            setLocalGameHandler(new GameHandler(1));
+            getLocalGameHandler().add(virtualView);
+            getLocalGameHandler().startNewGame();
+        } catch (IOException e) {
+            graphicalCLI.printlnString("Unable to create local game");
+        }
     }
 
     public void connect() {

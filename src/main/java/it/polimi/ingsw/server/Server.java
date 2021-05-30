@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server;
 
-import it.polimi.ingsw.server.view.RemoteVirtualView;
+import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.messages.client.ClientSetupMessage;
 import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
@@ -96,7 +96,7 @@ public class Server {
                 gameList.add(waitingGame);
             }
 
-            waitingGame.add(new RemoteVirtualView(client, output, input, nickname));
+            waitingGame.add(new VirtualView(client, output, input, nickname));
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Client disconnected during setup");
         }
