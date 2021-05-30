@@ -4,7 +4,6 @@ import it.polimi.ingsw.client.gui.controllers.DecksBoardController;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.List;
 
 public class DevelopmentDeckViewListener implements PropertyChangeListener {
 
@@ -16,6 +15,6 @@ public class DevelopmentDeckViewListener implements PropertyChangeListener {
 
     @SuppressWarnings("unchecked")
     public void propertyChange(PropertyChangeEvent evt) {
-        decksBoardController.setDevelopmentDeck((List<Integer>) evt.getNewValue());
+        decksBoardController.showDevelopmentDeck();
     }
 }

@@ -13,6 +13,6 @@ public class FaithBFaithViewListener extends PlayerBoardViewChangeListener {
     @Override
     @SuppressWarnings("unchecked")
     public void propertyChange(PropertyChangeEvent evt) {
-        getPlayerBoardController().setFaithBFaith((int) evt.getNewValue());
+        getPlayerBoardController().showFaithBoard();
     }
 }

@@ -252,7 +252,7 @@ public class GUI extends ClientController {
     @Override
     public void selectDevDecks() {
         Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
-            .setDevelopmentBSpaces(null)); //TODO: cambiare il null
+            .showDevelopmentBSpaces()); //TODO: cambiare il null
         Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.DECKS_BOARD));
         Platform.runLater(() -> guiApplication.getController(SceneNames.DECKS_BOARD).showAlert(Alert.AlertType.ERROR,
                 "Error", "You can't buy this card and place in the selected space",
@@ -283,17 +283,15 @@ public class GUI extends ClientController {
     @Override
     public void setMarket(MarketView market) {
         super.setMarket(market);
-        //updateMarket();
         Platform.runLater(() -> ((MarketBoardController)guiApplication.getController(SceneNames.MARKET_BOARD))
-                .setMarket(market));
+                .showMarket(market));
     }
 
     @Override
     public void setDevelopmentDecks(List<DevelopmentDeckView> developmentDecks) {
         super.setDevelopmentDecks(developmentDecks);
-        //updateDevDecks();
         Platform.runLater(() -> ((DecksBoardController)guiApplication.getController(SceneNames.DECKS_BOARD))
-                .setDevelopmentDeck(null)); //TODO: null temporaneo
+                .showDevelopmentDeck()); //TODO: null temporaneo
     }
 
     public void setMainActionPlayed(boolean mainActionPlayed) {
@@ -315,23 +313,6 @@ public class GUI extends ClientController {
         else
             Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.MULTI_PLAYER_WAITING));
     }
-
-    /*public void updateMarket(){
-        List<MarbleColors> marbleColors = new ArrayList<>();
-        for(int row = 0; row < MARKET_ROW_SIZE.value(); row++)
-            for(int col = 0; col < MARKET_COLUMN_SIZE.value(); col++)
-                marbleColors.add(getMarket().getMarbleMatrix()[row][col].getColor());
-        Platform.runLater(() -> ((MarketBoardController)guiApplication.getController(SceneNames.MARKET_BOARD))
-                .updateMarket(marbleColors, getMarket().getFloatingMarble().getColor()));
-    }*/
-
-    /*public void updateDevDecks(){
-        List<Integer> listID = new ArrayList<>();
-        for(DevelopmentDeckView deck : getDevelopmentDecks())
-            listID.add(deck.getDeck().get(0).getID());
-        Platform.runLater(() -> ((DecksBoardController)guiApplication.getController(SceneNames.DECKS_BOARD))
-                .updateDevDecks(listID));
-    }*/
 
     public void updateLeaderHandToDiscard(){
         try {
@@ -432,14 +413,8 @@ public class GUI extends ClientController {
     }
 
     public void updateWarehouse(){
-        Platform.runLater(() -> {
-            try {
-                ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
-                        .setWarehouse(getLocalPlayerBoard().getWarehouse().getShelves());
-            } catch (NotExistingNicknameException e) {
-                e.printStackTrace();
-            }
-        });
+        Platform.runLater(() ->
+                ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD)).showWarehouse());
     }
 
     public void setResourcesToPlace(List<Resource> resources){

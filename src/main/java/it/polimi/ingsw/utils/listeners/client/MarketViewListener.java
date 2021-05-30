@@ -15,6 +15,6 @@ public class MarketViewListener implements PropertyChangeListener {
     }
 
     public void propertyChange(PropertyChangeEvent evt) {
-        marketBoardController.setMarket((MarketView) evt.getNewValue());
+        marketBoardController.showMarket((MarketView) evt.getNewValue());
     }
 }

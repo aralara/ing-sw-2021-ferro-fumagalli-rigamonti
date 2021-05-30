@@ -189,12 +189,6 @@ public class MarketBoardController extends GenericController {
         takeResources_button.setDisable(true);
     }
 
-    /*public void updateMarket(List<MarbleColors> marbles, MarbleColors floatingMarble){
-        updateMarbleMatrix(marbles);
-        resetAll();
-        updateFloatingMarble(floatingMarble);
-    }*/
-
     private void updateMarbleMatrix(List<Marble> marble){
         int i=0;
         for (Node node : marbleMatrix_gridPane.getChildren()) {
@@ -234,7 +228,7 @@ public class MarketBoardController extends GenericController {
         floatingMarble_imageView.setImage(null);
     }
 
-    public void setMarket(MarketView market) {
+    public void showMarket(MarketView market) {
         List<Marble> marbles = new ArrayList<>();
         for(int row = 0; row < MARKET_ROW_SIZE.value(); row++)
             for(int col = 0; col < MARKET_COLUMN_SIZE.value(); col++)
