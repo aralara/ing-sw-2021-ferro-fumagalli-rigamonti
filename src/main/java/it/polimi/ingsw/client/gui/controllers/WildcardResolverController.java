@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.gui.controllers;
 
 import it.polimi.ingsw.client.gui.SceneNames;
+import it.polimi.ingsw.server.model.storage.Production;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 import javafx.fxml.FXML;
@@ -12,12 +13,18 @@ import java.util.List;
 
 public class WildcardResolverController extends GenericController {
 
-    private List<Resource> resources;
-    private boolean isFirstPhase=true;
+    private List<Resource> resources, consumedWildcards, producedWildcards, consumedResolved, producedResolved,
+            selectedConsumed, selectedProduced;
+    private List<Production> productions;
+    private boolean isFirstPhase=false, isProducedAction;
     private int totalResources;
 
     @FXML private Label chooseResources_label, coin_label, servant_label, shield_label, stone_label;
     @FXML private Button confirm_button, restore_button, goBack_button;
+
+    public void setIsFirstPhase(boolean value){
+        isFirstPhase=value;
+    }
 
     public void setTotalResources(int total){
         totalResources=total;
@@ -27,17 +34,45 @@ public class WildcardResolverController extends GenericController {
         this.chooseResources_label.setText(title);
     }
 
-    private void takeResource(Label label, ResourceType resourceType){
-        if(getTotalTakenResources()<totalResources) {
-            if (resources == null)
-                resources = new ArrayList<>();
-            resources.add(new Resource(resourceType, 1));
-            incrementQuantity(resourceType);
-            label.setText("x " + getQuantity(resourceType));
-            restore_button.setDisable(false);
+    private void takeResource(Label label, ResourceType resourceType) {
+        if (isFirstPhase) {
+            if (getTotalTakenResources() < totalResources) {
+                if (resources == null)
+                    resources = new ArrayList<>();
+                resources.add(new Resource(resourceType, 1));
+                incrementQuantity(resourceType);
+                label.setText("x " + getQuantity(resourceType));
+                restore_button.setDisable(false);
+            }
+            if (getTotalTakenResources() == totalResources) {
+                confirm_button.setDisable(false);
+            }
         }
-        if(getTotalTakenResources()==totalResources){
-            confirm_button.setDisable(false);
+        else if(!isProducedAction && !consumedWildcards.isEmpty()){
+            if (getTotalTakenResources() < getTotal(consumedWildcards)) {
+                if (selectedConsumed == null)
+                    selectedConsumed = new ArrayList<>();
+                selectedConsumed.add(new Resource(resourceType, 1));
+                incrementQuantity(resourceType);
+                label.setText("x " + getQuantity(resourceType));
+                restore_button.setDisable(false);
+            }
+            if (getTotalTakenResources() == getTotal(consumedWildcards)) {
+                confirm_button.setDisable(false);
+            }
+        }
+        else if(!producedWildcards.isEmpty()){
+            if (getTotalTakenResources() < getTotal(producedWildcards)) {
+                if (selectedProduced == null)
+                    selectedProduced = new ArrayList<>();
+                selectedProduced.add(new Resource(resourceType, 1));
+                incrementQuantity(resourceType);
+                label.setText("x " + getQuantity(resourceType));
+                restore_button.setDisable(false);
+            }
+            if (getTotalTakenResources() == getTotal(producedWildcards)) {
+                confirm_button.setDisable(false);
+            }
         }
     }
 
@@ -91,6 +126,10 @@ public class WildcardResolverController extends GenericController {
                 getQuantity(ResourceType.SHIELD)+getQuantity(ResourceType.STONE);
     }
 
+    private int getTotal(List<Resource> resources){
+        return resources.stream().map(Resource::getQuantity).reduce(0, Integer::sum);
+    }
+
     public void confirm() {
         PlayerBoardController pbc = (PlayerBoardController) getGUIApplication().getController(SceneNames.PLAYER_BOARD);
         if(isFirstPhase) {
@@ -100,19 +139,40 @@ public class WildcardResolverController extends GenericController {
             }
             pbc.setIsResToPlace(true);
             getGUI().setResourcesToPlace(resources);
-            isFirstPhase=false;
+            getGUIApplication().closePopUpStage();
         }
-        else{
-            //TODO: da fare per productions
+        else if(selectedConsumed!=null && !selectedConsumed.isEmpty()){ //TODO: da qui in poi controllare
+            consumedResolved = selectedConsumed;
+            selectedConsumed=null;
+            restore();
+            isProducedAction = true;
+            setChooseResources_label("Choose " + producedWildcards.size() + " resources to resolve produced wildcards");
         }
-        getGUIApplication().closePopUpStage();
+        else if(selectedProduced!=null && !selectedProduced.isEmpty()){
+            producedResolved = selectedProduced;
+            selectedProduced=null;
+        }
+        if(!isFirstPhase && (consumedWildcards==null || consumedWildcards.isEmpty() ||
+                !(consumedResolved==null||consumedResolved.isEmpty())) &&
+                (producedWildcards==null || producedWildcards.isEmpty() ||
+                !(producedResolved==null||producedResolved.isEmpty()))){
+            if(consumedResolved==null)
+                consumedResolved = new ArrayList<>();
+            if(producedResolved==null)
+                producedResolved = new ArrayList<>();
+            productions.add(new Production(consumedResolved, producedResolved));
+            getGUI().sendCanActivateProductionsMessage(productions);
+            restore();
+        }
         confirm_button.setDisable(true);
         restore_button.setDisable(true);
         goBack_button.setVisible(true);
     }
 
     public void restore() {
-        resources.clear();
+        resources=null;
+        selectedConsumed=null;
+        selectedProduced=null;
         setQuantity(ResourceType.COIN, 0);
         setQuantity(ResourceType.SERVANT, 0);
         setQuantity(ResourceType.SHIELD, 0);
@@ -122,7 +182,24 @@ public class WildcardResolverController extends GenericController {
     }
 
     public void goBack() {
+        getGUIApplication().closePopUpStage();
+        restore();
         getGUIApplication().setActiveScene(SceneNames.PLAYER_BOARD);
-        //TODO: annullare azione production
+    }
+
+    public void resolveWildcard(List<Production> productions,
+                                List<Resource> consumedWildcards, List<Resource> producedWildcards){
+        this.productions=productions;
+        this.consumedWildcards=consumedWildcards;
+        this.producedWildcards=producedWildcards;
+        if(!consumedWildcards.isEmpty()) {
+            setChooseResources_label("Choose " + getTotal(consumedWildcards) + " resources to resolve consumed wildcards");
+            isProducedAction = false;
+        }
+        else {
+            setChooseResources_label("Choose " + getTotal(producedWildcards) + " resources to resolve produced wildcards");
+            isProducedAction = true;
+        }
+        goBack_button.setVisible(true);
     }
 }

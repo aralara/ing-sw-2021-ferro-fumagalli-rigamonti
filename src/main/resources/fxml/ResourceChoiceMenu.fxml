@@ -7,7 +7,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="355.0" prefWidth="761.0" styleClass="startingActions" stylesheets="@../css/setupWindow.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllers.WildcardResolverController">
     <children>
-        <Label fx:id="chooseResources_label" alignment="CENTER" layoutX="259.0" layoutY="25.0" prefHeight="39.0" prefWidth="244.0" textFill="#1d60cc">
+        <Label fx:id="chooseResources_label" alignment="CENTER" layoutX="33.0" layoutY="25.0" prefHeight="39.0" prefWidth="695.0" textFill="#1d60cc">
             <font>
                 <Font name="Pristina" size="24.0" />
             </font>

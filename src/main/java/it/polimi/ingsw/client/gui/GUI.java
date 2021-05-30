@@ -2,16 +2,16 @@ package it.polimi.ingsw.client.gui;
 
 import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.client.gui.controllers.*;
+import it.polimi.ingsw.client.structures.DevelopmentBoardView;
 import it.polimi.ingsw.client.structures.DevelopmentDeckView;
+import it.polimi.ingsw.client.structures.LeaderBoardView;
 import it.polimi.ingsw.client.structures.MarketView;
 import it.polimi.ingsw.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.model.boards.Player;
+import it.polimi.ingsw.server.model.cards.ability.AbilityProduction;
 import it.polimi.ingsw.server.model.cards.card.*;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
-import it.polimi.ingsw.server.model.storage.RequestResources;
-import it.polimi.ingsw.server.model.storage.Resource;
-import it.polimi.ingsw.server.model.storage.ResourceType;
-import it.polimi.ingsw.server.model.storage.Shelf;
+import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.server.saves.GameSave;
 import it.polimi.ingsw.utils.listeners.Listeners;
 import it.polimi.ingsw.utils.listeners.client.*;
@@ -259,7 +259,9 @@ public class GUI extends ClientController {
 
     @Override
     public void selectProductions() {
-
+        Platform.runLater(() -> guiApplication.getController(SceneNames.PLAYER_BOARD).showAlert(Alert.AlertType.ERROR,
+                "Error", "You can't activate the selected cards",
+                "Please choose another configuration"));
     }
 
     @Override
@@ -275,9 +277,9 @@ public class GUI extends ClientController {
         Platform.runLater(() -> ((DepotsController)guiApplication.getController(SceneNames.DEPOTS))
                 .setAction(action));
         Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.DEPOTS));
-        //while(requestResources.isEmpty()){}//TODO: brutto e non funzionante
-        //return requestResources;
-        return null;
+        while(requestResources.isEmpty()){}//TODO: brutto e non funzionante
+        return requestResources;
+        //return null;
     }
 
     @Override
@@ -363,6 +365,8 @@ public class GUI extends ClientController {
                     getController(SceneNames.RESOURCE_CHOICE_MENU)).setTotalResources(finalSize));
             Platform.runLater(() -> ((WildcardResolverController) guiApplication.
                     getController(SceneNames.RESOURCE_CHOICE_MENU)).setChooseResources_label(title));
+            Platform.runLater(() -> ((WildcardResolverController) guiApplication.
+                    getController(SceneNames.RESOURCE_CHOICE_MENU)).setIsFirstPhase(true));
             Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.RESOURCE_CHOICE_MENU));
         }
     }
@@ -445,12 +449,28 @@ public class GUI extends ClientController {
             getMessageHandler().sendClientMessage(new LeaderCardDiscardMessage(leaderCards));
     }
 
-    public int getLeaderShelfPosition(ResourceType resourceType){
+    public int getLeaderShelfPosition(ResourceType resourceType){//TODO: va bene?
         try {
             List<Shelf> shelves = getLocalPlayerBoard().getWarehouse().getShelves();
             for(int i=0; i<shelves.size();i++)
                 if(shelves.get(i).isLeader() && shelves.get(i).getResourceType()==resourceType)
                     return i;
+        } catch (NotExistingNicknameException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public int getLeaderProductionPosition(ResourceType resourceTypeConsumed){//TODO: BRUTTISSIMO, BISOGNA TROVARE UNA SOLUZIONE
+        try {
+            int i=0;
+            for(Card leaderCard : getLocalPlayerBoard().getLeaderBoard().getBoard()){
+                if(((LeaderCard)leaderCard).getAbility() instanceof AbilityProduction && ((AbilityProduction)(
+                        (LeaderCard)leaderCard).getAbility()).getProduction().getConsumed().get(0).
+                        getResourceType()==resourceTypeConsumed)
+                    return i;
+                i++;
+            }
         } catch (NotExistingNicknameException e) {
             e.printStackTrace();
         }
@@ -494,6 +514,29 @@ public class GUI extends ClientController {
         return new ArrayList<>();
     }
 
+    public Production getBasicProduction(){
+        try {
+            return getLocalPlayerBoard().getBasicProduction();
+        } catch (NotExistingNicknameException e) {
+            e.printStackTrace();
+        }
+        return new Production();
+    }
+
+    public Production getLeaderProduction(int position){ //TODO: brutto :/
+        try {
+            return ((AbilityProduction)((LeaderCard)getLocalPlayerBoard().getLeaderBoard().getBoard().get(position))
+                    .getAbility()).getProduction();
+        } catch (NotExistingNicknameException e) {
+            e.printStackTrace();
+        }
+        return new Production();
+    }
+
+    public void sendCanActivateProductionsMessage(List<Production> productions){
+        getMessageHandler().sendClientMessage(new CanActivateProductionsMessage(productions));
+    }
+  
     public void sendRequestResourcesDevMessage(List<RequestResources> requestResources){
         getMessageHandler().sendClientMessage(new RequestResourcesDevMessage(getDevelopmentCardToBuy(), getSpaceToPlace(), requestResources));
     }
