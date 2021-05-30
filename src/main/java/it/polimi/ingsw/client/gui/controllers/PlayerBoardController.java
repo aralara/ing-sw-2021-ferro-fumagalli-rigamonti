@@ -24,6 +24,7 @@ public class PlayerBoardController extends GenericController {
 
     private List<Shelf> shelves;
     private List<Resource> toDiscard;
+    private boolean isPlayerTurn=false;
         
     private List<ImageView> spaces, faithSpaces;
     private ResourceType resToPlace;
@@ -55,6 +56,20 @@ public class PlayerBoardController extends GenericController {
             coinToPlace_imageView, servantToPlace_imageView, shieldToPlace_imageView, stoneToPlace_imageView,
             popeFavorTile1_imageView, popeFavorTile2_imageView, popeFavorTile3_imageView;
 
+    public void setIsPlayerTurn(boolean isPlayerTurn){
+        this.isPlayerTurn=isPlayerTurn;
+        mainActionPlayed=false;
+        if(isPlayerTurn) {
+            enableButtons();
+        }
+        else {
+            disableButtons();
+        }
+    }
+
+    public boolean getIsPlayerTurn(){
+        return isPlayerTurn;
+    }
 
     public void setIsResToPlace(boolean isResToPlaceAction){
         this.isResToPlaceAction=isResToPlaceAction;
@@ -584,7 +599,7 @@ public class PlayerBoardController extends GenericController {
         endTurn_button.setDisable(true);
         activeLeaderCard_button.setDisable(true);
         discardLeaderCard_button.setDisable(true);
-        viewOpponents_button.setDisable(true);
+        //viewOpponents_button.setDisable(true);
         hideCheckBoxes();
     }
 
@@ -607,7 +622,8 @@ public class PlayerBoardController extends GenericController {
         if(toDiscard==null)
             toDiscard = new ArrayList<>();
         getGUI().sendShelvesConfigurationMessage(shelves,toDiscard);
-        enableButtons();
+        if(isPlayerTurn)
+            enableButtons();
         if(toDiscard!=null)
             toDiscard.clear();
         if(shelves!=null)

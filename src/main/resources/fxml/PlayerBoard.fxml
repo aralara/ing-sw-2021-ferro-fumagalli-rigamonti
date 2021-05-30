@@ -237,7 +237,7 @@
             <Font name="Pristina" size="18.0" />
          </font>
       </Button>
-      <Button fx:id="rearrangeWarehouse_button" disable="true" focusTraversable="false" layoutX="934.0" layoutY="152.0" mnemonicParsing="false" onAction="#rearrangeWarehouse" text="Rearrange warehouse" textFill="#1d60cc">
+      <Button fx:id="rearrangeWarehouse_button" focusTraversable="false" layoutX="934.0" layoutY="152.0" mnemonicParsing="false" onAction="#rearrangeWarehouse" text="Rearrange warehouse" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="18.0" />
          </font>

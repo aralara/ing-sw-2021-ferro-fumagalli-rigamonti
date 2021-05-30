@@ -179,8 +179,20 @@ public class GUI extends ClientController {
 
     @Override
     public void notifyStartTurn(String nickname) {
-        Platform.runLater(() -> ((PlayerBoardController) guiApplication.
-                getController(SceneNames.PLAYER_BOARD)).enableButtons());
+        if(nickname.equals(getNickname())) {
+            Platform.runLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD)).
+                    showAlert(Alert.AlertType.INFORMATION, "It's your turn",
+                            "Now you can play your actions", ""));
+            Platform.runLater(() -> ((PlayerBoardController) guiApplication.
+                    getController(SceneNames.PLAYER_BOARD)).setIsPlayerTurn(true));
+        }
+        else {
+            Platform.runLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD)).
+                    showAlert(Alert.AlertType.INFORMATION,"Wait your turn",
+                            "Now it's "+nickname+"'s turn", ""));
+            Platform.runLater(() -> ((PlayerBoardController) guiApplication.
+                    getController(SceneNames.PLAYER_BOARD)).setIsPlayerTurn(false));
+        }
     }
 
     @Override
