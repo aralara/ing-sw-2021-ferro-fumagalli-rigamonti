@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.gui.controllers;
 
+import it.polimi.ingsw.client.gui.GUIApplication;
 import it.polimi.ingsw.client.gui.SceneNames;
 import it.polimi.ingsw.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.model.cards.card.Card;
@@ -98,6 +99,7 @@ public class PlayerBoardController extends GenericController {
     }
 
     public void goToDecks() {
+        ((DecksBoardController)getGUIApplication().getController(SceneNames.DECKS_BOARD)).showDevelopmentDeck();
         getGUIApplication().setActiveScene(SceneNames.DECKS_BOARD);
     }
 
