@@ -24,7 +24,8 @@ public class ConnectionMessage extends ClientSetupMessage {
 
     @Override
     public void doNACKResponseAction(ClientController client) {
-        client.ackNotification("The selected nickname is not available", true);
+        client.ackNotification("The selected nickname is not available or contains unsupported characters",
+                true);
         client.askNickname();
     }
 }

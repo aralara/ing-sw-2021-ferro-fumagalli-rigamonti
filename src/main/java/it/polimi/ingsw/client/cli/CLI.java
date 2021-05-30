@@ -46,9 +46,10 @@ public class CLI extends ClientController {
             askNickname();
         }
         else {
+            setNickname(graphicalCLI.askNickname());
             localSetup();
+            graphicalCLI.printlnString("Creating a local game");
         }
-
     }
 
     public boolean askMultiplayer() {
@@ -57,8 +58,6 @@ public class CLI extends ClientController {
     }
 
     public void localSetup() {
-        graphicalCLI.printString("Insert your nickname: ");
-        setNickname(graphicalCLI.getNextLine());
         try {
             PipedPair pipedPair = new PipedPair();
             Thread t = new Thread(() -> {
@@ -75,7 +74,7 @@ public class CLI extends ClientController {
                     getNickname());
             setLocalGameHandler(new GameHandler(1));
             getLocalGameHandler().add(virtualView);
-            getLocalGameHandler().startNewGame();
+            getLocalGameHandler().run();
         } catch (IOException e) {
             graphicalCLI.printlnString("Unable to create local game");
         }
@@ -160,8 +159,7 @@ public class CLI extends ClientController {
 
     @Override
     public void askNickname() {
-        graphicalCLI.printString("Insert your nickname: ");
-        setNickname(graphicalCLI.getNextLine());
+        setNickname(graphicalCLI.askNickname());
         getMessageHandler().sendClientMessage(new ConnectionMessage(getNickname()));
     }
 
