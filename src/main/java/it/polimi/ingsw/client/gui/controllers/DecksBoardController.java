@@ -135,7 +135,7 @@ public class DecksBoardController extends GenericController {
         decks.add(deckY3_imageView);
     }
 
-    public void showDevelopmentDeck() {
+    public void showDevelopmentDeck() {  //TODO: da gestire un deck che vinee svuotato da lorenzo
         fillList();
         List<DevelopmentDeckView> devDecks = getGUI().getDevelopmentDecks();
         for (int i=0; i<devDecks.size(); i++) {

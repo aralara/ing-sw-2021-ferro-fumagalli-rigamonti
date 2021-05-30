@@ -33,7 +33,6 @@ public class GUI extends ClientController {
     private List<Resource> resourcesToPlace; //TODO: serve per memorizzare le risorse che si devono piazzare se viene richiamato il restore e devono essere rimesse
     private List<Resource> resourcesToDiscard; //TODO: serve per memorizzare le risorse che si devono scartare e se c'è della fede la immagazzina
     private int waitingPlayers;
-    List<RequestResources> requestResources;
 
     public GUI(GUIApplication guiApplication) {
         super();
@@ -45,7 +44,6 @@ public class GUI extends ClientController {
         resourcesToEqualize = new ArrayList<>();
         resourcesToPlace = new ArrayList<>();
         resourcesToDiscard = new ArrayList<>();
-        requestResources = new ArrayList<>();
     }
 
     public void attachListeners() {
@@ -203,13 +201,13 @@ public class GUI extends ClientController {
         resolveAbilityMarble(availableAbilities);
         boolean faith = checkFaithResource(resourcesToPlace);
         if(!checkOnlyWildcard(resourcesToPlace)) {
-            Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
+            Platform.runLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD))
                     .showAlert(Alert.AlertType.INFORMATION, "Success!", "Resources taken",
                             "Now you need to place each taken resource"));
             updateResourcesToPlace();
         }
         else if(faith) {
-            Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
+            Platform.runLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD))
                 .showAlert(Alert.AlertType.INFORMATION, "Success!", "Resources taken",
                         "Your faith has been updated"));
             Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
@@ -221,7 +219,7 @@ public class GUI extends ClientController {
             }
         }
         else {
-            Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
+            Platform.runLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD))
                     .showAlert(Alert.AlertType.INFORMATION, "Success!", "Resources taken",
                             "You've nothing to place"));
             Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
@@ -270,10 +268,12 @@ public class GUI extends ClientController {
     }
 
     @Override
-    public List<RequestResources> chooseStorages(List<Resource> resources) {
-        requestResources.clear();
+    public List<RequestResources> chooseStorages(List<Resource> resources, int action) {
+
         Platform.runLater(() -> ((DepotsController)guiApplication.getController(SceneNames.DEPOTS))
                 .setResourcesLabels(resources));
+        Platform.runLater(() -> ((DepotsController)guiApplication.getController(SceneNames.DEPOTS))
+                .setAction(action));
         Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.DEPOTS));
         //while(requestResources.isEmpty()){}//TODO: brutto e non funzionante
         //return requestResources;
@@ -485,10 +485,6 @@ public class GUI extends ClientController {
         return null;
     }
 
-    public void setRequestResources(List<RequestResources> requestResources){
-        this.requestResources = requestResources;
-    }
-
     public List<Deck> getDevelopmentBoard(){
         try {
             return getLocalPlayerBoard().getDevelopmentBoard().getSpaces();
@@ -496,5 +492,9 @@ public class GUI extends ClientController {
             e.printStackTrace();
         }
         return new ArrayList<>();
+    }
+
+    public void sendRequestResourcesDevMessage(List<RequestResources> requestResources){
+        getMessageHandler().sendClientMessage(new RequestResourcesDevMessage(getDevelopmentCardToBuy(), getSpaceToPlace(), requestResources));
     }
 }

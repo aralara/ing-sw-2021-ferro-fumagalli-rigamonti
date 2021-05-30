@@ -2,9 +2,11 @@ package it.polimi.ingsw.client.structures;
 
 import it.polimi.ingsw.server.model.boards.PlayerBoard;
 import it.polimi.ingsw.server.model.storage.Production;
+import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerBoardView implements Serializable {
@@ -44,7 +46,6 @@ public class PlayerBoardView implements Serializable {
                         new Resource(ResourceType.STONE,100),
                         new Resource(ResourceType.SHIELD,100),
                         new Resource(ResourceType.SERVANT,100)
-                        ,new Resource(ResourceType.FAITH, 23)
                 )));*/
 
         //TODO: inserita per testare, da togliere quando la CLI sarà PERFETTA (come Bonucci)
