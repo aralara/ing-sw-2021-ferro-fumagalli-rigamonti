@@ -138,7 +138,7 @@ public class DecksBoardController extends GenericController {
 
     public void showDevelopmentDeck() {
         fillList();
-        List<DevelopmentDeckView> devDecks = getGUI().getDevelopmentDecks();
+        List<DevelopmentDeckView> devDecks = getGUI().getDevelopmentDecks().getDecks();
         for (int i=0; i<devDecks.size(); i++) {
             if(!devDecks.get(i).getDeck().isEmpty()){
                 String resPath = "/imgs/devCards/"+devDecks.get(i).getDeck().get(0).getID()+".png";

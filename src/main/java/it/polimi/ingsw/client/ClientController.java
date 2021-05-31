@@ -1,9 +1,6 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.client.structures.DevelopmentDeckView;
-import it.polimi.ingsw.client.structures.FaithTrackView;
-import it.polimi.ingsw.client.structures.MarketView;
-import it.polimi.ingsw.client.structures.PlayerBoardView;
+import it.polimi.ingsw.client.structures.*;
 import it.polimi.ingsw.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.GameHandler;
 import it.polimi.ingsw.server.model.boards.Player;
@@ -21,7 +18,7 @@ public abstract class ClientController {
     private int lorenzoFaith;
     private final List<PlayerBoardView> playerBoards;
     private MarketView market;
-    private List<DevelopmentDeckView> developmentDecks;
+    private DevelopmentDecksView developmentDecks;
     private FaithTrackView faithTrack;
     private boolean mainActionPlayed, playerTurn;
     private final MessageHandler messageHandler;
@@ -37,7 +34,7 @@ public abstract class ClientController {
         lorenzoFaith = -1;
         playerBoards = new ArrayList<>();
         market = null;
-        developmentDecks = new ArrayList<>();
+        developmentDecks = null;
         faithTrack = null;
         mainActionPlayed = false;
         playerTurn = false;
@@ -137,11 +134,11 @@ public abstract class ClientController {
         this.market = market;
     }
 
-    public List<DevelopmentDeckView> getDevelopmentDecks() {
+    public DevelopmentDecksView getDevelopmentDecks() {
         return developmentDecks;
     }
 
-    public void setDevelopmentDecks(List<DevelopmentDeckView> developmentDecks) {
+    public void setDevelopmentDecks(DevelopmentDecksView developmentDecks) {
         this.developmentDecks = developmentDecks;
     }
 

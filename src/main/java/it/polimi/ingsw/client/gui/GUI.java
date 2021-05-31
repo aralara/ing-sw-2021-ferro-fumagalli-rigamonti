@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.gui;
 import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.client.gui.controllers.*;
 import it.polimi.ingsw.client.structures.DevelopmentDeckView;
+import it.polimi.ingsw.client.structures.DevelopmentDecksView;
 import it.polimi.ingsw.client.structures.MarketView;
 import it.polimi.ingsw.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.model.boards.Player;
@@ -56,6 +57,8 @@ public class GUI extends ClientController {
                         new LeaderBBoardViewListener(playerBoardController));
                 pb.getLeaderBoard().addListener(Listeners.BOARD_LEADER_HAND.value(),
                         new LeaderBHandViewListener(playerBoardController));
+                pb.getDevelopmentBoard().addListener(Listeners.BOARD_DEV_SPACES.value(),
+                        new DevelopmentBSpacesViewListener(playerBoardController));
                 pb.getFaithBoard().addListener(Listeners.BOARD_FAITH_FAITH.value(),
                         new FaithBFaithViewListener(playerBoardController));
                 pb.getFaithBoard().addListener(Listeners.BOARD_FAITH_POPE.value(),
@@ -65,9 +68,8 @@ public class GUI extends ClientController {
                 pb.getStrongbox().addListener(Listeners.BOARD_STRONGBOX.value(),
                         new StrongboxViewListener(playerBoardController));
         });
-        getDevelopmentDecks().forEach(dd ->
-                dd.addListener(Listeners.GAME_DEV_DECK.value(),
-                        new DevelopmentDeckViewListener(developmentDecksController)));
+        getDevelopmentDecks().addListener(Listeners.GAME_DEV_DECK.value(),
+                new DevelopmentDeckViewListener(developmentDecksController));
         getMarket().addListener(Listeners.GAME_MARKET.value(),
                 new MarketViewListener(marketController));
     }
@@ -282,7 +284,7 @@ public class GUI extends ClientController {
     }
 
     @Override
-    public void setDevelopmentDecks(List<DevelopmentDeckView> developmentDecks) {
+    public void setDevelopmentDecks(DevelopmentDecksView developmentDecks) {
         super.setDevelopmentDecks(developmentDecks);
         Platform.runLater(() -> ((DecksBoardController)guiApplication.getController(SceneNames.DECKS_BOARD))
                 .showDevelopmentDeck());
@@ -489,7 +491,7 @@ public class GUI extends ClientController {
 
     private DevelopmentCard getDevelopmentCard(CardColors devColor, int devLevel){
         for(int i=0; i<getDevelopmentDecks().size(); i++){
-            DevelopmentDeckView developmentDeck = getDevelopmentDecks().get(i);
+            DevelopmentDeckView developmentDeck = getDevelopmentDecks().getDecks().get(i);
             if(developmentDeck.getDeckColor()==devColor && developmentDeck.getDeckLevel()==devLevel)
                 return (DevelopmentCard) developmentDeck.getDeck().get(0);
         }

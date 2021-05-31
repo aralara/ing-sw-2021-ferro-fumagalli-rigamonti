@@ -13,7 +13,6 @@ public class DevelopmentDeckViewListener implements PropertyChangeListener {
         this.decksBoardController = decksBoardController;
     }
 
-    @SuppressWarnings("unchecked")
     public void propertyChange(PropertyChangeEvent evt) {
         decksBoardController.showDevelopmentDeck();
     }

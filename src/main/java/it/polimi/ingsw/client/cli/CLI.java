@@ -227,7 +227,7 @@ public class CLI extends ClientController {
             List<LeaderCard> selected = new ArrayList<>();
 
             graphicalCLI.printMarket(getMarket());
-            graphicalCLI.printDevelopmentDeckTop(getDevelopmentDecks());
+            graphicalCLI.printDevelopmentDeckTop(getDevelopmentDecks().getDecks());
 
             for(int i = 2; i > 0; i--) {
                 final int index = i;
@@ -401,7 +401,7 @@ public class CLI extends ClientController {
         try {
             graphicalCLI.printWarehouseConfiguration(getLocalPlayerBoard().getWarehouse(), false);
             graphicalCLI.printStrongbox(getLocalPlayerBoard().getStrongbox());
-            graphicalCLI.printDevelopmentDeckTop(getDevelopmentDecks());
+            graphicalCLI.printDevelopmentDeckTop(getDevelopmentDecks().getDecks());
             if (graphicalCLI.askGoBack())
                 return;
             else
@@ -959,7 +959,7 @@ public class CLI extends ClientController {
                         color = CardColors.YELLOW.name();
                         break;
                 }
-                for (DevelopmentDeckView developmentDeck : getDevelopmentDecks()) {
+                for (DevelopmentDeckView developmentDeck : getDevelopmentDecks().getDecks()) {
                     if (developmentDeck.getDeckColor().equals(CardColors.valueOf(color)) &&
                             developmentDeck.getDeckLevel() == level) {
                         if(!developmentDeck.getDeck().isEmpty()) {
@@ -1042,8 +1042,10 @@ public class CLI extends ClientController {
         opponentTurnMenu = new ArrayList<>();
         List<MenuOption> shared = Arrays.asList(
                 new MenuOption("View market and development decks", () -> {
-                    graphicalCLI.printMarket(getMarket()); graphicalCLI.printlnString("");
-                    graphicalCLI.printDevelopmentDeckTop(getDevelopmentDecks()); graphicalCLI.printlnString("");
+                    graphicalCLI.printMarket(getMarket());
+                    graphicalCLI.printlnString("");
+                    graphicalCLI.printDevelopmentDeckTop(getDevelopmentDecks().getDecks());
+                    graphicalCLI.printlnString("");
                 }),
                 new MenuOption("View your board", this::showBoard),
                 new MenuOption("View opponents' boards", this::showOpponents),
