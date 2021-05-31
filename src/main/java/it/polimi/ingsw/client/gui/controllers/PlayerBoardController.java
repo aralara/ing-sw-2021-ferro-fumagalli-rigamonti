@@ -219,8 +219,8 @@ public class PlayerBoardController extends GenericController {
 
     private void handleDragDroppedSpace(DragEvent dragEvent, ImageView imageView, int space) {
         DecksBoardController dbc = (DecksBoardController) getGUIApplication().getController(SceneNames.DECKS_BOARD);
-        Image image = dragEvent.getDragboard().getImage();
-        imageView.setImage(image);
+        /*Image image = dragEvent.getDragboard().getImage();
+        imageView.setImage(image);*/
         disableSpaces();
         getGUIApplication().closeCardStage();
         getGUI().sendBuyDevelopmentCardMessage(dbc.getSelectedCardColor(), dbc.getSelectedLevel(), space-1);
@@ -521,21 +521,21 @@ public class PlayerBoardController extends GenericController {
             if (level == 2)
                 return space1L2_imageView;
             if (level == 3)
-                return space1L2_imageView;
+                return space1L3_imageView;
         } else if (space == 1) {
             if (level == 1)
                 return space2L1_imageView;
             if (level == 2)
                 return space2L2_imageView;
             if (level == 3)
-                return space2L2_imageView;
+                return space2L3_imageView;
         }else if (space == 2) {
             if (level == 1)
                 return space3L1_imageView;
             if (level == 2)
                 return space3L2_imageView;
             if (level == 3)
-                return space3L2_imageView;
+                return space3L3_imageView;
         }
         return null;
     }

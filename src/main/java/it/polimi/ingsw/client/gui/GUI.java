@@ -245,8 +245,8 @@ public class GUI extends ClientController {
 
     @Override
     public void selectDevDecks() {
-        Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
-            .showDevelopmentBSpaces());
+        /*Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
+            .showDevelopmentBSpaces());*/
         Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.DECKS_BOARD));
         Platform.runLater(() -> guiApplication.getController(SceneNames.DECKS_BOARD).showAlert(Alert.AlertType.ERROR,
                 "Error", "You can't buy this card and place in the selected space",
