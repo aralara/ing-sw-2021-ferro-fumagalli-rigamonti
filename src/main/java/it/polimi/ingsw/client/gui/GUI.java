@@ -27,9 +27,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class GUI extends ClientController {
 
     private final GUIApplication guiApplication;
-    private List<Resource> resourcesToEqualize; //TODO: serve per memorizzare le risorse che si devono equalizzare e usarle al momento opportuno
-    private List<Resource> resourcesToPlace; //TODO: serve per memorizzare le risorse che si devono piazzare se viene richiamato il restore e devono essere rimesse
-    private List<Resource> resourcesToDiscard; //TODO: serve per memorizzare le risorse che si devono scartare e se c'è della fede la immagazzina
+    private List<Resource> resourcesToEqualize;
+    private List<Resource> resourcesToPlace;
+    private List<Resource> resourcesToDiscard;
     private int waitingPlayers;
 
     public GUI(GUIApplication guiApplication) {
@@ -141,8 +141,6 @@ public class GUI extends ClientController {
 
     @Override
     public void askLeaderDiscard() {
-        //TODO:settare parti gioco
-        // TODO: override dei metodi del client contorller perche quando faccio un set ho bisogno di fare anche un update (copio da market lb19)
         attachListeners();  //TODO: TEMPORANEO, non valido quando si carica un gioco dal salvataggio
         updateLeaderHandToDiscard();
         try {
@@ -153,9 +151,7 @@ public class GUI extends ClientController {
         }catch(NotExistingNicknameException e){
             e.printStackTrace();
         }
-        //altro?
 
-        //???
         Platform.runLater(() -> ((PlayerBoardController)guiApplication.
                 getController(SceneNames.PLAYER_BOARD)).disableActivateProductionsAction());
         Platform.runLater(() -> ((PlayerBoardController) guiApplication.
@@ -369,10 +365,8 @@ public class GUI extends ClientController {
     }
 
     public void sendShelvesConfigurationMessage(List<Shelf> shelves, List<Resource> toDiscard){
-        //TODO: da inserire modo per creare lista di shelf dal nostro wh e una lista do shelves
         resourcesToDiscard.addAll(toDiscard);
-        getMessageHandler().sendClientMessage(new ShelvesConfigurationMessage(shelves, resourcesToPlace, resourcesToDiscard)); //TODO: giusto?
-        //TODO: ripulire resourcesToDiscard e resourcesToPlace?
+        getMessageHandler().sendClientMessage(new ShelvesConfigurationMessage(shelves, resourcesToPlace, resourcesToDiscard));
         resourcesToPlace.clear();
         resourcesToDiscard.clear();
     }

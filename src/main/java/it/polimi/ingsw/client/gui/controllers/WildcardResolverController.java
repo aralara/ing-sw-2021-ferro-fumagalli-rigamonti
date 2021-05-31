@@ -140,7 +140,7 @@ public class WildcardResolverController extends GenericController {
             getGUI().setResourcesToPlace(resources);
             getGUIApplication().closePopUpStage();
         }
-        else if(selectedConsumed!=null && !selectedConsumed.isEmpty()){ //TODO: da qui in poi controllare
+        else if(selectedConsumed!=null && !selectedConsumed.isEmpty()){
             consumedResolved.addAll(selectedConsumed);
             selectedConsumed=null;
             restore();
@@ -191,6 +191,10 @@ public class WildcardResolverController extends GenericController {
     public void goBack() {
         getGUIApplication().closePopUpStage();
         restore();
+        PlayerBoardController pbc = ((PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD));
+        pbc.enableButtons();
+        pbc.setWarehouseIsDisabled(false);
+        pbc.enableOpponents();
         getGUIApplication().setActiveScene(SceneNames.PLAYER_BOARD);
     }
 

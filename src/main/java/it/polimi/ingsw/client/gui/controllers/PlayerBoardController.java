@@ -1,16 +1,11 @@
 package it.polimi.ingsw.client.gui.controllers;
 
-import it.polimi.ingsw.client.gui.GUIApplication;
 import it.polimi.ingsw.client.gui.SceneNames;
 import it.polimi.ingsw.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.model.cards.card.Card;
 import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
-import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
-import it.polimi.ingsw.server.model.storage.Production;
-import it.polimi.ingsw.server.model.storage.Resource;
-import it.polimi.ingsw.server.model.storage.ResourceType;
-import it.polimi.ingsw.server.model.storage.Shelf;
+import it.polimi.ingsw.server.model.storage.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -94,6 +89,10 @@ public class PlayerBoardController extends GenericController {
         this.inkwell_imageVIew.setVisible(true);
     }
 
+    public void enableOpponents(){
+        this.viewOpponents_button.setDisable(false);
+    }
+
     public void goToMarket() {
         getGUIApplication().setActiveScene(SceneNames.MARKET_BOARD);
     }
@@ -120,15 +119,10 @@ public class PlayerBoardController extends GenericController {
     }
 
     public void activateProductions() {
-        //TODO: da fare
         if (checkSelectedCheckBoxes()) {
-            /*((MarketBoardController) getGUIApplication().getController(SceneNames.MARKET_BOARD)).disableMarketAction();
-            ((DecksBoardController) getGUIApplication().getController(SceneNames.DECKS_BOARD)).disableBuyCardAction();
-            disableActivateProductionsAction();
-            disableActivateLeaderAction();
-            disableDiscardLeaderAction();
+            disableButtons();
             setWarehouseIsDisabled(true);
-            hideCheckBoxes();*/
+            viewOpponents_button.setDisable(true);
             getActivatedProductions();
             resetCheckBoxes();
         }
@@ -138,7 +132,7 @@ public class PlayerBoardController extends GenericController {
         disableButtons();
         mainActionPlayed=false;
         hideCheckBoxes();
-        //TODO: disabilitare strongbox, abilitare leader warehouse
+        //TODO: disabilitare cose
         getGUI().sendEndTurnMessage();
     }
 
@@ -230,7 +224,6 @@ public class PlayerBoardController extends GenericController {
         disableSpaces();
         getGUIApplication().closeCardStage();
         getGUI().sendBuyDevelopmentCardMessage(dbc.getSelectedCardColor(), dbc.getSelectedLevel(), space-1);
-        //TODO: vedere se l'azione va a buon fine, altrimenti rimettere giusti i parametri
     }
 
     public void handleDragDropped1L1(DragEvent dragEvent) {
@@ -457,7 +450,7 @@ public class PlayerBoardController extends GenericController {
             imageView.setDisable(true);
     }
 
-    public void enableSpaces(){ //TODO: migliorabile
+    public void enableSpaces(){ //TODO: migliorabile?
         fillSpacesList();
         for(int i=0; i<3; i++){
             if(spaces.get(i).getImage()==null){
@@ -616,7 +609,6 @@ public class PlayerBoardController extends GenericController {
         endTurn_button.setDisable(true);
         activeLeaderCard_button.setDisable(true);
         discardLeaderCard_button.setDisable(true);
-        //viewOpponents_button.setDisable(true);
         hideCheckBoxes();
     }
 
@@ -659,8 +651,6 @@ public class PlayerBoardController extends GenericController {
     }
 
     public void showDevelopmentBSpaces() {
-        //TODO: va testato appena si potranno comprare le dev!
-        //TODO: stub
         int id, maxLevel = 3;
         List<Deck> tempDevDeck = getGUI().getDevelopmentBoard();
         for(int i = 0; i< tempDevDeck.size(); i++){
@@ -776,17 +766,25 @@ public class PlayerBoardController extends GenericController {
     }
 
     public void showStrongbox() { //TODO: da controllare... perchè lo fa su un altro thread?
+        resetStrongbox();
         for (Resource resource : getGUI().getStrongboxResources()){
             if(resource.getResourceType() == ResourceType.COIN){
                 Platform.runLater(() -> coinStrongbox_label.setText("x " + resource.getQuantity()));
             } else if(resource.getResourceType() == ResourceType.SERVANT){
-                Platform.runLater(() ->servantStrongbox_label.setText("x " + resource.getQuantity()));
+                Platform.runLater(() -> servantStrongbox_label.setText("x " + resource.getQuantity()));
             }else if(resource.getResourceType() == ResourceType.STONE){
-                Platform.runLater(() ->stoneStrongbox_label.setText("x " + resource.getQuantity()));
+                Platform.runLater(() -> stoneStrongbox_label.setText("x " + resource.getQuantity()));
             }else if(resource.getResourceType() == ResourceType.SHIELD){
-                Platform.runLater(() ->shieldStrongbox_label.setText("x " + resource.getQuantity()));
+                Platform.runLater(() -> shieldStrongbox_label.setText("x " + resource.getQuantity()));
             }
         }
+    }
+
+    private void resetStrongbox(){
+        Platform.runLater(() -> coinStrongbox_label.setText("x 0"));
+        Platform.runLater(() -> servantStrongbox_label.setText("x 0"));
+        Platform.runLater(() -> stoneStrongbox_label.setText("x 0"));
+        Platform.runLater(() -> shieldStrongbox_label.setText("x 0"));
     }
 
     public void showWarehouse() {
@@ -1239,16 +1237,20 @@ public class PlayerBoardController extends GenericController {
         List<Resource> consumedResolved = new ArrayList<>(), producedResolved = new ArrayList<>(),
                 consumedWildcards = new ArrayList<>(), producedWildcards = new ArrayList<>();
         for(Production production : productions) {
-            consumedResolved =  production.getConsumed().stream()
-                    .filter((r -> r.getResourceType() != ResourceType.WILDCARD)).collect(Collectors.toList());
-            producedResolved =  production.getProduced().stream()
-                    .filter((r -> r.getResourceType() != ResourceType.WILDCARD)).collect(Collectors.toList());
-            consumedWildcards = production.getConsumed().stream()
-                    .filter((r -> r.getResourceType() == ResourceType.WILDCARD)).collect(Collectors.toList());
-            producedWildcards = production.getProduced().stream()
-                    .filter((r -> r.getResourceType() == ResourceType.WILDCARD)).collect(Collectors.toList());
+            consumedResolved.addAll(production.getConsumed().stream()
+                    .filter((r -> r.getResourceType() != ResourceType.WILDCARD)).collect(Collectors.toList()));
+            producedResolved.addAll(production.getProduced().stream()
+                    .filter((r -> r.getResourceType() != ResourceType.WILDCARD)).collect(Collectors.toList()));
+            consumedWildcards.addAll(production.getConsumed().stream()
+                    .filter((r -> r.getResourceType() == ResourceType.WILDCARD)).collect(Collectors.toList()));
+            producedWildcards.addAll(production.getProduced().stream()
+                    .filter((r -> r.getResourceType() == ResourceType.WILDCARD)).collect(Collectors.toList()));
         }
         if(!consumedWildcards.isEmpty() || !producedWildcards.isEmpty()) {
+            Storage.aggregateResources(consumedResolved);
+            Storage.aggregateResources(producedResolved);
+            Storage.aggregateResources(consumedWildcards);
+            Storage.aggregateResources(producedWildcards);
             ((WildcardResolverController) getGUIApplication().getController(SceneNames.RESOURCE_CHOICE_MENU)).
                     resolveWildcard(consumedResolved, producedResolved, consumedWildcards, producedWildcards);
             getGUIApplication().setActiveScene(SceneNames.RESOURCE_CHOICE_MENU);

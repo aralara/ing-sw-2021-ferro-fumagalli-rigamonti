@@ -326,7 +326,7 @@ public class DepotsController extends GenericController {
 
     private boolean isToTake(ResourceType resourceType){
         for(Resource resource : resourcesToTake)
-            if(resource.getResourceType()==resourceType)
+            if(resource.getResourceType()==resourceType && getResourceQuantity(resourceType)+1 <= resource.getQuantity())
               return true;
         return false;
     }

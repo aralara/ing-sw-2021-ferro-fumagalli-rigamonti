@@ -122,7 +122,7 @@ public class SetupController extends GenericController {
                     "The nickname field is longer than 20 character,\nplease complete it correctly");
         }
         else{
-            getGUIApplication().changeNicknameMenuStatus(); //TODO: aggiungere controllo nickname errato
+            getGUIApplication().changeNicknameMenuStatus();
             getGUIApplication().getGUI().sendNickname(nickname_field.getText());
         }
     }

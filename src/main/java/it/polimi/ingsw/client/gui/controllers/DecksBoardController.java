@@ -46,6 +46,7 @@ public class DecksBoardController extends GenericController {
             pbc.hideCheckBoxes();
             showAlert(Alert.AlertType.INFORMATION, "Buy card", "Complete buying action",
                     "Now you can drag and drop the card in the desired space");
+            selectedDevCard_imageView.setImage(null);
             getGUIApplication().closeSecondStage();
             getGUIApplication().setActiveScene(SceneNames.CARD);
         }
@@ -135,12 +136,15 @@ public class DecksBoardController extends GenericController {
         decks.add(deckY3_imageView);
     }
 
-    public void showDevelopmentDeck() {  //TODO: da gestire un deck che vinee svuotato da lorenzo
+    public void showDevelopmentDeck() {
         fillList();
         List<DevelopmentDeckView> devDecks = getGUI().getDevelopmentDecks();
         for (int i=0; i<devDecks.size(); i++) {
-            String resPath = "/imgs/devCards/"+devDecks.get(i).getDeck().get(0).getID()+".png";
-            decks.get(i).setImage(new Image(getClass().getResourceAsStream(resPath)));
+            if(!devDecks.get(i).getDeck().isEmpty()){
+                String resPath = "/imgs/devCards/"+devDecks.get(i).getDeck().get(0).getID()+".png";
+                decks.get(i).setImage(new Image(getClass().getResourceAsStream(resPath)));
+            }
+            else decks.get(i).setImage(null);
         }
     }
 }
