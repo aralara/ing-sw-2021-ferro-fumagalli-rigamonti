@@ -43,6 +43,7 @@ public class CanActivateProductionsMessage extends ClientActionMessage {
 
     @Override
     public void doACKResponseAction(ClientController client) {
+        client.setMainActionPlayed(true);
         List<Resource> resources = new ArrayList<>();
         productions.forEach(p -> resources.addAll(p.getConsumed()));
         client.setProductionsToActivate(productions);

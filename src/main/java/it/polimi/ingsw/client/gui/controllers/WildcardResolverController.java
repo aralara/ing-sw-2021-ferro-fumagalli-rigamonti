@@ -15,8 +15,7 @@ public class WildcardResolverController extends GenericController {
 
     private List<Resource> resources, consumedWildcards, producedWildcards, consumedResolved, producedResolved,
             selectedConsumed, selectedProduced;
-    private List<Production> productions;
-    private boolean isFirstPhase=false, isProducedAction;
+    private boolean isFirstPhase=false, isProducedAction=false, areResolved=false;
     private int totalResources;
 
     @FXML private Label chooseResources_label, coin_label, servant_label, shield_label, stone_label;
@@ -142,27 +141,35 @@ public class WildcardResolverController extends GenericController {
             getGUIApplication().closePopUpStage();
         }
         else if(selectedConsumed!=null && !selectedConsumed.isEmpty()){ //TODO: da qui in poi controllare
-            consumedResolved = selectedConsumed;
+            consumedResolved.addAll(selectedConsumed);
             selectedConsumed=null;
             restore();
-            isProducedAction = true;
-            setChooseResources_label("Choose " + producedWildcards.size() + " resources to resolve produced wildcards");
+            if(producedWildcards!=null && !producedWildcards.isEmpty()) {
+                isProducedAction = true;
+                setChooseResources_label("Choose " + producedWildcards.size() + " resources to resolve produced wildcards");
+            }
+            else
+                areResolved = true;
+
         }
         else if(selectedProduced!=null && !selectedProduced.isEmpty()){
-            producedResolved = selectedProduced;
+            producedResolved.addAll(selectedProduced);
             selectedProduced=null;
+            areResolved = true;
         }
-        if(!isFirstPhase && (consumedWildcards==null || consumedWildcards.isEmpty() ||
-                !(consumedResolved==null||consumedResolved.isEmpty())) &&
-                (producedWildcards==null || producedWildcards.isEmpty() ||
-                !(producedResolved==null||producedResolved.isEmpty()))){
-            if(consumedResolved==null)
-                consumedResolved = new ArrayList<>();
-            if(producedResolved==null)
-                producedResolved = new ArrayList<>();
+        if(!isFirstPhase && areResolved){
+            List<Production> productions = new ArrayList<>();
             productions.add(new Production(consumedResolved, producedResolved));
-            getGUI().sendCanActivateProductionsMessage(productions);
             restore();
+            isFirstPhase=false;
+            isProducedAction=false;
+            areResolved=false;
+            this.consumedResolved=null;
+            this.producedResolved=null;
+            this.consumedWildcards=null;
+            this.producedWildcards=null;
+            getGUIApplication().closePopUpStage();
+            getGUI().sendCanActivateProductionsMessage(productions);
         }
         confirm_button.setDisable(true);
         restore_button.setDisable(true);
@@ -187,9 +194,10 @@ public class WildcardResolverController extends GenericController {
         getGUIApplication().setActiveScene(SceneNames.PLAYER_BOARD);
     }
 
-    public void resolveWildcard(List<Production> productions,
+    public void resolveWildcard(List<Resource> consumedResolved, List<Resource> producedResolved,
                                 List<Resource> consumedWildcards, List<Resource> producedWildcards){
-        this.productions=productions;
+        this.consumedResolved=consumedResolved;
+        this.producedResolved=producedResolved;
         this.consumedWildcards=consumedWildcards;
         this.producedWildcards=producedWildcards;
         if(!consumedWildcards.isEmpty()) {

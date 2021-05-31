@@ -292,6 +292,7 @@ public class GUI extends ClientController {
                 .showDevelopmentDeck());
     }
 
+    @Override
     public void setMainActionPlayed(boolean mainActionPlayed) {
         super.setMainActionPlayed(mainActionPlayed);
         ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD)).setMainActionPlayed(mainActionPlayed);
@@ -539,5 +540,14 @@ public class GUI extends ClientController {
 
     public void sendRequestResourcesProdMessage(List<RequestResources> requestResources){
         getMessageHandler().sendClientMessage(new RequestResourcesProdMessage(getProductionsToActivate(), requestResources));
+    }
+
+    public List<Resource> getStrongboxResources(){
+        try {
+            return getLocalPlayerBoard().getStrongbox().getResources();
+        } catch (NotExistingNicknameException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList<>();
     }
 }

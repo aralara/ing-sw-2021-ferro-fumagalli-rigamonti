@@ -11,6 +11,7 @@ import it.polimi.ingsw.server.model.storage.Production;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 import it.polimi.ingsw.server.model.storage.Shelf;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -624,9 +625,14 @@ public class PlayerBoardController extends GenericController {
             ((MarketBoardController) getGUIApplication().getController(SceneNames.MARKET_BOARD)).enableMarketAction();
             ((DecksBoardController) getGUIApplication().getController(SceneNames.DECKS_BOARD)).enableBuyCardAction();
             activateProductions_button.setDisable(false);
+            endTurn_button.setDisable(true);
         }
-        if(mainActionPlayed)
+        if(mainActionPlayed) {
+            ((MarketBoardController) getGUIApplication().getController(SceneNames.MARKET_BOARD)).disableMarketAction();
+            ((DecksBoardController) getGUIApplication().getController(SceneNames.DECKS_BOARD)).disableBuyCardAction();
+            activateProductions_button.setDisable(true);
             endTurn_button.setDisable(false);
+        }
         activeLeaderCard_button.setDisable(false);
         discardLeaderCard_button.setDisable(false);
         rearrangeWarehouse_button.setDisable(false);
@@ -769,21 +775,17 @@ public class PlayerBoardController extends GenericController {
         /*esempio: if(id è una produzione && space==1) leader1ProductionConsumedType!=null=resourceType*/
     }
 
-    public void showStrongbox() {
-        try {
-            for (Resource resource : getGUI().getLocalPlayerBoard().getStrongbox().getResources()){
-                if(resource.getResourceType() == ResourceType.COIN){
-                    coinStrongbox_label.setText("x " + resource.getQuantity());
-                } else if(resource.getResourceType() == ResourceType.SERVANT){
-                    servantStrongbox_label.setText("x " + resource.getQuantity());
-                }else if(resource.getResourceType() == ResourceType.STONE){
-                    stoneStrongbox_label.setText("x " + resource.getQuantity());
-                }else if(resource.getResourceType() == ResourceType.SHIELD){
-                    shieldStrongbox_label.setText("x " + resource.getQuantity());
-                }
+    public void showStrongbox() { //TODO: da controllare... perchè lo fa su un altro thread?
+        for (Resource resource : getGUI().getStrongboxResources()){
+            if(resource.getResourceType() == ResourceType.COIN){
+                Platform.runLater(() -> coinStrongbox_label.setText("x " + resource.getQuantity()));
+            } else if(resource.getResourceType() == ResourceType.SERVANT){
+                Platform.runLater(() ->servantStrongbox_label.setText("x " + resource.getQuantity()));
+            }else if(resource.getResourceType() == ResourceType.STONE){
+                Platform.runLater(() ->stoneStrongbox_label.setText("x " + resource.getQuantity()));
+            }else if(resource.getResourceType() == ResourceType.SHIELD){
+                Platform.runLater(() ->shieldStrongbox_label.setText("x " + resource.getQuantity()));
             }
-        } catch(NotExistingNicknameException e){
-            e.printStackTrace();
         }
     }
 
@@ -1234,8 +1236,13 @@ public class PlayerBoardController extends GenericController {
     }
 
     private void resolveWildcard(List<Production> productions){
-        List<Resource> consumedWildcards = new ArrayList<>(), producedWildcards = new ArrayList<>();
+        List<Resource> consumedResolved = new ArrayList<>(), producedResolved = new ArrayList<>(),
+                consumedWildcards = new ArrayList<>(), producedWildcards = new ArrayList<>();
         for(Production production : productions) {
+            consumedResolved =  production.getConsumed().stream()
+                    .filter((r -> r.getResourceType() != ResourceType.WILDCARD)).collect(Collectors.toList());
+            producedResolved =  production.getProduced().stream()
+                    .filter((r -> r.getResourceType() != ResourceType.WILDCARD)).collect(Collectors.toList());
             consumedWildcards = production.getConsumed().stream()
                     .filter((r -> r.getResourceType() == ResourceType.WILDCARD)).collect(Collectors.toList());
             producedWildcards = production.getProduced().stream()
@@ -1243,7 +1250,7 @@ public class PlayerBoardController extends GenericController {
         }
         if(!consumedWildcards.isEmpty() || !producedWildcards.isEmpty()) {
             ((WildcardResolverController) getGUIApplication().getController(SceneNames.RESOURCE_CHOICE_MENU)).
-                    resolveWildcard(productions, consumedWildcards, producedWildcards); //TODO: aggiustare il passaggio delle risorse da attivare(solo già ok)
+                    resolveWildcard(consumedResolved, producedResolved, consumedWildcards, producedWildcards);
             getGUIApplication().setActiveScene(SceneNames.RESOURCE_CHOICE_MENU);
         }
         else getGUI().sendCanActivateProductionsMessage(productions);

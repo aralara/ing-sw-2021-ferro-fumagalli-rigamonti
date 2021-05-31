@@ -148,6 +148,7 @@ public class DepotsController extends GenericController {
     public void setResourcesLabels(List<Resource> resources){
         resetLabels();
         resourcesToTake = new ArrayList<>(resources);
+        Storage.aggregateResources(resourcesToTake);
         setTotalResourcesToTake();
         for(Resource resource : resourcesToTake)
             setResourcesQuantityToTake(resource.getResourceType(), resource.getQuantity());
@@ -200,7 +201,7 @@ public class DepotsController extends GenericController {
         return -1;
     }
 
-    public int setResourceQuantity(ResourceType resourceType, int quantity) {
+    public void setResourceQuantity(ResourceType resourceType, int quantity) {
         if (resourceType == ResourceType.COIN) {
             int index = coinToTake_label.getText().indexOf("/");
             String total = coinToTake_label.getText().substring(index);
@@ -218,7 +219,6 @@ public class DepotsController extends GenericController {
             String total = stoneToTake_label.getText().substring(index);
             stoneToTake_label.setText(quantity + total);
         }
-        return -1;
     }
 
     private void setWarehouse(){
