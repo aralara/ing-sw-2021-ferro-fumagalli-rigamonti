@@ -524,26 +524,20 @@ public class GUI extends ClientController {
         return new ArrayList<>();
     }
 
-    public int getPlayerIndex(String nickname){
-        for(int i=0; i<getPlayerBoards().size(); i++)
-            if(getPlayerBoards().get(i).getNickname().equals(nickname))
+    public int getOpponentIndex(String nickname){
+        for(int i=0; i<getOpponents().size(); i++) {
+            if (getOpponents().get(i).getNickname().equals(nickname))
                 return i;
+        }
         return -1;
     }
 
-    public PlayerBoardView getNextOpponent(int currentPosition){
-        for(int i=currentPosition+1; i<getPlayerBoards().size();i++){
-            if(!getPlayerBoards().get(i).getNickname().equals(getNickname()))
-                return getPlayerBoards().get(i);
+    public List<PlayerBoardView> getOpponents(){
+        List<PlayerBoardView> opponents = new ArrayList<>();
+        for(PlayerBoardView pb : getPlayerBoards()){
+            if(!pb.getNickname().equals(getNickname()))
+                opponents.add(pb);
         }
-        return null;
-    }
-
-    public PlayerBoardView getPreviousOpponent(int currentPosition){
-        for(int i=currentPosition-1; i>=0;i--){
-            if(!getPlayerBoards().get(i).getNickname().equals(getNickname()))
-                return getPlayerBoards().get(i);
-        }
-        return null;
+        return opponents;
     }
 }
