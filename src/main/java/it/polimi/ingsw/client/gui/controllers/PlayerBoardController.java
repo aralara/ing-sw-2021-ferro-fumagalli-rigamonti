@@ -3,8 +3,11 @@ package it.polimi.ingsw.client.gui.controllers;
 import it.polimi.ingsw.client.gui.SceneNames;
 import it.polimi.ingsw.client.structures.PlayerBoardView;
 import it.polimi.ingsw.exceptions.NotExistingNicknameException;
+import it.polimi.ingsw.server.model.cards.ability.AbilityProduction;
+import it.polimi.ingsw.server.model.cards.ability.AbilityWarehouse;
 import it.polimi.ingsw.server.model.cards.card.Card;
 import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
+import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.server.model.storage.*;
 import javafx.application.Platform;
@@ -27,7 +30,8 @@ public class PlayerBoardController extends GenericController {
     private List<ImageView> spaces, faithSpaces;
     private ResourceType resToPlace;
     private boolean isResToPlaceAction=false, mainActionPlayed=false, warehouseIsDisabled=false;
-    private boolean isFirstLeaderProduction = false, isSeccondLeaderProduction = false;
+    private boolean isFirstLeaderProduction = false, isSecondLeaderProduction = false,
+            isFirstLeaderShelf = false, isSecondLeaderShelf = false;
 
     @FXML private Label player_label,
             coinStrongbox_label, servantStrongbox_label, shieldStrongbox_label, stoneStrongbox_label,
@@ -384,12 +388,12 @@ public class PlayerBoardController extends GenericController {
     }
 
     public void handleDragOverShelfLeader2_1(DragEvent dragEvent) {
-        if(isSeccondLeaderProduction)
+        if(isSecondLeaderProduction)
             handleDragOverShelf(dragEvent);
     }
 
     public void handleDragOverShelfLeader2_2(DragEvent dragEvent) {
-        if(isSeccondLeaderProduction)
+        if(isSecondLeaderProduction)
             handleDragOverShelf(dragEvent);
     }
 
@@ -437,25 +441,25 @@ public class PlayerBoardController extends GenericController {
 
     public void handleDragDroppedShelfLeader1_1(DragEvent dragEvent) { //TODO: da testare
         //int position = getGUI().getLeaderShelfPosition(leader1WarehouseType)+1;
-        int position = (isFirstLeaderProduction) ? 4 : (isSeccondLeaderProduction) ? 4 : -1;
+        int position = 3; //TODO: può essere 3 o 4, controllo numero leader con shelf
         if(handleDragDroppedShelf(dragEvent, shelfLeader1_1_imageView, position))
             setWhLeadersImages(position, 1);
     }
 
     public void handleDragDroppedShelfLeader1_2(DragEvent dragEvent) { //TODO: da testare
-        int position = (isFirstLeaderProduction) ? 4 : (isSeccondLeaderProduction) ? 4 : -1;
+        int position = (isFirstLeaderProduction) ? 4 : (isSecondLeaderProduction) ? 4 : -1;
         if(handleDragDroppedShelf(dragEvent, shelfLeader1_2_imageView, position))
             setWhLeadersImages(position, 1);
     }
 
     public void handleDragDroppedShelfLeader2_1(DragEvent dragEvent) { //TODO: da testare
-        int position = (isFirstLeaderProduction) ? 4 : (isSeccondLeaderProduction) ? 3 : -1;
+        int position = (isFirstLeaderProduction) ? 4 : (isSecondLeaderProduction) ? 3 : -1;
         if(handleDragDroppedShelf(dragEvent, shelfLeader2_1_imageView, position))
             setWhLeadersImages(position, 2);
     }
 
     public void handleDragDroppedShelfLeader2_2(DragEvent dragEvent) { //TODO: da testare
-        int position = (isFirstLeaderProduction) ? 4 : (isSeccondLeaderProduction) ? 3 : -1;
+        int position = (isFirstLeaderProduction) ? 4 : (isSecondLeaderProduction) ? 3 : -1;
         if(handleDragDroppedShelf(dragEvent, shelfLeader2_2_imageView, position))
             setWhLeadersImages(position, 2);
     }
@@ -817,13 +821,34 @@ public class PlayerBoardController extends GenericController {
             boardLeader1_imageView.setImage(null);
             boardLeader2_imageView.setImage(null);
             for(Integer id : idList) {
+                LeaderCard currentLeaderCard = new LeaderCard();
+                try {
+                    List<LeaderCard> leaderCards = ((List<LeaderCard>)(List<? extends Card>)getGUI().getLocalPlayerBoard().getLeaderBoard().getBoard().getCards());
+                    for(LeaderCard lc : leaderCards){
+                        if(lc.getID() == id){
+                            currentLeaderCard = lc;
+                        }
+                    }
+                }catch(NotExistingNicknameException e){
+                    e.printStackTrace();
+                }
                 if (boardLeader1_imageView.getImage() == null && handLeader1_imageView.getImage() == null) {
                     boardLeader1_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
                             + id + ".png")));
+                    if (currentLeaderCard.getAbility() instanceof AbilityProduction)
+                        isFirstLeaderProduction = true;
+                    else if (currentLeaderCard.getAbility() instanceof AbilityWarehouse)
+                        isFirstLeaderShelf = true;
+
                     enableLeaderAbility();
                 } else if (boardLeader2_imageView.getImage() == null && handLeader2_imageView.getImage() == null) {
                     boardLeader2_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
                             + id + ".png")));
+                    if (currentLeaderCard.getAbility() instanceof AbilityProduction)
+                        isSecondLeaderProduction = true;
+                    else if (currentLeaderCard.getAbility() instanceof AbilityWarehouse)
+                        isSecondLeaderShelf = true;
+
                     enableLeaderAbility();
                 }
             }
@@ -849,7 +874,7 @@ public class PlayerBoardController extends GenericController {
             shelfLeader1_1_imageView.setDisable(false);
             shelfLeader1_2_imageView.setDisable(false);
         }
-        else if (isSeccondLeaderProduction){
+        else if (isSecondLeaderProduction){
             shelfLeader2_1_imageView.setDisable(false);
             shelfLeader2_2_imageView.setDisable(false);
         }
@@ -949,8 +974,8 @@ public class PlayerBoardController extends GenericController {
             else { //leader //TODO: da testare
                 resType = shelf.getResourceType().toString()+".png";
                 image = new Image(getClass().getResourceAsStream(resPath+resType));
-                if(shelf.getResourceType() == getGUI().getWarehouseShelvesCopy().stream().filter(x-> x.isLeader()).
-                        map(x->x.getResourceType()).findFirst().orElse(ResourceType.WILDCARD)){
+                if(shelf.getResourceType() == getGUI().getWarehouseShelvesCopy().stream().filter(Shelf::isLeader).
+                        map(Shelf::getResourceType).findFirst().orElse(ResourceType.WILDCARD)){
                     if(shelf.getResources().getQuantity()==1){
                         shelfLeader1_1_imageView.setImage(image);
                         shelfLeader1_2_imageView.setImage(null);
@@ -964,8 +989,8 @@ public class PlayerBoardController extends GenericController {
                         shelfLeader1_2_imageView.setImage(null);
                     }
                 }
-                else if(shelf.getResourceType()==getGUI().getWarehouseShelvesCopy().stream().filter(x-> x.isLeader()).
-                        map(x->x.getResourceType()).findFirst().orElse(ResourceType.WILDCARD)){
+                else if(shelf.getResourceType()==getGUI().getWarehouseShelvesCopy().stream().filter(Shelf::isLeader).
+                        map(Shelf::getResourceType).findFirst().orElse(ResourceType.WILDCARD)){
                     if(shelf.getResources().getQuantity()==1){
                         shelfLeader2_1_imageView.setImage(image);
                         shelfLeader2_2_imageView.setImage(null);
@@ -1290,7 +1315,7 @@ public class PlayerBoardController extends GenericController {
                 isFirstLeaderProduction)
             leader1_checkBox.setVisible(true);
         if(handLeader2_imageView.getImage()!=null && boardLeader2_imageView.getImage()==null ||
-                isSeccondLeaderProduction)
+                isSecondLeaderProduction)
             leader2_checkBox.setVisible(true);
     }
 
@@ -1317,13 +1342,13 @@ public class PlayerBoardController extends GenericController {
         return basicProduction_checkBox.isSelected() || devSpace1_checkBox.isSelected() ||
                 devSpace2_checkBox.isSelected() || devSpace3_checkBox.isSelected() ||
                 isFirstLeaderProduction && leader1_checkBox.isSelected() ||
-                isSeccondLeaderProduction && leader2_checkBox.isSelected(); //TODO: leaders da controllare
+                isSecondLeaderProduction && leader2_checkBox.isSelected(); //TODO: leaders da controllare
     }
 
     //%%
     private void getActivatedProductions(){ //TODO: vedere se migliorabile
         List<Production> activatedProductions = new ArrayList<>();
-
+        int specialProductionSize =  getGUI().getLeaderProductions().size();
         if (basicProduction_checkBox.isSelected())
             activatedProductions.add(getGUI().getBasicProduction());
         if (devSpace1_checkBox.isSelected())
@@ -1332,11 +1357,12 @@ public class PlayerBoardController extends GenericController {
             activatedProductions.add(((DevelopmentCard) getGUI().getDevelopmentBoard().get(1).get(0)).getProduction());
         if (devSpace3_checkBox.isSelected())
             activatedProductions.add(((DevelopmentCard) getGUI().getDevelopmentBoard().get(2).get(0)).getProduction());
-        if (isFirstLeaderProduction && leader1_checkBox.isSelected())
+        if (isFirstLeaderProduction && leader1_checkBox.isSelected()) {
             activatedProductions.add(getGUI().getLeaderProductions().get(0));
-        if (isSeccondLeaderProduction && leader2_checkBox.isSelected())
-            activatedProductions.add(getGUI().getLeaderProductions().get(1));
-
+        }
+        if (isSecondLeaderProduction && leader2_checkBox.isSelected()) {
+            activatedProductions.add(getGUI().getLeaderProductions().get((specialProductionSize>1) ? 1 : 0));  //TODO: controllo quante leader ability sono attive
+        }
         resolveWildcard(activatedProductions);
     }
 
