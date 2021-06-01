@@ -55,7 +55,7 @@ public interface Storage extends Serializable {
             for (int j = 1; j < resources.size(); j++) {
                 if ((resources.get(i).getResourceType() == resources.get(j).getResourceType()) &&
                         i != j && !toRemove[j] && !toRemove[i]) {
-                    resources.get(i).add(resources.get(j));
+                    resources.get(i).add(resources.get(j)); //TODO: questa riga di codice dà problemi quando attiviamo 2 devCard che consumano lo stesso tipo di risorsa: se ho 1 e 2, la volta dopo avrò 3 e 2, poi 5 e 2, ecc
                     toRemove[j] = true;
                 }
             }
