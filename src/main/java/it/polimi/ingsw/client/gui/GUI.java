@@ -5,6 +5,7 @@ import it.polimi.ingsw.client.gui.controllers.*;
 import it.polimi.ingsw.client.structures.DevelopmentDeckView;
 import it.polimi.ingsw.client.structures.DevelopmentDecksView;
 import it.polimi.ingsw.client.structures.MarketView;
+import it.polimi.ingsw.client.structures.PlayerBoardView;
 import it.polimi.ingsw.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.model.boards.Player;
 import it.polimi.ingsw.server.model.cards.card.*;
@@ -524,7 +525,25 @@ public class GUI extends ClientController {
     }
 
     public int getPlayerIndex(String nickname){
-        //TODO: da fare
-        return 0;
+        for(int i=0; i<getPlayerBoards().size(); i++)
+            if(getPlayerBoards().get(i).getNickname().equals(nickname))
+                return i;
+        return -1;
+    }
+
+    public PlayerBoardView getNextOpponent(int currentPosition){
+        for(int i=currentPosition+1; i<getPlayerBoards().size();i++){
+            if(!getPlayerBoards().get(i).getNickname().equals(getNickname()))
+                return getPlayerBoards().get(i);
+        }
+        return null;
+    }
+
+    public PlayerBoardView getPreviousOpponent(int currentPosition){
+        for(int i=currentPosition-1; i>=0;i--){
+            if(!getPlayerBoards().get(i).getNickname().equals(getNickname()))
+                return getPlayerBoards().get(i);
+        }
+        return null;
     }
 }
