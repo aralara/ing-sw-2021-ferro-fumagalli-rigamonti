@@ -1,6 +1,9 @@
 package it.polimi.ingsw.client.gui.controllers;
 
+import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.model.storage.*;
+import it.polimi.ingsw.utils.messages.client.RequestResourcesDevMessage;
+import it.polimi.ingsw.utils.messages.client.RequestResourcesProdMessage;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -20,6 +23,10 @@ public class DepotsController extends GenericController {
     private StorageType storageType;
     private int totalResourcesToTake, totalTakenResources, action;
 
+    private DevelopmentCard devCardToBuy;
+    private int spaceToPlace;
+    private List<Production> productionsToActivate;
+
     @FXML private Label coinToTake_label, servantToTake_label, shieldToTake_label, stoneToTake_label;
     @FXML private Button restore_button, confirm_button;
     @FXML private ImageView whShelf1_1_imageView, whShelf2_1_imageView, whShelf2_2_imageView, whShelf3_1_imageView,
@@ -37,11 +44,12 @@ public class DepotsController extends GenericController {
         requestResources.add(new RequestResources(warehouse, StorageType.WAREHOUSE));
         requestResources.add(new RequestResources(leaders, StorageType.LEADER));
         getGUIApplication().closeSecondStage();
-        if(action == 1) {
-            getGUI().sendRequestResourcesDevMessage(requestResources);
-        }else if (action == 2){
-            getGUI().sendRequestResourcesProdMessage(requestResources);
-        }
+        if(action == 1)
+            getGUI().getMessageHandler().sendClientMessage(
+                    new RequestResourcesDevMessage(devCardToBuy, spaceToPlace, requestResources));
+        else if (action == 2)
+            getGUI().getMessageHandler().sendClientMessage(
+                    new RequestResourcesProdMessage(productionsToActivate, requestResources));
     }
 
     public void handleDragDropped() {
@@ -333,5 +341,17 @@ public class DepotsController extends GenericController {
 
     public void setAction(int action){
         this.action = action;
+    }
+
+    public void setDevCardToBuy(DevelopmentCard devCardToBuy) {
+        this.devCardToBuy = devCardToBuy;
+    }
+
+    public void setSpaceToPlace(int spaceToPlace) {
+        this.spaceToPlace = spaceToPlace;
+    }
+
+    public void setProductionsToActivate(List<Production> productionsToActivate) {
+        this.productionsToActivate = productionsToActivate;
     }
 }

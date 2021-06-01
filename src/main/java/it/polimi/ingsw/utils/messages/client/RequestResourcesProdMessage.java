@@ -32,6 +32,6 @@ public class RequestResourcesProdMessage extends CanActivateProductionsMessage {
 
     @Override
     public void doNACKResponseAction(ClientController client) {
-        client.chooseStorages(getConsumed(),2);
+        client.chooseProductionStorages(getProductions(), getConsumed());
     }
 }

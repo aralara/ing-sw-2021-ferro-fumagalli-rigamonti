@@ -579,7 +579,18 @@ public class CLI extends ClientController {
     }
 
     @Override
-    public List<RequestResources> chooseStorages(List<Resource> resources, int action) {
+    public void chooseDevelopmentStorages(DevelopmentCard cardToBuy, int spaceToPlace, List<Resource> cost) {
+        getMessageHandler().sendClientMessage(
+                new RequestResourcesDevMessage(cardToBuy, spaceToPlace, chooseStorages(cost)));
+    }
+
+    @Override
+    public void chooseProductionStorages(List<Production> productionsToActivate, List<Resource> consumed) {
+        getMessageHandler().sendClientMessage(
+                new RequestResourcesProdMessage(productionsToActivate, chooseStorages(consumed)));
+    }
+
+    private List<RequestResources> chooseStorages(List<Resource> resources) {
         try {
             PlayerBoardView playerBoard = getLocalPlayerBoard();
             graphicalCLI.printWarehouseConfiguration(playerBoard.getWarehouse(), false);
@@ -623,11 +634,6 @@ public class CLI extends ClientController {
 
         idle = true;
 
-        if(action == 1) {
-            getMessageHandler().sendClientMessage(new RequestResourcesDevMessage(getDevelopmentCardToBuy(), getSpaceToPlace(), requestResources));
-        } else if(action == 2){
-            getMessageHandler().sendClientMessage(new RequestResourcesProdMessage(getProductionsToActivate(), requestResources));
-        }
         return requestResources;
     }
 

@@ -7,7 +7,6 @@ import it.polimi.ingsw.client.structures.DevelopmentDecksView;
 import it.polimi.ingsw.client.structures.MarketView;
 import it.polimi.ingsw.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.model.boards.Player;
-import it.polimi.ingsw.server.model.cards.ability.AbilityProduction;
 import it.polimi.ingsw.server.model.cards.card.*;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.server.model.storage.*;
@@ -266,14 +265,28 @@ public class GUI extends ClientController {
     }
 
     @Override
-    public List<RequestResources> chooseStorages(List<Resource> resources, int action) {
+    public void chooseDevelopmentStorages(DevelopmentCard cardToBuy, int spaceToPlace, List<Resource> cost) {
+        Platform.runLater(() -> ((DepotsController)guiApplication.getController(SceneNames.DEPOTS))
+                .setDevCardToBuy(cardToBuy));
+        Platform.runLater(() ->
+                ((DepotsController)guiApplication.getController(SceneNames.DEPOTS))
+                        .setSpaceToPlace(spaceToPlace));
+        chooseStorages(cost, 1);    //TODO: 1 e 2 possono diventare degli enum
+    }
 
+    @Override
+    public void chooseProductionStorages(List<Production> productionsToActivate, List<Resource> consumed) {
+        Platform.runLater(() -> ((DepotsController)guiApplication.getController(SceneNames.DEPOTS))
+                .setProductionsToActivate(productionsToActivate));
+        chooseStorages(consumed, 2);    //TODO: 1 e 2 possono diventare degli enum
+    }
+
+    private void chooseStorages(List<Resource> resources, int action) {
         Platform.runLater(() -> ((DepotsController)guiApplication.getController(SceneNames.DEPOTS))
                 .setResourcesLabels(resources));
         Platform.runLater(() -> ((DepotsController)guiApplication.getController(SceneNames.DEPOTS))
                 .setAction(action));
         Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.DEPOTS));
-        return null;
     }
 
     @Override
@@ -499,14 +512,6 @@ public class GUI extends ClientController {
 
     public void sendCanActivateProductionsMessage(List<Production> productions){
         getMessageHandler().sendClientMessage(new CanActivateProductionsMessage(productions));
-    }
-  
-    public void sendRequestResourcesDevMessage(List<RequestResources> requestResources){
-        getMessageHandler().sendClientMessage(new RequestResourcesDevMessage(getDevelopmentCardToBuy(), getSpaceToPlace(), requestResources));
-    }
-
-    public void sendRequestResourcesProdMessage(List<RequestResources> requestResources){
-        getMessageHandler().sendClientMessage(new RequestResourcesProdMessage(getProductionsToActivate(), requestResources));
     }
 
     public List<Resource> getStrongboxResources(){

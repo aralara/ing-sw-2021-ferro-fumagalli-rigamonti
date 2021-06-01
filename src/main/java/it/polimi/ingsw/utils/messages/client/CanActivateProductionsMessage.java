@@ -24,13 +24,13 @@ public class CanActivateProductionsMessage extends ClientActionMessage {
 
     public List<Resource> getConsumed() {
         List<Resource> consumed = new ArrayList<>();
-        productions.stream().map(Production::getConsumed).forEach(consumed::addAll);
+        productions.stream().map(Production::getConsumed).forEach(l -> l.forEach(r -> consumed.add(r.makeClone())));
         return consumed;
     }
 
     public List<Resource> getProduced() {
         List<Resource> produced = new ArrayList<>();
-        productions.stream().map(Production::getProduced).forEach(produced::addAll);
+        productions.stream().map(Production::getProduced).forEach(l -> l.forEach(r -> produced.add(r.makeClone())));
         return produced;
     }
 
@@ -44,10 +44,7 @@ public class CanActivateProductionsMessage extends ClientActionMessage {
     @Override
     public void doACKResponseAction(ClientController client) {
         client.setMainActionPlayed(true);
-        List<Resource> resources = new ArrayList<>();
-        productions.forEach(p -> resources.addAll(p.getConsumed()));
-        client.setProductionsToActivate(productions);
-        client.chooseStorages(resources,2);
+        client.chooseProductionStorages(productions, getConsumed());
     }
 
     @Override
