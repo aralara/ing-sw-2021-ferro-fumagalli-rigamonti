@@ -400,22 +400,22 @@ public class PlayerBoardController extends GenericController {
     }
 
     public void handleDragOverShelfLeader1_1(DragEvent dragEvent) {
-        if(isFirstLeaderProduction)
+        if(isFirstLeaderShelf)
             handleDragOverShelf(dragEvent);
     }
 
     public void handleDragOverShelfLeader1_2(DragEvent dragEvent) {
-        if(isFirstLeaderProduction)
+        if(isFirstLeaderShelf)
             handleDragOverShelf(dragEvent);
     }
 
     public void handleDragOverShelfLeader2_1(DragEvent dragEvent) {
-        if(isSecondLeaderProduction)
+        if(isSecondLeaderShelf)
             handleDragOverShelf(dragEvent);
     }
 
     public void handleDragOverShelfLeader2_2(DragEvent dragEvent) {
-        if(isSecondLeaderProduction)
+        if(isSecondLeaderShelf)
             handleDragOverShelf(dragEvent);
     }
 
@@ -463,25 +463,25 @@ public class PlayerBoardController extends GenericController {
 
     public void handleDragDroppedShelfLeader1_1(DragEvent dragEvent) { //TODO: da testare
         //int position = getGUI().getLeaderShelfPosition(leader1WarehouseType)+1;
-        int position = 3; //TODO: può essere 3 o 4, controllo numero leader con shelf
+        int position = 3; //TODO: faccio un check prendendo i vari shelf del wh
         if(handleDragDroppedShelf(dragEvent, shelfLeader1_1_imageView, position))
             setWhLeadersImages(position, 1);
     }
 
     public void handleDragDroppedShelfLeader1_2(DragEvent dragEvent) { //TODO: da testare
-        int position = (isFirstLeaderProduction) ? 4 : (isSecondLeaderProduction) ? 4 : -1;
+        int position = 3; //TODO: faccio un check prendendo i vari shelf del wh
         if(handleDragDroppedShelf(dragEvent, shelfLeader1_2_imageView, position))
             setWhLeadersImages(position, 1);
     }
 
     public void handleDragDroppedShelfLeader2_1(DragEvent dragEvent) { //TODO: da testare
-        int position = (isFirstLeaderProduction) ? 4 : (isSecondLeaderProduction) ? 3 : -1;
+        int position = (isFirstLeaderShelf) ? 4 : 3; //TODO: faccio un check prendendo i vari shelf del wh
         if(handleDragDroppedShelf(dragEvent, shelfLeader2_1_imageView, position))
             setWhLeadersImages(position, 2);
     }
 
     public void handleDragDroppedShelfLeader2_2(DragEvent dragEvent) { //TODO: da testare
-        int position = (isFirstLeaderProduction) ? 4 : (isSecondLeaderProduction) ? 3 : -1;
+        int position = (isFirstLeaderShelf) ? 4 : 3; //TODO: faccio un check prendendo i vari shelf del wh
         if(handleDragDroppedShelf(dragEvent, shelfLeader2_2_imageView, position))
             setWhLeadersImages(position, 2);
     }
@@ -889,15 +889,23 @@ public class PlayerBoardController extends GenericController {
    public void setLeaderBBoard(List<Integer> idList){  //TODO: mi arriva sia per le mie leader sia per quelle degli oppo, va bene?
         updateLeaderBBoard(idList);
     }
-  
-    //%%
+
     private void enableLeaderAbility(){
 
         if(isFirstLeaderProduction) {
+            shelfLeader1_1_imageView.setDisable(true);
+            shelfLeader1_2_imageView.setDisable(true);
+        }
+        else if (isSecondLeaderProduction){
+            shelfLeader2_1_imageView.setDisable(true);
+            shelfLeader2_2_imageView.setDisable(true);
+        }
+
+        if(isFirstLeaderShelf) {
             shelfLeader1_1_imageView.setDisable(false);
             shelfLeader1_2_imageView.setDisable(false);
         }
-        else if (isSecondLeaderProduction){
+        else if (isSecondLeaderShelf){
             shelfLeader2_1_imageView.setDisable(false);
             shelfLeader2_2_imageView.setDisable(false);
         }
@@ -1050,6 +1058,7 @@ public class PlayerBoardController extends GenericController {
         updateWarehouse(getGUI().getWarehouseShelvesCopy());
     }
 
+    //%%
     private void setWhShelvesImages(int level){
         int resQuantity = shelves.get(level-1).getResources().getQuantity();
         switch (level){
@@ -1332,7 +1341,6 @@ public class PlayerBoardController extends GenericController {
         showLeaderCheckBoxes();
     }
 
-    //%%
     private void showLeaderCheckBoxes(){
         if(handLeader1_imageView.getImage()!=null && boardLeader1_imageView.getImage()==null ||
                 isFirstLeaderProduction)
@@ -1360,7 +1368,6 @@ public class PlayerBoardController extends GenericController {
         leader2_checkBox.setSelected(false);
     }
 
-    //%%
     private boolean checkSelectedCheckBoxes(){
         return basicProduction_checkBox.isSelected() || devSpace1_checkBox.isSelected() ||
                 devSpace2_checkBox.isSelected() || devSpace3_checkBox.isSelected() ||
@@ -1368,7 +1375,6 @@ public class PlayerBoardController extends GenericController {
                 isSecondLeaderProduction && leader2_checkBox.isSelected(); //TODO: leaders da controllare
     }
 
-    //%%
     private void getActivatedProductions(){ //TODO: vedere se migliorabile
         List<Production> activatedProductions = new ArrayList<>();
         int specialProductionSize =  getGUI().getLeaderProductions().size();
