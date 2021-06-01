@@ -122,8 +122,9 @@ public class PlayerBoardController extends GenericController {
             endTurn_button.setDisable(false);
             activeLeaderCard_button.setDisable(false);
             discardLeaderCard_button.setDisable(false);
-            viewOpponents_button.setDisable(false);
         }
+        if(!isResToPlaceAction)
+            viewOpponents_button.setDisable(false);
     }
 
     public void activateProductions() {
@@ -205,23 +206,30 @@ public class PlayerBoardController extends GenericController {
 
     private void viewOpponent(boolean next){//false x precedente
         String currentPlayer = player_label.getText();
+        int thisPlayerPosition = getGUI().getPlayerIndex(getGUI().getNickname());
+        int numberOfPlayers = getGUI().getNumberOfPlayers();
+        leftArrow_button.setDisable(false);
+        rightArrow_button.setDisable(false);
+        PlayerBoardView opponentBoard;
         if(currentPlayer.equals(getGUI().getNickname())){
-            //andare a prendere il primo giocatore avversario
+            leftArrow_button.setDisable(true);
+            opponentBoard= getGUI().getNextOpponent(-1);
         }
         else if(next){
-            //prendere il giocatore successivo
+            int currentPosition = getGUI().getPlayerIndex(currentPlayer);
+            opponentBoard= getGUI().getNextOpponent(currentPosition);
         }
         else{
-            //prendere il precedente
+            int currentPosition = getGUI().getPlayerIndex(currentPlayer);
+            opponentBoard= getGUI().getPreviousOpponent(currentPosition);
         }
-        //contare #avversari e abilitare frecce di conseguenza
-        //TODO: da fare
-        PlayerBoardView opponentBoard;
-        if(getGUI().getPlayerBoards().get(0).getNickname().equals(getGUI().getNickname()))
-            opponentBoard = getGUI().getPlayerBoards().get(1);  //prende il giocatore diverso da me
-        else
-            opponentBoard = getGUI().getPlayerBoards().get(0);
-        ////////////////////////////////////////////////////////
+        int opponentPosition = getGUI().getPlayerIndex(opponentBoard.getNickname());
+        if(opponentPosition+1==numberOfPlayers ||
+                opponentPosition+1==thisPlayerPosition && thisPlayerPosition+1==numberOfPlayers)
+            rightArrow_button.setDisable(true);
+        if(opponentPosition-1==0 ||
+                opponentPosition-1==thisPlayerPosition && thisPlayerPosition-1==0)
+            leftArrow_button.setDisable(true);
         player_label.setText(opponentBoard.getNickname());
         inkwell_imageVIew.setVisible(opponentBoard.isInkwell());
         updateFaithBoard(opponentBoard.getFaithBoard().getFaith(), false);
@@ -705,6 +713,7 @@ public class PlayerBoardController extends GenericController {
         if(mainActionPlayed)
             endTurn_button.setDisable(false);
         isResToPlaceAction=false;
+        viewOpponents_button.setDisable(false);
     }
 
     private void updateDevelopmentBSpaces(List<Deck> devDecks) {
