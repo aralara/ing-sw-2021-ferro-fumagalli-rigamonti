@@ -442,34 +442,6 @@ public class GUI extends ClientController {
             getMessageHandler().sendClientMessage(new LeaderCardDiscardMessage(leaderCards));
     }
 
-    public int getLeaderShelfPosition(ResourceType resourceType){//TODO: va bene?
-        try {
-            List<Shelf> shelves = getLocalPlayerBoard().getWarehouse().getShelves();
-            for(int i=0; i<shelves.size();i++)
-                if(shelves.get(i).isLeader() && shelves.get(i).getResourceType()==resourceType)
-                    return i;
-        } catch (NotExistingNicknameException e) {
-            e.printStackTrace();
-        }
-        return -1;
-    }
-
-    public int getLeaderProductionPosition(ResourceType resourceTypeConsumed){//TODO: BRUTTISSIMO, BISOGNA TROVARE UNA SOLUZIONE
-        try {
-            int i=0;
-            for(Card leaderCard : getLocalPlayerBoard().getLeaderBoard().getBoard()){
-                if(((LeaderCard)leaderCard).getAbility() instanceof AbilityProduction && ((AbilityProduction)(
-                        (LeaderCard)leaderCard).getAbility()).getProduction().getConsumed().get(0).
-                        getResourceType()==resourceTypeConsumed)
-                    return i;
-                i++;
-            }
-        } catch (NotExistingNicknameException e) {
-            e.printStackTrace();
-        }
-        return -1;
-    }
-
     private void resolveAbilityMarble(List<ResourceType> availableAbilities){
         //TODO: fare
     }
@@ -516,14 +488,13 @@ public class GUI extends ClientController {
         return new Production();
     }
 
-    public Production getLeaderProduction(int position){ //TODO: brutto :/
+    public List<Production> getLeaderProductions(){
         try {
-            return ((AbilityProduction)((LeaderCard)getLocalPlayerBoard().getLeaderBoard().getBoard().get(position))
-                    .getAbility()).getProduction();
+            return getLocalPlayerBoard().getActiveAbilityProductions();
         } catch (NotExistingNicknameException e) {
             e.printStackTrace();
         }
-        return new Production();
+        return null;
     }
 
     public void sendCanActivateProductionsMessage(List<Production> productions){
