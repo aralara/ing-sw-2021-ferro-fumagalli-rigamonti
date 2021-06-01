@@ -64,6 +64,7 @@ public class PlayerBoardController extends GenericController {
         }
         else {
             disableButtons();
+            viewOpponents_button.setDisable(false);
         }
     }
 
@@ -115,6 +116,9 @@ public class PlayerBoardController extends GenericController {
         if(mainActionPlayed){
             showCheckBoxes();
             endTurn_button.setDisable(false);
+            activeLeaderCard_button.setDisable(false);
+            discardLeaderCard_button.setDisable(false);
+            viewOpponents_button.setDisable(false);
         }
     }
 
@@ -197,13 +201,23 @@ public class PlayerBoardController extends GenericController {
 
     private void viewOpponent(boolean next){//false x precedente
         String currentPlayer = player_label.getText();
-
+        if(currentPlayer.equals(getGUI().getNickname())){
+            //andare a prendere il primo giocatore avversario
+        }
+        else if(next){
+            //prendere il giocatore successivo
+        }
+        else{
+            //prendere il precedente
+        }
+        //contare #avversari e abilitare frecce di conseguenza
+        //TODO: da fare
         PlayerBoardView opponentBoard;
         if(getGUI().getPlayerBoards().get(0).getNickname().equals(getGUI().getNickname()))
             opponentBoard = getGUI().getPlayerBoards().get(1);  //prende il giocatore diverso da me
         else
             opponentBoard = getGUI().getPlayerBoards().get(0);
-        //TODO:sopra cambiare
+        ////////////////////////////////////////////////////////
         player_label.setText(opponentBoard.getNickname());
         inkwell_imageVIew.setVisible(opponentBoard.isInkwell());
         updateFaithBoard(opponentBoard.getFaithBoard().getFaith(), false);
@@ -602,7 +616,7 @@ public class PlayerBoardController extends GenericController {
         }else if (resourceType == ResourceType.STONE){
             resToPlaceStone_label.setText("x "+quantity);
         }
-
+        viewOpponents_button.setDisable(true);
         if(quantity>0)
             disableButtons();
         else if (quantity == 0)

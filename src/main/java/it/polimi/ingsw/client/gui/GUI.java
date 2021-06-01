@@ -517,4 +517,9 @@ public class GUI extends ClientController {
         }
         return new ArrayList<>();
     }
+
+    public int getPlayerIndex(String nickname){
+        //TODO: da fare
+        return 0;
+    }
 }
