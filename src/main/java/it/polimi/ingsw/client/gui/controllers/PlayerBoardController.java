@@ -206,29 +206,25 @@ public class PlayerBoardController extends GenericController {
 
     private void viewOpponent(boolean next){//false x precedente
         String currentPlayer = player_label.getText();
-        int thisPlayerPosition = getGUI().getPlayerIndex(getGUI().getNickname());
-        int numberOfPlayers = getGUI().getNumberOfPlayers();
         leftArrow_button.setDisable(false);
         rightArrow_button.setDisable(false);
         PlayerBoardView opponentBoard;
         if(currentPlayer.equals(getGUI().getNickname())){
             leftArrow_button.setDisable(true);
-            opponentBoard= getGUI().getNextOpponent(-1);
+            opponentBoard = getGUI().getOpponents().get(0);
         }
         else if(next){
-            int currentPosition = getGUI().getPlayerIndex(currentPlayer);
-            opponentBoard= getGUI().getNextOpponent(currentPosition);
+            int currentPosition = getGUI().getOpponentIndex(currentPlayer);
+            opponentBoard = getGUI().getOpponents().get(currentPosition+1);
         }
         else{
-            int currentPosition = getGUI().getPlayerIndex(currentPlayer);
-            opponentBoard= getGUI().getPreviousOpponent(currentPosition);
+            int currentPosition = getGUI().getOpponentIndex(currentPlayer);
+            opponentBoard = getGUI().getOpponents().get(currentPosition-1);
         }
-        int opponentPosition = getGUI().getPlayerIndex(opponentBoard.getNickname());
-        if(opponentPosition+1==numberOfPlayers ||
-                opponentPosition+1==thisPlayerPosition && thisPlayerPosition+1==numberOfPlayers)
+        int opponentPosition = getGUI().getOpponentIndex(opponentBoard.getNickname());
+        if(opponentPosition==getGUI().getOpponents().size()-1)
             rightArrow_button.setDisable(true);
-        if(opponentPosition-1==0 ||
-                opponentPosition-1==thisPlayerPosition && thisPlayerPosition-1==0)
+        if(opponentPosition==0)
             leftArrow_button.setDisable(true);
         player_label.setText(opponentBoard.getNickname());
         inkwell_imageVIew.setVisible(opponentBoard.isInkwell());
@@ -237,7 +233,7 @@ public class PlayerBoardController extends GenericController {
         updateWarehouse(opponentBoard.getWarehouse().getShelves());
         updateStrongbox(opponentBoard.getStrongbox().getResources());
         updateDevelopmentBSpaces(opponentBoard.getDevelopmentBoard().getSpaces());
-        updateLeaderBBoard(opponentBoard.getLeaderBoard().getBoard());
+        updateLeaderBBoard(opponentBoard.getLeaderBoard().getBoard()); //TODO: controllare
     }
 
     public void handleDragOver(DragEvent dragEvent) {
@@ -1408,6 +1404,8 @@ public class PlayerBoardController extends GenericController {
             Storage.aggregateResources(consumedWildcards);
             Storage.aggregateResources(producedWildcards);
             ((WildcardResolverController) getGUIApplication().getController(SceneNames.RESOURCE_CHOICE_MENU)).
+                    setIsFirstPhase(false);
+            ((WildcardResolverController) getGUIApplication().getController(SceneNames.RESOURCE_CHOICE_MENU)).
                     resolveWildcard(consumedResolved, producedResolved, consumedWildcards, producedWildcards);
             getGUIApplication().setActiveScene(SceneNames.RESOURCE_CHOICE_MENU);
         }
@@ -1461,7 +1459,7 @@ public class PlayerBoardController extends GenericController {
             updateWarehouse(pbv.getWarehouse().getShelves());
             updateStrongbox(pbv.getStrongbox().getResources());
             updateDevelopmentBSpaces(pbv.getDevelopmentBoard().getSpaces());
-            updateLeaderBHand(pbv.getLeaderBoard().getHand());
+            updateLeaderBHand(pbv.getLeaderBoard().getHand()); //TODO: controllare
             updateLeaderBBoard(pbv.getLeaderBoard().getBoard());
         } catch (NotExistingNicknameException e) {
             e.printStackTrace();
