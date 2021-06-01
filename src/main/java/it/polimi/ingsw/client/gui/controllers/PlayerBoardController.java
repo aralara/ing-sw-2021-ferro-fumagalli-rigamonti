@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.gui.controllers;
 
 import it.polimi.ingsw.client.gui.SceneNames;
+import it.polimi.ingsw.client.structures.PlayerBoardView;
 import it.polimi.ingsw.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.model.cards.card.Card;
 import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
@@ -8,10 +9,7 @@ import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.server.model.storage.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
@@ -33,9 +31,12 @@ public class PlayerBoardController extends GenericController {
 
     @FXML private Label player_label,
             coinStrongbox_label, servantStrongbox_label, shieldStrongbox_label, stoneStrongbox_label,
-            resToPlaceCoin_label, resToPlaceServant_label, resToPlaceShield_label, resToPlaceStone_label;
+            resToPlaceCoin_label, resToPlaceServant_label, resToPlaceShield_label, resToPlaceStone_label,
+            otherActions_label, resToPlace_label, leaders_label;
+    @FXML private Separator separator1, separator2, separator3;
     @FXML private Button confirm_button, restoreWarehouse_button, activateProductions_button, endTurn_button,
-            activeLeaderCard_button, discardLeaderCard_button, rearrangeWarehouse_button, viewOpponents_button;
+            activeLeaderCard_button, discardLeaderCard_button, rearrangeWarehouse_button, viewOpponents_button,
+            leftArrow_button, rightArrow_button, goBoard_button;
     @FXML private CheckBox basicProduction_checkBox, devSpace1_checkBox, devSpace2_checkBox, devSpace3_checkBox,
             leader1_checkBox, leader2_checkBox;
     @FXML private ImageView inkwell_imageVIew,
@@ -159,7 +160,7 @@ public class PlayerBoardController extends GenericController {
     }
 
     public void rearrangeWarehouse() {
-        if(!warehouseIsEmpty()) {
+        if(!warehouseIsDisabled && !warehouseIsEmpty()) {
             for (Shelf shelf : shelves) {
                 addQuantity(shelf.getResources().getResourceType(), shelf.getResources().getQuantity());
                 resetShelf(shelf);
@@ -172,7 +173,45 @@ public class PlayerBoardController extends GenericController {
     }
 
     public void viewOpponents() {
-        //TODO:da fare
+        showButtons(false);
+        if(getGUI().getLorenzoFaith()==-1){ //multiplayer
+            viewOpponent(true);
+        }
+        else { //single player
+            player_label.setText("Lorenzo il Magnifico");
+            inkwell_imageVIew.setVisible(false);
+            updateFaithBoard(getGUI().getLorenzoFaith(), true);
+            updateFaithBPope(new boolean[]{false, false, false}); //TODO: lorenzo ha anche popeTiles?
+            resetWarehouse();
+            resetStrongbox();
+            resetDevelopmentBSpaces();
+            resetLeaderBoard();
+            leftArrow_button.setDisable(true);
+            rightArrow_button.setDisable(true);
+            leaders_label.setVisible(false);
+            separator3.setVisible(false);
+        }
+        hideLeaderHand();
+        hideCheckBoxes();
+    }
+
+    private void viewOpponent(boolean next){//false x precedente
+        String currentPlayer = player_label.getText();
+
+        PlayerBoardView opponentBoard;
+        if(getGUI().getPlayerBoards().get(0).getNickname().equals(getGUI().getNickname()))
+            opponentBoard = getGUI().getPlayerBoards().get(1);  //prende il giocatore diverso da me
+        else
+            opponentBoard = getGUI().getPlayerBoards().get(0);
+        //TODO:sopra cambiare
+        player_label.setText(opponentBoard.getNickname());
+        inkwell_imageVIew.setVisible(opponentBoard.isInkwell());
+        updateFaithBoard(opponentBoard.getFaithBoard().getFaith(), false);
+        updateFaithBPope(opponentBoard.getFaithBoard().getPopeProgression());
+        updateWarehouse(opponentBoard.getWarehouse().getShelves());
+        updateStrongbox(opponentBoard.getStrongbox().getResources());
+        updateDevelopmentBSpaces(opponentBoard.getDevelopmentBoard().getSpaces());
+        updateLeaderBBoard(opponentBoard.getLeaderBoard().getBoard());
     }
 
     public void handleDragOver(DragEvent dragEvent) {
@@ -650,13 +689,12 @@ public class PlayerBoardController extends GenericController {
         isResToPlaceAction=false;
     }
 
-    public void showDevelopmentBSpaces() {
+    private void updateDevelopmentBSpaces(List<Deck> devDecks) {
         int id, maxLevel = 3;
-        List<Deck> tempDevDeck = getGUI().getDevelopmentBoard();
-        for(int i = 0; i< tempDevDeck.size(); i++){
+        for(int i = 0; i< devDecks.size(); i++){
             for(int level = 1; level <= maxLevel; level++) {
                 int finalLevel = level;
-                id = tempDevDeck.get(i).getCards().stream().map(x -> (DevelopmentCard)x).filter(x -> x.getLevel() == finalLevel).
+                id = devDecks.get(i).getCards().stream().map(x -> (DevelopmentCard)x).filter(x -> x.getLevel() == finalLevel).
                         map(Card::getID).findFirst().orElse(-1);
                 getDevSpace(i,level).setImage((id > -1) ? new Image(
                         getClass().getResourceAsStream("/imgs/devCards/" + id + ".png")) : null);
@@ -665,17 +703,36 @@ public class PlayerBoardController extends GenericController {
         showCheckBoxes();
     }
 
-    public void showFaithBoard(){
+    private void resetDevelopmentBSpaces(){
+        space1L1_imageView.setImage(null);
+        space1L2_imageView.setImage(null);
+        space1L3_imageView.setImage(null);
+        space2L1_imageView.setImage(null);
+        space2L2_imageView.setImage(null);
+        space2L3_imageView.setImage(null);
+        space3L1_imageView.setImage(null);
+        space3L2_imageView.setImage(null);
+        space3L3_imageView.setImage(null);
+    }
+
+    public void showDevelopmentBSpaces() {
+        updateDevelopmentBSpaces(getGUI().getDevelopmentBoard());
+    }
+
+    private void updateFaithBoard(int faith, boolean isLorenzo){
         resetFaith();
-        Image cross = new Image(getClass().getResourceAsStream("/imgs/faith/cross_red.png"));
-        int myFaith = 0;
+        Image cross = new Image(getClass().getResourceAsStream(
+                "/imgs/faith/cross_"+(isLorenzo?"black":"red")+".png"));
+        if(faith > 24) faith = 24;
+        faithSpaces.get(faith).setImage(cross);
+    }
+
+    public void showFaithBoard(){
         try {
-            myFaith = getGUI().getLocalPlayerBoard().getFaithBoard().getFaith();
+            updateFaithBoard(getGUI().getLocalPlayerBoard().getFaithBoard().getFaith(), false);
         }catch(NotExistingNicknameException e){
             e.printStackTrace();
         }
-        if(myFaith > 24) myFaith = 24;
-        faithSpaces.get(myFaith).setImage(cross);
     }
 
     private void resetFaith(){
@@ -684,31 +741,44 @@ public class PlayerBoardController extends GenericController {
             imageView.setImage(null);
     }
 
+    private void updateFaithBPope(boolean [] popeTiles) {
+        for (int i=0; i < popeTiles.length; i++) {
+            if (i == 0) {
+                popeFavorTile1_imageView.setImage(new Image(
+                        (popeTiles[i]) ? getClass().getResourceAsStream("/imgs/faith/tile_2pointUp.png") :
+                                getClass().getResourceAsStream("/imgs/faith/tile_2point.png")));
+            }else if (i == 1){
+                popeFavorTile2_imageView.setImage(new Image(
+                        (popeTiles[i]) ? getClass().getResourceAsStream("/imgs/faith/tile_3pointUp.png") :
+                                getClass().getResourceAsStream("/imgs/faith/tile_3point.png")));
+            } else if (i == 2) {
+                popeFavorTile3_imageView.setImage(new Image(
+                        (popeTiles[i]) ? getClass().getResourceAsStream("/imgs/faith/tile_4pointUp.png") :
+                                getClass().getResourceAsStream("/imgs/faith/tile_4point.png")));
+            }
+        }
+    }
+
     public void showFaithBPope() {
         try {
-            boolean [] popeCopy = getGUI().getLocalPlayerBoard().getFaithBoard().getPopeProgression();
-            for (int i=0; i < popeCopy.length; i++) {
-                if (i == 0) {
-                    popeFavorTile1_imageView.setImage(new Image(
-                            (popeCopy[i]) ? getClass().getResourceAsStream("/imgs/faith/tile_2pointUp.png") :
-                                    getClass().getResourceAsStream("/imgs/faith/tile_2point.png")));
-                }else if (i == 1){
-                    popeFavorTile2_imageView.setImage(new Image(
-                            (popeCopy[i]) ? getClass().getResourceAsStream("/imgs/faith/tile_3pointUp.png") :
-                                    getClass().getResourceAsStream("/imgs/faith/tile_3point.png")));
-                } else if (i == 2) {
-                    popeFavorTile3_imageView.setImage(new Image(
-                            (popeCopy[i]) ? getClass().getResourceAsStream("/imgs/faith/tile_4pointUp.png") :
-                                    getClass().getResourceAsStream("/imgs/faith/tile_4point.png")));
-                }
-            }
-
+            updateFaithBPope(getGUI().getLocalPlayerBoard().getFaithBoard().getPopeProgression());
         }catch(NotExistingNicknameException e){
             e.printStackTrace();
         }
     }
 
-    public void setLeaderBHand(List<Integer> idList){
+  
+  private void resetLeaderBoard(){
+        handLeader1_imageView.setImage(null);
+        handLeader2_imageView.setImage(null);
+        boardLeader1_imageView.setImage(null);
+        boardLeader2_imageView.setImage(null);
+    }
+  
+    
+
+    private void updateLeaderBHand(List<Integer> idList){  //TODO: mi arriva sia per le mie leader sia per quelle degli oppo, va bene
+        
         if(idList.stream().noneMatch(x -> x == -1)) {
             handLeader1_imageView.setImage(null);
             handLeader2_imageView.setImage(null);
@@ -725,8 +795,24 @@ public class PlayerBoardController extends GenericController {
         showLeaderCheckBoxes();
     }
 
-    //%%
-    public void setLeaderBBoard(List<Integer> idList){
+
+    private void updateLeaderBHand(Deck leaderCards){
+        List<Integer> idList = new ArrayList<>();
+        for(Card card : leaderCards)
+            idList.add(card.getID());
+        updateLeaderBHand(idList);
+    }
+
+    public void setLeaderBHand(List<Integer> idList){  //TODO: mi arriva sia per le mie leader sia per quelle degli oppo, va bene
+        updateLeaderBHand(idList);
+    }
+
+    private void hideLeaderHand(){
+        handLeader1_imageView.setImage(null);
+        handLeader2_imageView.setImage(null);
+    }
+
+    private void updateLeaderBBoard(List<Integer> idList){  //TODO: mi arriva sia per le mie leader sia per quelle degli oppo, va bene?
         if(idList.stream().noneMatch(x -> x == -1)) {
             boardLeader1_imageView.setImage(null);
             boardLeader2_imageView.setImage(null);
@@ -745,6 +831,17 @@ public class PlayerBoardController extends GenericController {
         showLeaderCheckBoxes();
     }
 
+  private void updateLeaderBBoard(Deck leaderCards){
+        List<Integer> idList = new ArrayList<>();
+        for(Card card : leaderCards)
+            idList.add(card.getID());
+        updateLeaderBBoard(idList);
+    }
+  
+   public void setLeaderBBoard(List<Integer> idList){  //TODO: mi arriva sia per le mie leader sia per quelle degli oppo, va bene?
+        updateLeaderBBoard(idList);
+    }
+  
     //%%
     private void enableLeaderAbility(){
 
@@ -758,9 +855,9 @@ public class PlayerBoardController extends GenericController {
         }
     }
 
-    public void showStrongbox() { //TODO: da controllare... perchè lo fa su un altro thread?
+    private void updateStrongbox(List<Resource> strongboxResources) { //TODO: da controllare... perchè lo fa su un altro thread?
         resetStrongbox();
-        for (Resource resource : getGUI().getStrongboxResources()){
+        for (Resource resource : strongboxResources){
             if(resource.getResourceType() == ResourceType.COIN){
                 Platform.runLater(() -> coinStrongbox_label.setText("x " + resource.getQuantity()));
             } else if(resource.getResourceType() == ResourceType.SERVANT){
@@ -773,6 +870,10 @@ public class PlayerBoardController extends GenericController {
         }
     }
 
+    public void showStrongbox() {
+        updateStrongbox(getGUI().getStrongboxResources());
+    }
+
     private void resetStrongbox(){
         Platform.runLater(() -> coinStrongbox_label.setText("x 0"));
         Platform.runLater(() -> servantStrongbox_label.setText("x 0"));
@@ -780,8 +881,8 @@ public class PlayerBoardController extends GenericController {
         Platform.runLater(() -> shieldStrongbox_label.setText("x 0"));
     }
 
-    public void showWarehouse() {
-        shelves = getGUI().getWarehouseShelvesCopy();
+    private void updateWarehouse(List<Shelf> warehouseShelves) {
+        shelves = warehouseShelves;
         Image image;
         Shelf shelf;
         String resPath = "/imgs/res/", resType;
@@ -882,7 +983,25 @@ public class PlayerBoardController extends GenericController {
         }
     }
 
-    //%%
+
+
+    private void resetWarehouse(){
+        shelfResL1_1_imageView.setImage(null);
+        shelfResL2_1_imageView.setImage(null);
+        shelfResL2_2_imageView.setImage(null);
+        shelfResL3_1_imageView.setImage(null);
+        shelfResL3_2_imageView.setImage(null);
+        shelfResL3_3_imageView.setImage(null);
+        shelfLeader1_1_imageView.setImage(null);
+        shelfLeader1_2_imageView.setImage(null);
+        shelfLeader2_1_imageView.setImage(null);
+        shelfLeader2_2_imageView.setImage(null);
+    }
+
+    public void showWarehouse() {
+        updateWarehouse(getGUI().getWarehouseShelvesCopy());
+    }
+
     private void setWhShelvesImages(int level){
         int resQuantity = shelves.get(level-1).getResources().getQuantity();
         switch (level){
@@ -1244,5 +1363,59 @@ public class PlayerBoardController extends GenericController {
             getGUIApplication().setActiveScene(SceneNames.RESOURCE_CHOICE_MENU);
         }
         else getGUI().sendCanActivateProductionsMessage(productions);
+    }
+
+    private void showButtons(boolean isMyBoard){
+        activateProductions_button.setVisible(isMyBoard);
+        endTurn_button.setVisible(isMyBoard);
+        otherActions_label.setVisible(isMyBoard);
+        separator1.setVisible(isMyBoard);
+        viewOpponents_button.setVisible(isMyBoard);
+        rearrangeWarehouse_button.setVisible(isMyBoard);
+        activeLeaderCard_button.setVisible(isMyBoard);
+        discardLeaderCard_button.setVisible(isMyBoard);
+        resToPlace_label.setVisible(isMyBoard);
+        separator2.setVisible(isMyBoard);
+        coinToPlace_imageView.setVisible(isMyBoard);
+        resToPlaceCoin_label.setVisible(isMyBoard);
+        servantToPlace_imageView.setVisible(isMyBoard);
+        resToPlaceServant_label.setVisible(isMyBoard);
+        shieldToPlace_imageView.setVisible(isMyBoard);
+        resToPlaceShield_label.setVisible(isMyBoard);
+        stoneToPlace_imageView.setVisible(isMyBoard);
+        resToPlaceStone_label.setVisible(isMyBoard);
+        leftArrow_button.setVisible(!isMyBoard);
+        rightArrow_button.setVisible(!isMyBoard);
+        goBoard_button.setVisible(!isMyBoard);
+        leaders_label.setVisible(true);
+        separator3.setVisible(true);
+    }
+
+    public void showPrevPlayer() {
+        viewOpponent(false);
+    }
+
+    public void showNextPlayer() {
+        viewOpponent(true);
+    }
+
+    public void goBoard() {
+        showButtons(true);
+        leftArrow_button.setDisable(true);
+        rightArrow_button.setDisable(true);
+        player_label.setText(getGUI().getNickname());
+        try {
+            PlayerBoardView pbv = getGUI().getLocalPlayerBoard();
+            inkwell_imageVIew.setVisible(pbv.isInkwell());
+            updateFaithBoard(pbv.getFaithBoard().getFaith(), false);
+            updateFaithBPope(pbv.getFaithBoard().getPopeProgression());
+            updateWarehouse(pbv.getWarehouse().getShelves());
+            updateStrongbox(pbv.getStrongbox().getResources());
+            updateDevelopmentBSpaces(pbv.getDevelopmentBoard().getSpaces());
+            updateLeaderBHand(pbv.getLeaderBoard().getHand());
+            updateLeaderBBoard(pbv.getLeaderBoard().getBoard());
+        } catch (NotExistingNicknameException e) {
+            e.printStackTrace();
+        }
     }
 }

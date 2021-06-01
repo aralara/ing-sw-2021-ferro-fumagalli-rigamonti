@@ -221,12 +221,12 @@
             <Font name="Pristina" size="18.0" />
          </font>
       </Button>
-      <Label layoutX="1286.0" layoutY="101.0" text="Other actions" textFill="WHITE">
+      <Label fx:id="otherActions_label" layoutX="1286.0" layoutY="101.0" text="Other actions" textFill="WHITE">
          <font>
             <Font name="Pristina" size="24.0" />
          </font>
       </Label>
-      <Separator layoutX="936.0" layoutY="141.0" prefHeight="3.0" prefWidth="446.0" />
+      <Separator fx:id="separator1" layoutX="936.0" layoutY="141.0" prefHeight="3.0" prefWidth="446.0" />
       <Button fx:id="activeLeaderCard_button" disable="true" focusTraversable="false" layoutX="1097.0" layoutY="152.0" mnemonicParsing="false" onAction="#activateLeaderCard" text="Activate leader card" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="18.0" />
@@ -242,12 +242,12 @@
             <Font name="Pristina" size="18.0" />
          </font>
       </Button>
-      <Label layoutX="1248.0" layoutY="225.0" text="Resources to place" textFill="WHITE">
+      <Label fx:id="resToPlace_label" layoutX="1248.0" layoutY="225.0" text="Resources to place" textFill="WHITE">
          <font>
             <Font name="Pristina" size="24.0" />
          </font>
       </Label>
-      <Separator layoutX="987.0" layoutY="267.0" prefHeight="3.0" prefWidth="400.0" />
+      <Separator fx:id="separator2" layoutX="987.0" layoutY="267.0" prefHeight="3.0" prefWidth="400.0" />
       <ImageView fx:id="coinToPlace_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="984.0" layoutY="281.0" onDragDetected="#handleDragDetectedCoinToPlace" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../imgs/res/coin.png" />
@@ -288,12 +288,12 @@
             <Font name="Pristina" size="24.0" />
          </font>
       </Label>
-      <Label layoutX="1325.0" layoutY="323.0" text="Leaders" textFill="WHITE">
+      <Label fx:id="leaders_label" layoutX="1325.0" layoutY="323.0" text="Leaders" textFill="WHITE">
          <font>
             <Font name="Pristina" size="24.0" />
          </font>
       </Label>
-      <Separator layoutX="1002.0" layoutY="363.0" prefHeight="3.0" prefWidth="384.0" />
+      <Separator fx:id="separator3" layoutX="1002.0" layoutY="363.0" prefHeight="3.0" prefWidth="384.0" />
       <GridPane fx:id="activeLeaderMatrix_gridPane" layoutX="986.0" layoutY="370.0" prefHeight="256.0" prefWidth="400.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="247.4" minWidth="10.0" prefWidth="208.4" />
@@ -365,5 +365,20 @@
             <Font size="16.0" />
          </font>
       </CheckBox>
+      <Button fx:id="leftArrow_button" disable="true" focusTraversable="false" layoutX="1152.0" layoutY="49.0" mnemonicParsing="false" onAction="#showPrevPlayer" text="🠔" textFill="#1d60cc" visible="false">
+         <font>
+            <Font name="Pristina" size="18.0" />
+         </font>
+      </Button>
+      <Button fx:id="goBoard_button" focusTraversable="false" layoutX="1209.0" layoutY="49.0" mnemonicParsing="false" onAction="#goBoard" text="Go to your board" textFill="#1d60cc" visible="false">
+         <font>
+            <Font name="Pristina" size="18.0" />
+         </font>
+      </Button>
+      <Button fx:id="rightArrow_button" disable="true" focusTraversable="false" layoutX="1345.0" layoutY="49.0" mnemonicParsing="false" onAction="#showNextPlayer" text="🠖" textFill="#1d60cc" visible="false">
+         <font>
+            <Font name="Pristina" size="18.0" />
+         </font>
+      </Button>
    </children>
 </Pane>
