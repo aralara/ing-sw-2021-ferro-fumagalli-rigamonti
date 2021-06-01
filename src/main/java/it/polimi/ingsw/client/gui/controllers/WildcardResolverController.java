@@ -150,7 +150,6 @@ public class WildcardResolverController extends GenericController {
             }
             else
                 areResolved = true;
-
         }
         else if(selectedProduced!=null && !selectedProduced.isEmpty()){
             producedResolved.addAll(selectedProduced);
@@ -200,6 +199,7 @@ public class WildcardResolverController extends GenericController {
 
     public void resolveWildcard(List<Resource> consumedResolved, List<Resource> producedResolved,
                                 List<Resource> consumedWildcards, List<Resource> producedWildcards){
+        restore();
         this.consumedResolved=consumedResolved;
         this.producedResolved=producedResolved;
         this.consumedWildcards=consumedWildcards;
