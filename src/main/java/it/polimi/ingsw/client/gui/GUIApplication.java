@@ -94,22 +94,28 @@ public class GUIApplication extends Application { //TODO: flusso messaggi da ric
     }
 
     private void openPopUpStage(Scene scene){
-        if(popUpStage==null || popUpStage.getScene()!=scene) {
-            popUpStage = new Stage();
-            Image image = new Image(getClass().getResourceAsStream("/imgs/icon_inkwell.png"));
-            popUpStage.setTitle("Master of Renaissance");
-            popUpStage.setResizable(false);
-            popUpStage.getIcons().add(image);
-            popUpStage.setScene(scene);
-
+        double x;
+        double y;
+        if(popUpStage==null){
             Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
-            double x = bounds.getMinX() + (bounds.getWidth() - scene.getWidth()) * 0.25;
-            double y = bounds.getMinY() + (bounds.getHeight() - scene.getHeight()) * 0.25;
-            popUpStage.setX(x);
-            popUpStage.setY(y);
-
-            popUpStage.initStyle(StageStyle.UNDECORATED);
+            x = bounds.getMinX() + (bounds.getWidth() - scene.getWidth()) * 0.25;
+            y = bounds.getMinY() + (bounds.getHeight() - scene.getHeight()) * 0.25;
         }
+        else{
+            x = popUpStage.getX();
+            y = popUpStage.getY();
+        }
+        popUpStage = new Stage();
+        Image image = new Image(getClass().getResourceAsStream("/imgs/icon_inkwell.png"));
+        popUpStage.setTitle("Master of Renaissance");
+        popUpStage.setResizable(false);
+        popUpStage.getIcons().add(image);
+        popUpStage.setScene(scene);
+
+        popUpStage.setX(x);
+        popUpStage.setY(y);
+
+        popUpStage.initStyle(StageStyle.UNDECORATED);
         popUpStage.show();
     }
 
@@ -138,25 +144,31 @@ public class GUIApplication extends Application { //TODO: flusso messaggi da ric
     }
 
     private void openCardStage(Scene scene){
-        if(cardStage==null) {
-            cardStage = new Stage();
-            Image image = new Image(getClass().getResourceAsStream("/imgs/icon_inkwell.png"));
-            cardStage.setTitle("Master of Renaissance");
-            cardStage.setResizable(false);
-            cardStage.getIcons().add(image);
-            cardStage.setScene(scene);
-
-            cardStage.initModality(Modality.WINDOW_MODAL);
-            cardStage.initOwner(this.stage);
-
+        double x;
+        double y;
+        if(cardStage==null){
             Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
-            double x = bounds.getMinX() + (bounds.getWidth() - scene.getWidth()) * 0.705;
-            double y = bounds.getMinY() + (bounds.getHeight() - scene.getHeight()) * 0.25;
-            cardStage.setX(x);
-            cardStage.setY(y);
-
-            cardStage.initStyle(StageStyle.UNDECORATED);
+            x = bounds.getMinX() + (bounds.getWidth() - scene.getWidth()) * 0.705;
+            y = bounds.getMinY() + (bounds.getHeight() - scene.getHeight()) * 0.25;
         }
+        else{
+            x = cardStage.getX();
+            y = cardStage.getY();
+        }
+        cardStage = new Stage();
+        Image image = new Image(getClass().getResourceAsStream("/imgs/icon_inkwell.png"));
+        cardStage.setTitle("Master of Renaissance");
+        cardStage.setResizable(false);
+        cardStage.getIcons().add(image);
+        cardStage.setScene(scene);
+
+        cardStage.initModality(Modality.WINDOW_MODAL);
+        cardStage.initOwner(this.stage);
+
+        cardStage.setX(x);
+        cardStage.setY(y);
+
+        cardStage.initStyle(StageStyle.UNDECORATED);
         cardStage.show();
     }
 

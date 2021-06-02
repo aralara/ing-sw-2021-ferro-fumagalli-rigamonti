@@ -201,12 +201,12 @@
          </font>
       </Label>
       <Separator layoutX="974.0" layoutY="37.0" prefHeight="3.0" prefWidth="408.0" />
-      <Button focusTraversable="false" layoutX="978.0" layoutY="49.0" mnemonicParsing="false" onAction="#goToMarket" text="Market" textFill="#1d60cc">
+      <Button fx:id="market_button" focusTraversable="false" layoutX="978.0" layoutY="49.0" mnemonicParsing="false" onAction="#goToMarket" text="Market" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="18.0" />
          </font>
       </Button>
-      <Button focusTraversable="false" layoutX="1065.0" layoutY="49.0" mnemonicParsing="false" onAction="#goToDecks" prefHeight="41.0" prefWidth="70.0" text="Decks" textFill="#1d60cc">
+      <Button fx:id="decks_button" focusTraversable="false" layoutX="1065.0" layoutY="49.0" mnemonicParsing="false" onAction="#goToDecks" prefHeight="41.0" prefWidth="70.0" text="Decks" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="18.0" />
          </font>
