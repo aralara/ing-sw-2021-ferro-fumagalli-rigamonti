@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="686.0" prefWidth="994.0" styleClass="podiumPanel" stylesheets="@../css/podium.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllers.PodiumController">
+   <children>
+      <Button focusTraversable="false" layoutX="918.0" layoutY="10.0" mnemonicParsing="false" onAction="#quit" text="Quit" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="24.0" />
+         </font>
+      </Button>
+      <Label layoutX="688.0" layoutY="14.0" text="The game is ended!" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="30.0" />
+         </font>
+      </Label>
+      <Label fx:id="place2" layoutX="241.0" layoutY="342.0" textAlignment="CENTER" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="28.0" />
+         </font>
+      </Label>
+      <Label fx:id="place1" layoutX="398.0" layoutY="224.0" textAlignment="CENTER" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="34.0" />
+         </font>
+      </Label>
+      <Label fx:id="place3" layoutX="599.0" layoutY="416.0" textAlignment="CENTER" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="24.0" />
+         </font>
+      </Label>
+      <Label fx:id="place4" layoutX="781.0" layoutY="612.0" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="20.0" />
+         </font>
+      </Label>
+   </children>
+</Pane>

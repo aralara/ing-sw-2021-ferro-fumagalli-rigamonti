@@ -1,0 +1,4 @@
+.podiumPanel {
+    -fx-background-image: url("../imgs/bkgs/bkg_podium.png");
+    -fx-background-size: stretch;
+}

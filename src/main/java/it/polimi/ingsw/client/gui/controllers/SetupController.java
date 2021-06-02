@@ -14,7 +14,7 @@ public class SetupController extends GenericController {
 
     @FXML private TextField ipAddress_field, portNumber_field, nickname_field;
     @FXML private ProgressIndicator connecting_progressIndicator, waitingNickname_progressIndicator;
-    @FXML private Button playOnline_button, playOffline_button, connect_button, quit_button, confirm_button;
+    @FXML private Button playOnline_button, playOffline_button, connect_button, confirm_button;
     @FXML private Label nickname_label, notifyPlayers_label;
     @FXML private ProgressBar loading_bar;
 
@@ -40,10 +40,6 @@ public class SetupController extends GenericController {
 
     public Button getConnect_button() {
         return connect_button;
-    }
-
-    public Button getQuit_button() {
-        return quit_button;
     }
 
     public Button getConfirm_button() {
@@ -103,12 +99,6 @@ public class SetupController extends GenericController {
         if (keyEvent.getCode().equals(KeyCode.ENTER)) {
             connect();
         }
-    }
-
-    public void quit() {
-        showAlert(Alert.AlertType.INFORMATION, "Quit",
-                "Thanks to have played Master of Renaissance!", "");
-        System.exit(0);
     }
 
     public void sendNickname() {
