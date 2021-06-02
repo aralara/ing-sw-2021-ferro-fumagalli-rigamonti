@@ -809,7 +809,8 @@ public class PlayerBoardController extends GenericController {
                 if (handLeader1_imageView.getImage() == null && boardLeader1_imageView.getImage() == null) {
                     handLeader1_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/cost_"
                             + id + ".png")));
-                } else if (handLeader2_imageView.getImage() == null && boardLeader2_imageView.getImage() == null) {
+                    //%%%
+                } else {
                     handLeader2_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/cost_"
                             + id + ".png")));
                 }
@@ -854,20 +855,14 @@ public class PlayerBoardController extends GenericController {
                 if (boardLeader1_imageView.getImage() == null && handLeader1_imageView.getImage() == null) {
                     boardLeader1_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
                             + id + ".png")));
-                    if (currentLeaderCard.getAbility() instanceof AbilityProduction)
-                        isFirstLeaderProduction = true;
-                    else if (currentLeaderCard.getAbility() instanceof AbilityWarehouse)
-                        isFirstLeaderShelf = true;
-
+                    isFirstLeaderProduction = currentLeaderCard.getAbility() instanceof AbilityProduction;
+                    isFirstLeaderShelf = currentLeaderCard.getAbility() instanceof AbilityWarehouse;
                     enableLeaderAbility();
                 } else if (boardLeader2_imageView.getImage() == null && handLeader2_imageView.getImage() == null) {
                     boardLeader2_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
                             + id + ".png")));
-                    if (currentLeaderCard.getAbility() instanceof AbilityProduction)
-                        isSecondLeaderProduction = true;
-                    else if (currentLeaderCard.getAbility() instanceof AbilityWarehouse)
-                        isSecondLeaderShelf = true;
-
+                    isSecondLeaderProduction = currentLeaderCard.getAbility() instanceof AbilityProduction;
+                    isSecondLeaderShelf = currentLeaderCard.getAbility() instanceof AbilityWarehouse;
                     enableLeaderAbility();
                 }
             }
@@ -1338,12 +1333,10 @@ public class PlayerBoardController extends GenericController {
     }
 
     private void showLeaderCheckBoxes(){
-        if(handLeader1_imageView.getImage()!=null && boardLeader1_imageView.getImage()==null ||
-                isFirstLeaderProduction)
-            leader1_checkBox.setVisible(true);
-        if(handLeader2_imageView.getImage()!=null && boardLeader2_imageView.getImage()==null ||
-                isSecondLeaderProduction)
-            leader2_checkBox.setVisible(true);
+        leader1_checkBox.setVisible(handLeader1_imageView.getImage() != null && boardLeader1_imageView.getImage() == null ||
+                isFirstLeaderProduction);
+        leader2_checkBox.setVisible(handLeader2_imageView.getImage() != null && boardLeader2_imageView.getImage() == null ||
+                isSecondLeaderProduction);
     }
 
     public void hideCheckBoxes(){

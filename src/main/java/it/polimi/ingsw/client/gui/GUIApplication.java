@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GUIApplication extends Application { //TODO: flusso messaggi da richiamare: BOARD con solo viste -> LEADERCHOICE -> *RESCHOICE -> BOARD abilitata
+public class GUIApplication extends Application {
 
     private GUI gui;
 
@@ -177,9 +177,9 @@ public class GUIApplication extends Application { //TODO: flusso messaggi da ric
     }
 
     private SceneNames getNameByScene(Scene scene){
-        for(int i = 0; i < scenesInformation.size(); i++){
-            if(scenesInformation.get(i).getScene().equals(scene))
-                return scenesInformation.get(i).getFileName();
+        for (SceneInformation sceneInformation : scenesInformation) {
+            if (sceneInformation.getScene().equals(scene))
+                return sceneInformation.getFileName();
         }
         return null;  //TODO: potrebbe dare eccezione?
     }

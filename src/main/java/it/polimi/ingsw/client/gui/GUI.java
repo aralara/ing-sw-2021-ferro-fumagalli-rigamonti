@@ -461,7 +461,7 @@ public class GUI extends ClientController {
 
     public void controlResourcesToPlace(List<Resource> resources){
         resourcesToPlace.clear();
-        resourcesToPlace.addAll(resources);  //TODO: a volte lancia un'eccezione perchè: "Cannot invoke "java.util.Collection.toArray()" because "c" is null"
+        resourcesToPlace.addAll(resources);
 
         boolean faith = checkFaithResource(resourcesToPlace);
         if(!checkOnlyWildcard(resourcesToPlace)) {
