@@ -21,8 +21,10 @@ import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.stream.Collectors;
 
 
 public class GUI extends ClientController {
@@ -128,7 +130,7 @@ public class GUI extends ClientController {
 
     @Override
     public void displaySaves(List<GameSave> saves) {
-
+        //TODO: da fare?
     }
 
     @Override
@@ -175,16 +177,18 @@ public class GUI extends ClientController {
     @Override
     public void notifyStartTurn(String nickname) {
         if(nickname.equals(getNickname())) {
-            Platform.runLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD)).
+            if(getLorenzoFaith()==-1)
+                Platform.runLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD)).
                     showAlert(Alert.AlertType.INFORMATION, "It's your turn",
                             "Now you can play your actions", ""));
             Platform.runLater(() -> ((PlayerBoardController) guiApplication.
                     getController(SceneNames.PLAYER_BOARD)).setIsPlayerTurn(true));
         }
         else {
-            Platform.runLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD)).
+            if(getLorenzoFaith()==-1)
+                Platform.runLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD)).
                     showAlert(Alert.AlertType.INFORMATION,"Wait your turn",
-                            "Now it's "+nickname+"'s turn", ""));
+                             "Now it's "+nickname+"'s turn", ""));
             Platform.runLater(() -> ((PlayerBoardController) guiApplication.
                     getController(SceneNames.PLAYER_BOARD)).setIsPlayerTurn(false));
         }
@@ -226,28 +230,47 @@ public class GUI extends ClientController {
 
     @Override
     public void notifyLorenzoCard(LorenzoCard lorenzoCard) {
-
+        Platform.runLater(() -> guiApplication.getController(SceneNames.PLAYER_BOARD).showAlert(Alert.AlertType.INFORMATION,
+                "It's Lorenzo's turn", "Lorenzo pulls a card from his deck", lorenzoCard.toString()+
+                "\nNow you can play your actions"));
     }
 
     @Override
     public void notifyLastRound() {
-
+        Platform.runLater(() -> guiApplication.getController(SceneNames.PLAYER_BOARD).showAlert(Alert.AlertType.INFORMATION,
+                "Notification", "Last round before the game ends!", ""));
     }
 
     @Override
     public void notifyEndGame(List<Player> players) {
-
+        Platform.runLater(() -> guiApplication.getController(SceneNames.PLAYER_BOARD).showAlert(Alert.AlertType.INFORMATION,
+                "Notification", "The game has ended!", ""));
+        List<Player> playerRanking = players.stream().sorted(Comparator.comparingInt(Player::getFinalPosition)).
+                collect(Collectors.toList());
+        PodiumController pc = (PodiumController) guiApplication.getController(SceneNames.PODIUM);
+        if(getLorenzoFaith()==-1) {
+            Platform.runLater(() -> pc.setPlace1(playerRanking.get(0).getNickname() + "\n" + playerRanking.get(0).getTotalVP()));
+            Platform.runLater(() -> pc.setPlace2(playerRanking.get(1).getNickname() + "\n" + playerRanking.get(1).getTotalVP()));
+            if (getNumberOfPlayers() > 2)
+                Platform.runLater(() -> pc.setPlace2(playerRanking.get(2).getNickname() + "\n" + playerRanking.get(2).getTotalVP()));
+            if (getNumberOfPlayers() > 3)
+                Platform.runLater(() -> pc.setPlace2(playerRanking.get(3).getNickname() + "\n" + playerRanking.get(3).getTotalVP()));
+        }
+        else {
+            if(getLorenzoFaith()>playerRanking.get(0).getTotalVP())
+                Platform.runLater(() -> pc.setPlace1("Lorenzo il Magnifico" + "\n"));
+            else Platform.runLater(() -> pc.setPlace1(playerRanking.get(0).getNickname()));
+        }
+        Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.PODIUM));
     }
 
     @Override
     public void selectMarket() {
-
+        //TODO: da fare?
     }
 
     @Override
     public void selectDevDecks() {
-        /*Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
-            .showDevelopmentBSpaces());*/
         Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.DECKS_BOARD));
         Platform.runLater(() -> guiApplication.getController(SceneNames.DECKS_BOARD).showAlert(Alert.AlertType.ERROR,
                 "Error", "You can't buy this card and place in the selected space",
@@ -263,7 +286,7 @@ public class GUI extends ClientController {
 
     @Override
     public void placeResourcesOnShelves(List<Resource> resources) {
-
+        //TODO: da fare?
     }
 
     @Override
@@ -349,12 +372,6 @@ public class GUI extends ClientController {
         } catch (NotExistingNicknameException e) {
             e.printStackTrace();
         }
-    }
-
-    public void sendLeaderCardDiscardMessage(int index){
-        List<Integer> oneElementList = new ArrayList<>();
-        oneElementList.add(index);
-        sendLeaderCardDiscardMessage(oneElementList);
     }
 
     private void callAskResourceToEqualize(){

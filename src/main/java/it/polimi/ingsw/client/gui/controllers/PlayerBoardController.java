@@ -694,6 +694,8 @@ public class PlayerBoardController extends GenericController {
     public void confirm() {
         if(toDiscard==null)
             toDiscard = new ArrayList<>();
+        if(shelves==null)
+            shelves = getGUI().getWarehouseShelvesCopy();
         getGUI().sendShelvesConfigurationMessage(shelves,toDiscard);
         if(isPlayerTurn)
             enableButtons();
