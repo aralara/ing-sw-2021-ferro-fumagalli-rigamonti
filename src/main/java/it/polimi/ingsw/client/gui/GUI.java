@@ -542,6 +542,15 @@ public class GUI extends ClientController {
         return null;
     }
 
+    public Deck getLeaderBoard(){
+        try {
+            return getLocalPlayerBoard().getLeaderBoard().getBoard();
+        } catch (NotExistingNicknameException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public void sendCanActivateProductionsMessage(List<Production> productions){
         getMessageHandler().sendClientMessage(new CanActivateProductionsMessage(productions));
     }

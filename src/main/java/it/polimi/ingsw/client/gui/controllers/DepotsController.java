@@ -229,7 +229,7 @@ public class DepotsController extends GenericController {
         }
     }
 
-    private void setWarehouse(){
+    private void setWarehouse(){ //TODO: x STE: cambiare anche qua 19
         shelves = getGUI().getWarehouseShelvesCopy();
         Image image;
         Shelf shelf;
@@ -306,6 +306,7 @@ public class DepotsController extends GenericController {
                             leaderShelf1_2_imageView.setImage(null);
                         }
                     }
+                    break;
                 case(4):
                     if(shelf.getResourceType() != ResourceType.WILDCARD) {
                         resType = shelf.getResourceType().toString()+".png";
@@ -323,6 +324,7 @@ public class DepotsController extends GenericController {
                             leaderShelf2_2_imageView.setImage(null);
                         }
                     }
+                    break;
                 default: break;
             }
         }

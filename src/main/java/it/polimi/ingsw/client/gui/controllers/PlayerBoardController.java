@@ -457,25 +457,25 @@ public class PlayerBoardController extends GenericController {
 
     public void handleDragDroppedShelfLeader1_1(DragEvent dragEvent) { //TODO: da testare
         //int position = getGUI().getLeaderShelfPosition(leader1WarehouseType)+1;
-        int position = 3; //TODO: faccio un check prendendo i vari shelf del wh
+        int position = 4; //TODO: faccio un check prendendo i vari shelf del wh
         if(handleDragDroppedShelf(dragEvent, shelfLeader1_1_imageView, position))
             setWhLeadersImages(position, 1);
     }
 
     public void handleDragDroppedShelfLeader1_2(DragEvent dragEvent) { //TODO: da testare
-        int position = 3; //TODO: faccio un check prendendo i vari shelf del wh
+        int position = 4; //TODO: faccio un check prendendo i vari shelf del wh
         if(handleDragDroppedShelf(dragEvent, shelfLeader1_2_imageView, position))
             setWhLeadersImages(position, 1);
     }
 
     public void handleDragDroppedShelfLeader2_1(DragEvent dragEvent) { //TODO: da testare
-        int position = (isFirstLeaderShelf) ? 4 : 3; //TODO: faccio un check prendendo i vari shelf del wh
+        int position = (isFirstLeaderShelf) ? 5 : 4; //TODO: faccio un check prendendo i vari shelf del wh
         if(handleDragDroppedShelf(dragEvent, shelfLeader2_1_imageView, position))
             setWhLeadersImages(position, 2);
     }
 
     public void handleDragDroppedShelfLeader2_2(DragEvent dragEvent) { //TODO: da testare
-        int position = (isFirstLeaderShelf) ? 4 : 3; //TODO: faccio un check prendendo i vari shelf del wh
+        int position = (isFirstLeaderShelf) ? 5 : 4; //TODO: faccio un check prendendo i vari shelf del wh
         if(handleDragDroppedShelf(dragEvent, shelfLeader2_2_imageView, position))
             setWhLeadersImages(position, 2);
     }
@@ -807,7 +807,6 @@ public class PlayerBoardController extends GenericController {
                 if (handLeader1_imageView.getImage() == null && boardLeader1_imageView.getImage() == null) {
                     handLeader1_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/cost_"
                             + id + ".png")));
-                    //%%%
                 } else {
                     handLeader2_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/cost_"
                             + id + ".png")));
@@ -929,11 +928,9 @@ public class PlayerBoardController extends GenericController {
     private void updateWarehouse(List<Shelf> warehouseShelves) {
         shelves = warehouseShelves;
         Image image;
-        Shelf shelf;
         String resPath = "/imgs/res/", resType;
-        for(int i = 0; i < shelves.size(); i++){
-            shelf = shelves.get(i);
-            if(i<3){ //basic
+        for(Shelf shelf : shelves){
+            if(!shelf.isLeader()){ //basic
                 switch (shelf.getLevel()){
                     case(1):
                         if(shelf.getResourceType() != ResourceType.WILDCARD) {
@@ -993,9 +990,8 @@ public class PlayerBoardController extends GenericController {
             //%%
             else { //leader //TODO: da testare
                 resType = shelf.getResourceType().toString()+".png";
-                image = new Image(getClass().getResourceAsStream(resPath+resType));
-                if(shelf.getResourceType() == getGUI().getWarehouseShelvesCopy().stream().filter(Shelf::isLeader).
-                        map(Shelf::getResourceType).findFirst().orElse(ResourceType.WILDCARD)){
+                image = new Image(getClass().getResourceAsStream(resPath+resType)); //TODO: controllare se va bene in maiuscolo o da problemi
+                if(isFirstLeaderShelf && !isSecondLeaderShelf){
                     if(shelf.getResources().getQuantity()==1){
                         shelfLeader1_1_imageView.setImage(image);
                         shelfLeader1_2_imageView.setImage(null);
@@ -1009,8 +1005,7 @@ public class PlayerBoardController extends GenericController {
                         shelfLeader1_2_imageView.setImage(null);
                     }
                 }
-                else if(shelf.getResourceType()==getGUI().getWarehouseShelvesCopy().stream().filter(Shelf::isLeader).
-                        map(Shelf::getResourceType).findFirst().orElse(ResourceType.WILDCARD)){
+                else if(!isFirstLeaderShelf && isSecondLeaderShelf){
                     if(shelf.getResources().getQuantity()==1){
                         shelfLeader2_1_imageView.setImage(image);
                         shelfLeader2_2_imageView.setImage(null);
@@ -1022,6 +1017,34 @@ public class PlayerBoardController extends GenericController {
                     else {
                         shelfLeader2_1_imageView.setImage(null);
                         shelfLeader2_2_imageView.setImage(null);
+                    }
+                } else{
+                    //%%
+                    if(getGUI().getLeaderBoard().size() == 2) {  //devo aver gia aggiornato lla board
+                        if (shelf.getResources().getResourceType() ==
+                                ((AbilityWarehouse) ((LeaderCard) getGUI().getLeaderBoard().get(0)).getAbility()).getResourceType()) {
+                            if (shelf.getResources().getQuantity() == 1) {
+                                shelfLeader1_1_imageView.setImage(image);
+                                shelfLeader1_2_imageView.setImage(null);
+                            } else if (shelf.getResources().getQuantity() == 2) {
+                                shelfLeader1_1_imageView.setImage(image);
+                                shelfLeader1_2_imageView.setImage(image);
+                            } else {
+                                shelfLeader1_1_imageView.setImage(null);
+                                shelfLeader1_2_imageView.setImage(null);
+                            }
+                        } else {
+                            if (shelf.getResources().getQuantity() == 1) {
+                                shelfLeader2_1_imageView.setImage(image);
+                                shelfLeader2_2_imageView.setImage(null);
+                            } else if (shelf.getResources().getQuantity() == 2) {
+                                shelfLeader2_1_imageView.setImage(image);
+                                shelfLeader2_2_imageView.setImage(image);
+                            } else {
+                                shelfLeader2_1_imageView.setImage(null);
+                                shelfLeader2_2_imageView.setImage(null);
+                            }
+                        }
                     }
                 }
             }
@@ -1047,7 +1070,7 @@ public class PlayerBoardController extends GenericController {
         updateWarehouse(getGUI().getWarehouseShelvesCopy());
     }
 
-    //%%
+
     private void setWhShelvesImages(int level){
         int resQuantity = shelves.get(level-1).getResources().getQuantity();
         switch (level){
@@ -1099,41 +1122,33 @@ public class PlayerBoardController extends GenericController {
     }
 
     //%%
-    private void setWhLeadersImages(int level, int leader){
-        int resQuantity = shelves.get(level-1).getResources().getQuantity();
+    private void setWhLeadersImages(int index, int leader){
+        int resQuantity = shelves.get(index-1).getResources().getQuantity();
+        Image image = new Image(getClass().getResourceAsStream("/imgs/res/" +
+                shelves.get(index-1).getResources().getResourceType().toString().toLowerCase() + ".png"));
         switch (leader){
             case(1):
-                if(resQuantity>0) {
-                    Image image;
-                    if (shelfLeader1_1_imageView.getImage() != null)
-                        image = shelfLeader1_1_imageView.getImage();
-                    else
-                        image = shelfLeader1_2_imageView.getImage();
-                    if(resQuantity==1){
-                        shelfLeader1_1_imageView.setImage(image);
-                        shelfLeader1_2_imageView.setImage(null);
-                    }
-                    else {
-                        shelfLeader1_1_imageView.setImage(image);
-                        shelfLeader1_2_imageView.setImage(image);
-                    }
+                shelfLeader1_1_imageView.setImage(null);
+                shelfLeader1_2_imageView.setImage(null);
+                if(resQuantity == 1){
+                    shelfLeader1_1_imageView.setImage(image);
+                    shelfLeader1_2_imageView.setImage(null);
+                }
+                else if(resQuantity == 2){
+                    shelfLeader1_1_imageView.setImage(image);
+                    shelfLeader1_2_imageView.setImage(image);
                 }
                 break;
             case (2):
-                if(resQuantity>0) {
-                    Image image;
-                    if (shelfLeader2_1_imageView.getImage() != null)
-                        image = shelfLeader2_1_imageView.getImage();
-                    else
-                        image = shelfLeader2_2_imageView.getImage();
-                    if(resQuantity==1){
-                        shelfLeader2_1_imageView.setImage(image);
-                        shelfLeader2_2_imageView.setImage(null);
-                    }
-                    else {
-                        shelfLeader2_1_imageView.setImage(image);
-                        shelfLeader2_2_imageView.setImage(image);
-                    }
+                shelfLeader2_1_imageView.setImage(null);
+                shelfLeader2_2_imageView.setImage(null);
+                if(resQuantity == 1){
+                    shelfLeader2_1_imageView.setImage(image);
+                    shelfLeader2_2_imageView.setImage(null);
+                }
+                else if(resQuantity == 2) {
+                    shelfLeader2_1_imageView.setImage(image);
+                    shelfLeader2_2_imageView.setImage(image);
                 }
                 break;
             default:break;
