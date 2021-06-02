@@ -73,6 +73,10 @@ public class Controller {
         return game.canBuyDevCard(game.getPlayerIndexOf(player), card, space);
     }
 
+    public void applyDiscount(String player, List<Resource> resources) {
+        game.applyDiscount(game.getPlayerIndexOf(player), resources);
+    }
+
     public boolean buyDevCard(String player, DevelopmentCard card, int space, List<RequestResources> requests) {
         return game.buyDevCard(game.getPlayerIndexOf(player), card, space, requests);
     }

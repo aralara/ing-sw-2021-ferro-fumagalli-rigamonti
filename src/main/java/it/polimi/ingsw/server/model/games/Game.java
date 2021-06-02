@@ -216,9 +216,25 @@ public abstract class Game implements Serializable {
      * @return Returns true if the card can be added, false otherwise
      */
     public boolean canBuyDevCard(int player, DevelopmentCard card, int space) {
+        List<Resource> temp = new ArrayList<>();
+        for (Resource resource : card.getCost())
+             temp.add(resource.makeClone());
+        applyDiscount(player, temp);
         return playerBoards.get(player).getDevelopmentBoard().checkDevCardAddable(card, space) &&
                 Storage.checkContainedResources(playerBoards.get(player).createResourceStock(),
-                        Storage.mergeResourceList(card.getCost()));
+                        Storage.mergeResourceList(temp));
+        //TODO: controllo lo sconto alla dev card
+    }
+
+    //TODO: da testare!!
+    public void applyDiscount(int player, List<Resource> resources){
+        for(ResourceType resourceType : playerBoards.get(player).getAbilityDiscounts()){
+            for (Resource resource : resources)
+                if(resource.getResourceType() == resourceType){
+                    resource.setQuantity(resource.getQuantity()-1);
+                    break;
+                }
+        }
     }
 
     /**

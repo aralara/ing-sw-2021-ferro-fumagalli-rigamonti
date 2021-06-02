@@ -13,11 +13,15 @@ public class CanBuyDevelopmentCardMessage extends ClientActionMessage {
 
     private final DevelopmentCard developmentCard;
     private final int space;
+    private List<Resource> cost = new ArrayList<>();
 
 
     public CanBuyDevelopmentCardMessage(DevelopmentCard developmentCard, int space) {
         this.developmentCard = developmentCard;
         this.space = space;
+        for(Resource resource : developmentCard.getCost()){
+            this.cost.add(resource.makeClone());
+        }
     }
 
 
@@ -30,22 +34,21 @@ public class CanBuyDevelopmentCardMessage extends ClientActionMessage {
     }
 
     public List<Resource> getCost() {
-        List<Resource> cost = new ArrayList<>();
-        developmentCard.getCost().forEach(r -> cost.add(r.makeClone()));
-        return cost;
+        return this.cost;
     }
 
     @Override
     public void doAction(VirtualView view) {
         boolean success = view.getGameHandler().getController()
                 .canBuyDevCard(view.getNickname(), developmentCard, space);
+        view.getGameHandler().getController().applyDiscount(view.getNickname(),getCost());
         view.sendMessage(new ServerAckMessage(getUuid(), success));
     }
 
     @Override
     public void doACKResponseAction(ClientController client) {
         client.setMainActionPlayed(true);
-        client.chooseDevelopmentStorages(developmentCard, space, getCost());
+        client.chooseDevelopmentStorages(developmentCard, space, this.cost);
     }
 
     @Override
