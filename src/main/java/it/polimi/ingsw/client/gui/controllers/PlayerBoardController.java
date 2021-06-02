@@ -1412,6 +1412,8 @@ public class PlayerBoardController extends GenericController {
             ((WildcardResolverController) getGUIApplication().getController(SceneNames.RESOURCE_CHOICE_MENU)).
                     setIsFirstPhase(false);
             ((WildcardResolverController) getGUIApplication().getController(SceneNames.RESOURCE_CHOICE_MENU)).
+                    setIsMarbleAction(false);
+            ((WildcardResolverController) getGUIApplication().getController(SceneNames.RESOURCE_CHOICE_MENU)).
                     resolveWildcard(consumedResolved, producedResolved, consumedWildcards, producedWildcards);
             getGUIApplication().setActiveScene(SceneNames.RESOURCE_CHOICE_MENU);
         }

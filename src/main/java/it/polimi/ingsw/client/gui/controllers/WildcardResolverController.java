@@ -15,14 +15,19 @@ public class WildcardResolverController extends GenericController {
 
     private List<Resource> resources, consumedWildcards, producedWildcards, consumedResolved, producedResolved,
             selectedConsumed, selectedProduced;
-    private boolean isFirstPhase=false, isProducedAction=false, areResolved=false;
+    private boolean isFirstPhase=false, isProducedAction=false, areResolved=false, isMarbleAction=false;
     private int totalResources;
 
     @FXML private Label chooseResources_label, coin_label, servant_label, shield_label, stone_label;
-    @FXML private Button confirm_button, restore_button, goBack_button;
+    @FXML private Button coin_button, servant_button, shield_button, stone_button,
+            confirm_button, restore_button, goBack_button;
 
     public void setIsFirstPhase(boolean value){
         isFirstPhase=value;
+    }
+
+    public void setIsMarbleAction(boolean value){
+        isMarbleAction=value;
     }
 
     public void setTotalResources(int total){
@@ -34,7 +39,7 @@ public class WildcardResolverController extends GenericController {
     }
 
     private void takeResource(Label label, ResourceType resourceType) {
-        if (isFirstPhase) {
+        if (isFirstPhase || isMarbleAction) {
             if (getTotalTakenResources() < totalResources) {
                 if (resources == null)
                     resources = new ArrayList<>();
@@ -140,6 +145,10 @@ public class WildcardResolverController extends GenericController {
             getGUI().setResourcesToPlace(resources);
             getGUIApplication().closePopUpStage();
         }
+        else if(isMarbleAction){
+            getGUI().controlResourcesToPlace(resources);
+            getGUIApplication().closePopUpStage();
+        }
         else if(selectedConsumed!=null && !selectedConsumed.isEmpty()){
             consumedResolved.addAll(selectedConsumed);
             selectedConsumed=null;
@@ -173,6 +182,7 @@ public class WildcardResolverController extends GenericController {
         confirm_button.setDisable(true);
         restore_button.setDisable(true);
         goBack_button.setVisible(true);
+        enableButtons();
     }
 
     public void restore() {
@@ -213,5 +223,33 @@ public class WildcardResolverController extends GenericController {
             isProducedAction = true;
         }
         goBack_button.setVisible(true);
+    }
+
+    public void enableButtons(List<ResourceType> resourceTypes){
+        disableButtons();
+        for(ResourceType resourceType : resourceTypes) {
+            if (resourceType == ResourceType.COIN)
+                coin_button.setDisable(false);
+            else if (resourceType == ResourceType.SERVANT)
+                servant_button.setDisable(false);
+            else if (resourceType == ResourceType.SHIELD)
+                shield_button.setDisable(false);
+            else if (resourceType == ResourceType.STONE)
+                stone_button.setDisable(false);
+        }
+    }
+
+    private void disableButtons(){
+        coin_button.setDisable(true);
+        servant_button.setDisable(true);
+        shield_button.setDisable(true);
+        stone_button.setDisable(true);
+    }
+
+    private void enableButtons(){
+        coin_button.setDisable(false);
+        servant_button.setDisable(false);
+        shield_button.setDisable(false);
+        stone_button.setDisable(false);
     }
 }

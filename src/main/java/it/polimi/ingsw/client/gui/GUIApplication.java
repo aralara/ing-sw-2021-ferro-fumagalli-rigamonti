@@ -201,7 +201,6 @@ public class GUIApplication extends Application { //TODO: flusso messaggi da ric
         controller.getIpAddress_field().setDisable(newDisableValue);
         controller.getPortNumber_field().setDisable(newDisableValue);
         controller.getConnect_button().setDisable(newDisableValue);
-        controller.getQuit_button().setDisable(newDisableValue);
         controller.getConnecting_progressIndicator().setVisible(newDisableValue);
     }
 

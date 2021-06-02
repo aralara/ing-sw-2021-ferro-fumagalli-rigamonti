@@ -192,34 +192,35 @@ public class GUI extends ClientController {
 
     @Override
     public void addMarketResources(List<Resource> resources, List<ResourceType> availableAbilities) {
-        resourcesToPlace.clear();
-        resourcesToPlace.addAll(resources);  //TODO: a volte lancia un'eccezione perchè: "Cannot invoke "java.util.Collection.toArray()" because "c" is null"
-        resolveAbilityMarble(availableAbilities);
-        boolean faith = checkFaithResource(resourcesToPlace);
-        if(!checkOnlyWildcard(resourcesToPlace)) {
-            Platform.runLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD))
-                    .showAlert(Alert.AlertType.INFORMATION, "Success!", "Resources taken",
-                            "Now you need to place each taken resource"));
-            updateResourcesToPlace();
-        }
-        else if(faith) {
-            Platform.runLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD))
-                .showAlert(Alert.AlertType.INFORMATION, "Success!", "Resources taken",
-                        "Your faith has been updated"));
-            Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
-                    .enableButtons());
-            try {
-                sendShelvesConfigurationMessage(getLocalPlayerBoard().getWarehouse().getShelves(),new ArrayList<>());
-            } catch (NotExistingNicknameException e) {
-                e.printStackTrace();
+        int countWildcard = 0;
+        for(Resource resource : resources)
+            if(resource.getResourceType()==ResourceType.WILDCARD)
+                countWildcard += resource.getQuantity();
+        if(countWildcard==0)
+            controlResourcesToPlace(resources);
+        else if(availableAbilities!=null && availableAbilities.size()>1){
+            int finalCountWildcard = countWildcard;
+            Platform.runLater(() -> ((WildcardResolverController) guiApplication.
+                    getController(SceneNames.RESOURCE_CHOICE_MENU)).
+                    setChooseResources_label("Choose " + finalCountWildcard +" resources to resolve white marbles"));
+            Platform.runLater(() -> ((WildcardResolverController) guiApplication.
+                    getController(SceneNames.RESOURCE_CHOICE_MENU)).setTotalResources(finalCountWildcard));
+            Platform.runLater(() -> ((WildcardResolverController) guiApplication.
+                    getController(SceneNames.RESOURCE_CHOICE_MENU)).setIsFirstPhase(false));
+            Platform.runLater(() -> ((WildcardResolverController) guiApplication.
+                    getController(SceneNames.RESOURCE_CHOICE_MENU)).setIsMarbleAction(true));
+            Platform.runLater(() -> ((WildcardResolverController) guiApplication.
+                    getController(SceneNames.RESOURCE_CHOICE_MENU)).enableButtons(availableAbilities));
+            Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.RESOURCE_CHOICE_MENU));
+        } else {
+            if (availableAbilities != null && availableAbilities.size() == 1) {
+                for (Resource resource : resources) {
+                    if (resource.getResourceType() == ResourceType.WILDCARD) {
+                        resource.setResourceType(availableAbilities.get(0));
+                    }
+                }
             }
-        }
-        else {
-            Platform.runLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD))
-                    .showAlert(Alert.AlertType.INFORMATION, "Success!", "Resources taken",
-                            "You've nothing to place"));
-            Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
-                    .enableButtons());
+            controlResourcesToPlace(resources);
         }
     }
 
@@ -376,6 +377,8 @@ public class GUI extends ClientController {
                     getController(SceneNames.RESOURCE_CHOICE_MENU)).setChooseResources_label(title));
             Platform.runLater(() -> ((WildcardResolverController) guiApplication.
                     getController(SceneNames.RESOURCE_CHOICE_MENU)).setIsFirstPhase(true));
+            Platform.runLater(() -> ((WildcardResolverController) guiApplication.
+                    getController(SceneNames.RESOURCE_CHOICE_MENU)).setIsMarbleAction(false));
             Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.RESOURCE_CHOICE_MENU));
         }
     }
@@ -456,8 +459,36 @@ public class GUI extends ClientController {
             getMessageHandler().sendClientMessage(new LeaderCardDiscardMessage(leaderCards));
     }
 
-    private void resolveAbilityMarble(List<ResourceType> availableAbilities){
-        //TODO: fare
+    public void controlResourcesToPlace(List<Resource> resources){
+        resourcesToPlace.clear();
+        resourcesToPlace.addAll(resources);  //TODO: a volte lancia un'eccezione perchè: "Cannot invoke "java.util.Collection.toArray()" because "c" is null"
+
+        boolean faith = checkFaithResource(resourcesToPlace);
+        if(!checkOnlyWildcard(resourcesToPlace)) {
+            Platform.runLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD))
+                    .showAlert(Alert.AlertType.INFORMATION, "Success!", "Resources taken",
+                            "Now you need to place each taken resource"));
+            updateResourcesToPlace();
+        }
+        else if(faith) {
+            Platform.runLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD))
+                    .showAlert(Alert.AlertType.INFORMATION, "Success!", "Resources taken",
+                            "Your faith has been updated"));
+            Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
+                    .enableButtons());
+            try {
+                sendShelvesConfigurationMessage(getLocalPlayerBoard().getWarehouse().getShelves(),new ArrayList<>());
+            } catch (NotExistingNicknameException e) {
+                e.printStackTrace();
+            }
+        }
+        else {
+            Platform.runLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD))
+                    .showAlert(Alert.AlertType.INFORMATION, "Success!", "Resources taken",
+                            "You've nothing to place"));
+            Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
+                    .enableButtons());
+        }
     }
 
     private boolean checkOnlyWildcard(List<Resource> resources){
