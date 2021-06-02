@@ -38,9 +38,9 @@ public class PlayerBoardController extends GenericController {
             resToPlaceCoin_label, resToPlaceServant_label, resToPlaceShield_label, resToPlaceStone_label,
             otherActions_label, resToPlace_label, leaders_label;
     @FXML private Separator separator1, separator2, separator3;
-    @FXML private Button confirm_button, restoreWarehouse_button, activateProductions_button, endTurn_button,
-            activeLeaderCard_button, discardLeaderCard_button, rearrangeWarehouse_button, viewOpponents_button,
-            leftArrow_button, rightArrow_button, goBoard_button;
+    @FXML private Button confirm_button, restoreWarehouse_button, market_button, decks_button,
+            activateProductions_button, endTurn_button, activeLeaderCard_button, discardLeaderCard_button,
+            rearrangeWarehouse_button, viewOpponents_button, leftArrow_button, rightArrow_button, goBoard_button;
     @FXML private CheckBox basicProduction_checkBox, devSpace1_checkBox, devSpace2_checkBox, devSpace3_checkBox,
             leader1_checkBox, leader2_checkBox;
     @FXML private ImageView inkwell_imageVIew,
@@ -279,8 +279,6 @@ public class PlayerBoardController extends GenericController {
 
     private void handleDragDroppedSpace(DragEvent dragEvent, ImageView imageView, int space) {
         DecksBoardController dbc = (DecksBoardController) getGUIApplication().getController(SceneNames.DECKS_BOARD);
-        /*Image image = dragEvent.getDragboard().getImage();
-        imageView.setImage(image);*/
         disableSpaces();
         getGUIApplication().closeCardStage();
         getGUI().sendBuyDevelopmentCardMessage(dbc.getSelectedCardColor(), dbc.getSelectedLevel(), space-1);
@@ -1420,6 +1418,8 @@ public class PlayerBoardController extends GenericController {
         separator1.setVisible(isMyBoard);
         viewOpponents_button.setVisible(isMyBoard);
         rearrangeWarehouse_button.setVisible(isMyBoard);
+        market_button.setVisible(isMyBoard);
+        decks_button.setVisible(isMyBoard);
         activeLeaderCard_button.setVisible(isMyBoard);
         discardLeaderCard_button.setVisible(isMyBoard);
         resToPlace_label.setVisible(isMyBoard);
