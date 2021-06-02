@@ -26,8 +26,14 @@ public class WildcardResolverController extends GenericController {
         isFirstPhase=value;
     }
 
-    public void setIsMarbleAction(boolean value){
+    public void setIsMarbleAction(boolean value, List<Resource> resourcesToResolve){
         isMarbleAction=value;
+        if(isMarbleAction) {
+            resources = new ArrayList<>();
+            for (Resource resource : resourcesToResolve)
+                if (resource.getResourceType() != ResourceType.WILDCARD)
+                    resources.add(resource);
+        }
     }
 
     public void setTotalResources(int total){
@@ -152,7 +158,7 @@ public class WildcardResolverController extends GenericController {
         else if(selectedConsumed!=null && !selectedConsumed.isEmpty()){
             consumedResolved.addAll(selectedConsumed);
             selectedConsumed=null;
-            restore();
+            //restore();
             if(producedWildcards!=null && !producedWildcards.isEmpty()) {
                 isProducedAction = true;
                 setChooseResources_label("Choose " + producedWildcards.size() + " resources to resolve produced wildcards");
@@ -168,7 +174,7 @@ public class WildcardResolverController extends GenericController {
         if(!isFirstPhase && areResolved){
             List<Production> productions = new ArrayList<>();
             productions.add(new Production(consumedResolved, producedResolved));
-            restore();
+            //restore();
             isFirstPhase=false;
             isProducedAction=false;
             areResolved=false;
@@ -179,10 +185,9 @@ public class WildcardResolverController extends GenericController {
             getGUIApplication().closePopUpStage();
             getGUI().sendCanActivateProductionsMessage(productions);
         }
-        confirm_button.setDisable(true);
-        restore_button.setDisable(true);
-        goBack_button.setVisible(true);
+        restore();
         enableButtons();
+        goBack_button.setVisible(true);
     }
 
     public void restore() {

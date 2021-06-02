@@ -212,7 +212,7 @@ public class GUI extends ClientController {
             Platform.runLater(() -> ((WildcardResolverController) guiApplication.
                     getController(SceneNames.RESOURCE_CHOICE_MENU)).setIsFirstPhase(false));
             Platform.runLater(() -> ((WildcardResolverController) guiApplication.
-                    getController(SceneNames.RESOURCE_CHOICE_MENU)).setIsMarbleAction(true));
+                    getController(SceneNames.RESOURCE_CHOICE_MENU)).setIsMarbleAction(true, resources));
             Platform.runLater(() -> ((WildcardResolverController) guiApplication.
                     getController(SceneNames.RESOURCE_CHOICE_MENU)).enableButtons(availableAbilities));
             Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.RESOURCE_CHOICE_MENU));
@@ -395,7 +395,7 @@ public class GUI extends ClientController {
             Platform.runLater(() -> ((WildcardResolverController) guiApplication.
                     getController(SceneNames.RESOURCE_CHOICE_MENU)).setIsFirstPhase(true));
             Platform.runLater(() -> ((WildcardResolverController) guiApplication.
-                    getController(SceneNames.RESOURCE_CHOICE_MENU)).setIsMarbleAction(false));
+                    getController(SceneNames.RESOURCE_CHOICE_MENU)).setIsMarbleAction(false, null));
             Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.RESOURCE_CHOICE_MENU));
         }
     }

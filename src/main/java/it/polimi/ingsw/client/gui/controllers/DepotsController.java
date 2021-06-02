@@ -1,10 +1,10 @@
 package it.polimi.ingsw.client.gui.controllers;
 
+import it.polimi.ingsw.client.gui.SceneNames;
 import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.utils.messages.client.RequestResourcesDevMessage;
 import it.polimi.ingsw.utils.messages.client.RequestResourcesProdMessage;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -34,15 +34,16 @@ public class DepotsController extends GenericController {
             leaderShelf2_1_imageView, leaderShelf2_2_imageView, strongboxCoin_imageView, strongboxServant_imageView,
             strongboxShield_imageView, strongboxStone_imageView;
 
-    public void restore(ActionEvent actionEvent) {
+    public void restore() {
         setResourcesLabels(resourcesToTake);
     }
 
-    public void confirm(ActionEvent actionEvent) {
+    public void confirm() {
         List<RequestResources> requestResources = new ArrayList<>();
         requestResources.add(new RequestResources(strongbox, StorageType.STRONGBOX));
         requestResources.add(new RequestResources(warehouse, StorageType.WAREHOUSE));
         requestResources.add(new RequestResources(leaders, StorageType.LEADER));
+        ((PlayerBoardController) getGUIApplication().getController(SceneNames.PLAYER_BOARD)).setWarehouseIsDisabled(false);
         getGUIApplication().closeSecondStage();
         if(action == 1)
             getGUI().getMessageHandler().sendClientMessage(

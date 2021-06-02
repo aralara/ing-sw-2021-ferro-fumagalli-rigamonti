@@ -64,7 +64,8 @@ public class PlayerBoardController extends GenericController {
         this.isPlayerTurn=isPlayerTurn;
         mainActionPlayed=false;
         if(isPlayerTurn) {
-            enableButtons();
+            if(!isResToPlaceAction)
+                enableButtons();
         }
         else {
             disableButtons();
@@ -141,7 +142,7 @@ public class PlayerBoardController extends GenericController {
         disableButtons();
         mainActionPlayed=false;
         hideCheckBoxes();
-        //TODO: disabilitare cose
+        //TODO: disabilitare cose?
         getGUI().sendEndTurnMessage();
     }
 
@@ -161,9 +162,9 @@ public class PlayerBoardController extends GenericController {
             leaders.add(1);
         if(!leaders.isEmpty()) {
             leader1_checkBox.setSelected(false);
-            leader1_checkBox.setVisible(false);
+            //leader1_checkBox.setVisible(false);
             leader2_checkBox.setSelected(false);
-            leader2_checkBox.setVisible(false);
+            //leader2_checkBox.setVisible(false);
             getGUI().sendLeaderMessage(leaders, toActivate);
         }
     }
@@ -233,7 +234,9 @@ public class PlayerBoardController extends GenericController {
         updateWarehouse(opponentBoard.getWarehouse().getShelves());
         updateStrongbox(opponentBoard.getStrongbox().getResources());
         updateDevelopmentBSpaces(opponentBoard.getDevelopmentBoard().getSpaces());
-        updateLeaderBBoard(opponentBoard.getLeaderBoard().getBoard()); //TODO: controllare
+        updateOpponentLeaderBoard(opponentBoard);
+        hideLeaderHand();
+        hideCheckBoxes();
     }
 
     public void handleDragOver(DragEvent dragEvent) {
@@ -790,15 +793,16 @@ public class PlayerBoardController extends GenericController {
         }
     }
 
-  
-  private void resetLeaderBoard(){
+    private void resetLeaderBoard(){
         handLeader1_imageView.setImage(null);
         handLeader2_imageView.setImage(null);
         boardLeader1_imageView.setImage(null);
         boardLeader2_imageView.setImage(null);
+        shelfLeader1_1_imageView.setImage(null);
+        shelfLeader1_2_imageView.setImage(null);
+        shelfLeader2_1_imageView.setImage(null);
+        shelfLeader2_2_imageView.setImage(null);
     }
-  
-    
 
     private void updateLeaderBHand(List<Integer> idList){  //TODO: mi arriva sia per le mie leader sia per quelle degli oppo, va bene
         
@@ -1420,7 +1424,7 @@ public class PlayerBoardController extends GenericController {
             ((WildcardResolverController) getGUIApplication().getController(SceneNames.RESOURCE_CHOICE_MENU)).
                     setIsFirstPhase(false);
             ((WildcardResolverController) getGUIApplication().getController(SceneNames.RESOURCE_CHOICE_MENU)).
-                    setIsMarbleAction(false);
+                    setIsMarbleAction(false, null);
             ((WildcardResolverController) getGUIApplication().getController(SceneNames.RESOURCE_CHOICE_MENU)).
                     resolveWildcard(consumedResolved, producedResolved, consumedWildcards, producedWildcards);
             getGUIApplication().setActiveScene(SceneNames.RESOURCE_CHOICE_MENU);
@@ -1474,13 +1478,53 @@ public class PlayerBoardController extends GenericController {
             inkwell_imageVIew.setVisible(pbv.isInkwell());
             updateFaithBoard(pbv.getFaithBoard().getFaith(), false);
             updateFaithBPope(pbv.getFaithBoard().getPopeProgression());
-            updateWarehouse(pbv.getWarehouse().getShelves());
             updateStrongbox(pbv.getStrongbox().getResources());
             updateDevelopmentBSpaces(pbv.getDevelopmentBoard().getSpaces());
-            updateLeaderBHand(pbv.getLeaderBoard().getHand()); //TODO: controllare
+            resetLeaderBoard();
+            updateLeaderBHand(pbv.getLeaderBoard().getHand());
             updateLeaderBBoard(pbv.getLeaderBoard().getBoard());
+            updateWarehouse(pbv.getWarehouse().getShelves());
         } catch (NotExistingNicknameException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void updateOpponentLeaderBoard(PlayerBoardView playerBoard){
+        resetLeaderBoard();
+        Deck leaderCards = playerBoard.getLeaderBoard().getBoard();
+        if(leaderCards.size()>0) {
+            boardLeader1_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
+                    + leaderCards.get(0).getID() + ".png")));
+            if(((LeaderCard)leaderCards.get(0)).getAbility() instanceof AbilityWarehouse)
+                setOpponentLeaderShelf(((AbilityWarehouse)((LeaderCard)leaderCards.get(0)).getAbility()).
+                        getResourceType(), playerBoard.getWarehouse().getShelves(), 1);
+        }
+        if(leaderCards.size()>1) {
+            boardLeader2_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
+                    + leaderCards.get(1).getID() + ".png")));
+            if(((LeaderCard)leaderCards.get(0)).getAbility() instanceof AbilityWarehouse)
+                setOpponentLeaderShelf(((AbilityWarehouse)((LeaderCard)leaderCards.get(0)).getAbility()).
+                        getResourceType(), playerBoard.getWarehouse().getShelves(), 2);
+        }
+    }
+
+    private void setOpponentLeaderShelf(ResourceType resourceType, List<Shelf> shelves, int leaderPosition){
+        for(Shelf shelf : shelves){
+            Image image = new Image(getClass().getResourceAsStream("/imgs/res/"+ resourceType + ".png"));
+            if(shelf.isLeader() && shelf.getResourceType()==resourceType){
+                if(leaderPosition==1) {
+                    if (shelf.getResources().getQuantity() >= 1)
+                        shelfLeader1_1_imageView.setImage(image);
+                    if (shelf.getResources().getQuantity() >= 2)
+                        shelfLeader1_2_imageView.setImage(image);
+                }
+                else {
+                    if (shelf.getResources().getQuantity() >= 1)
+                        shelfLeader2_1_imageView.setImage(image);
+                    if (shelf.getResources().getQuantity() >= 2)
+                        shelfLeader2_2_imageView.setImage(image);
+                }
+            }
         }
     }
 }
