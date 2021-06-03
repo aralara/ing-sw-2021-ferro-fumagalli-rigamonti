@@ -1,7 +1,6 @@
 package it.polimi.ingsw.client.gui.controllers;
 
 import it.polimi.ingsw.client.gui.SceneNames;
-import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
 import javafx.fxml.FXML;;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -18,38 +17,73 @@ public class SetupController extends GenericController {
     @FXML private Label nickname_label, notifyPlayers_label;
     @FXML private ProgressBar loading_bar;
 
+    /**
+     * Gets the ipAddress_field attribute
+     * @return Returns ipAddress_field
+     */
     public TextField getIpAddress_field() {
         return ipAddress_field;
     }
 
+    /**
+     * Gets the portNumber_field attribute
+     * @return Returns portNumber_field
+     */
     public TextField getPortNumber_field() {
         return portNumber_field;
     }
 
+    /**
+     * Gets the nickname_field attribute
+     * @return Returns nickname_field
+     */
     public TextField getNickname_field() {
         return nickname_field;
     }
 
+    /**
+     * Gets the connecting_progressIndicator attribute
+     * @return Returns connecting_progressIndicator
+     */
     public ProgressIndicator getConnecting_progressIndicator() {
         return connecting_progressIndicator;
     }
 
+    /**
+     * Gets the waitingNickname_progressIndicator attribute
+     * @return Returns waitingNickname_progressIndicator
+     */
     public ProgressIndicator getWaitingNickname_progressIndicator() {
         return waitingNickname_progressIndicator;
     }
 
+    /**
+     * Gets the connect_button attribute
+     * @return Returns connect_button
+     */
     public Button getConnect_button() {
         return connect_button;
     }
 
+    /**
+     * Gets the confirm_button attribute
+     * @return Returns confirm_button
+     */
     public Button getConfirm_button() {
         return confirm_button;
     }
 
+    /**
+     * Gets the nickname_label attribute
+     * @return Returns nickname_label
+     */
     public Label getNickname_label() {
         return nickname_label;
     }
 
+    /**
+     * Shows the ConnectionMenu scene
+     */
     public void playOnline() {
         playOnline_button.setVisible(false);
         playOffline_button.setVisible(false);
@@ -57,6 +91,9 @@ public class SetupController extends GenericController {
         getGUIApplication().setActiveScene(SceneNames.CONNECTION_MENU);
     }
 
+    /**
+     * TODO: fare quando si sarà implementato il metodo
+     */
     public void playOffline() {
         //TODO: implementare singlegame offline
         playOnline_button.setVisible(false);
@@ -64,6 +101,9 @@ public class SetupController extends GenericController {
         loading_bar.setVisible(true);
     }
 
+    /**
+     * Controls if port and ip address are correct and shows the NicknameMenu scene, otherwise shows an alert message
+     */
     public void connect() {  //TODO: decidere se lasciare ip e porta vuota (molto probabilmente sì)
         /*if(ipAddress_field.getText().equals("")) {
             showAlert(Alert.AlertType.ERROR, "Error", "Missing field!",
@@ -95,12 +135,19 @@ public class SetupController extends GenericController {
         }
     }
 
+    /**
+     * Calls connect method if ENTER key is pressed
+     * @param keyEvent
+     */
     public void keyConnect(KeyEvent keyEvent) {
         if (keyEvent.getCode().equals(KeyCode.ENTER)) {
             connect();
         }
     }
 
+    /**
+     * Sends a message to the server with the chosen nickname
+     */
     public void sendNickname() {
 
         if(nickname_field.getText().equals("")){
@@ -117,28 +164,48 @@ public class SetupController extends GenericController {
         }
     }
 
+    /**
+     * Calls sendNickname method if ENTER key is pressed
+     * @param keyEvent
+     */
     public void keyNickname(KeyEvent keyEvent) {
         if (keyEvent.getCode().equals(KeyCode.ENTER)) {
             sendNickname();
         }
     }
 
+    /**
+     * Sets 1 as size of the lobby
+     */
     public void choose1Players() {
         getGUI().setLobbySize(1);
     }
 
+    /**
+     * Sets 2 as size of the lobby
+     */
     public void choose2Players() {
         getGUI().setLobbySize(2);
     }
 
+    /**
+     * Sets 3 as size of the lobby
+     */
     public void choose3Players() {
         getGUI().setLobbySize(3);
     }
 
+    /**
+     * Sets 4 as size of the lobby
+     */
     public void choose4Players() {
         getGUI().setLobbySize(4);
     }
 
+    /**
+     * Updates the label showing the nickname given by parameter
+     * @param nickname Nickname to show
+     */
     public void notifyNewPlayer(String nickname){
         String text = notifyPlayers_label.getText();
         notifyPlayers_label.setText(text + nickname + (nickname.length()>=16 ? "\n" : " ") + "has joined the game!\n");

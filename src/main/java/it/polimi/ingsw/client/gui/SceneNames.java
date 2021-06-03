@@ -13,7 +13,7 @@ public enum SceneNames {
     CARD("/fxml/Card.fxml"),
     DECKS_BOARD("/fxml/DecksBoard.fxml"),
     DEPOTS("/fxml/Depots.fxml"),
-    PODIUM("/fxml/Podium.fxml");
+    RANKING("/fxml/Ranking.fxml");
 
     private final String value;
 

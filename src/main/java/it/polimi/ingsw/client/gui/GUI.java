@@ -261,34 +261,31 @@ public class GUI extends ClientController {
     public void notifyEndGame(List<Player> players) {
         Platform.runLater(() -> guiApplication.getController(SceneNames.PLAYER_BOARD).showAlert(Alert.AlertType.INFORMATION,
                 "Notification", "The game has ended!", ""));
-        List<Player> playerRanking = players.stream().sorted(Comparator.comparingInt(Player::getFinalPosition)).
-                collect(Collectors.toList());
-        PodiumController pc = (PodiumController) guiApplication.getController(SceneNames.PODIUM);
+        RankingController rc = (RankingController) guiApplication.getController(SceneNames.RANKING);
+        List<Player> playerRanking = players.stream().sorted(Comparator.comparingInt(
+                Player::getFinalPosition)).collect(Collectors.toList());
         if(getLorenzoFaith()==-1) {
-            Platform.runLater(() -> pc.setPlace1(playerRanking.get(0).getNickname() + "\n" +
-                    playerRanking.get(0).getTotalVP() + " pt"));
-            Platform.runLater(() -> pc.setPlace2(playerRanking.get(1).getNickname() + "\n" +
-                    playerRanking.get(1).getTotalVP() + " pt"));
-            if (getNumberOfPlayers() > 2)
-                Platform.runLater(() -> pc.setPlace3(playerRanking.get(2).getNickname() + "\n" +
-                        playerRanking.get(2).getTotalVP() + " pt"));
-            if (getNumberOfPlayers() > 3)
-                Platform.runLater(() -> pc.setPlace4(playerRanking.get(3).getNickname() + "\n" +
-                        playerRanking.get(3).getTotalVP() + " pt"));
+            for (Player player : playerRanking) {
+                rc.setNames_label(player.getNickname());
+                rc.setScores_label(getLorenzoFaith() >= 0 && player.getNickname().equals("Lorenzo") ?
+                        "-" : Integer.toString(player.getTotalVP()));
+            }
         }
-        else {  //TODO: settare vittoria mia o lorenzo
-            if(players.get(0).getFinalPosition() == 2) {
-                Platform.runLater(() -> pc.setPlace1("Lorenzo il Magnifico" + "\n"));
-                Platform.runLater(() -> pc.setPlace2(playerRanking.get(0).getNickname() + "\n" +
-                        playerRanking.get(0).getTotalVP() + " pt"));
+        else {
+            if(players.get(0).getFinalPosition() == 1) {
+                Platform.runLater(() -> rc.setNames_label(playerRanking.get(0).getNickname()
+                        + "\nLorenzo il Magnifico"));
+                Platform.runLater(() -> rc.setScores_label(Integer.toString(playerRanking.get(0).getTotalVP())));
+                Platform.runLater(() -> rc.setScores_label("-"));
             }
             else {
-                Platform.runLater(() -> pc.setPlace1(playerRanking.get(0).getNickname() + "\n" +
-                    playerRanking.get(0).getTotalVP() + " pt"));
-                Platform.runLater(() -> pc.setPlace2("Lorenzo il Magnifico" + "\n"));
+                Platform.runLater(() -> rc.setNames_label("Lorenzo il Magnifico\n"
+                        + playerRanking.get(0).getNickname()));
+                Platform.runLater(() -> rc.setScores_label("-"));
+                Platform.runLater(() -> rc.setScores_label(Integer.toString(playerRanking.get(0).getTotalVP())));
             }
         }
-        Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.PODIUM));
+        Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.RANKING));
     }
 
     @Override

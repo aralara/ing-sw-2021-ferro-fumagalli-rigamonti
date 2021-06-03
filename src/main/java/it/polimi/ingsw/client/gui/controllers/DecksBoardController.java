@@ -23,14 +23,25 @@ public class DecksBoardController extends GenericController {
             deckG2_imageView, deckB2_imageView, deckY2_imageView, deckP2_imageView,
             deckG1_imageView, deckB1_imageView, deckY1_imageView, deckP1_imageView, selectedDevCard_imageView;
 
+    /**
+     * Gets the selectedCardColor attribute
+     * @return Returns selectedCardColor
+     */
     public CardColors getSelectedCardColor(){
         return selectedCardColor;
     }
 
+    /**
+     * Gets the selectedLevel attribute
+     * @return Returns selectedLevel
+     */
     public int getSelectedLevel(){
         return selectedLevel;
     }
 
+    /**
+     * Sets in the CardController the image of the selected card, closes this stage and opens the popUp one
+     */
     public void buyCard() {
         if(selectedDevCard_imageView.getImage()!=null) {
             ((CardController) getGUIApplication().getController(SceneNames.CARD))
@@ -52,74 +63,127 @@ public class DecksBoardController extends GenericController {
         }
     }
 
+    /**
+     * Goes back to the main stage closing this one
+     */
     public void goBack() {
         selectedDevCard_imageView.setImage(null);
         getGUIApplication().closeSecondStage();
     }
 
+    /**
+     * Sets the attributes of the class according to the clicked card given by parameter
+     * @param clickedImageView ImageView of the clicked card
+     * @param cardColors Color of the clicked card
+     * @param level Level of the clicked card
+     */
     private void clickedCard(ImageView clickedImageView, CardColors cardColors, int level){
         selectedDevCard_imageView.setImage(clickedImageView.getImage());
         selectedCardColor = cardColors;
         selectedLevel = level;
     }
 
+    /**
+     * Sets the attributes of the class according to the card at the top of the green deck, third level
+     */
     public void clickedG3() {
         clickedCard(deckG3_imageView, CardColors.GREEN, 3);
     }
 
+    /**
+     * Sets the attributes of the class according to the card at the top of the blue deck, third level
+     */
     public void clickedB3() {
         clickedCard(deckB3_imageView, CardColors.BLUE, 3);
     }
 
+    /**
+     * Sets the attributes of the class according to the card at the top of the yellow deck, third level
+     */
     public void clickedY3() {
         clickedCard(deckY3_imageView, CardColors.YELLOW, 3);
     }
 
+    /**
+     * Sets the attributes of the class according to the card at the top of the purple deck, third level
+     */
     public void clickedP3() {
         clickedCard(deckP3_imageView, CardColors.PURPLE, 3);
     }
 
+    /**
+     * Sets the attributes of the class according to the card at the top of the green deck, second level
+     */
     public void clickedG2() {
         clickedCard(deckG2_imageView, CardColors.GREEN, 2);
     }
 
+    /**
+     * Sets the attributes of the class according to the card at the top of the blue deck, second level
+     */
     public void clickedB2() {
         clickedCard(deckB2_imageView, CardColors.BLUE, 2);
     }
 
+    /**
+     * Sets the attributes of the class according to the card at the top of the yellow deck, second level
+     */
     public void clickedY2() {
         clickedCard(deckY2_imageView, CardColors.YELLOW, 2);
     }
 
+    /**
+     * Sets the attributes of the class according to the card at the top of the purple deck, second level
+     */
     public void clickedP2() {
         clickedCard(deckP2_imageView, CardColors.PURPLE, 2);
     }
 
+    /**
+     * Sets the attributes of the class according to the card at the top of the green deck, first level
+     */
     public void clickedG1() {
         clickedCard(deckG1_imageView, CardColors.GREEN, 1);
     }
 
+    /**
+     * Sets the attributes of the class according to the card at the top of the blue deck, first level
+     */
     public void clickedB1() {
         clickedCard(deckB1_imageView, CardColors.BLUE, 1);
     }
 
+    /**
+     * Sets the attributes of the class according to the card at the top of the yellow deck, first level
+     */
     public void clickedY1() {
         clickedCard(deckY1_imageView, CardColors.YELLOW, 1);
     }
 
+    /**
+     * Sets the attributes of the class according to the card at the top of the purple deck, first level
+     */
     public void clickedP1() {
         clickedCard(deckP1_imageView, CardColors.PURPLE, 1);
     }
 
-
+    /**
+     * Enables buyCard button
+     */
     public void enableBuyCardAction(){
         buyCard_button.setDisable(false);
     }
 
+    /**
+     * Disables buyCard button
+     */
     public void disableBuyCardAction(){
         buyCard_button.setDisable(true);
     }
 
+    /**
+     * Loads development decks' imageViews in the decks list
+     */
     private void fillList(){
         decks = new ArrayList<>();
         decks.add(deckG1_imageView);
@@ -136,6 +200,9 @@ public class DecksBoardController extends GenericController {
         decks.add(deckY3_imageView);
     }
 
+    /**
+     * Shows decks updating all the development decks
+     */
     public void showDevelopmentDeck() {
         fillList();
         List<DevelopmentDeckView> devDecks = getGUI().getDevelopmentDecks().getDecks();

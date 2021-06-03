@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane fx:id="connectionPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="400.0" styleClass="rankingPanel" stylesheets="@../css/ranking.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllers.RankingController">
+   <children>
+      <Label fx:id="names_label" focusTraversable="false" layoutX="19.0" layoutY="169.0" prefHeight="151.0" prefWidth="297.0" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="22.0" />
+         </font>
+      </Label>
+      <Label fx:id="scores_label" alignment="CENTER_RIGHT" layoutX="317.0" layoutY="169.0" prefHeight="151.0" prefWidth="39.0" textAlignment="RIGHT" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="22.0" />
+         </font>
+      </Label>
+      <Label fx:id="pt_label" layoutX="363.0" layoutY="169.0" prefHeight="151.0" prefWidth="28.0" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="22.0" />
+         </font>
+      </Label>
+      <Button layoutX="157.0" layoutY="348.0" mnemonicParsing="false" onAction="#quit" prefHeight="55.0" prefWidth="97.0" text="Quit" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="24.0" />
+         </font>
+      </Button>
+   </children>
+</Pane>
