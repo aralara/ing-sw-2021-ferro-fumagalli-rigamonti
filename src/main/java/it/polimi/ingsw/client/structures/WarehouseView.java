@@ -9,6 +9,7 @@ import it.polimi.ingsw.utils.listeners.Listeners;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class WarehouseView extends Listened implements Serializable {
 
@@ -29,6 +30,22 @@ public class WarehouseView extends Listened implements Serializable {
         this.shelves = shelves;
     }
 
+
+    /**
+     * Gets if the warehouse is empty
+     * @return Returns true if the warehouse is empty, false otherwise
+     */
+    public boolean isEmpty() {
+        return shelves.stream().allMatch(Shelf::isEmpty);
+    }
+
+    /**
+     * Gets a clone of the warehouse shelves
+     * @return Returns a list of the cloned shelves
+     */
+    public List<Shelf> getShelvesClone() {
+        return shelves.stream().map(Shelf::makeClone).collect(Collectors.toList());
+    }
 
     /**
      * Gets the shelves attribute

@@ -146,6 +146,14 @@ public class Warehouse extends PlayerListened implements Storage {
     }
 
     /**
+     * Gets if the warehouse is empty
+     * @return Returns true if the warehouse is empty, false otherwise
+     */
+    public boolean isEmpty() {      //TODO: ereditabile da Storage
+        return shelves.stream().allMatch(Shelf::isEmpty);
+    }
+
+    /**
      * Returns the cloned shelves
      * @return Returns a list of cloned shelves
      */

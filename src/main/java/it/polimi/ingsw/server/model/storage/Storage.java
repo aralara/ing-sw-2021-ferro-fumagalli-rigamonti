@@ -93,6 +93,18 @@ public interface Storage extends Serializable {
     }
 
     /**
+     * Checks if a list of resources is discarded correctly
+     * @param resources resources to be placed
+     * @param toDiscard resources to be discarded
+     * @return Returns true if the discarded resource is correct
+     */
+    static boolean isDiscardedResCorrect(List<Resource> resources, List<Resource> toDiscard) {
+        aggregateResources(resources);
+        aggregateResources(toDiscard);
+        return checkContainedResources(resources,toDiscard);
+    }
+
+    /**
      * Returns the total quantity of the resources contained in a list
      * @param resources List to be evaluated
      * @return Returns amount of resources

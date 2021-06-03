@@ -136,6 +136,37 @@ public class GraphicalCLI {
     }
 
     /**
+     * Generic method to let the user choose an integer between an upper and a lower bound
+     * @param lowerLimit Lower bound (not specified if null)
+     * @param upperLimit Upper bound (not specified if null)
+     * @param message String that is visualized as the input message
+     * @param adjustP1 If true, all the values that the users sees or enters are counted with a + 1
+     * @return Returns the integer chosen by the user
+     */
+    public int integerSelector(Integer lowerLimit, Integer upperLimit, String message, boolean adjustP1) {
+        int choice;
+        boolean isLow = lowerLimit != null, isUpp = upperLimit != null;
+        Integer adjLow = isLow ? (adjustP1 ? lowerLimit + 1 : lowerLimit) : null;
+        Integer adjUpp = isUpp ? (adjustP1 ? upperLimit + 1 : upperLimit) : null;
+        String adjMessage = message;
+        if(isLow) {
+            if(isUpp)
+                adjMessage += " (between " + adjLow + " and " + adjUpp + ")";
+            else
+                adjMessage += " (greater than " + adjLow + ")";
+        }
+        else if(isUpp)
+            adjMessage += " (greater than " + adjUpp + ")";
+        adjMessage += ": ";
+        do {
+            printString(adjMessage);
+            choice = getNextInt();
+        }
+        while ((isLow && choice < adjLow) || (isUpp && choice > adjUpp));
+        return adjustP1 ? choice - 1 : choice;
+    }
+
+    /**
      * Generic method to let the user choose an object from a list of possible options
      * @param <T> Type of the objects
      * @param list List of possible options
