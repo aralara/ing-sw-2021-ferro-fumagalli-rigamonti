@@ -34,10 +34,18 @@ public class DepotsController extends GenericController {
             leaderShelf2_1_imageView, leaderShelf2_2_imageView, strongboxCoin_imageView, strongboxServant_imageView,
             strongboxShield_imageView, strongboxStone_imageView;
 
+    /**
+     * Restores all the components of the class
+     */
     public void restore() {
         setResourcesLabels(resourcesToTake);
     }
 
+    /**
+     * Confirms and sends a message to the server according to the value of the action attribute
+     * If action is 1, sends a message with the resources to buy a card;
+     * if action is 2, sends a message with the resources to activate productions
+     */
     public void confirm() {
         List<RequestResources> requestResources = new ArrayList<>();
         requestResources.add(new RequestResources(strongbox, StorageType.STRONGBOX));
@@ -53,6 +61,9 @@ public class DepotsController extends GenericController {
                     new RequestResourcesProdMessage(productionsToActivate, requestResources));
     }
 
+    /**
+     * Handles drag dropped events of the depots
+     */
     public void handleDragDropped() {
         if(totalTakenResources<totalResourcesToTake && isToTake(resToTakeType)) {
             incrementQuantity(resToTakeType);
@@ -72,11 +83,22 @@ public class DepotsController extends GenericController {
             confirm_button.setVisible(true);
     }
 
+    /**
+     * Handles drag over events of the depots
+     * @param dragEvent Drag event
+     */
     public void handleDragOver(DragEvent dragEvent) {
         if(dragEvent.getDragboard().hasImage())
             dragEvent.acceptTransferModes(TransferMode.MOVE);
     }
 
+    /**
+     * * Handles drag detected events of the depots
+     * @param mouseEvent Mouse event
+     * @param imageView ImageView to drag
+     * @param storageType Storage's type of the dragged resource
+     * @param resourceType Resource's type of the dragged resource
+     */
     private void handleDragDetected(MouseEvent mouseEvent, ImageView imageView,
                                     StorageType storageType, ResourceType resourceType) {
         Dragboard dragboard = imageView.startDragAndDrop(TransferMode.MOVE);
@@ -88,72 +110,132 @@ public class DepotsController extends GenericController {
         mouseEvent.consume();
     }
 
+    /**
+     * Handles drag detected event of the first warehouse's shelf
+     * @param mouseEvent Mouse event
+     */
     public void handleDragDetectedWhShelf1_1(MouseEvent mouseEvent) {
         if (shelves.get(0).getResourceType()!=ResourceType.WILDCARD)
             handleDragDetected(mouseEvent, whShelf1_1_imageView, StorageType.WAREHOUSE, shelves.get(0).getResourceType());
     }
 
+    /**
+     * Handles drag detected event of the second warehouse's shelf, first slot
+     * @param mouseEvent Mouse event
+     */
     public void handleDragDetectedWhShelf2_1(MouseEvent mouseEvent) {
         if (shelves.get(1).getResourceType()!=ResourceType.WILDCARD)
             handleDragDetected(mouseEvent, whShelf2_1_imageView, StorageType.WAREHOUSE, shelves.get(1).getResourceType());
     }
 
+    /**
+     * Handles drag detected event of the second warehouse's shelf, second slot
+     * @param mouseEvent Mouse event
+     */
     public void handleDragDetectedWhShelf2_2(MouseEvent mouseEvent) {
         if (shelves.get(1).getResourceType()!=ResourceType.WILDCARD)
             handleDragDetected(mouseEvent, whShelf2_2_imageView, StorageType.WAREHOUSE, shelves.get(1).getResourceType());
     }
 
+    /**
+     * Handles drag detected event of the third warehouse's shelf, first slot
+     * @param mouseEvent Mouse event
+     */
     public void handleDragDetectedWhShelf3_1(MouseEvent mouseEvent) {
         if (shelves.get(2).getResourceType()!=ResourceType.WILDCARD)
             handleDragDetected(mouseEvent, whShelf3_1_imageView, StorageType.WAREHOUSE, shelves.get(2).getResourceType());
     }
 
+    /**
+     * Handles drag detected event of the third warehouse's shelf, second slot
+     * @param mouseEvent Mouse event
+     */
     public void handleDragDetectedWhShelf3_2(MouseEvent mouseEvent) {
         if (shelves.get(2).getResourceType()!=ResourceType.WILDCARD)
             handleDragDetected(mouseEvent, whShelf3_2_imageView, StorageType.WAREHOUSE, shelves.get(2).getResourceType());
     }
 
+    /**
+     * Handles drag detected event of the third warehouse's shelf, third slot
+     * @param mouseEvent Mouse event
+     */
     public void handleDragDetectedWhShelf3_3(MouseEvent mouseEvent) {
         if (shelves.get(2).getResourceType()!=ResourceType.WILDCARD)
             handleDragDetected(mouseEvent, whShelf3_3_imageView, StorageType.WAREHOUSE, shelves.get(2).getResourceType());
     }
 
+    /**
+     * Handles drag detected event of the first leader's shelf, first slot
+     * @param mouseEvent Mouse event
+     */
     public void handleDragDetectedLeaderShelf1_1(MouseEvent mouseEvent) {
         if (shelves.size()>=4 && shelves.get(3).getResources().getQuantity()>0)
             handleDragDetected(mouseEvent, leaderShelf1_1_imageView, StorageType.LEADER, shelves.get(3).getResourceType());
     }
 
+    /**
+     * Handles drag detected event of the first leader's shelf, second slot
+     * @param mouseEvent Mouse event
+     */
     public void handleDragDetectedLeaderShelf1_2(MouseEvent mouseEvent) {
         if (shelves.size()>=4 && shelves.get(3).getResources().getQuantity()>0)
             handleDragDetected(mouseEvent, leaderShelf1_2_imageView, StorageType.LEADER, shelves.get(3).getResourceType());
     }
 
+    /**
+     * Handles drag detected event of the second leader's shelf, first slot
+     * @param mouseEvent Mouse event
+     */
     public void handleDragDetectedLeaderShelf2_1(MouseEvent mouseEvent) {
         if (shelves.size()>=5 && shelves.get(4).getResources().getQuantity()>0)
             handleDragDetected(mouseEvent, leaderShelf2_1_imageView, StorageType.LEADER, shelves.get(4).getResourceType());
     }
 
+    /**
+     * Handles drag detected event of the second leader's shelf, second slot
+     * @param mouseEvent Mouse event
+     */
     public void handleDragDetectedLeaderShelf2_2(MouseEvent mouseEvent) {
         if (shelves.size()>=5 && shelves.get(4).getResources().getQuantity()>0)
             handleDragDetected(mouseEvent, leaderShelf2_2_imageView, StorageType.LEADER, shelves.get(4).getResourceType());
     }
 
+    /**
+     * Handles drag detected event of the coin in the strongbox
+     * @param mouseEvent Mouse event
+     */
     public void handleDragDetectedStrongboxCoin(MouseEvent mouseEvent) {
         handleDragDetected(mouseEvent, strongboxCoin_imageView, StorageType.STRONGBOX, ResourceType.COIN);
     }
 
+    /**
+     * Handles drag detected event of the servant in the strongbox
+     * @param mouseEvent Mouse event
+     */
     public void handleDragDetectedStrongboxServant(MouseEvent mouseEvent) {
         handleDragDetected(mouseEvent, strongboxServant_imageView, StorageType.STRONGBOX, ResourceType.SERVANT);
     }
 
+    /**
+     * Handles drag detected event of the shield in the strongbox
+     * @param mouseEvent Mouse event
+     */
     public void handleDragDetectedStrongboxShield(MouseEvent mouseEvent) {
         handleDragDetected(mouseEvent, strongboxShield_imageView, StorageType.STRONGBOX, ResourceType.SHIELD);
     }
 
+    /**
+     * Handles drag detected event of the stone in the strongbox
+     * @param mouseEvent Mouse event
+     */
     public void handleDragDetectedStrongboxStone(MouseEvent mouseEvent) {
         handleDragDetected(mouseEvent, strongboxStone_imageView, StorageType.STRONGBOX, ResourceType.STONE);
     }
 
+    /**
+     * Sets labels and initializes attributes
+     * @param resources List of resources to ask
+     */
     public void setResourcesLabels(List<Resource> resources){
         resetLabels();
         resourcesToTake = new ArrayList<>(resources);
@@ -170,6 +252,9 @@ public class DepotsController extends GenericController {
         totalTakenResources=0;
     }
 
+    /**
+     * Resets labels to 0 resources required
+     */
     private void resetLabels(){
         coinToTake_label.setText("0/0");
         servantToTake_label.setText("0/0");
@@ -177,6 +262,11 @@ public class DepotsController extends GenericController {
         stoneToTake_label.setText("0/0");
     }
 
+    /**
+     * Sets labels with the total amounts of the specified resource
+     * @param resourceType Resource's type
+     * @param quantity Resource's quantity
+     */
     private void setResourcesQuantityToTake(ResourceType resourceType, int quantity){
         if(resourceType == ResourceType.COIN) {
             coinToTake_label.setText("0/" + quantity);
@@ -189,10 +279,19 @@ public class DepotsController extends GenericController {
         }
     }
 
+    /**
+     * Increments by one the the quantity of the resource given by parameter
+     * @param resourceType Resource's type
+     */
     private void incrementQuantity(ResourceType resourceType){
         setResourceQuantity(resourceType, getResourceQuantity(resourceType) + 1);
     }
 
+    /**
+     * Gets the quantity of the resource given by parameter
+     * @param resourceType Resource's type
+     * @return Returns resource's quantity
+     */
     public int getResourceQuantity(ResourceType resourceType) {
         if (resourceType == ResourceType.COIN) {
             int index = coinToTake_label.getText().indexOf("/");
@@ -210,6 +309,11 @@ public class DepotsController extends GenericController {
         return -1;
     }
 
+    /**
+     * Sets the quantity of the resource given by parameter
+     * @param resourceType Resource's type
+     * @param quantity Resource's quantity
+     */
     public void setResourceQuantity(ResourceType resourceType, int quantity) {
         if (resourceType == ResourceType.COIN) {
             int index = coinToTake_label.getText().indexOf("/");
@@ -230,7 +334,10 @@ public class DepotsController extends GenericController {
         }
     }
 
-    private void setWarehouse(){ //TODO: x STE: cambiare anche qua 19
+    /**
+     * Sets warehouse's shelves' imageViews
+     */
+    private void setWarehouse(){
         shelves = getGUI().getWarehouseShelvesCopy();
         Image image;
         Shelf shelf;
@@ -331,10 +438,18 @@ public class DepotsController extends GenericController {
         }
     }
 
+    /**
+     * Calculates and sets total resources to take
+     */
     private void setTotalResourcesToTake(){
         totalResourcesToTake = resourcesToTake.stream().map(Resource::getQuantity).reduce(0, Integer::sum);
     }
 
+    /**
+     * Checks if the resource given by parameter needs to be taken
+     * @param resourceType Resource's type
+     * @return True if the resource needs to be taken, false otherwise
+     */
     private boolean isToTake(ResourceType resourceType){
         for(Resource resource : resourcesToTake)
             if(resource.getResourceType()==resourceType && getResourceQuantity(resourceType)+1 <= resource.getQuantity())
@@ -342,18 +457,34 @@ public class DepotsController extends GenericController {
         return false;
     }
 
+    /**
+     * Sets the action attribute
+     * @param action New attribute value
+     */
     public void setAction(int action){
         this.action = action;
     }
 
+    /**
+     * Sets the devCardToBuy attribute
+     * @param devCardToBuy New attribute value
+     */
     public void setDevCardToBuy(DevelopmentCard devCardToBuy) {
         this.devCardToBuy = devCardToBuy;
     }
 
+    /**
+     * Sets the spaceToPlace attribute
+     * @param spaceToPlace New attribute value
+     */
     public void setSpaceToPlace(int spaceToPlace) {
         this.spaceToPlace = spaceToPlace;
     }
 
+    /**
+     * Sets the productionsToActivate attribute
+     * @param productionsToActivate New attribute value
+     */
     public void setProductionsToActivate(List<Production> productionsToActivate) {
         this.productionsToActivate = productionsToActivate;
     }

@@ -10,6 +10,13 @@ import javafx.stage.Stage;
 public class GenericController {
     private GUIApplication guiApplication;
 
+    /**
+     * Shows alert with the specifics given by parameters
+     * @param alertType Type of the alert
+     * @param title Title of the alert
+     * @param header Header of the alert
+     * @param content Content of the alert
+     */
     public void showAlert(Alert.AlertType alertType, String title, String header, String content){
         Alert alert = guiApplication.getAlert();
         if(alert.isShowing()) {
@@ -25,14 +32,26 @@ public class GenericController {
         alert.showAndWait();
     }
 
+    /**
+     * Gets the gui attribute
+     * @return Returns gui
+     */
     public GUI getGUI(){
         return guiApplication.getGUI();
     }
 
+    /**
+     * Gets the scene attribute
+     * @return Returns scene
+     */
     public GUIApplication getGUIApplication(){
         return guiApplication;
     }
 
+    /**
+     * Sets the guiApplication attribute
+     * @param guiApplication New attribute value
+     */
     public void setGUIApplication(GUIApplication guiApplication) {
         this.guiApplication = guiApplication;
     }

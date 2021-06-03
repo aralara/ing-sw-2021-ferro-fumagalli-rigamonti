@@ -239,6 +239,10 @@ public class PlayerBoardController extends GenericController {
         hideCheckBoxes();
     }
 
+    /**
+     * Handles drag over events
+     * @param dragEvent Drag event
+     */
     public void handleDragOver(DragEvent dragEvent) {
         if(dragEvent.getDragboard().hasImage())
             dragEvent.acceptTransferModes(TransferMode.MOVE);
@@ -280,49 +284,58 @@ public class PlayerBoardController extends GenericController {
         handleDragOver(dragEvent);
     }
 
-    private void handleDragDroppedSpace(DragEvent dragEvent, ImageView imageView, int space) {
+    /**
+     * Handles drag dropped events of the development spaces
+     * @param space The space where drop the card
+     */
+    private void handleDragDroppedSpace(int space) {
         DecksBoardController dbc = (DecksBoardController) getGUIApplication().getController(SceneNames.DECKS_BOARD);
         disableSpaces();
         getGUIApplication().closeCardStage();
         getGUI().sendCanBuyDevelopmentCardMessage(dbc.getSelectedCardColor(), dbc.getSelectedLevel(), space-1);
     }
 
-    public void handleDragDropped1L1(DragEvent dragEvent) {
-        handleDragDroppedSpace(dragEvent, space1L1_imageView, 1);
+    public void handleDragDropped1L1() {
+        handleDragDroppedSpace(1);
     }
 
-    public void handleDragDropped1L2(DragEvent dragEvent) {
-        handleDragDroppedSpace(dragEvent, space1L2_imageView, 1);
+    public void handleDragDropped1L2() {
+        handleDragDroppedSpace(1);
     }
 
-    public void handleDragDropped1L3(DragEvent dragEvent) {
-        handleDragDroppedSpace(dragEvent, space1L3_imageView, 1);
+    public void handleDragDropped1L3() {
+        handleDragDroppedSpace(1);
     }
 
-    public void handleDragDropped2L1(DragEvent dragEvent) {
-        handleDragDroppedSpace(dragEvent, space2L1_imageView, 2);
+    public void handleDragDropped2L1() {
+        handleDragDroppedSpace(2);
     }
 
-    public void handleDragDropped2L2(DragEvent dragEvent) {
-        handleDragDroppedSpace(dragEvent, space2L2_imageView, 2);
+    public void handleDragDropped2L2() {
+        handleDragDroppedSpace(2);
     }
 
-    public void handleDragDropped2L3(DragEvent dragEvent) {
-        handleDragDroppedSpace(dragEvent, space2L3_imageView, 2);
+    public void handleDragDropped2L3() {
+        handleDragDroppedSpace(2);
     }
 
-    public void handleDragDropped3L1(DragEvent dragEvent) {
-        handleDragDroppedSpace(dragEvent, space3L1_imageView, 3);
+    public void handleDragDropped3L1() {
+        handleDragDroppedSpace(3);
     }
 
-    public void handleDragDropped3L2(DragEvent dragEvent) {
-        handleDragDroppedSpace(dragEvent, space3L2_imageView, 3);
+    public void handleDragDropped3L2() {
+        handleDragDroppedSpace(3);
     }
 
-    public void handleDragDropped3L3(DragEvent dragEvent) {
-        handleDragDroppedSpace(dragEvent, space3L3_imageView, 3);
+    public void handleDragDropped3L3() {
+        handleDragDroppedSpace(3);
     }
 
+    /**
+     * Handles drag detected event of the resources to place
+     * @param mouseEvent Mouse event
+     * @param imageView ImageView to drag
+     */
     public void handleDragDetectedToPlace(MouseEvent mouseEvent, ImageView imageView) {
         Dragboard dragboard = imageView.startDragAndDrop(TransferMode.MOVE);
         ClipboardContent clipboardContent = new ClipboardContent();
@@ -367,6 +380,10 @@ public class PlayerBoardController extends GenericController {
         }
     }
 
+    /**
+     * Handles drag over events of the shelves
+     * @param dragEvent Drag event
+     */
     private void handleDragOverShelf(DragEvent dragEvent){
         if(!warehouseIsDisabled)
             handleDragOver(dragEvent);
@@ -416,6 +433,13 @@ public class PlayerBoardController extends GenericController {
             handleDragOverShelf(dragEvent);
     }
 
+    /**
+     * Handles drag dropped events of the shelves
+     * @param dragEvent Drag event
+     * @param imageView ImageView to drop
+     * @param shelfLevel Level of the shelf where drop the resource
+     * @return Returns true if the resource has been placed, false otherwise
+     */
     private boolean handleDragDroppedShelf(DragEvent dragEvent, ImageView imageView, int shelfLevel){
         if(addToWarehouse(resToPlace, shelfLevel-1)) {
             Image image = dragEvent.getDragboard().getImage();
@@ -458,37 +482,43 @@ public class PlayerBoardController extends GenericController {
             setWhShelvesImages(3);
     }
 
-    public void handleDragDroppedShelfLeader1_1(DragEvent dragEvent) { //TODO: da testare
-        //int position = getGUI().getLeaderShelfPosition(leader1WarehouseType)+1;
-        int position = 4; //TODO: faccio un check prendendo i vari shelf del wh
+    public void handleDragDroppedShelfLeader1_1(DragEvent dragEvent) {
+        int position = 4;
         if(handleDragDroppedShelf(dragEvent, shelfLeader1_1_imageView, position))
             setWhLeadersImages(position, 1);
     }
 
-    public void handleDragDroppedShelfLeader1_2(DragEvent dragEvent) { //TODO: da testare
-        int position = 4; //TODO: faccio un check prendendo i vari shelf del wh
+    public void handleDragDroppedShelfLeader1_2(DragEvent dragEvent) {
+        int position = 4;
         if(handleDragDroppedShelf(dragEvent, shelfLeader1_2_imageView, position))
             setWhLeadersImages(position, 1);
     }
 
-    public void handleDragDroppedShelfLeader2_1(DragEvent dragEvent) { //TODO: da testare
-        int position = (isFirstLeaderShelf) ? 5 : 4; //TODO: faccio un check prendendo i vari shelf del wh
+    public void handleDragDroppedShelfLeader2_1(DragEvent dragEvent) {
+        int position = (isFirstLeaderShelf) ? 5 : 4;
         if(handleDragDroppedShelf(dragEvent, shelfLeader2_1_imageView, position))
             setWhLeadersImages(position, 2);
     }
 
-    public void handleDragDroppedShelfLeader2_2(DragEvent dragEvent) { //TODO: da testare
-        int position = (isFirstLeaderShelf) ? 5 : 4; //TODO: faccio un check prendendo i vari shelf del wh
+    public void handleDragDroppedShelfLeader2_2(DragEvent dragEvent) {
+        int position = (isFirstLeaderShelf) ? 5 : 4;
         if(handleDragDroppedShelf(dragEvent, shelfLeader2_2_imageView, position))
             setWhLeadersImages(position, 2);
     }
 
+    /**
+     * Handles drag dropped events of the resources to discard
+     */
     public void handleDragDroppedHole() {
         addToDiscardedResources(resToPlace);
         restoreWarehouse_button.setVisible(true);
         setResToPlaceQuantity(resToPlace, getResToPlaceQuantity(resToPlace) - 1);
     }
 
+    /**
+     * Handles drag over events of the resources to discard
+     * @param dragEvent Drag event
+     */
     public void handleDragOverHole(DragEvent dragEvent) {
         if(isResToPlaceAction)
             handleDragOver(dragEvent);
@@ -512,7 +542,7 @@ public class PlayerBoardController extends GenericController {
             imageView.setDisable(true);
     }
 
-    public void enableSpaces(){ //TODO: migliorabile?
+    public void enableSpaces(){
         fillSpacesList();
         for(int i=0; i<3; i++){
             if(spaces.get(i).getImage()==null){
@@ -630,31 +660,6 @@ public class PlayerBoardController extends GenericController {
             disableButtons();
         else if (quantity == 0)
             checkEnableButtons();
-    }
-
-    public int getStrongboxQuantity(ResourceType resourceType) {
-        if (resourceType == ResourceType.COIN) {
-            return Integer.parseInt(coinStrongbox_label.getText().substring(2));
-        } else if (resourceType == ResourceType.SERVANT) {
-            return Integer.parseInt(servantStrongbox_label.getText().substring(2));
-        }else if (resourceType == ResourceType.SHIELD) {
-            return Integer.parseInt(shieldStrongbox_label.getText().substring(2));
-        }else if (resourceType == ResourceType.STONE){
-            return Integer.parseInt(stoneStrongbox_label.getText().substring(2));
-        }
-        return 0;
-    }
-
-    public void setStrongboxQuantity(ResourceType resourceType, int quantity){
-        if(resourceType == ResourceType.COIN) {
-            coinStrongbox_label.setText("x " + quantity);
-        }else if (resourceType == ResourceType.SERVANT) {
-            servantStrongbox_label.setText("x "+quantity);
-        }else if (resourceType == ResourceType.SHIELD) {
-            shieldStrongbox_label.setText("x "+quantity);
-        }else if (resourceType == ResourceType.STONE){
-            stoneStrongbox_label.setText("x "+quantity);
-        }
     }
 
     private void checkEnableButtons(){
@@ -804,8 +809,7 @@ public class PlayerBoardController extends GenericController {
         shelfLeader2_2_imageView.setImage(null);
     }
 
-    private void updateLeaderBHand(List<Integer> idList){  //TODO: mi arriva sia per le mie leader sia per quelle degli oppo, va bene
-        
+    private void updateLeaderBHand(List<Integer> idList){
         if(idList.stream().noneMatch(x -> x == -1)) {
             handLeader1_imageView.setImage(null);
             handLeader2_imageView.setImage(null);
@@ -830,7 +834,7 @@ public class PlayerBoardController extends GenericController {
         updateLeaderBHand(idList);
     }
 
-    public void setLeaderBHand(List<Integer> idList){  //TODO: mi arriva sia per le mie leader sia per quelle degli oppo, va bene
+    public void setLeaderBHand(List<Integer> idList){
         updateLeaderBHand(idList);
     }
 
@@ -839,14 +843,15 @@ public class PlayerBoardController extends GenericController {
         handLeader2_imageView.setImage(null);
     }
 
-    private void updateLeaderBBoard(List<Integer> idList){  //TODO: mi arriva sia per le mie leader sia per quelle degli oppo, va bene?
+    private void updateLeaderBBoard(List<Integer> idList){
         if(idList.stream().noneMatch(x -> x == -1)) {
             boardLeader1_imageView.setImage(null);
             boardLeader2_imageView.setImage(null);
             for(Integer id : idList) {
                 LeaderCard currentLeaderCard = new LeaderCard();
                 try {
-                    List<LeaderCard> leaderCards = ((List<LeaderCard>)(List<? extends Card>)getGUI().getLocalPlayerBoard().getLeaderBoard().getBoard().getCards());
+                    List<LeaderCard> leaderCards = ((List<LeaderCard>)(List<? extends Card>)getGUI().
+                            getLocalPlayerBoard().getLeaderBoard().getBoard().getCards());
                     for(LeaderCard lc : leaderCards){
                         if(lc.getID() == id){
                             currentLeaderCard = lc;
@@ -873,14 +878,14 @@ public class PlayerBoardController extends GenericController {
         showLeaderCheckBoxes();
     }
 
-  private void updateLeaderBBoard(Deck leaderCards){
+    private void updateLeaderBBoard(Deck leaderCards){
         List<Integer> idList = new ArrayList<>();
         for(Card card : leaderCards)
             idList.add(card.getID());
         updateLeaderBBoard(idList);
     }
   
-   public void setLeaderBBoard(List<Integer> idList){  //TODO: mi arriva sia per le mie leader sia per quelle degli oppo, va bene?
+    public void setLeaderBBoard(List<Integer> idList){
         updateLeaderBBoard(idList);
     }
 
@@ -941,7 +946,8 @@ public class PlayerBoardController extends GenericController {
                     case(1):
                         if(shelf.getResourceType() != ResourceType.WILDCARD) {
                             resType = shelf.getResourceType().toString()+".png";
-                            shelfResL1_1_imageView.setImage(new Image(getClass().getResourceAsStream(resPath+resType)));
+                            shelfResL1_1_imageView.setImage(new Image(
+                                    getClass().getResourceAsStream(resPath+resType)));
                         }
                         else
                             shelfResL1_1_imageView.setImage(null);
@@ -993,10 +999,9 @@ public class PlayerBoardController extends GenericController {
                     default: break;
                 }
             }
-            //%%
-            else { //leader //TODO: da testare
+            else { //leader
                 resType = shelf.getResourceType().toString()+".png";
-                image = new Image(getClass().getResourceAsStream(resPath+resType)); //TODO: controllare se va bene in maiuscolo o da problemi
+                image = new Image(getClass().getResourceAsStream(resPath+resType));
                 if(isFirstLeaderShelf && !isSecondLeaderShelf){
                     if(shelf.getResources().getQuantity()==1){
                         shelfLeader1_1_imageView.setImage(image);
@@ -1025,10 +1030,9 @@ public class PlayerBoardController extends GenericController {
                         shelfLeader2_2_imageView.setImage(null);
                     }
                 } else{
-                    //%%
-                    if(getGUI().getLeaderBoard().size() == 2) {  //devo aver gia aggiornato lla board
-                        if (shelf.getResources().getResourceType() ==
-                                ((AbilityWarehouse) ((LeaderCard) getGUI().getLeaderBoard().get(0)).getAbility()).getResourceType()) {
+                    if(getGUI().getLeaderBoard().size() == 2) {
+                        if (shelf.getResources().getResourceType() == ((AbilityWarehouse) ((LeaderCard) getGUI().
+                                getLeaderBoard().get(0)).getAbility()).getResourceType()) {
                             if (shelf.getResources().getQuantity() == 1) {
                                 shelfLeader1_1_imageView.setImage(image);
                                 shelfLeader1_2_imageView.setImage(null);
@@ -1057,8 +1061,6 @@ public class PlayerBoardController extends GenericController {
         }
     }
 
-
-
     private void resetWarehouse(){
         shelfResL1_1_imageView.setImage(null);
         shelfResL2_1_imageView.setImage(null);
@@ -1075,7 +1077,6 @@ public class PlayerBoardController extends GenericController {
     public void showWarehouse() {
         updateWarehouse(getGUI().getWarehouseShelvesCopy());
     }
-
 
     private void setWhShelvesImages(int level){
         int resQuantity = shelves.get(level-1).getResources().getQuantity();
@@ -1127,7 +1128,6 @@ public class PlayerBoardController extends GenericController {
         }
     }
 
-    //%%
     private void setWhLeadersImages(int index, int leader){
         int resQuantity = shelves.get(index-1).getResources().getQuantity();
         Image image = new Image(getClass().getResourceAsStream("/imgs/res/" +
@@ -1264,7 +1264,7 @@ public class PlayerBoardController extends GenericController {
             if(!shelf.isLeader() && shelf.getResourceType().equals(resourceType))
                 return shelf;
         }
-        return null; //TODO: brutto?
+        return null;
     }
 
     private void placeResource(Shelf shelf, ResourceType resourceType){
@@ -1380,10 +1380,10 @@ public class PlayerBoardController extends GenericController {
         return basicProduction_checkBox.isSelected() || devSpace1_checkBox.isSelected() ||
                 devSpace2_checkBox.isSelected() || devSpace3_checkBox.isSelected() ||
                 isFirstLeaderProduction && leader1_checkBox.isSelected() ||
-                isSecondLeaderProduction && leader2_checkBox.isSelected(); //TODO: leaders da controllare
+                isSecondLeaderProduction && leader2_checkBox.isSelected();
     }
 
-    private void getActivatedProductions(){ //TODO: vedere se migliorabile
+    private void getActivatedProductions(){
         List<Production> activatedProductions = new ArrayList<>();
         int specialProductionSize =  getGUI().getLeaderProductions().size();
         if (basicProduction_checkBox.isSelected())
@@ -1394,12 +1394,10 @@ public class PlayerBoardController extends GenericController {
             activatedProductions.add(((DevelopmentCard) getGUI().getDevelopmentBoard().get(1).get(0)).getProduction());
         if (devSpace3_checkBox.isSelected())
             activatedProductions.add(((DevelopmentCard) getGUI().getDevelopmentBoard().get(2).get(0)).getProduction());
-        if (isFirstLeaderProduction && leader1_checkBox.isSelected()) {
+        if (isFirstLeaderProduction && leader1_checkBox.isSelected())
             activatedProductions.add(getGUI().getLeaderProductions().get(0));
-        }
-        if (isSecondLeaderProduction && leader2_checkBox.isSelected()) {
-            activatedProductions.add(getGUI().getLeaderProductions().get((specialProductionSize>1) ? 1 : 0));  //TODO: controllo quante leader ability sono attive
-        }
+        if (isSecondLeaderProduction && leader2_checkBox.isSelected())
+            activatedProductions.add(getGUI().getLeaderProductions().get((specialProductionSize>1) ? 1 : 0));
         resolveWildcard(activatedProductions);
     }
 

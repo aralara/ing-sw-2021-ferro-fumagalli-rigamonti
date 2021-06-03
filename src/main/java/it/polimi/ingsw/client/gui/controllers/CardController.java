@@ -9,6 +9,10 @@ public class CardController extends GenericController{
 
     @FXML private ImageView cardToPlace_imageView;
 
+    /**
+     * Handles drag detected event of the card
+     * @param mouseEvent Mouse event
+     */
     public void handleDragDetected(MouseEvent mouseEvent) {
         Dragboard dragboard = cardToPlace_imageView.startDragAndDrop(TransferMode.MOVE);
         ClipboardContent clipboardContent = new ClipboardContent();
@@ -17,6 +21,10 @@ public class CardController extends GenericController{
         mouseEvent.consume();
     }
 
+    /**
+     * Sets cardToPlace's imageView
+     * @param image Image to be set
+     */
     public void setImage(Image image){
         cardToPlace_imageView.setImage(image);
     }
