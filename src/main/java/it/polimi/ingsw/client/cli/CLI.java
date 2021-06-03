@@ -11,6 +11,7 @@ import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.server.saves.GameSave;
 import it.polimi.ingsw.server.saves.SaveInteractions;
 import it.polimi.ingsw.server.view.VirtualView;
+import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.PipedPair;
 import it.polimi.ingsw.utils.messages.client.*;
 import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
@@ -175,14 +176,10 @@ public class CLI extends ClientController {
 
     @Override
     public void askNewLobby(int lobbySize, int waitingPlayers) {
-        if (lobbySize == waitingPlayers){
-            int size;
+        if (lobbySize == waitingPlayers) {
             graphicalCLI.printlnString("There aren't any players waiting for a match!");
-            do {
-                graphicalCLI.printString("Insert the number of desired players for the game " +
-                        "(value inserted must between 1 and 4): ");
-                size = graphicalCLI.getNextInt();
-            }while(size <= 0 || size >= 6);
+            int size = graphicalCLI.integerSelector(1, Constants.MAX_LOBBY_SIZE.value(),
+                    "Insert the number of desired players for the game", false);
             setNumberOfPlayers(size);
             getMessageHandler().sendClientMessage(new NewLobbyMessage(size));
         }
@@ -195,6 +192,7 @@ public class CLI extends ClientController {
 
     @Override
     public void displaySaves(List<GameSave> saves) {
+        ClientMessage messageToSend = new SaveInteractionMessage(null, SaveInteractions.NO_ACTION);
         if(saves.size() > 0) {
             graphicalCLI.printString("Do you want to load a save? ");
             if (graphicalCLI.isAnswerYes()) {
@@ -209,14 +207,12 @@ public class CLI extends ClientController {
                         null,
                         null);
                 if (option.equals("Delete"))
-                    getMessageHandler().sendClientMessage(new SaveInteractionMessage(save, SaveInteractions.DELETE_SAVE));
+                    messageToSend = new SaveInteractionMessage(save, SaveInteractions.DELETE_SAVE);
                 else
-                    getMessageHandler().sendClientMessage(new SaveInteractionMessage(save, SaveInteractions.OPEN_SAVE));
-            } else
-                getMessageHandler().sendClientMessage(new SaveInteractionMessage(null, SaveInteractions.NO_ACTION));
+                    messageToSend = new SaveInteractionMessage(save, SaveInteractions.OPEN_SAVE);
+            }
         }
-        else
-            getMessageHandler().sendClientMessage(new SaveInteractionMessage(null, SaveInteractions.NO_ACTION));
+        getMessageHandler().sendClientMessage(messageToSend);
     }
 
     @Override
@@ -350,22 +346,18 @@ public class CLI extends ClientController {
     }
 
     public void turnMenu() {
-        MenuOption result;
-        if(isPlayerTurn())
-            result = graphicalCLI.objectOptionSelector(playerTurnMenu,
-                    m -> graphicalCLI.printlnString(m.getTitle()),
-                    () -> graphicalCLI.printlnString("MENU:\n"),
-                    () -> graphicalCLI.printString("\nChoose an action to do on your turn: "),
-                    null
-            );
-        else
-            result = graphicalCLI.objectOptionSelector(opponentTurnMenu,
-                    m -> graphicalCLI.printlnString(m.getTitle()),
-                    () -> graphicalCLI.printlnString("MENU:\n"),
-                    () -> graphicalCLI.printString("\nChoose an action to do: "),
-                    null
-            );
-        result.getAction().run();
+        List<MenuOption> turnMenu = opponentTurnMenu;   //Defaults as the opponent turn
+        Runnable choiceText = () -> graphicalCLI.printString("\nChoose an action to do: ");
+        if(isPlayerTurn()) {    //If it's the player's turn sets the corresponding menu options
+            turnMenu = playerTurnMenu;
+            choiceText = () -> graphicalCLI.printString("\nChoose an action to do on your turn: ");
+        }
+        graphicalCLI.objectOptionSelector(turnMenu,     //Makes the player choose between their actions and runs it
+                m -> graphicalCLI.printlnString(m.getTitle()),
+                () -> graphicalCLI.printlnString("MENU:\n"),
+                choiceText,
+                null
+        ).getAction().run();
     }
 
     @Override
@@ -417,12 +409,9 @@ public class CLI extends ClientController {
 
             DevelopmentCard developmentCard = chooseCardFromDecks();
 
-            graphicalCLI.printString("Which space do you want to put the card on? ");
-            space = graphicalCLI.getNextInt() - 1;
-            while (space < 0 || space >= 3) {
-                graphicalCLI.printString("Invalid choice, please try again: ");
-                space = graphicalCLI.getNextInt() - 1;
-            }
+            space = graphicalCLI.integerSelector(0, Constants.BASE_DEVELOPMENT_SPACES.value() - 1,
+                    "Which space do you want to put the card on?", true);
+
             getMessageHandler().sendClientMessage(new CanBuyDevelopmentCardMessage(developmentCard, space));
         } catch(NotExistingNicknameException e) {
             e.printStackTrace();
