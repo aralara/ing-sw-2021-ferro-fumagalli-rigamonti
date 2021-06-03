@@ -284,7 +284,7 @@ public class PlayerBoardController extends GenericController {
         DecksBoardController dbc = (DecksBoardController) getGUIApplication().getController(SceneNames.DECKS_BOARD);
         disableSpaces();
         getGUIApplication().closeCardStage();
-        getGUI().sendBuyDevelopmentCardMessage(dbc.getSelectedCardColor(), dbc.getSelectedLevel(), space-1);
+        getGUI().sendCanBuyDevelopmentCardMessage(dbc.getSelectedCardColor(), dbc.getSelectedLevel(), space-1);
     }
 
     public void handleDragDropped1L1(DragEvent dragEvent) {

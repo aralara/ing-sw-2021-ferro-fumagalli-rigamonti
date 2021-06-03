@@ -35,6 +35,10 @@ public class GUI extends ClientController {
     private List<Resource> resourcesToDiscard;
     private int waitingPlayers;
 
+    /**
+     * GUI constructor with parameters
+     * @param guiApplication Lower limit for the VaticanReport
+     */
     public GUI(GUIApplication guiApplication) {
         super();
         this.guiApplication = guiApplication;
@@ -47,6 +51,9 @@ public class GUI extends ClientController {
         resourcesToDiscard = new ArrayList<>();
     }
 
+    /**
+     * TODO: RIGA fai il javadoc c':
+     */
     public void attachListeners() {
         PlayerBoardController playerBoardController = (PlayerBoardController) guiApplication
                 .getController(SceneNames.PLAYER_BOARD);
@@ -76,6 +83,12 @@ public class GUI extends ClientController {
                 new MarketViewListener(marketController));
     }
 
+    /**
+     * Connects to the server given by parameter
+     * @param address Server's address
+     * @param port Server's port
+     * @return Returns true if it connects successfully, false otherwise
+     */
     public boolean connect(String address, Integer port) {
         boolean success = getMessageHandler().connect(address, port);
         if(success)
@@ -146,8 +159,12 @@ public class GUI extends ClientController {
     @Override
     public void askLeaderDiscard() {
         attachListeners();  //TODO: TEMPORANEO, non valido quando si carica un gioco dal salvataggio
-        updateLeaderHandToDiscard();
         try {
+            List<Integer> listID = new ArrayList<>();
+            for(Card card : getLocalPlayerBoard().getLeaderBoard().getHand())
+                listID.add(card.getID());
+            Platform.runLater(() -> ((FirstPhaseController)guiApplication.
+                    getController(SceneNames.LEADER_CHOICE_MENU)).setLeaders(listID));
             if (getLocalPlayerBoard().isInkwell()) {
                 Platform.runLater(() -> ((PlayerBoardController) guiApplication.
                         getController(SceneNames.PLAYER_BOARD)).enableInkwell());
@@ -155,7 +172,6 @@ public class GUI extends ClientController {
         }catch(NotExistingNicknameException e){
             e.printStackTrace();
         }
-
         Platform.runLater(() -> ((PlayerBoardController)guiApplication.
                 getController(SceneNames.PLAYER_BOARD)).disableActivateProductionsAction());
         Platform.runLater(() -> ((PlayerBoardController) guiApplication.
@@ -236,7 +252,7 @@ public class GUI extends ClientController {
     }
 
     @Override
-    public void notifyLastRound() {
+    public void notifyLastRound() { //TODO: controllare quante volte arriva
         Platform.runLater(() -> guiApplication.getController(SceneNames.PLAYER_BOARD).showAlert(Alert.AlertType.INFORMATION,
                 "Notification", "Last round before the game ends!", ""));
     }
@@ -249,12 +265,16 @@ public class GUI extends ClientController {
                 collect(Collectors.toList());
         PodiumController pc = (PodiumController) guiApplication.getController(SceneNames.PODIUM);
         if(getLorenzoFaith()==-1) {
-            Platform.runLater(() -> pc.setPlace1(playerRanking.get(0).getNickname() + "\n" + playerRanking.get(0).getTotalVP()));
-            Platform.runLater(() -> pc.setPlace2(playerRanking.get(1).getNickname() + "\n" + playerRanking.get(1).getTotalVP()));
+            Platform.runLater(() -> pc.setPlace1(playerRanking.get(0).getNickname() + "\n" +
+                    playerRanking.get(0).getTotalVP() + " pt"));
+            Platform.runLater(() -> pc.setPlace2(playerRanking.get(1).getNickname() + "\n" +
+                    playerRanking.get(1).getTotalVP() + " pt"));
             if (getNumberOfPlayers() > 2)
-                Platform.runLater(() -> pc.setPlace2(playerRanking.get(2).getNickname() + "\n" + playerRanking.get(2).getTotalVP()));
+                Platform.runLater(() -> pc.setPlace3(playerRanking.get(2).getNickname() + "\n" +
+                        playerRanking.get(2).getTotalVP() + " pt"));
             if (getNumberOfPlayers() > 3)
-                Platform.runLater(() -> pc.setPlace2(playerRanking.get(3).getNickname() + "\n" + playerRanking.get(3).getTotalVP()));
+                Platform.runLater(() -> pc.setPlace4(playerRanking.get(3).getNickname() + "\n" +
+                        playerRanking.get(3).getTotalVP() + " pt"));
         }
         else {
             if(getLorenzoFaith()>playerRanking.get(0).getTotalVP())
@@ -306,6 +326,11 @@ public class GUI extends ClientController {
         chooseStorages(consumed, 2);    //TODO: 1 e 2 possono diventare degli enum
     }
 
+    /**
+     * Shows Depots scene
+     * @param resources Consumed resources' list to resolve
+     * @param action 1 to resolve development decks' resources or 2 to resolve productions' resources
+     */
     private void chooseStorages(List<Resource> resources, int action) {
         Platform.runLater(() -> ((DepotsController)guiApplication.getController(SceneNames.DEPOTS))
                 .setResourcesLabels(resources));
@@ -334,12 +359,20 @@ public class GUI extends ClientController {
         ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD)).setMainActionPlayed(mainActionPlayed);
     }
 
+    /**
+     * Sends to the server the nickname given by parameter
+     * @param nickname Nickname to send
+     */
     public void sendNickname(String nickname){
         getMessageHandler().sendClientMessage(new ConnectionMessage(nickname));
         setNickname(nickname);
         ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD)).setPlayer_label(nickname);
     }
 
+    /**
+     * Sets the size of the lobby and show a new scene accordingly
+     * @param size Size of the lobby
+     */
     public void setLobbySize(int size){
         setNumberOfPlayers(size);
         getMessageHandler().sendClientMessage(new NewLobbyMessage(size));
@@ -349,18 +382,10 @@ public class GUI extends ClientController {
             Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.MULTI_PLAYER_WAITING));
     }
 
-    public void updateLeaderHandToDiscard(){
-        try {
-            List<Integer> listID = new ArrayList<>();
-            for(Card card : getLocalPlayerBoard().getLeaderBoard().getHand())
-                listID.add(card.getID());
-            Platform.runLater(() -> ((FirstPhaseController)guiApplication.getController(SceneNames.LEADER_CHOICE_MENU))
-                    .setLeaders(listID));
-        } catch (NotExistingNicknameException e) {
-            e.printStackTrace();
-        }
-    }
-
+    /**
+     * Sends to the server a list of leaders to discard
+     * @param indexes List of leaders' IDs to discard
+     */
     public void sendLeaderCardDiscardMessage(List<Integer> indexes){
         try {
             List<LeaderCard> leadersToDiscard = new ArrayList<>();
@@ -374,6 +399,9 @@ public class GUI extends ClientController {
         }
     }
 
+    /**
+     * Sets and shows the popUp stage to equalize initial resources
+     */
     private void callAskResourceToEqualize(){
         int size = 0;
         for(Resource resource : resourcesToEqualize)
@@ -400,6 +428,11 @@ public class GUI extends ClientController {
         }
     }
 
+    /**
+     * Sends to the server a shelves' configuration to be validated
+     * @param shelves List of shelves to be validated
+     * @param toDiscard Extra resources to discard
+     */
     public void sendShelvesConfigurationMessage(List<Shelf> shelves, List<Resource> toDiscard){
         resourcesToDiscard.addAll(toDiscard);
         getMessageHandler().sendClientMessage(new ShelvesConfigurationMessage(shelves, resourcesToPlace, resourcesToDiscard));
@@ -407,6 +440,11 @@ public class GUI extends ClientController {
         resourcesToDiscard.clear();
     }
 
+    /**
+     * Controls and adds faith to discarded resources' list if present
+     * @param resources
+     * @return
+     */
     private boolean checkFaithResource(List<Resource> resources){
         int faithQuantity=0;
         for(Resource resource : resources){
@@ -420,10 +458,19 @@ public class GUI extends ClientController {
         return false;
     }
 
+    /**
+     * Sends to the server a message with the selected row or column of the market
+     * @param row Selected row of the market, -1 if the column is selected
+     * @param col Selected column of the market, -1 if the row is selected
+     */
     public void sendMarketMessage(int row, int col){
         getMessageHandler().sendClientMessage(new SelectMarketMessage(row, col));
     }
 
+    /**
+     * Gets a copy of the local playerboard's warehouse
+     * @return Returns the copy of the warehouse
+     */
     public List<Shelf> getWarehouseShelvesCopy(){
         List<Shelf> shelvesCopy = new ArrayList<>();
         try {
@@ -436,6 +483,9 @@ public class GUI extends ClientController {
         return shelvesCopy;
     }
 
+    /**
+     * Updates graphical components of the resources to place
+     */
     public void updateResourcesToPlace(){
         Storage.aggregateResources(resourcesToPlace);
         for(Resource resource : resourcesToPlace){
@@ -444,19 +494,34 @@ public class GUI extends ClientController {
         }
     }
 
+    /**
+     * Updates graphical components of the warehouse
+     */
     public void updateWarehouse(){
         Platform.runLater(() ->
                 ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD)).showWarehouse());
     }
 
+    /**
+     * Stores resources to place in case setting them fails and they need to be placed again
+     * @param resources Resources to be stored
+     */
     public void setResourcesToPlace(List<Resource> resources){
         resourcesToPlace=resources;
     }
 
+    /**
+     * Sends to the server a message to notify the end of the turn
+     */
     public void sendEndTurnMessage(){
         getMessageHandler().sendClientMessage(new EndTurnMessage());
     }
 
+    /**
+     * Sends to the server a message to active or discard a list of leader
+     * @param positions List of positions of the leaders in the hand
+     * @param toActivate True to activate leaders, false otherwise
+     */
     public void sendLeaderMessage(List<Integer> positions, boolean toActivate){
         List<LeaderCard> leaderHand = new ArrayList<>(), leaderCards = new ArrayList<>();
         try {
@@ -477,6 +542,12 @@ public class GUI extends ClientController {
             getMessageHandler().sendClientMessage(new LeaderCardDiscardMessage(leaderCards));
     }
 
+    /**
+     * Controls which type of resources are to place and calls methods accordingly
+     * If there are resources, updates resources to place and shows them on the playerBoard
+     * If there is only faith, adds it to the discarded resources and send a message to the server
+     * @param resources
+     */
     public void controlResourcesToPlace(List<Resource> resources){
         resourcesToPlace.clear();
         resourcesToPlace.addAll(resources);
@@ -510,21 +581,36 @@ public class GUI extends ClientController {
         }
     }
 
+    /**
+     * Controls if there are resources to place
+     * @param resources Resources to place
+     * @return Returns true if there are only wildcards or faith, false otherwise
+     */
     private boolean checkOnlyWildcard(List<Resource> resources){
-        boolean onlyWildcard = true;
         for(Resource resource : resources)
             if(resource.getResourceType() != ResourceType.WILDCARD && resource.getResourceType() != ResourceType.FAITH) {
-                onlyWildcard = false;
-                break;
+                return false;
             }
-        return onlyWildcard;
+        return true;
     }
 
-    public void sendBuyDevelopmentCardMessage(CardColors devColor, int devLevel, int space){
+    /**
+     * Sends to the server a message with the development card that would be bought
+     * @param devColor Color of the development card
+     * @param devLevel Level of the development card
+     * @param space Space where place the card
+     */
+    public void sendCanBuyDevelopmentCardMessage(CardColors devColor, int devLevel, int space){
         getMessageHandler().sendClientMessage(new CanBuyDevelopmentCardMessage(
                 getDevelopmentCard(devColor, devLevel), space));
     }
 
+    /**
+     * Gets development card given by parameter
+     * @param devColor Color of the development card
+     * @param devLevel Level of the development card
+     * @return Returns the development card at the top of the selected deck
+     */
     private DevelopmentCard getDevelopmentCard(CardColors devColor, int devLevel){
         for(int i=0; i<getDevelopmentDecks().size(); i++){
             DevelopmentDeckView developmentDeck = getDevelopmentDecks().getDecks().get(i);
@@ -534,6 +620,10 @@ public class GUI extends ClientController {
         return null;
     }
 
+    /**
+     * Gets the developmentBoard of the local player
+     * @return Returns the developmentBoard
+     */
     public List<Deck> getDevelopmentBoard(){
         try {
             return getLocalPlayerBoard().getDevelopmentBoard().getSpaces();
@@ -543,6 +633,10 @@ public class GUI extends ClientController {
         return new ArrayList<>();
     }
 
+    /**
+     * Gets the basic production
+     * @return Returns the basic production
+     */
     public Production getBasicProduction(){
         try {
             return getLocalPlayerBoard().getBasicProduction();
@@ -552,6 +646,10 @@ public class GUI extends ClientController {
         return new Production();
     }
 
+    /**
+     * Gets the leaders' productions
+     * @return Returns the leaders' productions
+     */
     public List<Production> getLeaderProductions(){
         try {
             return getLocalPlayerBoard().getActiveAbilityProductions();
@@ -561,6 +659,10 @@ public class GUI extends ClientController {
         return null;
     }
 
+    /**
+     * Gets the leaderBoard of the local player
+     * @return Returns the leaderBoard
+     */
     public Deck getLeaderBoard(){
         try {
             return getLocalPlayerBoard().getLeaderBoard().getBoard();
@@ -570,10 +672,18 @@ public class GUI extends ClientController {
         return null;
     }
 
+    /**
+     * Sends to the server a message with the productions that would be activated
+     * @param productions List of productions to be activated
+     */
     public void sendCanActivateProductionsMessage(List<Production> productions){
         getMessageHandler().sendClientMessage(new CanActivateProductionsMessage(productions));
     }
 
+    /**
+     * Gets the resources in the strongbox of the local player
+     * @return Returns the resources in the strongbox
+     */
     public List<Resource> getStrongboxResources(){
         try {
             return getLocalPlayerBoard().getStrongbox().getResources();
@@ -583,6 +693,11 @@ public class GUI extends ClientController {
         return new ArrayList<>();
     }
 
+    /**
+     * Gets the index of the opposing player given by parameter
+     * @param nickname Opposing player's nickname
+     * @return Return the index of the opposing player
+     */
     public int getOpponentIndex(String nickname){
         for(int i=0; i<getOpponents().size(); i++) {
             if (getOpponents().get(i).getNickname().equals(nickname))
@@ -591,6 +706,10 @@ public class GUI extends ClientController {
         return -1;
     }
 
+    /**
+     * Gets the list of opposing playerBoards
+     * @return Return the list of playerBoards
+     */
     public List<PlayerBoardView> getOpponents(){
         List<PlayerBoardView> opponents = new ArrayList<>();
         for(PlayerBoardView pb : getPlayerBoards()){

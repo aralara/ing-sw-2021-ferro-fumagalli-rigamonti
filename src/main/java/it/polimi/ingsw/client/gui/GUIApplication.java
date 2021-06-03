@@ -27,11 +27,14 @@ public class GUIApplication extends Application {
     private Stage stage, secondStage, cardStage, popUpStage;
     private Alert alert;
 
+    //TODO: deve avere javadoc?
     public static void main(String[] args) {
         launch(args);
     }
 
-
+    /**
+     * Initializes attributes and starts a new GUI thread
+     */
     private void setup() {
         this.gui = new GUI(this);
         gui.setup();
@@ -45,7 +48,10 @@ public class GUIApplication extends Application {
         setActiveScene(SceneNames.LOADING);
     }
 
-    //TODO: mettere suppress
+    /**
+     * Initializes the stage by setting parameters and loading fxml files
+     * @param stage Stage to set up
+     */
     private void setupStage(Stage stage) {
         Image image = new Image(getClass().getResourceAsStream("/imgs/icon_inkwell.png"));
         alert = new Alert(Alert.AlertType.NONE);
@@ -72,10 +78,22 @@ public class GUIApplication extends Application {
         }
     }
 
+    /**
+     * Gets the fileName attribute of the active scene
+     * @return Returns fileName
+     */
     public SceneNames getActiveSceneName(){
-        return getNameByScene(stage.getScene());
+        for (SceneInformation sceneInformation : scenesInformation) {
+            if (sceneInformation.getScene().equals(stage.getScene()))
+                return sceneInformation.getFileName();
+        }
+        return null;  //TODO: potrebbe dare eccezione?
     }
 
+    /**
+     * Sets the active scene to show
+     * @param sceneName Scene's name to active
+     */
     public void setActiveScene(SceneNames sceneName) {
         if(sceneName.equals(SceneNames.LEADER_CHOICE_MENU) || sceneName.equals(SceneNames.RESOURCE_CHOICE_MENU))
             openPopUpStage(scenesInformation.get(getSceneIndex(sceneName)).getScene());
@@ -93,6 +111,10 @@ public class GUIApplication extends Application {
         }
     }
 
+    /**
+     * Creates and shows a new popUp stage over the main one
+     * @param scene Scene to load and show
+     */
     private void openPopUpStage(Scene scene){
         double x;
         double y;
@@ -119,10 +141,17 @@ public class GUIApplication extends Application {
         popUpStage.show();
     }
 
+    /**
+     * Closes the popUp stage
+     */
     public void closePopUpStage(){
         popUpStage.hide();
     }
 
+    /**
+     * Creates and shows a new second stage over the main one
+     * @param scene Scene to load and show
+     */
     private void openSecondStage(Scene scene){
         secondStage = new Stage();
         Image image = new Image(getClass().getResourceAsStream("/imgs/icon_inkwell.png"));
@@ -139,10 +168,17 @@ public class GUIApplication extends Application {
         secondStage.show();
     }
 
+    /**
+     * Closes the second stage
+     */
     public void closeSecondStage(){
         secondStage.hide();
     }
 
+    /**
+     * Creates and shows a new card stage over the main one
+     * @param scene Scene to load and show
+     */
     private void openCardStage(Scene scene){
         double x;
         double y;
@@ -172,34 +208,47 @@ public class GUIApplication extends Application {
         cardStage.show();
     }
 
+    /**
+     * Closes the card stage
+     */
     public void closeCardStage(){
         cardStage.hide();
     }
 
+    /**
+     * Gets the alert attribute
+     * @return Returns alert
+     */
     public Alert getAlert() {
         return alert;
     }
 
+    /**
+     * Gets the index of the scene given by parameter
+     * @param sceneName The scene's name
+     * @return Returns the index of the scene
+     */
     private int getSceneIndex(SceneNames sceneName) {
         for(int i = 0; i < scenesInformation.size(); i++){
             if(scenesInformation.get(i).getFileName().equals(sceneName))
                 return i;
         }
-        return -1; //TODO: potrebbe dare eccezione?
+        return -1;
     }
 
-    private SceneNames getNameByScene(Scene scene){
-        for (SceneInformation sceneInformation : scenesInformation) {
-            if (sceneInformation.getScene().equals(scene))
-                return sceneInformation.getFileName();
-        }
-        return null;  //TODO: potrebbe dare eccezione?
-    }
-
+    /**
+     * Gets the controller of the scene given by parameter
+     * @param sceneName The scene's name
+     * @return Returns the controller of the scene
+     */
     public GenericController getController(SceneNames sceneName) {
         return scenesInformation.get(getSceneIndex(sceneName)).getController();
     }
 
+    /**
+     * Gets the gui attribute
+     * @return Returns gui
+     */
     public GUI getGUI() {
         return gui;
     }
