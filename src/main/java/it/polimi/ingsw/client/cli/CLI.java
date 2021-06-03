@@ -370,11 +370,11 @@ public class CLI extends ClientController {
 
     @Override
     public void selectMarket() {
+
         graphicalCLI.printMarket(getMarket());
-        if(graphicalCLI.askGoBack())
+        if(idle = graphicalCLI.askGoBack())
             return;
-        else
-            idle = false;
+
         graphicalCLI.printString("Where do you want to place the marble?\n" +
                 "Choose R (row) or C (column) followed by a number: ");
         boolean valid;
@@ -412,10 +412,8 @@ public class CLI extends ClientController {
             graphicalCLI.printWarehouseConfiguration(getLocalPlayerBoard().getWarehouse(), false);
             graphicalCLI.printStrongbox(getLocalPlayerBoard().getStrongbox());
             graphicalCLI.printDevelopmentDeckTop(getDevelopmentDecks().getDecks());
-            if (graphicalCLI.askGoBack())
+            if (idle = graphicalCLI.askGoBack())
                 return;
-            else
-                idle = false;
 
             DevelopmentCard developmentCard = chooseCardFromDecks();
 
@@ -447,11 +445,8 @@ public class CLI extends ClientController {
 
             graphicalCLI.printlnString("Available productions:");
             graphicalCLI.printNumberedList(productions, graphicalCLI::printProduction);
-
-            if(graphicalCLI.askGoBack())
+            if(idle = graphicalCLI.askGoBack())
                 return;
-            else
-                idle = false;
 
             boolean endChoice = false;
             if(productions.size() > 0) {
