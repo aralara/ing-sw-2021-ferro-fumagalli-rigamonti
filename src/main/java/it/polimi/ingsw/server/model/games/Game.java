@@ -227,7 +227,7 @@ public abstract class Game implements Serializable {
     }
 
     //TODO: da testare!!
-    public void applyDiscount(int player, List<Resource> resources){
+    public List<Resource> applyDiscount(int player, List<Resource> resources){
         for(ResourceType resourceType : playerBoards.get(player).getAbilityDiscounts()){
             for (Resource resource : resources)
                 if(resource.getResourceType() == resourceType){
@@ -235,6 +235,7 @@ public abstract class Game implements Serializable {
                     break;
                 }
         }
+        return resources;
     }
 
     /**
