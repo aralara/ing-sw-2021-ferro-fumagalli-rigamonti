@@ -340,7 +340,7 @@ public class CLI extends ClientController {
     }
 
     @Override
-    public void notifyEndGame(List<Player> players) {
+    public void notifyEndGame(List<Player> players) {  //TODO: gestire single game
         graphicalCLI.printlnString("THE GAME HAS ENDED!");
         graphicalCLI.printlnString("Scoreboard:");
         for(Player player : players.stream()
