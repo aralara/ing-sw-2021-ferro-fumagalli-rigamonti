@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.gui.SceneNames;
 import it.polimi.ingsw.server.model.storage.Production;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
+import it.polimi.ingsw.server.model.storage.Storage;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -32,7 +33,7 @@ public class WildcardResolverController extends GenericController {
             resources = new ArrayList<>();
             for (Resource resource : resourcesToResolve)
                 if (resource.getResourceType() != ResourceType.WILDCARD)
-                    resources.add(resource);
+                    resources.add(new Resource(resource.getResourceType(), resource.getQuantity()));
         }
     }
 

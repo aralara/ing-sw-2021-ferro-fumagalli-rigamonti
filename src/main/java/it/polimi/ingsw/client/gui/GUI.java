@@ -437,6 +437,7 @@ public class GUI extends ClientController {
     }
 
     public void updateResourcesToPlace(){
+        Storage.aggregateResources(resourcesToPlace);
         for(Resource resource : resourcesToPlace){
             Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
                     .setResToPlaceQuantity(resource.getResourceType(),resource.getQuantity()));
@@ -479,6 +480,7 @@ public class GUI extends ClientController {
     public void controlResourcesToPlace(List<Resource> resources){
         resourcesToPlace.clear();
         resourcesToPlace.addAll(resources);
+        Storage.aggregateResources(resourcesToPlace);
 
         boolean faith = checkFaithResource(resourcesToPlace);
         if(!checkOnlyWildcard(resourcesToPlace)) {
