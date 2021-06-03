@@ -17,10 +17,18 @@ public enum SceneNames {
 
     private final String value;
 
+    /**
+     * Constructor for a SceneNames entry
+     * @param value Value of the entry
+     */
     SceneNames(final String value) {
         this.value = value;
     }
 
+    /**
+     * Gets the value of an entry
+     * @return Returns the value
+     */
     public String value() {
         return value;
     }
