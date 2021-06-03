@@ -37,18 +37,22 @@ public class CanBuyDevelopmentCardMessage extends ClientActionMessage {
         return this.cost;
     }
 
+    public void setCost(List<Resource> resources) {
+        this.cost = resources;
+    }
+
     @Override
     public void doAction(VirtualView view) {
         boolean success = view.getGameHandler().getController()
                 .canBuyDevCard(view.getNickname(), developmentCard, space);
-        view.getGameHandler().getController().applyDiscount(view.getNickname(),getCost());
+        setCost(view.getGameHandler().getController().applyDiscount(view.getNickname(),getCost()));
         view.sendMessage(new ServerAckMessage(getUuid(), success));
     }
 
     @Override
     public void doACKResponseAction(ClientController client) {
         client.setMainActionPlayed(true);
-        client.chooseDevelopmentStorages(developmentCard, space, this.cost);
+        client.chooseDevelopmentStorages(developmentCard, space, getCost());
     }
 
     @Override
