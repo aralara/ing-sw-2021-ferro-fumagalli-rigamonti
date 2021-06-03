@@ -3,16 +3,13 @@ package it.polimi.ingsw.client.cli;
 import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.client.structures.*;
 import it.polimi.ingsw.exceptions.NotExistingNicknameException;
-import it.polimi.ingsw.server.GameHandler;
 import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.server.model.boards.Player;
 import it.polimi.ingsw.server.model.cards.card.*;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.server.saves.GameSave;
 import it.polimi.ingsw.server.saves.SaveInteractions;
-import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.Constants;
-import it.polimi.ingsw.utils.PipedPair;
 import it.polimi.ingsw.utils.messages.client.*;
 import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 import it.polimi.ingsw.utils.messages.server.action.ServerActionMessage;
@@ -465,7 +462,7 @@ public class CLI extends ClientController {
             List<Resource> toPlace = getResourcesOneByOne(resources);
             moveFaith(toDiscard, toPlace);
             WarehouseView warehouse = getLocalPlayerBoard().getWarehouse();
-            shelves = getShelvesWarehouseCopy(warehouse.getShelves());
+            shelves = warehouse.getShelvesClone();
             graphicalCLI.printWarehouseConfiguration(warehouse, true);
             if(!toPlace.isEmpty()) {
                 graphicalCLI.printString("Resources to place: ");
@@ -482,11 +479,11 @@ public class CLI extends ClientController {
                     }
                 }
                 if (freeSlots) { //it's possible to place resources
-                    if (!isShelvesEmpty(shelves)) { //before starting move resources
+                    if (!shelves.stream().allMatch(Shelf::isEmpty)) { //before starting move resources
                         graphicalCLI.printString("Do you want to rearrange the warehouse? ");
                         rearranged = graphicalCLI.isAnswerYes();
                         if(rearranged){
-                            shelves = getShelvesWarehouseCopy(rearrangeWarehouse());
+                            shelves = warehouse.getShelvesClone();
                         }
                     }
                     while (!toPlace.isEmpty()) {
@@ -518,7 +515,7 @@ public class CLI extends ClientController {
                             graphicalCLI.printString("Resources to place: ");
                             graphicalCLI.printGraphicalResources(toPlace);
                         }
-                        if (toPlace.isEmpty() && !isDiscardedResCorrect(resources, toDiscard)) {
+                        if (toPlace.isEmpty() && !Storage.isDiscardedResCorrect(resources, toDiscard)) {
                             graphicalCLI.printlnString("You're trying to discard resources already stored in the" +
                                     " warehouse!\nThe warehouse will be restored and you'll be asked to place all the" +
                                     " resources again...");
@@ -658,7 +655,7 @@ public class CLI extends ClientController {
     }
 
     /**
-     * Show the player's board
+     * Shows the player's board
      */
     private void showBoard(){
         try{
@@ -690,7 +687,7 @@ public class CLI extends ClientController {
         List<Shelf> shelves = new ArrayList<>();
         try {
             WarehouseView warehouse = getLocalPlayerBoard().getWarehouse();
-            shelves = getShelvesWarehouseCopy(warehouse.getShelves());
+            shelves = warehouse.getShelvesClone();
             List<Shelf> temporaryWarehouseShelves;
             List<Resource> resources = new ArrayList<>();
             Shelf selectedShelf;
@@ -704,7 +701,7 @@ public class CLI extends ClientController {
                     shelf.setResourceType(ResourceType.WILDCARD);
                 }
             }
-            temporaryWarehouseShelves = getShelvesWarehouseCopy(shelves);
+            temporaryWarehouseShelves = warehouse.getShelvesClone();
             List<Resource> toPlace = getResourcesOneByOne(resources);
             boolean firstTurn = true;
             while (!toPlace.isEmpty()){
@@ -738,44 +735,6 @@ public class CLI extends ClientController {
     }
 
     /**
-     * Checks if a list of shelves is empty
-     * @param shelves List of shelves that needs to be checked
-     * @return Returns true if every shelf in the list is empty, false otherwise
-     */
-    private boolean isShelvesEmpty(List<Shelf> shelves) {    //TODO: da spostare (magari nel warehouse) in maniera che tutti possano usarlo
-        for (Shelf shelf : shelves)
-            if(shelf.getResources().getQuantity() > 0)
-                return false;
-        return true;
-    }
-
-    /**
-     * Checks if the warehouse is empty
-     * @return True if the warehouse is empty, false otherwise
-     */
-    private boolean isWarehouseEmpty() {                    //TODO: da spostare (magari nel warehouse) in maniera che tutti possano usarlo
-        try {
-            return isShelvesEmpty(getLocalPlayerBoard().getWarehouse().getShelves());
-        } catch (NotExistingNicknameException e){
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    /**
-     * Gets a copy of the warehouse shelves
-     * @param warehouse Warehouse to be copied
-     * @return Returns the list of shelves copied
-     */
-    private List<Shelf> getShelvesWarehouseCopy(List<Shelf> warehouse) {    //TODO: da spostare (magari nel warehouse) in maniera che tutti possano usarlo
-        List<Shelf> shelves = new ArrayList<>();
-        for(Shelf shelf : warehouse)
-            shelves.add(new Shelf(shelf.getResourceType(), shelf.getResources(),
-                    shelf.getLevel(), shelf.isLeader()));
-        return shelves;
-    }
-
-    /**
      * Split a list of resources in more lists with a size of 1
      * @param resources List of resources to be split
      * @return Returns the list of resources
@@ -799,7 +758,7 @@ public class CLI extends ClientController {
      */
     private void emptyShelfManagement(List<Shelf> shelves, List<Resource> toPlace,
                                       Shelf selectedShelf, Resource resourceToPlace) {
-        if(isResourceTypeUnique(shelves,resourceToPlace.getResourceType())) { //there are no shelves with the same resource type
+        if(Shelf.isResourceTypeUnique(shelves,resourceToPlace.getResourceType())) { //there are no shelves with the same resource type
             placeResource(selectedShelf, resourceToPlace);
             toPlace.remove(0);
         }
@@ -861,7 +820,7 @@ public class CLI extends ClientController {
         graphicalCLI.printString("This shelf contains a different resource type\nIf you want" +
                 " to place it here anyway, insert YES and then you'll place again the removed ones: ");
         if(graphicalCLI.isAnswerYes()) {
-            if (isResourceTypeUnique(shelves, resourceToPlace.getResourceType())) { //there are no shelves with the same resource type
+            if (Shelf.isResourceTypeUnique(shelves, resourceToPlace.getResourceType())) { //there are no shelves with the same resource type
                 for (int i = 0; i < selectedShelf.getResources().getQuantity(); i++) {
                     toPlace.add(1, new Resource(selectedShelf.getResourceType(), 1));
                 }
@@ -888,16 +847,6 @@ public class CLI extends ClientController {
                 }
             }
         }
-    }
-
-    /**
-     * Checks is a list of shelves didn't contain a resourceType
-     * @param shelves List of shelves to be checked
-     * @param resourceType ResourceType to be checked
-     * @return Returns true if the list didn't contains the resourceType, false otherwise
-     */
-    private boolean isResourceTypeUnique(List<Shelf> shelves, ResourceType resourceType) {   //TODO: da spostare (magari nello shelf) in maniera che tutti possano usarlo
-        return shelves.stream().noneMatch(shelf -> !shelf.isLeader() && shelf.getResourceType().equals(resourceType));
     }
 
     /**
@@ -968,7 +917,7 @@ public class CLI extends ClientController {
     private void restoreConfiguration(WarehouseView warehouse, List<Shelf> shelves, List<Resource> resources,
                                       List<Resource> toPlace, List<Resource> toDiscard, boolean canDiscard) {
         shelves.clear();
-        shelves.addAll(getShelvesWarehouseCopy(warehouse.getShelves()));
+        shelves.addAll(warehouse.getShelvesClone());
         toPlace.clear();
         toPlace.addAll(getResourcesOneByOne(resources));
         if(canDiscard) {
@@ -976,18 +925,6 @@ public class CLI extends ClientController {
             moveFaith(toDiscard, toPlace);
         }
         graphicalCLI.printlnString("Warehouse restored");
-    }
-
-    /**
-     * Checks if a list of resources is correctly discarded
-     * @param resources resources to be placed
-     * @param toDiscard resources to be discarded
-     * @return Returns true if the discarded resource is correct
-     */
-    private boolean isDiscardedResCorrect(List<Resource> resources, List<Resource> toDiscard) {     //TODO: da spostare ASSOLUTAMENTE nello storage in maniera che tutti possano usarlo
-        Storage.aggregateResources(resources);
-        Storage.aggregateResources(toDiscard);
-        return Storage.checkContainedResources(resources,toDiscard);
     }
 
     /**
@@ -1121,10 +1058,14 @@ public class CLI extends ClientController {
                 new MenuOption("View your board", this::showBoard),
                 new MenuOption("View opponents' boards", this::showOpponents),
                 new MenuOption("Rearrange Warehouse", () -> {
-                    if(!isWarehouseEmpty()) {
-                        List<Shelf> shelves = rearrangeWarehouse();
-                        getMessageHandler().sendClientMessage(new ShelvesConfigurationMessage(shelves));
-                    } else graphicalCLI.printlnString("You have no resources to rearrange");
+                    try {
+                        if(!getLocalPlayerBoard().getWarehouse().isEmpty()) {
+                            List<Shelf> shelves = rearrangeWarehouse();
+                            getMessageHandler().sendClientMessage(new ShelvesConfigurationMessage(shelves));
+                        } else graphicalCLI.printlnString("You have no resources to rearrange");
+                    } catch (NotExistingNicknameException e) {
+                        e.printStackTrace();
+                    }
                 })
         );
         playerTurnMenu.addAll( Arrays.asList(

@@ -49,6 +49,16 @@ public class Shelf implements Storage, Serializable {
 
 
     /**
+     * Checks if a list of shelves doesn't contain a resourceType
+     * @param shelves List of shelves to be checked
+     * @param resourceType ResourceType to be checked
+     * @return Returns true if the list doesn't contain resources of the specified resourceType, false otherwise
+     */
+    public static boolean isResourceTypeUnique(List<Shelf> shelves, ResourceType resourceType) {
+        return shelves.stream().noneMatch(shelf -> !shelf.isLeader() && shelf.getResourceType().equals(resourceType));
+    }
+
+    /**
      * Checks if a list of resources can be added to the shelf
      * @param resources Resources to be added
      * @return Returns true if the resources can be added, false otherwise
@@ -132,6 +142,14 @@ public class Shelf implements Storage, Serializable {
                         this.resources.getQuantity()),
                 this.getLevel(),
                 this.isLeader);
+    }
+
+    /**
+     * Gets if the shelf is empty
+     * @return Returns true if the shelf is empty, false otherwise
+     */
+    public boolean isEmpty() {
+        return getResources().getQuantity() <= 0;
     }
 
     /**
