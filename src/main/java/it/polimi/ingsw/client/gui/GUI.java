@@ -276,10 +276,17 @@ public class GUI extends ClientController {
                 Platform.runLater(() -> pc.setPlace4(playerRanking.get(3).getNickname() + "\n" +
                         playerRanking.get(3).getTotalVP() + " pt"));
         }
-        else {
-            if(getLorenzoFaith()>playerRanking.get(0).getTotalVP())
+        else {  //TODO: settare vittoria mia o lorenzo
+            if(players.get(0).getFinalPosition() == 2) {
                 Platform.runLater(() -> pc.setPlace1("Lorenzo il Magnifico" + "\n"));
-            else Platform.runLater(() -> pc.setPlace1(playerRanking.get(0).getNickname()));
+                Platform.runLater(() -> pc.setPlace2(playerRanking.get(0).getNickname() + "\n" +
+                        playerRanking.get(0).getTotalVP() + " pt"));
+            }
+            else {
+                Platform.runLater(() -> pc.setPlace1(playerRanking.get(0).getNickname() + "\n" +
+                    playerRanking.get(0).getTotalVP() + " pt"));
+                Platform.runLater(() -> pc.setPlace2("Lorenzo il Magnifico" + "\n"));
+            }
         }
         Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.PODIUM));
     }
@@ -316,7 +323,14 @@ public class GUI extends ClientController {
         Platform.runLater(() ->
                 ((DepotsController)guiApplication.getController(SceneNames.DEPOTS))
                         .setSpaceToPlace(spaceToPlace));
-        chooseStorages(cost, 1);    //TODO: 1 e 2 possono diventare degli enum
+        Storage.aggregateResources(cost);
+        List<Resource> realCost = cost;
+        try {
+            realCost = Storage.calculateDiscount(cost, getLocalPlayerBoard().getActiveAbilityDiscounts());
+        } catch(NotExistingNicknameException e) {
+            e.printStackTrace();
+        }
+        chooseStorages(realCost, 1);    //TODO: 1 e 2 possono diventare degli enum
     }
 
     @Override
