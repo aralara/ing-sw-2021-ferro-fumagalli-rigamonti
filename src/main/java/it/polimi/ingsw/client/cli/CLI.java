@@ -578,12 +578,20 @@ public class CLI extends ClientController {
 
     @Override
     public void chooseDevelopmentStorages(DevelopmentCard cardToBuy, int spaceToPlace, List<Resource> cost) {
+        Storage.aggregateResources(cost);
+        List<Resource> realCost = cost;
+        try {
+            realCost = Storage.calculateDiscount(cost, getLocalPlayerBoard().getActiveAbilityDiscounts());
+        } catch(NotExistingNicknameException e) {
+            e.printStackTrace();
+        }
         getMessageHandler().sendClientMessage(
-                new RequestResourcesDevMessage(cardToBuy, spaceToPlace, chooseStorages(cost)));
+                new RequestResourcesDevMessage(cardToBuy, spaceToPlace, chooseStorages(realCost)));
     }
 
     @Override
     public void chooseProductionStorages(List<Production> productionsToActivate, List<Resource> consumed) {
+        Storage.aggregateResources(consumed);
         getMessageHandler().sendClientMessage(
                 new RequestResourcesProdMessage(productionsToActivate, chooseStorages(consumed)));
     }
@@ -601,7 +609,7 @@ public class CLI extends ClientController {
         } catch(NotExistingNicknameException e) {
             e.printStackTrace();
         }
-        Storage.aggregateResources(resources);
+
         graphicalCLI.printString("You have to take these resources: ");
         graphicalCLI.printResources(resources);
         int choice;

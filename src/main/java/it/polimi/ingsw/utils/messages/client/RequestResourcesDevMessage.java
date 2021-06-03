@@ -34,6 +34,6 @@ public class RequestResourcesDevMessage extends CanBuyDevelopmentCardMessage {
     @Override
     public void doNACKResponseAction(ClientController client) {
         //TODO: aggiungere messaggio di errore x gui?
-        client.chooseDevelopmentStorages(getDevelopmentCard(), getSpace(), getCost());
+        client.chooseDevelopmentStorages(getDevelopmentCard(), getSpace(), getDevelopmentCard().getCost());
     }
 }
