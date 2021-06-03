@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public interface Storage extends Serializable {
 
@@ -64,6 +65,31 @@ public interface Storage extends Serializable {
             if(toRemove[i])
                 resources.remove(i);
         }
+    }
+
+    /**
+     * Calculates a net cost given its possible discount
+     * @param cost Gross cost as a list of resources
+     * @param discounts Possible discounts as a list of resource types
+     * @return Returns the net cost as a list of resources
+     */
+    static List<Resource> calculateDiscount(List<Resource> cost, List<ResourceType> discounts) {
+        List<Resource> returnCost = cost;
+        if (discounts.size() > 0) {
+            final List<Resource> temp = new ArrayList<>();
+            cost.forEach(r -> temp.add(r.makeClone()));
+            discounts.forEach(rt -> {
+                Optional<Resource> res = temp.stream().filter(r -> rt == r.getResourceType()).findFirst();
+                if(res.isPresent()) {
+                    if(res.get().getQuantity() == 0)
+                        temp.remove(res.get());
+                    else
+                        res.get().setQuantity(res.get().getQuantity() - 1);
+                }
+            });
+            returnCost = temp;
+        }
+        return returnCost;
     }
 
     /**
