@@ -8,7 +8,12 @@ import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.model.cards.card.LorenzoCard;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.server.saves.GameSave;
+import it.polimi.ingsw.server.view.VirtualView;
+import it.polimi.ingsw.utils.PipedPair;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,6 +90,28 @@ public abstract class ClientController {
     public abstract void chooseProductionStorages(List<Production> productionsToActivate,
                                                                     List<Resource> consumed);
 
+
+    /**
+     * Initializes pipedPair, virtualView and localGameHandler objects in order to create a local game
+     */
+    public void localSetup() throws IOException {
+        PipedPair pipedPair = new PipedPair();
+        Thread t = new Thread(() -> {
+            boolean success;
+            do
+                success = getMessageHandler().connect(pipedPair);
+            while(!success);
+            getMessageHandler().run();
+        });
+        t.start();
+        VirtualView virtualView = new VirtualView(
+                new ObjectOutputStream(pipedPair.getPipeOut()),
+                new ObjectInputStream(pipedPair.getPipeIn()),
+                getNickname());
+        setLocalGameHandler(new GameHandler(1));
+        getLocalGameHandler().add(virtualView);
+        getLocalGameHandler().run();
+    }
 
     public void destroy() {
         messageHandler.stop();

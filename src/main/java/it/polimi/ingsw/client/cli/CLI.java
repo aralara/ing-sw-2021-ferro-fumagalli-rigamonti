@@ -50,14 +50,18 @@ public class CLI extends ClientController {
         }
         else {
             setNickname(graphicalCLI.askNickname());
-            localSetup();
-            graphicalCLI.printlnString("Creating a local game");
+            try {
+                localSetup();
+                graphicalCLI.printlnString("Creating a local game");
+            } catch (IOException e) {
+                graphicalCLI.printlnString("Unable to create local game");
+            }
         }
     }
 
     /**
-     * Asks to the client if he want to connect to the server
-     * @return true if the client want to connect, false otherwise
+     * Asks the user if they want to connect to the server
+     * @return Returns true if the user wants to connect, false otherwise
      */
     public boolean askMultiplayer() {
         graphicalCLI.printString("Do you want to connect to the server? ");
@@ -65,33 +69,7 @@ public class CLI extends ClientController {
     }
 
     /**
-     * Initializes pipedPair, virtualView and localGameHandler for a local game
-     */
-    public void localSetup() {
-        try {
-            PipedPair pipedPair = new PipedPair();
-            Thread t = new Thread(() -> {
-                boolean success;
-                do
-                    success = getMessageHandler().connect(pipedPair);
-                while(!success);
-                getMessageHandler().run();
-            });
-            t.start();
-            VirtualView virtualView = new VirtualView(
-                    new ObjectOutputStream(pipedPair.getPipeOut()),
-                    new ObjectInputStream(pipedPair.getPipeIn()),
-                    getNickname());
-            setLocalGameHandler(new GameHandler(1));
-            getLocalGameHandler().add(virtualView);
-            getLocalGameHandler().run();
-        } catch (IOException e) {
-            graphicalCLI.printlnString("Unable to create local game");
-        }
-    }
-
-    /**
-     * Connect the client to the server by asking the IP address and the port
+     * Connects the client to the server by asking IP address and port for the socket
      */
     public void connect() {
         boolean success;
@@ -345,6 +323,9 @@ public class CLI extends ClientController {
                     + player.getTotalVP() + " VP");
     }
 
+    /**
+     * Visualizes and makes the player choose between the options from their current menu
+     */
     public void turnMenu() {
         List<MenuOption> turnMenu = opponentTurnMenu;   //Defaults as the opponent turn
         Runnable choiceText = () -> graphicalCLI.printString("\nChoose an action to do: ");
@@ -581,9 +562,9 @@ public class CLI extends ClientController {
     }
 
     /**
-     * Chooses a storage for each resource to take
+     * Chooses a storage for each resource to take in order to make a request
      * @param resources Resources to be taken
-     * @return Returns a list of requestResources
+     * @return Returns a list of RequestResources
      */
     private List<RequestResources> chooseStorages(List<Resource> resources) {
         try {
@@ -616,15 +597,18 @@ public class CLI extends ClientController {
 
             if(choice == 1) {
                 whResources.add(res);
-            }else if (choice == 2) {
+            } else if (choice == 2) {
                 whLeaderResources.add(res);
-            }else if(choice == 3) {
+            } else if(choice == 3) {
                 strongboxResources.add(res);
             }
         }
-        requestResources.add(new RequestResources(whResources,StorageType.WAREHOUSE));
-        requestResources.add(new RequestResources(whLeaderResources,StorageType.LEADER));
-        requestResources.add(new RequestResources(strongboxResources,StorageType.STRONGBOX));
+        if(whResources.size() > 0)
+            requestResources.add(new RequestResources(whResources, StorageType.WAREHOUSE));
+        if(whLeaderResources.size() > 0)
+            requestResources.add(new RequestResources(whLeaderResources, StorageType.LEADER));
+        if(strongboxResources.size() > 0)
+            requestResources.add(new RequestResources(strongboxResources, StorageType.STRONGBOX));
         idle = true;
         return requestResources;
     }
@@ -634,7 +618,7 @@ public class CLI extends ClientController {
      * @return The chosen leader card
      */
     @SuppressWarnings("unchecked")
-    private List<LeaderCard> chooseLeaderCard(){ //TODO: mettere nella graphicalCLI
+    private List<LeaderCard> chooseLeaderCard() { //TODO: mettere nella graphicalCLI
         try {
             List<LeaderCard> hand = (List<LeaderCard>)(List<? extends Card>)
                     getLocalPlayerBoard().getLeaderBoard().getHand().getCards();
@@ -661,7 +645,7 @@ public class CLI extends ClientController {
     }
 
     /**
-     * Show opponents boards
+     * Shows the opponents' boards
      */
     private void showOpponents(){
         if(getNumberOfPlayers()>1) {
@@ -674,7 +658,7 @@ public class CLI extends ClientController {
     }
 
     /**
-     * Show player's board
+     * Show the player's board
      */
     private void showBoard(){
         try{
@@ -685,13 +669,13 @@ public class CLI extends ClientController {
     }
 
     /**
-     * Move every faith from src to dest
-     * @param dest List of resources where the resources will be added
-     * @param src List of resources from which the resources will be taken
+     * Moves all the Faith resources from a source list to destination list
+     * @param dest List where the resources will be added to
+     * @param src List from which the resources will be taken from
      */
-    public void moveFaith(List<Resource> dest, List<Resource> src){ //TODO: refactor con streams
-        for(int i=0; i<src.size(); i++)
-            if(src.get(i).getResourceType().equals(ResourceType.FAITH)){
+    public void moveFaith(List<Resource> dest, List<Resource> src) {        //TODO: refactor con streams
+        for(int i = 0; i < src.size(); i++)                                 //TODO: da spostare (magari nello storage) in maniera che tutti possano usarlo
+            if(src.get(i).getResourceType().equals(ResourceType.FAITH)) {   //TODO: invertire l'ordine dei paramteri, prima src, poi dest
                 dest.add(src.get(i));
                 src.remove(i);
                 break;
@@ -699,7 +683,7 @@ public class CLI extends ClientController {
     }
 
     /**
-     * Rearrange the warehouse
+     * Lets the user rearrange the warehouse
      * @return Returns the new list of shelves
      */
     private List<Shelf> rearrangeWarehouse() {
@@ -755,21 +739,21 @@ public class CLI extends ClientController {
 
     /**
      * Checks if a list of shelves is empty
-     * @param shelves List of shelves to be checked
-     * @return True if every shelf in the list is empty, fale otherwise
+     * @param shelves List of shelves that needs to be checked
+     * @return Returns true if every shelf in the list is empty, false otherwise
      */
-    private boolean isShelvesEmpty(List<Shelf> shelves){    //TODO: mettere metodi specifici nelle loro classi
+    private boolean isShelvesEmpty(List<Shelf> shelves) {    //TODO: da spostare (magari nel warehouse) in maniera che tutti possano usarlo
         for (Shelf shelf : shelves)
-            if(shelf.getResources().getQuantity()>0)
+            if(shelf.getResources().getQuantity() > 0)
                 return false;
         return true;
     }
 
     /**
-     * Checks if a warehouse is empty
-     * @return True if the warehouse is empy, false otherwise
+     * Checks if the warehouse is empty
+     * @return True if the warehouse is empty, false otherwise
      */
-    private boolean isWarehouseEmpty(){
+    private boolean isWarehouseEmpty() {                    //TODO: da spostare (magari nel warehouse) in maniera che tutti possano usarlo
         try {
             return isShelvesEmpty(getLocalPlayerBoard().getWarehouse().getShelves());
         } catch (NotExistingNicknameException e){
@@ -779,11 +763,11 @@ public class CLI extends ClientController {
     }
 
     /**
-     * Get a copy of the warehouse shelves
+     * Gets a copy of the warehouse shelves
      * @param warehouse Warehouse to be copied
      * @return Returns the list of shelves copied
      */
-    private List<Shelf> getShelvesWarehouseCopy(List<Shelf> warehouse) {
+    private List<Shelf> getShelvesWarehouseCopy(List<Shelf> warehouse) {    //TODO: da spostare (magari nel warehouse) in maniera che tutti possano usarlo
         List<Shelf> shelves = new ArrayList<>();
         for(Shelf shelf : warehouse)
             shelves.add(new Shelf(shelf.getResourceType(), shelf.getResources(),
@@ -796,7 +780,7 @@ public class CLI extends ClientController {
      * @param resources List of resources to be split
      * @return Returns the list of resources
      */
-    private List<Resource> getResourcesOneByOne(List<Resource> resources){
+    private List<Resource> getResourcesOneByOne(List<Resource> resources) {     //TODO: da spostare (magari nello storage) in maniera che tutti possano usarlo
         List<Resource> resourcesOneByOne = new ArrayList<>();
         for(Resource resource : resources){
             for(int i=0; i<resource.getQuantity(); i++){
@@ -845,7 +829,7 @@ public class CLI extends ClientController {
      * @param resourceToPlace
      */
     private void sameResTypeShelfManagement(List<Shelf> shelves, List<Resource> toPlace,
-                                            Shelf selectedShelf, Resource resourceToPlace){
+                                            Shelf selectedShelf, Resource resourceToPlace) {
         if (selectedShelf.getResources().getQuantity() <= selectedShelf.getLevel() - 1) { //shelf not completely full
             placeResource(selectedShelf, resourceToPlace);
             toPlace.remove(0);
@@ -912,7 +896,7 @@ public class CLI extends ClientController {
      * @param resourceType ResourceType to be checked
      * @return Returns true if the list didn't contains the resourceType, false otherwise
      */
-    private boolean isResourceTypeUnique(List<Shelf> shelves, ResourceType resourceType) {
+    private boolean isResourceTypeUnique(List<Shelf> shelves, ResourceType resourceType) {   //TODO: da spostare (magari nello shelf) in maniera che tutti possano usarlo
         return shelves.stream().noneMatch(shelf -> !shelf.isLeader() && shelf.getResourceType().equals(resourceType));
     }
 
@@ -921,7 +905,7 @@ public class CLI extends ClientController {
      * @param shelf Shelf where the resource will be placed
      * @param resource Resource to be placed
      */
-    private void placeResource(Shelf shelf, Resource resource){
+    private void placeResource(Shelf shelf, Resource resource) {                //TODO: da spostare (magari nello shelf) in maniera che tutti possano usarlo
         if(shelf.getResourceType().equals(resource.getResourceType())){ //shelf with the same resource type
             shelf.getResources().setQuantity(shelf.getResources().getQuantity() +
                     resource.getQuantity());
@@ -936,10 +920,10 @@ public class CLI extends ClientController {
     /**
      * Gets a shelf from a list of shelves with a specific resourceType
      * @param shelves List of shelves to be checked
-     * @param resourceType RsourceType to be found
+     * @param resourceType ResourceType to be found
      * @return Returns a shelf with the specific resourceType
      */
-    private Shelf getShelfWithSameResource(List<Shelf> shelves, ResourceType resourceType){
+    private Shelf getShelfWithSameResource(List<Shelf> shelves, ResourceType resourceType) {     //TODO: da spostare (magari nello shelf) in maniera che tutti possano usarlo
         for(Shelf shelf : shelves){
             if(!shelf.isLeader() && shelf.getResourceType().equals(resourceType))
                 return shelf;
@@ -953,7 +937,7 @@ public class CLI extends ClientController {
      * @param resource
      * @return
      */
-    private boolean isShelfRearrangeable(List<Shelf> shelves, Resource resource){
+    private boolean isShelfRearrangeable(List<Shelf> shelves, Resource resource) {
         Shelf shelfWithResources = getShelfWithSameResource(shelves, resource.getResourceType());
         int totalLeaderShelves = 2*(int)(shelves.stream().filter(shelf -> shelf.isLeader() && shelf.getResourceType()
                     .equals(resource.getResourceType())).count());
@@ -964,7 +948,7 @@ public class CLI extends ClientController {
      * Reset a shelf
      * @param shelf Shelf to be reset
      */
-    private void resetShelf(Shelf shelf) {
+    private void resetShelf(Shelf shelf) {          //TODO: da spostare (magari nello shelf) in maniera che tutti possano usarlo
         if(!shelf.isLeader()) {
             shelf.setResourceType(ResourceType.WILDCARD);
             shelf.getResources().setResourceType(ResourceType.WILDCARD);
@@ -982,7 +966,7 @@ public class CLI extends ClientController {
      * @param canDiscard
      */
     private void restoreConfiguration(WarehouseView warehouse, List<Shelf> shelves, List<Resource> resources,
-                                      List<Resource> toPlace, List<Resource> toDiscard, boolean canDiscard){
+                                      List<Resource> toPlace, List<Resource> toDiscard, boolean canDiscard) {
         shelves.clear();
         shelves.addAll(getShelvesWarehouseCopy(warehouse.getShelves()));
         toPlace.clear();
@@ -1000,14 +984,14 @@ public class CLI extends ClientController {
      * @param toDiscard resources to be discarded
      * @return Returns true if the discarded resource is correct
      */
-    private boolean isDiscardedResCorrect(List<Resource> resources, List<Resource> toDiscard){
+    private boolean isDiscardedResCorrect(List<Resource> resources, List<Resource> toDiscard) {     //TODO: da spostare ASSOLUTAMENTE nello storage in maniera che tutti possano usarlo
         Storage.aggregateResources(resources);
         Storage.aggregateResources(toDiscard);
         return Storage.checkContainedResources(resources,toDiscard);
     }
 
     /**
-     * Chooses a development card from decks
+     * Chooses a development card from the development decks
      * @return Returns the chosen development card
      */
     private DevelopmentCard chooseCardFromDecks() {
@@ -1061,7 +1045,7 @@ public class CLI extends ClientController {
     /**
      * Resolves wildcards for a list of productions
      * @param productions List of production to be solved
-     * @return Returns the list of productions with the wildcard solved
+     * @return Returns the list of productions with their wildcards solved
      */
     public List<Production> resolveProductionWildcards(List<Production> productions) {
         List<Production> resolvedProductions = new ArrayList<>();
@@ -1122,7 +1106,7 @@ public class CLI extends ClientController {
     }
 
     /**
-     * TODO: scrivere javadoc
+     * Initializes the menu options for the "player" and "opponents" possible turns
      */
     private void initMenus() {
         playerTurnMenu = new ArrayList<>();
