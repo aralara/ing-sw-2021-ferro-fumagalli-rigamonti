@@ -14,6 +14,6 @@ public class LeaderBBoardViewListener extends PlayerBoardViewChangeListener {
     @Override
     @SuppressWarnings("unchecked")
     public void propertyChange(PropertyChangeEvent evt) {
-        getPlayerBoardController().setLeaderBBoard((List<Integer>)evt.getNewValue());
+        getPlayerBoardController().setLeaderBBoard(/*(List<Integer>)evt.getNewValue()*/);
     }
 }
