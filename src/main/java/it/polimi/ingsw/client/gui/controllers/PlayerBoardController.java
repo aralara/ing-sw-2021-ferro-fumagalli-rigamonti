@@ -1101,42 +1101,32 @@ public class PlayerBoardController extends GenericController {
 
     /**
      * Updates imageViews of the leaders in the hand
-     * @param idList List of leaders' IDs to show
+     * @param leaderCards List of leaders to show
      */
-    private void updateLeaderBHand(List<Integer> idList){
-        if(idList.stream().noneMatch(x -> x == -1)) {
-            handLeader1_imageView.setImage(null);
-            handLeader2_imageView.setImage(null);
-            for (Integer id : idList) {
-                if (handLeader1_imageView.getImage() == null && boardLeader1_imageView.getImage() == null) {
-                    handLeader1_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/cost_"
-                            + id + ".png")));
-                } else {
-                    handLeader2_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/cost_"
-                            + id + ".png")));
-                }
+    private void updateLeaderBHand(Deck leaderCards){
+        handLeader1_imageView.setImage(null);
+        handLeader2_imageView.setImage(null);
+        for (Card card : leaderCards) {
+            if (handLeader1_imageView.getImage() == null && boardLeader1_imageView.getImage() == null) {
+                handLeader1_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/cost_"
+                        + card.getID() + ".png")));
+            } else {
+                handLeader2_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/cost_"
+                        + card.getID() + ".png")));
             }
         }
         showLeaderCheckBoxes();
     }
 
     /**
-     * Updates imageViews of the leaders in the hand
-     * @param leaderCards List of leaders to show
-     */
-    private void updateLeaderBHand(Deck leaderCards){
-        List<Integer> idList = new ArrayList<>();
-        for(Card card : leaderCards)
-            idList.add(card.getID());
-        updateLeaderBHand(idList);
-    }
-
-    /**
      * Sets imageViews of the leaders in the hand to be shown
-     * @param idList List of leaders' IDs to show
      */
-    public void setLeaderBHand(List<Integer> idList){
-        updateLeaderBHand(idList);
+    public void setLeaderBHand(/*Deck leaderCards*/){ //TODO: controllare
+        try {
+            updateLeaderBHand(getGUI().getLocalPlayerBoard().getLeaderBoard().getHand());
+        } catch (NotExistingNicknameException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -1149,60 +1139,39 @@ public class PlayerBoardController extends GenericController {
 
     /**
      * Updates imageViews of the leaders on the board
-     * @param idList List of leaders' IDs to show
+     * @param leaderCards List of leaders to show
      */
-    private void updateLeaderBBoard(List<Integer> idList){
-        if(idList.stream().noneMatch(x -> x == -1)) {
-            boardLeader1_imageView.setImage(null);
-            boardLeader2_imageView.setImage(null);
-            for(Integer id : idList) {
-                LeaderCard currentLeaderCard = new LeaderCard();
-                try {
-                    List<LeaderCard> leaderCards = ((List<LeaderCard>)(List<? extends Card>)getGUI().
-                            getLocalPlayerBoard().getLeaderBoard().getBoard().getCards());
-                    for(LeaderCard lc : leaderCards){
-                        if(lc.getID() == id){
-                            currentLeaderCard = lc;
-                        }
-                    }
-                }catch(NotExistingNicknameException e){
-                    e.printStackTrace();
-                }
-                if (boardLeader1_imageView.getImage() == null && handLeader1_imageView.getImage() == null) {
-                    boardLeader1_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
-                            + id + ".png")));
-                    isFirstLeaderProduction = currentLeaderCard.getAbility() instanceof AbilityProduction;
-                    isFirstLeaderShelf = currentLeaderCard.getAbility() instanceof AbilityWarehouse;
-                    enableLeaderAbility();
-                } else if (boardLeader2_imageView.getImage() == null && handLeader2_imageView.getImage() == null) {
-                    boardLeader2_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
-                            + id + ".png")));
-                    isSecondLeaderProduction = currentLeaderCard.getAbility() instanceof AbilityProduction;
-                    isSecondLeaderShelf = currentLeaderCard.getAbility() instanceof AbilityWarehouse;
-                    enableLeaderAbility();
-                }
+    private void updateLeaderBBoard(Deck leaderCards){
+        boardLeader1_imageView.setImage(null);
+        boardLeader2_imageView.setImage(null);
+        for(Card card : leaderCards) {
+            LeaderCard currentLeaderCard = new LeaderCard();
+            if (boardLeader1_imageView.getImage() == null && handLeader1_imageView.getImage() == null) {
+                boardLeader1_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
+                        + card.getID() + ".png")));
+                isFirstLeaderProduction = currentLeaderCard.getAbility() instanceof AbilityProduction;
+                isFirstLeaderShelf = currentLeaderCard.getAbility() instanceof AbilityWarehouse;
+                enableLeaderAbility();
+            } else if (boardLeader2_imageView.getImage() == null && handLeader2_imageView.getImage() == null) {
+                boardLeader2_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
+                        + card.getID() + ".png")));
+                isSecondLeaderProduction = currentLeaderCard.getAbility() instanceof AbilityProduction;
+                isSecondLeaderShelf = currentLeaderCard.getAbility() instanceof AbilityWarehouse;
+                enableLeaderAbility();
             }
         }
         showLeaderCheckBoxes();
     }
 
     /**
-     * Updates imageViews of the leaders on the board
-     * @param leaderCards List of leaders to show
-     */
-    private void updateLeaderBBoard(Deck leaderCards){
-        List<Integer> idList = new ArrayList<>();
-        for(Card card : leaderCards)
-            idList.add(card.getID());
-        updateLeaderBBoard(idList);
-    }
-
-    /**
      * Sets imageViews of the leaders on the board to be shown
-     * @param idList List of leaders' IDs to show
      */
-    public void setLeaderBBoard(List<Integer> idList){
-        updateLeaderBBoard(idList);
+    public void setLeaderBBoard(/*Deck leaderCards*/){
+        try {
+            updateLeaderBBoard(getGUI().getLocalPlayerBoard().getLeaderBoard().getBoard());
+        } catch (NotExistingNicknameException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
