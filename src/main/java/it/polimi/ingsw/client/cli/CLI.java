@@ -750,10 +750,10 @@ public class CLI extends ClientController {
     }
 
     /**
-     * Manages the placement of the specified resources on the empty shelf given by parameter
-     * @param shelves List of shelves to control
+     * Manages the specified resources placement on the empty shelf given by parameter
+     * @param shelves List of shelves to check
      * @param toPlace List of resources to place
-     * @param selectedShelf Shelf where to place the resources
+     * @param selectedShelf Shelf where the resources will be placed
      * @param resourceToPlace Resources' type
      */
     private void emptyShelfManagement(List<Shelf> shelves, List<Resource> toPlace,
@@ -781,10 +781,10 @@ public class CLI extends ClientController {
     }
 
     /**
-     * Manages the placement on the shelf with the same resources' type of the resources given by parameters
-     * @param shelves List of shelves to control
+     * Manages the resources placement on the shelf with the same resource type of the resources
+     * @param shelves List of shelves to check
      * @param toPlace List of resources to place
-     * @param selectedShelf Shelf where to place the resources
+     * @param selectedShelf Shelf where the resources will be placed
      * @param resourceToPlace Resources' type
      */
     private void sameResTypeShelfManagement(List<Shelf> shelves, List<Resource> toPlace,
@@ -809,10 +809,10 @@ public class CLI extends ClientController {
     }
 
     /**
-     * Manages the placement on the shelf with different resources' type of the resources given by parameters
-     * @param shelves List of shelves to control
+     * Manages the resources placement on the shelf with different resource type from the resources
+     * @param shelves List of shelves to check
      * @param toPlace List of resources to place
-     * @param selectedShelf Shelf where to place the resources
+     * @param selectedShelf Shelf where the resources will be placed
      * @param resourceToPlace Resources' type
      */
     private void differentResTypeShelfManagement(List<Shelf> shelves, List<Resource> toPlace,
@@ -882,8 +882,8 @@ public class CLI extends ClientController {
 
     /**
      * Checks if the configuration of the resources given by parameter is rearrangeable among the warehouse's shelves
-     * @param shelves List of shelves to control
-     * @param resource Resources to control
+     * @param shelves List of shelves to check
+     * @param resource Resources to check
      * @return Returns true if it's rearrangeable, false otherwise
      */
     private boolean isShelfRearrangeable(List<Shelf> shelves, Resource resource) {
@@ -907,9 +907,9 @@ public class CLI extends ClientController {
 
     /**
      * Restores resources in the warehouse and resets attributes
-     * @param warehouse Warehouse where restore the resources from
+     * @param warehouse Warehouse where to restore the resources from
      * @param shelves List of shelves to restore
-     * @param resources List where restore the "resources to place" from
+     * @param resources List where to restore the "resources to place" from
      * @param toPlace List of resources to place
      * @param toDiscard List of resources to discard
      * @param canDiscard True if there are resources that can be discarded, false otherwise
