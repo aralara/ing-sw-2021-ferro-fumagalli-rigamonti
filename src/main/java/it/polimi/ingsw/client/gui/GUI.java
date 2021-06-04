@@ -522,13 +522,6 @@ public class GUI extends ClientController {
     }
 
     /**
-     * Sends to the server a message to notify the end of the turn
-     */
-    public void sendEndTurnMessage(){
-        getMessageHandler().sendClientMessage(new EndTurnMessage());
-    }
-
-    /**
      * Sends to the server a message to active or discard a list of leader
      * @param positions List of positions of the leaders in the hand
      * @param toActivate True to activate leaders, false otherwise

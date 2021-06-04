@@ -10,6 +10,7 @@ import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.server.model.storage.*;
+import it.polimi.ingsw.utils.messages.client.EndTurnMessage;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -39,7 +40,7 @@ public class PlayerBoardController extends GenericController {
             otherActions_label, resToPlace_label, leaders_label;
     @FXML private Separator separator1, separator2, separator3;
     @FXML private Button confirm_button, restoreWarehouse_button, market_button, decks_button,
-            activateProductions_button, endTurn_button, activeLeaderCard_button, discardLeaderCard_button,
+            activateProductions_button, endTurn_button, activateLeaderCard_button, discardLeaderCard_button,
             rearrangeWarehouse_button, viewOpponents_button, leftArrow_button, rightArrow_button, goBoard_button;
     @FXML private CheckBox basicProduction_checkBox, devSpace1_checkBox, devSpace2_checkBox, devSpace3_checkBox,
             leader1_checkBox, leader2_checkBox;
@@ -60,6 +61,10 @@ public class PlayerBoardController extends GenericController {
             coinToPlace_imageView, servantToPlace_imageView, shieldToPlace_imageView, stoneToPlace_imageView,
             popeFavorTile1_imageView, popeFavorTile2_imageView, popeFavorTile3_imageView;
 
+    /**
+     * Sets the isPlayerTurn attribute and enable or disable buttons accordingly
+     * @param isPlayerTurn New attribute value
+     */
     public void setIsPlayerTurn(boolean isPlayerTurn){
         this.isPlayerTurn=isPlayerTurn;
         mainActionPlayed=false;
@@ -73,41 +78,72 @@ public class PlayerBoardController extends GenericController {
         }
     }
 
+    /**
+     * Sets the isResToPlaceAction attribute
+     * @param isResToPlaceAction New attribute value
+     */
     public void setIsResToPlace(boolean isResToPlaceAction){
         this.isResToPlaceAction=isResToPlaceAction;
     }
 
-    public void setMainActionPlayed(boolean played){ //TODO: aggiornare tutti gli elementi visti, per sicurezza, e aggiornare tutti i bottoni
+    /**
+     * Sets the mainActionPlayed attribute
+     * @param played New attribute value
+     */
+    public void setMainActionPlayed(boolean played){
         mainActionPlayed=played;
         enableButtons();
     }
 
+    /**
+     * Sets the warehouseIsDisabled attribute
+     * @param isDisabled New attribute value
+     */
     public void setWarehouseIsDisabled(boolean isDisabled){
         warehouseIsDisabled=isDisabled;
     }
 
+    /**
+     * Sets the player_label attribute
+     * @param player_label New attribute value
+     */
     public void setPlayer_label(String player_label){
         this.player_label.setText(player_label);
         this.player_label.setVisible(true);
     }
 
+    /**
+     * Shows the inkwell image on the playerBoard
+     */
     public void enableInkwell(){
         this.inkwell_imageVIew.setVisible(true);
     }
 
+    /**
+     * Enables the button to view opponents on the playerBoard
+     */
     public void enableOpponents(){
         this.viewOpponents_button.setDisable(false);
     }
 
+    /**
+     * Shows the market scene over the main stage
+     */
     public void goToMarket() {
         getGUIApplication().setActiveScene(SceneNames.MARKET_BOARD);
     }
 
+    /**
+     * Shows the development decks scene over the main stage
+     */
     public void goToDecks() {
         ((DecksBoardController)getGUIApplication().getController(SceneNames.DECKS_BOARD)).showDevelopmentDeck();
         getGUIApplication().setActiveScene(SceneNames.DECKS_BOARD);
     }
 
+    /**
+     * Restores resources in the warehouse and resets attributes
+     */
     public void restoreWarehouse() {
         if(toDiscard!=null)
             toDiscard.clear();
@@ -121,39 +157,54 @@ public class PlayerBoardController extends GenericController {
         if(mainActionPlayed){
             showCheckBoxes();
             endTurn_button.setDisable(false);
-            activeLeaderCard_button.setDisable(false);
+            activateLeaderCard_button.setDisable(false);
             discardLeaderCard_button.setDisable(false);
         }
         if(!isResToPlaceAction)
             viewOpponents_button.setDisable(false);
     }
 
+    /**
+     * Activates the productions action
+     */
     public void activateProductions() {
         if (checkSelectedCheckBoxes()) {
             disableButtons();
             setWarehouseIsDisabled(true);
             viewOpponents_button.setDisable(true);
-            getActivatedProductions();
+            controlActivatedProductions();
             resetCheckBoxes();
         }
     }
 
+    /**
+     * Sends to the server a message to notify the end of the turn
+     */
     public void endTurn() {
         disableButtons();
         mainActionPlayed=false;
         hideCheckBoxes();
-        //TODO: disabilitare cose?
-        getGUI().sendEndTurnMessage();
+        getGUI().getMessageHandler().sendClientMessage(new EndTurnMessage());
     }
 
+    /**
+     * Calls sendLeaderMessage method to activate leaders
+     */
     public void activateLeaderCard() {
         sendLeaderMessage(true);
     }
 
+    /**
+     * Calls sendLeaderMessage method to discard leaders
+     */
     public void discardLeaderCard() {
         sendLeaderMessage(false);
     }
 
+    /**
+     * Takes selected leaders and call sendLeaderMessage GUI's method
+     * @param toActivate True to activate cards, false to discard them
+     */
     private void sendLeaderMessage(boolean toActivate){
         List<Integer> leaders = new ArrayList<>();
         if(leader1_checkBox.isSelected())
@@ -162,13 +213,14 @@ public class PlayerBoardController extends GenericController {
             leaders.add(1);
         if(!leaders.isEmpty()) {
             leader1_checkBox.setSelected(false);
-            //leader1_checkBox.setVisible(false);
             leader2_checkBox.setSelected(false);
-            //leader2_checkBox.setVisible(false);
             getGUI().sendLeaderMessage(leaders, toActivate);
         }
     }
 
+    /**
+     * Empties warehouse's shelves, then all the resources need to be placed again on the shelves
+     */
     public void rearrangeWarehouse() {
         if(!warehouseIsDisabled && !warehouseIsEmpty()) {
             for (Shelf shelf : shelves) {
@@ -182,6 +234,9 @@ public class PlayerBoardController extends GenericController {
         }
     }
 
+    /**
+     * Shows opponents' boards
+     */
     public void viewOpponents() {
         showButtons(false);
         if(getGUI().getLorenzoFaith()==-1){ //multiplayer
@@ -191,7 +246,7 @@ public class PlayerBoardController extends GenericController {
             player_label.setText("Lorenzo il Magnifico");
             inkwell_imageVIew.setVisible(false);
             updateFaithBoard(getGUI().getLorenzoFaith(), true);
-            updateFaithBPope(new boolean[]{false, false, false}); //TODO: lorenzo ha anche popeTiles?
+            updateFaithBPope(new boolean[]{false, false, false});
             resetWarehouse();
             resetStrongbox();
             resetDevelopmentBSpaces();
@@ -205,6 +260,10 @@ public class PlayerBoardController extends GenericController {
         hideCheckBoxes();
     }
 
+    /**
+     * Shows the opponent's board
+     * @param next True to show next player, false to show previous player in the list of opponents
+     */
     private void viewOpponent(boolean next){//false x precedente
         String currentPlayer = player_label.getText();
         leftArrow_button.setDisable(false);
@@ -248,38 +307,74 @@ public class PlayerBoardController extends GenericController {
             dragEvent.acceptTransferModes(TransferMode.MOVE);
     }
 
+    /**
+     * Handles drag over event of the first development space, card level 1
+     * @param dragEvent Drag event
+     */
     public void handleDragOver1L1(DragEvent dragEvent) {
         handleDragOver(dragEvent);
     }
 
+    /**
+     * Handles drag over event of the first development space, card level 2
+     * @param dragEvent Drag event
+     */
     public void handleDragOver1L2(DragEvent dragEvent) {
         handleDragOver(dragEvent);
     }
 
+    /**
+     * Handles drag over event of the first development space, card level 3
+     * @param dragEvent Drag event
+     */
     public void handleDragOver1L3(DragEvent dragEvent) {
         handleDragOver(dragEvent);
     }
 
+    /**
+     * Handles drag over event of the second development space, card level 1
+     * @param dragEvent Drag event
+     */
     public void handleDragOver2L1(DragEvent dragEvent) {
         handleDragOver(dragEvent);
     }
 
+    /**
+     * Handles drag over event of the second development space, card level 2
+     * @param dragEvent Drag event
+     */
     public void handleDragOver2L2(DragEvent dragEvent) {
         handleDragOver(dragEvent);
     }
 
+    /**
+     * Handles drag over event of the second development space, card level 3
+     * @param dragEvent Drag event
+     */
     public void handleDragOver2L3(DragEvent dragEvent) {
         handleDragOver(dragEvent);
     }
 
+    /**
+     * Handles drag over event of the third development space, card level 1
+     * @param dragEvent Drag event
+     */
     public void handleDragOver3L1(DragEvent dragEvent) {
         handleDragOver(dragEvent);
     }
 
+    /**
+     * Handles drag over event of the third development space, card level 2
+     * @param dragEvent Drag event
+     */
     public void handleDragOver3L2(DragEvent dragEvent) {
         handleDragOver(dragEvent);
     }
 
+    /**
+     * Handles drag over event of the third development space, card level 3
+     * @param dragEvent Drag event
+     */
     public void handleDragOver3L3(DragEvent dragEvent) {
         handleDragOver(dragEvent);
     }
@@ -295,38 +390,65 @@ public class PlayerBoardController extends GenericController {
         getGUI().sendCanBuyDevelopmentCardMessage(dbc.getSelectedCardColor(), dbc.getSelectedLevel(), space-1);
     }
 
+    /**
+     * Handles drag dropped events of the first development space, card level 1
+     */
     public void handleDragDropped1L1() {
         handleDragDroppedSpace(1);
     }
 
+    /**
+     * Handles drag dropped events of the first development space, card level 2
+     */
     public void handleDragDropped1L2() {
         handleDragDroppedSpace(1);
     }
 
+    /**
+     * Handles drag dropped events of the first development space, card level 3
+     */
     public void handleDragDropped1L3() {
         handleDragDroppedSpace(1);
     }
 
+    /**
+     * Handles drag dropped events of the second development space, card level 1
+     */
     public void handleDragDropped2L1() {
         handleDragDroppedSpace(2);
     }
 
+    /**
+     * Handles drag dropped events of the second development space, card level 2
+     */
     public void handleDragDropped2L2() {
         handleDragDroppedSpace(2);
     }
 
+    /**
+     * Handles drag dropped events of the second development space, card level 3
+     */
     public void handleDragDropped2L3() {
         handleDragDroppedSpace(2);
     }
 
+    /**
+     * Handles drag dropped events of the third development space, card level 1
+     */
     public void handleDragDropped3L1() {
         handleDragDroppedSpace(3);
     }
 
+    /**
+     * Handles drag dropped events of the third development space, card level 2
+     */
     public void handleDragDropped3L2() {
         handleDragDroppedSpace(3);
     }
 
+    /**
+     * Handles drag dropped events of the third development space, card level 3
+     */
     public void handleDragDropped3L3() {
         handleDragDroppedSpace(3);
     }
@@ -344,6 +466,10 @@ public class PlayerBoardController extends GenericController {
         mouseEvent.consume();
     }
 
+    /**
+     * Handles drag detected event of the coin to place
+     * @param mouseEvent Mouse event
+     */
     public void handleDragDetectedCoinToPlace(MouseEvent mouseEvent) {
         String label = resToPlaceCoin_label.getText().substring(2);
         int labelQuantity = Integer.parseInt(label);
@@ -353,6 +479,10 @@ public class PlayerBoardController extends GenericController {
         }
     }
 
+    /**
+     * Handles drag detected event of the servant to place
+     * @param mouseEvent Mouse event
+     */
     public void handleDragDetectedServantToPlace(MouseEvent mouseEvent) {
         String label = resToPlaceServant_label.getText().substring(2);
         int labelQuantity = Integer.parseInt(label);
@@ -362,6 +492,10 @@ public class PlayerBoardController extends GenericController {
         }
     }
 
+    /**
+     * Handles drag detected event of the shield to place
+     * @param mouseEvent Mouse event
+     */
     public void handleDragDetectedShieldToPlace(MouseEvent mouseEvent) {
         String label = resToPlaceShield_label.getText().substring(2);
         int labelQuantity = Integer.parseInt(label);
@@ -371,6 +505,10 @@ public class PlayerBoardController extends GenericController {
         }
     }
 
+    /**
+     * Handles drag detected event of the stone to place
+     * @param mouseEvent Mouse event
+     */
     public void handleDragDetectedStoneToPlace(MouseEvent mouseEvent) {
         String label = resToPlaceStone_label.getText().substring(2);
         int labelQuantity = Integer.parseInt(label);
@@ -389,45 +527,85 @@ public class PlayerBoardController extends GenericController {
             handleDragOver(dragEvent);
     }
 
+    /**
+     * Handles drag over events of the first shelf
+     * @param dragEvent Drag event
+     */
     public void handleDragOverShelfResL1_1(DragEvent dragEvent) {
         handleDragOverShelf(dragEvent);
     }
 
+    /**
+     * Handles drag over events of the second shelf, slot 1
+     * @param dragEvent Drag event
+     */
     public void handleDragOverShelfResL2_1(DragEvent dragEvent) {
         handleDragOverShelf(dragEvent);
     }
 
+    /**
+     * Handles drag over events of the second shelf, slot 2
+     * @param dragEvent Drag event
+     */
     public void handleDragOverShelfResL2_2(DragEvent dragEvent) {
         handleDragOverShelf(dragEvent);
     }
 
+    /**
+     * Handles drag over events of the third shelf, slot 1
+     * @param dragEvent Drag event
+     */
     public void handleDragOverShelfResL3_1(DragEvent dragEvent) {
         handleDragOverShelf(dragEvent);
     }
 
+    /**
+     * Handles drag over events of the third shelf, slot 2
+     * @param dragEvent Drag event
+     */
     public void handleDragOverShelfResL3_2(DragEvent dragEvent) {
         handleDragOverShelf(dragEvent);
     }
 
+    /**
+     * Handles drag over events of the third shelf, slot 3
+     * @param dragEvent Drag event
+     */
     public void handleDragOverShelfResL3_3(DragEvent dragEvent) {
         handleDragOverShelf(dragEvent);
     }
 
+    /**
+     * Handles drag over events of the first leader's shelf, slot 1
+     * @param dragEvent Drag event
+     */
     public void handleDragOverShelfLeader1_1(DragEvent dragEvent) {
         if(isFirstLeaderShelf)
             handleDragOverShelf(dragEvent);
     }
 
+    /**
+     * Handles drag over events of the first leader's shelf, slot 2
+     * @param dragEvent Drag event
+     */
     public void handleDragOverShelfLeader1_2(DragEvent dragEvent) {
         if(isFirstLeaderShelf)
             handleDragOverShelf(dragEvent);
     }
 
+    /**
+     * Handles drag over events of the second leader's shelf, slot 1
+     * @param dragEvent Drag event
+     */
     public void handleDragOverShelfLeader2_1(DragEvent dragEvent) {
         if(isSecondLeaderShelf)
             handleDragOverShelf(dragEvent);
     }
 
+    /**
+     * Handles drag over events of the second leader's shelf, slot 2
+     * @param dragEvent Drag event
+     */
     public void handleDragOverShelfLeader2_2(DragEvent dragEvent) {
         if(isSecondLeaderShelf)
             handleDragOverShelf(dragEvent);
@@ -452,54 +630,94 @@ public class PlayerBoardController extends GenericController {
         return false;
     }
 
+    /**
+     * Handles drag dropped events of the first shelf
+     * @param dragEvent Drag event
+     */
     public void handleDragDroppedShelfResL1_1(DragEvent dragEvent) {
         handleDragDroppedShelf(dragEvent, shelfResL1_1_imageView, 1);
     }
 
+    /**
+     * Handles drag dropped events of the second shelf, slot 1
+     * @param dragEvent Drag event
+     */
     public void handleDragDroppedShelfResL2_1(DragEvent dragEvent) {
         if(handleDragDroppedShelf(dragEvent, shelfResL2_1_imageView, 2)){
             setWhShelvesImages(2);
         }
     }
 
+    /**
+     * Handles drag dropped events of the second shelf, slot 2
+     * @param dragEvent Drag event
+     */
     public void handleDragDroppedShelfResL2_2(DragEvent dragEvent) {
         if(handleDragDroppedShelf(dragEvent, shelfResL2_2_imageView, 2))
             setWhShelvesImages(2);
     }
 
+    /**
+     * Handles drag dropped events of the third shelf, slot 1
+     * @param dragEvent Drag event
+     */
     public void handleDragDroppedShelfResL3_1(DragEvent dragEvent) {
         if(handleDragDroppedShelf(dragEvent, shelfResL3_1_imageView, 3))
             setWhShelvesImages(3);
     }
 
+    /**
+     * Handles drag dropped events of the third shelf, slot 2
+     * @param dragEvent Drag event
+     */
     public void handleDragDroppedShelfResL3_2(DragEvent dragEvent) {
         if(handleDragDroppedShelf(dragEvent, shelfResL3_2_imageView, 3))
             setWhShelvesImages(3);
     }
 
+    /**
+     * Handles drag dropped events of the third shelf, slot 3
+     * @param dragEvent Drag event
+     */
     public void handleDragDroppedShelfResL3_3(DragEvent dragEvent) {
         if(handleDragDroppedShelf(dragEvent, shelfResL3_3_imageView, 3))
             setWhShelvesImages(3);
     }
 
+    /**
+     * Handles drag dropped events of the first leader's shelf, slot 1
+     * @param dragEvent Drag event
+     */
     public void handleDragDroppedShelfLeader1_1(DragEvent dragEvent) {
         int position = 4;
         if(handleDragDroppedShelf(dragEvent, shelfLeader1_1_imageView, position))
             setWhLeadersImages(position, 1);
     }
 
+    /**
+     * Handles drag dropped events of the first leader's shelf, slot 2
+     * @param dragEvent Drag event
+     */
     public void handleDragDroppedShelfLeader1_2(DragEvent dragEvent) {
         int position = 4;
         if(handleDragDroppedShelf(dragEvent, shelfLeader1_2_imageView, position))
             setWhLeadersImages(position, 1);
     }
 
+    /**
+     * Handles drag dropped events of the second leader's shelf, slot 1
+     * @param dragEvent Drag event
+     */
     public void handleDragDroppedShelfLeader2_1(DragEvent dragEvent) {
         int position = (isFirstLeaderShelf) ? 5 : 4;
         if(handleDragDroppedShelf(dragEvent, shelfLeader2_1_imageView, position))
             setWhLeadersImages(position, 2);
     }
 
+    /**
+     * Handles drag dropped events of the second leader's shelf, slot 2
+     * @param dragEvent Drag event
+     */
     public void handleDragDroppedShelfLeader2_2(DragEvent dragEvent) {
         int position = (isFirstLeaderShelf) ? 5 : 4;
         if(handleDragDroppedShelf(dragEvent, shelfLeader2_2_imageView, position))
@@ -524,24 +742,39 @@ public class PlayerBoardController extends GenericController {
             handleDragOver(dragEvent);
     }
 
+    /**
+     * Disables activateProductions button
+     */
     public void disableActivateProductionsAction(){
         activateProductions_button.setDisable(true);
     }
 
+    /**
+     * Disables activateLeaderCard button
+     */
     public void disableActivateLeaderAction(){
-        activeLeaderCard_button.setDisable(true);
+        activateLeaderCard_button.setDisable(true);
     }
 
+    /**
+     * Disables discardLeaderCard button
+     */
     public void disableDiscardLeaderAction(){
         discardLeaderCard_button.setDisable(true);
     }
 
+    /**
+     * Disable development board's spaces
+     */
     private void disableSpaces(){
         fillSpacesList();
         for(ImageView imageView : spaces)
             imageView.setDisable(true);
     }
 
+    /**
+     * Enables for each space the first development board's card which image is null
+     */
     public void enableSpaces(){
         fillSpacesList();
         for(int i=0; i<3; i++){
@@ -564,6 +797,9 @@ public class PlayerBoardController extends GenericController {
         }
     }
 
+    /**
+     * Loads development cards' imageViews in the development board's spaces list
+     */
     private void fillSpacesList(){
         spaces = new ArrayList<>();
         spaces.add(space1L1_imageView);
@@ -577,6 +813,9 @@ public class PlayerBoardController extends GenericController {
         spaces.add(space3L3_imageView);
     }
 
+    /**
+     * Loads faith spaces' imageViews in their list
+     */
     private void fillFaithSpaces(){
         faithSpaces = new ArrayList<>();
         faithSpaces.add(faithSpace0_imageView);
@@ -606,6 +845,12 @@ public class PlayerBoardController extends GenericController {
         faithSpaces.add(faithSpace24_imageView);
     }
 
+    /**
+     * Gets the development card's imageView in the development board's space given by parameter
+     * @param space ImageView's space
+     * @param level ImageView's level
+     * @return Returns the selected imageView
+     */
     private ImageView getDevSpace(int space, int level) {
         if (space == 0) {
             if (level == 1)
@@ -632,6 +877,11 @@ public class PlayerBoardController extends GenericController {
         return null;
     }
 
+    /**
+     * Gets the quantity of the resource given by parameter
+     * @param resourceType Resource's type
+     * @return Returns resource's quantity
+     */
     public int getResToPlaceQuantity(ResourceType resourceType) {
         if (resourceType == ResourceType.COIN) {
             return Integer.parseInt(resToPlaceCoin_label.getText().substring(2));
@@ -645,6 +895,11 @@ public class PlayerBoardController extends GenericController {
         return -1;
     }
 
+    /**
+     * Sets the quantity of the resource given by parameter
+     * @param resourceType Resource's type
+     * @param quantity Resource's quantity
+     */
     public void setResToPlaceQuantity(ResourceType resourceType, int quantity){
         if(resourceType == ResourceType.COIN) {
             resToPlaceCoin_label.setText("x " + quantity);
@@ -658,27 +913,28 @@ public class PlayerBoardController extends GenericController {
         viewOpponents_button.setDisable(true);
         if(quantity>0)
             disableButtons();
-        else if (quantity == 0)
-            checkEnableButtons();
-    }
-
-    private void checkEnableButtons(){
-        if(getResToPlaceQuantity(ResourceType.COIN)==0 && getResToPlaceQuantity(ResourceType.SERVANT)==0
-                && getResToPlaceQuantity(ResourceType.SHIELD)==0 && getResToPlaceQuantity(ResourceType.STONE)==0){
+        else if (quantity == 0 &&
+                getResToPlaceQuantity(ResourceType.COIN)==0 && getResToPlaceQuantity(ResourceType.SERVANT)==0
+                && getResToPlaceQuantity(ResourceType.SHIELD)==0 && getResToPlaceQuantity(ResourceType.STONE)==0)
             confirm_button.setVisible(true);
-        }
     }
 
+    /**
+     * Disables buttons and hides checkboxes to prevent the player to click them
+     */
     public void disableButtons(){
         ((MarketBoardController)getGUIApplication().getController(SceneNames.MARKET_BOARD)).disableMarketAction();
         ((DecksBoardController)getGUIApplication().getController(SceneNames.DECKS_BOARD)).disableBuyCardAction();
         activateProductions_button.setDisable(true);
         endTurn_button.setDisable(true);
-        activeLeaderCard_button.setDisable(true);
+        activateLeaderCard_button.setDisable(true);
         discardLeaderCard_button.setDisable(true);
         hideCheckBoxes();
     }
 
+    /**
+     * Enables buttons depending on whether the main actions has been played
+     */
     public void enableButtons(){
         if(!mainActionPlayed) {
             ((MarketBoardController) getGUIApplication().getController(SceneNames.MARKET_BOARD)).enableMarketAction();
@@ -692,13 +948,16 @@ public class PlayerBoardController extends GenericController {
             activateProductions_button.setDisable(true);
             endTurn_button.setDisable(false);
         }
-        activeLeaderCard_button.setDisable(false);
+        activateLeaderCard_button.setDisable(false);
         discardLeaderCard_button.setDisable(false);
         rearrangeWarehouse_button.setDisable(false);
         viewOpponents_button.setDisable(false);
         showCheckBoxes();
     }
 
+    /**
+     * Confirms the actual shelves' configurations and calls sendShelvesConfigurationMessage GUI's method
+     */
     public void confirm() {
         if(toDiscard==null)
             toDiscard = new ArrayList<>();
@@ -720,13 +979,17 @@ public class PlayerBoardController extends GenericController {
         viewOpponents_button.setDisable(false);
     }
 
+    /**
+     * Updates development board's imageViews showing the cards given by parameter
+     * @param devDecks List of development cards to show
+     */
     private void updateDevelopmentBSpaces(List<Deck> devDecks) {
         int id, maxLevel = 3;
         for(int i = 0; i< devDecks.size(); i++){
             for(int level = 1; level <= maxLevel; level++) {
                 int finalLevel = level;
-                id = devDecks.get(i).getCards().stream().map(x -> (DevelopmentCard)x).filter(x -> x.getLevel() == finalLevel).
-                        map(Card::getID).findFirst().orElse(-1);
+                id = devDecks.get(i).getCards().stream().map(x -> (DevelopmentCard)x).
+                        filter(x -> x.getLevel() == finalLevel).map(Card::getID).findFirst().orElse(-1);
                 getDevSpace(i,level).setImage((id > -1) ? new Image(
                         getClass().getResourceAsStream("/imgs/devCards/" + id + ".png")) : null);
             }
@@ -734,6 +997,9 @@ public class PlayerBoardController extends GenericController {
         showCheckBoxes();
     }
 
+    /**
+     * Sets to null all the development board's spaces' imageViews
+     */
     private void resetDevelopmentBSpaces(){
         space1L1_imageView.setImage(null);
         space1L2_imageView.setImage(null);
@@ -746,10 +1012,18 @@ public class PlayerBoardController extends GenericController {
         space3L3_imageView.setImage(null);
     }
 
+    /**
+     * Shows local player's development board's cards
+     */
     public void showDevelopmentBSpaces() {
         updateDevelopmentBSpaces(getGUI().getDevelopmentBoard());
     }
 
+    /**
+     * Updates faith board's imageViews showing the position of the cross
+     * @param faith Faith level
+     * @param isLorenzo True if it's single game and the cross to show is black
+     */
     private void updateFaithBoard(int faith, boolean isLorenzo){
         resetFaith();
         Image cross = new Image(getClass().getResourceAsStream(
@@ -758,6 +1032,9 @@ public class PlayerBoardController extends GenericController {
         faithSpaces.get(faith).setImage(cross);
     }
 
+    /**
+     * Shows local player's faith level
+     */
     public void showFaithBoard(){
         try {
             updateFaithBoard(getGUI().getLocalPlayerBoard().getFaithBoard().getFaith(), false);
@@ -766,12 +1043,19 @@ public class PlayerBoardController extends GenericController {
         }
     }
 
+    /**
+     * Sets to null all the faith board's spaces' imageViews
+     */
     private void resetFaith(){
         fillFaithSpaces();
         for(ImageView imageView : faithSpaces)
             imageView.setImage(null);
     }
 
+    /**
+     * Updates imageViews of the faith Pope progression, showing or not the value of the tiles
+     * @param popeTiles List of tiles to show
+     */
     private void updateFaithBPope(boolean [] popeTiles) {
         for (int i=0; i < popeTiles.length; i++) {
             if (i == 0) {
@@ -790,6 +1074,9 @@ public class PlayerBoardController extends GenericController {
         }
     }
 
+    /**
+     * Shows local player's Pope progression tiles
+     */
     public void showFaithBPope() {
         try {
             updateFaithBPope(getGUI().getLocalPlayerBoard().getFaithBoard().getPopeProgression());
@@ -798,6 +1085,9 @@ public class PlayerBoardController extends GenericController {
         }
     }
 
+    /**
+     * Sets to null all the leaderBoard's imageViews
+     */
     private void resetLeaderBoard(){
         handLeader1_imageView.setImage(null);
         handLeader2_imageView.setImage(null);
@@ -809,6 +1099,10 @@ public class PlayerBoardController extends GenericController {
         shelfLeader2_2_imageView.setImage(null);
     }
 
+    /**
+     * Updates imageViews of the leaders in the hand
+     * @param idList List of leaders' IDs to show
+     */
     private void updateLeaderBHand(List<Integer> idList){
         if(idList.stream().noneMatch(x -> x == -1)) {
             handLeader1_imageView.setImage(null);
@@ -826,7 +1120,10 @@ public class PlayerBoardController extends GenericController {
         showLeaderCheckBoxes();
     }
 
-
+    /**
+     * Updates imageViews of the leaders in the hand
+     * @param leaderCards List of leaders to show
+     */
     private void updateLeaderBHand(Deck leaderCards){
         List<Integer> idList = new ArrayList<>();
         for(Card card : leaderCards)
@@ -834,15 +1131,26 @@ public class PlayerBoardController extends GenericController {
         updateLeaderBHand(idList);
     }
 
+    /**
+     * Sets imageViews of the leaders in the hand to be shown
+     * @param idList List of leaders' IDs to show
+     */
     public void setLeaderBHand(List<Integer> idList){
         updateLeaderBHand(idList);
     }
 
+    /**
+     * Sets to null all the leaders' imageViews in the hand
+     */
     private void hideLeaderHand(){
         handLeader1_imageView.setImage(null);
         handLeader2_imageView.setImage(null);
     }
 
+    /**
+     * Updates imageViews of the leaders on the board
+     * @param idList List of leaders' IDs to show
+     */
     private void updateLeaderBBoard(List<Integer> idList){
         if(idList.stream().noneMatch(x -> x == -1)) {
             boardLeader1_imageView.setImage(null);
@@ -878,17 +1186,28 @@ public class PlayerBoardController extends GenericController {
         showLeaderCheckBoxes();
     }
 
+    /**
+     * Updates imageViews of the leaders on the board
+     * @param leaderCards List of leaders to show
+     */
     private void updateLeaderBBoard(Deck leaderCards){
         List<Integer> idList = new ArrayList<>();
         for(Card card : leaderCards)
             idList.add(card.getID());
         updateLeaderBBoard(idList);
     }
-  
+
+    /**
+     * Sets imageViews of the leaders on the board to be shown
+     * @param idList List of leaders' IDs to show
+     */
     public void setLeaderBBoard(List<Integer> idList){
         updateLeaderBBoard(idList);
     }
 
+    /**
+     * Enables leaders' productions or shelves if their abilities are active
+     */
     private void enableLeaderAbility(){
 
         if(isFirstLeaderProduction) {
@@ -910,6 +1229,10 @@ public class PlayerBoardController extends GenericController {
         }
     }
 
+    /**
+     * Updates labels of the strongbox
+     * @param strongboxResources List of resources to update
+     */
     private void updateStrongbox(List<Resource> strongboxResources) { //TODO: da controllare... perchè lo fa su un altro thread?
         resetStrongbox();
         for (Resource resource : strongboxResources){
@@ -925,10 +1248,16 @@ public class PlayerBoardController extends GenericController {
         }
     }
 
+    /**
+     * Shows local player's strongbox
+     */
     public void showStrongbox() {
         updateStrongbox(getGUI().getStrongboxResources());
     }
 
+    /**
+     * Sets to null all the strongbox's labels
+     */
     private void resetStrongbox(){
         Platform.runLater(() -> coinStrongbox_label.setText("x 0"));
         Platform.runLater(() -> servantStrongbox_label.setText("x 0"));
@@ -936,6 +1265,10 @@ public class PlayerBoardController extends GenericController {
         Platform.runLater(() -> shieldStrongbox_label.setText("x 0"));
     }
 
+    /**
+     * Updates imageViews of the warehouse
+     * @param warehouseShelves List of shelves to update
+     */
     private void updateWarehouse(List<Shelf> warehouseShelves) {
         shelves = warehouseShelves;
         Image image;
@@ -1061,6 +1394,9 @@ public class PlayerBoardController extends GenericController {
         }
     }
 
+    /**
+     * Sets to null all the warehouse's resources on each shelf
+     */
     private void resetWarehouse(){
         shelfResL1_1_imageView.setImage(null);
         shelfResL2_1_imageView.setImage(null);
@@ -1074,10 +1410,17 @@ public class PlayerBoardController extends GenericController {
         shelfLeader2_2_imageView.setImage(null);
     }
 
+    /**
+     * Shows local player's warehouse
+     */
     public void showWarehouse() {
         updateWarehouse(getGUI().getWarehouseShelvesCopy());
     }
 
+    /**
+     * Sets the images of the warehouse's shelf given by parameter
+     * @param level Shelf's level
+     */
     private void setWhShelvesImages(int level){
         int resQuantity = shelves.get(level-1).getResources().getQuantity();
         switch (level){
@@ -1128,6 +1471,11 @@ public class PlayerBoardController extends GenericController {
         }
     }
 
+    /**
+     * Sets the images of the leader's shelf given by parameters
+     * @param index Index of the leader's shelf in the warehouse
+     * @param leader Position of the leader in the board
+     */
     private void setWhLeadersImages(int index, int leader){
         int resQuantity = shelves.get(index-1).getResources().getQuantity();
         Image image = new Image(getClass().getResourceAsStream("/imgs/res/" +
@@ -1161,22 +1509,32 @@ public class PlayerBoardController extends GenericController {
         }
     }
 
+    /**
+     * Adds the resource given by parameter to discarded list
+     * @param resourceType Resource's type
+     */
     private void addToDiscardedResources(ResourceType resourceType){
         if(toDiscard==null)
             toDiscard = new ArrayList<>();
         toDiscard.add(new Resource(resourceType,1));
     }
 
-    private boolean addToWarehouse(ResourceType resourceType, int position){
+    /**
+     * Adds the resource given by parameter in the specified shelf
+     * @param resourceType Resource's type
+     * @param index Index of the shelf in the warehouse
+     * @return Returns true if the resource has been added correctly, false otherwise
+     */
+    private boolean addToWarehouse(ResourceType resourceType, int index){
         if(shelves==null || shelves.isEmpty())
             shelves = getGUI().getWarehouseShelvesCopy();
         if(checkFreeSpace()){
-            if (shelves.get(position).getResourceType().equals(ResourceType.WILDCARD)) //empty shelf
-                return emptyShelfManagement(shelves.get(position), resourceType);
-            else if (shelves.get(position).getResourceType().equals(resourceType)) //shelf with the same resource type
-                return sameResTypeShelfManagement(shelves.get(position), resourceType);
-            else if (!shelves.get(position).isLeader()) //shelf with different resource type
-                return differentResTypeShelfManagement(shelves.get(position), resourceType);
+            if (shelves.get(index).getResourceType().equals(ResourceType.WILDCARD)) //empty shelf
+                return emptyShelfManagement(shelves.get(index), resourceType);
+            else if (shelves.get(index).getResourceType().equals(resourceType)) //shelf with the same resource type
+                return sameResTypeShelfManagement(shelves.get(index), resourceType);
+            else if (!shelves.get(index).isLeader()) //shelf with different resource type
+                return differentResTypeShelfManagement(shelves.get(index), resourceType);
             else {
                 showAlert(Alert.AlertType.ERROR, "Error", "Wrong slot",
                         "You can't place this resource here");
@@ -1190,6 +1548,10 @@ public class PlayerBoardController extends GenericController {
         }
     }
 
+    /**
+     * Checks if there are free slots in the warehouse's shelves
+     * @return Returns true if there are free slots, false otherwise
+     */
     private boolean checkFreeSpace(){
         for (Shelf shelf : shelves) {
             if (shelf.getResourceType().equals(ResourceType.WILDCARD) ||
@@ -1200,6 +1562,12 @@ public class PlayerBoardController extends GenericController {
         return false;
     }
 
+    /**
+     * Manages the placement of the specified resource on the empty shelf given by parameter
+     * @param selectedShelf Shelf where to place the resource
+     * @param resourceToPlace Resource's type
+     * @return Returns true if the resource has been added correctly, false otherwise
+     */
     private boolean emptyShelfManagement(Shelf selectedShelf, ResourceType resourceToPlace) {
         if(isResourceTypeUnique(shelves,resourceToPlace)) { //there are no shelves with the same resource type
             placeResource(selectedShelf, resourceToPlace);
@@ -1218,6 +1586,12 @@ public class PlayerBoardController extends GenericController {
         }
     }
 
+    /**
+     * Manages the placement on the shelf with the same resource's type of the resource given by parameters
+     * @param selectedShelf Shelf where to place the resource
+     * @param resourceToPlace Resource's type
+     * @return Returns true if the resource has been added correctly, false otherwise
+     */
     private boolean sameResTypeShelfManagement(Shelf selectedShelf, ResourceType resourceToPlace){
         if (selectedShelf.getResources().getQuantity() <= selectedShelf.getLevel() - 1) { //shelf not completely full
             placeResource(selectedShelf, resourceToPlace);
@@ -1226,6 +1600,12 @@ public class PlayerBoardController extends GenericController {
         return false;
     }
 
+    /**
+     * Manages the placement on the shelf with different resource's type of the resource given by parameters
+     * @param selectedShelf Shelf where to place the resource
+     * @param resourceToPlace Resource's type
+     * @return Returns true if the resource has been added correctly, false otherwise
+     */
     private boolean differentResTypeShelfManagement(Shelf selectedShelf, ResourceType resourceToPlace) {
         if (isResourceTypeUnique(shelves, resourceToPlace)) { //there are no shelves with the same resource type
             addQuantity(selectedShelf.getResources().getResourceType(),selectedShelf.getResources().getQuantity());
@@ -1248,10 +1628,23 @@ public class PlayerBoardController extends GenericController {
         }
     }
 
+    /**
+     * Checks if the resource's type given by parameter is unique among the warehouse's shelves
+     * @param shelves List of shelves to control
+     * @param resourceType Resource's type
+     * @return Returns true if the type is unique, false otherwise
+     */
     private boolean isResourceTypeUnique(List<Shelf> shelves, ResourceType resourceType) {
         return shelves.stream().noneMatch(shelf -> !shelf.isLeader() && shelf.getResourceType().equals(resourceType));
     }
 
+    /**
+     * Checks if the configuration of the resources which resource's type is given by parameter
+     * is rearrangeable among the warehouse's shelves
+     * @param shelves List of shelves to control
+     * @param resourceType Resource's type
+     * @return Returns true if it's rearrangeable, false otherwise
+     */
     private boolean isShelfRearrangeable(List<Shelf> shelves, ResourceType resourceType){
         Shelf shelfWithResources = getShelfWithSameResource(shelves, resourceType);
         int totalLeaderShelves = 2*(int)(shelves.stream().filter(shelf -> shelf.isLeader() && shelf.getResourceType()
@@ -1259,6 +1652,12 @@ public class PlayerBoardController extends GenericController {
         return shelfWithResources.getResources().getQuantity()+1 <= 3 + totalLeaderShelves;
     }
 
+    /**
+     * Gets the shelf with the same resource's type of the resource given by parameter
+     * @param shelves List of shelves where get the shelf from
+     * @param resourceType Resourc's type
+     * @return Returns the selected shelf, if present
+     */
     private Shelf getShelfWithSameResource(List<Shelf> shelves, ResourceType resourceType){
         for(Shelf shelf : shelves){
             if(!shelf.isLeader() && shelf.getResourceType().equals(resourceType))
@@ -1267,6 +1666,11 @@ public class PlayerBoardController extends GenericController {
         return null;
     }
 
+    /**
+     * Places the resource on the shelf given by parameters
+     * @param shelf Shelf where place the resource
+     * @param resourceType Resource's type
+     */
     private void placeResource(Shelf shelf, ResourceType resourceType){
         if(shelf.getResourceType().equals(resourceType)){ //shelf with the same resource type
             shelf.getResources().setQuantity(shelf.getResources().getQuantity() + 1);
@@ -1278,6 +1682,10 @@ public class PlayerBoardController extends GenericController {
         }
     }
 
+    /**
+     * Empties the shelf given by parameter
+     * @param shelf Shelf to empty
+     */
     private void resetShelf(Shelf shelf) {
         if(!shelf.isLeader()) {
             shelf.setResourceType(ResourceType.WILDCARD);
@@ -1286,10 +1694,19 @@ public class PlayerBoardController extends GenericController {
         shelf.getResources().setQuantity(0);
     }
 
+    /**
+     * Adds quantity to place to the resource's label given by parameter
+     * @param resourceType Resource's type to place
+     * @param quantity Quantity amount to place
+     */
     private void addQuantity(ResourceType resourceType, int quantity){
         setResToPlaceQuantity(resourceType, getResToPlaceQuantity(resourceType) + quantity);
     }
 
+    /**
+     * Sets to null al the imageViews of the shelf which level is given by parameter
+     * @param level Level of the shelf to reset
+     */
     private void resetShelfImageView(int level){
         switch (level){
             case(1):
@@ -1308,19 +1725,23 @@ public class PlayerBoardController extends GenericController {
         }
     }
 
+    /**
+     * Sets to null all the shelves' imagesViews
+     */
     private void resetShelvesImageView(){
-        shelfResL1_1_imageView.setImage(null);
-        shelfResL2_1_imageView.setImage(null);
-        shelfResL2_2_imageView.setImage(null);
-        shelfResL3_1_imageView.setImage(null);
-        shelfResL3_2_imageView.setImage(null);
-        shelfResL3_3_imageView.setImage(null);
+        resetShelfImageView(1);
+        resetShelfImageView(2);
+        resetShelfImageView(3);
         shelfLeader1_1_imageView.setImage(null);
         shelfLeader1_2_imageView.setImage(null);
         shelfLeader2_1_imageView.setImage(null);
         shelfLeader2_2_imageView.setImage(null);
     }
 
+    /**
+     * Checks if there are no resources in the warehouse
+     * @return Returns true if it's empty, false otherwise
+     */
     private boolean warehouseIsEmpty(){
         if(shelves==null || shelves.isEmpty())
             shelves=getGUI().getWarehouseShelvesCopy();
@@ -1333,6 +1754,9 @@ public class PlayerBoardController extends GenericController {
         return true;
     }
 
+    /**
+     * Resets to 0 all the labels to place resources
+     */
     private void resetResLabels(){
         setResToPlaceQuantity(ResourceType.COIN,0);
         setResToPlaceQuantity(ResourceType.SERVANT,0);
@@ -1340,6 +1764,9 @@ public class PlayerBoardController extends GenericController {
         setResToPlaceQuantity(ResourceType.STONE,0);
     }
 
+    /**
+     * Shows all the checkBoxes if their cards are active
+     */
     public void showCheckBoxes(){
         basicProduction_checkBox.setVisible(true);
         if(space1L1_imageView.getImage()!=null)
@@ -1351,6 +1778,9 @@ public class PlayerBoardController extends GenericController {
         showLeaderCheckBoxes();
     }
 
+    /**
+     * Shows leaders' checkBoxes if their cards are active
+     */
     private void showLeaderCheckBoxes(){
         leader1_checkBox.setVisible(handLeader1_imageView.getImage() != null && boardLeader1_imageView.getImage() == null ||
                 isFirstLeaderProduction);
@@ -1358,6 +1788,9 @@ public class PlayerBoardController extends GenericController {
                 isSecondLeaderProduction);
     }
 
+    /**
+     * Hides all the checkBoxes
+     */
     public void hideCheckBoxes(){
         basicProduction_checkBox.setVisible(false);
         devSpace1_checkBox.setVisible(false);
@@ -1367,6 +1800,9 @@ public class PlayerBoardController extends GenericController {
         leader2_checkBox.setVisible(false);
     }
 
+    /**
+     * Unselects all the checkBoxes
+     */
     private void resetCheckBoxes(){
         basicProduction_checkBox.setSelected(false);
         devSpace1_checkBox.setSelected(false);
@@ -1376,6 +1812,10 @@ public class PlayerBoardController extends GenericController {
         leader2_checkBox.setSelected(false);
     }
 
+    /**
+     * Checks if there are selected checkBoxes
+     * @return Returns true if there are selected checkBoxes, false otherwise
+     */
     private boolean checkSelectedCheckBoxes(){
         return basicProduction_checkBox.isSelected() || devSpace1_checkBox.isSelected() ||
                 devSpace2_checkBox.isSelected() || devSpace3_checkBox.isSelected() ||
@@ -1383,7 +1823,10 @@ public class PlayerBoardController extends GenericController {
                 isSecondLeaderProduction && leader2_checkBox.isSelected();
     }
 
-    private void getActivatedProductions(){
+    /**
+     * Controls which productions have been activated
+     */
+    private void controlActivatedProductions(){
         List<Production> activatedProductions = new ArrayList<>();
         int specialProductionSize =  getGUI().getLeaderProductions().size();
         if (basicProduction_checkBox.isSelected())
@@ -1401,6 +1844,11 @@ public class PlayerBoardController extends GenericController {
         resolveWildcard(activatedProductions);
     }
 
+    /**
+     * Controls if there are productions' wildcards and calls method accordingly
+     * Calls sendCanActivateProductionsMessage GUI's method if there are no wildcards, otherwise shows the popUp scene
+     * @param productions
+     */
     private void resolveWildcard(List<Production> productions){
         List<Resource> consumedResolved = new ArrayList<>(), producedResolved = new ArrayList<>(),
                 consumedWildcards = new ArrayList<>(), producedWildcards = new ArrayList<>();
@@ -1430,42 +1878,55 @@ public class PlayerBoardController extends GenericController {
         else getGUI().sendCanActivateProductionsMessage(productions);
     }
 
-    private void showButtons(boolean isMyBoard){
-        activateProductions_button.setVisible(isMyBoard);
-        endTurn_button.setVisible(isMyBoard);
-        otherActions_label.setVisible(isMyBoard);
-        separator1.setVisible(isMyBoard);
-        viewOpponents_button.setVisible(isMyBoard);
-        rearrangeWarehouse_button.setVisible(isMyBoard);
-        market_button.setVisible(isMyBoard);
-        decks_button.setVisible(isMyBoard);
-        activeLeaderCard_button.setVisible(isMyBoard);
-        discardLeaderCard_button.setVisible(isMyBoard);
-        resToPlace_label.setVisible(isMyBoard);
-        separator2.setVisible(isMyBoard);
-        coinToPlace_imageView.setVisible(isMyBoard);
-        resToPlaceCoin_label.setVisible(isMyBoard);
-        servantToPlace_imageView.setVisible(isMyBoard);
-        resToPlaceServant_label.setVisible(isMyBoard);
-        shieldToPlace_imageView.setVisible(isMyBoard);
-        resToPlaceShield_label.setVisible(isMyBoard);
-        stoneToPlace_imageView.setVisible(isMyBoard);
-        resToPlaceStone_label.setVisible(isMyBoard);
-        leftArrow_button.setVisible(!isMyBoard);
-        rightArrow_button.setVisible(!isMyBoard);
-        goBoard_button.setVisible(!isMyBoard);
+    /**
+     * Shows or hide buttons on the playerBoard accordingly to the value given by parameter
+     * @param isLocalBoard True if it's local playerBoard, false otherwise
+     */
+    private void showButtons(boolean isLocalBoard){
+        activateProductions_button.setVisible(isLocalBoard);
+        endTurn_button.setVisible(isLocalBoard);
+        otherActions_label.setVisible(isLocalBoard);
+        separator1.setVisible(isLocalBoard);
+        viewOpponents_button.setVisible(isLocalBoard);
+        rearrangeWarehouse_button.setVisible(isLocalBoard);
+        market_button.setVisible(isLocalBoard);
+        decks_button.setVisible(isLocalBoard);
+        activateLeaderCard_button.setVisible(isLocalBoard);
+        discardLeaderCard_button.setVisible(isLocalBoard);
+        resToPlace_label.setVisible(isLocalBoard);
+        separator2.setVisible(isLocalBoard);
+        coinToPlace_imageView.setVisible(isLocalBoard);
+        resToPlaceCoin_label.setVisible(isLocalBoard);
+        servantToPlace_imageView.setVisible(isLocalBoard);
+        resToPlaceServant_label.setVisible(isLocalBoard);
+        shieldToPlace_imageView.setVisible(isLocalBoard);
+        resToPlaceShield_label.setVisible(isLocalBoard);
+        stoneToPlace_imageView.setVisible(isLocalBoard);
+        resToPlaceStone_label.setVisible(isLocalBoard);
+        leftArrow_button.setVisible(!isLocalBoard);
+        rightArrow_button.setVisible(!isLocalBoard);
+        goBoard_button.setVisible(!isLocalBoard);
         leaders_label.setVisible(true);
         separator3.setVisible(true);
     }
 
+    /**
+     * Shows previous opponent's board
+     */
     public void showPrevPlayer() {
         viewOpponent(false);
     }
 
+    /**
+     * Shows next opponent's board
+     */
     public void showNextPlayer() {
         viewOpponent(true);
     }
 
+    /**
+     * Goes back to local playerBoard restoring buttons
+     */
     public void goBoard() {
         showButtons(true);
         leftArrow_button.setDisable(true);
@@ -1487,6 +1948,10 @@ public class PlayerBoardController extends GenericController {
         }
     }
 
+    /**
+     * Updates leaders to show in the opponent's view
+     * @param playerBoard Opponent's playerBoard to show
+     */
     private void updateOpponentLeaderBoard(PlayerBoardView playerBoard){
         resetLeaderBoard();
         Deck leaderCards = playerBoard.getLeaderBoard().getBoard();
@@ -1506,6 +1971,12 @@ public class PlayerBoardController extends GenericController {
         }
     }
 
+    /**
+     * Updates leader's shelves to show in the opponent's view
+     * @param resourceType Resource's type to show
+     * @param shelves List of opponent's warehouse's shelf
+     * @param leaderPosition Position of the leader on the board
+     */
     private void setOpponentLeaderShelf(ResourceType resourceType, List<Shelf> shelves, int leaderPosition){
         for(Shelf shelf : shelves){
             Image image = new Image(getClass().getResourceAsStream("/imgs/res/"+ resourceType + ".png"));

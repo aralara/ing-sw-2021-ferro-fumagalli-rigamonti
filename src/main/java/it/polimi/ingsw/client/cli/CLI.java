@@ -750,11 +750,11 @@ public class CLI extends ClientController {
     }
 
     /**
-     * TODO: scrivere javaadoc
-     * @param shelves
-     * @param toPlace
-     * @param selectedShelf
-     * @param resourceToPlace
+     * Manages the placement of the specified resources on the empty shelf given by parameter
+     * @param shelves List of shelves to control
+     * @param toPlace List of resources to place
+     * @param selectedShelf Shelf where to place the resources
+     * @param resourceToPlace Resources' type
      */
     private void emptyShelfManagement(List<Shelf> shelves, List<Resource> toPlace,
                                       Shelf selectedShelf, Resource resourceToPlace) {
@@ -781,11 +781,11 @@ public class CLI extends ClientController {
     }
 
     /**
-     * TODO: scrivere javadoc
-     * @param shelves
-     * @param toPlace
-     * @param selectedShelf
-     * @param resourceToPlace
+     * Manages the placement on the shelf with the same resources' type of the resources given by parameters
+     * @param shelves List of shelves to control
+     * @param toPlace List of resources to place
+     * @param selectedShelf Shelf where to place the resources
+     * @param resourceToPlace Resources' type
      */
     private void sameResTypeShelfManagement(List<Shelf> shelves, List<Resource> toPlace,
                                             Shelf selectedShelf, Resource resourceToPlace) {
@@ -809,11 +809,11 @@ public class CLI extends ClientController {
     }
 
     /**
-     * TODO: scrivere javadoc
-     * @param shelves
-     * @param toPlace
-     * @param selectedShelf
-     * @param resourceToPlace
+     * Manages the placement on the shelf with different resources' type of the resources given by parameters
+     * @param shelves List of shelves to control
+     * @param toPlace List of resources to place
+     * @param selectedShelf Shelf where to place the resources
+     * @param resourceToPlace Resources' type
      */
     private void differentResTypeShelfManagement(List<Shelf> shelves, List<Resource> toPlace,
                                                  Shelf selectedShelf, Resource resourceToPlace) {
@@ -881,10 +881,10 @@ public class CLI extends ClientController {
     }
 
     /**
-     * TODO: scrivere javadoc
-     * @param shelves
-     * @param resource
-     * @return
+     * Checks if the configuration of the resources given by parameter is rearrangeable among the warehouse's shelves
+     * @param shelves List of shelves to control
+     * @param resource Resources to control
+     * @return Returns true if it's rearrangeable, false otherwise
      */
     private boolean isShelfRearrangeable(List<Shelf> shelves, Resource resource) {
         Shelf shelfWithResources = getShelfWithSameResource(shelves, resource.getResourceType());
@@ -906,13 +906,13 @@ public class CLI extends ClientController {
     }
 
     /**
-     * TODO: scrivere javadoc
-     * @param warehouse
-     * @param shelves
-     * @param resources
-     * @param toPlace
-     * @param toDiscard
-     * @param canDiscard
+     * Restores resources in the warehouse and resets attributes
+     * @param warehouse Warehouse where restore the resources from
+     * @param shelves List of shelves to restore
+     * @param resources List where restore the "resources to place" from
+     * @param toPlace List of resources to place
+     * @param toDiscard List of resources to discard
+     * @param canDiscard True if there are resources that can be discarded, false otherwise
      */
     private void restoreConfiguration(WarehouseView warehouse, List<Shelf> shelves, List<Resource> resources,
                                       List<Resource> toPlace, List<Resource> toDiscard, boolean canDiscard) {
