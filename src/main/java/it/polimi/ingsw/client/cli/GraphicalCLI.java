@@ -20,6 +20,8 @@ import static it.polimi.ingsw.utils.Constants.MARKET_ROW_SIZE;
 
 public class GraphicalCLI {
 
+    private static final String CHOICE_DELIMITERS = " ,.:;-_/\\";
+
     public static final String RESET = "\033[0m";  // Text Reset
 
     public static final String BLACK_BRIGHT = "\033[0;90m";  // BLACK
@@ -167,18 +169,24 @@ public class GraphicalCLI {
     }
 
     /**
-     * Generic method to let the user choose an object from a list of possible options
+     * Generic method to let the user choose multiple objects from a list of possible options
      * @param <T> Type of the objects
      * @param list List of possible options
      * @param printObject Consumer function that is called to visualize a single option
      * @param printMessage Runnable function that is called to visualize the first message
      * @param printInput Runnable function that is called to visualize the input message
      * @param printOnlyOption Runnable function that is called to visualize the only option notification
-     * @return Returns the object chosen by the user
+     * @param multiChoice True if the user is able to select multiple options at once, separated by CHOICE_DELIMITERS
+     * @param minChoice If multiChoice is true, minimum number of possible choices (0 or lower for no limit)
+     * @param maxChoice If multiChoice is true, maximum number of possible choices (0 or lower for no limit)
+     * @param maxCopy If multiChoice is true, maximum number of possible copies of the same object (0 or lower
+     *                for no limit)
+     * @return Returns the objects chosen by the user
      */
-    public <T> T objectOptionSelector(List<T> list, Consumer<T> printObject,
+    public <T> List<T> objectOptionSelector(List<T> list, Consumer<T> printObject,
                                       Runnable printMessage,
-                                      Runnable printInput, Runnable printOnlyOption) {
+                                      Runnable printInput, Runnable printOnlyOption,
+                                      boolean multiChoice, int minChoice, int maxChoice, int maxCopy) {
         if(list.size() > 0) {
             if(list.size() == 1) {
                 T opt = list.get(0);
@@ -187,9 +195,9 @@ public class GraphicalCLI {
                 else
                     printString("Only one option available: ");
                 printObject.accept(opt);
-                return opt;
+                return Collections.singletonList(opt);
             }
-            int index;
+            List<Integer> indexes;
             if(printMessage != null)
                 printMessage.run();
             else
@@ -200,11 +208,40 @@ public class GraphicalCLI {
                     printInput.run();
                 else
                     printString("Choose a valid option: ");
-                index = getNextInt() - 1;
-            } while(index < 0 || index >= list.size());
-            return list.get(index);
+                if(multiChoice)
+                    try {
+                        indexes = parseMultiChoice(getNextLine());
+                    } catch(NumberFormatException e) { indexes = null; }
+                else
+                    indexes = Collections.singletonList(getNextInt() - 1);
+            } while(indexes == null ||                                                                      //Indexes are not empty
+                    (multiChoice && indexes.size() < minChoice) ||                                          //Number of choices greater or equal than minimum
+                    (multiChoice && maxChoice > 0 && indexes.size() > maxChoice) ||                         //Number of choices lower or equal than maximum
+                    (multiChoice && maxCopy > 0 && indexes.stream()
+                            .collect(Collectors.groupingBy(Integer::intValue, Collectors.counting()))
+                            .values().stream().allMatch(count -> count > maxCopy)) ||                       //Number of copies lower or equal than maximum
+                    indexes.stream().anyMatch(index -> index < 0 || index >= list.size()));                 //Indexes are part of the list
+            return indexes.stream().map(list::get).collect(Collectors.toList());
         }
         return null;
+    }
+
+    /**
+     * Parses an input string in order to get a list of integers separated by CHOICE_DELIMITERS, 1 is subtracted from
+     * all the numbers
+     * @param input Input string to parse
+     * @return Returns a list of integers containing all the separated inputs
+     * @throws NumberFormatException Throws a NumberFormatException if an input isn't an integer
+     */
+    private List<Integer> parseMultiChoice(String input) throws NumberFormatException {
+        List<Integer> indexes = new ArrayList<>();
+        StringTokenizer tokenizer = new StringTokenizer(input, CHOICE_DELIMITERS);
+        while(tokenizer.hasMoreTokens()) {
+            String token = tokenizer.nextToken();
+            if (token != null && !token.equals(""))
+                indexes.add(Integer.parseInt(token) - 1);
+        }
+        return indexes;
     }
 
     /**
