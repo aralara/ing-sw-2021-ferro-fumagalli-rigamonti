@@ -10,6 +10,7 @@ import it.polimi.ingsw.server.model.faith.FaithTrack;
 import it.polimi.ingsw.server.model.market.Market;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.server.view.VirtualView;
+import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.listeners.*;
 import it.polimi.ingsw.utils.listeners.server.*;
 
@@ -107,15 +108,25 @@ public abstract class Game implements Serializable {
      * @param player Index of the player discarding cards
      * @param leaderCards List of leader cards to discard
      * @param setup If the setup flag is false, for each leader discarded 1 faith is added to their owner
+     * @return Returns true if the cards can be discarded, false otherwise
      */
-    public void discardLeaders(int player, List<LeaderCard> leaderCards, boolean setup) {
-        for(LeaderCard leaderCard : leaderCards){
-            playerBoards.get(player).getLeaderBoard().discardLeaderHand(leaderCard);
+    public boolean discardLeaders(int player, List<LeaderCard> leaderCards, boolean setup) {
+        PlayerBoard playerBoard = playerBoards.get(player);
+        List<Card> playerHand = playerBoard.getLeaderBoard().getHand().getCards();
+        if((setup && playerHand.size() != Constants.INITIAL_LEADER_CARDS.value()) ||                    //Checks if the discardLeaders is called during setup
+                (setup && leaderCards.size() != 2) ||                                                   //Checks (assuming setup) if the player discarded 2 cards
+                playerHand.stream().allMatch(c -> leaderCards.stream().anyMatch(lc -> lc.equals(c))) || //Checks if the discarded cards are in the player's hand
+                leaderCards.stream().allMatch(new HashSet<>()::add)                                     //Checks if the player wants to discard the same card
+        )
+            return false;
+        for(LeaderCard leaderCard : leaderCards) {
+            playerBoard.getLeaderBoard().discardLeaderHand(leaderCard);
             if(!setup) {
-                playerBoards.get(player).getFaithBoard().addFaith(1);
+                playerBoard.getFaithBoard().addFaith(1);
                 checkFaith();
             }
         }
+        return true;
     }
 
     /**
@@ -150,7 +161,7 @@ public abstract class Game implements Serializable {
      * @param extra List of resources to be discarded and faith to be added
      * @return Returns true if the resources are added correctly, false otherwise
      */
-    public boolean addResourcesToWarehouse(int player, List<Shelf> shelves, List<Resource> extra) {
+    public boolean addResourcesToWarehouse(int player, List<Shelf> shelves, List<Resource> extra) { //TODO: controllare che il giocatore possa aggiungerle dato lo stato corrente (dopo aver preso dal market o dopo aver equalizzato)
         PlayerBoard playerboard = playerBoards.get(player);
         boolean success = playerboard.getWarehouse().changeConfiguration(shelves);
         if(extra.size() > 0 && success) {
@@ -216,26 +227,11 @@ public abstract class Game implements Serializable {
      * @return Returns true if the card can be added, false otherwise
      */
     public boolean canBuyDevCard(int player, DevelopmentCard card, int space) {
-        List<Resource> temp = new ArrayList<>();
-        for (Resource resource : card.getCost())
-             temp.add(resource.makeClone());
-        applyDiscount(player, temp);
-        return playerBoards.get(player).getDevelopmentBoard().checkDevCardAddable(card, space) &&
+        PlayerBoard playerBoard = playerBoards.get(player);
+        List<Resource> cost = Storage.calculateDiscount(card.getCost(), playerBoard.getAbilityDiscounts());
+        return playerBoard.getDevelopmentBoard().checkDevCardAddable(card, space) &&
                 Storage.checkContainedResources(playerBoards.get(player).createResourceStock(),
-                        Storage.mergeResourceList(temp));
-        //TODO: controllo lo sconto alla dev card
-    }
-
-    //TODO: da testare!!
-    public List<Resource> applyDiscount(int player, List<Resource> resources){
-        for(ResourceType resourceType : playerBoards.get(player).getAbilityDiscounts()){
-            for (Resource resource : resources)
-                if(resource.getResourceType() == resourceType){
-                    resource.setQuantity(resource.getQuantity()-1);
-                    break;
-                }
-        }
-        return resources;
+                        Storage.mergeResourceList(cost));
     }
 
     /**
@@ -249,8 +245,15 @@ public abstract class Game implements Serializable {
      */
     public boolean buyDevCard(int player, DevelopmentCard card, int space, List<RequestResources> requests) {
         PlayerBoard playerBoard = playerBoards.get(player);
+        List<Resource> totalRequests = new ArrayList<>();
+        List<Resource> cost = Storage.calculateDiscount(card.getCost(), playerBoard.getAbilityDiscounts());
+        requests.forEach(rr -> totalRequests.addAll(rr.getList()));
         if(!playerBoard.isTurnPlayed())
-            if(playerBoard.buyDevCard(card, space, requests)) {
+            if(canBuyDevCard(player, card, space) &&                                                    //Basic checks
+                    Storage.checkContainedResources(Storage.mergeResourceList(cost), totalRequests) &&  //Checks if the resources in the requests can buy the card
+                    developmentDecks.stream().anyMatch(dd -> dd.getDeck().get(0).equals(card)) &&       //Checks if the selected card can be taken from the decks
+                    playerBoard.buyDevCard(card, space, requests)                                       //Buys development card if the player has enough resources
+            ) {
                 playerBoard.setTurnPlayed(true);
                 return removeDevCard(card.getColor(), card.getLevel());
             }
@@ -272,21 +275,29 @@ public abstract class Game implements Serializable {
      * If the resources contained in the requests match the actual available resources detained by the player,
      * activates the productions for said player by adding the produced resources to their
      * @param player Index of the player to activate productions for
-     * @param produced List of resources to produce
+     * @param productions List of productions to activate
      * @param requests List of requests containing resource quantity and location for the spent resources
      * @return Returns true if the productions can be activated, false otherwise
      */
-    public boolean activateProductions(int player, List<Resource> produced, List<RequestResources> requests) {
+    public boolean activateProductions(int player, List<Production> productions, List<RequestResources> requests) {
         PlayerBoard playerBoard = playerBoards.get(player);
+        List<Resource> totalRequests = new ArrayList<>();
+        List<Resource> consumed = new ArrayList<>(), produced = new ArrayList<>();
+        productions.stream().map(Production::getConsumed).forEach(l -> l.forEach(r -> consumed.add(r.makeClone())));
+        productions.stream().map(Production::getProduced).forEach(l -> l.forEach(r -> produced.add(r.makeClone())));
         if(!playerBoard.isTurnPlayed()) {
-            if(playerBoard.canTakeFromStorages(requests)) {
+            if(canActivateProductions(player, consumed) &&                                                  //Basic checks
+                    Storage.checkContainedResources(Storage.mergeResourceList(consumed), totalRequests) &&  //Checks if the resources in the requests can activate the production
+                    //TODO: controllo se le produzioni possono essere state create da questa playerboard
+                    playerBoard.canTakeFromStorages(requests)                                               //Activates productions if the player has enough resources
+            ) {
                 playerBoard.getFaithBoard().takeFaithFromResources(produced);
                 checkFaith();
                 playerBoard.setTurnPlayed(true);
             }
             return playerBoards.get(player).activateProductions(produced, requests);
         }
-        return false;   //TODO: eccezione?
+        return false;
     }
 
     /**

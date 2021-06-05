@@ -53,8 +53,8 @@ public class Controller {
         game.addListeners(views);
     }
 
-    public void discardLeaders(String player, List<LeaderCard> leaderCards, boolean setup) {
-        game.discardLeaders(game.getPlayerIndexOf(player), leaderCards, setup);
+    public boolean discardLeaders(String player, List<LeaderCard> leaderCards, boolean setup) {
+        return game.discardLeaders(game.getPlayerIndexOf(player), leaderCards, setup);
     }
 
     public boolean addResourcesToWarehouse(String player, List<Shelf> shelves, List<Resource> extra) {
@@ -73,10 +73,6 @@ public class Controller {
         return game.canBuyDevCard(game.getPlayerIndexOf(player), card, space);
     }
 
-    public List<Resource> applyDiscount(String player, List<Resource> resources) {
-        return game.applyDiscount(game.getPlayerIndexOf(player), resources);
-    }
-
     public boolean buyDevCard(String player, DevelopmentCard card, int space, List<RequestResources> requests) {
         return game.buyDevCard(game.getPlayerIndexOf(player), card, space, requests);
     }
@@ -85,8 +81,8 @@ public class Controller {
         return game.canActivateProductions(game.getPlayerIndexOf(player), consumed);
     }
 
-    public boolean activateProductions(String player, List<Resource> produced, List<RequestResources> requests) {
-        return game.activateProductions(game.getPlayerIndexOf(player), produced, requests);
+    public boolean activateProductions(String player, List<Production> productions, List<RequestResources> requests) {
+        return game.activateProductions(game.getPlayerIndexOf(player), productions, requests);
     }
 
     public Map<String, List<Resource>> getResourcesToEqualize() {
