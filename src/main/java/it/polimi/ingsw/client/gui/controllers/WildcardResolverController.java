@@ -240,7 +240,6 @@ public class WildcardResolverController extends GenericController {
         if(!isFirstPhase && areResolved){
             List<Production> productions = new ArrayList<>();
             productions.add(new Production(consumedResolved, producedResolved));
-            //restore();
             isFirstPhase=false;
             isProducedAction=false;
             areResolved=false;

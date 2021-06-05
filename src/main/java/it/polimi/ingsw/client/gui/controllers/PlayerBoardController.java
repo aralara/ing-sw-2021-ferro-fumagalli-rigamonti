@@ -1145,18 +1145,17 @@ public class PlayerBoardController extends GenericController {
         boardLeader1_imageView.setImage(null);
         boardLeader2_imageView.setImage(null);
         for(Card card : leaderCards) {
-            LeaderCard currentLeaderCard = new LeaderCard();
             if (boardLeader1_imageView.getImage() == null && handLeader1_imageView.getImage() == null) {
                 boardLeader1_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
                         + card.getID() + ".png")));
-                isFirstLeaderProduction = currentLeaderCard.getAbility() instanceof AbilityProduction;
-                isFirstLeaderShelf = currentLeaderCard.getAbility() instanceof AbilityWarehouse;
+                isFirstLeaderProduction = ((LeaderCard)card).getAbility() instanceof AbilityProduction;
+                isFirstLeaderShelf = ((LeaderCard)card).getAbility() instanceof AbilityWarehouse;
                 enableLeaderAbility();
             } else if (boardLeader2_imageView.getImage() == null && handLeader2_imageView.getImage() == null) {
                 boardLeader2_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
                         + card.getID() + ".png")));
-                isSecondLeaderProduction = currentLeaderCard.getAbility() instanceof AbilityProduction;
-                isSecondLeaderShelf = currentLeaderCard.getAbility() instanceof AbilityWarehouse;
+                isSecondLeaderProduction = ((LeaderCard)card).getAbility() instanceof AbilityProduction;
+                isSecondLeaderShelf = ((LeaderCard)card).getAbility() instanceof AbilityWarehouse;
                 enableLeaderAbility();
             }
         }
