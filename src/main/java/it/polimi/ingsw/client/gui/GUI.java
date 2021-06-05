@@ -23,6 +23,7 @@ import javafx.scene.control.Alert;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.stream.Collectors;
 
@@ -96,6 +97,11 @@ public class GUI extends ClientController {
         return success;
     }
 
+
+    public void callPlatformRunLater(Runnable r){
+        Platform.runLater(r);
+    }
+
     @Override
     public void run() {
         LinkedBlockingQueue<ServerActionMessage> actionQueue = getMessageHandler().getActionQueue();
@@ -120,7 +126,7 @@ public class GUI extends ClientController {
     public void ackNotification(String message, boolean visual) {
         //messaggio ricevuto da ack
         if(visual)
-            Platform.runLater(() -> guiApplication.getController(guiApplication.getActiveSceneName()).
+            callPlatformRunLater(() -> guiApplication.getController(guiApplication.getActiveSceneName()).
                     showAlert(Alert.AlertType.INFORMATION,"Notification","Event notification", message));
     }
 
@@ -132,11 +138,11 @@ public class GUI extends ClientController {
     @Override
     public void askNewLobby(int lobbySize, int waitingPlayers) {
         if (lobbySize == waitingPlayers){
-            Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.GAME_MODE_MENU));
+            callPlatformRunLater(() -> guiApplication.setActiveScene(SceneNames.GAME_MODE_MENU));
         }
         else {
             setNumberOfPlayers(lobbySize);
-            Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.MULTI_PLAYER_WAITING));
+            callPlatformRunLater(() -> guiApplication.setActiveScene(SceneNames.MULTI_PLAYER_WAITING));
         }
         this.waitingPlayers = waitingPlayers;
     }
@@ -148,11 +154,11 @@ public class GUI extends ClientController {
 
     @Override
     public void notifyNewPlayer(String nickname) {
-        Platform.runLater(() -> ((SetupController)guiApplication.
+        callPlatformRunLater(() -> ((SetupController)guiApplication.
                 getController(SceneNames.MULTI_PLAYER_WAITING)).notifyNewPlayer(nickname));
 
         if(getNumberOfPlayers() == ++this.waitingPlayers){
-            Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.LOADING));
+            callPlatformRunLater(() -> guiApplication.setActiveScene(SceneNames.LOADING));
         }
     }
 
@@ -163,25 +169,25 @@ public class GUI extends ClientController {
             List<Integer> listID = new ArrayList<>();
             for(Card card : getLocalPlayerBoard().getLeaderBoard().getHand())
                 listID.add(card.getID());
-            Platform.runLater(() -> ((FirstPhaseController)guiApplication.
+            callPlatformRunLater(() -> ((FirstPhaseController)guiApplication.
                     getController(SceneNames.LEADER_CHOICE_MENU)).setLeaders(listID));
             if (getLocalPlayerBoard().isInkwell()) {
-                Platform.runLater(() -> ((PlayerBoardController) guiApplication.
+                callPlatformRunLater(() -> ((PlayerBoardController) guiApplication.
                         getController(SceneNames.PLAYER_BOARD)).enableInkwell());
             }
         }catch(NotExistingNicknameException e){
             e.printStackTrace();
         }
-        Platform.runLater(() -> ((PlayerBoardController)guiApplication.
+        callPlatformRunLater(() -> ((PlayerBoardController)guiApplication.
                 getController(SceneNames.PLAYER_BOARD)).disableActivateProductionsAction());
-        Platform.runLater(() -> ((PlayerBoardController) guiApplication.
+        callPlatformRunLater(() -> ((PlayerBoardController) guiApplication.
                 getController(SceneNames.PLAYER_BOARD)).disableActivateProductionsAction());
-        Platform.runLater(() -> ((MarketBoardController) guiApplication.
+        callPlatformRunLater(() -> ((MarketBoardController) guiApplication.
                 getController(SceneNames.MARKET_BOARD)).disableMarketAction());
-        Platform.runLater(() -> ((DecksBoardController) guiApplication.
+        callPlatformRunLater(() -> ((DecksBoardController) guiApplication.
                 getController(SceneNames.DECKS_BOARD)).disableBuyCardAction());
-        Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.PLAYER_BOARD));
-        Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.LEADER_CHOICE_MENU));
+        callPlatformRunLater(() -> guiApplication.setActiveScene(SceneNames.PLAYER_BOARD));
+        callPlatformRunLater(() -> guiApplication.setActiveScene(SceneNames.LEADER_CHOICE_MENU));
     }
 
     @Override
@@ -194,18 +200,18 @@ public class GUI extends ClientController {
     public void notifyStartTurn(String nickname) {
         if(nickname.equals(getNickname())) {
             if(getLorenzoFaith()==-1)
-                Platform.runLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD)).
+                callPlatformRunLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD)).
                     showAlert(Alert.AlertType.INFORMATION, "It's your turn",
                             "Now you can play your actions", ""));
-            Platform.runLater(() -> ((PlayerBoardController) guiApplication.
+            callPlatformRunLater(() -> ((PlayerBoardController) guiApplication.
                     getController(SceneNames.PLAYER_BOARD)).setIsPlayerTurn(true));
         }
         else {
             if(getLorenzoFaith()==-1)
-                Platform.runLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD)).
+                callPlatformRunLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD)).
                     showAlert(Alert.AlertType.INFORMATION,"Wait your turn",
                              "Now it's "+nickname+"'s turn", ""));
-            Platform.runLater(() -> ((PlayerBoardController) guiApplication.
+            callPlatformRunLater(() -> ((PlayerBoardController) guiApplication.
                     getController(SceneNames.PLAYER_BOARD)).setIsPlayerTurn(false));
         }
     }
@@ -220,18 +226,18 @@ public class GUI extends ClientController {
             controlResourcesToPlace(resources);
         else if(availableAbilities!=null && availableAbilities.size()>1){
             int finalCountWildcard = countWildcard;
-            Platform.runLater(() -> ((WildcardResolverController) guiApplication.
+            callPlatformRunLater(() -> ((WildcardResolverController) guiApplication.
                     getController(SceneNames.RESOURCE_CHOICE_MENU)).
                     setChooseResources_label("Choose " + finalCountWildcard +" resources to resolve white marbles"));
-            Platform.runLater(() -> ((WildcardResolverController) guiApplication.
+            callPlatformRunLater(() -> ((WildcardResolverController) guiApplication.
                     getController(SceneNames.RESOURCE_CHOICE_MENU)).setTotalResources(finalCountWildcard));
-            Platform.runLater(() -> ((WildcardResolverController) guiApplication.
+            callPlatformRunLater(() -> ((WildcardResolverController) guiApplication.
                     getController(SceneNames.RESOURCE_CHOICE_MENU)).setIsFirstPhase(false));
-            Platform.runLater(() -> ((WildcardResolverController) guiApplication.
+            callPlatformRunLater(() -> ((WildcardResolverController) guiApplication.
                     getController(SceneNames.RESOURCE_CHOICE_MENU)).setIsMarbleAction(true, resources));
-            Platform.runLater(() -> ((WildcardResolverController) guiApplication.
+            callPlatformRunLater(() -> ((WildcardResolverController) guiApplication.
                     getController(SceneNames.RESOURCE_CHOICE_MENU)).enableButtons(availableAbilities));
-            Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.RESOURCE_CHOICE_MENU));
+            callPlatformRunLater(() -> guiApplication.setActiveScene(SceneNames.RESOURCE_CHOICE_MENU));
         } else {
             if (availableAbilities != null && availableAbilities.size() == 1) {
                 for (Resource resource : resources) {
@@ -246,20 +252,20 @@ public class GUI extends ClientController {
 
     @Override
     public void notifyLorenzoCard(LorenzoCard lorenzoCard) {
-        Platform.runLater(() -> guiApplication.getController(SceneNames.PLAYER_BOARD).showAlert(Alert.AlertType.INFORMATION,
+        callPlatformRunLater(() -> guiApplication.getController(SceneNames.PLAYER_BOARD).showAlert(Alert.AlertType.INFORMATION,
                 "It's Lorenzo's turn", "Lorenzo pulls a card from his deck", lorenzoCard.toString()+
                 "\nNow you can play your actions"));
     }
 
     @Override
     public void notifyLastRound() { //TODO: controllare quante volte arriva
-        Platform.runLater(() -> guiApplication.getController(SceneNames.PLAYER_BOARD).showAlert(Alert.AlertType.INFORMATION,
+        callPlatformRunLater(() -> guiApplication.getController(SceneNames.PLAYER_BOARD).showAlert(Alert.AlertType.INFORMATION,
                 "Notification", "Last round before the game ends!", ""));
     }
 
     @Override
     public void notifyEndGame(List<Player> players) {
-        Platform.runLater(() -> guiApplication.getController(SceneNames.PLAYER_BOARD).showAlert(Alert.AlertType.INFORMATION,
+        callPlatformRunLater(() -> guiApplication.getController(SceneNames.PLAYER_BOARD).showAlert(Alert.AlertType.INFORMATION,
                 "Notification", "The game has ended!", ""));
         RankingController rc = (RankingController) guiApplication.getController(SceneNames.RANKING);
         List<Player> playerRanking = players.stream().sorted(Comparator.comparingInt(
@@ -273,19 +279,19 @@ public class GUI extends ClientController {
         }
         else {
             if(players.get(0).getFinalPosition() == 1) {
-                Platform.runLater(() -> rc.setNames_label(playerRanking.get(0).getNickname()
+                callPlatformRunLater(() -> rc.setNames_label(playerRanking.get(0).getNickname()
                         + "\nLorenzo il Magnifico"));
-                Platform.runLater(() -> rc.setScores_label(Integer.toString(playerRanking.get(0).getTotalVP())));
-                Platform.runLater(() -> rc.setScores_label("-"));
+                callPlatformRunLater(() -> rc.setScores_label(Integer.toString(playerRanking.get(0).getTotalVP())));
+                callPlatformRunLater(() -> rc.setScores_label("-"));
             }
             else {
-                Platform.runLater(() -> rc.setNames_label("Lorenzo il Magnifico\n"
+                callPlatformRunLater(() -> rc.setNames_label("Lorenzo il Magnifico\n"
                         + playerRanking.get(0).getNickname()));
-                Platform.runLater(() -> rc.setScores_label("-"));
-                Platform.runLater(() -> rc.setScores_label(Integer.toString(playerRanking.get(0).getTotalVP())));
+                callPlatformRunLater(() -> rc.setScores_label("-"));
+                callPlatformRunLater(() -> rc.setScores_label(Integer.toString(playerRanking.get(0).getTotalVP())));
             }
         }
-        Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.RANKING));
+        callPlatformRunLater(() -> guiApplication.setActiveScene(SceneNames.RANKING));
     }
 
     @Override
@@ -295,15 +301,15 @@ public class GUI extends ClientController {
 
     @Override
     public void selectDevDecks() {
-        Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.DECKS_BOARD));
-        Platform.runLater(() -> guiApplication.getController(SceneNames.DECKS_BOARD).showAlert(Alert.AlertType.ERROR,
+        callPlatformRunLater(() -> guiApplication.setActiveScene(SceneNames.DECKS_BOARD));
+        callPlatformRunLater(() -> guiApplication.getController(SceneNames.DECKS_BOARD).showAlert(Alert.AlertType.ERROR,
                 "Error", "You can't buy this card and place in the selected space",
                 "Please choose another card or another space"));
     }
 
     @Override
     public void selectProductions() {
-        Platform.runLater(() -> guiApplication.getController(SceneNames.PLAYER_BOARD).showAlert(Alert.AlertType.ERROR,
+        callPlatformRunLater(() -> guiApplication.getController(SceneNames.PLAYER_BOARD).showAlert(Alert.AlertType.ERROR,
                 "Error", "You can't activate the selected productions",
                 "Please choose another configuration"));
     }
@@ -315,9 +321,9 @@ public class GUI extends ClientController {
 
     @Override
     public void chooseDevelopmentStorages(DevelopmentCard cardToBuy, int spaceToPlace, List<Resource> cost) {
-        Platform.runLater(() -> ((DepotsController)guiApplication.getController(SceneNames.DEPOTS))
+        callPlatformRunLater(() -> ((DepotsController)guiApplication.getController(SceneNames.DEPOTS))
                 .setDevCardToBuy(cardToBuy));
-        Platform.runLater(() ->
+        callPlatformRunLater(() ->
                 ((DepotsController)guiApplication.getController(SceneNames.DEPOTS))
                         .setSpaceToPlace(spaceToPlace));
         Storage.aggregateResources(cost);
@@ -332,7 +338,7 @@ public class GUI extends ClientController {
 
     @Override
     public void chooseProductionStorages(List<Production> productionsToActivate, List<Resource> consumed) {
-        Platform.runLater(() -> ((DepotsController)guiApplication.getController(SceneNames.DEPOTS))
+        callPlatformRunLater(() -> ((DepotsController)guiApplication.getController(SceneNames.DEPOTS))
                 .setProductionsToActivate(productionsToActivate));
         chooseStorages(consumed, 2);    //TODO: 1 e 2 possono diventare degli enum
     }
@@ -343,24 +349,24 @@ public class GUI extends ClientController {
      * @param action 1 to resolve development decks' resources or 2 to resolve productions' resources
      */
     private void chooseStorages(List<Resource> resources, int action) {
-        Platform.runLater(() -> ((DepotsController)guiApplication.getController(SceneNames.DEPOTS))
+        callPlatformRunLater(() -> ((DepotsController)guiApplication.getController(SceneNames.DEPOTS))
                 .setResourcesLabels(resources));
-        Platform.runLater(() -> ((DepotsController)guiApplication.getController(SceneNames.DEPOTS))
+        callPlatformRunLater(() -> ((DepotsController)guiApplication.getController(SceneNames.DEPOTS))
                 .setAction(action));
-        Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.DEPOTS));
+        callPlatformRunLater(() -> guiApplication.setActiveScene(SceneNames.DEPOTS));
     }
 
     @Override
     public void setMarket(MarketView market) {
         super.setMarket(market);
-        Platform.runLater(() -> ((MarketBoardController)guiApplication.getController(SceneNames.MARKET_BOARD))
+        callPlatformRunLater(() -> ((MarketBoardController)guiApplication.getController(SceneNames.MARKET_BOARD))
                 .showMarket(market));
     }
 
     @Override
     public void setDevelopmentDecks(DevelopmentDecksView developmentDecks) {
         super.setDevelopmentDecks(developmentDecks);
-        Platform.runLater(() -> ((DecksBoardController)guiApplication.getController(SceneNames.DECKS_BOARD))
+        callPlatformRunLater(() -> ((DecksBoardController)guiApplication.getController(SceneNames.DECKS_BOARD))
                 .showDevelopmentDeck());
     }
 
@@ -388,9 +394,9 @@ public class GUI extends ClientController {
         setNumberOfPlayers(size);
         getMessageHandler().sendClientMessage(new NewLobbyMessage(size));
         if(size==1)
-            Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.LOADING));
+            callPlatformRunLater(() -> guiApplication.setActiveScene(SceneNames.LOADING));
         else
-            Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.MULTI_PLAYER_WAITING));
+            callPlatformRunLater(() -> guiApplication.setActiveScene(SceneNames.MULTI_PLAYER_WAITING));
     }
 
     /**
@@ -427,15 +433,15 @@ public class GUI extends ClientController {
                 title = "Choose one resource to take";
             }
             int finalSize = size;
-            Platform.runLater(() -> ((WildcardResolverController) guiApplication.
+            callPlatformRunLater(() -> ((WildcardResolverController) guiApplication.
                     getController(SceneNames.RESOURCE_CHOICE_MENU)).setTotalResources(finalSize));
-            Platform.runLater(() -> ((WildcardResolverController) guiApplication.
+            callPlatformRunLater(() -> ((WildcardResolverController) guiApplication.
                     getController(SceneNames.RESOURCE_CHOICE_MENU)).setChooseResources_label(title));
-            Platform.runLater(() -> ((WildcardResolverController) guiApplication.
+            callPlatformRunLater(() -> ((WildcardResolverController) guiApplication.
                     getController(SceneNames.RESOURCE_CHOICE_MENU)).setIsFirstPhase(true));
-            Platform.runLater(() -> ((WildcardResolverController) guiApplication.
+            callPlatformRunLater(() -> ((WildcardResolverController) guiApplication.
                     getController(SceneNames.RESOURCE_CHOICE_MENU)).setIsMarbleAction(false, null));
-            Platform.runLater(() -> guiApplication.setActiveScene(SceneNames.RESOURCE_CHOICE_MENU));
+            callPlatformRunLater(() -> guiApplication.setActiveScene(SceneNames.RESOURCE_CHOICE_MENU));
         }
     }
 
@@ -500,7 +506,7 @@ public class GUI extends ClientController {
     public void updateResourcesToPlace(){
         Storage.aggregateResources(resourcesToPlace);
         for(Resource resource : resourcesToPlace){
-            Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
+            callPlatformRunLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
                     .setResToPlaceQuantity(resource.getResourceType(),resource.getQuantity()));
         }
     }
@@ -509,7 +515,7 @@ public class GUI extends ClientController {
      * Updates graphical components of the warehouse
      */
     public void updateWarehouse(){
-        Platform.runLater(() ->
+        callPlatformRunLater(() ->
                 ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD)).showWarehouse());
     }
 
@@ -559,16 +565,16 @@ public class GUI extends ClientController {
 
         boolean faith = checkFaithResource(resourcesToPlace);
         if(!checkOnlyWildcard(resourcesToPlace)) {
-            Platform.runLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD))
+            callPlatformRunLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD))
                     .showAlert(Alert.AlertType.INFORMATION, "Success!", "Resources taken",
                             "Now you need to place each taken resource"));
             updateResourcesToPlace();
         }
         else if(faith) {
-            Platform.runLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD))
+            callPlatformRunLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD))
                     .showAlert(Alert.AlertType.INFORMATION, "Success!", "Resources taken",
                             "Your faith has been updated"));
-            Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
+            callPlatformRunLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
                     .enableButtons());
             try {
                 sendShelvesConfigurationMessage(getLocalPlayerBoard().getWarehouse().getShelves(),new ArrayList<>());
@@ -577,10 +583,10 @@ public class GUI extends ClientController {
             }
         }
         else {
-            Platform.runLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD))
+            callPlatformRunLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD))
                     .showAlert(Alert.AlertType.INFORMATION, "Success!", "Resources taken",
                             "You've nothing to place"));
-            Platform.runLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
+            callPlatformRunLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
                     .enableButtons());
         }
     }
@@ -722,4 +728,5 @@ public class GUI extends ClientController {
         }
         return opponents;
     }
+
 }

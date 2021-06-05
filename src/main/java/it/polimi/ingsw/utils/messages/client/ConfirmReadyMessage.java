@@ -26,6 +26,6 @@ public class ConfirmReadyMessage extends ClientActionMessage {
 
     @Override
     public void doNACKResponseAction(ClientController client) {
-        client.ackNotification("Waiting for other players to finish their setup actions", true);
+        client.ackNotification("Waiting for other players to finish their setup actions", false);
     }
 }
