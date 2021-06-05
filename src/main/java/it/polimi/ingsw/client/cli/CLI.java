@@ -118,7 +118,7 @@ public class CLI extends ClientController {
                     }
                     try {
                         if (br.ready()) {
-                            while(br.ready())   //Clear buffer
+                            while(br.ready())   //Clears the buffer
                                 br.readLine();
                             turnMenu();
                             displayMenu = true;
@@ -175,12 +175,14 @@ public class CLI extends ClientController {
                         s -> graphicalCLI.printlnString(s.getFileName()),
                         () -> graphicalCLI.printlnString("Choose a save file to load or delete: "),
                         null,
-                        () -> graphicalCLI.printString("Found only one save: "));
+                        () -> graphicalCLI.printString("Found only one save: "),
+                        false, -1, -1, -1).get(0);
                 String option = graphicalCLI.objectOptionSelector(List.of("Load", "Delete"),
                         graphicalCLI::printlnString,
                         () -> graphicalCLI.printlnString("Do you want to load it or delete it?"),
                         null,
-                        null);
+                        null,
+                        false, -1, -1, -1).get(0);
                 if (option.equals("Delete"))
                     messageToSend = new SaveInteractionMessage(save, SaveInteractions.DELETE_SAVE);
                 else
@@ -210,17 +212,17 @@ public class CLI extends ClientController {
             graphicalCLI.printMarket(getMarket());
             graphicalCLI.printDevelopmentDeckTop(getDevelopmentDecks().getDecks());
 
-            for(int i = 2; i > 0; i--) {
-                final int index = i;
-                LeaderCard selection = graphicalCLI.objectOptionSelector(leaderHand,
-                        graphicalCLI::printLeaderCard,
-                        () -> graphicalCLI.printlnString("\nYou have to discard "
-                                + index + " leader card(s) from your hand:"),
-                        () -> graphicalCLI.printString("Choose a valid card to discard: "),
-                        null);
-                selected.add(selection);
-                leaderHand.remove(selection);
-            }
+            graphicalCLI.objectOptionSelector(leaderHand,
+                    graphicalCLI::printLeaderCard,
+                    () -> graphicalCLI.printlnString("\nYou have to discard 2 leader cards from your hand:"),
+                    () -> graphicalCLI.printString("Choose 2 cards from your hand: "),
+                    null,
+                    true, 2, 2, 1
+            ).forEach(c -> {
+                selected.add(c);
+                leaderHand.remove(c);
+            });
+
             getMessageHandler().sendClientMessage(new LeaderCardDiscardMessage(selected, true));
         }catch (NotExistingNicknameException e){
             e.printStackTrace();
@@ -232,21 +234,18 @@ public class CLI extends ClientController {
         List<Resource> newResources = new ArrayList<>();
         graphicalCLI.printlnString("");
         for(Resource resource : resources) {
-            if (resource.getResourceType() == ResourceType.FAITH) {
+            if (resource.getResourceType() == ResourceType.FAITH)
                 newResources.add(new Resource(ResourceType.FAITH, resource.getQuantity()));
-            }
-            else if (resource.getResourceType() == ResourceType.WILDCARD) {
-                for (int num = resource.getQuantity(); num > 0; num--) {
-                    final int index = num;
-                    ResourceType resType = graphicalCLI.objectOptionSelector(ResourceType.getRealValues(),
-                            rt -> graphicalCLI.printlnString(rt.toString()),
-                            () -> graphicalCLI.printlnString("You can add " + index +
-                                    " resource(s) to your warehouse since you are not the first player"),
-                            () -> graphicalCLI.printString("Choose a valid resource to add: "),
-                            null);
-                    newResources.add(new Resource(resType, 1));
-                }
-            }
+            else if (resource.getResourceType() == ResourceType.WILDCARD)
+                graphicalCLI.objectOptionSelector(ResourceType.getRealValues(),
+                        rt -> graphicalCLI.printlnString(rt.toString()),
+                        () -> graphicalCLI.printlnString("You can add " + resource.getQuantity() +
+                                " resource(s) to your warehouse since you are not the first player"),
+                        () -> graphicalCLI.printString("Choose " + resource.getQuantity() +
+                                " resource(s) to add: "),
+                        null,
+                        true, resource.getQuantity(), resource.getQuantity(), -1
+                ).forEach(rt -> newResources.add(new Resource(rt, 1)));
         }
         if(newResources.size() > 0) {
             graphicalCLI.printlnString("Now place the resources on the shelves:");
@@ -334,8 +333,9 @@ public class CLI extends ClientController {
                 m -> graphicalCLI.printlnString(m.getTitle()),
                 () -> graphicalCLI.printlnString("MENU:\n"),
                 choiceText,
-                null
-        ).getAction().run();
+                null,
+                false, -1, -1, -1
+        ).get(0).getAction().run();
     }
 
     @Override
@@ -403,7 +403,7 @@ public class CLI extends ClientController {
             graphicalCLI.printStrongbox(getLocalPlayerBoard().getStrongbox());
 
             List<Production> productions = new ArrayList<>();
-            List<Production> productionsToActivate = new ArrayList<>();
+            List<Production> productionsToActivate;
 
             productions.add(getLocalPlayerBoard().getBasicProduction());
             getLocalPlayerBoard().getDevelopmentBoard().getSpaces().stream().filter(d -> !d.isEmpty())
@@ -415,29 +415,14 @@ public class CLI extends ClientController {
             if(idle = graphicalCLI.askGoBack())
                 return;
 
-            boolean endChoice = false;
             if(productions.size() > 0) {
-                do {
-                    graphicalCLI.printString("Choose a production you want to activate by entering its number: ");
-                    int index = graphicalCLI.getNextInt() - 1;
-                    while (index < 0 || index >= productions.size()){
-                        graphicalCLI.printString("Invalid choice, please try again: ");
-                        index = graphicalCLI.getNextInt() - 1;
-                    }
-                    productionsToActivate.add(productions.remove(index));
-                    if(productions.size() <= 0)
-                        endChoice = true;
-                    else {
-                        graphicalCLI.printString("Do you want to activate another production? ");
-                        if (!graphicalCLI.isAnswerYes()) {
-                            endChoice = true;
-                        }
-                        else{
-                            graphicalCLI.printlnString("Available productions:");
-                            graphicalCLI.printNumberedList(productions, graphicalCLI::printProduction);
-                        }
-                    }
-                } while (!endChoice);
+                productionsToActivate = graphicalCLI.objectOptionSelector(productions,
+                        graphicalCLI::printProduction,
+                        () -> graphicalCLI.printlnString("Available productions:"),
+                        () -> graphicalCLI.printString("Choose a production you want to activate " +
+                                "by entering its number: "),
+                        () -> graphicalCLI.printlnString("Found only one production to activate"),
+                        true, 1, productions.size(), 1);
                 productionsToActivate = resolveProductionWildcards(productionsToActivate);
                 if(productionsToActivate.size() > 0)
                     getMessageHandler().sendClientMessage(new CanActivateProductionsMessage(productionsToActivate));
@@ -750,10 +735,10 @@ public class CLI extends ClientController {
     }
 
     /**
-     * Manages the placement of the specified resources on the empty shelf given by parameter
-     * @param shelves List of shelves to control
+     * Manages the specified resources placement on the empty shelf given by parameter
+     * @param shelves List of shelves to check
      * @param toPlace List of resources to place
-     * @param selectedShelf Shelf where to place the resources
+     * @param selectedShelf Shelf where the resources will be placed
      * @param resourceToPlace Resources' type
      */
     private void emptyShelfManagement(List<Shelf> shelves, List<Resource> toPlace,
@@ -781,10 +766,10 @@ public class CLI extends ClientController {
     }
 
     /**
-     * Manages the placement on the shelf with the same resources' type of the resources given by parameters
-     * @param shelves List of shelves to control
+     * Manages the resources placement on the shelf with the same resource type of the resources
+     * @param shelves List of shelves to check
      * @param toPlace List of resources to place
-     * @param selectedShelf Shelf where to place the resources
+     * @param selectedShelf Shelf where the resources will be placed
      * @param resourceToPlace Resources' type
      */
     private void sameResTypeShelfManagement(List<Shelf> shelves, List<Resource> toPlace,
@@ -809,10 +794,10 @@ public class CLI extends ClientController {
     }
 
     /**
-     * Manages the placement on the shelf with different resources' type of the resources given by parameters
-     * @param shelves List of shelves to control
+     * Manages the resources placement on the shelf with different resource type from the resources
+     * @param shelves List of shelves to check
      * @param toPlace List of resources to place
-     * @param selectedShelf Shelf where to place the resources
+     * @param selectedShelf Shelf where the resources will be placed
      * @param resourceToPlace Resources' type
      */
     private void differentResTypeShelfManagement(List<Shelf> shelves, List<Resource> toPlace,
@@ -882,8 +867,8 @@ public class CLI extends ClientController {
 
     /**
      * Checks if the configuration of the resources given by parameter is rearrangeable among the warehouse's shelves
-     * @param shelves List of shelves to control
-     * @param resource Resources to control
+     * @param shelves List of shelves to check
+     * @param resource Resources to check
      * @return Returns true if it's rearrangeable, false otherwise
      */
     private boolean isShelfRearrangeable(List<Shelf> shelves, Resource resource) {
@@ -907,9 +892,9 @@ public class CLI extends ClientController {
 
     /**
      * Restores resources in the warehouse and resets attributes
-     * @param warehouse Warehouse where restore the resources from
+     * @param warehouse Warehouse where to restore the resources from
      * @param shelves List of shelves to restore
-     * @param resources List where restore the "resources to place" from
+     * @param resources List where to restore the "resources to place" from
      * @param toPlace List of resources to place
      * @param toDiscard List of resources to discard
      * @param canDiscard True if there are resources that can be discarded, false otherwise
@@ -959,7 +944,7 @@ public class CLI extends ClientController {
                         color = CardColors.YELLOW.name();
                         break;
                 }
-                for (DevelopmentDeckView developmentDeck : getDevelopmentDecks().getDecks()) {
+                for(DevelopmentDeckView developmentDeck : getDevelopmentDecks().getDecks()) {
                     if (developmentDeck.getDeckColor().equals(CardColors.valueOf(color)) &&
                             developmentDeck.getDeckLevel() == level) {
                         if(!developmentDeck.getDeck().isEmpty()) {
@@ -987,9 +972,9 @@ public class CLI extends ClientController {
     public List<Production> resolveProductionWildcards(List<Production> productions) {
         List<Production> resolvedProductions = new ArrayList<>();
         for(Production production : productions) {
-            List<Resource> consumedResolved =  production.getConsumed().stream()
+            List<Resource> consumedResolved = production.getConsumed().stream()
                     .filter((r -> r.getResourceType() != ResourceType.WILDCARD)).collect(Collectors.toList());
-            List<Resource> producedResolved =  production.getProduced().stream()
+            List<Resource> producedResolved = production.getProduced().stream()
                     .filter((r -> r.getResourceType() != ResourceType.WILDCARD)).collect(Collectors.toList());
             List<Resource> consumedWildcards = production.getConsumed().stream()
                     .filter((r -> r.getResourceType() == ResourceType.WILDCARD)).collect(Collectors.toList());
@@ -1007,32 +992,32 @@ public class CLI extends ClientController {
                 if(consumedWildcards.size() > 0) {
                     graphicalCLI.printString(GraphicalCLI.YELLOW_BRIGHT);
                     graphicalCLI.printlnString("\nChoose resource types for the consumed wildcards:\n");
-                    graphicalCLI.printString(GraphicalCLI.RESET);
-                    for (Resource wildcard : consumedWildcards) {
-                        final int index = consumedWildcards.indexOf(wildcard);
-                        ResourceType chosenType = graphicalCLI.objectOptionSelector(ResourceType.getRealValues(),
-                                rt -> graphicalCLI.printlnString(rt.toString()),
-                                () -> graphicalCLI.printlnString("Consumed wildcard N°" + (index + 1)),
-                                () -> graphicalCLI.printString("Choose a valid resource type: "),
-                                null
-                        );
-                        consumedResolved.add(new Resource(chosenType, wildcard.getQuantity()));
-                    }
+                    graphicalCLI.printString(GraphicalCLI.RESET);   //TODO: sistemare duplicazione
+                    final List<Resource> finalConsumedWildcards = consumedWildcards;
+                    graphicalCLI.objectOptionSelector(ResourceType.getRealValues(),
+                            rt -> graphicalCLI.printlnString(rt.toString()),
+                            () -> graphicalCLI.printlnString("You have " + finalConsumedWildcards.size() +
+                                    " wildcard(s) to resolve"),
+                            () -> graphicalCLI.printString("Choose " + finalConsumedWildcards.size() +
+                                    " resource type(s) for the wildcard(s): "),
+                            null,
+                            true, consumedWildcards.size(), consumedWildcards.size(), -1
+                    ).forEach(rt -> consumedResolved.add(new Resource(rt, 1)));
                 }
                 if(producedWildcards.size() > 0) {
                     graphicalCLI.printString(GraphicalCLI.YELLOW_BRIGHT);
                     graphicalCLI.printlnString("\nChoose for produced wildcards:\n");
                     graphicalCLI.printString(GraphicalCLI.RESET);
-                    for (Resource wildcard : producedWildcards) {
-                        final int index = consumedWildcards.indexOf(wildcard);
-                        ResourceType chosenType = graphicalCLI.objectOptionSelector(ResourceType.getRealValues(),
-                                rt -> graphicalCLI.printlnString(rt.toString()),
-                                () -> graphicalCLI.printlnString("Produced wildcard N°" + (index + 1)),
-                                () -> graphicalCLI.printString("Choose a valid resource type: "),
-                                null
-                        );
-                        producedResolved.add(new Resource(chosenType, wildcard.getQuantity()));
-                    }
+                    final List<Resource> finalProducedWildcards = producedWildcards;
+                    graphicalCLI.objectOptionSelector(ResourceType.getRealValues(),
+                            rt -> graphicalCLI.printlnString(rt.toString()),
+                            () -> graphicalCLI.printlnString("You have " + finalProducedWildcards.size() +
+                                    " wildcard(s) to resolve"),
+                            () -> graphicalCLI.printString("Choose " + finalProducedWildcards.size() +
+                                    " resource type(s) for the wildcard(s): "),
+                            null,
+                            true, consumedWildcards.size(), consumedWildcards.size(), -1
+                    ).forEach(rt -> producedResolved.add(new Resource(rt, 1)));
                 }
             }
             Storage.aggregateResources(consumedResolved);
