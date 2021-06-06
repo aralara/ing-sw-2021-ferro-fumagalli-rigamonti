@@ -9,13 +9,21 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
+import java.io.IOException;
+
 public class SetupController extends GenericController {
+
+    private boolean isLocal=false;
 
     @FXML private TextField ipAddress_field, portNumber_field, nickname_field;
     @FXML private ProgressIndicator connecting_progressIndicator, waitingNickname_progressIndicator;
     @FXML private Button playOnline_button, playOffline_button, connect_button, confirm_button;
     @FXML private Label nickname_label, notifyPlayers_label;
     @FXML private ProgressBar loading_bar;
+
+    public void setIsLocal(boolean value){
+        isLocal = value;
+    }
 
     /**
      * Gets the ipAddress_field attribute
@@ -95,10 +103,11 @@ public class SetupController extends GenericController {
      * TODO: fare quando si sarà implementato il metodo
      */
     public void playOffline() {
-        //TODO: implementare singlegame offline
+        ((SetupController)getGUIApplication().getController(SceneNames.NICKNAME_MENU)).setIsLocal(true);
         playOnline_button.setVisible(false);
         playOffline_button.setVisible(false);
         loading_bar.setVisible(true);
+        getGUIApplication().setActiveScene(SceneNames.NICKNAME_MENU);
     }
 
     /**
@@ -149,7 +158,6 @@ public class SetupController extends GenericController {
      * Sends a message to the server with the chosen nickname
      */
     public void sendNickname() {
-
         if(nickname_field.getText().equals("")){
             showAlert(Alert.AlertType.ERROR, "Error", "Missing field!",
                     "The nickname field is empty, please fill it");
@@ -160,7 +168,17 @@ public class SetupController extends GenericController {
         }
         else{
             getGUIApplication().changeNicknameMenuStatus();
-            getGUIApplication().getGUI().sendNickname(nickname_field.getText());
+            if(!isLocal)
+                getGUIApplication().getGUI().sendNickname(nickname_field.getText());
+            else {
+                getGUIApplication().setActiveScene(SceneNames.LOADING);
+                getGUIApplication().getGUI().setNickname(nickname_field.getText());
+                try {
+                    getGUIApplication().getGUI().localSetup();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
