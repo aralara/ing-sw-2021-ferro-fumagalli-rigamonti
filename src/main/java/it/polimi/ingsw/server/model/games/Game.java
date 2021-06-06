@@ -116,7 +116,7 @@ public abstract class Game implements Serializable {
         if((setup && playerHand.size() != Constants.INITIAL_LEADER_CARDS.value()) ||                    //Checks if the discardLeaders is called during setup
                 (setup && leaderCards.size() != 2) ||                                                   //Checks (assuming setup) if the player discarded 2 cards
                 playerHand.stream().allMatch(c -> leaderCards.stream().anyMatch(lc -> lc.equals(c))) || //Checks if the discarded cards are in the player's hand
-                leaderCards.stream().allMatch(new HashSet<>()::add)                                     //Checks if the player wants to discard the same card
+                !leaderCards.stream().allMatch(new HashSet<>()::add)                                    //Checks if the player wants to discard the same card
         )
             return false;
         for(LeaderCard leaderCard : leaderCards) {
@@ -248,15 +248,17 @@ public abstract class Game implements Serializable {
         List<Resource> totalRequests = new ArrayList<>();
         List<Resource> cost = Storage.calculateDiscount(card.getCost(), playerBoard.getAbilityDiscounts());
         requests.forEach(rr -> totalRequests.addAll(rr.getList()));
-        if(!playerBoard.isTurnPlayed())
-            if(canBuyDevCard(player, card, space) &&                                                    //Basic checks
-                    Storage.checkContainedResources(Storage.mergeResourceList(cost), totalRequests) &&  //Checks if the resources in the requests can buy the card
-                    developmentDecks.stream().anyMatch(dd -> dd.getDeck().get(0).equals(card)) &&       //Checks if the selected card can be taken from the decks
-                    playerBoard.buyDevCard(card, space, requests)                                       //Buys development card if the player has enough resources
+        if(!playerBoard.isTurnPlayed()) {
+            if (canBuyDevCard(player, card, space) &&                                                       //Basic checks
+                    Storage.checkContainedResources(Storage.mergeResourceList(cost), totalRequests) &&      //Checks if the resources in the requests can buy the card
+                    developmentDecks.stream()
+                            .anyMatch(dd -> !dd.getDeck().isEmpty() && dd.getDeck().get(0).equals(card)) && //Checks if the selected card can be taken from the decks
+                    playerBoard.buyDevCard(card, space, requests)                                           //Buys development card if the player has enough resources
             ) {
                 playerBoard.setTurnPlayed(true);
                 return removeDevCard(card.getColor(), card.getLevel());
             }
+        }
         return false;
     }
 
