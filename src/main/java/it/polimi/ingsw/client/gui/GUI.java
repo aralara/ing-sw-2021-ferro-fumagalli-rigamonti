@@ -23,7 +23,6 @@ import javafx.scene.control.Alert;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.stream.Collectors;
 
@@ -98,6 +97,10 @@ public class GUI extends ClientController {
     }
 
 
+    /**
+     * TODO: javadoc
+     * @param r
+     */
     public void callPlatformRunLater(Runnable r){
         Platform.runLater(r);
     }
@@ -124,7 +127,7 @@ public class GUI extends ClientController {
 
     @Override
     public void ackNotification(String message, boolean visual) {
-        //messaggio ricevuto da ack
+        //message received from ack
         if(visual)
             callPlatformRunLater(() -> guiApplication.getController(guiApplication.getActiveSceneName()).
                     showAlert(Alert.AlertType.INFORMATION,"Notification","Event notification", message));
@@ -223,7 +226,7 @@ public class GUI extends ClientController {
             if(resource.getResourceType()==ResourceType.WILDCARD)
                 countWildcard += resource.getQuantity();
         if(countWildcard==0)
-            controlResourcesToPlace(resources);
+            controlResourcesToPlace(resources, true);
         else if(availableAbilities!=null && availableAbilities.size()>1){
             int finalCountWildcard = countWildcard;
             callPlatformRunLater(() -> ((WildcardResolverController) guiApplication.
@@ -246,7 +249,7 @@ public class GUI extends ClientController {
                     }
                 }
             }
-            controlResourcesToPlace(resources);
+            controlResourcesToPlace(resources, true);
         }
     }
 
@@ -316,7 +319,11 @@ public class GUI extends ClientController {
 
     @Override
     public void placeResourcesOnShelves(List<Resource> resources) {
-        //TODO: da fare?
+        //TODO: da controllare
+        callPlatformRunLater(() -> guiApplication.getController(SceneNames.PLAYER_BOARD).showAlert(Alert.AlertType.ERROR,
+                "Error", "You can't place the resources in this way",
+                "Please choose another configuration"));
+        controlResourcesToPlace(resources, false);
     }
 
     @Override
@@ -377,16 +384,6 @@ public class GUI extends ClientController {
     }
 
     /**
-     * Sends to the server the nickname given by parameter
-     * @param nickname Nickname to send
-     */
-    public void sendNickname(String nickname){
-        getMessageHandler().sendClientMessage(new ConnectionMessage(nickname));
-        setNickname(nickname);
-        ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD)).setPlayer_label(nickname);
-    }
-
-    /**
      * Sets the size of the lobby and show a new scene accordingly
      * @param size Size of the lobby
      */
@@ -400,26 +397,34 @@ public class GUI extends ClientController {
     }
 
     /**
-     * Sends to the server a list of leaders to discard
-     * @param indexes List of leaders' IDs to discard
+     * Sends to the server a message to activate or discard a list of leaders
+     * @param positions List of positions of the leaders in the hand
+     * @param toActivate True to activate leaders, false otherwise
      */
-    public void sendLeaderCardDiscardMessage(List<Integer> indexes){
+    public void sendLeaderMessage(List<Integer> positions, boolean toActivate){
+        List<LeaderCard> leaderHand = new ArrayList<>(), leaderCards = new ArrayList<>();
         try {
-            List<LeaderCard> leadersToDiscard = new ArrayList<>();
-            for(int index : indexes)
-                leadersToDiscard.add((LeaderCard) getLocalPlayerBoard().getLeaderBoard().getHand().get(index));
-            getMessageHandler().sendClientMessage(new LeaderCardDiscardMessage(leadersToDiscard, true));
-            guiApplication.closePopUpStage();
-            callAskResourceToEqualize();
+            for(Card card : getLocalPlayerBoard().getLeaderBoard().getHand())
+                leaderHand.add((LeaderCard)card);
         } catch (NotExistingNicknameException e) {
             e.printStackTrace();
         }
+        if (positions.size() == 1 && leaderHand.size()>1)
+            leaderCards.add(leaderHand.get(positions.get(0)));
+        else if (positions.size() == 1 && leaderHand.size()==1)
+            leaderCards.add(leaderHand.get(0));
+        else
+            leaderCards.addAll(leaderHand);
+        if(toActivate)
+            getMessageHandler().sendClientMessage(new LeaderCardPlayMessage(leaderCards));
+        else
+            getMessageHandler().sendClientMessage(new LeaderCardDiscardMessage(leaderCards));
     }
 
     /**
      * Sets and shows the popUp stage to equalize initial resources
      */
-    private void callAskResourceToEqualize(){
+    public void callAskResourceToEqualize(){
         int size = 0;
         for(Resource resource : resourcesToEqualize)
             if(resource.getResourceType() != ResourceType.FAITH)
@@ -452,7 +457,8 @@ public class GUI extends ClientController {
      */
     public void sendShelvesConfigurationMessage(List<Shelf> shelves, List<Resource> toDiscard){
         resourcesToDiscard.addAll(toDiscard);
-        getMessageHandler().sendClientMessage(new ShelvesConfigurationMessage(shelves, resourcesToPlace, resourcesToDiscard));
+        getMessageHandler().sendClientMessage(new ShelvesConfigurationMessage(
+                shelves, resourcesToPlace, resourcesToDiscard));
         resourcesToPlace.clear();
         resourcesToDiscard.clear();
     }
@@ -473,15 +479,6 @@ public class GUI extends ClientController {
             return true;
         }
         return false;
-    }
-
-    /**
-     * Sends to the server a message with the selected row or column of the market
-     * @param row Selected row of the market, -1 if the column is selected
-     * @param col Selected column of the market, -1 if the row is selected
-     */
-    public void sendMarketMessage(int row, int col){
-        getMessageHandler().sendClientMessage(new SelectMarketMessage(row, col));
     }
 
     /**
@@ -512,14 +509,6 @@ public class GUI extends ClientController {
     }
 
     /**
-     * Updates graphical components of the warehouse
-     */
-    public void updateWarehouse(){
-        callPlatformRunLater(() ->
-                ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD)).showWarehouse());
-    }
-
-    /**
      * Stores resources to place in case setting them fails and they need to be placed again
      * @param resources Resources to be stored
      */
@@ -528,50 +517,27 @@ public class GUI extends ClientController {
     }
 
     /**
-     * Sends to the server a message to active or discard a list of leader
-     * @param positions List of positions of the leaders in the hand
-     * @param toActivate True to activate leaders, false otherwise
-     */
-    public void sendLeaderMessage(List<Integer> positions, boolean toActivate){
-        List<LeaderCard> leaderHand = new ArrayList<>(), leaderCards = new ArrayList<>();
-        try {
-            for(Card card : getLocalPlayerBoard().getLeaderBoard().getHand())
-                leaderHand.add((LeaderCard)card);
-        } catch (NotExistingNicknameException e) {
-            e.printStackTrace();
-        }
-        if (positions.size() == 1 && leaderHand.size()>1)
-            leaderCards.add(leaderHand.get(positions.get(0)));
-        else if (positions.size() == 1 && leaderHand.size()==1)
-            leaderCards.add(leaderHand.get(0));
-        else
-            leaderCards.addAll(leaderHand);
-        if(toActivate)
-            getMessageHandler().sendClientMessage(new LeaderCardPlayMessage(leaderCards));
-        else
-            getMessageHandler().sendClientMessage(new LeaderCardDiscardMessage(leaderCards));
-    }
-
-    /**
      * Controls which type of resources are to place and calls methods accordingly
      * If there are resources, updates resources to place and shows them on the playerBoard
      * If there is only faith, adds it to the discarded resources and send a message to the server
      * @param resources
      */
-    public void controlResourcesToPlace(List<Resource> resources){
+    public void controlResourcesToPlace(List<Resource> resources, boolean showAlert){
         resourcesToPlace.clear();
         resourcesToPlace.addAll(resources);
         Storage.aggregateResources(resourcesToPlace);
 
         boolean faith = checkFaithResource(resourcesToPlace);
         if(!checkOnlyWildcard(resourcesToPlace)) {
-            callPlatformRunLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD))
+            if(showAlert)
+                callPlatformRunLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD))
                     .showAlert(Alert.AlertType.INFORMATION, "Success!", "Resources taken",
                             "Now you need to place each taken resource"));
             updateResourcesToPlace();
         }
         else if(faith) {
-            callPlatformRunLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD))
+            if(showAlert)
+                callPlatformRunLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD))
                     .showAlert(Alert.AlertType.INFORMATION, "Success!", "Resources taken",
                             "Your faith has been updated"));
             callPlatformRunLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))
@@ -583,7 +549,8 @@ public class GUI extends ClientController {
             }
         }
         else {
-            callPlatformRunLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD))
+            if(showAlert)
+                callPlatformRunLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD))
                     .showAlert(Alert.AlertType.INFORMATION, "Success!", "Resources taken",
                             "You've nothing to place"));
             callPlatformRunLater(() -> ((PlayerBoardController)guiApplication.getController(SceneNames.PLAYER_BOARD))

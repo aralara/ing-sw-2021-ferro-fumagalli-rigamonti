@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.gui.controllers;
 
 import it.polimi.ingsw.client.gui.SceneNames;
+import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
 import javafx.fxml.FXML;;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -21,8 +22,20 @@ public class SetupController extends GenericController {
     @FXML private Label nickname_label, notifyPlayers_label;
     @FXML private ProgressBar loading_bar;
 
+    /**
+     * Sets the isLocal attribute
+     * @param value New attribute value
+     */
     public void setIsLocal(boolean value){
         isLocal = value;
+    }
+
+    /**
+     * Gets the isLocal attribute
+     * @return Returns isLocal
+     */
+    public boolean getIsLocal() {
+        return isLocal;
     }
 
     /**
@@ -93,6 +106,7 @@ public class SetupController extends GenericController {
      * Shows the ConnectionMenu scene
      */
     public void playOnline() {
+        ((SetupController)getGUIApplication().getController(SceneNames.NICKNAME_MENU)).setIsLocal(false);
         playOnline_button.setVisible(false);
         playOffline_button.setVisible(false);
         loading_bar.setVisible(true);
@@ -168,8 +182,12 @@ public class SetupController extends GenericController {
         }
         else{
             getGUIApplication().changeNicknameMenuStatus();
-            if(!isLocal)
-                getGUIApplication().getGUI().sendNickname(nickname_field.getText());
+            if(!isLocal) {
+                getGUI().getMessageHandler().sendClientMessage(new ConnectionMessage(nickname_field.getText()));
+                getGUI().setNickname(nickname_field.getText());
+                ((PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD)).
+                        setPlayer_label(nickname_field.getText());
+            }
             else {
                 getGUIApplication().setActiveScene(SceneNames.LOADING);
                 getGUIApplication().getGUI().setNickname(nickname_field.getText());

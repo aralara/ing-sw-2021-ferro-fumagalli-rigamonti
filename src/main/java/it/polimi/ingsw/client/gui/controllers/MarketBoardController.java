@@ -3,9 +3,9 @@ package it.polimi.ingsw.client.gui.controllers;
 import it.polimi.ingsw.client.gui.SceneNames;
 import it.polimi.ingsw.client.structures.MarketView;
 import it.polimi.ingsw.server.model.market.Marble;
+import it.polimi.ingsw.utils.messages.client.SelectMarketMessage;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -30,6 +30,7 @@ public class MarketBoardController extends GenericController {
 
     /**
      * Takes resources from the market according to the selected row and column
+     * and sends a message to the server
      */
     public void takeMarketResources() {
         if((selectedRow==3 && selectedColumn>=0 && selectedColumn<=3) ||
@@ -49,7 +50,7 @@ public class MarketBoardController extends GenericController {
             pbc.setIsResToPlace(true);
             pbc.hideCheckBoxes();
             resetAll();
-            getGUI().sendMarketMessage(row, col);
+            getGUI().getMessageHandler().sendClientMessage(new SelectMarketMessage(row, col));
             getGUIApplication().closeSecondStage();
         }
     }

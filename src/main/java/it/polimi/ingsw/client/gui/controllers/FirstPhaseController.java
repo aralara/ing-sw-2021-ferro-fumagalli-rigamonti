@@ -1,5 +1,8 @@
 package it.polimi.ingsw.client.gui.controllers;
 
+import it.polimi.ingsw.exceptions.NotExistingNicknameException;
+import it.polimi.ingsw.server.model.cards.card.LeaderCard;
+import it.polimi.ingsw.utils.messages.client.LeaderCardDiscardMessage;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -16,7 +19,7 @@ public class FirstPhaseController extends GenericController {
     @FXML private Button discard1_button, discard2_button, discard3_button, discard4_button;
 
     /**
-     * Adds to the discarded list the card given by parameter and disable its button
+     * Adds to the discarded leaders list the card given by parameter and disable its button
      * When the list contains 2 cards, a message is sent to the server
      * @param button Button to disable
      * @param index Index of the card to discard
@@ -26,8 +29,20 @@ public class FirstPhaseController extends GenericController {
         if(leaderIndexesToDiscard == null)
             leaderIndexesToDiscard = new ArrayList<>();
         leaderIndexesToDiscard.add(index-1);
-        if(leaderIndexesToDiscard.size()==2)
-            getGUI().sendLeaderCardDiscardMessage(leaderIndexesToDiscard);
+        if(leaderIndexesToDiscard.size()==2) {
+            try {
+                List<LeaderCard> leadersToDiscard = new ArrayList<>();
+                for(int leaderIndex : leaderIndexesToDiscard)
+                    leadersToDiscard.add((LeaderCard) getGUI().getLocalPlayerBoard().
+                            getLeaderBoard().getHand().get(leaderIndex));
+                getGUI().getMessageHandler().sendClientMessage(
+                        new LeaderCardDiscardMessage(leadersToDiscard, true));
+                getGUIApplication().closePopUpStage();
+                getGUI().callAskResourceToEqualize();
+            } catch (NotExistingNicknameException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**

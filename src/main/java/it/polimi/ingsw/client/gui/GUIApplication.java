@@ -105,7 +105,9 @@ public class GUIApplication extends Application {
         else {
             stage.setScene(scenesInformation.get(getSceneIndex(sceneName)).getScene());
             if (sceneName.equals(SceneNames.PLAYER_BOARD) || sceneName.equals(SceneNames.LOADING) ||
-                    sceneName.equals(SceneNames.CONNECTION_MENU) || sceneName.equals(SceneNames.RANKING))
+                    sceneName.equals(SceneNames.CONNECTION_MENU) || sceneName.equals(SceneNames.RANKING) ||
+                    sceneName.equals(SceneNames.NICKNAME_MENU) &&
+                    ((SetupController)getController(SceneNames.NICKNAME_MENU)).getIsLocal())
                 stage.centerOnScreen();
             stage.show();
         }

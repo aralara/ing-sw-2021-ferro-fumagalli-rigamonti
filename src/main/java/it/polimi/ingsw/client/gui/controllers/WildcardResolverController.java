@@ -217,7 +217,7 @@ public class WildcardResolverController extends GenericController {
             getGUIApplication().closePopUpStage();
         }
         else if(isMarbleAction){
-            getGUI().controlResourcesToPlace(resources);
+            getGUI().controlResourcesToPlace(resources, true);
             getGUIApplication().closePopUpStage();
         }
         else if(selectedConsumed!=null && !selectedConsumed.isEmpty()){

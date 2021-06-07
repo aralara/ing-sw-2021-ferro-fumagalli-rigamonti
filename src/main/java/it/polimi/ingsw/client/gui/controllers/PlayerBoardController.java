@@ -150,7 +150,7 @@ public class PlayerBoardController extends GenericController {
         shelves = getGUI().getWarehouseShelvesCopy();
         resetResLabels();
         getGUI().updateResourcesToPlace();
-        getGUI().updateWarehouse();
+        showWarehouse();
         confirm_button.setVisible(false);
         restoreWarehouse_button.setVisible(false);
         rearrangeWarehouse_button.setDisable(false);
@@ -1119,9 +1119,9 @@ public class PlayerBoardController extends GenericController {
     }
 
     /**
-     * Sets imageViews of the leaders in the hand to be shown
+     * Shows imageViews of the leaders in the hand to be shown
      */
-    public void setLeaderBHand(/*Deck leaderCards*/){ //TODO: controllare
+    public void showLeaderBHand(){
         try {
             updateLeaderBHand(getGUI().getLocalPlayerBoard().getLeaderBoard().getHand());
         } catch (NotExistingNicknameException e) {
@@ -1163,9 +1163,9 @@ public class PlayerBoardController extends GenericController {
     }
 
     /**
-     * Sets imageViews of the leaders on the board to be shown
+     * Shows imageViews of the leaders on the board to be shown
      */
-    public void setLeaderBBoard(/*Deck leaderCards*/){
+    public void showLeaderBBoard(){
         try {
             updateLeaderBBoard(getGUI().getLocalPlayerBoard().getLeaderBoard().getBoard());
         } catch (NotExistingNicknameException e) {
