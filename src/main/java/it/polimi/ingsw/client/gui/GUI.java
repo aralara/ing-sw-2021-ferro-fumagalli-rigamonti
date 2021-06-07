@@ -112,8 +112,11 @@ public class GUI extends ClientController {
 
         while(true) {
             try {
-                if (confirmationList.size() != 0)
-                    responseQueue.take().activateResponse(this);
+                if (confirmationList.size() != 0) {
+                    ServerAckMessage ack = responseQueue.take();
+                    confirmationList.remove(confirmationList.stream().filter(ack::compareTo).findFirst().orElseThrow());
+                    ack.activateResponse(this);
+                }
                 else if (actionQueue.size() > 0)
                         actionQueue.poll().doAction(this);
             } catch(Exception e) {

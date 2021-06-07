@@ -124,7 +124,6 @@ public class MessageHandler implements Runnable {
         ClientMessage clientMessage = confirmationList.stream()
                 .filter(message::compareTo)
                 .findFirst().orElseThrow(UnknownMessageException::new);
-        confirmationList.remove(clientMessage);
         message.setRelativeMessage(clientMessage);
         responseQueue.put(message);
     }

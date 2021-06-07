@@ -100,7 +100,9 @@ public class CLI extends ClientController {
         while(alive) {
             if (confirmationList.size() != 0 && updateQueue.isEmpty()) {
                 try {
-                    responseQueue.take().activateResponse(this);
+                    ServerAckMessage ack = responseQueue.take();
+                    confirmationList.remove(confirmationList.stream().filter(ack::compareTo).findFirst().orElseThrow());
+                    ack.activateResponse(this);
                     displayMenu = true;
                 } catch(InterruptedException e) {
                     e.printStackTrace();
