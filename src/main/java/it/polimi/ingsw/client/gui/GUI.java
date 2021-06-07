@@ -2,10 +2,7 @@ package it.polimi.ingsw.client.gui;
 
 import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.client.gui.controllers.*;
-import it.polimi.ingsw.client.structures.DevelopmentDeckView;
-import it.polimi.ingsw.client.structures.DevelopmentDecksView;
-import it.polimi.ingsw.client.structures.MarketView;
-import it.polimi.ingsw.client.structures.PlayerBoardView;
+import it.polimi.ingsw.client.structures.*;
 import it.polimi.ingsw.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.model.boards.Player;
 import it.polimi.ingsw.server.model.cards.card.*;
@@ -454,13 +451,18 @@ public class GUI extends ClientController {
      * Sends to the server a shelves' configuration to be validated
      * @param shelves List of shelves to be validated
      * @param toDiscard Extra resources to discard
+     * @return Returns true if the given configuration is correct and the message has been sent, false otherwise
      */
-    public void sendShelvesConfigurationMessage(List<Shelf> shelves, List<Resource> toDiscard){
+    public boolean sendShelvesConfigurationMessage(List<Shelf> shelves, List<Resource> toDiscard){
+        if (!Storage.isDiscardedResCorrect(resourcesToPlace, toDiscard)) {
+            return false;
+        }
         resourcesToDiscard.addAll(toDiscard);
         getMessageHandler().sendClientMessage(new ShelvesConfigurationMessage(
                 shelves, resourcesToPlace, resourcesToDiscard));
         resourcesToPlace.clear();
         resourcesToDiscard.clear();
+        return true;
     }
 
     /**

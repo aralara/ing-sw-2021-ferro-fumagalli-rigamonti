@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 public class PlayerBoardController extends GenericController {
 
-    private List<Shelf> shelves;
+    private List<Shelf> warehouseShelves;
     private List<Resource> toDiscard;
     private boolean isPlayerTurn=false;
         
@@ -147,7 +147,7 @@ public class PlayerBoardController extends GenericController {
     public void restoreWarehouse() {
         if(toDiscard!=null)
             toDiscard.clear();
-        shelves = getGUI().getWarehouseShelvesCopy();
+        warehouseShelves = getGUI().getWarehouseShelvesCopy();
         resetResLabels();
         getGUI().updateResourcesToPlace();
         showWarehouse();
@@ -160,8 +160,14 @@ public class PlayerBoardController extends GenericController {
             activateLeaderCard_button.setDisable(false);
             discardLeaderCard_button.setDisable(false);
         }
-        if(!isResToPlaceAction)
+        if(!mainActionPlayed && !isResToPlaceAction){
+            ((MarketBoardController)getGUIApplication().getController(SceneNames.MARKET_BOARD)).enableMarketAction();
+            ((DecksBoardController)getGUIApplication().getController(SceneNames.DECKS_BOARD)).enableBuyCardAction();
+            activateProductions_button.setDisable(false);
             viewOpponents_button.setDisable(false);
+            activateLeaderCard_button.setDisable(false);
+            discardLeaderCard_button.setDisable(false);
+        }
     }
 
     /**
@@ -223,7 +229,8 @@ public class PlayerBoardController extends GenericController {
      */
     public void rearrangeWarehouse() {
         if(!warehouseIsDisabled && !warehouseIsEmpty()) {
-            for (Shelf shelf : shelves) {
+            warehouseShelves = getGUI().getWarehouseShelvesCopy();
+            for (Shelf shelf : warehouseShelves) {
                 addQuantity(shelf.getResources().getResourceType(), shelf.getResources().getQuantity());
                 resetShelf(shelf);
             }
@@ -961,22 +968,29 @@ public class PlayerBoardController extends GenericController {
     public void confirm() {
         if(toDiscard==null)
             toDiscard = new ArrayList<>();
-        if(shelves==null)
-            shelves = getGUI().getWarehouseShelvesCopy();
-        getGUI().sendShelvesConfigurationMessage(shelves,toDiscard);
-        if(isPlayerTurn)
-            enableButtons();
-        if(toDiscard!=null)
-            toDiscard.clear();
-        if(shelves!=null)
-            shelves.clear();
-        restoreWarehouse_button.setVisible(false);
-        confirm_button.setVisible(false);
-        rearrangeWarehouse_button.setDisable(false);
-        if(mainActionPlayed)
-            endTurn_button.setDisable(false);
-        isResToPlaceAction=false;
-        viewOpponents_button.setDisable(false);
+        if(warehouseShelves==null)
+            warehouseShelves = getGUI().getWarehouseShelvesCopy();
+        if(getGUI().sendShelvesConfigurationMessage(warehouseShelves,toDiscard)){
+            if(isPlayerTurn)
+                enableButtons();
+            if(toDiscard!=null)
+                toDiscard.clear();
+            if(warehouseShelves!=null)
+                warehouseShelves.clear();
+            restoreWarehouse_button.setVisible(false);
+            confirm_button.setVisible(false);
+            rearrangeWarehouse_button.setDisable(false);
+            if(mainActionPlayed)
+                endTurn_button.setDisable(false);
+            isResToPlaceAction=false;
+            viewOpponents_button.setDisable(false);
+        }
+        else{
+            showAlert(Alert.AlertType.ERROR, "Wrong configuration",
+                    "You're trying to discard resources already stored in the warehouse",
+                    "The warehouse will be restored and you'll be asked to place all the resources again");
+            restoreWarehouse();
+        }
     }
 
     /**
@@ -1195,6 +1209,11 @@ public class PlayerBoardController extends GenericController {
             shelfLeader2_1_imageView.setDisable(false);
             shelfLeader2_2_imageView.setDisable(false);
         }
+
+        if(isFirstLeaderShelf || isSecondLeaderShelf) {
+            resetWarehouse();
+            showWarehouse();
+        }
     }
 
     /**
@@ -1235,13 +1254,13 @@ public class PlayerBoardController extends GenericController {
 
     /**
      * Updates imageViews of the warehouse
-     * @param warehouseShelves List of shelves to update
+     * @param whShelves List of shelves to update
      */
-    private void updateWarehouse(List<Shelf> warehouseShelves) {
-        shelves = warehouseShelves;
+    private void updateWarehouse(List<Shelf> whShelves) {
+        warehouseShelves = whShelves;
         Image image;
         String resPath = "/imgs/res/", resType;
-        for(Shelf shelf : shelves){
+        for(Shelf shelf : warehouseShelves){
             if(!shelf.isLeader()){ //basic
                 switch (shelf.getLevel()){
                     case(1):
@@ -1390,7 +1409,7 @@ public class PlayerBoardController extends GenericController {
      * @param level Shelf's level
      */
     private void setWhShelvesImages(int level){
-        int resQuantity = shelves.get(level-1).getResources().getQuantity();
+        int resQuantity = warehouseShelves.get(level-1).getResources().getQuantity();
         switch (level){
             case(2):
                 if(resQuantity>0) {
@@ -1445,9 +1464,9 @@ public class PlayerBoardController extends GenericController {
      * @param leader Position of the leader in the board
      */
     private void setWhLeadersImages(int index, int leader){
-        int resQuantity = shelves.get(index-1).getResources().getQuantity();
+        int resQuantity = warehouseShelves.get(index-1).getResources().getQuantity();
         Image image = new Image(getClass().getResourceAsStream("/imgs/res/" +
-                shelves.get(index-1).getResources().getResourceType().toString().toLowerCase() + ".png"));
+                warehouseShelves.get(index-1).getResources().getResourceType().toString().toLowerCase() + ".png"));
         switch (leader){
             case(1):
                 shelfLeader1_1_imageView.setImage(null);
@@ -1494,15 +1513,15 @@ public class PlayerBoardController extends GenericController {
      * @return Returns true if the resource has been added correctly, false otherwise
      */
     private boolean addToWarehouse(ResourceType resourceType, int index){
-        if(shelves==null || shelves.isEmpty())
-            shelves = getGUI().getWarehouseShelvesCopy();
+        if(warehouseShelves==null || warehouseShelves.isEmpty())
+            warehouseShelves = getGUI().getWarehouseShelvesCopy();
         if(checkFreeSpace()){
-            if (shelves.get(index).getResourceType().equals(ResourceType.WILDCARD)) //empty shelf
-                return emptyShelfManagement(shelves.get(index), resourceType);
-            else if (shelves.get(index).getResourceType().equals(resourceType)) //shelf with the same resource type
-                return sameResTypeShelfManagement(shelves.get(index), resourceType);
-            else if (!shelves.get(index).isLeader()) //shelf with different resource type
-                return differentResTypeShelfManagement(shelves.get(index), resourceType);
+            if (warehouseShelves.get(index).getResourceType().equals(ResourceType.WILDCARD)) //empty shelf
+                return emptyShelfManagement(warehouseShelves.get(index), resourceType);
+            else if (warehouseShelves.get(index).getResourceType().equals(resourceType)) //shelf with the same resource type
+                return sameResTypeShelfManagement(warehouseShelves.get(index), resourceType);
+            else if (!warehouseShelves.get(index).isLeader()) //shelf with different resource type
+                return differentResTypeShelfManagement(warehouseShelves.get(index), resourceType);
             else {
                 showAlert(Alert.AlertType.ERROR, "Error", "Wrong slot",
                         "You can't place this resource here");
@@ -1521,7 +1540,7 @@ public class PlayerBoardController extends GenericController {
      * @return Returns true if there are free slots, false otherwise
      */
     private boolean checkFreeSpace(){
-        for (Shelf shelf : shelves) {
+        for (Shelf shelf : warehouseShelves) {
             if (shelf.getResourceType().equals(ResourceType.WILDCARD) ||
                     shelf.getLevel() > shelf.getResources().getQuantity()) {
                 return true;
@@ -1537,13 +1556,13 @@ public class PlayerBoardController extends GenericController {
      * @return Returns true if the resource has been added correctly, false otherwise
      */
     private boolean emptyShelfManagement(Shelf selectedShelf, ResourceType resourceToPlace) {
-        if(isResourceTypeUnique(shelves,resourceToPlace)) { //there are no shelves with the same resource type
+        if(isResourceTypeUnique(warehouseShelves,resourceToPlace)) { //there are no shelves with the same resource type
             placeResource(selectedShelf, resourceToPlace);
             return true;
         }
         else {//there are shelves with the same resource type
-            if(isShelfRearrangeable(shelves, resourceToPlace)) {
-                Shelf otherShelf = getShelfWithSameResource(shelves, resourceToPlace);
+            if(isShelfRearrangeable(warehouseShelves, resourceToPlace)) {
+                Shelf otherShelf = getShelfWithSameResource(warehouseShelves, resourceToPlace);
                 addQuantity(otherShelf.getResources().getResourceType(),otherShelf.getResources().getQuantity());
                 resetShelfImageView(otherShelf.getLevel());
                 resetShelf(otherShelf);
@@ -1575,15 +1594,15 @@ public class PlayerBoardController extends GenericController {
      * @return Returns true if the resource has been added correctly, false otherwise
      */
     private boolean differentResTypeShelfManagement(Shelf selectedShelf, ResourceType resourceToPlace) {
-        if (isResourceTypeUnique(shelves, resourceToPlace)) { //there are no shelves with the same resource type
+        if (isResourceTypeUnique(warehouseShelves, resourceToPlace)) { //there are no shelves with the same resource type
             addQuantity(selectedShelf.getResources().getResourceType(),selectedShelf.getResources().getQuantity());
             resetShelfImageView(selectedShelf.getLevel());
             placeResource(selectedShelf, resourceToPlace);
             return true;
         }
         else {//there are shelves with the same resource type
-            if (isShelfRearrangeable(shelves, resourceToPlace)) { //it's possible to rearrange shelves
-                Shelf otherShelf = getShelfWithSameResource(shelves, resourceToPlace);
+            if (isShelfRearrangeable(warehouseShelves, resourceToPlace)) { //it's possible to rearrange shelves
+                Shelf otherShelf = getShelfWithSameResource(warehouseShelves, resourceToPlace);
                 addQuantity(otherShelf.getResources().getResourceType(),otherShelf.getResources().getQuantity());
                 resetShelfImageView(otherShelf.getLevel());
                 resetShelf(otherShelf);
@@ -1711,9 +1730,9 @@ public class PlayerBoardController extends GenericController {
      * @return Returns true if it's empty, false otherwise
      */
     private boolean warehouseIsEmpty(){
-        if(shelves==null || shelves.isEmpty())
-            shelves=getGUI().getWarehouseShelvesCopy();
-        for(Shelf shelf : shelves) {
+        if(warehouseShelves==null || warehouseShelves.isEmpty())
+            warehouseShelves=getGUI().getWarehouseShelvesCopy();
+        for(Shelf shelf : warehouseShelves) {
             if (!shelf.isLeader() && shelf.getResourceType() != ResourceType.WILDCARD)
                 return false;
             else if(shelf.isLeader() && shelf.getResources().getQuantity()>0)
