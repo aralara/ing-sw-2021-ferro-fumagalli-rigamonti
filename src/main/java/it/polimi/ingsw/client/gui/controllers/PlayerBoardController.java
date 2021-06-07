@@ -1817,17 +1817,21 @@ public class PlayerBoardController extends GenericController {
         List<Production> activatedProductions = new ArrayList<>();
         int specialProductionSize =  getGUI().getLeaderProductions().size();
         if (basicProduction_checkBox.isSelected())
-            activatedProductions.add(getGUI().getBasicProduction());
+            activatedProductions.add(getGUI().getBasicProduction().makeClone());
         if (devSpace1_checkBox.isSelected())
-            activatedProductions.add(((DevelopmentCard) getGUI().getDevelopmentBoard().get(0).get(0)).getProduction());
+            activatedProductions.add(((DevelopmentCard) getGUI().
+                    getDevelopmentBoard().get(0).get(0)).getProduction().makeClone());
         if (devSpace2_checkBox.isSelected())
-            activatedProductions.add(((DevelopmentCard) getGUI().getDevelopmentBoard().get(1).get(0)).getProduction());
+            activatedProductions.add(((DevelopmentCard) getGUI().
+                    getDevelopmentBoard().get(1).get(0)).getProduction().makeClone());
         if (devSpace3_checkBox.isSelected())
-            activatedProductions.add(((DevelopmentCard) getGUI().getDevelopmentBoard().get(2).get(0)).getProduction());
+            activatedProductions.add(((DevelopmentCard) getGUI().
+                    getDevelopmentBoard().get(2).get(0)).getProduction().makeClone());
         if (isFirstLeaderProduction && leader1_checkBox.isSelected())
-            activatedProductions.add(getGUI().getLeaderProductions().get(0));
+            activatedProductions.add(getGUI().getLeaderProductions().get(0).makeClone());
         if (isSecondLeaderProduction && leader2_checkBox.isSelected())
-            activatedProductions.add(getGUI().getLeaderProductions().get((specialProductionSize>1) ? 1 : 0));
+            activatedProductions.add(getGUI().getLeaderProductions().
+                    get((specialProductionSize>1) ? 1 : 0).makeClone());
         resolveWildcard(activatedProductions);
     }
 
