@@ -93,22 +93,20 @@ public abstract class ClientController {
                                                                     List<Resource> consumed);
 
 
-    /**
-     * Initializes pipedPair, virtualView and localGameHandler objects in order to create a local game
-     */
     public void localSetup() throws IOException {
-        PipedPair pipedPair = new PipedPair();
+        PipedPair pipedPairHandler = new PipedPair();
+        PipedPair pipedPairView = pipedPairHandler.connect();
         Thread t = new Thread(() -> {
             boolean success;
             do
-                success = getMessageHandler().connect(pipedPair);
+                success = getMessageHandler().connect(pipedPairView);
             while(!success);
             getMessageHandler().run();
         });
         t.start();
         VirtualView virtualView = new VirtualView(
-                new ObjectOutputStream(pipedPair.getPipeOut()),
-                new ObjectInputStream(pipedPair.getPipeIn()),
+                new ObjectOutputStream(pipedPairHandler.getPipeOut()),
+                new ObjectInputStream(pipedPairHandler.getPipeIn()),
                 getNickname());
         setLocalGameHandler(new GameHandler(1));
         getLocalGameHandler().add(virtualView);

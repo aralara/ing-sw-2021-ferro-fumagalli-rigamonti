@@ -70,17 +70,9 @@ public class MessageHandler implements Runnable {
     }
 
     public boolean connect(PipedPair pipedPair) {
-        PipedInputStream pipeIn = new PipedInputStream();
-        PipedOutputStream pipeOut = new PipedOutputStream();
         try {
-            pipeIn.connect(pipedPair.getPipeOut());
-            pipeOut.connect(pipedPair.getPipeIn());
-        } catch (IOException e) {
-            return false;
-        }
-        try {
-            output = new ObjectOutputStream(pipeOut);
-            input = new ObjectInputStream(pipeIn);
+            output = new ObjectOutputStream(pipedPair.getPipeOut());
+            input = new ObjectInputStream(pipedPair.getPipeIn());
         } catch (IOException | ClassCastException e) {
             return false;
         }
