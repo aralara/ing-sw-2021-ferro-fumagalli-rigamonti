@@ -28,6 +28,7 @@ public abstract class ClientController {
     private boolean mainActionPlayed, playerTurn;
     private final MessageHandler messageHandler;
     private final UpdateMessageReader updateMessageReader;
+    private boolean alive;
 
     private GameHandler gameHandler;
 
@@ -42,6 +43,7 @@ public abstract class ClientController {
         playerTurn = false;
         messageHandler = new MessageHandler();
         updateMessageReader = new UpdateMessageReader(this, messageHandler.getUpdateQueue());
+        alive = false;
         gameHandler = null;
     }
 
@@ -114,6 +116,7 @@ public abstract class ClientController {
     }
 
     public void destroy() {
+        alive = false;
         messageHandler.stop();
         updateMessageReader.stop();
     }
@@ -206,6 +209,14 @@ public abstract class ClientController {
 
     public UpdateMessageReader getUpdateMessageReader() {
         return updateMessageReader;
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
     }
 
     public GameHandler getLocalGameHandler() {

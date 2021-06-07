@@ -340,7 +340,7 @@ public abstract class Game implements Serializable {
      */
     boolean checkEndGame() {
         boolean endGame = false;
-        //Checks if a players has reached the end of the FaithTrack
+        //Checks if a players has reached the end of the FaithTrack or has 7 development cards on his board
         for(PlayerBoard pBoard : playerBoards)
             if(!endGame &&
                     (faithTrack.isCompleted(pBoard.getFaithBoard().getFaith()) ||

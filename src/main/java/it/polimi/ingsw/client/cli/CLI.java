@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 public class CLI extends ClientController {
 
-    private boolean idle, alive;
+    private boolean idle;
     private List<MenuOption> playerTurnMenu, opponentTurnMenu;
     private final GraphicalCLI graphicalCLI;
 
@@ -31,7 +31,6 @@ public class CLI extends ClientController {
      */
     public CLI() {
         super();
-        alive = true;
         idle = false;
         graphicalCLI = new GraphicalCLI();
         initMenus();
@@ -97,7 +96,9 @@ public class CLI extends ClientController {
 
         boolean displayMenu = true;
 
-        while(alive) {
+        setAlive(true);
+
+        while(isAlive()) {
             if (confirmationList.size() != 0 && updateQueue.isEmpty()) {
                 try {
                     ServerAckMessage ack = responseQueue.take();
@@ -132,12 +133,6 @@ public class CLI extends ClientController {
             }
         }
         graphicalCLI.printlnString("Game ended");   //TODO: temp
-    }
-
-    @Override
-    public void destroy() {
-        super.destroy();
-        alive = false;
     }
 
     @Override

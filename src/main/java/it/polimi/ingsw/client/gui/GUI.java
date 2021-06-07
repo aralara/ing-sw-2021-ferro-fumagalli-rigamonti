@@ -104,25 +104,44 @@ public class GUI extends ClientController {
 
     @Override
     public void run() {
-        LinkedBlockingQueue<ServerActionMessage> actionQueue = getMessageHandler().getActionQueue();
+        LinkedBlockingQueue<ServerActionMessage>  actionQueue = getMessageHandler().getActionQueue();
         LinkedBlockingQueue<ServerAckMessage> responseQueue = getMessageHandler().getResponseQueue();
         List<ClientMessage> confirmationList = getMessageHandler().getConfirmationList();
 
+        Object lock = new Object();
+
         new Thread(getUpdateMessageReader()).start();
 
-        while(true) {
+        setAlive(true);
+
+        new Thread(() -> {
             try {
-                if (confirmationList.size() != 0) {
+                while(isAlive()) {
                     ServerAckMessage ack = responseQueue.take();
-                    confirmationList.remove(confirmationList.stream().filter(ack::compareTo).findFirst().orElseThrow());
-                    ack.activateResponse(this);
+                    synchronized (lock) {
+                        confirmationList.remove(confirmationList.stream().filter(ack::compareTo).findFirst().orElseThrow());
+                        ack.activateResponse(this);
+                        lock.notify();
+                    }
                 }
-                else if (actionQueue.size() > 0)
-                        actionQueue.poll().doAction(this);
-            } catch(Exception e) {
+            } catch(InterruptedException e) {
                 e.printStackTrace();
             }
-        }
+        }).start();
+
+        new Thread(() -> {
+            try {
+                while(isAlive()) {
+                    ServerActionMessage action = actionQueue.take();
+                    synchronized (lock) {
+                        action.doAction(this);
+                        lock.notify();
+                    }
+                }
+            } catch(InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     @Override
