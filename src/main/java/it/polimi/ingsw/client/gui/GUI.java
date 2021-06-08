@@ -460,6 +460,9 @@ public class GUI extends ClientController {
                     getController(SceneNames.RESOURCE_CHOICE_MENU)).setIsMarbleAction(false, null));
             callPlatformRunLater(() -> guiApplication.setActiveScene(SceneNames.RESOURCE_CHOICE_MENU));
         }
+        else
+            callPlatformRunLater(() -> ((PlayerBoardController) guiApplication.
+                    getController(SceneNames.PLAYER_BOARD)).enableButtons());
     }
 
     /**
@@ -660,6 +663,19 @@ public class GUI extends ClientController {
     public Deck getLeaderBoard(){
         try {
             return getLocalPlayerBoard().getLeaderBoard().getBoard();
+        } catch (NotExistingNicknameException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * Gets the leaderHand of the local player
+     * @return Returns the leaderHand
+     */
+    public Deck getLeaderHand(){
+        try {
+            return getLocalPlayerBoard().getLeaderBoard().getHand();
         } catch (NotExistingNicknameException e) {
             e.printStackTrace();
         }

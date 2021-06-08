@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.gui.controllers;
 import it.polimi.ingsw.client.gui.SceneNames;
 import it.polimi.ingsw.client.structures.PlayerBoardView;
 import it.polimi.ingsw.exceptions.NotExistingNicknameException;
+import it.polimi.ingsw.server.model.boards.LeaderBoard;
 import it.polimi.ingsw.server.model.cards.ability.AbilityProduction;
 import it.polimi.ingsw.server.model.cards.ability.AbilityWarehouse;
 import it.polimi.ingsw.server.model.cards.card.Card;
@@ -11,6 +12,7 @@ import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.utils.messages.client.EndTurnMessage;
+import it.polimi.ingsw.utils.messages.client.SaveMessage;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -70,14 +72,12 @@ public class PlayerBoardController extends GenericController {
     public void setIsPlayerTurn(boolean isPlayerTurn){
         this.isPlayerTurn=isPlayerTurn;
         mainActionPlayed=false;
-        if(isPlayerTurn) {
-            if(!isResToPlaceAction)
-                enableButtons();
-        }
-        else {
+        if(!isPlayerTurn || getGUI().getLeaderHand().size()>=3){ //disable buttons even when the initial phase has not ended yet
             disableButtons();
             viewOpponents_button.setDisable(false);
         }
+        else if(!isResToPlaceAction)
+            enableButtons();
     }
 
     /**
@@ -275,7 +275,7 @@ public class PlayerBoardController extends GenericController {
      * Saves the game
      */
     public void save() {
-        //TODO: fare
+        getGUI().getMessageHandler().sendClientMessage(new SaveMessage());
     }
 
     /**
@@ -1977,8 +1977,8 @@ public class PlayerBoardController extends GenericController {
         if(leaderCards.size()>1) {
             boardLeader2_imageView.setImage(new Image(getClass().getResourceAsStream("/imgs/leaderCards/"
                     + leaderCards.get(1).getID() + ".png")));
-            if(((LeaderCard)leaderCards.get(0)).getAbility() instanceof AbilityWarehouse)
-                setOpponentLeaderShelf(((AbilityWarehouse)((LeaderCard)leaderCards.get(0)).getAbility()).
+            if(((LeaderCard)leaderCards.get(1)).getAbility() instanceof AbilityWarehouse)
+                setOpponentLeaderShelf(((AbilityWarehouse)((LeaderCard)leaderCards.get(1)).getAbility()).
                         getResourceType(), playerBoard.getWarehouse().getShelves(), 2);
         }
     }
