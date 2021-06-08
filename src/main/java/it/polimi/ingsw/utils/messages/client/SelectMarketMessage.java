@@ -26,17 +26,15 @@ public class SelectMarketMessage extends ClientActionMessage {
         Controller controller = view.getGameHandler().getController();
         List<Resource> resources = controller.getFromMarket(view.getNickname(), row, column);
         List<ResourceType> availableResources = controller.getPlayerBoard(view.getNickname()).getAbilityMarbles();
-        view.sendMessage(new ServerAckMessage(getUuid(), true));
+        view.sendMessage(new ServerAckMessage(getUuid(), true));    //TODO: controlli server side
         view.sendMessage(new ResourcesMarketMessage(resources, availableResources));
     }
 
     @Override
-    public void doACKResponseAction(ClientController client) {
-        //TODO: gestione ACK
-    }
+    public void doACKResponseAction(ClientController client) { }
 
     @Override
     public void doNACKResponseAction(ClientController client) {
-        //TODO: gestione NACK
+        client.ackNotification("Invalid row/column combination, unable to access market", true);
     }
 }

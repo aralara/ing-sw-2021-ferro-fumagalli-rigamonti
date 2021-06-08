@@ -27,11 +27,13 @@ public class RequestResourcesProdMessage extends CanActivateProductionsMessage {
 
     @Override
     public void doACKResponseAction(ClientController client) {
-        //TODO: gestione ACK
+        client.ackNotification("Productions activated successfully", false);
     }
 
     @Override
     public void doNACKResponseAction(ClientController client) {
+        client.ackNotification("Unable to activate the requested productions with the selected resources",
+                true);
         client.chooseProductionStorages(getProductions(), getConsumed());
     }
 }
