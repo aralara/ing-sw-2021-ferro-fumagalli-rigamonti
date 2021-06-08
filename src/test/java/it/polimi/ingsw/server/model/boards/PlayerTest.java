@@ -6,6 +6,9 @@ import static org.junit.Assert.*;
 
 public class PlayerTest {
 
+    /**
+     * Tests if getters return the correct values
+     */
     @Test
     public void testGettersSetters() {
         String nickname = "testNickname";

@@ -6,6 +6,9 @@ import static org.junit.Assert.*;
 
 public class VaticanReportTest {
 
+    /**
+     * Tests different levels of faith trigger or not each vatican report
+     */
     @Test
     public void testInRange() {
         VaticanReport[] vaticanReports = new VaticanReport[3];
@@ -35,6 +38,9 @@ public class VaticanReportTest {
         assertTrue(vaticanReports[2].inRange(29)); //out of the faith track range, but still valid
     }
 
+    /**
+     * Tests if the value set after a triggered report is correct
+     */
     @Test
     public void testSetTriggered() {
         VaticanReport[] vaticanReports = new VaticanReport[3];

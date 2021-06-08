@@ -15,6 +15,9 @@ import static org.junit.Assert.*;
 
 public class DevelopmentBoardTest {
 
+    /**
+     * Tests if the active productions are the same of the cards placed at the top of the spaces
+     */
     @Test
     public void testGetActiveProductions() {
         DevelopmentBoard developmentBoard = new DevelopmentBoard();
@@ -119,6 +122,9 @@ public class DevelopmentBoardTest {
         }
     }
 
+    /**
+     * Tests if the cards are inserted correctly and if the number of cards on the board is corresponded
+     */
     @Test
     public void testAddDevCardAndNumberOfCards() {
         DevelopmentBoard developmentBoard = new DevelopmentBoard();
@@ -173,6 +179,9 @@ public class DevelopmentBoardTest {
         }
     }
 
+    /**
+     * Tests if a card can be placed on a specific space depending on its level
+     */
     @Test
     public void testCheckDevCardAddable() {
         DevelopmentBoard developmentBoard = new DevelopmentBoard();
@@ -243,6 +252,9 @@ public class DevelopmentBoardTest {
         }
     }
 
+    /**
+     * Tests if cards are present on the board at the right quantity
+     */
     @Test
     public void testCheckRequirement() {
         DevelopmentBoard developmentBoard = new DevelopmentBoard();
@@ -282,6 +294,9 @@ public class DevelopmentBoardTest {
         assertFalse(developmentBoard.checkRequirement(CardColors.BLUE, 1, 1));
     }
 
+    /**
+     * Tests the VPs returned with different configurations of cards placed on the board
+     */
     @Test
     public void testCalculateVP() {
         DevelopmentBoard developmentBoard = new DevelopmentBoard();
@@ -338,6 +353,9 @@ public class DevelopmentBoardTest {
         }
     }
 
+    /**
+     * Tests if the getter methods returns a list of three decks
+     */
     @Test
     public void testGetSpaces() {
         DevelopmentBoard developmentBoard = new DevelopmentBoard();

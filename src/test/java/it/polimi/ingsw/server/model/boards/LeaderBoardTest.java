@@ -16,6 +16,9 @@ import static org.junit.Assert.*;
 
 public class LeaderBoardTest {
 
+    /**
+     * Tests the VPs returned with different leaderBoard configurations
+     */
     @Test
     public void testCalculateVP() {
         LeaderBoard leaderBoard = new LeaderBoard();
