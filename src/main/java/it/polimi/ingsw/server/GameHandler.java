@@ -141,19 +141,24 @@ public class GameHandler implements Runnable {
         }
     }
 
+    public boolean saveGame() {
+        if(sizeSetup.get() == size) {
+            try {
+                save.save();
+                return true;
+            } catch (IOException e) {
+                System.out.println("Unable to save game");
+            }
+        }
+        return false;
+    }
+
     public void stop() {
         if(active) {
             active = false;
             for (VirtualView virtualView : clientsVirtualView)
                 virtualView.stop(false);
-            if(sizeSetup.get() == size) {
-                try {
-                    save.save();
-                } catch (IOException e) {
-                    System.out.println("Unable to save game");
-                }
-            }
-            else {
+            if(!saveGame()) {
                 try {
                     GameLibrary.getInstance().deleteSave(save);
                 } catch (LibraryNotLoadedException e) {

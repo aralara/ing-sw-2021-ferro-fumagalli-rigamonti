@@ -378,6 +378,8 @@ public abstract class Game implements Serializable {
             playersPositions[i] = 0;
         }
 
+        //Iterates over the VP array multiple times, each time considering only the scores that are lower or equal than the
+        // current maximum score, and selecting the highest one as the next iteration's maximum score
         int currentMax = Integer.MAX_VALUE;
         for(int i = 0; i < playerNumber; i++) {
             int tempMax = -1;

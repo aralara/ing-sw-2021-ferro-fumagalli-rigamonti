@@ -262,6 +262,7 @@ public class CLI extends ClientController {
             setPlayerTurn(false);
         }
         turnMenu();
+        idle = true;
     }
 
     @Override
@@ -336,7 +337,6 @@ public class CLI extends ClientController {
     }
 
     public void selectMarket() {
-
         graphicalCLI.printMarket(getMarket());
         if(idle = graphicalCLI.askGoBack())
             return;
@@ -1069,7 +1069,10 @@ public class CLI extends ClientController {
                 })
         ));
         playerTurnMenu.addAll(shared);
-        playerTurnMenu.add(
+        playerTurnMenu.addAll( Arrays.asList(
+                new MenuOption("Save game", () -> {
+                    getMessageHandler().sendClientMessage(new SaveMessage());
+                }),
                 new MenuOption("End turn", () -> {
                     if (isMainActionPlayed()) {
                         setPlayerTurn(false);
@@ -1077,7 +1080,7 @@ public class CLI extends ClientController {
                     }
                     else graphicalCLI.printlnString("You haven't played any main action yet!");
                 })
-        );
+        ));
         opponentTurnMenu.add(
                 new MenuOption("Wait for my turn", () -> graphicalCLI.printlnString("Waiting for your turn..."))
         );
