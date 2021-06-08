@@ -1,8 +1,5 @@
 package it.polimi.ingsw.server.model.cards.card;
 
-import it.polimi.ingsw.server.model.cards.ability.AbilityDiscount;
-import it.polimi.ingsw.server.model.cards.requirement.Requirement;
-import it.polimi.ingsw.server.model.cards.requirement.RequirementRes;
 import it.polimi.ingsw.server.model.storage.*;
 
 import java.util.ArrayList;
