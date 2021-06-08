@@ -12,6 +12,10 @@ public class WarehouseTest{
     @Test
     public void testValidate() {
 
+        List<Shelf> temp2 = new ArrayList<>(List.of(new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,false),
+                new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,false)));
+        assertFalse(Warehouse.validate(temp2));
+
         List<Shelf> temp = new ArrayList<>(List.of(new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,false)));
         assertTrue(Warehouse.validate(temp));
         temp.add(new Shelf(ResourceType.SHIELD,new Resource(ResourceType.SHIELD,2),2,false));
@@ -41,17 +45,7 @@ public class WarehouseTest{
 
     @Test
     public void testAddShelf() {
-        //TODO: test vecchi, cambaite la gestione del wh
-/*
-        Warehouse wh = new Warehouse();
-        Shelf s1 = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,false);
-        wh.addShelf(s1);
-        assertEquals(2,wh.getList().get(0).getResToPlaceQuantity());
-        assertEquals(ResourceType.COIN,wh.getList().get(0).getResourceType());
 
-        wh = new Warehouse(new ArrayList<>(List.of(new Shelf(ResourceType.SHIELD,new Resource(ResourceType.SHIELD,1),2,false))));
-        assertEquals(1,wh.getList().get(0).getResToPlaceQuantity());
-        assertEquals(ResourceType.SHIELD,wh.getList().get(0).getResourceType());*/
     }
 
     @Test
@@ -130,6 +124,20 @@ public class WarehouseTest{
     }
 
     @Test
+    public void testIsEmpty() {
+        Warehouse wh = new Warehouse();
+        assertTrue(wh.isEmpty());
+        List<Shelf> temp = new ArrayList<>();
+        temp.add(new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,1),1,false));
+        temp.add(new Shelf(ResourceType.SHIELD,new Resource(ResourceType.SHIELD,1),2,false));
+        temp.add(new Shelf(ResourceType.STONE,new Resource(ResourceType.STONE,1),3,false));
+        temp.add(new Shelf(ResourceType.SHIELD,new Resource(ResourceType.SHIELD,2),2,true));
+        temp.add(new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,true));
+        wh.changeConfiguration(temp);
+        assertFalse(wh.isEmpty());
+    }
+
+    @Test
     public void testRemoveResources() {
 
         Warehouse wh = new Warehouse();
@@ -143,25 +151,13 @@ public class WarehouseTest{
 
         assertTrue(wh.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN,1))),false));
         assertTrue(wh.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.SHIELD,1))),false));
-/*  TODO:cambiata la gestione del warehouse, test veccchi
 
-        assertEquals(0,wh.getList(false).get(0).getResToPlaceQuantity());
-        assertEquals(ResourceType.COIN,wh.getList(false).get(3).getResourceType());
-        assertEquals(0,wh.getList(false).get(4).getResToPlaceQuantity());
-        assertEquals(ResourceType.SHIELD,wh.getList(false).get(4).getResourceType());
-        assertEquals(1,wh.getList(false).get(5).getResToPlaceQuantity());
-        assertEquals(ResourceType.STONE,wh.getList(false).get(5).getResourceType());
 
-        assertFalse(wh.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN,1))),false));
+        assertTrue(wh.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.SHIELD,2))),true));
 
+        assertFalse(wh.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN,10))),false));
         assertTrue(wh.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN,1))),true));
 
-        assertEquals(2,wh.getList(true).get(3).getResToPlaceQuantity());
-        assertEquals(ResourceType.SHIELD,wh.getList(true).get(3).getResourceType());
-        assertEquals(1,wh.getList(true).get(4).getResToPlaceQuantity());
-        assertEquals(ResourceType.COIN,wh.getList(true).get(4).getResourceType());
-
-
-        assertFalse(wh.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN,1)))));*/
+        assertTrue(wh.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN,5)))));
     }
 }

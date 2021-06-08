@@ -71,6 +71,51 @@ public class StorageTest{
 
     }
 
+    @Test
+    public void testCalculateDiscount() {
+        List<Resource> resources = new ArrayList<>();
+        List<ResourceType> discount = new ArrayList<>();
+        discount.add(ResourceType.STONE);
+        resources.add(new Resource(ResourceType.COIN,2));
+        assertEquals(Storage.calculateDiscount(resources,discount).get(0).getQuantity(),2);
+        assertEquals(Storage.calculateDiscount(resources,discount).get(0).getResourceType(),ResourceType.COIN);
+        discount.add(ResourceType.COIN);
+        assertEquals(Storage.calculateDiscount(resources,discount).get(0).getQuantity(),1);
+        assertEquals(Storage.calculateDiscount(resources,discount).get(0).getResourceType(),ResourceType.COIN);
+    }
+
+    @Test
+    public void testIsDiscardedResCorrect() {
+        List<Resource> resources1 = new ArrayList<>();
+        List<Resource> resources2 = new ArrayList<>();
+
+        resources1.add(new Resource(ResourceType.COIN,2));
+        resources1.add(new Resource(ResourceType.STONE,2));
+        resources1.add(new Resource(ResourceType.SERVANT,2));
+
+        resources2.add(new Resource(ResourceType.STONE,2));
+        resources2.add(new Resource(ResourceType.SERVANT,2));
+
+        assertTrue(Storage.isDiscardedResCorrect(resources1,resources1));
+        assertTrue(Storage.isDiscardedResCorrect(resources1,resources2));
+        assertFalse(Storage.isDiscardedResCorrect(resources2,resources1));
+    }
+
+    @Test
+    public void testGetTotalQuantity() {
+        List<Resource> resources1 = new ArrayList<>();
+        List<Resource> resources2 = new ArrayList<>();
+
+        resources1.add(new Resource(ResourceType.COIN,2));
+        resources1.add(new Resource(ResourceType.STONE,2));
+        resources1.add(new Resource(ResourceType.SERVANT,2));
+
+        resources2.add(new Resource(ResourceType.STONE,2));
+        resources2.add(new Resource(ResourceType.SERVANT,2));
+
+        assertEquals(Storage.getTotalQuantity(resources1),6);
+        assertEquals(Storage.getTotalQuantity(resources2),4);
+    }
 
     @Test
     public void testGetList() {

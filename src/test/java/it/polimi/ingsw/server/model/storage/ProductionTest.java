@@ -10,6 +10,19 @@ import static org.junit.Assert.*;
 public class ProductionTest{
 
     @Test
+    public void testToString() {
+        Production temp = new Production();
+        assertEquals(temp.toString(),"\tConsumed:  > 2 " + ResourceType.WILDCARD +"\n\tProduced:  > 1 " + ResourceType.WILDCARD + "\n");
+
+        temp = new Production(new ArrayList<>(List.of(new Resource(ResourceType.COIN,4),new Resource(ResourceType.SHIELD,4))),
+                new ArrayList<>(List.of(new Resource(ResourceType.SHIELD,4),new Resource(ResourceType.SHIELD,4))));
+
+        assertEquals(temp.toString(),"\tConsumed:  > 4 " + ResourceType.COIN + "\n\t           > 4 " + ResourceType.SHIELD +
+                "\n\tProduced:  > 4 " + ResourceType.SHIELD + "\n\t           > 4 "+ ResourceType.SHIELD +"\n");
+
+    }
+
+    @Test
     public void testMakeClone() {
         Production temp = new Production(new ArrayList<>(List.of(new Resource(ResourceType.COIN,4))),
                 new ArrayList<>(List.of(new Resource(ResourceType.SHIELD,4))));

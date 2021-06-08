@@ -34,6 +34,28 @@ public class ShelfTest{
     }
 
     @Test
+    public void testIsResourceTypeUnique() {
+        List<Shelf> shelves = new ArrayList<>();
+        shelves.add(new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,false));
+        assertFalse(Shelf.isResourceTypeUnique(shelves,ResourceType.COIN));
+        assertTrue(Shelf.isResourceTypeUnique(shelves,ResourceType.SHIELD));
+        assertTrue(Shelf.isResourceTypeUnique(shelves,ResourceType.SERVANT));
+        shelves.add(new Shelf(ResourceType.SHIELD,new Resource(ResourceType.SHIELD,1),1,false));
+        assertFalse(Shelf.isResourceTypeUnique(shelves,ResourceType.COIN));
+        assertFalse(Shelf.isResourceTypeUnique(shelves,ResourceType.SHIELD));
+        assertTrue(Shelf.isResourceTypeUnique(shelves,ResourceType.SERVANT));
+        assertTrue(Shelf.isResourceTypeUnique(shelves,ResourceType.STONE));
+    }
+
+    @Test
+    public void testIsEmpty() {
+        Shelf shelf = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,false);
+        assertFalse(shelf.isEmpty());
+        shelf = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,0),2,false);
+        assertTrue(shelf.isEmpty());
+    }
+
+    @Test
     public void testCheckAdd() {
 
         Shelf instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,false);
