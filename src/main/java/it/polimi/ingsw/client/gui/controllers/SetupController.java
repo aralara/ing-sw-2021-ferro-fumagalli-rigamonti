@@ -114,7 +114,7 @@ public class SetupController extends GenericController {
     }
 
     /**
-     * TODO: fare quando si sarà implementato il metodo
+     * Sets the number of players and shows the NicknameMenu scene
      */
     public void playOffline() {
         ((SetupController)getGUIApplication().getController(SceneNames.NICKNAME_MENU)).setIsLocal(true);

@@ -335,7 +335,6 @@ public class CLI extends ClientController {
         ).get(0).getAction().run();
     }
 
-    @Override
     public void selectMarket() {
 
         graphicalCLI.printMarket(getMarket());

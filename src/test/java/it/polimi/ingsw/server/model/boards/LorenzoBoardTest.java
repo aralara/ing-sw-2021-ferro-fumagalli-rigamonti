@@ -27,11 +27,6 @@ public class LorenzoBoardTest {
     }
 
     @Test
-    public void testTakeDevCard() {
-        //TODO: da fare o richiamare metodo in altri test
-    }
-
-    @Test
     public void testInitLorenzoDeckAndPickLorenzoCard() {
         SingleGame game = new SingleGame();
         LorenzoBoard lorenzoBoard = new LorenzoBoard(game);

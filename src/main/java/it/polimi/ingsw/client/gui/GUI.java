@@ -95,8 +95,8 @@ public class GUI extends ClientController {
 
 
     /**
-     * TODO: javadoc
-     * @param r
+     * Calls runLater method of Platform class and executes the command given by parameter
+     * @param r Command to be executed
      */
     public void callPlatformRunLater(Runnable r){
         Platform.runLater(r);
@@ -316,11 +316,6 @@ public class GUI extends ClientController {
     }
 
     @Override
-    public void selectMarket() {
-        //TODO: da fare?
-    }
-
-    @Override
     public void selectDevDecks() {
         callPlatformRunLater(() -> guiApplication.setActiveScene(SceneNames.DECKS_BOARD));
         callPlatformRunLater(() -> guiApplication.getController(SceneNames.DECKS_BOARD).showAlert(Alert.AlertType.ERROR,
@@ -337,7 +332,6 @@ public class GUI extends ClientController {
 
     @Override
     public void placeResourcesOnShelves(List<Resource> resources) {
-        //TODO: da controllare
         callPlatformRunLater(() -> guiApplication.getController(SceneNames.PLAYER_BOARD).showAlert(Alert.AlertType.ERROR,
                 "Error", "You can't place the resources in this way",
                 "Please choose another configuration"));

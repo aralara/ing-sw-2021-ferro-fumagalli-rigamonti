@@ -77,9 +77,6 @@ public abstract class ClientController {
 
     public abstract void notifyEndGame(List<Player> players);
 
-
-    public abstract void selectMarket();
-
     public abstract void selectDevDecks();
 
     public abstract void selectProductions();
