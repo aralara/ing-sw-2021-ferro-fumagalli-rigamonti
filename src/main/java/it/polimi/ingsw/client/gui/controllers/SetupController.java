@@ -118,6 +118,7 @@ public class SetupController extends GenericController {
      */
     public void playOffline() {
         ((SetupController)getGUIApplication().getController(SceneNames.NICKNAME_MENU)).setIsLocal(true);
+        getGUI().setNumberOfPlayers(1);
         playOnline_button.setVisible(false);
         playOffline_button.setVisible(false);
         loading_bar.setVisible(true);

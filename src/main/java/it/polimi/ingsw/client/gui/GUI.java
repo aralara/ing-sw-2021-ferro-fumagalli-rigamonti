@@ -221,7 +221,7 @@ public class GUI extends ClientController {
     @Override
     public void notifyStartTurn(String nickname) {
         if(nickname.equals(getNickname())) {
-            if(getLorenzoFaith()==-1)
+            if(getNumberOfPlayers()>1)
                 callPlatformRunLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD)).
                     showAlert(Alert.AlertType.INFORMATION, "It's your turn",
                             "Now you can play your actions", ""));
@@ -229,7 +229,7 @@ public class GUI extends ClientController {
                     getController(SceneNames.PLAYER_BOARD)).setIsPlayerTurn(true));
         }
         else {
-            if(getLorenzoFaith()==-1)
+            if(getNumberOfPlayers()>1)
                 callPlatformRunLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD)).
                     showAlert(Alert.AlertType.INFORMATION,"Wait your turn",
                              "Now it's "+nickname+"'s turn", ""));
@@ -292,11 +292,10 @@ public class GUI extends ClientController {
         RankingController rc = (RankingController) guiApplication.getController(SceneNames.RANKING);
         List<Player> playerRanking = players.stream().sorted(Comparator.comparingInt(
                 Player::getFinalPosition)).collect(Collectors.toList());
-        if(getLorenzoFaith()==-1) {
+        if(getNumberOfPlayers()>1) {
             for (Player player : playerRanking) {
                 rc.setNames_label(player.getNickname());
-                rc.setScores_label(getLorenzoFaith() >= 0 && player.getNickname().equals("Lorenzo") ?
-                        "-" : Integer.toString(player.getTotalVP()));
+                rc.setScores_label(Integer.toString(player.getTotalVP()));
             }
         }
         else {

@@ -194,24 +194,23 @@
          <image>
             <Image url="@../imgs/faith/tile_4point.png" />
          </image></ImageView>
-      <Button fx:id="viewOpponents_button" disable="true" focusTraversable="false" layoutX="877.0" layoutY="151.0" mnemonicParsing="false" onAction="#viewOpponents" prefHeight="44.0" prefWidth="44.0" styleClass="opponentButton" stylesheets="@../css/playerBoard.css" />
       <Label layoutX="1281.0" text="Main actions" textFill="WHITE">
          <font>
             <Font name="Pristina" size="24.0" />
          </font>
       </Label>
-      <Separator layoutX="974.0" layoutY="37.0" prefHeight="3.0" prefWidth="408.0" />
-      <Button fx:id="market_button" focusTraversable="false" layoutX="978.0" layoutY="49.0" mnemonicParsing="false" onAction="#goToMarket" text="Market" textFill="#1d60cc">
+      <Separator layoutX="982.0" layoutY="37.0" prefHeight="3.0" prefWidth="400.0" />
+      <Button fx:id="market_button" focusTraversable="false" layoutX="982.0" layoutY="49.0" mnemonicParsing="false" onAction="#goToMarket" text="Market" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="18.0" />
          </font>
       </Button>
-      <Button fx:id="decks_button" focusTraversable="false" layoutX="1065.0" layoutY="49.0" mnemonicParsing="false" onAction="#goToDecks" prefHeight="41.0" prefWidth="70.0" text="Decks" textFill="#1d60cc">
+      <Button fx:id="decks_button" focusTraversable="false" layoutX="1066.0" layoutY="49.0" mnemonicParsing="false" onAction="#goToDecks" prefHeight="41.0" prefWidth="70.0" text="Decks" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="18.0" />
          </font>
       </Button>
-      <Button fx:id="activateProductions_button" disable="true" focusTraversable="false" layoutX="1151.0" layoutY="49.0" mnemonicParsing="false" onAction="#activateProductions" text="Activate productions" textFill="#1d60cc">
+      <Button fx:id="activateProductions_button" disable="true" focusTraversable="false" layoutX="1152.0" layoutY="49.0" mnemonicParsing="false" onAction="#activateProductions" text="Activate productions" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="18.0" />
          </font>
@@ -227,21 +226,23 @@
          </font>
       </Label>
       <Separator fx:id="separator1" layoutX="936.0" layoutY="141.0" prefHeight="3.0" prefWidth="446.0" />
-      <Button fx:id="activateLeaderCard_button" disable="true" focusTraversable="false" layoutX="1097.0" layoutY="152.0" mnemonicParsing="false" onAction="#activateLeaderCard" text="Activate leader card" textFill="#1d60cc">
-         <font>
-            <Font name="Pristina" size="18.0" />
-         </font>
-      </Button>
       <Button fx:id="discardLeaderCard_button" disable="true" focusTraversable="false" layoutX="1249.0" layoutY="152.0" mnemonicParsing="false" onAction="#discardLeaderCard" text="Discard leader card" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="18.0" />
          </font>
       </Button>
-      <Button fx:id="rearrangeWarehouse_button" focusTraversable="false" layoutX="934.0" layoutY="152.0" mnemonicParsing="false" onAction="#rearrangeWarehouse" text="Rearrange warehouse" textFill="#1d60cc">
+      <Button fx:id="activateLeaderCard_button" disable="true" focusTraversable="false" layoutX="1105.0" layoutY="152.0" mnemonicParsing="false" onAction="#activateLeaderCard" text="Activate leader card" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="18.0" />
          </font>
       </Button>
+      <Button fx:id="rearrangeWarehouse_button" focusTraversable="false" layoutX="949.0" layoutY="152.0" mnemonicParsing="false" onAction="#rearrangeWarehouse" text="Rearrange warehouse" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="18.0" />
+         </font>
+      </Button>
+      <Button fx:id="viewOpponents_button" disable="true" focusTraversable="false" layoutX="896.0" layoutY="151.0" mnemonicParsing="false" onAction="#viewOpponents" prefHeight="44.0" prefWidth="44.0" styleClass="opponentButton" stylesheets="@../css/playerBoard.css" />
+      <Button fx:id="save_button" disable="true" focusTraversable="false" layoutX="845.0" layoutY="151.0" mnemonicParsing="false" onAction="#save" prefHeight="44.0" prefWidth="44.0" styleClass="saveButton" stylesheets="@../css/playerBoard.css" />
       <Label fx:id="resToPlace_label" layoutX="1248.0" layoutY="225.0" text="Resources to place" textFill="WHITE">
          <font>
             <Font name="Pristina" size="24.0" />
@@ -293,7 +294,7 @@
             <Font name="Pristina" size="24.0" />
          </font>
       </Label>
-      <Separator fx:id="separator3" layoutX="1002.0" layoutY="363.0" prefHeight="3.0" prefWidth="384.0" />
+      <Separator fx:id="separator3" layoutX="986.0" layoutY="363.0" prefHeight="3.0" prefWidth="400.0" />
       <GridPane fx:id="activeLeaderMatrix_gridPane" layoutX="986.0" layoutY="370.0" prefHeight="256.0" prefWidth="400.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="247.4" minWidth="10.0" prefWidth="208.4" />

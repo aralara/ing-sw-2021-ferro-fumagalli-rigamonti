@@ -15,3 +15,8 @@
     -fx-background-image: url("../imgs/icon_opponents.png");
     -fx-background-size: stretch;
 }
+
+.saveButton {
+    -fx-background-image: url("../imgs/icon_save.png");
+    -fx-background-size: stretch;
+}

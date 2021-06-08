@@ -12,6 +12,7 @@ import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.utils.messages.client.EndTurnMessage;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -41,7 +42,8 @@ public class PlayerBoardController extends GenericController {
     @FXML private Separator separator1, separator2, separator3;
     @FXML private Button confirm_button, restoreWarehouse_button, market_button, decks_button,
             activateProductions_button, endTurn_button, activateLeaderCard_button, discardLeaderCard_button,
-            rearrangeWarehouse_button, viewOpponents_button, leftArrow_button, rightArrow_button, goBoard_button;
+            rearrangeWarehouse_button, viewOpponents_button, save_button,
+            leftArrow_button, rightArrow_button, goBoard_button;
     @FXML private CheckBox basicProduction_checkBox, devSpace1_checkBox, devSpace2_checkBox, devSpace3_checkBox,
             leader1_checkBox, leader2_checkBox;
     @FXML private ImageView inkwell_imageVIew,
@@ -159,6 +161,7 @@ public class PlayerBoardController extends GenericController {
             endTurn_button.setDisable(false);
             activateLeaderCard_button.setDisable(false);
             discardLeaderCard_button.setDisable(false);
+            save_button.setDisable(false);
         }
         if(!mainActionPlayed && !isResToPlaceAction){
             ((MarketBoardController)getGUIApplication().getController(SceneNames.MARKET_BOARD)).enableMarketAction();
@@ -167,6 +170,7 @@ public class PlayerBoardController extends GenericController {
             viewOpponents_button.setDisable(false);
             activateLeaderCard_button.setDisable(false);
             discardLeaderCard_button.setDisable(false);
+            save_button.setDisable(false);
         }
     }
 
@@ -246,7 +250,7 @@ public class PlayerBoardController extends GenericController {
      */
     public void viewOpponents() {
         showButtons(false);
-        if(getGUI().getLorenzoFaith()==-1){ //multiplayer
+        if(getGUI().getNumberOfPlayers()>1){ //multiplayer
             viewOpponent(true);
         }
         else { //single player
@@ -265,6 +269,13 @@ public class PlayerBoardController extends GenericController {
         }
         hideLeaderHand();
         hideCheckBoxes();
+    }
+
+    /**
+     * Saves the game
+     */
+    public void save() {
+        //TODO: fare
     }
 
     /**
@@ -771,6 +782,13 @@ public class PlayerBoardController extends GenericController {
     }
 
     /**
+     * Disables save button
+     */
+    public void disableSaveButton(){
+        save_button.setDisable(true);
+    }
+
+    /**
      * Disable development board's spaces
      */
     private void disableSpaces(){
@@ -936,6 +954,7 @@ public class PlayerBoardController extends GenericController {
         endTurn_button.setDisable(true);
         activateLeaderCard_button.setDisable(true);
         discardLeaderCard_button.setDisable(true);
+        save_button.setDisable(true);
         hideCheckBoxes();
     }
 
@@ -957,6 +976,7 @@ public class PlayerBoardController extends GenericController {
         }
         activateLeaderCard_button.setDisable(false);
         discardLeaderCard_button.setDisable(false);
+        save_button.setDisable(false);
         rearrangeWarehouse_button.setDisable(false);
         viewOpponents_button.setDisable(false);
         showCheckBoxes();
@@ -1884,6 +1904,7 @@ public class PlayerBoardController extends GenericController {
         decks_button.setVisible(isLocalBoard);
         activateLeaderCard_button.setVisible(isLocalBoard);
         discardLeaderCard_button.setVisible(isLocalBoard);
+        save_button.setVisible(isLocalBoard);
         resToPlace_label.setVisible(isLocalBoard);
         separator2.setVisible(isLocalBoard);
         coinToPlace_imageView.setVisible(isLocalBoard);

@@ -42,4 +42,11 @@ public class RankingController extends GenericController {
                 "Thanks to have played Master of Renaissance!", "");
         System.exit(0);
     }
+
+    /**
+     * Goes back to the first scene to start a new game
+     */
+    public void startNewGame() {
+        //TODO: fare
+    }
 }

@@ -21,7 +21,12 @@
             <Font name="Pristina" size="22.0" />
          </font>
       </Label>
-      <Button layoutX="157.0" layoutY="348.0" mnemonicParsing="false" onAction="#quit" prefHeight="55.0" prefWidth="97.0" text="Quit" textFill="#1d60cc">
+      <Button layoutX="67.0" layoutY="348.0" mnemonicParsing="false" onAction="#quit" prefHeight="55.0" prefWidth="97.0" text="Quit" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="24.0" />
+         </font>
+      </Button>
+      <Button focusTraversable="false" layoutX="185.0" layoutY="348.0" mnemonicParsing="false" onAction="#startNewGame" text="Start new game" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="24.0" />
          </font>
