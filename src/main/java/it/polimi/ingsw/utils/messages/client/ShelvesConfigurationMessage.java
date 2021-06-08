@@ -45,6 +45,6 @@ public class ShelvesConfigurationMessage extends ClientActionMessage {
         if(placed.size() > 0)   // true if the warehouse has been rearranged while adding resources to it
             client.placeResourcesOnShelves(placed);
         else
-            client.ackNotification("Invalid shelf configuration", false);
+            client.ackNotification("Invalid shelf configuration", true);
     }
 }
