@@ -78,8 +78,10 @@ public class MarketTest {
         market.loadMarket(FileNames.MARKET_FILE.value());
 
         for(int row=0; row<3; row++)
-            for(int column=0; column<3; column++)
+            for(int column=0; column<3; column++) {
                 assertNotNull(market.getMarbleAt(row, column));
+                assertEquals(market.getMarbleMatrix()[row][column], market.getMarbleAt(row, column));
+            }
 
         assertNotNull(market.getFloatingMarble());
     }

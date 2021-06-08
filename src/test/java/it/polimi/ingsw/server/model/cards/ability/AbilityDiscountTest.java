@@ -10,10 +10,11 @@ import static org.junit.Assert.*;
 public class AbilityDiscountTest {
 
     @Test
-    public void testGetResourceType() {
+    public void testGetResourceTypeAndAbilityToString() {
         AbilityDiscount ad = new AbilityDiscount(ResourceType.COIN);
         assertEquals(ResourceType.COIN,ad.getResourceType());
-
+        assertEquals(" • Special ability: You can get 1 COIN off the cost of development cards\n",
+                ad.abilityToString());
     }
 
     @Test

@@ -28,18 +28,20 @@ public class LorenzoBoardTest {
 
     @Test
     public void testTakeDevCard() {
+        //TODO: da fare o richiamare metodo in altri test
     }
 
     @Test
-    public void testInitLorenzoDeck_and_pickLorenzoCard() {
+    public void testInitLorenzoDeckAndPickLorenzoCard() {
         SingleGame game = new SingleGame();
         LorenzoBoard lorenzoBoard = new LorenzoBoard(game);
         lorenzoBoard.initLorenzoDeck(FileNames.LORENZO_DEV_FILE.value(), FileNames.LORENZO_FAITH_FILE.value());
+        assertEquals(7, lorenzoBoard.getDeck().size());
         int[] lorenzoCards = new int[2];
-        int numOfCards = 7;
 
         for(int i=0; i<7; i++){
             LorenzoCard picked = lorenzoBoard.pickLorenzoCard();
+            assertEquals(7, lorenzoBoard.getDeck().size());
             assertNotNull(picked);
             if(picked instanceof LorenzoDev)
                 lorenzoCards[0]++;

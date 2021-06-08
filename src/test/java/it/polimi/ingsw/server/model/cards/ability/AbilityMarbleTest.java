@@ -10,9 +10,11 @@ import static org.junit.Assert.*;
 public class AbilityMarbleTest {
 
     @Test
-    public void testGetResourceType() {
+    public void testGetResourceTypeAndAbilityToString() {
         AbilityMarble am = new AbilityMarble(ResourceType.STONE);
         assertEquals(ResourceType.STONE,am.getResourceType());
+        assertEquals(" • Special ability: You can can get a STONE from the white marbles in the market \n",
+                am.abilityToString());
     }
 
     @Test

@@ -120,7 +120,7 @@ public class DevelopmentBoardTest {
     }
 
     @Test
-    public void testAddDevCard_and_numberOfCards() {
+    public void testAddDevCardAndNumberOfCards() {
         DevelopmentBoard developmentBoard = new DevelopmentBoard();
         assertEquals(0, developmentBoard.numberOfCards());
 
@@ -336,6 +336,11 @@ public class DevelopmentBoardTest {
         catch (InvalidSpaceException e){
             e.printStackTrace();
         }
+    }
 
+    @Test
+    public void testGetSpaces() {
+        DevelopmentBoard developmentBoard = new DevelopmentBoard();
+        assertEquals(3, developmentBoard.getSpaces().size());
     }
 }

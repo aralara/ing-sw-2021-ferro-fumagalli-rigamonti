@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.model.cards.card;
 
 import it.polimi.ingsw.server.model.cards.ability.AbilityDiscount;
+import it.polimi.ingsw.server.model.cards.ability.SpecialAbility;
 import it.polimi.ingsw.server.model.cards.requirement.*;
 import it.polimi.ingsw.server.model.storage.*;
 
@@ -40,5 +41,19 @@ public class LeaderCardTest {
         assertEquals(VP, leadCard.getVP());
         assertEquals(requirements, leadCard.getRequirements());
         assertEquals(ability, leadCard.getAbility());
+    }
+
+    @Test
+    public void testToString(){
+        LeaderCard leaderCard = new LeaderCard();
+        assertEquals(" LEADER CARD \n• The leader card is covered, you can't see it!", leaderCard.toString());
+        List<Requirement> requirementRes = new ArrayList<>();
+        requirementRes.add(new RequirementRes(new Resource(ResourceType.SHIELD, 5)));
+        leaderCard = new LeaderCard(1, 2, requirementRes, new AbilityDiscount(ResourceType.COIN));
+        assertEquals(" LEADER CARD \n" +
+                " • Requirements: 5 SHIELD\n" +
+                " • Victory points: 2\n" +
+                " • Special ability: You can get 1 COIN off the cost of development cards\n",
+                leaderCard.toString());
     }
 }

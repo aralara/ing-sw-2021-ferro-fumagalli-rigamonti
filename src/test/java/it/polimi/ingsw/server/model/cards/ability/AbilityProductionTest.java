@@ -15,8 +15,7 @@ import static org.junit.Assert.*;
 public class AbilityProductionTest {
 
     @Test
-    public void getProduction() {
-
+    public void testGetProductionAndAbilityToString() {
         AbilityProduction ap = new AbilityProduction(new Production(
                 new ArrayList<>(List.of(new Resource(ResourceType.COIN,2))),
                 new ArrayList<>(List.of(new Resource(ResourceType.SERVANT,1)))));
@@ -25,10 +24,14 @@ public class AbilityProductionTest {
         assertEquals(ResourceType.COIN,ap.getProduction().getConsumed().get(0).getResourceType());
         assertEquals(1,ap.getProduction().getProduced().get(0).getQuantity());
         assertEquals(ResourceType.SERVANT,ap.getProduction().getProduced().get(0).getResourceType());
+        assertEquals(" • Special ability: You can can gain access to the following production: \n " +
+                        "\tConsumed:  > 2 COIN\n" +
+                        "\tProduced:  > 1 SERVANT\n",
+                ap.abilityToString());
     }
 
     @Test
-    public void activateAbility() {
+    public void testActivateAbility() {
         PlayerBoard pb = new PlayerBoard("Bonucci");
         AbilityProduction ap = new AbilityProduction(new Production(
                 new ArrayList<>(List.of(new Resource(ResourceType.COIN,2))),

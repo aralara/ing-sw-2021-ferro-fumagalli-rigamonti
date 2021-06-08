@@ -10,9 +10,11 @@ import static org.junit.Assert.*;
 public class AbilityWarehouseTest {
 
     @Test
-    public void testGetResourceType() {
+    public void testGetResourceTypeAndAbilityToString() {
         AbilityWarehouse aw = new AbilityWarehouse(ResourceType.STONE);
         assertEquals(ResourceType.STONE,aw.getResourceType());
+        assertEquals(" • Special ability: You can can gain an extra shelf to contain 2 units of STONE\n",
+                aw.abilityToString());
     }
 
     @Test

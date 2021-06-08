@@ -2,7 +2,12 @@ package it.polimi.ingsw.server.model.boards;
 
 import it.polimi.ingsw.server.model.FileNames;
 import it.polimi.ingsw.server.model.faith.FaithTrack;
+import it.polimi.ingsw.server.model.storage.Resource;
+import it.polimi.ingsw.server.model.storage.ResourceType;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -83,4 +88,25 @@ public class FaithBoardTest {
         assertFalse(faithBoard.getPopeProgression()[1]);
         assertTrue(faithBoard.getPopeProgression()[2]);
     }
+
+    @Test
+    public void testTakeFaithFromResources() {
+        FaithBoard faithBoard = new FaithBoard();
+        assertEquals(0, faithBoard.getFaith());
+        List<Resource> resources = new ArrayList<>();
+        resources.add(new Resource(ResourceType.STONE, 2));
+        faithBoard.takeFaithFromResources(resources);
+        assertEquals(0, faithBoard.getFaith());
+        resources.add(new Resource(ResourceType.FAITH, 1));
+        resources.add(new Resource(ResourceType.COIN, 1));
+        faithBoard.takeFaithFromResources(resources);
+        assertEquals(1, faithBoard.getFaith());
+        boolean faith=false;
+        for(Resource resource : resources)
+            if(resource.getResourceType()==ResourceType.FAITH)
+                faith=true;
+        assertFalse(faith);
+        assertEquals(2, resources.size());
+    }
+
 }

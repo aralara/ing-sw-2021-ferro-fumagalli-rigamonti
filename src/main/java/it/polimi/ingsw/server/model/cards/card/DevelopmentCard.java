@@ -48,14 +48,18 @@ public class DevelopmentCard extends Card {
     public String toString() {
         boolean first = true;
         StringBuilder toPrint;
-        toPrint = new StringBuilder(" DEVELOPMENT CARD \n • This is a " + color + " card level " + level +
-                "\n • Victory points: " + VP + "\n • Cost: ");
-        for (Resource resource : cost) {
-            toPrint.append((!first) ? ", " : "").append(resource.getQuantity()).append(" ").append(resource.getResourceType());
-            first = false;
-        }
+        if(getID() != -1) {
+            toPrint = new StringBuilder(" DEVELOPMENT CARD \n • This is a " + color + " card level " + level +
+                    "\n • Victory points: " + VP + "\n • Cost: ");
+            for (Resource resource : cost) {
+                toPrint.append((!first) ? ", " : "").append(resource.getQuantity()).append(" ").append(resource.getResourceType());
+                first = false;
+            }
 
-        toPrint.append("\n • Production that can be activated:\n ").append(production.toString());
+            toPrint.append("\n • Production that can be activated:\n ").append(production.toString());
+        }
+        else
+            toPrint = new StringBuilder(" DEVELOPMENT CARD \n• The development card is covered, you can't see it!");
         return toPrint.toString();
     }
 

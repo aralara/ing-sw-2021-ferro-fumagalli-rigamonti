@@ -17,18 +17,6 @@ import static org.junit.Assert.*;
 public class LeaderBoardTest {
 
     @Test
-    public void testSetLeaderHand() {
-    }
-
-    @Test
-    public void testDiscardLeaderHand() {
-    }
-
-    @Test
-    public void testPlayLeaderHand() {
-    }
-
-    @Test
     public void testCalculateVP() {
         LeaderBoard leaderBoard = new LeaderBoard();
         List<LeaderCard> leaderCards = new ArrayList<>();
@@ -43,18 +31,28 @@ public class LeaderBoardTest {
         assertEquals(0, leaderBoard.calculateVP());
 
         leaderBoard.setLeaderHand(leaderCards);
+        assertEquals(0, leaderBoard.getBoard().size());
+        assertEquals(4, leaderBoard.getHand().size());
         assertEquals(0, leaderBoard.calculateVP());
 
         leaderBoard.discardLeaderHand(leaderCards.get(0));
+        assertEquals(0, leaderBoard.getBoard().size());
+        assertEquals(3, leaderBoard.getHand().size());
         assertEquals(0, leaderBoard.calculateVP());
 
         leaderBoard.discardLeaderHand(leaderCards.get(3));
+        assertEquals(0, leaderBoard.getBoard().size());
+        assertEquals(2, leaderBoard.getHand().size());
         assertEquals(0, leaderBoard.calculateVP());
 
         leaderBoard.playLeaderHand(leaderCards.get(2));
+        assertEquals(1, leaderBoard.getBoard().size());
+        assertEquals(1, leaderBoard.getHand().size());
         assertEquals(9, leaderBoard.calculateVP());
 
         leaderBoard.playLeaderHand(leaderCards.get(1));
+        assertEquals(2, leaderBoard.getBoard().size());
+        assertEquals(0, leaderBoard.getHand().size());
         assertEquals(15, leaderBoard.calculateVP());
     }
 }
