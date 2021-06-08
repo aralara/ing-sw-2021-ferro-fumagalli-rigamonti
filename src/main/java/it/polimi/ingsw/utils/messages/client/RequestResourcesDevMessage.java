@@ -28,12 +28,12 @@ public class RequestResourcesDevMessage extends CanBuyDevelopmentCardMessage {
 
     @Override
     public void doACKResponseAction(ClientController client) {
-        //TODO: gestione ACK
+        client.ackNotification("Development card bought successfully", false);
     }
 
     @Override
     public void doNACKResponseAction(ClientController client) {
-        //TODO: aggiungere messaggio di errore x gui?
+        client.ackNotification("Unable to buy development card with the selected resources", true);
         client.chooseDevelopmentStorages(getDevelopmentCard(), getSpace(), getDevelopmentCard().getCost());
     }
 }

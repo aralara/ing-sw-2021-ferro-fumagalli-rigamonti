@@ -49,6 +49,6 @@ public class EndTurnMessage extends ClientActionMessage {
 
     @Override
     public void doNACKResponseAction(ClientController client) {
-        //TODO: gestione NACK
+        client.ackNotification("Cannot end turn", true);
     }
 }

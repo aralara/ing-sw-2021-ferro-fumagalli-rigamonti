@@ -22,11 +22,11 @@ public class LeaderCardPlayMessage extends LeaderCardMessageClient {
 
     @Override
     public void doACKResponseAction(ClientController client) {
-        //TODO: gestione ACK
+        client.ackNotification("Leader played successfully", false);
     }
 
     @Override
     public void doNACKResponseAction(ClientController client) {
-        //TODO: gestione NACK
+        client.ackNotification("Unable to play leader", true);
     }
 }

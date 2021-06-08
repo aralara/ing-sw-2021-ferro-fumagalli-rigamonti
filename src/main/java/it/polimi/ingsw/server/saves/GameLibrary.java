@@ -90,18 +90,6 @@ public class GameLibrary {
     }
 
     /**
-     * Returns a save given a list of player names and its id
-     * @param players List of player names
-     * @param id Id of the save
-     * @return Returns the save object
-     * @throws LibraryNotLoadedException Throws a LibraryNotLoadedException if the library is not loaded
-     */
-    public GameSave getSave(List<String> players, int id) throws LibraryNotLoadedException { //TODO: Lanciare eccezione?
-        checkLoad();
-        return saves.stream().filter(s -> s.samePlayers(players) && s.sameId(id)).findFirst().orElse(null);
-    }
-
-    /**
      * Returns a list of saves given a list of player names
      * @param players List of player names
      * @return Returns the saves list
