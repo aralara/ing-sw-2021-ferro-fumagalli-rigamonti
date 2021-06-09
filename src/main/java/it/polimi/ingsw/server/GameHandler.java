@@ -33,6 +33,10 @@ public class GameHandler implements Runnable {
     private Controller controller;
     private GameSave save;
 
+    /**
+     * Constructor for a GameHandler with a specified size
+     * @param size Size of the game that will be created
+     */
     public GameHandler(int size) {
         this.active = true;
         this.size = size;
@@ -56,6 +60,10 @@ public class GameHandler implements Runnable {
         }
     }
 
+    /**
+     * Initializes a new Game and its components from a saved one
+     * @param save Save that will be used as a reference
+     */
     public void startFromSave(GameSave save) {
         this.save = save;
         try {
@@ -71,6 +79,9 @@ public class GameHandler implements Runnable {
         }
     }
 
+    /**
+     * Initializes a brand new game and its components
+     */
     public void startNewGame() {
         controller = new Controller(size);
         Game game = controller.getGame();
@@ -94,6 +105,10 @@ public class GameHandler implements Runnable {
         }
     }
 
+    /**
+     * Sends to the players all the relevant information about the game
+     * @param game Game that will be used as a reference
+     */
     private void updateClients(Game game) {
         List<PlayerBoard> playerBoards = game.getPlayerBoards();
         for (VirtualView virtualView : clientsVirtualView) {
@@ -113,14 +128,25 @@ public class GameHandler implements Runnable {
         }
     }
 
+    /**
+     * Resumes the game by sending a StartTurnMessage to all the players
+     */
     public void resumeGame() {
         sendAll(new StartTurnMessage(controller.getGame().getPlayingNickname()));
     }
 
+    /**
+     * Checks if all the players have finished their setup
+     * @return Returns true if all the players have finished their setup, false otherwise
+     */
     public boolean playerFinishedSetup() {
         return sizeSetup.incrementAndGet() == size;
     }
 
+    /**
+     * Adds a player to the game
+     * @param view VirtualView of the player that needs to be added
+     */
     public void add(VirtualView view) {
         view.setGameHandler(this);
         clientsVirtualView.add(view);
@@ -128,11 +154,20 @@ public class GameHandler implements Runnable {
         sendAll(new NewPlayerMessage(view.getNickname()));
     }
 
+    /**
+     * Sends a message to all the players
+     * @param message Message that needs to be sent
+     */
     public void sendAll(Message message) {
         for (VirtualView virtualView : clientsVirtualView)
             virtualView.sendMessage(message);
     }
 
+    /**
+     * Activates the action of a given message
+     * @param view VirtualView of the player that sent the message
+     * @param message Message received
+     */
     public void handleMessage(VirtualView view, Message message) {
         if (message instanceof ClientActionMessage) {
             ((ClientActionMessage) message).doAction(view);
@@ -141,6 +176,10 @@ public class GameHandler implements Runnable {
         }
     }
 
+    /**
+     * Saves the game on its dedicated file
+     * @return Returns true if the game has been saved successfully, false otherwise
+     */
     public boolean saveGame() {
         if(sizeSetup.get() == size) {
             try {
@@ -153,6 +192,9 @@ public class GameHandler implements Runnable {
         return false;
     }
 
+    /**
+     * Interrupts the game, sends a non-propagating stop message to all of the players and tries to save the game
+     */
     public void stop() {
         if(active) {
             active = false;
@@ -168,29 +210,53 @@ public class GameHandler implements Runnable {
         }
     }
 
-    public boolean isActive() {
-        return active;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
+    /**
+     * Gets if the game is full
+     * @return Returns true if the theoretical size of the game matches the number of players, false otherwise
+     */
     public boolean isFull() {
         return size == clientsVirtualView.size();
     }
 
+    /**
+     * Gets a list of the nicknames of all the players
+     * @return Returns a list of nicknames
+     */
     public List<String> getAllNicknames() {
         return clientsVirtualView.stream().map(VirtualView::getNickname).collect(Collectors.toList());
     }
 
-    public VirtualView getFromNickname(String nickname) throws NotExistingNicknameException{
+    /**
+     * Returns a VirtualView given the nickname of its player
+     * @return Returns the VirtualView
+     */
+    public VirtualView getFromNickname(String nickname) throws NotExistingNicknameException {
         for (VirtualView virtualView : clientsVirtualView)
             if(virtualView.getNickname().equals(nickname))
                 return virtualView;
         throw new NotExistingNicknameException();
     }
 
+    /**
+     * Gets the active attribute
+     * @return Returns active value
+     */
+    public boolean isActive() {
+        return active;
+    }
+
+    /**
+     * Gets the size attribute
+     * @return Returns size value
+     */
+    public int getSize() {
+        return size;
+    }
+
+    /**
+     * Gets the controller attribute
+     * @return Returns controller value
+     */
     public Controller getController() {
         return controller;
     }
