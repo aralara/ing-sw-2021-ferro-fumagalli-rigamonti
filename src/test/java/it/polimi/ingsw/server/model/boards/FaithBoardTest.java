@@ -13,6 +13,9 @@ import static org.junit.Assert.*;
 
 public class FaithBoardTest {
 
+    /**
+     * Tests the faith is summed correctly
+     */
     @Test
     public void testAddFaith() {
         FaithBoard faithBoard = new FaithBoard();
@@ -24,6 +27,9 @@ public class FaithBoardTest {
         assertEquals(4, faithBoard.getFaith());
     }
 
+    /**
+     * Tests the VPs returned with different faithBoard configurations
+     */
     @Test
     public void testCalculateVP() {
         FaithBoard faithBoard = new FaithBoard();
@@ -58,6 +64,9 @@ public class FaithBoardTest {
 
     }
 
+    /**
+     * Tests if the values of the vatican reports object set after an activation are correct
+     */
     @Test
     public void testHandleReportActivation() {
         FaithTrack faithTrack = new FaithTrack();
@@ -89,6 +98,9 @@ public class FaithBoardTest {
         assertTrue(faithBoard.getPopeProgression()[2]);
     }
 
+    /**
+     * Tests if the method takes faith resources and converts them to units of faith level correctly
+     */
     @Test
     public void testTakeFaithFromResources() {
         FaithBoard faithBoard = new FaithBoard();

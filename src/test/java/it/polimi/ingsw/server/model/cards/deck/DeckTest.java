@@ -169,11 +169,6 @@ public class DeckTest {
     }
 
     @Test
-    public void testShuffle() {
-        //TODO: Random test?
-    }
-
-    @Test
     public void testIterator() {
         int i = 0;
         Deck deck = new Deck(createRandomDevelopmentCards(10));

@@ -14,6 +14,9 @@ import static org.junit.Assert.*;
 
 public class LorenzoBoardTest {
 
+    /**
+     * Tests if Lorenzo's faith is added correctly
+     */
     @Test
     public void testAddFaith() {
         SingleGame game = new SingleGame();
@@ -26,11 +29,9 @@ public class LorenzoBoardTest {
         assertEquals(4, lorenzoBoard.getFaith());
     }
 
-    @Test
-    public void testTakeDevCard() {
-        //TODO: da fare o richiamare metodo in altri test
-    }
-
+    /**
+     * Tests Lorenzo's cards are loaded from file correctly and if the picked card is not null
+     */
     @Test
     public void testInitLorenzoDeckAndPickLorenzoCard() {
         SingleGame game = new SingleGame();
@@ -52,6 +53,9 @@ public class LorenzoBoardTest {
         assertEquals(3, lorenzoCards[1]);
     }
 
+    /**
+     * Tests if the size of the Lorenzo's cards are always the same before and after the shuffle action
+     */
     @Test
     public void testRefreshDeck() {
         SingleGame game = new SingleGame();

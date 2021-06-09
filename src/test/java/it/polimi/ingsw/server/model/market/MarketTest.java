@@ -13,6 +13,9 @@ import static org.junit.Assert.*;
 
 public class MarketTest {
 
+    /**
+     * Tests marbles loaded from file are present at the right quantity
+     */
     @Test
     public void testLoadMarket() {
         Market market = new Market();
@@ -32,6 +35,9 @@ public class MarketTest {
         assertEquals(4, matrixCounters[5]); //WHITE
     }
 
+    /**
+     * Tests the chosen coordinates return a list of resources
+     */
     @Test
     public void testChooseCoordinates() {
         Market market = new Market();
@@ -72,6 +78,9 @@ public class MarketTest {
         }
     }
 
+    /**
+     * Tests marbles' getters return a not null object and getMarbleMatrix, getMarbleAt methods give the same object
+     */
     @Test
     public void testGetMarbles() {
         Market market = new Market();

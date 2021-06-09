@@ -31,11 +31,11 @@ public class LeaderCardDiscardMessage extends LeaderCardMessageClient {
 
     @Override
     public void doACKResponseAction(ClientController client) {
-        //TODO: gestione ACK
+        client.ackNotification("Leaders discarded successfully", false);
     }
 
     @Override
     public void doNACKResponseAction(ClientController client) {
-        //TODO: gestione NACK
+        client.ackNotification("Unable to discard leaders", true);
     }
 }

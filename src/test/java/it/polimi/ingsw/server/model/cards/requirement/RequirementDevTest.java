@@ -36,6 +36,12 @@ public class RequirementDevTest {
     }
 
     @Test
+    public void testRequirementToString(){
+        RequirementDev requirementDev = new RequirementDev(CardColors.YELLOW, 2, 1);
+        assertEquals("1 YELLOW level 2 development cards", requirementDev.requirementToString());
+    }
+
+    @Test
     public void testCheckRequirement() {
         PlayerBoard pb = new PlayerBoard("Bonucci");
 

@@ -373,21 +373,24 @@ public abstract class Game implements Serializable {
         int[] playersVP = new int[playerNumber];
         int[] playersPositions = new int[playerNumber];
 
-        for(int i = 0; i < playerNumber; i++)
+        for(int i = 0; i < playerNumber; i++) {
             playersVP[i] = playerBoards.get(i).getPlayer().getTotalVP();
-
-        int currentMax = Integer.MAX_VALUE;
-        for(int i = 0; i < playerNumber; i++)
             playersPositions[i] = 0;
+        }
+
+        //Iterates over the VP array multiple times, each time considering only the scores that are lower or equal than the
+        // current maximum score, and selecting the highest one as the next iteration's maximum score
+        int currentMax = Integer.MAX_VALUE;
         for(int i = 0; i < playerNumber; i++) {
             int tempMax = -1;
             for (int j = 0; j < playerNumber; j++) {
                 if (playersVP[j] < currentMax) {
                     playersPositions[j]++;
                     if(playersVP[j] >= tempMax)
-                        currentMax = playersVP[j];
+                        tempMax = playersVP[j];
                 }
             }
+            currentMax = tempMax;
         }
 
         for(int i = 0; i < playerNumber; i++)

@@ -37,15 +37,14 @@ public class ShelvesConfigurationMessage extends ClientActionMessage {
 
     @Override
     public void doACKResponseAction(ClientController client) {
-        //TODO: gestione ACK
+        client.ackNotification("Shelves set successfully", false);
     }
 
     @Override
     public void doNACKResponseAction(ClientController client) {
         if(placed.size() > 0)   // true if the warehouse has been rearranged while adding resources to it
             client.placeResourcesOnShelves(placed);
-        else {
-            //TODO: gestione NACK
-        }
+        else
+            client.ackNotification("Invalid shelf configuration", true);
     }
 }

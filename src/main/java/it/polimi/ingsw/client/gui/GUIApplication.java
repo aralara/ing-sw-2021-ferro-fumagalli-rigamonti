@@ -87,7 +87,7 @@ public class GUIApplication extends Application {
             if (sceneInformation.getScene().equals(stage.getScene()))
                 return sceneInformation.getFileName();
         }
-        return null;  //TODO: potrebbe dare eccezione?
+        return null;
     }
 
     /**

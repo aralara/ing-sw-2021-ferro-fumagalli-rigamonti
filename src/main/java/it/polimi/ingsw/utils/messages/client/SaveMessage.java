@@ -1,32 +1,27 @@
 package it.polimi.ingsw.utils.messages.client;
 
 import it.polimi.ingsw.client.ClientController;
-import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 
-import java.util.List;
+public class SaveMessage extends ClientActionMessage {
 
-public class LeaderCardPlayMessage extends LeaderCardMessageClient {
-
-    public LeaderCardPlayMessage(List<LeaderCard> leaderCards) {
-        super(leaderCards);
-    }
+    public SaveMessage() { }
 
 
     @Override
     public void doAction(VirtualView view) {
-        boolean success = view.getGameHandler().getController().playLeaderCard(view.getNickname(), getLeaderCards());
+        boolean success = view.getGameHandler().saveGame();
         view.sendMessage(new ServerAckMessage(getUuid(), success));
     }
 
     @Override
     public void doACKResponseAction(ClientController client) {
-        client.ackNotification("Leader played successfully", false);
+        client.ackNotification("Game saved successfully", true);
     }
 
     @Override
     public void doNACKResponseAction(ClientController client) {
-        client.ackNotification("Unable to play leader", true);
+        client.ackNotification("Unable to save game at this point in time", true);
     }
 }

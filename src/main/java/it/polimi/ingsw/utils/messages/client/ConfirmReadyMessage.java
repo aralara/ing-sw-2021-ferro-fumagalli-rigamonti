@@ -20,9 +20,7 @@ public class ConfirmReadyMessage extends ClientActionMessage {
     }
 
     @Override
-    public void doACKResponseAction(ClientController client) {
-        //TODO: gestione ACK
-    }
+    public void doACKResponseAction(ClientController client) { }
 
     @Override
     public void doNACKResponseAction(ClientController client) {

@@ -29,11 +29,17 @@ public class Server {
     private List<GameHandler> gameList;
 
 
+    /**
+     * Server constructor with no parameters
+     */
     public Server() {
         reset();
     }
 
-
+    /**
+     * Main method
+     * @param args Arguments
+     */
     public static void main(String[] args) {
         Server server = new Server();
 
@@ -57,6 +63,10 @@ public class Server {
         }
     }
 
+    /**
+     * Handles a new connection with a client
+     * @param client Socket of the client
+     */
     public void handleNewConnection(Socket client) {
         Object message;
         String nickname = "";
@@ -108,6 +118,11 @@ public class Server {
         }
     }
 
+    /**
+     * Checks if a given nickname is valid (isn't present in an active game and doesn't contain special characters)
+     * @param nickname Nickname that needs to be checked
+     * @return Returns true if the nickname is valid, false otherwise
+     */
     public boolean checkValidNickname(String nickname) {
         if(nickname.matches(GameLibrary.NONVALID_REGEX))
             return false;
@@ -121,16 +136,31 @@ public class Server {
         return true;
     }
 
+    /**
+     * Checks if a given size is valid for a game (needs to be betweenMIN_LOBBY_SIZE and MAX_LOBBY_SIZE)
+     * @param size Size that needs to be checked
+     * @return Returns ture if the size is valid, false otherwise
+     */
     public boolean checkValidSize(int size) {
         return size >= Constants.MIN_LOBBY_SIZE.value() && size <= Constants.MAX_LOBBY_SIZE.value();
     }
 
+    /**
+     * Sends an ACK message to the client
+     * @param output Stream that will be used to send the message
+     * @param message Referenced client message
+     * @param success Determines if the message sent is an ACK or a NACK
+     * @throws IOException Throws a IOException in case it's not possible to send the message
+     */
     public void writeAck(ObjectOutputStream output, ClientSetupMessage message, boolean success) throws IOException {
         ServerAckMessage ack = new ServerAckMessage(message, success);
         output.writeObject(ack);
         output.reset();
     }
 
+    /**
+     * Resets the server attributes to their default values
+     */
     public void reset() {
         running = false;
         waitingGame = null;

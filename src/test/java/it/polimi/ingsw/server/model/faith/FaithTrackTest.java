@@ -8,6 +8,9 @@ import static org.junit.Assert.*;
 
 public class FaithTrackTest {
 
+    /**
+     * Tests vatican reports and faith spaces loaded from file are correct
+     */
     @Test
     public void testLoadTrack() {
         FaithTrack faithTrack = new FaithTrack();
@@ -43,6 +46,9 @@ public class FaithTrackTest {
         assertEquals(24, faithTrack.getFaithSpaces().get(7).getPosition());
     }
 
+    /**
+     * Tests if a report is activated with different faith levels
+     */
     @Test
     public void testCheckReportActivation() {
         FaithTrack faithTrackCell = new FaithTrack(); //to check the exact activation cell
@@ -82,6 +88,9 @@ public class FaithTrackTest {
         assertEquals(2, faithTrackBeyond.getLastReportTriggered());
     }
 
+    /**
+     * Tests if the faith level is in the last triggered report range
+     */
     @Test
     public void testCheckPlayerReportPosition() {
         FaithTrack faithTrack = new FaithTrack();
@@ -120,6 +129,9 @@ public class FaithTrackTest {
         }
     }
 
+    /**
+     * Tests the VPs returned with different faithBoard configurations
+     */
     @Test
     public void testCalculateVP() {
         FaithTrack faithTrack = new FaithTrack();
@@ -225,6 +237,9 @@ public class FaithTrackTest {
         assertEquals(29, faithTrack.calculateVP(24, new boolean[] {true, true, true}));
     }
 
+    /**
+     * Tests if the max level of the last vatican report is reached
+     */
     @Test
     public void testIsCompleted() {
         FaithTrack faithTrack = new FaithTrack();

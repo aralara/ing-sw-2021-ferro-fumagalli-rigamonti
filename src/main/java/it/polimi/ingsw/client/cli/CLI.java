@@ -262,6 +262,7 @@ public class CLI extends ClientController {
             setPlayerTurn(false);
         }
         turnMenu();
+        idle = true;
     }
 
     @Override
@@ -335,9 +336,7 @@ public class CLI extends ClientController {
         ).get(0).getAction().run();
     }
 
-    @Override
     public void selectMarket() {
-
         graphicalCLI.printMarket(getMarket());
         if(idle = graphicalCLI.askGoBack())
             return;
@@ -490,7 +489,7 @@ public class CLI extends ClientController {
                             toDiscard.add(new Resource(resourceToPlace.getResourceType(), resourceToPlace.getQuantity()));
                             graphicalCLI.printlnString("Resource discarded");
                             toPlace.remove(0);
-                        } else if (level < 0) {
+                        } else {
                             restoreConfiguration(warehouse, shelves, resources, toPlace, toDiscard, true);
                             rearranged = false;
                             graphicalCLI.printWarehouseConfiguration(new WarehouseView(shelves),true);
@@ -693,7 +692,8 @@ public class CLI extends ClientController {
                 graphicalCLI.printGraphicalResources(toPlace);
                 level=graphicalCLI.askWhichShelf(resourceToPlace, shelves.size(), false);
 
-                if(firstTurn) firstTurn = !firstTurn;
+                if(firstTurn)
+                    firstTurn = false;
 
                 if(level>0) {
                     selectedShelf = shelves.get(level - 1);
@@ -751,12 +751,14 @@ public class CLI extends ClientController {
                         "then you'll place again the removed ones from the other shelf: ");
                 if(graphicalCLI.isAnswerYes()) {
                     Shelf otherShelf = getShelfWithSameResource(shelves, resourceToPlace.getResourceType());
-                    for (int i = 0; i < otherShelf.getResources().getQuantity(); i++) {
-                        toPlace.add(1, new Resource(otherShelf.getResources().getResourceType(), 1));
+                    if(otherShelf != null) {
+                        for (int i = 0; i < otherShelf.getResources().getQuantity(); i++) {
+                            toPlace.add(1, new Resource(otherShelf.getResources().getResourceType(), 1));
+                        }
+                        resetShelf(otherShelf);
+                        placeResource(selectedShelf, resourceToPlace);
+                        toPlace.remove(0);
                     }
-                    resetShelf(otherShelf);
-                    placeResource(selectedShelf, resourceToPlace);
-                    toPlace.remove(0);
                 }
             }
         }
@@ -816,15 +818,18 @@ public class CLI extends ClientController {
                             "then you'll place again the removed ones: ");
                     if (graphicalCLI.isAnswerYes()) {
                         Shelf otherShelf = getShelfWithSameResource(shelves, resourceToPlace.getResourceType());
-                        for (int i = 0; i < otherShelf.getResources().getQuantity(); i++) {
-                            toPlace.add(1, new Resource(otherShelf.getResources().getResourceType(), 1));
+                        if(otherShelf != null) {
+                            for (int i = 0; i < otherShelf.getResources().getQuantity(); i++) {
+                                toPlace.add(1,
+                                        new Resource(otherShelf.getResources().getResourceType(), 1));
+                            }
+                            resetShelf(otherShelf);
+                            for (int i = 0; i < selectedShelf.getResources().getQuantity(); i++) {
+                                toPlace.add(1, new Resource(selectedShelf.getResourceType(), 1));
+                            }
+                            placeResource(selectedShelf, resourceToPlace);
+                            toPlace.remove(0);
                         }
-                        resetShelf(otherShelf);
-                        for (int i = 0; i < selectedShelf.getResources().getQuantity(); i++) {
-                            toPlace.add(1, new Resource(selectedShelf.getResourceType(), 1));
-                        }
-                        placeResource(selectedShelf, resourceToPlace);
-                        toPlace.remove(0);
                     }
                 }
             }
@@ -870,9 +875,10 @@ public class CLI extends ClientController {
      */
     private boolean isShelfRearrangeable(List<Shelf> shelves, Resource resource) {
         Shelf shelfWithResources = getShelfWithSameResource(shelves, resource.getResourceType());
-        int totalLeaderShelves = 2*(int)(shelves.stream().filter(shelf -> shelf.isLeader() && shelf.getResourceType()
+        int totalLeaderShelves = 2 * (int)(shelves.stream().filter(shelf -> shelf.isLeader() && shelf.getResourceType()
                     .equals(resource.getResourceType())).count());
-        return shelfWithResources.getResources().getQuantity()+resource.getQuantity() <= 3 + totalLeaderShelves;
+        return shelfWithResources != null &&
+                shelfWithResources.getResources().getQuantity() + resource.getQuantity() <= 3 + totalLeaderShelves;
     }
 
     /**
@@ -1062,15 +1068,16 @@ public class CLI extends ClientController {
                 }),
                 new MenuOption("Activate a leader card", () -> {
                     List<LeaderCard> leaderCards = chooseLeaderCard();
-                    if(leaderCards.size() > 0) getMessageHandler().sendClientMessage(new LeaderCardPlayMessage(leaderCards));
+                    if(leaderCards != null && leaderCards.size() > 0) getMessageHandler().sendClientMessage(new LeaderCardPlayMessage(leaderCards));
                 }),
                 new MenuOption("Discard a leader card", () -> {
                     List<LeaderCard> leaderCards = chooseLeaderCard();
-                    if(leaderCards.size() > 0) getMessageHandler().sendClientMessage(new LeaderCardDiscardMessage(leaderCards));
+                    if(leaderCards != null && leaderCards.size() > 0) getMessageHandler().sendClientMessage(new LeaderCardDiscardMessage(leaderCards));
                 })
         ));
         playerTurnMenu.addAll(shared);
-        playerTurnMenu.add(
+        playerTurnMenu.addAll( Arrays.asList(
+                new MenuOption("Save game", () -> getMessageHandler().sendClientMessage(new SaveMessage())),
                 new MenuOption("End turn", () -> {
                     if (isMainActionPlayed()) {
                         setPlayerTurn(false);
@@ -1078,7 +1085,7 @@ public class CLI extends ClientController {
                     }
                     else graphicalCLI.printlnString("You haven't played any main action yet!");
                 })
-        );
+        ));
         opponentTurnMenu.add(
                 new MenuOption("Wait for my turn", () -> graphicalCLI.printlnString("Waiting for your turn..."))
         );
