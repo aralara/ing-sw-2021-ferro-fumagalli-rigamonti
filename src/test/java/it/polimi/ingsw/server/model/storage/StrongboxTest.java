@@ -9,6 +9,9 @@ import static org.junit.Assert.*;
 
 public class StrongboxTest{
 
+    /**
+     * Tests methods getList that returns a list of resource that contains every resource from the strongbox
+     */
     @Test
     public void testGetList() {
 
@@ -43,15 +46,5 @@ public class StrongboxTest{
         assertFalse(instance.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.SERVANT,1)))));
         assertFalse(instance.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN,2)))));
         assertFalse(instance.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.SHIELD,4)))));
-    }
-
-    @Test
-    public void testAddResources() {
-        //method tested in the testGetList
-    }
-
-    @Test
-    public void testRemoveResources() {
-        //method tested in the testGetList
     }
 }

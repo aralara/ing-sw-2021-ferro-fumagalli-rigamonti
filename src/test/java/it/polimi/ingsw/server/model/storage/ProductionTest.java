@@ -9,6 +9,9 @@ import static org.junit.Assert.*;
 
 public class ProductionTest{
 
+    /**
+     * Tests if a production is correctly turn into a String
+     */
     @Test
     public void testToString() {
         Production temp = new Production();
@@ -22,6 +25,9 @@ public class ProductionTest{
 
     }
 
+    /**
+     * Tests if a production is correctly cloned
+     */
     @Test
     public void testMakeClone() {
         Production temp = new Production(new ArrayList<>(List.of(new Resource(ResourceType.COIN,4))),
@@ -34,6 +40,9 @@ public class ProductionTest{
         assertNotEquals(temp, temp2);
     }
 
+    /**
+     * Tests if getConsumed return the correct list of resources consumed
+     */
     @Test
     public void testGetConsumed() {
 
@@ -58,6 +67,9 @@ public class ProductionTest{
         assertEquals(ResourceType.SHIELD,temp.getConsumed().get(1).getResourceType());
     }
 
+    /**
+     * Tests if getProduced return the correct list of resources produced
+     */
     @Test
     public void testGetProduced() {
 

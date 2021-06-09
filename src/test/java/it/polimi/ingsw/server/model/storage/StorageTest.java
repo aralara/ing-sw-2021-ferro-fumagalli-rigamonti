@@ -9,6 +9,9 @@ import static org.junit.Assert.*;
 
 public class StorageTest{
 
+    /**
+     * Tests if some lists of resources are correctly merged into a new list
+     */
     @Test
     public void testMergeResourceList() {
 
@@ -24,6 +27,9 @@ public class StorageTest{
         assertEquals(ResourceType.SHIELD,Storage.mergeResourceList(res,res,res1,res2).get(2).getResourceType());
     }
 
+    /**
+     * Tests if a list of resources contains all the resources from another list of resources
+     */
     @Test
     public void testCheckContainedResources() {
 
@@ -42,6 +48,9 @@ public class StorageTest{
         assertFalse(Storage.checkContainedResources(res4,res3));
     }
 
+    /**
+     * Tests if the resources from a list are correctly aggregated
+     */
     @Test
     public void testAggregateResources() {
 
@@ -71,6 +80,9 @@ public class StorageTest{
 
     }
 
+    /**
+     * Tests if a discount is correctly calculated
+     */
     @Test
     public void testCalculateDiscount() {
         List<Resource> resources = new ArrayList<>();
@@ -84,6 +96,9 @@ public class StorageTest{
         assertEquals(Storage.calculateDiscount(resources,discount).get(0).getResourceType(),ResourceType.COIN);
     }
 
+    /**
+     * Tests if a resource is correctly discarded
+     */
     @Test
     public void testIsDiscardedResCorrect() {
         List<Resource> resources1 = new ArrayList<>();
@@ -101,6 +116,9 @@ public class StorageTest{
         assertFalse(Storage.isDiscardedResCorrect(resources2,resources1));
     }
 
+    /**
+     * Tests method getTotalQuantity
+     */
     @Test
     public void testGetTotalQuantity() {
         List<Resource> resources1 = new ArrayList<>();
@@ -115,17 +133,5 @@ public class StorageTest{
 
         assertEquals(Storage.getTotalQuantity(resources1),6);
         assertEquals(Storage.getTotalQuantity(resources2),4);
-    }
-
-    @Test
-    public void testGetList() {
-    }
-
-    @Test
-    public void testAddResources() {
-    }
-
-    @Test
-    public void testRemoveResources() {
     }
 }

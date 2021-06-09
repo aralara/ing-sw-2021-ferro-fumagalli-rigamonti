@@ -6,6 +6,9 @@ import static org.junit.Assert.*;
 
 public class ResourceTest{
 
+    /**
+     * Tests if a resource is correctly cloned
+     */
     @Test
     public void testMakeClone() {
         Resource res = new Resource(ResourceType.COIN, 2);
@@ -16,6 +19,9 @@ public class ResourceTest{
         assertEquals(2,res2.getQuantity());
     }
 
+    /**
+     * Tests if a resource is correctly added
+     */
     @Test
     public void testAdd() {
         Resource res = new Resource(ResourceType.COIN, 2);
@@ -27,6 +33,9 @@ public class ResourceTest{
         assertFalse(res.add(new Resource(ResourceType.SHIELD, 2)));
     }
 
+    /**
+     * Tests if a resource is correctly subtracted
+     */
     @Test
     public void testSub() {
         Resource res = new Resource(ResourceType.COIN, 2);
@@ -39,14 +48,9 @@ public class ResourceTest{
         assertFalse(res.sub(new Resource(ResourceType.COIN, 2)));
     }
 
-    @Test
-    public void testGetResourceType() {
-    }
-
-    @Test
-    public void testGetQuantity() {
-    }
-
+    /**
+     * Tests if a resourceType is correctly set
+     */
     @Test
     public void testSetResourceType() {
         Resource res = new Resource();
@@ -55,6 +59,9 @@ public class ResourceTest{
         assertEquals(ResourceType.COIN,res.getResourceType());
     }
 
+    /**
+     * Tests if quantity is correctly set
+     */
     @Test
     public void testSetQuantity() {
         Resource res = new Resource();

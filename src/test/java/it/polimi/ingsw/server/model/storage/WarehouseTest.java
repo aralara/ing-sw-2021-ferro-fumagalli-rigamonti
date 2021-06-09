@@ -9,6 +9,9 @@ import static org.junit.Assert.*;
 
 public class WarehouseTest{
 
+    /**
+     * Tests if a list of shelves is a valid configuration for the warehouse
+     */
     @Test
     public void testValidate() {
 
@@ -43,11 +46,9 @@ public class WarehouseTest{
 
     }
 
-    @Test
-    public void testAddShelf() {
-
-    }
-
+    /**
+     * Tests methods getShelves
+     */
     @Test
     public void testGetShelves() {
         Warehouse wh = new Warehouse();
@@ -59,6 +60,9 @@ public class WarehouseTest{
         assertEquals(ResourceType.COIN,temp.get(3).getList().get(0).getResourceType());
     }
 
+    /**
+     * Tests if the configuration is correctly changed with method changeConfiguration
+     */
     @Test
     public void testChangeConfiguration() {
         Warehouse wh = new Warehouse();
@@ -87,6 +91,9 @@ public class WarehouseTest{
         assertFalse(wh.changeConfiguration(temp));
     }
 
+    /**
+     * Tests methods getList that return a list of resources contained in the warehouse
+     */
     @Test
     public void testGetList() {
         Warehouse wh = new Warehouse();
@@ -117,12 +124,18 @@ public class WarehouseTest{
 
     }
 
+    /**
+     * Tests method addResources, always return false because we can only add a resource by change the configuration
+     */
     @Test
     public void testAddResources() {
         Warehouse wh = new Warehouse();
         assertFalse(wh.addResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN,2)))));
     }
 
+    /**
+     * Tests if a warehouse is empty
+     */
     @Test
     public void testIsEmpty() {
         Warehouse wh = new Warehouse();
@@ -137,6 +150,9 @@ public class WarehouseTest{
         assertFalse(wh.isEmpty());
     }
 
+    /**
+     * Tests if a list of resources is correctly removed from a warehouse
+     */
     @Test
     public void testRemoveResources() {
 

@@ -8,11 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShelfTest{
-
-    @Test
-    public void testGetResourceType() {
-    }
-
+    /**
+     * Tests if a resourceType is correctly set
+     */
     @Test
     public void testSetResourceType() {
         Shelf instance = new Shelf();
@@ -21,18 +19,28 @@ public class ShelfTest{
         assertEquals(ResourceType.COIN, instance.getResourceType());
     }
 
+    /**
+     * Tests if a level is correctly got
+     */
     @Test
     public void testGetLevel() {
         Shelf instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,false);
         assertEquals(2, instance.getLevel());
     }
 
+    /**
+     * Tests method getIsLeader
+     */
     @Test
     public void testGetIsLeader() {
         Shelf instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,false);
         assertFalse(instance.isLeader());
     }
 
+    /**
+     * Tests if isResourceTypeUnique correctly returns true if the list doesn't contain resources of the specified
+     * resourceType
+     */
     @Test
     public void testIsResourceTypeUnique() {
         List<Shelf> shelves = new ArrayList<>();
@@ -47,6 +55,9 @@ public class ShelfTest{
         assertTrue(Shelf.isResourceTypeUnique(shelves,ResourceType.STONE));
     }
 
+    /**
+     * Tests methods isEmpty
+     */
     @Test
     public void testIsEmpty() {
         Shelf shelf = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,false);
@@ -55,6 +66,9 @@ public class ShelfTest{
         assertTrue(shelf.isEmpty());
     }
 
+    /**
+     * Tests if a resource can be added to a shelf
+     */
     @Test
     public void testCheckAdd() {
 
@@ -81,6 +95,9 @@ public class ShelfTest{
 
     }
 
+    /**
+     * Tests if getList correctly return the list of resources in a shelf
+     */
     @Test
     public void testGetList() {
 
@@ -100,6 +117,9 @@ public class ShelfTest{
 
     }
 
+    /**
+     * Tests if a resource is correctly added to a shelf
+     */
     @Test
     public void testAddResources() {
 
@@ -126,15 +146,13 @@ public class ShelfTest{
 
         instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,0),2,true);
         assertFalse(instance.addResources(new Resource(ResourceType.SHIELD, 2)));
-    }
 
-    @Test
-    public void testTestAddResources() {
-        Shelf instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,0),2,false);
+        instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,0),2,false);
         assertTrue(instance.addResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN, 2)))));
 
         instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,0),2,false);
-        assertTrue(instance.addResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN, 1), new Resource(ResourceType.COIN, 1)))));
+        assertTrue(instance.addResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN, 1),
+                new Resource(ResourceType.COIN, 1)))));
 
         instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,0),2,false);
         assertFalse(instance.addResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN, 3)))));
@@ -156,6 +174,9 @@ public class ShelfTest{
                 new Resource(ResourceType.COIN, 2)))));
     }
 
+    /**
+     * Tests if a resource is correctly removed from a shelf
+     */
     @Test
     public void testRemoveResources() {
         Shelf instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,0),2,false);
@@ -176,11 +197,7 @@ public class ShelfTest{
         instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,true);
         assertFalse(instance.removeResources(new Resource(ResourceType.COIN, 3)));
 
-    }
-
-    @Test
-    public void testTestRemoveResources() {
-        Shelf instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,false);
+        instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,false);
         assertTrue(instance.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN, 1)))));
 
         instance = new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,false);

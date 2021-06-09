@@ -8,7 +8,9 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 public class RequestResourcesTest{
-
+    /**
+     * Tests if getStorageType return the correct StorageType
+     */
     @Test
     public void testGetStorageType() {
         RequestResources temp = new RequestResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN,3))),StorageType.STRONGBOX);
@@ -16,6 +18,9 @@ public class RequestResourcesTest{
         assertEquals(StorageType.STRONGBOX, temp.getStorageType());
     }
 
+    /**
+     * Tests if getList return the correct list of resources from a RequestResources
+     */
     @Test
     public void testGetList() {
         RequestResources temp = new RequestResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN,3))),StorageType.STRONGBOX);
@@ -36,6 +41,9 @@ public class RequestResourcesTest{
         assertEquals(ResourceType.COIN, temp.getList().get(0).getResourceType());
     }
 
+    /**
+     * Tests if a list of resource is correctly added
+     */
     @Test
     public void testAddResources() {
         RequestResources temp = new RequestResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN,3))),StorageType.STRONGBOX);
@@ -66,6 +74,9 @@ public class RequestResourcesTest{
         assertEquals(ResourceType.SERVANT, temp.getList().get(2).getResourceType());
     }
 
+    /**
+     * Test is a list of resources is correctly removed
+     */
     @Test
     public void testRemoveResources() {
         RequestResources temp = new RequestResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN,3))),StorageType.STRONGBOX);
