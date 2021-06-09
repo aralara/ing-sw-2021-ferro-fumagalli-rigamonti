@@ -1,8 +1,7 @@
-package it.polimi.ingsw.server;
+package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.exceptions.LibraryNotLoadedException;
 import it.polimi.ingsw.exceptions.NotExistingNicknameException;
-import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.model.boards.PlayerBoard;
 import it.polimi.ingsw.server.model.games.Game;
 import it.polimi.ingsw.server.model.storage.Resource;

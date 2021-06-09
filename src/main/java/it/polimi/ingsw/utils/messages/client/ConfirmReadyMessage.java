@@ -1,7 +1,7 @@
 package it.polimi.ingsw.utils.messages.client;
 
 import it.polimi.ingsw.client.ClientController;
-import it.polimi.ingsw.server.GameHandler;
+import it.polimi.ingsw.server.controller.GameHandler;
 import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 

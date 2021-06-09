@@ -19,6 +19,10 @@ public class GameSave implements Serializable {
     private Game game;
 
 
+    /**
+     * GameSave constructor that uses the name of a file to extract its attributes
+     * @param fileName String containing the file name
+     */
     public GameSave(String fileName) {
         this.players = new ArrayList<>();
         int id = 0;
@@ -38,6 +42,12 @@ public class GameSave implements Serializable {
         this.game = null;
     }
 
+    /**
+     * GameSave constructor given a list of players, the id of the game and a game object
+     * @param players List of players
+     * @param id Id of the game
+     * @param game Game object that will be saved
+     */
     public GameSave(List<String> players, int id, Game game) {
         this.players = players;
         this.id = id;

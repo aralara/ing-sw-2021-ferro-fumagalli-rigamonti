@@ -2,7 +2,7 @@ package it.polimi.ingsw.client;
 
 import it.polimi.ingsw.client.structures.*;
 import it.polimi.ingsw.exceptions.NotExistingNicknameException;
-import it.polimi.ingsw.server.GameHandler;
+import it.polimi.ingsw.server.controller.GameHandler;
 import it.polimi.ingsw.server.model.boards.Player;
 import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.model.cards.card.LorenzoCard;
