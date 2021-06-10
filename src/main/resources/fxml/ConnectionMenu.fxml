@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="400.0" styleClass="setupPanel" stylesheets="@../css/setupWindow.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllers.SetupController">
+<Pane fx:id="connection_pane" focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="400.0" styleClass="setupPanel" stylesheets="@../css/setupWindow.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllers.SetupController">
    <children>
       <TextField fx:id="ipAddress_field" alignment="CENTER" focusTraversable="false" layoutX="34.0" layoutY="189.0" onKeyPressed="#keyConnect" prefHeight="42.0" prefWidth="138.0" promptText="Server IP address">
          <font>

@@ -35,6 +35,7 @@ public class EndTurnMessage extends ClientActionMessage {
             case LOAD_TURN_END_GAME:
                 gameHandler.sendAll(new EndGameMessage(controller.getGame().
                         getPlayerBoards().stream().map(PlayerBoard::getPlayer).collect(Collectors.toList())));
+                break; //TODO: aggiunto break
             case INVALID:
                 success = false;
                 break;

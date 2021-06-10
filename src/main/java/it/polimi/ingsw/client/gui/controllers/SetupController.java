@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 
@@ -21,6 +22,7 @@ public class SetupController extends GenericController {
     @FXML private Button playOnline_button, playOffline_button, connect_button, confirm_button;
     @FXML private Label nickname_label, notifyPlayers_label;
     @FXML private ProgressBar loading_bar;
+    @FXML private Pane connection_pane;
 
     /**
      * Sets the isLocal attribute
@@ -103,13 +105,19 @@ public class SetupController extends GenericController {
     }
 
     /**
+     * Gets the connection_pane attribute
+     * @return Returns connection_pane
+     */
+    public Pane getConnection_pane() {
+        return connection_pane;
+    }
+
+    /**
      * Shows the ConnectionMenu scene
      */
     public void playOnline() {
         ((SetupController)getGUIApplication().getController(SceneNames.NICKNAME_MENU)).setIsLocal(false);
-        playOnline_button.setVisible(false);
-        playOffline_button.setVisible(false);
-        loading_bar.setVisible(true);
+        showLoadingBar(true);
         getGUIApplication().setActiveScene(SceneNames.CONNECTION_MENU);
     }
 
@@ -119,9 +127,7 @@ public class SetupController extends GenericController {
     public void playOffline() {
         ((SetupController)getGUIApplication().getController(SceneNames.NICKNAME_MENU)).setIsLocal(true);
         getGUI().setNumberOfPlayers(1);
-        playOnline_button.setVisible(false);
-        playOffline_button.setVisible(false);
-        loading_bar.setVisible(true);
+        showLoadingBar(true);
         getGUIApplication().setActiveScene(SceneNames.NICKNAME_MENU);
     }
 
@@ -247,5 +253,15 @@ public class SetupController extends GenericController {
         String text = notifyPlayers_label.getText();
         notifyPlayers_label.setText(text + nickname + (nickname.length()>=16 ? "\n" : " ") + "has joined the game!\n");
         notifyPlayers_label.setVisible(true);
+    }
+
+    /**
+     * Shows loading bar according to the value given by parameter
+     * @param toShow True to show the bar, false to show buttons
+     */
+    public void showLoadingBar(boolean toShow){
+        playOnline_button.setVisible(!toShow);
+        playOffline_button.setVisible(!toShow);
+        loading_bar.setVisible(toShow);
     }
 }

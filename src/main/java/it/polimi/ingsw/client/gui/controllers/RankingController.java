@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.gui.controllers;
 
+import it.polimi.ingsw.client.gui.SceneNames;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -47,6 +48,21 @@ public class RankingController extends GenericController {
      * Goes back to the first scene to start a new game
      */
     public void startNewGame() {
-        //TODO: fare
+        SetupController sc =((SetupController)getGUIApplication().getController(SceneNames.LOADING));
+        getGUI().setNumberOfPlayers(1);
+        sc.showLoadingBar(false);
+        getGUIApplication().changeConnectionMenuStatus();
+        ((SetupController)getGUIApplication().getController(SceneNames.CONNECTION_MENU)).
+                getIpAddress_field().setText("");
+        ((SetupController)getGUIApplication().getController(SceneNames.CONNECTION_MENU)).
+                getPortNumber_field().setText("");
+        ((SetupController)getGUIApplication().getController(SceneNames.CONNECTION_MENU)).
+                getConnection_pane().requestFocus();
+        getGUIApplication().changeNicknameMenuStatus();
+        ((SetupController)getGUIApplication().getController(SceneNames.NICKNAME_MENU)).
+                getNickname_field().setText("");
+        ((SetupController)getGUIApplication().getController(SceneNames.NICKNAME_MENU)).
+                getNickname_label().requestFocus();
+        getGUIApplication().setActiveScene(SceneNames.LOADING); //TODO: ripristinare socket
     }
 }
