@@ -3,7 +3,7 @@ package it.polimi.ingsw.client.gui;
 import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.client.gui.controllers.*;
 import it.polimi.ingsw.client.structures.*;
-import it.polimi.ingsw.exceptions.NotExistingNicknameException;
+import it.polimi.ingsw.utils.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.model.boards.Player;
 import it.polimi.ingsw.server.model.cards.card.*;
 import it.polimi.ingsw.server.model.cards.deck.Deck;

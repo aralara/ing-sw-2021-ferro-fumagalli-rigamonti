@@ -1,6 +1,6 @@
 package it.polimi.ingsw.client.gui.controllers;
 
-import it.polimi.ingsw.exceptions.NotExistingNicknameException;
+import it.polimi.ingsw.utils.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.utils.messages.client.LeaderCardDiscardMessage;
 import javafx.fxml.FXML;

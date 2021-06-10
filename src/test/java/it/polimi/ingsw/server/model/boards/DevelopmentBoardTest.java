@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.model.boards;
 
-import it.polimi.ingsw.exceptions.InvalidSpaceException;
+import it.polimi.ingsw.utils.exceptions.InvalidSpaceException;
 import it.polimi.ingsw.server.model.cards.card.CardColors;
 import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.model.storage.Production;

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.saves;
 
-import it.polimi.ingsw.exceptions.LibraryNotLoadedException;
+import it.polimi.ingsw.utils.exceptions.LibraryNotLoadedException;
 import it.polimi.ingsw.server.model.games.Game;
 
 import java.io.File;

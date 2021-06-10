@@ -2,7 +2,7 @@ package it.polimi.ingsw.server.model.faith;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-import it.polimi.ingsw.exceptions.NotExistingLastReportTriggeredException;
+import it.polimi.ingsw.utils.exceptions.NotExistingLastReportTriggeredException;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;

@@ -2,8 +2,8 @@ package it.polimi.ingsw.server.model.market;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-import it.polimi.ingsw.exceptions.InvalidColumnException;
-import it.polimi.ingsw.exceptions.InvalidRowException;
+import it.polimi.ingsw.utils.exceptions.InvalidColumnException;
+import it.polimi.ingsw.utils.exceptions.InvalidRowException;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.utils.listeners.Listened;
 import it.polimi.ingsw.utils.listeners.Listeners;

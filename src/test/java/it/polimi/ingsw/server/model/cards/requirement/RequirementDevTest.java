@@ -1,10 +1,9 @@
 package it.polimi.ingsw.server.model.cards.requirement;
 
-import it.polimi.ingsw.exceptions.InvalidSpaceException;
+import it.polimi.ingsw.utils.exceptions.InvalidSpaceException;
 import it.polimi.ingsw.server.model.boards.PlayerBoard;
 import it.polimi.ingsw.server.model.cards.card.CardColors;
 import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
-import it.polimi.ingsw.server.model.games.MultiGame;
 import it.polimi.ingsw.server.model.storage.Production;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;

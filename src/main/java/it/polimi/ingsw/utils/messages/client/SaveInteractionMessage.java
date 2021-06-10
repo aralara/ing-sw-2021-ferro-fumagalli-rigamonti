@@ -1,7 +1,7 @@
 package it.polimi.ingsw.utils.messages.client;
 
 import it.polimi.ingsw.client.ClientController;
-import it.polimi.ingsw.exceptions.LibraryNotLoadedException;
+import it.polimi.ingsw.utils.exceptions.LibraryNotLoadedException;
 import it.polimi.ingsw.server.saves.GameLibrary;
 import it.polimi.ingsw.server.saves.GameSave;
 import it.polimi.ingsw.server.saves.SaveInteractions;

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.model.boards;
 
-import it.polimi.ingsw.exceptions.NotExistingLastReportTriggeredException;
+import it.polimi.ingsw.utils.exceptions.NotExistingLastReportTriggeredException;
 import it.polimi.ingsw.server.model.faith.FaithTrack;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.utils.listeners.Listeners;

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.client;
 
-import it.polimi.ingsw.exceptions.UnknownMessageException;
+import it.polimi.ingsw.utils.exceptions.UnknownMessageException;
 import it.polimi.ingsw.utils.PipedPair;
 import it.polimi.ingsw.utils.messages.Message;
 import it.polimi.ingsw.utils.messages.client.ClientMessage;

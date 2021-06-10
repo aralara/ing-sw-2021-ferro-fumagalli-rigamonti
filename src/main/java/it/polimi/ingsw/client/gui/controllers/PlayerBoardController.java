@@ -2,8 +2,7 @@ package it.polimi.ingsw.client.gui.controllers;
 
 import it.polimi.ingsw.client.gui.SceneNames;
 import it.polimi.ingsw.client.structures.PlayerBoardView;
-import it.polimi.ingsw.exceptions.NotExistingNicknameException;
-import it.polimi.ingsw.server.model.boards.LeaderBoard;
+import it.polimi.ingsw.utils.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.model.cards.ability.AbilityProduction;
 import it.polimi.ingsw.server.model.cards.ability.AbilityWarehouse;
 import it.polimi.ingsw.server.model.cards.card.Card;
@@ -14,7 +13,6 @@ import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.utils.messages.client.EndTurnMessage;
 import it.polimi.ingsw.utils.messages.client.SaveMessage;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;

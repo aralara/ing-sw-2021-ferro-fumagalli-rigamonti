@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server.model.market;
 
-import it.polimi.ingsw.exceptions.InvalidColumnException;
-import it.polimi.ingsw.exceptions.InvalidRowException;
+import it.polimi.ingsw.utils.exceptions.InvalidColumnException;
+import it.polimi.ingsw.utils.exceptions.InvalidRowException;
 import it.polimi.ingsw.server.model.FileNames;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;

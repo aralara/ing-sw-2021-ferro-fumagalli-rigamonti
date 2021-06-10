@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.model.faith;
 
-import it.polimi.ingsw.exceptions.NotExistingLastReportTriggeredException;
+import it.polimi.ingsw.utils.exceptions.NotExistingLastReportTriggeredException;
 import it.polimi.ingsw.server.model.FileNames;
 import org.junit.Test;
 
