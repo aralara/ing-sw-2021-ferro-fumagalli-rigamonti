@@ -325,11 +325,15 @@ public class CLI extends ClientController {
     public void turnMenu() {
         List<MenuOption> turnMenu = opponentTurnMenu;   //Defaults as the opponent turn
         Runnable choiceText = () -> graphicalCLI.printString("\nChoose an action to do: ");
-        if(isPlayerTurn()) {    //If it's the player's turn sets the corresponding menu options
-            turnMenu = playerTurnMenu;
+        if(isPlayerTurn()) {    // If it's the player's turn sets the corresponding menu options
+            turnMenu = new ArrayList<>(playerTurnMenu);
+            if(isMainActionPlayed())    // If the player has already played their main action, he can save the game
+                turnMenu.add(
+                        new MenuOption("Save game", () -> getMessageHandler().sendClientMessage(new SaveMessage()))
+                );
             choiceText = () -> graphicalCLI.printString("\nChoose an action to do on your turn: ");
         }
-        graphicalCLI.objectOptionSelector(turnMenu,     //Makes the player choose between their actions and runs it
+        graphicalCLI.objectOptionSelector(turnMenu,     // Makes the player choose between their actions and runs it
                 m -> graphicalCLI.printlnString(m.getTitle()),
                 () -> graphicalCLI.printlnString("MENU:\n"),
                 choiceText,
@@ -1079,7 +1083,6 @@ public class CLI extends ClientController {
         ));
         playerTurnMenu.addAll(shared);
         playerTurnMenu.addAll( Arrays.asList(
-                new MenuOption("Save game", () -> getMessageHandler().sendClientMessage(new SaveMessage())),
                 new MenuOption("End turn", () -> {
                     if (isMainActionPlayed()) {
                         setPlayerTurn(false);

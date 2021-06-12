@@ -183,10 +183,15 @@ public class GameHandler implements Runnable {
 
     /**
      * Saves the game on its dedicated file
+     * @param nickname Nickname of the player that is requesting to save the game in order to check if it's their turn
+     *                 (if null, it will always save the game)
      * @return Returns true if the game has been saved successfully, false otherwise
      */
-    public boolean saveGame() {
-        if(sizeSetup.get() == size) {
+    public boolean saveGame(String nickname) {
+        if((nickname == null ||                                                     // If there is no nickname specified the save request is always accepted
+                (controller.getPlayingNickname().equals(nickname) &&
+                        controller.getPlayerBoard(nickname).isTurnPlayed())) &&     // If there is a nickname specified, the player must have already played their action and it must be their turn
+                sizeSetup.get() == size) {                                          // It's not possible to save a game during the setup phase
             try {
                 save.save();
                 return true;
@@ -205,7 +210,7 @@ public class GameHandler implements Runnable {
             active = false;
             for (VirtualView virtualView : clientsVirtualView)
                 virtualView.stop(false);
-            if(!saveGame()) {
+            if(!saveGame(null)) {
                 try {
                     GameLibrary.getInstance().deleteSave(save);
                 } catch (LibraryNotLoadedException e) {
