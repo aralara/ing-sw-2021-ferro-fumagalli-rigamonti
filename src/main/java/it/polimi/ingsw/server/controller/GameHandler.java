@@ -71,8 +71,14 @@ public class GameHandler implements Runnable {
             controller = new Controller(game);
             controller.initSavedGame(clientsVirtualView);
             sizeSetup.set(size);
-            updateClients(game);
-            resumeGame();
+            if(game.isFinished()) {     // In case the loaded game has already ended, displays the results to all the players and stops the game
+                sendAll(new EndGameMessage(game.getEndPlayerList()));
+                stop();
+            }
+            else {
+                updateClients(game);
+                resumeGame();
+            }
         } catch(IOException | ClassNotFoundException e) {
             startNewGame();
         }
