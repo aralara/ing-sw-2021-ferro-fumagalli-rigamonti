@@ -30,16 +30,18 @@ public interface Storage extends Serializable {
      */
     static boolean checkContainedResources(List<Resource> container, List<Resource> contained) {
         for (Resource resource : contained) {
-            boolean check = false;
-            for (Resource value : container) {
-                if (resource.getResourceType() == value.getResourceType() &&
-                        value.getQuantity() >= resource.getQuantity()) {
-                    check = true;
-                    break;
+            if(resource.getQuantity() > 0) {
+                boolean check = false;
+                for (Resource value : container) {
+                    if (resource.getResourceType() == value.getResourceType() &&
+                            value.getQuantity() >= resource.getQuantity()) {
+                        check = true;
+                        break;
+                    }
                 }
+                if (!check)
+                    return false;
             }
-            if (!check)
-                return false;
         }
         return true;
     }
