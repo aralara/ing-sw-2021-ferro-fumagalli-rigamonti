@@ -9,6 +9,9 @@ import static org.junit.Assert.*;
 
 public class AbilityWarehouseTest {
 
+    /**
+     * Tests the ability getter
+     */
     @Test
     public void testGetResourceTypeAndAbilityToString() {
         AbilityWarehouse aw = new AbilityWarehouse(ResourceType.STONE);
@@ -17,6 +20,9 @@ public class AbilityWarehouseTest {
                 aw.abilityToString());
     }
 
+    /**
+     * Tests the warehouse ability activation
+     */
     @Test
     public void testActivateAbility() {
         PlayerBoard pb = new PlayerBoard("Bonucci");

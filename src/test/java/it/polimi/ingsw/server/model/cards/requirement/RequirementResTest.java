@@ -14,6 +14,9 @@ import static org.junit.Assert.*;
 
 public class RequirementResTest {
 
+    /**
+     * Tests the requirement getter
+     */
     @Test
     public void testGetResource() {
         RequirementRes rr = new RequirementRes(new Resource(ResourceType.SHIELD,4));
@@ -22,6 +25,9 @@ public class RequirementResTest {
         assertEquals(ResourceType.SHIELD,rr.getResource().getResourceType());
     }
 
+    /**
+     * Tests if a requirement is checked
+     */
     @Test
     public void testCheckRequirement() {
         PlayerBoard pb = new PlayerBoard("Bonucci");

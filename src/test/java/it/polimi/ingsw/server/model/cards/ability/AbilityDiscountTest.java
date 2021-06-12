@@ -9,6 +9,9 @@ import static org.junit.Assert.*;
 
 public class AbilityDiscountTest {
 
+    /**
+     * Tests the ability getter
+     */
     @Test
     public void testGetResourceTypeAndAbilityToString() {
         AbilityDiscount ad = new AbilityDiscount(ResourceType.COIN);
@@ -17,6 +20,9 @@ public class AbilityDiscountTest {
                 ad.abilityToString());
     }
 
+    /**
+     * Tests the discount ability activation
+     */
     @Test
     public void testActivateAbility() {
         PlayerBoard pb = new PlayerBoard("Bonucci");

@@ -16,30 +16,45 @@ import static org.junit.Assert.*;
 
 public class RequirementDevTest {
 
+    /**
+     * Tests the color getter
+     */
     @Test
     public void testGetColor() {
         RequirementDev rd = new RequirementDev(CardColors.YELLOW, 2,1);
         assertEquals(CardColors.YELLOW,rd.getColor());
     }
 
+    /**
+     * Tests the level getter
+     */
     @Test
     public void testGetLevel() {
         RequirementDev rd = new RequirementDev(CardColors.YELLOW, 2,1);
         assertEquals(2,rd.getLevel());
     }
 
+    /**
+     * Tests the number getter
+     */
     @Test
     public void testGetNumber() {
         RequirementDev rd = new RequirementDev(CardColors.YELLOW, 2,1);
         assertEquals(1,rd.getNumber());
     }
 
+    /**
+     * Tests if a requirement is correctly turn into a string
+     */
     @Test
     public void testRequirementToString(){
         RequirementDev requirementDev = new RequirementDev(CardColors.YELLOW, 2, 1);
         assertEquals("1 YELLOW level 2 development cards", requirementDev.requirementToString());
     }
 
+    /**
+     * Tests if a requirement is checked
+     */
     @Test
     public void testCheckRequirement() {
         PlayerBoard pb = new PlayerBoard("Bonucci");
