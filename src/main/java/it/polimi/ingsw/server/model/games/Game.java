@@ -113,10 +113,10 @@ public abstract class Game implements Serializable {
     public boolean discardLeaders(int player, List<LeaderCard> leaderCards, boolean setup) {
         PlayerBoard playerBoard = playerBoards.get(player);
         List<Card> playerHand = playerBoard.getLeaderBoard().getHand().getCards();
-        if((setup && playerHand.size() != Constants.INITIAL_LEADER_CARDS.value()) ||                    //Checks if the discardLeaders is called during setup
-                (setup && leaderCards.size() != 2) ||                                                   //Checks (assuming setup) if the player discarded 2 cards
-                playerHand.stream().allMatch(c -> leaderCards.stream().anyMatch(lc -> lc.equals(c))) || //Checks if the discarded cards are in the player's hand
-                !leaderCards.stream().allMatch(new HashSet<>()::add)                                    //Checks if the player wants to discard the same card
+        if((setup && playerHand.size() != Constants.INITIAL_LEADER_CARDS.value()) ||                        //Checks if the discardLeaders is called during setup
+                (setup && leaderCards.size() != 2) ||                                                       //Checks (assuming setup) if the player discarded 2 cards
+                !leaderCards.stream().allMatch(c -> playerHand.stream().anyMatch(lc -> lc.equals(c))) ||    //Checks if the discarded cards are in the player's hand
+                !leaderCards.stream().allMatch(new HashSet<>()::add)                                        //Checks if the player wants to discard the same card
         )
             return false;
         for(LeaderCard leaderCard : leaderCards) {
