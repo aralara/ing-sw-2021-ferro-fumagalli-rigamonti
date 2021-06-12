@@ -14,6 +14,9 @@ import static org.junit.Assert.*;
 
 public class AbilityProductionTest {
 
+    /**
+     * Tests the ability getter
+     */
     @Test
     public void testGetProductionAndAbilityToString() {
         AbilityProduction ap = new AbilityProduction(new Production(
@@ -30,6 +33,9 @@ public class AbilityProductionTest {
                 ap.abilityToString());
     }
 
+    /**
+     * Tests the production ability activation
+     */
     @Test
     public void testActivateAbility() {
         PlayerBoard pb = new PlayerBoard("Bonucci");

@@ -9,6 +9,9 @@ import static org.junit.Assert.*;
 
 public class AbilityMarbleTest {
 
+    /**
+     * Tests the ability getter
+     */
     @Test
     public void testGetResourceTypeAndAbilityToString() {
         AbilityMarble am = new AbilityMarble(ResourceType.STONE);
@@ -17,6 +20,9 @@ public class AbilityMarbleTest {
                 am.abilityToString());
     }
 
+    /**
+     * Tests the marble ability activation
+     */
     @Test
     public void testActivateAbility() {
         PlayerBoard pb = new PlayerBoard("Bonucci");
