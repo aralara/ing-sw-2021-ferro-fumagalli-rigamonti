@@ -292,25 +292,10 @@ public class GUI extends ClientController {
         RankingController rc = (RankingController) guiApplication.getController(SceneNames.RANKING);
         List<Player> playerRanking = players.stream().sorted(Comparator.comparingInt(
                 Player::getFinalPosition)).collect(Collectors.toList());
-        if(getNumberOfPlayers()>1) {
-            for (Player player : playerRanking) {
-                rc.setNames_label(player.getNickname());
-                rc.setScores_label(Integer.toString(player.getTotalVP()));
-            }
-        }
-        else {
-            if(players.get(0).getFinalPosition() == 1) {
-                callPlatformRunLater(() -> rc.setNames_label(playerRanking.get(0).getNickname()
-                        + "\nLorenzo il Magnifico"));
-                callPlatformRunLater(() -> rc.setScores_label(Integer.toString(playerRanking.get(0).getTotalVP())));
-                callPlatformRunLater(() -> rc.setScores_label("-"));
-            }
-            else {
-                callPlatformRunLater(() -> rc.setNames_label("Lorenzo il Magnifico\n"
-                        + playerRanking.get(0).getNickname()));
-                callPlatformRunLater(() -> rc.setScores_label("-"));
-                callPlatformRunLater(() -> rc.setScores_label(Integer.toString(playerRanking.get(0).getTotalVP())));
-            }
+        for (Player player : playerRanking) {
+            rc.setNames_label(player.getNickname());
+            // Lorenzo doesn't have a VP score, therefore the ranking board will display "-" in its place
+            rc.setScores_label(player.getTotalVP() >= 0 ? Integer.toString(player.getTotalVP()) : "-");
         }
         callPlatformRunLater(() -> guiApplication.setActiveScene(SceneNames.RANKING));
     }

@@ -3,15 +3,12 @@ package it.polimi.ingsw.utils.messages.client;
 import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.server.controller.GameHandler;
 import it.polimi.ingsw.server.controller.Controller;
-import it.polimi.ingsw.server.model.boards.PlayerBoard;
 import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.TurnStatus;
 import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 import it.polimi.ingsw.utils.messages.server.action.EndGameMessage;
 import it.polimi.ingsw.utils.messages.server.action.LastRoundMessage;
 import it.polimi.ingsw.utils.messages.server.action.StartTurnMessage;
-
-import java.util.stream.Collectors;
 
 public class EndTurnMessage extends ClientActionMessage {
 
@@ -24,7 +21,7 @@ public class EndTurnMessage extends ClientActionMessage {
         Controller controller = gameHandler.getController();
         TurnStatus ts = TurnStatus.getStatus(controller.loadNextTurn());
         boolean success = true;
-        switch(ts){
+        switch(ts) {
             case LOAD_TURN_NORMAL:
                 gameHandler.sendAll(new StartTurnMessage(controller.getPlayingNickname()));
                 break;
@@ -33,9 +30,8 @@ public class EndTurnMessage extends ClientActionMessage {
                 gameHandler.sendAll(new StartTurnMessage(controller.getPlayingNickname()));
                 break;
             case LOAD_TURN_END_GAME:
-                gameHandler.sendAll(new EndGameMessage(controller.getGame().
-                        getPlayerBoards().stream().map(PlayerBoard::getPlayer).collect(Collectors.toList())));
-                break; //TODO: aggiunto break
+                gameHandler.sendAll(new EndGameMessage(controller.getGame().getEndPlayerList()));
+                break;
             case INVALID:
                 success = false;
                 break;

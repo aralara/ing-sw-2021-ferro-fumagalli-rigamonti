@@ -14,7 +14,7 @@ public class Player implements Serializable {
      */
     public Player(String nickname) {
         this.nickname = nickname;
-        totalVP = 0;
+        totalVP = -1;
         finalPosition = 0;
     }
 

@@ -40,7 +40,7 @@ public class RankingController extends GenericController {
      */
     public void quit() {
         showAlert(Alert.AlertType.INFORMATION, "Quit",
-                "Thanks to have played Master of Renaissance!", "");
+                "Thank you for having played Master of Renaissance!", "");
         System.exit(0);
     }
 

@@ -11,6 +11,8 @@ import it.polimi.ingsw.utils.listeners.server.LorenzoCardPlayListener;
 import it.polimi.ingsw.utils.listeners.server.LorenzoFaithChangeListener;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class SingleGame extends Game {
 
@@ -105,10 +107,8 @@ public class SingleGame extends Game {
 
     @Override
     public void calculateFinalPositions() {
-        if(!isLorenzoWinner)
-            getPlayerBoards().get(0).getPlayer().setFinalPosition(1);
-        else
-            getPlayerBoards().get(0).getPlayer().setFinalPosition(2);
+        getPlayerBoards().get(0).getPlayer().setFinalPosition(isLorenzoWinner ? 2 : 1);
+        lorenzoBoard.getPlayer().setFinalPosition(isLorenzoWinner ? 1 : 2);
     }
 
     @Override
@@ -125,8 +125,14 @@ public class SingleGame extends Game {
     @Override
     public String getPlayingNickname() {
         if(isLorenzoTurn)
-            return "Lorenzo";   //TODO: uhm... boh
+            return lorenzoBoard.getPlayer().getNickname();
         else
             return getPlayerBoards().get(0).getPlayer().getNickname();
+    }
+
+    @Override
+    public List<Player> getEndPlayerList() {
+        return Stream.concat(super.getEndPlayerList().stream(),
+                Stream.of(lorenzoBoard.getPlayer())).collect(Collectors.toList());
     }
 }

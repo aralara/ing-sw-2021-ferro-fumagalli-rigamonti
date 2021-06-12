@@ -308,13 +308,16 @@ public class CLI extends ClientController {
     }
 
     @Override
-    public void notifyEndGame(List<Player> players) {  //TODO: gestire single game
+    public void notifyEndGame(List<Player> players) {
         graphicalCLI.printlnString("THE GAME HAS ENDED!");
         graphicalCLI.printlnString("Scoreboard:");
-        for(Player player : players.stream()
-                .sorted(Comparator.comparingInt(Player::getFinalPosition)).collect(Collectors.toList()))
-            graphicalCLI.printlnString(player.getFinalPosition() + ": " + player.getNickname() + " with " +
-                    + player.getTotalVP() + " VP");
+        // Lorenzo doesn't have a VP score, therefore the ranking board won't display it
+        for(Player player : players.stream().sorted(Comparator.comparingInt(Player::getFinalPosition))
+                .collect(Collectors.toList()))
+            graphicalCLI.printlnString(player.getFinalPosition() + ": " + player.getNickname() +
+                    (player.getTotalVP() >= 0 ? (" with " + player.getTotalVP() + " VP") : "")
+            );
+        graphicalCLI.printlnString("Thank you for having played Master of Renaissance!");
     }
 
     /**

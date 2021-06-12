@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.games;
 
+import it.polimi.ingsw.server.model.boards.Player;
 import it.polimi.ingsw.utils.exceptions.InvalidColumnException;
 import it.polimi.ingsw.utils.exceptions.InvalidRowException;
 import it.polimi.ingsw.server.model.FileNames;
@@ -464,6 +465,14 @@ public abstract class Game implements Serializable {
                 index = i;
         }
         return index;
+    }
+
+    /**
+     * Returns a list containing all the player objects that need to be visualized in the final screen
+     * @return Returns a list of Player objects
+     */
+    public List<Player> getEndPlayerList() {
+        return playerBoards.stream().map(PlayerBoard::getPlayer).collect(Collectors.toList());
     }
 
     /**

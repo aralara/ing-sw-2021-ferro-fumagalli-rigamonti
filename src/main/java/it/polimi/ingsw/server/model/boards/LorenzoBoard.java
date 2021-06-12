@@ -10,6 +10,7 @@ import java.io.Serializable;
 
 public class LorenzoBoard extends Listened implements Serializable {
 
+    private final Player player;
     private final SingleGame game;
     private final Deck lorenzoDeck;
     private int faith;
@@ -21,6 +22,7 @@ public class LorenzoBoard extends Listened implements Serializable {
      */
     public LorenzoBoard(SingleGame game) {
         this.game = game;
+        player = new Player("Lorenzo il Magnifico");
         lorenzoDeck = new Deck();
         faith = 0;
     }
@@ -81,6 +83,14 @@ public class LorenzoBoard extends Listened implements Serializable {
      */
     public void refreshDeck() {
         lorenzoDeck.shuffle();
+    }
+
+    /**
+     * Gets the player attribute
+     * @return Returns player value
+     */
+    public Player getPlayer() {
+        return player;
     }
 
     /**
