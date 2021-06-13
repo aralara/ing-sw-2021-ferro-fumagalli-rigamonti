@@ -1,7 +1,11 @@
 package it.polimi.ingsw.client.gui.controllers;
 
 import it.polimi.ingsw.client.gui.SceneNames;
+import it.polimi.ingsw.server.saves.SaveInteractions;
 import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -12,6 +16,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
+import java.util.List;
 
 public class SetupController extends GenericController {
 
@@ -19,10 +24,12 @@ public class SetupController extends GenericController {
 
     @FXML private TextField ipAddress_field, portNumber_field, nickname_field;
     @FXML private ProgressIndicator connecting_progressIndicator, waitingNickname_progressIndicator;
-    @FXML private Button playOnline_button, playOffline_button, connect_button, confirm_button;
+    @FXML private Button playOnline_button, playOffline_button, connect_button, confirm_button,
+            load_button, delete_button;
     @FXML private Label nickname_label, notifyPlayers_label;
     @FXML private ProgressBar loading_bar;
     @FXML private Pane connection_pane;
+    @FXML private ComboBox<String> files_comboBox;
 
     /**
      * Sets the isLocal attribute
@@ -263,5 +270,44 @@ public class SetupController extends GenericController {
         playOnline_button.setVisible(!toShow);
         playOffline_button.setVisible(!toShow);
         loading_bar.setVisible(toShow);
+    }
+
+    /**
+     * TODO: da qui in poi fare javadoc
+     */
+    public void skip() {
+        getGUIApplication().closeSecondStage();
+        load_button.setDisable(true);
+        delete_button.setDisable(true);
+        getGUI().sendSaveInteractionMessage(null, SaveInteractions.NO_ACTION);
+    }
+
+    public void load() {
+        getGUIApplication().closeSecondStage();
+        load_button.setDisable(true);
+        delete_button.setDisable(true);
+        getGUI().sendSaveInteractionMessage(files_comboBox.getValue(), SaveInteractions.OPEN_SAVE);
+    }
+
+    public void delete() {
+        getGUIApplication().closeSecondStage();
+        load_button.setDisable(true);
+        delete_button.setDisable(true);
+        getGUI().sendSaveInteractionMessage(files_comboBox.getValue(), SaveInteractions.DELETE_SAVE);
+    }
+
+    public void fillComboBox(List<String> files){
+        files_comboBox.setItems(FXCollections.observableArrayList(files));
+    }
+
+    public void fileSelected() {
+        if(files_comboBox.getValue()!=""){
+            load_button.setDisable(false);
+            delete_button.setDisable(false);
+        }
+        else {
+            load_button.setDisable(true);
+            delete_button.setDisable(true);
+        }
     }
 }

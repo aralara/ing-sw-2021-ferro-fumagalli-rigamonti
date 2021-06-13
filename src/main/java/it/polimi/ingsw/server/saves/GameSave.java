@@ -18,6 +18,14 @@ public class GameSave implements Serializable {
     private boolean loaded;
     private Game game;
 
+    /**
+     * TODO: fare
+     */
+    public GameSave() {
+        players = null;
+        id = -1;
+        fileName = "";
+    }
 
     /**
      * GameSave constructor that uses the name of a file to extract its attributes

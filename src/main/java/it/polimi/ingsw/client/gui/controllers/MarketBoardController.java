@@ -45,7 +45,6 @@ public class MarketBoardController extends GenericController {
             pbc.disableActivateProductionsAction();
             pbc.disableActivateLeaderAction();
             pbc.disableDiscardLeaderAction();
-            pbc.disableSaveButton();
             pbc.setWarehouseIsDisabled(false);
             pbc.setMainActionPlayed(true);
             pbc.setIsResToPlace(true);

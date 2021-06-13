@@ -6,6 +6,7 @@ public enum SceneNames {
     NICKNAME_MENU("/fxml/NicknameMenu.fxml"),
     GAME_MODE_MENU("/fxml/GameModeMenu.fxml"),
     MULTI_PLAYER_WAITING("/fxml/MultiPlayerWaiting.fxml"),
+    SAVES_MENU("/fxml/Saves.fxml"),
     LEADER_CHOICE_MENU("/fxml/LeaderChoiceMenu.fxml"),
     RESOURCE_CHOICE_MENU("/fxml/ResourceChoiceMenu.fxml"),
     PLAYER_BOARD("/fxml/PlayerBoard.fxml"),

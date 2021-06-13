@@ -168,7 +168,6 @@ public class PlayerBoardController extends GenericController {
             viewOpponents_button.setDisable(false);
             activateLeaderCard_button.setDisable(false);
             discardLeaderCard_button.setDisable(false);
-            save_button.setDisable(false);
         }
     }
 
@@ -780,13 +779,6 @@ public class PlayerBoardController extends GenericController {
     }
 
     /**
-     * Disables save button
-     */
-    public void disableSaveButton(){
-        save_button.setDisable(true);
-    }
-
-    /**
      * Disable development board's spaces
      */
     private void disableSpaces(){
@@ -965,16 +957,17 @@ public class PlayerBoardController extends GenericController {
             ((DecksBoardController) getGUIApplication().getController(SceneNames.DECKS_BOARD)).enableBuyCardAction();
             activateProductions_button.setDisable(false);
             endTurn_button.setDisable(true);
+            save_button.setDisable(true);
         }
         if(mainActionPlayed) {
             ((MarketBoardController) getGUIApplication().getController(SceneNames.MARKET_BOARD)).disableMarketAction();
             ((DecksBoardController) getGUIApplication().getController(SceneNames.DECKS_BOARD)).disableBuyCardAction();
             activateProductions_button.setDisable(true);
             endTurn_button.setDisable(false);
+            save_button.setDisable(false);
         }
         activateLeaderCard_button.setDisable(false);
         discardLeaderCard_button.setDisable(false);
-        save_button.setDisable(false);
         rearrangeWarehouse_button.setDisable(false);
         viewOpponents_button.setDisable(false);
         showCheckBoxes();
@@ -998,8 +991,10 @@ public class PlayerBoardController extends GenericController {
             restoreWarehouse_button.setVisible(false);
             confirm_button.setVisible(false);
             rearrangeWarehouse_button.setDisable(false);
-            if(mainActionPlayed)
+            if(mainActionPlayed) {
                 endTurn_button.setDisable(false);
+                save_button.setDisable(false);
+            }
             isResToPlaceAction=false;
             viewOpponents_button.setDisable(false);
         }

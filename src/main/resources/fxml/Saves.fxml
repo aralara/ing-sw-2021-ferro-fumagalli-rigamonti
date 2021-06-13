@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane fx:id="connectionPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="400.0" styleClass="setupPanel" stylesheets="@../css/setupWindow.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllers.SetupController">
+   <children>
+      <Label layoutX="77.0" layoutY="163.0" text="Choose a save file to load or delete" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="24.0" />
+         </font>
+      </Label>
+      <Button focusTraversable="false" layoutX="324.0" layoutY="14.0" mnemonicParsing="false" onAction="#skip" prefHeight="23.0" prefWidth="62.0" text="Skip" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="load_button" disable="true" focusTraversable="false" layoutX="108.0" layoutY="349.0" mnemonicParsing="false" onAction="#load" prefHeight="55.0" prefWidth="79.0" text="Load" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="24.0" />
+         </font>
+      </Button>
+      <Button fx:id="delete_button" disable="true" focusTraversable="false" layoutX="214.0" layoutY="349.0" mnemonicParsing="false" onAction="#delete" text="Delete" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="24.0" />
+         </font>
+      </Button>
+      <ComboBox fx:id="files_comboBox" focusTraversable="false" layoutX="44.0" layoutY="230.0" onAction="#fileSelected" prefHeight="39.0" prefWidth="315.0" />
+   </children>
+</Pane>

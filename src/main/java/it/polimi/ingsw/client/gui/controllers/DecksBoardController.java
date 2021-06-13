@@ -54,7 +54,6 @@ public class DecksBoardController extends GenericController {
             pbc.setWarehouseIsDisabled(true);
             pbc.disableActivateLeaderAction();
             pbc.disableDiscardLeaderAction();
-            pbc.disableSaveButton();
             pbc.hideCheckBoxes();
             showAlert(Alert.AlertType.INFORMATION, "Buy card", "Complete buying action",
                     "Now you can drag and drop the card in the desired space");

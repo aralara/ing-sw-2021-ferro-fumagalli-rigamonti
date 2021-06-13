@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.gui;
 import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.client.gui.controllers.*;
 import it.polimi.ingsw.client.structures.*;
+import it.polimi.ingsw.server.saves.SaveInteractions;
 import it.polimi.ingsw.utils.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.model.boards.Player;
 import it.polimi.ingsw.server.model.cards.card.*;
@@ -30,6 +31,7 @@ public class GUI extends ClientController {
     private List<Resource> resourcesToEqualize;
     private List<Resource> resourcesToPlace;
     private List<Resource> resourcesToDiscard;
+    private List<GameSave> gameSaves;
     private int waitingPlayers;
 
     /**
@@ -170,8 +172,39 @@ public class GUI extends ClientController {
     }
 
     @Override
-    public void displaySaves(List<GameSave> saves) {
-        //TODO: da fare?
+    public void displaySaves(List<GameSave> saves) {//TODO: scommentare
+        ClientMessage messageToSend = new SaveInteractionMessage(null, SaveInteractions.NO_ACTION);
+        if(saves.size() > 0) {
+            gameSaves = saves;
+            List<String> fileNames = new ArrayList<>();
+            for(GameSave save : gameSaves)
+                fileNames.add(save.getFileName());
+            callPlatformRunLater(() -> ((SetupController) guiApplication.
+                    getController(SceneNames.SAVES_MENU)).fillComboBox(fileNames));
+            callPlatformRunLater(() -> guiApplication.setActiveScene(SceneNames.SAVES_MENU));
+        }
+        else
+            getMessageHandler().sendClientMessage(messageToSend);
+    }
+
+    /**
+     * TODO: fare
+     * @param fileName
+     * @param action
+     */
+    public void sendSaveInteractionMessage(String fileName, SaveInteractions action){
+        if(action==SaveInteractions.NO_ACTION) {
+            getMessageHandler().sendClientMessage(new SaveInteractionMessage(null, SaveInteractions.NO_ACTION));
+        }
+        else {
+            GameSave gameSave = new GameSave();
+            for(GameSave save : gameSaves)
+                if(save.getFileName() == fileName){
+                    gameSave = save;
+                    break;
+                }
+            getMessageHandler().sendClientMessage(new SaveInteractionMessage(gameSave, action));
+        }
     }
 
     @Override
@@ -235,6 +268,17 @@ public class GUI extends ClientController {
                              "Now it's "+nickname+"'s turn", ""));
             callPlatformRunLater(() -> ((PlayerBoardController) guiApplication.
                     getController(SceneNames.PLAYER_BOARD)).setIsPlayerTurn(false));
+        }
+        if(guiApplication.getActiveSceneName() == null ||
+                guiApplication.getActiveSceneName() != SceneNames.PLAYER_BOARD) { //to resume a game
+            //TODO: listeners?
+            callPlatformRunLater(() -> ((PlayerBoardController) guiApplication.
+                    getController(SceneNames.PLAYER_BOARD)).setIsPlayerTurn(isPlayerTurn()));
+            callPlatformRunLater(() -> ((PlayerBoardController) guiApplication.
+                    getController(SceneNames.PLAYER_BOARD)).setMainActionPlayed(isMainActionPlayed()));
+            callPlatformRunLater(() -> ((PlayerBoardController) guiApplication.
+                    getController(SceneNames.PLAYER_BOARD)).goBoard());
+            callPlatformRunLater(() -> guiApplication.setActiveScene(SceneNames.PLAYER_BOARD));
         }
     }
 
