@@ -135,4 +135,12 @@ public class SingleGame extends Game {
         return Stream.concat(super.getEndPlayerList().stream(),
                 Stream.of(lorenzoBoard.getPlayer())).collect(Collectors.toList());
     }
+
+    /**
+     * Gets the lorenzoBoard attribute
+     * @return Returns lorenzoBoard value
+     */
+    public LorenzoBoard getLorenzoBoard() {
+        return lorenzoBoard;
+    }
 }

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller;
 
+import it.polimi.ingsw.server.model.games.SingleGame;
 import it.polimi.ingsw.utils.exceptions.LibraryNotLoadedException;
 import it.polimi.ingsw.utils.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.model.boards.PlayerBoard;
@@ -11,10 +12,7 @@ import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.messages.client.ClientActionMessage;
 import it.polimi.ingsw.utils.messages.Message;
 import it.polimi.ingsw.utils.messages.server.action.*;
-import it.polimi.ingsw.utils.messages.server.update.DevelopmentDecksMessage;
-import it.polimi.ingsw.utils.messages.server.update.FaithTrackMessage;
-import it.polimi.ingsw.utils.messages.server.update.MarketMessage;
-import it.polimi.ingsw.utils.messages.server.update.PlayerBoardSetupMessage;
+import it.polimi.ingsw.utils.messages.server.update.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -130,6 +128,8 @@ public class GameHandler implements Runnable {
             virtualView.sendMessage(new MarketMessage(game.getMarket()));
             virtualView.sendMessage(new DevelopmentDecksMessage(game.getDevelopmentDecks()));
             virtualView.sendMessage(new FaithTrackMessage(game.getFaithTrack()));
+            if(size == 1)
+                virtualView.sendMessage(new LorenzoFaithMessage(((SingleGame)game).getLorenzoBoard().getFaith()));
         }
     }
 
