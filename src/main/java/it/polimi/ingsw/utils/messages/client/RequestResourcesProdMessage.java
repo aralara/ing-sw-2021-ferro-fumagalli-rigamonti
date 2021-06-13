@@ -20,8 +20,8 @@ public class RequestResourcesProdMessage extends CanActivateProductionsMessage {
 
     @Override
     public void doAction(VirtualView view) {
-        boolean success = view.getGameHandler().getController()
-                .activateProductions(view.getNickname(), getProductions(), requestResources);
+        boolean success = view.getGameHandler().getController().activateProductions(view.getNickname(),
+                getProductions(), requestResources, getConsumed(), getProduced());
         view.sendMessage(new ServerAckMessage(getUuid(), success));
     }
 

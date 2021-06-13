@@ -3,7 +3,6 @@ package it.polimi.ingsw.server.model.storage;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Production implements Serializable {
@@ -62,40 +61,15 @@ public class Production implements Serializable {
         return new Production(consumedCopy,producedCopy);
     }
 
-    /** //TODO: da fare
-     * Compares two productions and declares if this production could have resolved into the other
+    /**
+     * Compares two productions and declares if this production could have modeled the other
      * @param p Production to compare
-     * @return True if this production could have resolved into the other, false otherwise
-     *//*
-    public boolean equalsResolved(Production p) {
-        List<Resource> consumed = this.makeClone().getConsumed().stream()
-                .filter(r -> r.getResourceType() != ResourceType.WILDCARD).collect(Collectors.toList());
-        int nWildConsumed = (int) this.makeClone().getConsumed().stream()
-                .filter(r -> r.getResourceType() == ResourceType.WILDCARD).count();
-        List<Resource> produced = this.makeClone().getProduced().stream()
-                .filter(r -> r.getResourceType() != ResourceType.WILDCARD).collect(Collectors.toList());
-        int nWildProduced = (int) this.makeClone().getProduced().stream()
-                .filter(r -> r.getResourceType() == ResourceType.WILDCARD).count();
-        List<Resource> pConsumed = p.makeClone().getConsumed();
-        List<Resource> pProduced = p.makeClone().getProduced();
-        Storage.aggregateResources(consumed);
-        Storage.aggregateResources(produced);
-        Storage.aggregateResources(pConsumed);
-        Storage.aggregateResources(pProduced);
-        List<Resource> plus = new ArrayList<>();
-        for(Resource rp : pConsumed) {
-            for(Resource r : consumed) {
-                if(r.getResourceType() == rp.getResourceType()) {
-                    if(r.getResourceType() != ResourceType.FAITH && r.getResourceType() != ResourceType.WILDCARD)
-                        if()
-                }
-            }
-        }
-        return consumed.stream().allMatch(c -> pConsumed.stream().anyMatch(pc ->
-                        pc.getResourceType() == c.getResourceType() && pc.getQuantity() == c.getQuantity())) &&
-                produced.stream().allMatch(c -> pProduced.stream().anyMatch(pc ->
-                        pc.getResourceType() == c.getResourceType() && pc.getQuantity() == c.getQuantity()));
-    }*/
+     * @return True if this production could have modeled the other, false otherwise
+     */
+    public boolean canModel(Production p) {
+        return Storage.checkListModeled(this.getConsumed(), p.getConsumed(), ResourceType.getRealValues()) &&
+                Storage.checkListModeled(this.getProduced(), p.getProduced(), ResourceType.getRealValues());
+    }
 
     /**
      * Returns a list of the consumed resources

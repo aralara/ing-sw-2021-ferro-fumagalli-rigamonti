@@ -266,7 +266,7 @@ public abstract class Game implements Serializable {
     /**
      * Checks if a list of productions can be activated for the player by checking if they own enough resources
      * @param player Index of the player to check
-     * @param consumed The list of resources to be consumed
+     * @param consumed The list of resources that will be consumed
      * @return Returns true if the productions can be activated, false otherwise
      */
     public boolean canActivateProductions(int player, List<Resource> consumed) {
@@ -276,29 +276,44 @@ public abstract class Game implements Serializable {
 
     /**
      * If the resources contained in the requests match the actual available resources detained by the player,
-     * activates the productions for said player by adding the produced resources to their
+     * activates the productions for said player by adding the produced resources to their storage
      * @param player Index of the player to activate productions for
      * @param productions List of productions to activate
      * @param requests List of requests containing resource quantity and location for the spent resources
+     * @param consumed The list of resources that will be consumed
+     * @param produced The list of resources that will be produced
      * @return Returns true if the productions can be activated, false otherwise
      */
-    public boolean activateProductions(int player, List<Production> productions, List<RequestResources> requests) {
+    @SuppressWarnings("CollectionAddAllCanBeReplacedWithConstructor")
+    public boolean activateProductions(int player, List<Production> productions, List<RequestResources> requests,
+                                       List<Resource> consumed, List<Resource> produced) {
         PlayerBoard playerBoard = playerBoards.get(player);
         List<Resource> totalRequests = new ArrayList<>();
-        List<Resource> consumed = new ArrayList<>(), produced = new ArrayList<>();
-        productions.stream().map(Production::getConsumed).forEach(l -> l.forEach(r -> consumed.add(r.makeClone())));
-        productions.stream().map(Production::getProduced).forEach(l -> l.forEach(r -> produced.add(r.makeClone())));
+        List<Production> allProductions = new ArrayList<>();    //TODO: ci ho perso un'ora di vita ma non ho idea di cosa sia successo, se uso il costruttore parametrizzato dell'arraylist, quando chiamo l'iteratore su productions, il metodo next dell'iteratore comincia a modificare productions azzerando i valori!!!!!!!!!!!!!!!!??????????????????????????
+        allProductions.addAll(playerBoard.createProductionStock());
+
+        // Calculates if the activated productions can be modeled from the productions available to the player
+        boolean matchingProductions = true;
+        for(Production p : productions) {
+            if (allProductions.stream().anyMatch(ap -> ap.canModel(p)))
+                allProductions.removeIf(ap -> ap.canModel(p));
+            else {
+                matchingProductions = false;
+                break;
+            }
+        }
+
         if(!playerBoard.isTurnPlayed()) {
-            if(canActivateProductions(player, consumed) &&                                                  //Basic checks
-                    Storage.checkContainedResources(Storage.mergeResourceList(consumed), totalRequests) &&  //Checks if the resources in the requests can activate the production
-                    //TODO: controllo se le produzioni possono essere state create da questa playerboard
-                    playerBoard.canTakeFromStorages(requests)                                               //Activates productions if the player has enough resources
+            if(canActivateProductions(player, consumed) &&                                                  // Basic checks
+                    Storage.checkContainedResources(Storage.mergeResourceList(consumed), totalRequests) &&  // Checks if the resources in the requests can activate the production
+                    matchingProductions &&                                                                  // Checks if the productions can be activated given all the possible productions for the player
+                    playerBoard.canTakeFromStorages(requests)                                               // Activates productions if the player has enough resources
             ) {
                 playerBoard.getFaithBoard().takeFaithFromResources(produced);
                 checkFaith();
                 playerBoard.setTurnPlayed(true);
+                return playerBoards.get(player).activateProductions(produced, requests);
             }
-            return playerBoards.get(player).activateProductions(produced, requests);
         }
         return false;
     }

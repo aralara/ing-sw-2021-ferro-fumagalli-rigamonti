@@ -1025,7 +1025,7 @@ public class CLI extends ClientController {
                             () -> graphicalCLI.printString("Choose " + finalProducedWildcards.size() +
                                     " resource type(s) for the wildcard(s): "),
                             null,
-                            true, consumedWildcards.size(), consumedWildcards.size(), -1
+                            true, producedWildcards.size(), producedWildcards.size(), -1
                     ).forEach(rt -> producedResolved.add(new Resource(rt, 1)));
                 }
             }

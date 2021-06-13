@@ -81,8 +81,9 @@ public class Controller {
         return game.canActivateProductions(game.getPlayerIndexOf(player), consumed);
     }
 
-    public boolean activateProductions(String player, List<Production> productions, List<RequestResources> requests) {
-        return game.activateProductions(game.getPlayerIndexOf(player), productions, requests);
+    public boolean activateProductions(String player, List<Production> productions, List<RequestResources> requests,
+                                       List<Resource> consumed, List<Resource> produced) {
+        return game.activateProductions(game.getPlayerIndexOf(player), productions, requests, consumed, produced);
     }
 
     public Map<String, List<Resource>> getResourcesToEqualize() {

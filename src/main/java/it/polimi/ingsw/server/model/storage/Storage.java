@@ -47,6 +47,52 @@ public interface Storage extends Serializable {
     }
 
     /**
+     * Checks if a list of resources can be modeled using wildcards from another one
+     * @param model Model list
+     * @param modeled List that needs to be checked
+     * @param possibleWildcards Possible wildcards that blank resources can be turned into
+     * @return Returns true if modeled can be obtained from model, false otherwise
+     */
+    static boolean checkListModeled(List<Resource> model, List<Resource> modeled,
+                                           List<ResourceType> possibleWildcards) {
+        List<Resource> c_model = new ArrayList<>(model);
+        List<Resource> c_modeled = new ArrayList<>(modeled);
+        Storage.aggregateResources(c_model);
+        Storage.aggregateResources(c_modeled);
+        try {
+            // Modeled list shouldn't contain wildcards
+            if(c_modeled.stream().anyMatch(r -> r.getResourceType() == ResourceType.WILDCARD))
+                return false;
+            // Subtracts all of the non-wildcard generated resources from the modeled list
+            for(Resource r : c_model)
+                if (r.getResourceType() != ResourceType.WILDCARD) {
+                    Resource modeled_resource = c_modeled.stream()
+                            .filter(r2 -> r.getResourceType() == r2.getResourceType()).findFirst().orElseThrow();
+                    if (r.getQuantity() >= modeled_resource.getQuantity())
+                        modeled_resource.setQuantity(modeled_resource.getQuantity() - r.getQuantity());
+                    else
+                        return false;
+                }
+            // Checks if the wildcards from the model list can generate the remaining resources in the modeled list
+            for(Resource r : c_model)
+                if (r.getResourceType() == ResourceType.WILDCARD)
+                    while(r.getQuantity() > 0) {
+                        Resource modeled_resource = c_modeled.stream()
+                                .filter(r2 -> r2.getQuantity() > 0 && possibleWildcards
+                                        .stream().anyMatch(rt -> rt == r2.getResourceType())).findFirst().orElseThrow();
+                        modeled_resource.setQuantity(modeled_resource.getQuantity() - 1);
+                        r.setQuantity(r.getQuantity() - 1);
+                    }
+            // Checks if the modeled list has any excess resources
+            if(c_modeled.stream().anyMatch(r -> r.getQuantity() > 0))
+                return false;
+        } catch(Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Aggregates the resources in the list that has the same resourceType and returns the list
      * @param resources List to be aggregated
      */
