@@ -74,8 +74,10 @@ public class PlayerBoardController extends GenericController {
             disableButtons();
             viewOpponents_button.setDisable(false);
         }
-        else if(!isResToPlaceAction)
+        else if(!isResToPlaceAction) {
             enableButtons();
+            viewOpponents_button.setDisable(false);
+        }
     }
 
     /**
@@ -159,6 +161,7 @@ public class PlayerBoardController extends GenericController {
             endTurn_button.setDisable(false);
             activateLeaderCard_button.setDisable(false);
             discardLeaderCard_button.setDisable(false);
+            viewOpponents_button.setDisable(false);
             save_button.setDisable(false);
         }
         if(!mainActionPlayed && !isResToPlaceAction){

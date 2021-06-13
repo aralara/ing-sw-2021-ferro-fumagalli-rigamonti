@@ -33,6 +33,7 @@ public class GUI extends ClientController {
     private List<Resource> resourcesToDiscard;
     private List<GameSave> gameSaves;
     private int waitingPlayers;
+    private boolean resumeGame;
 
     /**
      * GUI constructor with parameters
@@ -48,6 +49,7 @@ public class GUI extends ClientController {
         resourcesToEqualize = new ArrayList<>();
         resourcesToPlace = new ArrayList<>();
         resourcesToDiscard = new ArrayList<>();
+        resumeGame = false;
     }
 
     /**
@@ -197,6 +199,7 @@ public class GUI extends ClientController {
             getMessageHandler().sendClientMessage(new SaveInteractionMessage(null, SaveInteractions.NO_ACTION));
         }
         else {
+            resumeGame = true;
             GameSave gameSave = new GameSave();
             for(GameSave save : gameSaves)
                 if(save.getFileName() == fileName){
@@ -253,6 +256,7 @@ public class GUI extends ClientController {
 
     @Override
     public void notifyStartTurn(String nickname) {
+        setPlayerTurn(nickname.equals(getNickname()));
         if(nickname.equals(getNickname())) {
             if(getNumberOfPlayers()>1)
                 callPlatformRunLater(() -> (guiApplication.getController(SceneNames.PLAYER_BOARD)).
@@ -269,13 +273,13 @@ public class GUI extends ClientController {
             callPlatformRunLater(() -> ((PlayerBoardController) guiApplication.
                     getController(SceneNames.PLAYER_BOARD)).setIsPlayerTurn(false));
         }
-        if(guiApplication.getActiveSceneName() == null ||
-                guiApplication.getActiveSceneName() != SceneNames.PLAYER_BOARD) { //to resume a game
+        if(resumeGame) { //to resume a game
             //TODO: listeners?
+            resumeGame=false;
             callPlatformRunLater(() -> ((PlayerBoardController) guiApplication.
                     getController(SceneNames.PLAYER_BOARD)).setIsPlayerTurn(isPlayerTurn()));
             callPlatformRunLater(() -> ((PlayerBoardController) guiApplication.
-                    getController(SceneNames.PLAYER_BOARD)).setMainActionPlayed(isMainActionPlayed()));
+                    getController(SceneNames.PLAYER_BOARD)).setMainActionPlayed(isPlayerTurn())); //always resume where the last active player ended the main action
             callPlatformRunLater(() -> ((PlayerBoardController) guiApplication.
                     getController(SceneNames.PLAYER_BOARD)).goBoard());
             callPlatformRunLater(() -> guiApplication.setActiveScene(SceneNames.PLAYER_BOARD));
