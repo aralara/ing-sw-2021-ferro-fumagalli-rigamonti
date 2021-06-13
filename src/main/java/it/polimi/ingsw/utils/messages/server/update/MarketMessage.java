@@ -15,6 +15,6 @@ public class MarketMessage implements ServerUpdateMessage {
 
     @Override
     public void doUpdate(ClientController client) {
-        client.setMarket(market);
+        client.getMarket().setMarket(market);
     }
 }

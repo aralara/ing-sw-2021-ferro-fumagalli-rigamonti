@@ -13,8 +13,8 @@ import static it.polimi.ingsw.utils.Constants.MARKET_ROW_SIZE;
 
 public class MarketView extends Listened implements Serializable {
 
-    private final Marble[][] marbleMatrix;
-    private final Marble floatingMarble;
+    private Marble[][] marbleMatrix;
+    private Marble floatingMarble;
 
 
     public MarketView(){
@@ -25,10 +25,19 @@ public class MarketView extends Listened implements Serializable {
     public MarketView(Market market) {
         this.marbleMatrix = market.getMarbleMatrix();
         this.floatingMarble = market.getFloatingMarble();
+    }
+
+
+    /**
+     * Updates the current MarketView object referencing a Market object passed as a parameter
+     * @param market Market object to copy
+     */
+    public void setMarket(MarketView market) {
+        this.marbleMatrix = market.getMarbleMatrix();
+        this.floatingMarble = market.getFloatingMarble();
         if(hasListeners())
             fireUpdate(Listeners.GAME_MARKET.value(), this);
     }
-
 
     /**
      * Gets the marbleMatrix attribute
