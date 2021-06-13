@@ -194,7 +194,7 @@ public class GUI extends ClientController {
      * @param fileName
      * @param action
      */
-    public void sendSaveInteractionMessage(String fileName, SaveInteractions action){
+    public void sendSaveInteractionMessage(String fileName, SaveInteractions action) {
         if(action==SaveInteractions.NO_ACTION) {
             getMessageHandler().sendClientMessage(new SaveInteractionMessage(null, SaveInteractions.NO_ACTION));
         }
@@ -202,7 +202,7 @@ public class GUI extends ClientController {
             resumeGame = true;
             GameSave gameSave = new GameSave();
             for(GameSave save : gameSaves)
-                if(save.getFileName() == fileName){
+                if(save.getFileName().equals(fileName)) {
                     gameSave = save;
                     break;
                 }
@@ -222,7 +222,6 @@ public class GUI extends ClientController {
 
     @Override
     public void askLeaderDiscard() {
-        attachListeners();  //TODO: TEMPORANEO, non valido quando si carica un gioco dal salvataggio
         try {
             List<Integer> listID = new ArrayList<>();
             for(Card card : getLocalPlayerBoard().getLeaderBoard().getHand())
@@ -762,4 +761,10 @@ public class GUI extends ClientController {
         return opponents;
     }
 
+    @Override
+    public void setFaithTrack(FaithTrackView faithTrack) {
+        super.setFaithTrack(faithTrack);
+        attachListeners();  // Since it's the last setup message to arrive, listeners are added to the GUI components
+        //TODO: temporaneo direi, magari no eh
+    }
 }
