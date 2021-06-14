@@ -1849,29 +1849,20 @@ public class PlayerBoardController extends GenericController {
      * @param productions
      */
     private void resolveWildcard(List<Production> productions){
-        List<Resource> consumedResolved = new ArrayList<>(), producedResolved = new ArrayList<>(),
-                consumedWildcards = new ArrayList<>(), producedWildcards = new ArrayList<>();
+        List<Resource> consumedWildcards = new ArrayList<>(), producedWildcards = new ArrayList<>();
         for(Production production : productions) {
-            consumedResolved.addAll(production.getConsumed().stream()
-                    .filter((r -> r.getResourceType() != ResourceType.WILDCARD)).collect(Collectors.toList()));
-            producedResolved.addAll(production.getProduced().stream()
-                    .filter((r -> r.getResourceType() != ResourceType.WILDCARD)).collect(Collectors.toList()));
             consumedWildcards.addAll(production.getConsumed().stream()
                     .filter((r -> r.getResourceType() == ResourceType.WILDCARD)).collect(Collectors.toList()));
             producedWildcards.addAll(production.getProduced().stream()
                     .filter((r -> r.getResourceType() == ResourceType.WILDCARD)).collect(Collectors.toList()));
         }
         if(!consumedWildcards.isEmpty() || !producedWildcards.isEmpty()) {
-            Storage.aggregateResources(consumedResolved);
-            Storage.aggregateResources(producedResolved);
-            Storage.aggregateResources(consumedWildcards);
-            Storage.aggregateResources(producedWildcards);
             ((WildcardResolverController) getGUIApplication().getController(SceneNames.RESOURCE_CHOICE_MENU)).
                     setIsFirstPhase(false);
             ((WildcardResolverController) getGUIApplication().getController(SceneNames.RESOURCE_CHOICE_MENU)).
                     setIsMarbleAction(false, null);
             ((WildcardResolverController) getGUIApplication().getController(SceneNames.RESOURCE_CHOICE_MENU)).
-                    resolveWildcard(consumedResolved, producedResolved, consumedWildcards, producedWildcards);
+                    resolveWildcard(productions);
             getGUIApplication().setActiveScene(SceneNames.RESOURCE_CHOICE_MENU);
         }
         else getGUI().sendCanActivateProductionsMessage(productions);

@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.gui.SceneNames;
 import it.polimi.ingsw.server.model.storage.Production;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
+import it.polimi.ingsw.server.model.storage.Storage;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -13,10 +14,10 @@ import java.util.List;
 
 public class WildcardResolverController extends GenericController {
 
-    private List<Resource> resources, consumedWildcards, producedWildcards, consumedResolved, producedResolved,
-            selectedConsumed, selectedProduced;
-    private boolean isFirstPhase=false, isProducedAction=false, areResolved=false, isMarbleAction=false;
-    private int totalResources;
+    private List<Resource> resources;
+    private List<Production> productionsToResolve;
+    private boolean isFirstPhase=false, isProducedAction=false, isMarbleAction=false;
+    private int totalResources, productionIndexToResolve;
 
     @FXML private Label chooseResources_label, coin_label, servant_label, shield_label, stone_label;
     @FXML private Button coin_button, servant_button, shield_button, stone_button,
@@ -63,49 +64,21 @@ public class WildcardResolverController extends GenericController {
     }
 
     /**
-     * Stores the selected resource in the right list according to the current action
+     * Stores the selected resource
      * @param label Resource's label that needs to be updated
      * @param resourceType Resource's type
      */
     private void takeResource(Label label, ResourceType resourceType) {
-        if (isFirstPhase || isMarbleAction) {
-            if (getTotalTakenResources() < totalResources) {
-                if (resources == null)
-                    resources = new ArrayList<>();
-                resources.add(new Resource(resourceType, 1));
-                incrementQuantity(resourceType);
-                label.setText("x " + getQuantity(resourceType));
-                restore_button.setDisable(false);
-            }
-            if (getTotalTakenResources() == totalResources) {
-                confirm_button.setDisable(false);
-            }
+        if (getTotalTakenResources() < totalResources) {
+            if (resources == null)
+                resources = new ArrayList<>();
+            resources.add(new Resource(resourceType, 1));
+            incrementQuantity(resourceType);
+            label.setText("x " + getQuantity(resourceType));
+            restore_button.setDisable(false);
         }
-        else if(!isProducedAction && !consumedWildcards.isEmpty()){
-            if (getTotalTakenResources() < getTotal(consumedWildcards)) {
-                if (selectedConsumed == null)
-                    selectedConsumed = new ArrayList<>();
-                selectedConsumed.add(new Resource(resourceType, 1));
-                incrementQuantity(resourceType);
-                label.setText("x " + getQuantity(resourceType));
-                restore_button.setDisable(false);
-            }
-            if (getTotalTakenResources() == getTotal(consumedWildcards)) {
-                confirm_button.setDisable(false);
-            }
-        }
-        else if(!producedWildcards.isEmpty()){
-            if (getTotalTakenResources() < getTotal(producedWildcards)) {
-                if (selectedProduced == null)
-                    selectedProduced = new ArrayList<>();
-                selectedProduced.add(new Resource(resourceType, 1));
-                incrementQuantity(resourceType);
-                label.setText("x " + getQuantity(resourceType));
-                restore_button.setDisable(false);
-            }
-            if (getTotalTakenResources() == getTotal(producedWildcards)) {
-                confirm_button.setDisable(false);
-            }
+        if (getTotalTakenResources() == totalResources) {
+            confirm_button.setDisable(false);
         }
     }
 
@@ -190,15 +163,6 @@ public class WildcardResolverController extends GenericController {
     }
 
     /**
-     * Gets the total amount of the resource given by parameter
-     * @param resources Resource's type
-     * @return Returns total amount
-     */
-    private int getTotal(List<Resource> resources){
-        return resources.stream().map(Resource::getQuantity).reduce(0, Integer::sum);
-    }
-
-    /**
      * Stores the resources, calls a specific method according to the current action,
      * then resets all the components, closes this stage and shows the main one
      * If is the first phase, sets resources that need to be placed
@@ -221,35 +185,29 @@ public class WildcardResolverController extends GenericController {
             getGUI().controlResourcesToPlace(resources, true);
             getGUIApplication().closePopUpStage();
         }
-        else if(selectedConsumed!=null && !selectedConsumed.isEmpty()){
-            consumedResolved.addAll(selectedConsumed);
-            selectedConsumed=null;
-            //restore();
-            if(producedWildcards!=null && !producedWildcards.isEmpty()) {
-                isProducedAction = true;
-                setChooseResources_label("Choose " + producedWildcards.size()
-                        + " resources to resolve produced wildcards");
+        else{
+            Storage.aggregateResources(resources);
+            for(Resource resource : resources){
+                if(isProducedAction) {
+                    for (Resource productionResources : productionsToResolve.get(productionIndexToResolve).getProduced())
+                        if(productionResources.getResourceType()==ResourceType.WILDCARD){
+                            productionsToResolve.get(productionIndexToResolve).getProduced().remove(productionResources);
+                            break;
+                        }
+                    productionsToResolve.get(productionIndexToResolve).getProduced()
+                            .add(new Resource(resource.getResourceType(), resource.getQuantity()));
+                }
+                else {
+                    for (Resource productionResources : productionsToResolve.get(productionIndexToResolve).getConsumed())
+                        if(productionResources.getResourceType()==ResourceType.WILDCARD){
+                            productionsToResolve.get(productionIndexToResolve).getConsumed().remove(productionResources);
+                            break;
+                        }
+                    productionsToResolve.get(productionIndexToResolve).getConsumed()
+                            .add(new Resource(resource.getResourceType(), resource.getQuantity()));
+                }
             }
-            else
-                areResolved = true;
-        }
-        else if(selectedProduced!=null && !selectedProduced.isEmpty()){
-            producedResolved.addAll(selectedProduced);
-            selectedProduced=null;
-            areResolved = true;
-        }
-        if(!isFirstPhase && areResolved){
-            List<Production> productions = new ArrayList<>();
-            productions.add(new Production(consumedResolved, producedResolved));
-            isFirstPhase=false;
-            isProducedAction=false;
-            areResolved=false;
-            this.consumedResolved=null;
-            this.producedResolved=null;
-            this.consumedWildcards=null;
-            this.producedWildcards=null;
-            getGUIApplication().closePopUpStage();
-            getGUI().sendCanActivateProductionsMessage(productions);
+            setProductionToResolve();
         }
         restore();
         enableButtons();
@@ -261,8 +219,6 @@ public class WildcardResolverController extends GenericController {
      */
     public void restore() {
         resources=null;
-        selectedConsumed=null;
-        selectedProduced=null;
         setQuantity(ResourceType.COIN, 0);
         setQuantity(ResourceType.SERVANT, 0);
         setQuantity(ResourceType.SHIELD, 0);
@@ -285,28 +241,63 @@ public class WildcardResolverController extends GenericController {
     }
 
     /**
-     * Sets the lists of resources to resolve wildcards productions
-     * @param consumedResolved List of resources to be consumed already correct
-     * @param producedResolved List of resources to be produced already correct
-     * @param consumedWildcards List of resources to be consumed to resolve
-     * @param producedWildcards List of resources to be produced to resolve
+     * Sets the list of productions to resolve wildcards
+     * @param productionsWithWildcard List of productions to be resolved
      */
-    public void resolveWildcard(List<Resource> consumedResolved, List<Resource> producedResolved,
-                                List<Resource> consumedWildcards, List<Resource> producedWildcards){
+    public void resolveWildcard(List<Production> productionsWithWildcard){
         restore();
-        this.consumedResolved=consumedResolved;
-        this.producedResolved=producedResolved;
-        this.consumedWildcards=consumedWildcards;
-        this.producedWildcards=producedWildcards;
-        if(!consumedWildcards.isEmpty()) {
-            setChooseResources_label("Choose " + getTotal(consumedWildcards) + " resources to resolve consumed wildcards");
-            isProducedAction = false;
+        productionsToResolve = productionsWithWildcard;
+        goBack_button.setVisible(true);
+        productionIndexToResolve=0;
+        setProductionToResolve();
+    }
+
+    /**
+     * Sets attributes according to the next production to resolve; if there are no more productions,
+     * sends a message to the server to activate the stored and resolved productions
+     */
+    private void setProductionToResolve(){
+        restore();
+        if(checkNextProductionToResolve()){
+            if(isProducedAction) {
+                setTotalResources((int) productionsToResolve.get(productionIndexToResolve).getProduced().stream()
+                        .filter((r -> r.getResourceType() == ResourceType.WILDCARD)).map(Resource::getQuantity)
+                        .reduce(0, Integer::sum));
+                setChooseResources_label("Resolve produced resources"); //TODO: cambiare
+            }
+            else {
+                setTotalResources((int) productionsToResolve.get(productionIndexToResolve).getConsumed().stream()
+                        .filter((r -> r.getResourceType() == ResourceType.WILDCARD)).map(Resource::getQuantity)
+                        .reduce(0, Integer::sum));
+                setChooseResources_label("Resolve consumed resources"); //TODO: cambiare
+            }
         }
         else {
-            setChooseResources_label("Choose " + getTotal(producedWildcards) + " resources to resolve produced wildcards");
-            isProducedAction = true;
+            getGUIApplication().closePopUpStage();
+            getGUI().sendCanActivateProductionsMessage(productionsToResolve);
         }
-        goBack_button.setVisible(true);
+    }
+
+    /**
+     * Checks if there is another wildcard production to resolve
+     * @return Returns true if there is another wildcard, false otherwise
+     */
+    private boolean checkNextProductionToResolve(){
+        for(int i = Math.max(productionIndexToResolve, 0); i< productionsToResolve.size(); i++){
+            for(Resource resource : productionsToResolve.get(i).getConsumed())
+                if(resource.getResourceType()==ResourceType.WILDCARD) {
+                    productionIndexToResolve = i;
+                    isProducedAction = false;
+                    return true;
+                }
+            for(Resource resource : productionsToResolve.get(i).getProduced())
+                if(resource.getResourceType()==ResourceType.WILDCARD){
+                    productionIndexToResolve = i;
+                    isProducedAction = true;
+                    return true;
+                }
+        }
+        return false;
     }
 
     /**
