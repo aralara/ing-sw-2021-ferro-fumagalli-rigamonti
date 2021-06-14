@@ -174,7 +174,7 @@ public class GUI extends ClientController {
     }
 
     @Override
-    public void displaySaves(List<GameSave> saves) {//TODO: scommentare
+    public void displaySaves(List<GameSave> saves) {
         ClientMessage messageToSend = new SaveInteractionMessage(null, SaveInteractions.NO_ACTION);
         if(saves.size() > 0) {
             gameSaves = saves;
@@ -190,9 +190,9 @@ public class GUI extends ClientController {
     }
 
     /**
-     * TODO: fare
-     * @param fileName
-     * @param action
+     * Sends to the server a message with an action, given by parameter, to make with the selected save
+     * @param fileName Name of the selected file
+     * @param action Interaction with the save
      */
     public void sendSaveInteractionMessage(String fileName, SaveInteractions action) {
         if(action==SaveInteractions.NO_ACTION) {
@@ -327,7 +327,7 @@ public class GUI extends ClientController {
     }
 
     @Override
-    public void notifyLastRound() { //TODO: controllare quante volte arriva
+    public void notifyLastRound() {
         callPlatformRunLater(() -> guiApplication.getController(SceneNames.PLAYER_BOARD).showAlert(Alert.AlertType.INFORMATION,
                 "Notification", "Last round before the game ends!", ""));
     }

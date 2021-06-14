@@ -33,7 +33,7 @@ public class RequestResourcesDevMessage extends CanBuyDevelopmentCardMessage {
 
     @Override
     public void doNACKResponseAction(ClientController client) {
-        client.ackNotification("Unable to buy development card with the selected resources", true);
+        client.ackNotification("Unable to buy development card with the selected resources", false);
         client.chooseDevelopmentStorages(getDevelopmentCard(), getSpace(), getDevelopmentCard().getCost());
     }
 }

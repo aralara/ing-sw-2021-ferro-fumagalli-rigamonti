@@ -273,7 +273,7 @@ public class SetupController extends GenericController {
     }
 
     /**
-     * TODO: da qui in poi fare javadoc
+     * Avoids to load or delete file saves
      */
     public void skip() {
         getGUIApplication().closeSecondStage();
@@ -282,6 +282,9 @@ public class SetupController extends GenericController {
         getGUI().sendSaveInteractionMessage(null, SaveInteractions.NO_ACTION);
     }
 
+    /**
+     * Calls sendSaveInteractionMessage GUI method to load the selected file save
+     */
     public void load() {
         getGUIApplication().closeSecondStage();
         load_button.setDisable(true);
@@ -289,6 +292,9 @@ public class SetupController extends GenericController {
         getGUI().sendSaveInteractionMessage(files_comboBox.getValue(), SaveInteractions.OPEN_SAVE);
     }
 
+    /**
+     * Calls sendSaveInteractionMessage GUI method to delete the selected file save
+     */
     public void delete() {
         getGUIApplication().closeSecondStage();
         load_button.setDisable(true);
@@ -296,12 +302,20 @@ public class SetupController extends GenericController {
         getGUI().sendSaveInteractionMessage(files_comboBox.getValue(), SaveInteractions.DELETE_SAVE);
     }
 
+    /**
+     * Fills files_comboBox with items which names are given by parameter
+     * @param files List of items to load
+     */
     public void fillComboBox(List<String> files){
         files_comboBox.setItems(FXCollections.observableArrayList(files));
+        files_comboBox.setStyle("-fx-font: 16px \"Pristina\";");
     }
 
+    /**
+     * Enables buttons when an item is selected from the comboBox
+     */
     public void fileSelected() {
-        if(files_comboBox.getValue()!=""){
+        if(!files_comboBox.getValue().equals("")){
             load_button.setDisable(false);
             delete_button.setDisable(false);
         }

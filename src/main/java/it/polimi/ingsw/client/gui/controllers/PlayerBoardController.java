@@ -149,28 +149,26 @@ public class PlayerBoardController extends GenericController {
     public void restoreWarehouse() {
         if(toDiscard!=null)
             toDiscard.clear();
-        warehouseShelves = getGUI().getWarehouseShelvesCopy();
+        if(warehouseShelves!=null)
+            warehouseShelves.clear();
         resetResLabels();
         getGUI().updateResourcesToPlace();
         showWarehouse();
         confirm_button.setVisible(false);
         restoreWarehouse_button.setVisible(false);
         rearrangeWarehouse_button.setDisable(false);
-        if(mainActionPlayed){
+        if(mainActionPlayed || !isResToPlaceAction){
             showCheckBoxes();
-            endTurn_button.setDisable(false);
-            activateLeaderCard_button.setDisable(false);
-            discardLeaderCard_button.setDisable(false);
-            viewOpponents_button.setDisable(false);
-            save_button.setDisable(false);
-        }
-        if(!mainActionPlayed && !isResToPlaceAction){
             ((MarketBoardController)getGUIApplication().getController(SceneNames.MARKET_BOARD)).enableMarketAction();
             ((DecksBoardController)getGUIApplication().getController(SceneNames.DECKS_BOARD)).enableBuyCardAction();
             activateProductions_button.setDisable(false);
             viewOpponents_button.setDisable(false);
             activateLeaderCard_button.setDisable(false);
             discardLeaderCard_button.setDisable(false);
+            if(mainActionPlayed){
+                endTurn_button.setDisable(false);
+                save_button.setDisable(false);
+            }
         }
     }
 
@@ -987,10 +985,8 @@ public class PlayerBoardController extends GenericController {
         if(getGUI().sendShelvesConfigurationMessage(warehouseShelves,toDiscard)){
             if(isPlayerTurn)
                 enableButtons();
-            if(toDiscard!=null)
-                toDiscard.clear();
-            if(warehouseShelves!=null)
-                warehouseShelves.clear();
+            toDiscard.clear();
+            warehouseShelves.clear();
             restoreWarehouse_button.setVisible(false);
             confirm_button.setVisible(false);
             rearrangeWarehouse_button.setDisable(false);
@@ -1273,10 +1269,9 @@ public class PlayerBoardController extends GenericController {
      * @param whShelves List of shelves to update
      */
     private void updateWarehouse(List<Shelf> whShelves) {
-        warehouseShelves = whShelves;
         Image image;
         String resPath = "/imgs/res/", resType;
-        for(Shelf shelf : warehouseShelves){
+        for(Shelf shelf : whShelves){
             if(!shelf.isLeader()){ //basic
                 switch (shelf.getLevel()){
                     case(1):
@@ -1532,11 +1527,11 @@ public class PlayerBoardController extends GenericController {
         if(warehouseShelves==null || warehouseShelves.isEmpty())
             warehouseShelves = getGUI().getWarehouseShelvesCopy();
         if(checkFreeSpace()){
-            if (warehouseShelves.get(index).getResourceType().equals(ResourceType.WILDCARD)) //empty shelf
+            if (warehouseShelves.get(index).getResourceType().equals(ResourceType.WILDCARD))        //empty shelf
                 return emptyShelfManagement(warehouseShelves.get(index), resourceType);
-            else if (warehouseShelves.get(index).getResourceType().equals(resourceType)) //shelf with the same resource type
+            else if (warehouseShelves.get(index).getResourceType().equals(resourceType))            //shelf with the same resource type
                 return sameResTypeShelfManagement(warehouseShelves.get(index), resourceType);
-            else if (!warehouseShelves.get(index).isLeader()) //shelf with different resource type
+            else if (!warehouseShelves.get(index).isLeader())                                       //shelf with different resource type
                 return differentResTypeShelfManagement(warehouseShelves.get(index), resourceType);
             else {
                 showAlert(Alert.AlertType.ERROR, "Error", "Wrong slot",
