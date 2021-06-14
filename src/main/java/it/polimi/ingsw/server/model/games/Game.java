@@ -290,12 +290,14 @@ public abstract class Game implements Serializable {
         List<Resource> totalRequests = new ArrayList<>();
         List<Production> allProductions = new ArrayList<>();    //TODO: ci ho perso un'ora di vita ma non ho idea di cosa sia successo, se uso il costruttore parametrizzato dell'arraylist, quando chiamo l'iteratore su productions, il metodo next dell'iteratore comincia a modificare productions azzerando i valori!!!!!!!!!!!!!!!!??????????????????????????
         playerBoard.createProductionStock().forEach(p -> allProductions.add(p.makeClone()));
+        List<Resource> mergedConsumed = Storage.mergeResourceList(consumed);     //TODO: temporaneo, da togiere con una nuova implementazione di MergeResourceList
 
         // Calculates if the activated productions can be modeled from the productions available to the player
         boolean matchingProductions = true;
         for(Production p : productions) {
-            if (allProductions.stream().anyMatch(ap -> ap.canModel(p)))
-                allProductions.removeIf(ap -> ap.canModel(p));
+            List<Production> models = allProductions.stream().filter(ap -> ap.canModel(p)).collect(Collectors.toList());
+            if (models.stream().findFirst().isPresent())
+                allProductions.remove(models.stream().findFirst().get());
             else {
                 matchingProductions = false;
                 break;
@@ -303,8 +305,8 @@ public abstract class Game implements Serializable {
         }
 
         if(!playerBoard.isTurnPlayed()) {
-            if(canActivateProductions(player, consumed) &&                                                  // Basic checks
-                    Storage.checkContainedResources(Storage.mergeResourceList(consumed), totalRequests) &&  // Checks if the resources in the requests can activate the production
+            if(canActivateProductions(player, mergedConsumed) &&                                                  // Basic checks
+                    Storage.checkContainedResources(mergedConsumed, totalRequests) &&  // Checks if the resources in the requests can activate the production
                     matchingProductions &&                                                                  // Checks if the productions can be activated given all the possible productions for the player
                     playerBoard.canTakeFromStorages(requests)                                               // Activates productions if the player has enough resources
             ) {
