@@ -240,9 +240,9 @@ public class GUI extends ClientController {
         callPlatformRunLater(() -> ((PlayerBoardController) guiApplication.
                 getController(SceneNames.PLAYER_BOARD)).disableActivateProductionsAction());
         callPlatformRunLater(() -> ((MarketBoardController) guiApplication.
-                getController(SceneNames.MARKET_BOARD)).disableMarketAction());
+                getController(SceneNames.MARKET_BOARD)).disableMarketAction(true));
         callPlatformRunLater(() -> ((DecksBoardController) guiApplication.
-                getController(SceneNames.DECKS_BOARD)).disableBuyCardAction());
+                getController(SceneNames.DECKS_BOARD)).disableBuyCardAction(true));
         callPlatformRunLater(() -> guiApplication.setActiveScene(SceneNames.PLAYER_BOARD));
         callPlatformRunLater(() -> guiApplication.setActiveScene(SceneNames.LEADER_CHOICE_MENU));
     }

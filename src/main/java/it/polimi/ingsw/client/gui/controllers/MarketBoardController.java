@@ -39,8 +39,8 @@ public class MarketBoardController extends GenericController {
             int col = selectedColumn==4?-1:selectedColumn;
             selectedRow=0;
             selectedColumn=0;
-            disableMarketAction();
-            ((DecksBoardController)getGUIApplication().getController(SceneNames.DECKS_BOARD)).disableBuyCardAction();
+            disableMarketAction(true);
+            ((DecksBoardController)getGUIApplication().getController(SceneNames.DECKS_BOARD)).disableBuyCardAction(true);
             PlayerBoardController pbc = ((PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD));
             pbc.disableActivateProductionsAction();
             pbc.disableActivateLeaderAction();
@@ -299,17 +299,11 @@ public class MarketBoardController extends GenericController {
     }
 
     /**
-     * Enables takeResources button
+     * Enables or disables takeResources button according to the value given by parameter
+     * @param value True to disable, false otherwise
      */
-    public void enableMarketAction(){
-        takeResources_button.setDisable(false);
-    }
-
-    /**
-     * Disables takeResources button
-     */
-    public void disableMarketAction(){
-        takeResources_button.setDisable(true);
+    public void disableMarketAction(boolean value){
+        takeResources_button.setDisable(value);
     }
 
     /**

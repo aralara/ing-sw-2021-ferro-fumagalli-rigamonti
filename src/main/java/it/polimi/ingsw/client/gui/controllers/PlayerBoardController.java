@@ -53,7 +53,7 @@ public class PlayerBoardController extends GenericController {
             faithSpace12_imageView, faithSpace13_imageView, faithSpace14_imageView, faithSpace15_imageView,
             faithSpace16_imageView, faithSpace17_imageView, faithSpace18_imageView, faithSpace19_imageView,
             faithSpace20_imageView, faithSpace21_imageView, faithSpace22_imageView, faithSpace23_imageView,
-            faithSpace24_imageView,
+            faithSpace24_imageView, popeFavorTile1_imageView, popeFavorTile2_imageView, popeFavorTile3_imageView,
             shelfResL1_1_imageView, shelfResL2_1_imageView, shelfResL2_2_imageView,
             shelfResL3_1_imageView, shelfResL3_2_imageView, shelfResL3_3_imageView,
             space1L1_imageView, space1L2_imageView, space1L3_imageView, space2L1_imageView, space2L2_imageView,
@@ -61,7 +61,7 @@ public class PlayerBoardController extends GenericController {
             handLeader1_imageView, handLeader2_imageView, boardLeader1_imageView, boardLeader2_imageView,
             shelfLeader1_1_imageView, shelfLeader1_2_imageView, shelfLeader2_1_imageView, shelfLeader2_2_imageView,
             coinToPlace_imageView, servantToPlace_imageView, shieldToPlace_imageView, stoneToPlace_imageView,
-            popeFavorTile1_imageView, popeFavorTile2_imageView, popeFavorTile3_imageView;
+            hole_imageView;
 
     /**
      * Sets the isPlayerTurn attribute and enable or disable buttons accordingly
@@ -157,19 +157,19 @@ public class PlayerBoardController extends GenericController {
         confirm_button.setVisible(false);
         restoreWarehouse_button.setVisible(false);
         rearrangeWarehouse_button.setDisable(false);
-        if(mainActionPlayed || !isResToPlaceAction){
+        showResToPlace(isResToPlaceAction);
+        ((MarketBoardController)getGUIApplication().getController(SceneNames.MARKET_BOARD))
+                .disableMarketAction(mainActionPlayed);
+        ((DecksBoardController)getGUIApplication().getController(SceneNames.DECKS_BOARD))
+                .disableBuyCardAction(mainActionPlayed);
+        activateProductions_button.setDisable(mainActionPlayed);
+        if(!isResToPlaceAction)
             showCheckBoxes();
-            ((MarketBoardController)getGUIApplication().getController(SceneNames.MARKET_BOARD)).enableMarketAction();
-            ((DecksBoardController)getGUIApplication().getController(SceneNames.DECKS_BOARD)).enableBuyCardAction();
-            activateProductions_button.setDisable(false);
-            viewOpponents_button.setDisable(false);
-            activateLeaderCard_button.setDisable(false);
-            discardLeaderCard_button.setDisable(false);
-            if(mainActionPlayed){
-                endTurn_button.setDisable(false);
-                save_button.setDisable(false);
-            }
-        }
+        viewOpponents_button.setDisable(isResToPlaceAction);
+        activateLeaderCard_button.setDisable(isResToPlaceAction);
+        discardLeaderCard_button.setDisable(isResToPlaceAction);
+        endTurn_button.setDisable(!mainActionPlayed || isResToPlaceAction);
+        save_button.setDisable(!mainActionPlayed || isResToPlaceAction);
     }
 
     /**
@@ -240,6 +240,7 @@ public class PlayerBoardController extends GenericController {
             rearrangeWarehouse_button.setDisable(true);
             restoreWarehouse_button.setVisible(true);
             confirm_button.setVisible(false);
+            showResToPlace(true);
         }
     }
 
@@ -927,8 +928,10 @@ public class PlayerBoardController extends GenericController {
             resToPlaceStone_label.setText("x "+quantity);
         }
         viewOpponents_button.setDisable(true);
-        if(quantity>0)
+        if(quantity>0) {
             disableButtons();
+            showResToPlace(true);
+        }
         else if (quantity == 0 &&
                 getResToPlaceQuantity(ResourceType.COIN)==0 && getResToPlaceQuantity(ResourceType.SERVANT)==0
                 && getResToPlaceQuantity(ResourceType.SHIELD)==0 && getResToPlaceQuantity(ResourceType.STONE)==0)
@@ -939,8 +942,8 @@ public class PlayerBoardController extends GenericController {
      * Disables buttons and hides checkboxes to prevent the player to click them
      */
     public void disableButtons(){
-        ((MarketBoardController)getGUIApplication().getController(SceneNames.MARKET_BOARD)).disableMarketAction();
-        ((DecksBoardController)getGUIApplication().getController(SceneNames.DECKS_BOARD)).disableBuyCardAction();
+        ((MarketBoardController)getGUIApplication().getController(SceneNames.MARKET_BOARD)).disableMarketAction(true);
+        ((DecksBoardController)getGUIApplication().getController(SceneNames.DECKS_BOARD)).disableBuyCardAction(true);
         activateProductions_button.setDisable(true);
         endTurn_button.setDisable(true);
         activateLeaderCard_button.setDisable(true);
@@ -953,20 +956,13 @@ public class PlayerBoardController extends GenericController {
      * Enables buttons depending on whether the main actions has been played
      */
     public void enableButtons(){
-        if(!mainActionPlayed) {
-            ((MarketBoardController) getGUIApplication().getController(SceneNames.MARKET_BOARD)).enableMarketAction();
-            ((DecksBoardController) getGUIApplication().getController(SceneNames.DECKS_BOARD)).enableBuyCardAction();
-            activateProductions_button.setDisable(false);
-            endTurn_button.setDisable(true);
-            save_button.setDisable(true);
-        }
-        if(mainActionPlayed) {
-            ((MarketBoardController) getGUIApplication().getController(SceneNames.MARKET_BOARD)).disableMarketAction();
-            ((DecksBoardController) getGUIApplication().getController(SceneNames.DECKS_BOARD)).disableBuyCardAction();
-            activateProductions_button.setDisable(true);
-            endTurn_button.setDisable(false);
-            save_button.setDisable(false);
-        }
+        ((MarketBoardController) getGUIApplication().getController(SceneNames.MARKET_BOARD))
+                .disableMarketAction(mainActionPlayed);
+        ((DecksBoardController) getGUIApplication().getController(SceneNames.DECKS_BOARD))
+                .disableBuyCardAction(mainActionPlayed);
+        activateProductions_button.setDisable(mainActionPlayed);
+        endTurn_button.setDisable(!mainActionPlayed);
+        save_button.setDisable(!mainActionPlayed);
         activateLeaderCard_button.setDisable(false);
         discardLeaderCard_button.setDisable(false);
         rearrangeWarehouse_button.setDisable(false);
@@ -995,6 +991,7 @@ public class PlayerBoardController extends GenericController {
                 save_button.setDisable(false);
             }
             isResToPlaceAction=false;
+            showResToPlace(false);
             viewOpponents_button.setDisable(false);
         }
         else{
@@ -1881,7 +1878,7 @@ public class PlayerBoardController extends GenericController {
     }
 
     /**
-     * Shows or hide buttons on the playerBoard accordingly to the value given by parameter
+     * Shows or hides buttons on the playerBoard according to the value given by parameter
      * @param isLocalBoard True if it's local playerBoard, false otherwise
      */
     private void showButtons(boolean isLocalBoard){
@@ -1896,21 +1893,30 @@ public class PlayerBoardController extends GenericController {
         activateLeaderCard_button.setVisible(isLocalBoard);
         discardLeaderCard_button.setVisible(isLocalBoard);
         save_button.setVisible(isLocalBoard);
-        resToPlace_label.setVisible(isLocalBoard);
-        separator2.setVisible(isLocalBoard);
-        coinToPlace_imageView.setVisible(isLocalBoard);
-        resToPlaceCoin_label.setVisible(isLocalBoard);
-        servantToPlace_imageView.setVisible(isLocalBoard);
-        resToPlaceServant_label.setVisible(isLocalBoard);
-        shieldToPlace_imageView.setVisible(isLocalBoard);
-        resToPlaceShield_label.setVisible(isLocalBoard);
-        stoneToPlace_imageView.setVisible(isLocalBoard);
-        resToPlaceStone_label.setVisible(isLocalBoard);
         leftArrow_button.setVisible(!isLocalBoard);
         rightArrow_button.setVisible(!isLocalBoard);
         goBoard_button.setVisible(!isLocalBoard);
         leaders_label.setVisible(true);
         separator3.setVisible(true);
+        showResToPlace(false);
+    }
+
+    /**
+     * Shows or hides labels and imageViews according to the value given by parameter
+     * @param visible True to show elements, false otherwise
+     */
+    public void showResToPlace(boolean visible){
+        resToPlace_label.setVisible(visible);
+        separator2.setVisible(visible);
+        coinToPlace_imageView.setVisible(visible);
+        resToPlaceCoin_label.setVisible(visible);
+        servantToPlace_imageView.setVisible(visible);
+        resToPlaceServant_label.setVisible(visible);
+        shieldToPlace_imageView.setVisible(visible);
+        resToPlaceShield_label.setVisible(visible);
+        stoneToPlace_imageView.setVisible(visible);
+        resToPlaceStone_label.setVisible(visible);
+        hole_imageView.setVisible(isResToPlaceAction);
     }
 
     /**

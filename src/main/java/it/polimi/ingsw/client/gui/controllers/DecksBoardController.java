@@ -46,9 +46,11 @@ public class DecksBoardController extends GenericController {
         if(selectedDevCard_imageView.getImage()!=null) {
             ((CardController) getGUIApplication().getController(SceneNames.CARD))
                     .setImage(selectedDevCard_imageView.getImage());
-            disableBuyCardAction();
-            ((MarketBoardController) getGUIApplication().getController(SceneNames.MARKET_BOARD)).disableMarketAction();
-            PlayerBoardController pbc = ((PlayerBoardController) getGUIApplication().getController(SceneNames.PLAYER_BOARD));
+            disableBuyCardAction(true);
+            ((MarketBoardController) getGUIApplication().getController(SceneNames.MARKET_BOARD))
+                    .disableMarketAction(true);
+            PlayerBoardController pbc = ((PlayerBoardController) getGUIApplication()
+                    .getController(SceneNames.PLAYER_BOARD));
             pbc.disableActivateProductionsAction();
             pbc.enableSpaces();
             pbc.setWarehouseIsDisabled(true);
@@ -168,17 +170,11 @@ public class DecksBoardController extends GenericController {
     }
 
     /**
-     * Enables buyCard button
+     * Enables or disables buyCard button according to the value given by parameter
+     * @param value True to disables, false otherwise
      */
-    public void enableBuyCardAction(){
-        buyCard_button.setDisable(false);
-    }
-
-    /**
-     * Disables buyCard button
-     */
-    public void disableBuyCardAction(){
-        buyCard_button.setDisable(true);
+    public void disableBuyCardAction(boolean value){
+        buyCard_button.setDisable(value);
     }
 
     /**

@@ -74,12 +74,10 @@
          <font>
             <Font name="Pristina" size="18.0" />
          </font></Label>
-      <ImageView fitHeight="29.0" fitWidth="144.0" layoutX="24.0" layoutY="648.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="hole_imageView" fitHeight="35.0" fitWidth="102.0" layoutX="20.0" layoutY="645.0" onDragDropped="#handleDragDroppedHole" onDragOver="#handleDragOverHole" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>
             <Image url="@../imgs/icon_hole.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="35.0" fitWidth="102.0" layoutX="20.0" layoutY="645.0" onDragDropped="#handleDragDroppedHole" onDragOver="#handleDragOverHole" pickOnBounds="true" preserveRatio="true" />
+         </image></ImageView>
       <CheckBox fx:id="basicProduction_checkBox" focusTraversable="false" layoutX="330.0" layoutY="620.0" mnemonicParsing="false" opacity="0.85" visible="false">
          <font>
             <Font size="16.0" />
@@ -243,48 +241,48 @@
       </Button>
       <Button fx:id="viewOpponents_button" disable="true" focusTraversable="false" layoutX="896.0" layoutY="151.0" mnemonicParsing="false" onAction="#viewOpponents" prefHeight="44.0" prefWidth="44.0" styleClass="opponentButton" stylesheets="@../css/playerBoard.css" />
       <Button fx:id="save_button" disable="true" focusTraversable="false" layoutX="845.0" layoutY="151.0" mnemonicParsing="false" onAction="#save" prefHeight="44.0" prefWidth="44.0" styleClass="saveButton" stylesheets="@../css/playerBoard.css" />
-      <Label fx:id="resToPlace_label" layoutX="1248.0" layoutY="225.0" text="Resources to place" textFill="WHITE">
+      <Label fx:id="resToPlace_label" layoutX="1248.0" layoutY="227.0" text="Resources to place" textFill="WHITE" visible="false">
          <font>
             <Font name="Pristina" size="24.0" />
          </font>
       </Label>
-      <Separator fx:id="separator2" layoutX="987.0" layoutY="267.0" prefHeight="3.0" prefWidth="400.0" />
-      <ImageView fx:id="coinToPlace_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="984.0" layoutY="281.0" onDragDetected="#handleDragDetectedCoinToPlace" pickOnBounds="true" preserveRatio="true">
+      <Separator fx:id="separator2" layoutX="987.0" layoutY="269.0" prefHeight="3.0" prefWidth="400.0" visible="false" />
+      <ImageView fx:id="coinToPlace_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="984.0" layoutY="283.0" onDragDetected="#handleDragDetectedCoinToPlace" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>
             <Image url="@../imgs/res/coin.png" />
          </image>
       </ImageView>
-      <Label fx:id="resToPlaceCoin_label" alignment="CENTER" layoutX="1028.0" layoutY="278.0" prefWidth="40.0" styleClass="resToPlaceLabel" stylesheets="@../css/playerBoard.css" text="x 0" textFill="#c5b120">
+      <Label fx:id="resToPlaceCoin_label" alignment="CENTER" layoutX="1028.0" layoutY="280.0" prefWidth="40.0" styleClass="resToPlaceLabel" stylesheets="@../css/playerBoard.css" text="x 0" textFill="#c5b120" visible="false">
          <font>
             <Font name="Pristina" size="24.0" />
          </font>
       </Label>
-      <ImageView fx:id="servantToPlace_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="1092.0" layoutY="279.0" onDragDetected="#handleDragDetectedServantToPlace" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="servantToPlace_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="1092.0" layoutY="281.0" onDragDetected="#handleDragDetectedServantToPlace" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>
             <Image url="@../imgs/res/servant.png" />
          </image>
       </ImageView>
-      <Label fx:id="resToPlaceServant_label" alignment="CENTER" layoutX="1135.0" layoutY="278.0" prefWidth="40.0" styleClass="resToPlaceLabel" stylesheets="@../css/playerBoard.css" text="x 0" textFill="#581e6e">
+      <Label fx:id="resToPlaceServant_label" alignment="CENTER" layoutX="1135.0" layoutY="280.0" prefWidth="40.0" styleClass="resToPlaceLabel" stylesheets="@../css/playerBoard.css" text="x 0" textFill="#581e6e" visible="false">
          <font>
             <Font name="Pristina" size="24.0" />
          </font>
       </Label>
-      <ImageView fx:id="shieldToPlace_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="1196.0" layoutY="279.0" onDragDetected="#handleDragDetectedShieldToPlace" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="shieldToPlace_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="1196.0" layoutY="281.0" onDragDetected="#handleDragDetectedShieldToPlace" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>
             <Image url="@../imgs/res/shield.png" />
          </image>
       </ImageView>
-      <Label fx:id="resToPlaceShield_label" alignment="CENTER" layoutX="1236.0" layoutY="278.0" prefWidth="40.0" styleClass="resToPlaceLabel" stylesheets="@../css/playerBoard.css" text="x 0" textFill="#38bdbf">
+      <Label fx:id="resToPlaceShield_label" alignment="CENTER" layoutX="1236.0" layoutY="280.0" prefWidth="40.0" styleClass="resToPlaceLabel" stylesheets="@../css/playerBoard.css" text="x 0" textFill="#38bdbf" visible="false">
          <font>
             <Font name="Pristina" size="24.0" />
          </font>
       </Label>
-      <ImageView fx:id="stoneToPlace_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="1301.0" layoutY="278.0" onDragDetected="#handleDragDetectedStoneToPlace" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="stoneToPlace_imageView" fitHeight="40.0" fitWidth="40.0" layoutX="1301.0" layoutY="280.0" onDragDetected="#handleDragDetectedStoneToPlace" pickOnBounds="true" preserveRatio="true" visible="false">
          <image>
             <Image url="@../imgs/res/stone.png" />
          </image>
       </ImageView>
-      <Label fx:id="resToPlaceStone_label" alignment="CENTER" layoutX="1345.0" layoutY="278.0" prefWidth="40.0" styleClass="resToPlaceLabel" stylesheets="@../css/playerBoard.css" text="x 0" textFill="#646464">
+      <Label fx:id="resToPlaceStone_label" alignment="CENTER" layoutX="1345.0" layoutY="280.0" prefWidth="40.0" styleClass="resToPlaceLabel" stylesheets="@../css/playerBoard.css" text="x 0" textFill="#646464" visible="false">
          <font>
             <Font name="Pristina" size="24.0" />
          </font>

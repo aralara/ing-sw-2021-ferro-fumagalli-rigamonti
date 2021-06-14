@@ -213,6 +213,7 @@ public class WildcardResolverController extends GenericController {
                 pbc.setResToPlaceQuantity(resource.getResourceType(), ++labelQuantity);
             }
             pbc.setIsResToPlace(true);
+            pbc.showResToPlace(true);
             getGUI().setResourcesToPlace(resources);
             getGUIApplication().closePopUpStage();
         }
