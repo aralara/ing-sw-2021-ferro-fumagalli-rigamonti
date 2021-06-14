@@ -421,8 +421,8 @@ public class CLI extends ClientController {
                 productionsToActivate = graphicalCLI.objectOptionSelector(productions,
                         graphicalCLI::printProduction,
                         () -> graphicalCLI.printlnString("Available productions:"),
-                        () -> graphicalCLI.printString("Choose a production you want to activate " +
-                                "by entering its number: "),
+                        () -> graphicalCLI.printString("Choose the productions you want to activate " +
+                                "by entering their numbers: "),
                         () -> graphicalCLI.printlnString("Found only one production to activate"),
                         true, 1, productions.size(), 1);
                 productionsToActivate = resolveProductionWildcards(productionsToActivate);
