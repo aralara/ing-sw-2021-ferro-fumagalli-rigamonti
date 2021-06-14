@@ -55,8 +55,10 @@ public interface Storage extends Serializable {
      */
     static boolean checkListModeled(List<Resource> model, List<Resource> modeled,
                                            List<ResourceType> possibleWildcards) {
-        List<Resource> c_model = new ArrayList<>(model);
-        List<Resource> c_modeled = new ArrayList<>(modeled);
+        List<Resource> c_model = new ArrayList<>();
+        List<Resource> c_modeled = new ArrayList<>();
+        model.forEach(r -> c_model.add(r.makeClone()));
+        modeled.forEach(r -> c_modeled.add(r.makeClone()));
         Storage.aggregateResources(c_model);
         Storage.aggregateResources(c_modeled);
         try {

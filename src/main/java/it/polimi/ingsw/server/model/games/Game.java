@@ -284,13 +284,12 @@ public abstract class Game implements Serializable {
      * @param produced The list of resources that will be produced
      * @return Returns true if the productions can be activated, false otherwise
      */
-    @SuppressWarnings("CollectionAddAllCanBeReplacedWithConstructor")
     public boolean activateProductions(int player, List<Production> productions, List<RequestResources> requests,
                                        List<Resource> consumed, List<Resource> produced) {
         PlayerBoard playerBoard = playerBoards.get(player);
         List<Resource> totalRequests = new ArrayList<>();
         List<Production> allProductions = new ArrayList<>();    //TODO: ci ho perso un'ora di vita ma non ho idea di cosa sia successo, se uso il costruttore parametrizzato dell'arraylist, quando chiamo l'iteratore su productions, il metodo next dell'iteratore comincia a modificare productions azzerando i valori!!!!!!!!!!!!!!!!??????????????????????????
-        allProductions.addAll(playerBoard.createProductionStock());
+        playerBoard.createProductionStock().forEach(p -> allProductions.add(p.makeClone()));
 
         // Calculates if the activated productions can be modeled from the productions available to the player
         boolean matchingProductions = true;
