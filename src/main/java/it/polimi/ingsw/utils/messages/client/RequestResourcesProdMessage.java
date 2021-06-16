@@ -33,7 +33,7 @@ public class RequestResourcesProdMessage extends CanActivateProductionsMessage {
     @Override
     public void doNACKResponseAction(ClientController client) {
         client.ackNotification("Unable to activate the requested productions with the selected resources",
-                true);
+                false);
         client.chooseProductionStorages(getProductions(), getConsumed());
     }
 }

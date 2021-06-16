@@ -1823,32 +1823,46 @@ public class PlayerBoardController extends GenericController {
      */
     private void controlActivatedProductions(){
         List<Production> activatedProductions = new ArrayList<>();
+        List<String> activatedProductionsTypes = new ArrayList<>();
         int specialProductionSize =  getGUI().getLeaderProductions().size();
-        if (basicProduction_checkBox.isSelected())
+        if (basicProduction_checkBox.isSelected()){
             activatedProductions.add(getGUI().getBasicProduction().makeClone());
-        if (devSpace1_checkBox.isSelected())
+            activatedProductionsTypes.add("basic production");
+        }
+        if (devSpace1_checkBox.isSelected()){
             activatedProductions.add(((DevelopmentCard) getGUI().
                     getDevelopmentBoard().get(0).get(0)).getProduction().makeClone());
-        if (devSpace2_checkBox.isSelected())
+            activatedProductionsTypes.add("production in the first development space");
+        }
+        if (devSpace2_checkBox.isSelected()){
             activatedProductions.add(((DevelopmentCard) getGUI().
                     getDevelopmentBoard().get(1).get(0)).getProduction().makeClone());
-        if (devSpace3_checkBox.isSelected())
+            activatedProductionsTypes.add("production in the second development space");
+        }
+        if (devSpace3_checkBox.isSelected()){
             activatedProductions.add(((DevelopmentCard) getGUI().
                     getDevelopmentBoard().get(2).get(0)).getProduction().makeClone());
-        if (isFirstLeaderProduction && leader1_checkBox.isSelected())
+            activatedProductionsTypes.add("production in the third development space");
+        }
+        if (isFirstLeaderProduction && leader1_checkBox.isSelected()){
             activatedProductions.add(getGUI().getLeaderProductions().get(0).makeClone());
-        if (isSecondLeaderProduction && leader2_checkBox.isSelected())
+            activatedProductionsTypes.add("production in the first leader space");
+        }
+        if (isSecondLeaderProduction && leader2_checkBox.isSelected()){
             activatedProductions.add(getGUI().getLeaderProductions().
                     get((specialProductionSize>1) ? 1 : 0).makeClone());
-        resolveWildcard(activatedProductions);
+            activatedProductionsTypes.add("production in the second leader space");
+        }
+        resolveWildcard(activatedProductions, activatedProductionsTypes);
     }
 
     /**
-     * Controls if there are productions' wildcards and calls method accordingly
-     * Calls sendCanActivateProductionsMessage GUI's method if there are no wildcards, otherwise shows the popUp scene
-     * @param productions
+     * Checks if there are productions' wildcards and calls method accordingly:
+     * calls sendCanActivateProductionsMessage GUI's method if there are no wildcards, otherwise shows the popUp scene
+     * @param productions List of production to be checked
+     * @param productionsTypes List of production types
      */
-    private void resolveWildcard(List<Production> productions){
+    private void resolveWildcard(List<Production> productions, List<String> productionsTypes){
         List<Resource> consumedWildcards = new ArrayList<>(), producedWildcards = new ArrayList<>();
         for(Production production : productions) {
             consumedWildcards.addAll(production.getConsumed().stream()
@@ -1862,7 +1876,7 @@ public class PlayerBoardController extends GenericController {
             ((WildcardResolverController) getGUIApplication().getController(SceneNames.RESOURCE_CHOICE_MENU)).
                     setIsMarbleAction(false, null);
             ((WildcardResolverController) getGUIApplication().getController(SceneNames.RESOURCE_CHOICE_MENU)).
-                    resolveWildcard(productions);
+                    resolveWildcard(productions, productionsTypes);
             getGUIApplication().setActiveScene(SceneNames.RESOURCE_CHOICE_MENU);
         }
         else getGUI().sendCanActivateProductionsMessage(productions);

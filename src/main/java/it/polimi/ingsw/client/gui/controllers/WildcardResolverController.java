@@ -16,6 +16,7 @@ public class WildcardResolverController extends GenericController {
 
     private List<Resource> resources;
     private List<Production> productionsToResolve;
+    private List<String> productionsToResolveTypes;
     private boolean isFirstPhase=false, isProducedAction=false, isMarbleAction=false;
     private int totalResources, productionIndexToResolve;
 
@@ -243,10 +244,12 @@ public class WildcardResolverController extends GenericController {
     /**
      * Sets the list of productions to resolve wildcards
      * @param productionsWithWildcard List of productions to be resolved
+     * @param productionsTypes List of production types
      */
-    public void resolveWildcard(List<Production> productionsWithWildcard){
+    public void resolveWildcard(List<Production> productionsWithWildcard, List<String> productionsTypes){
         restore();
         productionsToResolve = productionsWithWildcard;
+        productionsToResolveTypes = productionsTypes;
         goBack_button.setVisible(true);
         productionIndexToResolve=0;
         setProductionToResolve();
@@ -260,16 +263,18 @@ public class WildcardResolverController extends GenericController {
         restore();
         if(checkNextProductionToResolve()){
             if(isProducedAction) {
-                setTotalResources((int) productionsToResolve.get(productionIndexToResolve).getProduced().stream()
+                setTotalResources(productionsToResolve.get(productionIndexToResolve).getProduced().stream()
                         .filter((r -> r.getResourceType() == ResourceType.WILDCARD)).map(Resource::getQuantity)
                         .reduce(0, Integer::sum));
-                setChooseResources_label("Resolve produced resources"); //TODO: cambiare
+                setChooseResources_label("Resolve produced resources for the " +
+                        productionsToResolveTypes.get(productionIndexToResolve)); //TODO: cambiare
             }
             else {
-                setTotalResources((int) productionsToResolve.get(productionIndexToResolve).getConsumed().stream()
+                setTotalResources(productionsToResolve.get(productionIndexToResolve).getConsumed().stream()
                         .filter((r -> r.getResourceType() == ResourceType.WILDCARD)).map(Resource::getQuantity)
                         .reduce(0, Integer::sum));
-                setChooseResources_label("Resolve consumed resources"); //TODO: cambiare
+                setChooseResources_label("Resolve consumed resources for the " +
+                        productionsToResolveTypes.get(productionIndexToResolve)); //TODO: cambiare
             }
         }
         else {
