@@ -101,9 +101,10 @@ public abstract class ClientController {
             getMessageHandler().run();
         });
         t.start();
+
         VirtualView virtualView = new VirtualView(
                 new ObjectOutputStream(pipedPairHandler.getPipeOut()),
-                new ObjectInputStream(pipedPairHandler.getPipeIn()),
+                new ObjectInputStream(pipedPairHandler.getPipeIn()),    //TODO: interruzione durante la ripetizione????
                 getNickname());
         setLocalGameHandler(new GameHandler(1));
         getLocalGameHandler().add(virtualView);

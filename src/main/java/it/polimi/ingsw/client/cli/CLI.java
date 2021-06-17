@@ -24,7 +24,6 @@ public class CLI extends ClientController {
 
     private boolean idle;
     private List<MenuOption> playerTurnMenu, opponentTurnMenu;
-    private final GraphicalCLI graphicalCLI;
 
     /**
      * CLI constructor with no parameters
@@ -32,7 +31,6 @@ public class CLI extends ClientController {
     public CLI() {
         super();
         idle = false;
-        graphicalCLI = new GraphicalCLI();
         initMenus();
     }
 
@@ -45,12 +43,13 @@ public class CLI extends ClientController {
             askNickname();
         }
         else {
-            setNickname(graphicalCLI.askNickname());
+            setNickname(GraphicalCLI.askNickname());
             try {
                 localSetup();
-                graphicalCLI.printlnString("Creating a local game");
+                GraphicalCLI.printlnString("Creating a local game");
             } catch (IOException e) {
-                graphicalCLI.printlnString("Unable to create local game");
+                e.printStackTrace();
+                GraphicalCLI.printlnString("Unable to create local game");
             }
         }
     }
@@ -60,8 +59,8 @@ public class CLI extends ClientController {
      * @return Returns true if the user wants to connect, false otherwise
      */
     public boolean askMultiplayer() {
-        graphicalCLI.printString("Do you want to connect to the server? ");
-        return graphicalCLI.isAnswerYes();
+        GraphicalCLI.printString("Do you want to connect to the server? ");
+        return GraphicalCLI.isAnswerYes();
     }
 
     /**
@@ -70,17 +69,17 @@ public class CLI extends ClientController {
     public void connect() {
         boolean success;
         do {
-            graphicalCLI.printString("Insert the IP address of the server: ");
-            String ip = graphicalCLI.getNextLine();
-            graphicalCLI.printString("Insert the port of the server: ");
-            int port = graphicalCLI.getNextInt();
-            graphicalCLI.printlnString("Connecting...");
+            GraphicalCLI.printString("Insert the IP address of the server: ");
+            String ip = GraphicalCLI.getNextLine();
+            GraphicalCLI.printString("Insert the port of the server: ");
+            int port = GraphicalCLI.getNextInt();
+            GraphicalCLI.printlnString("Connecting...");
             if(port <= 0) port = Server.SOCKET_PORT;    //TODO: temporaneo per testare
             success = getMessageHandler().connect(ip, port);
             if (success)
-                graphicalCLI.printlnString("Connected");
+                GraphicalCLI.printlnString("Connected");
             else
-                graphicalCLI.printlnString("Server unreachable");
+                GraphicalCLI.printlnString("Server unreachable");
         } while(!success);
     }
 
@@ -101,7 +100,7 @@ public class CLI extends ClientController {
         while(isAlive()) {
             if (confirmationList.size() != 0 && updateQueue.isEmpty()) {
                 try {
-                    ServerAckMessage ack = responseQueue.take();
+                    ServerAckMessage ack = responseQueue.take();    //TODO: interruzione durante la ripetizione????
                     confirmationList.remove(confirmationList.stream().filter(ack::compareTo).findFirst().orElseThrow());
                     ack.activateResponse(this);
                     displayMenu = true;
@@ -116,7 +115,7 @@ public class CLI extends ClientController {
                 }
                 else if(idle) {
                     if (displayMenu) {
-                        graphicalCLI.printlnString("Press ENTER to display action menu");
+                        GraphicalCLI.printlnString("Press ENTER to display action menu");
                         displayMenu = false;
                     }
                     try {
@@ -136,26 +135,26 @@ public class CLI extends ClientController {
 
     @Override
     public void ackNotification(String message, boolean visual) {
-        graphicalCLI.printlnString(message);
+        GraphicalCLI.printlnString(message);
     }
 
     @Override
     public void askNickname() {
-        setNickname(graphicalCLI.askNickname());
+        setNickname(GraphicalCLI.askNickname());
         getMessageHandler().sendClientMessage(new ConnectionMessage(getNickname()));
     }
 
     @Override
     public void askNewLobby(int lobbySize, int waitingPlayers) {
         if (lobbySize == waitingPlayers) {
-            graphicalCLI.printlnString("There aren't any players waiting for a match!");
-            int size = graphicalCLI.integerSelector(1, Constants.MAX_LOBBY_SIZE.value(),
+            GraphicalCLI.printlnString("There aren't any players waiting for a match!");
+            int size = GraphicalCLI.integerSelector(1, Constants.MAX_LOBBY_SIZE.value(),
                     "Insert the number of desired players for the game", false);
             setNumberOfPlayers(size);
             getMessageHandler().sendClientMessage(new NewLobbyMessage(size));
         }
         else {
-            graphicalCLI.printlnString("There is already a " + lobbySize + " player lobby waiting for "
+            GraphicalCLI.printlnString("There is already a " + lobbySize + " player lobby waiting for "
                     + (lobbySize - waitingPlayers) + " more player(s)");
             setNumberOfPlayers(lobbySize);
         }
@@ -165,17 +164,17 @@ public class CLI extends ClientController {
     public void displaySaves(List<GameSave> saves) {
         ClientMessage messageToSend = new SaveInteractionMessage(null, SaveInteractions.NO_ACTION);
         if(saves.size() > 0) {
-            graphicalCLI.printString("Do you want to load a save? ");
-            if (graphicalCLI.isAnswerYes()) {
-                GameSave save = graphicalCLI.objectOptionSelector(saves,
-                        s -> graphicalCLI.printlnString(s.getFileName()),
-                        () -> graphicalCLI.printlnString("Choose a save file to load or delete: "),
+            GraphicalCLI.printString("Do you want to load a save? ");
+            if (GraphicalCLI.isAnswerYes()) {
+                GameSave save = GraphicalCLI.objectOptionSelector(saves,
+                        s -> GraphicalCLI.printlnString(s.getFileName()),
+                        () -> GraphicalCLI.printlnString("Choose a save file to load or delete: "),
                         null,
-                        () -> graphicalCLI.printString("Found only one save: "),
+                        () -> GraphicalCLI.printString("Found only one save: "),
                         false, -1, -1, -1).get(0);
-                String option = graphicalCLI.objectOptionSelector(List.of("Load", "Delete"),
-                        graphicalCLI::printlnString,
-                        () -> graphicalCLI.printlnString("Do you want to load it or delete it?"),
+                String option = GraphicalCLI.objectOptionSelector(List.of("Load", "Delete"),
+                        GraphicalCLI::printlnString,
+                        () -> GraphicalCLI.printlnString("Do you want to load it or delete it?"),
                         null,
                         null,
                         false, -1, -1, -1).get(0);
@@ -191,9 +190,9 @@ public class CLI extends ClientController {
     @Override
     public void notifyNewPlayer(String nickname) {
         if(getNickname().equals(nickname))
-            graphicalCLI.printlnString("You have been added to the game!");
+            GraphicalCLI.printlnString("You have been added to the game!");
         else
-            graphicalCLI.printlnString("The player " + nickname + " has joined the game!");
+            GraphicalCLI.printlnString("The player " + nickname + " has joined the game!");
     }
 
     @Override
@@ -205,13 +204,13 @@ public class CLI extends ClientController {
                     (List<LeaderCard>)(List<? extends Card>)playerBoard.getLeaderBoard().getHand().getCards());
             List<LeaderCard> selected = new ArrayList<>();
 
-            graphicalCLI.printMarket(getMarket());
-            graphicalCLI.printDevelopmentDeckTop(getDevelopmentDecks().getDecks());
+            GraphicalCLI.printMarket(getMarket());
+            GraphicalCLI.printDevelopmentDeckTop(getDevelopmentDecks().getDecks());
 
-            graphicalCLI.objectOptionSelector(leaderHand,
-                    graphicalCLI::printLeaderCard,
-                    () -> graphicalCLI.printlnString("\nYou have to discard 2 leader cards from your hand:"),
-                    () -> graphicalCLI.printString("Choose 2 cards from your hand: "),
+            GraphicalCLI.objectOptionSelector(leaderHand,
+                    GraphicalCLI::printLeaderCard,
+                    () -> GraphicalCLI.printlnString("\nYou have to discard 2 leader cards from your hand:"),
+                    () -> GraphicalCLI.printString("Choose 2 cards from your hand: "),
                     null,
                     true, 2, 2, 1
             ).forEach(c -> {
@@ -228,23 +227,23 @@ public class CLI extends ClientController {
     @Override
     public void askResourceEqualize(List<Resource> resources) {
         List<Resource> newResources = new ArrayList<>();
-        graphicalCLI.printlnString("");
+        GraphicalCLI.printlnString("");
         for(Resource resource : resources) {
             if (resource.getResourceType() == ResourceType.FAITH)
                 newResources.add(new Resource(ResourceType.FAITH, resource.getQuantity()));
             else if (resource.getResourceType() == ResourceType.WILDCARD)
-                graphicalCLI.objectOptionSelector(ResourceType.getRealValues(),
-                        rt -> graphicalCLI.printlnString(rt.toString()),
-                        () -> graphicalCLI.printlnString("You can add " + resource.getQuantity() +
+                GraphicalCLI.objectOptionSelector(ResourceType.getRealValues(),
+                        rt -> GraphicalCLI.printlnString(rt.toString()),
+                        () -> GraphicalCLI.printlnString("You can add " + resource.getQuantity() +
                                 " resource(s) to your warehouse since you are not the first player"),
-                        () -> graphicalCLI.printString("Choose " + resource.getQuantity() +
+                        () -> GraphicalCLI.printString("Choose " + resource.getQuantity() +
                                 " resource(s) to add: "),
                         null,
                         true, resource.getQuantity(), resource.getQuantity(), -1
                 ).forEach(rt -> newResources.add(new Resource(rt, 1)));
         }
         if(newResources.size() > 0) {
-            graphicalCLI.printlnString("Now place the resources on the shelves:");
+            GraphicalCLI.printlnString("Now place the resources on the shelves:");
             placeResourcesOnShelves(newResources);
         }
         idle = true;
@@ -253,11 +252,11 @@ public class CLI extends ClientController {
     @Override
     public void notifyStartTurn(String nickname) {
         if (nickname.equals(getNickname())) {
-            graphicalCLI.printlnString("\nNOW IT'S YOUR TURN!\n");
+            GraphicalCLI.printlnString("\nNOW IT'S YOUR TURN!\n");
             setPlayerTurn(true);
         }
         else {
-            graphicalCLI.printlnString("\nNOW IT'S " + nickname.toUpperCase() + "'S TURN!\n");
+            GraphicalCLI.printlnString("\nNOW IT'S " + nickname.toUpperCase() + "'S TURN!\n");
             setPlayerTurn(false);
         }
         turnMenu();
@@ -274,14 +273,14 @@ public class CLI extends ClientController {
 
         while (marblesLeft > 0 && availableAbilities.size() > 0) {
 
-            graphicalCLI.printlnString("You can choose a resource from the following types ( "
+            GraphicalCLI.printlnString("You can choose a resource from the following types ( "
                     + marblesLeft + " wildcards left ):");
 
-            graphicalCLI.printNumberedList(availableAbilities, rt -> graphicalCLI.printString(rt.name()));
+            GraphicalCLI.printNumberedList(availableAbilities, rt -> GraphicalCLI.printString(rt.name()));
 
             do {
-                graphicalCLI.printString("\nPlease choose a valid resource type for the wildcard:");
-                index = graphicalCLI.getNextInt() - 1;
+                GraphicalCLI.printString("\nPlease choose a valid resource type for the wildcard:");
+                index = GraphicalCLI.getNextInt() - 1;
             } while(0 > index || index > availableAbilities.size());
 
             plainResources.add(new Resource(availableAbilities.get(index), 1));
@@ -295,28 +294,28 @@ public class CLI extends ClientController {
 
     @Override
     public void notifyLorenzoCard(LorenzoCard lorenzoCard) {
-        graphicalCLI.printlnString("\nNOW IT'S LORENZO'S TURN\n");
-        graphicalCLI.printlnString("Lorenzo pulls a card from his deck");
-        graphicalCLI.printLorenzoCard(lorenzoCard);
+        GraphicalCLI.printlnString("\nNOW IT'S LORENZO'S TURN\n");
+        GraphicalCLI.printlnString("Lorenzo pulls a card from his deck");
+        GraphicalCLI.printLorenzoCard(lorenzoCard);
     }
 
     @Override
     public void notifyLastRound() {
-        graphicalCLI.printlnString("Last round before the game ends!");
+        GraphicalCLI.printlnString("Last round before the game ends!");
         idle = true;
     }
 
     @Override
     public void notifyEndGame(List<Player> players) {
-        graphicalCLI.printlnString("THE GAME HAS ENDED!");
-        graphicalCLI.printlnString("Scoreboard:");
+        GraphicalCLI.printlnString("THE GAME HAS ENDED!");
+        GraphicalCLI.printlnString("Scoreboard:");
         // Lorenzo doesn't have a VP score, therefore the ranking board won't display it
         for(Player player : players.stream().sorted(Comparator.comparingInt(Player::getFinalPosition))
                 .collect(Collectors.toList()))
-            graphicalCLI.printlnString(player.getFinalPosition() + ": " + player.getNickname() +
+            GraphicalCLI.printlnString(player.getFinalPosition() + ": " + player.getNickname() +
                     (player.getTotalVP() >= 0 ? (" with " + player.getTotalVP() + " VP") : "")
             );
-        graphicalCLI.printlnString("Thank you for having played Master of Renaissance!");
+        GraphicalCLI.printlnString("Thank you for having played Master of Renaissance!");
     }
 
     /**
@@ -324,18 +323,18 @@ public class CLI extends ClientController {
      */
     public void turnMenu() {
         List<MenuOption> turnMenu = opponentTurnMenu;   //Defaults as the opponent turn
-        Runnable choiceText = () -> graphicalCLI.printString("\nChoose an action to do: ");
+        Runnable choiceText = () -> GraphicalCLI.printString("\nChoose an action to do: ");
         if(isPlayerTurn()) {    // If it's the player's turn sets the corresponding menu options
             turnMenu = new ArrayList<>(playerTurnMenu);
             if(isMainActionPlayed())    // If the player has already played their main action, he can save the game
                 turnMenu.add(
                         new MenuOption("Save game", () -> getMessageHandler().sendClientMessage(new SaveMessage()))
                 );
-            choiceText = () -> graphicalCLI.printString("\nChoose an action to do on your turn: ");
+            choiceText = () -> GraphicalCLI.printString("\nChoose an action to do on your turn: ");
         }
-        graphicalCLI.objectOptionSelector(turnMenu,     // Makes the player choose between their actions and runs it
-                m -> graphicalCLI.printlnString(m.getTitle()),
-                () -> graphicalCLI.printlnString("MENU:\n"),
+        GraphicalCLI.objectOptionSelector(turnMenu,     // Makes the player choose between their actions and runs it
+                m -> GraphicalCLI.printlnString(m.getTitle()),
+                () -> GraphicalCLI.printlnString("MENU:\n"),
                 choiceText,
                 null,
                 false, -1, -1, -1
@@ -343,18 +342,18 @@ public class CLI extends ClientController {
     }
 
     public void selectMarket() {
-        graphicalCLI.printMarket(getMarket());
-        if(idle = graphicalCLI.askGoBack())
+        GraphicalCLI.printMarket(getMarket());
+        if(idle = GraphicalCLI.askGoBack())
             return;
 
-        graphicalCLI.printString("Where do you want to place the marble?\n" +
+        GraphicalCLI.printString("Where do you want to place the marble?\n" +
                 "Choose R (row) or C (column) followed by a number: ");
         boolean valid;
         do {
             int row = -1, column = -1;
             valid = true;
 
-            String choice = graphicalCLI.getNextLine();
+            String choice = GraphicalCLI.getNextLine();
             if(choice.matches("[RCrc][0-4]")) {
                 String rowCol = choice.substring(0, 1).toUpperCase();
                 int number = Integer.parseInt(choice.substring(1, 2));
@@ -372,7 +371,7 @@ public class CLI extends ClientController {
             if(valid)
                 getMessageHandler().sendClientMessage(new SelectMarketMessage(row, column));
             else
-                graphicalCLI.printString("Invalid choice, please try again: ");
+                GraphicalCLI.printString("Invalid choice, please try again: ");
         } while(!valid);
         setMainActionPlayed(true);
     }
@@ -381,15 +380,15 @@ public class CLI extends ClientController {
     public void selectDevDecks() {
         int space;
         try {
-            graphicalCLI.printWarehouseConfiguration(getLocalPlayerBoard().getWarehouse(), false);
-            graphicalCLI.printStrongbox(getLocalPlayerBoard().getStrongbox());
-            graphicalCLI.printDevelopmentDeckTop(getDevelopmentDecks().getDecks());
-            if (idle = graphicalCLI.askGoBack())
+            GraphicalCLI.printWarehouseConfiguration(getLocalPlayerBoard().getWarehouse(), false);
+            GraphicalCLI.printStrongbox(getLocalPlayerBoard().getStrongbox());
+            GraphicalCLI.printDevelopmentDeckTop(getDevelopmentDecks().getDecks());
+            if (idle = GraphicalCLI.askGoBack())
                 return;
 
             DevelopmentCard developmentCard = chooseCardFromDecks();
 
-            space = graphicalCLI.integerSelector(0, Constants.BASE_DEVELOPMENT_SPACES.value() - 1,
+            space = GraphicalCLI.integerSelector(0, Constants.BASE_DEVELOPMENT_SPACES.value() - 1,
                     "Which space do you want to put the card on?", true);
 
             getMessageHandler().sendClientMessage(new CanBuyDevelopmentCardMessage(developmentCard, space));
@@ -401,8 +400,8 @@ public class CLI extends ClientController {
     @Override
     public void selectProductions() {
         try {
-            graphicalCLI.printWarehouseConfiguration(getLocalPlayerBoard().getWarehouse(),false);
-            graphicalCLI.printStrongbox(getLocalPlayerBoard().getStrongbox());
+            GraphicalCLI.printWarehouseConfiguration(getLocalPlayerBoard().getWarehouse(),false);
+            GraphicalCLI.printStrongbox(getLocalPlayerBoard().getStrongbox());
 
             List<Production> productions = new ArrayList<>();
             List<Production> productionsToActivate;
@@ -412,25 +411,25 @@ public class CLI extends ClientController {
                     .forEach(d -> productions.add(((DevelopmentCard) d.get(0)).getProduction()));
             productions.addAll(getLocalPlayerBoard().getActiveAbilityProductions());
 
-            graphicalCLI.printlnString("Available productions:");
-            graphicalCLI.printNumberedList(productions, graphicalCLI::printProduction);
-            if(idle = graphicalCLI.askGoBack())
+            GraphicalCLI.printlnString("Available productions:");
+            GraphicalCLI.printNumberedList(productions, GraphicalCLI::printProduction);
+            if(idle = GraphicalCLI.askGoBack())
                 return;
 
             if(productions.size() > 0) {
-                productionsToActivate = graphicalCLI.objectOptionSelector(productions,
-                        graphicalCLI::printProduction,
-                        () -> graphicalCLI.printlnString("Available productions:"),
-                        () -> graphicalCLI.printString("Choose the productions you want to activate " +
+                productionsToActivate = GraphicalCLI.objectOptionSelector(productions,
+                        GraphicalCLI::printProduction,
+                        () -> GraphicalCLI.printlnString("Available productions:"),
+                        () -> GraphicalCLI.printString("Choose the productions you want to activate " +
                                 "by entering their numbers: "),
-                        () -> graphicalCLI.printlnString("Found only one production to activate"),
+                        () -> GraphicalCLI.printlnString("Found only one production to activate"),
                         true, 1, productions.size(), 1);
                 productionsToActivate = resolveProductionWildcards(productionsToActivate);
                 if(productionsToActivate.size() > 0)
                     getMessageHandler().sendClientMessage(new CanActivateProductionsMessage(productionsToActivate));
             }
             else
-                graphicalCLI.printlnString("No productions");
+                GraphicalCLI.printlnString("No productions");
         } catch(NotExistingNicknameException e) {
             e.printStackTrace();
         }
@@ -450,10 +449,10 @@ public class CLI extends ClientController {
             moveFaith(toDiscard, toPlace);
             WarehouseView warehouse = getLocalPlayerBoard().getWarehouse();
             shelves = warehouse.getShelvesClone();
-            graphicalCLI.printWarehouseConfiguration(warehouse, true);
+            GraphicalCLI.printWarehouseConfiguration(warehouse, true);
             if(!toPlace.isEmpty()) {
-                graphicalCLI.printString("Resources to place: ");
-                graphicalCLI.printGraphicalResources(toPlace);
+                GraphicalCLI.printString("Resources to place: ");
+                GraphicalCLI.printGraphicalResources(toPlace);
                 if(getLocalPlayerBoard().getWarehouse().getShelves().size()<3)
                     freeSlots = true;
                 else {
@@ -467,20 +466,20 @@ public class CLI extends ClientController {
                 }
                 if (freeSlots) { //it's possible to place resources
                     if (!shelves.stream().allMatch(Shelf::isEmpty)) { //before starting move resources
-                        graphicalCLI.printString("Do you want to rearrange the warehouse? ");
-                        rearranged = graphicalCLI.isAnswerYes();
+                        GraphicalCLI.printString("Do you want to rearrange the warehouse? ");
+                        rearranged = GraphicalCLI.isAnswerYes();
                         if(rearranged){
                             shelves = warehouse.getShelvesClone();
                         }
                     }
                     while (!toPlace.isEmpty()) {
                         if (rearranged) {
-                            graphicalCLI.printWarehouseConfiguration(new WarehouseView(shelves),true);
-                            graphicalCLI.printString("Resources to place: ");
-                            graphicalCLI.printGraphicalResources(toPlace);
+                            GraphicalCLI.printWarehouseConfiguration(new WarehouseView(shelves),true);
+                            GraphicalCLI.printString("Resources to place: ");
+                            GraphicalCLI.printGraphicalResources(toPlace);
                         }
                         resourceToPlace = toPlace.get(0);
-                        level = graphicalCLI.askWhichShelf(resourceToPlace, shelves.size(), true);
+                        level = GraphicalCLI.askWhichShelf(resourceToPlace, shelves.size(), true);
                         rearranged = true;
                         if (level > 0) {
                             selectedShelf = shelves.get(level - 1);
@@ -490,34 +489,34 @@ public class CLI extends ClientController {
                                 sameResTypeShelfManagement(shelves, toPlace, selectedShelf, resourceToPlace);
                             else if (!selectedShelf.isLeader()) //shelf with different resource type
                                 differentResTypeShelfManagement(shelves, toPlace, selectedShelf, resourceToPlace);
-                            else graphicalCLI.printlnString("You can't place this resource here");
+                            else GraphicalCLI.printlnString("You can't place this resource here");
                         } else if (level == 0) {
                             toDiscard.add(new Resource(resourceToPlace.getResourceType(), resourceToPlace.getQuantity()));
-                            graphicalCLI.printlnString("Resource discarded");
+                            GraphicalCLI.printlnString("Resource discarded");
                             toPlace.remove(0);
                         } else {
                             restoreConfiguration(warehouse, shelves, resources, toPlace, toDiscard, true);
                             rearranged = false;
-                            graphicalCLI.printWarehouseConfiguration(new WarehouseView(shelves),true);
-                            graphicalCLI.printString("Resources to place: ");
-                            graphicalCLI.printGraphicalResources(toPlace);
+                            GraphicalCLI.printWarehouseConfiguration(new WarehouseView(shelves),true);
+                            GraphicalCLI.printString("Resources to place: ");
+                            GraphicalCLI.printGraphicalResources(toPlace);
                         }
                         if (toPlace.isEmpty() && !Storage.isDiscardedResCorrect(resources, toDiscard)) {
-                            graphicalCLI.printlnString("You're trying to discard resources already stored in the" +
+                            GraphicalCLI.printlnString("You're trying to discard resources already stored in the" +
                                     " warehouse!\nThe warehouse will be restored and you'll be asked to place all the" +
                                     " resources again...");
                             restoreConfiguration(warehouse, shelves, resources, toPlace, toDiscard, true);
                             rearranged = false;
-                            graphicalCLI.printWarehouseConfiguration(new WarehouseView(shelves),true);
-                            graphicalCLI.printString("Resources to place: ");
-                            graphicalCLI.printGraphicalResources(toPlace);
+                            GraphicalCLI.printWarehouseConfiguration(new WarehouseView(shelves),true);
+                            GraphicalCLI.printString("Resources to place: ");
+                            GraphicalCLI.printGraphicalResources(toPlace);
                         }
                     }
                 } else {
-                    graphicalCLI.printlnString("There are no available slots, all the resources will be discarded");
+                    GraphicalCLI.printlnString("There are no available slots, all the resources will be discarded");
                     toDiscard.addAll(toPlace);
                 }
-            } else graphicalCLI.printlnString("There are no resources to place");
+            } else GraphicalCLI.printlnString("There are no resources to place");
             getMessageHandler().sendClientMessage(new ShelvesConfigurationMessage(shelves, resources, toDiscard));
         }catch (NotExistingNicknameException e){
             e.printStackTrace();
@@ -553,14 +552,14 @@ public class CLI extends ClientController {
     private List<RequestResources> chooseStorages(List<Resource> resources) {
         try {
             PlayerBoardView playerBoard = getLocalPlayerBoard();
-            graphicalCLI.printWarehouseConfiguration(playerBoard.getWarehouse(), false);
-            graphicalCLI.printStrongbox(getLocalPlayerBoard().getStrongbox());
+            GraphicalCLI.printWarehouseConfiguration(playerBoard.getWarehouse(), false);
+            GraphicalCLI.printStrongbox(getLocalPlayerBoard().getStrongbox());
         } catch(NotExistingNicknameException e) {
             e.printStackTrace();
         }
 
-        graphicalCLI.printString("You have to take these resources: ");
-        graphicalCLI.printResources(resources);
+        GraphicalCLI.printString("You have to take these resources: ");
+        GraphicalCLI.printResources(resources);
         int choice;
         boolean first = true;
         List<Resource> whResources = new ArrayList<>();
@@ -568,14 +567,14 @@ public class CLI extends ClientController {
         List<Resource> strongboxResources = new ArrayList<>();
         List<RequestResources> requestResources = new ArrayList<>();
         List<Resource> allResources = getResourcesOneByOne(resources);
-        graphicalCLI.printChooseStorage();
+        GraphicalCLI.printChooseStorage();
         for(Resource res : allResources) {
-            graphicalCLI.printString("Resource: " );
-            graphicalCLI.printResource(res);
-            graphicalCLI.printString(" - Storage number: ");
+            GraphicalCLI.printString("Resource: " );
+            GraphicalCLI.printResource(res);
+            GraphicalCLI.printString(" - Storage number: ");
             do {
-                if(!first) graphicalCLI.printString("Invalid storage number, try again: ");
-                choice = graphicalCLI.getNextInt();
+                if(!first) GraphicalCLI.printString("Invalid storage number, try again: ");
+                choice = GraphicalCLI.getNextInt();
                 first = choice >= 0 && choice <= 3;
             } while(choice<0 || choice >3);
 
@@ -602,24 +601,24 @@ public class CLI extends ClientController {
      * @return The chosen leader card
      */
     @SuppressWarnings("unchecked")
-    private List<LeaderCard> chooseLeaderCard() { //TODO: mettere nella graphicalCLI
+    private List<LeaderCard> chooseLeaderCard() { //TODO: mettere nella GraphicalCLI
         try {
             List<LeaderCard> hand = (List<LeaderCard>)(List<? extends Card>)
                     getLocalPlayerBoard().getLeaderBoard().getHand().getCards();
             List<LeaderCard> chosenCard = new ArrayList<>();
             if(hand.size() > 0){
-                graphicalCLI.printNumberedList(hand, graphicalCLI::printLeaderCard);
-                graphicalCLI.printString("Choose a leader card by selecting the corresponding number: ");
+                GraphicalCLI.printNumberedList(hand, GraphicalCLI::printLeaderCard);
+                GraphicalCLI.printString("Choose a leader card by selecting the corresponding number: ");
 
-                int index = graphicalCLI.getNextInt() - 1;
+                int index = GraphicalCLI.getNextInt() - 1;
                 while(index<0 || index>=hand.size()){
-                    graphicalCLI.printString("Invalid choice, please try again: ");
-                    index = graphicalCLI.getNextInt() - 1;
+                    GraphicalCLI.printString("Invalid choice, please try again: ");
+                    index = GraphicalCLI.getNextInt() - 1;
                 }
                 chosenCard.add(hand.get(index));
             }
             else{
-                graphicalCLI.printlnString("You don't have any leader card in your hand!");
+                GraphicalCLI.printlnString("You don't have any leader card in your hand!");
             }
             return chosenCard;
         }catch(NotExistingNicknameException e){
@@ -635,10 +634,10 @@ public class CLI extends ClientController {
         if(getNumberOfPlayers()>1) {
             for (PlayerBoardView playerBoardView : getPlayerBoards()) {
                 if (!playerBoardView.getNickname().equals(getNickname())) {
-                    graphicalCLI.printPlayer(playerBoardView, getFaithTrack());
+                    GraphicalCLI.printPlayer(playerBoardView, getFaithTrack());
                 }
             }
-        } else graphicalCLI.printLorenzo(getLorenzoFaith(), getFaithTrack());
+        } else GraphicalCLI.printLorenzo(getLorenzoFaith(), getFaithTrack());
     }
 
     /**
@@ -646,7 +645,7 @@ public class CLI extends ClientController {
      */
     private void showBoard(){
         try{
-            graphicalCLI.printPlayer(getLocalPlayerBoard(), getFaithTrack());
+            GraphicalCLI.printPlayer(getLocalPlayerBoard(), getFaithTrack());
         } catch (NotExistingNicknameException e){
             e.printStackTrace();
         }
@@ -693,10 +692,10 @@ public class CLI extends ClientController {
             boolean firstTurn = true;
             while (!toPlace.isEmpty()){
                 resourceToPlace = toPlace.get(0);
-                graphicalCLI.printWarehouseConfiguration(new WarehouseView(shelves), true);
-                graphicalCLI.printString("Resources to place: ");
-                graphicalCLI.printGraphicalResources(toPlace);
-                level=graphicalCLI.askWhichShelf(resourceToPlace, shelves.size(), false);
+                GraphicalCLI.printWarehouseConfiguration(new WarehouseView(shelves), true);
+                GraphicalCLI.printString("Resources to place: ");
+                GraphicalCLI.printGraphicalResources(toPlace);
+                level=GraphicalCLI.askWhichShelf(resourceToPlace, shelves.size(), false);
 
                 if(firstTurn)
                     firstTurn = false;
@@ -709,7 +708,7 @@ public class CLI extends ClientController {
                         sameResTypeShelfManagement(shelves, toPlace, selectedShelf, resourceToPlace);
                     else if(!selectedShelf.isLeader()) //shelf with different resource type
                         differentResTypeShelfManagement(shelves, toPlace, selectedShelf, resourceToPlace);
-                    else graphicalCLI.printlnString("You can't place this resource here");
+                    else GraphicalCLI.printlnString("You can't place this resource here");
                 }
                 else if(level<0) {
                     restoreConfiguration(new WarehouseView(temporaryWarehouseShelves), shelves, resources, toPlace,
@@ -751,11 +750,11 @@ public class CLI extends ClientController {
             toPlace.remove(0);
         }
         else {//there are shelves with the same resource type
-            graphicalCLI.printlnString("There's already another shelf with the same resource type");
+            GraphicalCLI.printlnString("There's already another shelf with the same resource type");
             if(isShelfRearrangeable(shelves, resourceToPlace)) { //it's possible to rearrange shelves
-                graphicalCLI.printString("If you want to place it here anyway, insert YES and " +
+                GraphicalCLI.printString("If you want to place it here anyway, insert YES and " +
                         "then you'll place again the removed ones from the other shelf: ");
-                if(graphicalCLI.isAnswerYes()) {
+                if(GraphicalCLI.isAnswerYes()) {
                     Shelf otherShelf = getShelfWithSameResource(shelves, resourceToPlace.getResourceType());
                     if(otherShelf != null) {
                         for (int i = 0; i < otherShelf.getResources().getQuantity(); i++) {
@@ -784,11 +783,11 @@ public class CLI extends ClientController {
             toPlace.remove(0);
         }
         else { //shelf completely full
-            graphicalCLI.printlnString("The selected shelf is already full");
+            GraphicalCLI.printlnString("The selected shelf is already full");
             if(isShelfRearrangeable(shelves, resourceToPlace)){
-                graphicalCLI.printString("If you want to remove the resources from this" +
+                GraphicalCLI.printString("If you want to remove the resources from this" +
                         " shelf to place them again on another one, insert YES: ");
-                if(graphicalCLI.isAnswerYes()){
+                if(GraphicalCLI.isAnswerYes()){
                     for(int i=0; i<selectedShelf.getResources().getQuantity(); i++){
                         toPlace.add(1, new Resource(selectedShelf.getResourceType(), 1));
                     }
@@ -807,9 +806,9 @@ public class CLI extends ClientController {
      */
     private void differentResTypeShelfManagement(List<Shelf> shelves, List<Resource> toPlace,
                                                  Shelf selectedShelf, Resource resourceToPlace) {
-        graphicalCLI.printString("This shelf contains a different resource type\nIf you want" +
+        GraphicalCLI.printString("This shelf contains a different resource type\nIf you want" +
                 " to place it here anyway, insert YES and then you'll place again the removed ones: ");
-        if(graphicalCLI.isAnswerYes()) {
+        if(GraphicalCLI.isAnswerYes()) {
             if (Shelf.isResourceTypeUnique(shelves, resourceToPlace.getResourceType())) { //there are no shelves with the same resource type
                 for (int i = 0; i < selectedShelf.getResources().getQuantity(); i++) {
                     toPlace.add(1, new Resource(selectedShelf.getResourceType(), 1));
@@ -818,11 +817,11 @@ public class CLI extends ClientController {
                 toPlace.remove(0);
             }
             else {//there are shelves with the same resource type
-                graphicalCLI.printlnString("There's already another shelf with the same resource type");
+                GraphicalCLI.printlnString("There's already another shelf with the same resource type");
                 if (isShelfRearrangeable(shelves, resourceToPlace)) { //it's possible to rearrange shelves
-                    graphicalCLI.printString("If you want to place it here anyway, insert YES and " +
+                    GraphicalCLI.printString("If you want to place it here anyway, insert YES and " +
                             "then you'll place again the removed ones: ");
-                    if (graphicalCLI.isAnswerYes()) {
+                    if (GraphicalCLI.isAnswerYes()) {
                         Shelf otherShelf = getShelfWithSameResource(shelves, resourceToPlace.getResourceType());
                         if(otherShelf != null) {
                             for (int i = 0; i < otherShelf.getResources().getQuantity(); i++) {
@@ -918,7 +917,7 @@ public class CLI extends ClientController {
             toDiscard.clear();
             moveFaith(toDiscard, toPlace);
         }
-        graphicalCLI.printlnString("Warehouse restored");
+        GraphicalCLI.printlnString("Warehouse restored");
     }
 
     /**
@@ -930,11 +929,11 @@ public class CLI extends ClientController {
         String choice;
         int level;
         DevelopmentCard developmentCard = new DevelopmentCard();
-        graphicalCLI.printString("Which card do you want to buy?\nChoose B (blue), G (green), P (purple) " +
+        GraphicalCLI.printString("Which card do you want to buy?\nChoose B (blue), G (green), P (purple) " +
                 "or Y (yellow) followed by a number corresponding to its level: ");
         do {
             valid = false;
-            choice = graphicalCLI.getNextLine();
+            choice = GraphicalCLI.getNextLine();
 
             if(choice.matches("[BGPYbgpy][1-3]")) {
                 String color = choice.substring(0, 1).toUpperCase();
@@ -961,14 +960,14 @@ public class CLI extends ClientController {
                             valid = true;
                         }
                         else
-                            graphicalCLI.printString("There's no more cards available from this deck, " +
+                            GraphicalCLI.printString("There's no more cards available from this deck, " +
                                     "please try again ");
                         break;
                     }
                 }
             }
             else
-                graphicalCLI.printString("Invalid choice, please try again: ");
+                GraphicalCLI.printString("Invalid choice, please try again: ");
         } while (!valid);
         return developmentCard;
     }
@@ -994,35 +993,35 @@ public class CLI extends ClientController {
             producedWildcards = getResourcesOneByOne(producedWildcards);
 
             if(consumedWildcards.size() > 0 || producedWildcards.size() > 0) {
-                graphicalCLI.printString(GraphicalCLI.YELLOW_BRIGHT);
-                graphicalCLI.printlnString("\nResolve wildcards for the following production:\n");
-                graphicalCLI.printString(GraphicalCLI.RESET);
-                graphicalCLI.printProduction(production);
+                GraphicalCLI.printString(GraphicalCLI.YELLOW_BRIGHT);
+                GraphicalCLI.printlnString("\nResolve wildcards for the following production:\n");
+                GraphicalCLI.printString(GraphicalCLI.RESET);
+                GraphicalCLI.printProduction(production);
                 if(consumedWildcards.size() > 0) {
-                    graphicalCLI.printString(GraphicalCLI.YELLOW_BRIGHT);
-                    graphicalCLI.printlnString("\nChoose resource types for the consumed wildcards:\n");
-                    graphicalCLI.printString(GraphicalCLI.RESET);   //TODO: sistemare duplicazione
+                    GraphicalCLI.printString(GraphicalCLI.YELLOW_BRIGHT);
+                    GraphicalCLI.printlnString("\nChoose resource types for the consumed wildcards:\n");
+                    GraphicalCLI.printString(GraphicalCLI.RESET);   //TODO: sistemare duplicazione
                     final List<Resource> finalConsumedWildcards = consumedWildcards;
-                    graphicalCLI.objectOptionSelector(ResourceType.getRealValues(),
-                            rt -> graphicalCLI.printlnString(rt.toString()),
-                            () -> graphicalCLI.printlnString("You have " + finalConsumedWildcards.size() +
+                    GraphicalCLI.objectOptionSelector(ResourceType.getRealValues(),
+                            rt -> GraphicalCLI.printlnString(rt.toString()),
+                            () -> GraphicalCLI.printlnString("You have " + finalConsumedWildcards.size() +
                                     " wildcard(s) to resolve"),
-                            () -> graphicalCLI.printString("Choose " + finalConsumedWildcards.size() +
+                            () -> GraphicalCLI.printString("Choose " + finalConsumedWildcards.size() +
                                     " resource type(s) for the wildcard(s): "),
                             null,
                             true, consumedWildcards.size(), consumedWildcards.size(), -1
                     ).forEach(rt -> consumedResolved.add(new Resource(rt, 1)));
                 }
                 if(producedWildcards.size() > 0) {
-                    graphicalCLI.printString(GraphicalCLI.YELLOW_BRIGHT);
-                    graphicalCLI.printlnString("\nChoose for produced wildcards:\n");
-                    graphicalCLI.printString(GraphicalCLI.RESET);
+                    GraphicalCLI.printString(GraphicalCLI.YELLOW_BRIGHT);
+                    GraphicalCLI.printlnString("\nChoose for produced wildcards:\n");
+                    GraphicalCLI.printString(GraphicalCLI.RESET);
                     final List<Resource> finalProducedWildcards = producedWildcards;
-                    graphicalCLI.objectOptionSelector(ResourceType.getRealValues(),
-                            rt -> graphicalCLI.printlnString(rt.toString()),
-                            () -> graphicalCLI.printlnString("You have " + finalProducedWildcards.size() +
+                    GraphicalCLI.objectOptionSelector(ResourceType.getRealValues(),
+                            rt -> GraphicalCLI.printlnString(rt.toString()),
+                            () -> GraphicalCLI.printlnString("You have " + finalProducedWildcards.size() +
                                     " wildcard(s) to resolve"),
-                            () -> graphicalCLI.printString("Choose " + finalProducedWildcards.size() +
+                            () -> GraphicalCLI.printString("Choose " + finalProducedWildcards.size() +
                                     " resource type(s) for the wildcard(s): "),
                             null,
                             true, producedWildcards.size(), producedWildcards.size(), -1
@@ -1044,10 +1043,10 @@ public class CLI extends ClientController {
         opponentTurnMenu = new ArrayList<>();
         List<MenuOption> shared = Arrays.asList(
                 new MenuOption("View market and development decks", () -> {
-                    graphicalCLI.printMarket(getMarket());
-                    graphicalCLI.printlnString("");
-                    graphicalCLI.printDevelopmentDeckTop(getDevelopmentDecks().getDecks());
-                    graphicalCLI.printlnString("");
+                    GraphicalCLI.printMarket(getMarket());
+                    GraphicalCLI.printlnString("");
+                    GraphicalCLI.printDevelopmentDeckTop(getDevelopmentDecks().getDecks());
+                    GraphicalCLI.printlnString("");
                 }),
                 new MenuOption("View your board", this::showBoard),
                 new MenuOption("View opponents' boards", this::showOpponents),
@@ -1056,7 +1055,7 @@ public class CLI extends ClientController {
                         if(!getLocalPlayerBoard().getWarehouse().isEmpty()) {
                             List<Shelf> shelves = rearrangeWarehouse();
                             getMessageHandler().sendClientMessage(new ShelvesConfigurationMessage(shelves));
-                        } else graphicalCLI.printlnString("You have no resources to rearrange");
+                        } else GraphicalCLI.printlnString("You have no resources to rearrange");
                     } catch (NotExistingNicknameException e) {
                         e.printStackTrace();
                     }
@@ -1064,13 +1063,13 @@ public class CLI extends ClientController {
         );
         playerTurnMenu.addAll( Arrays.asList(
                 new MenuOption("Get resources from market", () -> {
-                    if (!isMainActionPlayed()) selectMarket(); else graphicalCLI.printlnString("You can't play this action on your turn anymore");
+                    if (!isMainActionPlayed()) selectMarket(); else GraphicalCLI.printlnString("You can't play this action on your turn anymore");
                 }),
                 new MenuOption("Buy a development card", () -> {
-                    if (!isMainActionPlayed()) selectDevDecks(); else graphicalCLI.printlnString("You can't play this action on your turn anymore");
+                    if (!isMainActionPlayed()) selectDevDecks(); else GraphicalCLI.printlnString("You can't play this action on your turn anymore");
                 }),
                 new MenuOption("Activate your productions", () -> {
-                    if (!isMainActionPlayed()) selectProductions(); else graphicalCLI.printlnString("You can't play this action on your turn anymore");
+                    if (!isMainActionPlayed()) selectProductions(); else GraphicalCLI.printlnString("You can't play this action on your turn anymore");
                 }),
                 new MenuOption("Activate a leader card", () -> {
                     List<LeaderCard> leaderCards = chooseLeaderCard();
@@ -1088,11 +1087,11 @@ public class CLI extends ClientController {
                         setPlayerTurn(false);
                         getMessageHandler().sendClientMessage(new EndTurnMessage());
                     }
-                    else graphicalCLI.printlnString("You haven't played any main action yet!");
+                    else GraphicalCLI.printlnString("You haven't played any main action yet!");
                 })
         ));
         opponentTurnMenu.add(
-                new MenuOption("Wait for my turn", () -> graphicalCLI.printlnString("Waiting for your turn..."))
+                new MenuOption("Wait for my turn", () -> GraphicalCLI.printlnString("Waiting for your turn..."))
         );
         opponentTurnMenu.addAll(shared);
     }
