@@ -3,6 +3,9 @@ package it.polimi.ingsw.client.gui;
 import it.polimi.ingsw.client.gui.controllers.GenericController;
 import javafx.scene.Scene;
 
+/**
+ * Handles information of loaded scenes
+ */
 public class SceneInformation {
     private final Scene scene;
     private final SceneNames fileName;

@@ -5,6 +5,9 @@ import it.polimi.ingsw.client.gui.controllers.DecksBoardController;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ * TODO: fare javadoc
+ */
 public class DevelopmentDeckViewListener implements PropertyChangeListener {
 
     private final DecksBoardController decksBoardController;

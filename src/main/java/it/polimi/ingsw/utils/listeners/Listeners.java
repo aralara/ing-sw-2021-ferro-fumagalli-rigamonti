@@ -1,5 +1,8 @@
 package it.polimi.ingsw.utils.listeners;
 
+/**
+ * TODO: fare javadoc
+ */
 public enum Listeners {
     GAME_DEV_DECK("developmentDeckListener"),
     GAME_MARKET("marketListener"),

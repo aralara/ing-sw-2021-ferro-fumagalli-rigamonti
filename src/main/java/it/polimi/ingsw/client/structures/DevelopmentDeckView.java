@@ -8,6 +8,9 @@ import it.polimi.ingsw.utils.listeners.Listeners;
 
 import java.io.Serializable;
 
+/**
+ * TODO: fare javadoc
+ */
 public class DevelopmentDeckView extends Listened implements Serializable {
 
     private Deck deck;

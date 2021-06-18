@@ -2,6 +2,9 @@ package it.polimi.ingsw.server.model.faith;
 
 import java.io.Serializable;
 
+/**
+ * Handles methods relative to the faith space
+ */
 public class FaithSpace implements Serializable {
 
     private final int VP;

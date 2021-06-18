@@ -17,7 +17,9 @@ import java.util.stream.Collectors;
 import static it.polimi.ingsw.utils.Constants.MARKET_COLUMN_SIZE;
 import static it.polimi.ingsw.utils.Constants.MARKET_ROW_SIZE;
 
-
+/**
+ * Handles printings of the client command line interface version
+ */
 public class GraphicalCLI {
 
     private static final String CHOICE_DELIMITERS = " ,.:;-_/\\";

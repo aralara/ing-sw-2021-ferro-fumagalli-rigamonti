@@ -6,6 +6,9 @@ import it.polimi.ingsw.server.model.storage.Resource;
 
 import java.util.List;
 
+/**
+ * TODO: fare javadoc
+ */
 public class PlayerStrongBoxMessage implements ServerUpdateMessage {
 
     private final List<Resource> resources;

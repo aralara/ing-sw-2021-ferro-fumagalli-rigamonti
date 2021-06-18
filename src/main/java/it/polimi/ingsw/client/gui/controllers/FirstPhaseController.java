@@ -11,6 +11,9 @@ import javafx.scene.image.ImageView;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles methods relative to fxml LeaderChoiceMenu file
+ */
 public class FirstPhaseController extends GenericController {
 
     private List<Integer> leaderIndexesToDiscard;

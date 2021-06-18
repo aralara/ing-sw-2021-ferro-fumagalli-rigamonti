@@ -5,6 +5,9 @@ import it.polimi.ingsw.server.controller.GameHandler;
 import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 
+/**
+ * TODO: fare javadoc
+ */
 public class ConfirmReadyMessage extends ClientActionMessage {
 
     public ConfirmReadyMessage() { }

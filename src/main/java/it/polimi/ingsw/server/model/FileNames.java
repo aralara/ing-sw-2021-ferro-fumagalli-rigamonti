@@ -1,5 +1,8 @@
 package it.polimi.ingsw.server.model;
 
+/**
+ * Names of loaded json files
+ */
 public enum FileNames {
 
     MARKET_FILE("src/main/resources/json/Market_File.json"),

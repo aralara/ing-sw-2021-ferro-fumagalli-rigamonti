@@ -1,5 +1,8 @@
 package it.polimi.ingsw.utils.exceptions;
 
+/**
+ * Exception thrown when the triggered report has an impossible value
+ */
 public class NotExistingLastReportTriggeredException extends Exception {
 
     @Override

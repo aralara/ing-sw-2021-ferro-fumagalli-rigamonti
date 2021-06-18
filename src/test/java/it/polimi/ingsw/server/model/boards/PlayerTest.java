@@ -4,6 +4,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests methods of Player class
+ */
 public class PlayerTest {
 
     /**
@@ -14,7 +17,7 @@ public class PlayerTest {
         String nickname = "testNickname";
         Player player = new Player(nickname);
         assertEquals(nickname, player.getNickname());
-        assertEquals(0, player.getTotalVP());
+        assertEquals(-1, player.getTotalVP());
         assertEquals(0, player.getFinalPosition());
         player.setTotalVP(56);
         assertEquals(56, player.getTotalVP());

@@ -7,6 +7,9 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests methods of Production class
+ */
 public class ProductionTest{
 
     /**

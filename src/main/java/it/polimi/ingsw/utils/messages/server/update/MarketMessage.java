@@ -4,6 +4,9 @@ import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.client.structures.MarketView;
 import it.polimi.ingsw.server.model.market.*;
 
+/**
+ * TODO: fare javadoc
+ */
 public class MarketMessage implements ServerUpdateMessage {
 
     private final MarketView market;

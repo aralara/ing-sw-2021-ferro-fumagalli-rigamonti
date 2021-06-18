@@ -12,6 +12,9 @@ import java.util.function.Predicate;
 
 import static it.polimi.ingsw.utils.Constants.FAITH_TOTAL_VATICAN_REPORTS;
 
+/**
+ * Handles methods to update the faith board
+ */
 public class FaithBoard extends PlayerListened implements Serializable {
 
     private int faith;

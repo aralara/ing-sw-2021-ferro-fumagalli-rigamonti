@@ -2,10 +2,12 @@ package it.polimi.ingsw.utils.messages.server.action;
 
 import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.server.model.boards.Player;
-import it.polimi.ingsw.utils.messages.Message;
 
 import java.util.List;
 
+/**
+ * TODO: fare javadoc
+ */
 public class EndGameMessage implements ServerActionMessage {
 
     private final List<Player> players;

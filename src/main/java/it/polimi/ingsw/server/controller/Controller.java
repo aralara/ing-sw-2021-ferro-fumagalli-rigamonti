@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * TODO: fare javadoc
+ */
 public class Controller {
 
     private final int playerNumber;

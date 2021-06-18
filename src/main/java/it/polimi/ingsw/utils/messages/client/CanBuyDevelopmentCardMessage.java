@@ -5,6 +5,9 @@ import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 
+/**
+ * TODO: fare javadoc
+ */
 public class CanBuyDevelopmentCardMessage extends ClientActionMessage {
 
     private final DevelopmentCard developmentCard;

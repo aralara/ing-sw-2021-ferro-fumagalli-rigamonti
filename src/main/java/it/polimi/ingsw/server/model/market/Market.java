@@ -16,6 +16,9 @@ import java.util.*;
 import static it.polimi.ingsw.utils.Constants.MARKET_COLUMN_SIZE;
 import static it.polimi.ingsw.utils.Constants.MARKET_ROW_SIZE;
 
+/**
+ * Handles methods relative to the market
+ */
 public class Market extends Listened implements Serializable {
 
     private final Marble[][] marbleMatrix;

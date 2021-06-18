@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * TODO: fare javadoc
+ */
 public class DevelopmentDecksView extends Listened implements Serializable {
 
     private final List<DevelopmentDeckView> decks;

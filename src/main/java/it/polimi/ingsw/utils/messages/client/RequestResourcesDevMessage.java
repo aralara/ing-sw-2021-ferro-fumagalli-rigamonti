@@ -8,6 +8,9 @@ import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 
 import java.util.List;
 
+/**
+ * TODO: fare javadoc
+ */
 public class RequestResourcesDevMessage extends CanBuyDevelopmentCardMessage {
 
     private final List<RequestResources> requestResources;

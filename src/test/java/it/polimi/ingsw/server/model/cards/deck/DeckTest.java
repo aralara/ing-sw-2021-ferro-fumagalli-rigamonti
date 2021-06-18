@@ -11,6 +11,9 @@ import java.util.stream.IntStream;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+/**
+ * Tests methods of Deck class TODO: fare javadoc
+ */
 public class DeckTest {
 
     private int randomIntBetween(Random r, int min, int max) {

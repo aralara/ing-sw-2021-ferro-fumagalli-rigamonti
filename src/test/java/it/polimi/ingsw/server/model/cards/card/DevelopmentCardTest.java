@@ -8,6 +8,9 @@ import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+/**
+ * Tests methods of DevelopmentCard class TODO: fare javadoc
+ */
 public class DevelopmentCardTest {
 
     private static final int VP = 5;

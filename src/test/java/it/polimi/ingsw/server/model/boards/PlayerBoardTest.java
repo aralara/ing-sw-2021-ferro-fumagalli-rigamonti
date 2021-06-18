@@ -2,6 +2,9 @@ package it.polimi.ingsw.server.model.boards;
 
 import org.junit.Test;
 
+/**
+ * TODO: fare javadoc e test!!
+ */
 public class PlayerBoardTest {
 
     @Test

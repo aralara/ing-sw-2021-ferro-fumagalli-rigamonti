@@ -2,6 +2,9 @@ package it.polimi.ingsw.server.model.cards.card;
 
 import it.polimi.ingsw.server.model.boards.LorenzoBoard;
 
+/**
+ * Handles methods relative to the Lorenzo development card
+ */
 public class LorenzoDev extends LorenzoCard {
 
     private final CardColors color;

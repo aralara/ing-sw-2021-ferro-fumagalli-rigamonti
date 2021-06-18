@@ -4,6 +4,9 @@ import it.polimi.ingsw.utils.messages.server.update.ServerUpdateMessage;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
+/**
+ * TODO: fare javadoc
+ */
 public class UpdateMessageReader implements Runnable {
 
     private final ClientController client;

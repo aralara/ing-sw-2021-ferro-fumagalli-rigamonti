@@ -5,6 +5,9 @@ import it.polimi.ingsw.server.saves.GameSave;
 
 import java.util.List;
 
+/**
+ * TODO: fare javadoc
+ */
 public class GameSavesMessage implements ServerActionMessage {
 
     private final List<GameSave> saves;

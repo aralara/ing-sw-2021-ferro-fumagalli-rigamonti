@@ -2,6 +2,9 @@ package it.polimi.ingsw.utils.listeners.server;
 
 import it.polimi.ingsw.utils.listeners.Listened;
 
+/**
+ * TODO: fare javadoc
+ */
 public abstract class PlayerListened extends Listened {
 
     private String playerNickname = "";

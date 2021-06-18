@@ -6,6 +6,9 @@ import it.polimi.ingsw.utils.messages.server.action.LorenzoCardMessage;
 
 import java.beans.PropertyChangeEvent;
 
+/**
+ * TODO: fare javadoc
+ */
 public class LorenzoCardPlayListener extends ModelChangeListener {
 
     public LorenzoCardPlayListener(VirtualView virtualView) {

@@ -3,6 +3,9 @@ package it.polimi.ingsw.utils.listeners;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
+/**
+ * TODO: fare javadoc
+ */
 public abstract class Listened {
 
     private final PropertyChangeSupport listeners = new PropertyChangeSupport(this);

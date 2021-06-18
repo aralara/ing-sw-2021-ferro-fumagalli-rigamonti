@@ -7,6 +7,9 @@ import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 
 import java.util.List;
 
+/**
+ * TODO: fare javadoc
+ */
 public class RequestResourcesProdMessage extends CanActivateProductionsMessage {
 
     private final List<RequestResources> requestResources;

@@ -6,8 +6,15 @@ import it.polimi.ingsw.server.Server;
 
 import java.util.List;
 
+/**
+ * The main class of Master of Renaissance
+ */
 public class MasterOfRenaissance {
 
+    /**
+     * Lets the user choose which version of Master of Renaissance start
+     * @param args
+     */
     public static void main(String[] args){
 
         List<String> versions = List.of("Server", "Client - CLI version", "Client - GUI version");

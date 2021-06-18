@@ -3,6 +3,9 @@ package it.polimi.ingsw.server.model.cards.card;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Defines a class to handle common parts of all cards
+ */
 public abstract class Card implements Serializable {
 
     private int ID;

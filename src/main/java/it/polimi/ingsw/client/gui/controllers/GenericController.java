@@ -7,6 +7,9 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
+/**
+ * Defines a class to handle common parts of all controllers
+ */
 public class GenericController {
     private GUIApplication guiApplication;
 

@@ -7,6 +7,9 @@ import it.polimi.ingsw.utils.messages.server.update.PlayerStrongBoxMessage;
 import java.beans.PropertyChangeEvent;
 import java.util.List;
 
+/**
+ * TODO: fare javadoc
+ */
 public class StrongboxChangeListener extends ModelChangeListener {
 
     public StrongboxChangeListener(VirtualView virtualView) {

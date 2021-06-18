@@ -7,6 +7,9 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Tests methods of Shelf class
+ */
 public class ShelfTest{
     /**
      * Tests if a resourceType is correctly set

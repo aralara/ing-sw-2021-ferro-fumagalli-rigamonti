@@ -5,6 +5,9 @@ import it.polimi.ingsw.utils.exceptions.NotExistingNicknameException;
 
 import static it.polimi.ingsw.utils.Constants.FAITH_TOTAL_VATICAN_REPORTS;
 
+/**
+ * TODO: fare javadoc
+ */
 public class PlayerFaithBPopeMessage implements ServerUpdateMessage {
     private final boolean[] popeProgression;
     private final String nickname;

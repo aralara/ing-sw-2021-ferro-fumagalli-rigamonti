@@ -4,6 +4,9 @@ import it.polimi.ingsw.server.model.boards.PlayerBoard;
 
 import java.io.Serializable;
 
+/**
+ * Defines an interface to handle common parts of all abilities
+ */
 public interface SpecialAbility extends Serializable {
 
     /**

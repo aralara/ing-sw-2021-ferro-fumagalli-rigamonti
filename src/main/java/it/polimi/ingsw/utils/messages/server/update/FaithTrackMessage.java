@@ -4,6 +4,9 @@ import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.client.structures.FaithTrackView;
 import it.polimi.ingsw.server.model.faith.*;
 
+/**
+ * TODO: fare javadoc
+ */
 public class FaithTrackMessage implements ServerUpdateMessage {
 
     private final FaithTrackView faithTrack;

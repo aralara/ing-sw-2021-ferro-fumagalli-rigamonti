@@ -21,6 +21,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Defines a class to handle common parts of all games
+ */
 public abstract class Game implements Serializable {
 
     private List<PlayerBoard> playerBoards;

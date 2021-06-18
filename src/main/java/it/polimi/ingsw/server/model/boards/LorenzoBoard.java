@@ -8,6 +8,9 @@ import it.polimi.ingsw.utils.listeners.Listeners;
 
 import java.io.Serializable;
 
+/**
+ * Handles methods to update the Lorenzo board
+ */
 public class LorenzoBoard extends Listened implements Serializable {
 
     private final Player player;

@@ -4,7 +4,9 @@ import it.polimi.ingsw.server.model.boards.PlayerBoard;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.utils.listeners.Listeners;
 
-
+/**
+ * Handles methods relative to the discount ability
+ */
 public class AbilityDiscount implements SpecialAbility {
 
     private final ResourceType resourceType;

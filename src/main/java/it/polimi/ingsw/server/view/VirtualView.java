@@ -10,6 +10,9 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * TODO: fare javadoc
+ */
 public class VirtualView implements Runnable {
 
     private final Socket client;

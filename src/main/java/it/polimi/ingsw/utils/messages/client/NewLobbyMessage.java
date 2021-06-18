@@ -2,6 +2,9 @@ package it.polimi.ingsw.utils.messages.client;
 
 import it.polimi.ingsw.client.ClientController;
 
+/**
+ * TODO: fare javadoc
+ */
 public class NewLobbyMessage extends ClientSetupMessage {
 
     private final int lobbySize;

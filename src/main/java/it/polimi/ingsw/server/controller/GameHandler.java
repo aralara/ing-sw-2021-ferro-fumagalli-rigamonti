@@ -21,6 +21,9 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
+/**
+ * TODO: fare javadoc
+ */
 public class GameHandler implements Runnable {
 
     private boolean active;

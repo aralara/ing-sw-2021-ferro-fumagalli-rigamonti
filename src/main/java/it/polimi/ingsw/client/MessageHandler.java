@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * TODO: fare javadoc
+ */
 public class MessageHandler implements Runnable {
 
     private Socket server;

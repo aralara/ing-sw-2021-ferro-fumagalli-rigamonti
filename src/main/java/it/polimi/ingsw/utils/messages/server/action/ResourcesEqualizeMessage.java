@@ -6,6 +6,9 @@ import it.polimi.ingsw.utils.messages.client.ConfirmReadyMessage;
 
 import java.util.List;
 
+/**
+ * TODO: fare javadoc
+ */
 public class ResourcesEqualizeMessage extends ResourcesMessage implements ServerActionMessage {
 
     public ResourcesEqualizeMessage(List<Resource> resources) {

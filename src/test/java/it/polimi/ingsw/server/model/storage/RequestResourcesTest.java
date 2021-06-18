@@ -7,6 +7,9 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests methods of RequestResources class
+ */
 public class RequestResourcesTest{
     /**
      * Tests if getStorageType return the correct StorageType

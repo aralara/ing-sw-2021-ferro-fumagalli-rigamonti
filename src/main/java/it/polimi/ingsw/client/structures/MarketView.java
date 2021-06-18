@@ -10,7 +10,9 @@ import java.io.Serializable;
 import static it.polimi.ingsw.utils.Constants.MARKET_COLUMN_SIZE;
 import static it.polimi.ingsw.utils.Constants.MARKET_ROW_SIZE;
 
-
+/**
+ * TODO: fare javadoc
+ */
 public class MarketView extends Listened implements Serializable {
 
     private Marble[][] marbleMatrix;

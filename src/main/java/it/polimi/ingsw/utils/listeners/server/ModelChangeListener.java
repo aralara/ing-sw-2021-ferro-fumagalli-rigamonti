@@ -4,6 +4,9 @@ import it.polimi.ingsw.server.view.VirtualView;
 
 import java.beans.PropertyChangeListener;
 
+/**
+ * TODO: fare javadoc
+ */
 public abstract class ModelChangeListener implements PropertyChangeListener {
 
     private final VirtualView virtualView;

@@ -4,6 +4,9 @@ import it.polimi.ingsw.server.model.storage.ResourceType;
 
 import java.io.Serializable;
 
+/**
+ * Handles methods relative to the marble
+ */
 public class Marble implements Serializable {
 
     private final MarbleColors color;

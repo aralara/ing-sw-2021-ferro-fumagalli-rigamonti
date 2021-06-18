@@ -9,6 +9,9 @@ import it.polimi.ingsw.utils.listeners.Listeners;
 import java.io.Serializable;
 import java.util.stream.Collectors;
 
+/**
+ * TODO: fare javadoc
+ */
 public class LeaderBoardView extends Listened implements Serializable {
 
     private Deck hand;

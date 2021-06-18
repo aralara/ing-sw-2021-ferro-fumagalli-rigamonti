@@ -18,6 +18,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles application of client graphical user interface version
+ */
 public class GUIApplication extends Application {
 
     private GUI gui;
@@ -27,7 +30,10 @@ public class GUIApplication extends Application {
     private Stage stage, secondStage, cardStage, popUpStage;
     private Alert alert;
 
-    //TODO: deve avere javadoc?
+    /**
+     * Calls the lunch method
+     * @param args List of arguments
+     */
     public static void main(String[] args) {
         launch(args);
     }

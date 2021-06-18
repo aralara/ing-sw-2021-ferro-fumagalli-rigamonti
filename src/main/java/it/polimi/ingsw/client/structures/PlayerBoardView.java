@@ -2,13 +2,14 @@ package it.polimi.ingsw.client.structures;
 
 import it.polimi.ingsw.server.model.boards.PlayerBoard;
 import it.polimi.ingsw.server.model.storage.Production;
-import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles playerBoard client methods
+ */
 public class PlayerBoardView implements Serializable {
 
     private String nickname;
@@ -24,7 +25,10 @@ public class PlayerBoardView implements Serializable {
     private List<ResourceType> activeAbilityMarbles;
     private List<ResourceType> activeAbilityDiscounts;
 
-
+    /**
+     * Constructor with parameter
+     * @param playerBoard Playerboard which parameters are to be set
+     */
     public PlayerBoardView(PlayerBoard playerBoard) {
         this.nickname = playerBoard.getPlayer().getNickname();
         this.developmentBoard = new DevelopmentBoardView(playerBoard.getDevelopmentBoard());

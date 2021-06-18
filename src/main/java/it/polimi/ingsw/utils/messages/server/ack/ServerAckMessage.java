@@ -6,6 +6,9 @@ import it.polimi.ingsw.utils.messages.client.ClientMessage;
 
 import java.util.UUID;
 
+/**
+ * TODO: fare javadoc
+ */
 public class ServerAckMessage extends AckMessage {
 
     private ClientMessage relativeMessage;

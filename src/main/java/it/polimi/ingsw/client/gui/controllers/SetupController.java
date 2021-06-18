@@ -4,8 +4,6 @@ import it.polimi.ingsw.client.gui.SceneNames;
 import it.polimi.ingsw.server.saves.SaveInteractions;
 import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -18,6 +16,9 @@ import javafx.scene.layout.Pane;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Handles methods relative to fxml ConnectionMenu, GameModeMenu, Loading, MultiPlayerWaiting, NicknameMenu, Saves files
+ */
 public class SetupController extends GenericController {
 
     private boolean isLocal=false;
@@ -141,15 +142,15 @@ public class SetupController extends GenericController {
     /**
      * Controls if port and ip address are correct and shows the NicknameMenu scene, otherwise shows an alert message
      */
-    public void connect() {  //TODO: decidere se lasciare ip e porta vuota (molto probabilmente sì)
-        /*if(ipAddress_field.getText().equals("")) {
+    public void connect() {
+        if(ipAddress_field.getText().equals("")) {
             showAlert(Alert.AlertType.ERROR, "Error", "Missing field!",
                     "The IP address field is empty, please fill it");
         }
         else if(portNumber_field.getText().equals("")) {
             showAlert(Alert.AlertType.ERROR, "Error", "Missing field!",
                     "The port number field is empty, please fill it");
-        }*/
+        }
         if(!ipAddress_field.getText().matches("[0-9.]*")) {
             showAlert(Alert.AlertType.ERROR, "Error", "Invalid field!",
                     "The IP address field is invalid, please complete it correctly");
@@ -160,8 +161,7 @@ public class SetupController extends GenericController {
         }
         else {
             getGUIApplication().changeConnectionMenuStatus();
-            //if(getGUI().connect(ipAddress_field.getText(), Integer.parseInt(portNumber_field.getText()))) {
-            if(getGUI().connect(ipAddress_field.getText(), 1919)) {
+            if(getGUI().connect(ipAddress_field.getText(), Integer.parseInt(portNumber_field.getText()))) {
                 getGUIApplication().setActiveScene(SceneNames.NICKNAME_MENU);
             }
             else {

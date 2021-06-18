@@ -10,6 +10,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles methods relative to the faith track
+ */
 public class FaithTrack implements Serializable {
 
     private final List<VaticanReport> vaticanReports;

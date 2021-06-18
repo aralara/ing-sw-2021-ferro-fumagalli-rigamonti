@@ -1,7 +1,6 @@
 package it.polimi.ingsw.server.model.cards.requirement;
 
 import it.polimi.ingsw.server.model.boards.PlayerBoard;
-import it.polimi.ingsw.server.model.games.MultiGame;
 import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 import it.polimi.ingsw.server.model.storage.Shelf;
@@ -12,6 +11,9 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests methods of RequirementRes class
+ */
 public class RequirementResTest {
 
     /**

@@ -2,6 +2,9 @@ package it.polimi.ingsw.server.model.boards;
 
 import java.io.Serializable;
 
+/**
+ * Handles methods to update player attributes
+ */
 public class Player implements Serializable {
 
     private final String nickname;

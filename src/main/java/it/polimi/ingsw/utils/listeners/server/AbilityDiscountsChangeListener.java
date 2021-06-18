@@ -7,6 +7,9 @@ import it.polimi.ingsw.utils.messages.server.update.PlayerAbilityDiscountsMessag
 import java.beans.PropertyChangeEvent;
 import java.util.List;
 
+/**
+ * TODO: fare javadoc
+ */
 public class AbilityDiscountsChangeListener extends ModelChangeListener {
 
     public AbilityDiscountsChangeListener(VirtualView virtualView) {

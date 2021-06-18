@@ -7,6 +7,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * TODO: fare javadoc
+ */
 public class FaithTrackView implements Serializable {
 
     private final List<VaticanReportView> vaticanReports;

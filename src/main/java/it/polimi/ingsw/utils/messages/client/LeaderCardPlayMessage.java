@@ -7,6 +7,9 @@ import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 
 import java.util.List;
 
+/**
+ * TODO: fare javadoc
+ */
 public class LeaderCardPlayMessage extends LeaderCardMessageClient {
 
     public LeaderCardPlayMessage(List<LeaderCard> leaderCards) {

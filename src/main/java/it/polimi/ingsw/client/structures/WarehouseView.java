@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * TODO: fare javadoc
+ */
 public class WarehouseView extends Listened implements Serializable {
 
     private List<Shelf> shelves;

@@ -12,6 +12,9 @@ import javafx.scene.image.ImageView;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles methods relative to fxml DecksBoard file
+ */
 public class DecksBoardController extends GenericController {
 
     private List<ImageView> decks;

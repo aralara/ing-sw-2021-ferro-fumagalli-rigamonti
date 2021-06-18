@@ -2,6 +2,9 @@ package it.polimi.ingsw.server.model.games;
 
 import org.junit.Test;
 
+/**
+ * Tests methods of MultiGame class TODO: fare javadoc
+ */
 public class MultiGameTest {
 
     @Test

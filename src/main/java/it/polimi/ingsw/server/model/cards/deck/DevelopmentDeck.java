@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Handles methods relative to the development deck
+ */
 public class DevelopmentDeck extends Listened implements Serializable {
 
     private final Deck deck;

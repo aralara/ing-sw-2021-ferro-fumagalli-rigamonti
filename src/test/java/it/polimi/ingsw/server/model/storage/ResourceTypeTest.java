@@ -6,6 +6,9 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests methods of ResourceType class
+ */
 public class ResourceTypeTest {
 
     /**

@@ -3,7 +3,9 @@ package it.polimi.ingsw.server.model.cards.ability;
 import it.polimi.ingsw.server.model.boards.PlayerBoard;
 import it.polimi.ingsw.server.model.storage.*;
 
-
+/**
+ * Handles methods relative to the warehouse ability
+ */
 public class AbilityWarehouse implements SpecialAbility {
 
     private final ResourceType resourceType;

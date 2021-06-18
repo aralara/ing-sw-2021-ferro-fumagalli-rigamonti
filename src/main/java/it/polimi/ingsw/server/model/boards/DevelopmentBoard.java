@@ -12,6 +12,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles methods to update the development board
+ */
 public class DevelopmentBoard extends PlayerListened implements Serializable {
 
     private final List<Deck> spaces;

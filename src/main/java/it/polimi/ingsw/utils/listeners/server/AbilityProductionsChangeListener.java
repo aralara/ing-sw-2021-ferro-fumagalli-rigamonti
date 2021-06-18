@@ -7,6 +7,9 @@ import it.polimi.ingsw.utils.messages.server.update.PlayerAbilityProductionsMess
 import java.beans.PropertyChangeEvent;
 import java.util.List;
 
+/**
+ * TODO: fare javadoc
+ */
 public class AbilityProductionsChangeListener extends ModelChangeListener {
 
     public AbilityProductionsChangeListener(VirtualView virtualView) {

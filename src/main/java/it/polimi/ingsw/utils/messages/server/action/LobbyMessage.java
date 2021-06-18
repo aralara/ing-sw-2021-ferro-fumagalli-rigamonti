@@ -1,8 +1,10 @@
 package it.polimi.ingsw.utils.messages.server.action;
 
 import it.polimi.ingsw.client.ClientController;
-import it.polimi.ingsw.utils.messages.server.action.ServerActionMessage;
 
+/**
+ * TODO: fare javadoc
+ */
 public class LobbyMessage implements ServerActionMessage {
 
     private final int lobbySize, waitingPlayers;  // If lobbySize is 0 the client must create a new lobby

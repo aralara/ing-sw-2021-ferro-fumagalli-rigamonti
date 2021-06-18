@@ -2,6 +2,9 @@ package it.polimi.ingsw.server.model.storage;
 
 import java.io.Serializable;
 
+/**
+ * Handles methods relative to the resource
+ */
 public class Resource implements Serializable {
 
     private ResourceType resourceType;

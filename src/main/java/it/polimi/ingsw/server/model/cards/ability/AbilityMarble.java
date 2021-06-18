@@ -4,6 +4,9 @@ import it.polimi.ingsw.server.model.boards.PlayerBoard;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 import it.polimi.ingsw.utils.listeners.Listeners;
 
+/**
+ * Handles methods relative to the marble ability
+ */
 public class AbilityMarble implements SpecialAbility {
 
     private final ResourceType resourceType;

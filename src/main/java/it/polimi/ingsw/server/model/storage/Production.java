@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Handles methods relative to the production
+ */
 public class Production implements Serializable {
 
     private final List<Resource> consumed, produced;

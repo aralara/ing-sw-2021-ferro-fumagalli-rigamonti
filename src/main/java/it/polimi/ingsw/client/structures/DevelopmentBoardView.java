@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * TODO: fare javadoc
+ */
 public class DevelopmentBoardView extends Listened implements Serializable {
 
     private List<Deck> spaces;

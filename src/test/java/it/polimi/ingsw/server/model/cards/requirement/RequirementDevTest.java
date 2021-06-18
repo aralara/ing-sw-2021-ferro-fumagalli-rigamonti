@@ -14,6 +14,9 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests methods of RequirementDev class
+ */
 public class RequirementDevTest {
 
     /**

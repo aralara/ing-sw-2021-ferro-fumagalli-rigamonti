@@ -10,6 +10,9 @@ import it.polimi.ingsw.utils.messages.server.action.EndGameMessage;
 import it.polimi.ingsw.utils.messages.server.action.LastRoundMessage;
 import it.polimi.ingsw.utils.messages.server.action.StartTurnMessage;
 
+/**
+ * TODO: fare javadoc
+ */
 public class EndTurnMessage extends ClientActionMessage {
 
     public EndTurnMessage() { }

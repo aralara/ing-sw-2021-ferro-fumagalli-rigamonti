@@ -12,6 +12,9 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests methods of LorenzoBoard class
+ */
 public class LorenzoBoardTest {
 
     /**
@@ -78,5 +81,16 @@ public class LorenzoBoardTest {
 
         assertTrue(preRefresh.containsAll(postRefresh));
         assertTrue(postRefresh.containsAll(preRefresh));
+    }
+
+    /**
+     * Tests if the player given from the LorenzoBoard is correct
+     */
+    @Test
+    public void testGetter(){
+        SingleGame game = new SingleGame();
+        LorenzoBoard lorenzoBoard = new LorenzoBoard(game);
+        lorenzoBoard.initLorenzoDeck(FileNames.LORENZO_DEV_FILE.value(), FileNames.LORENZO_FAITH_FILE.value());
+        assertEquals("Lorenzo il Magnifico", lorenzoBoard.getPlayer().toString());
     }
 }

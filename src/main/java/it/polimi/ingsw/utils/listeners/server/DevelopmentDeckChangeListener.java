@@ -7,6 +7,9 @@ import it.polimi.ingsw.utils.messages.server.update.DevelopmentDecksMessage;
 import java.beans.PropertyChangeEvent;
 import java.util.List;
 
+/**
+ * TODO: fare javadoc
+ */
 public class DevelopmentDeckChangeListener extends ModelChangeListener {
 
     public DevelopmentDeckChangeListener(VirtualView virtualView) {

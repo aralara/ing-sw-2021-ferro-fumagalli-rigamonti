@@ -2,6 +2,9 @@ package it.polimi.ingsw.server.model.cards.card;
 
 import it.polimi.ingsw.server.model.boards.LorenzoBoard;
 
+/**
+ * Handles methods relative to the Lorenzo faith card
+ */
 public class LorenzoFaith extends LorenzoCard {
 
     private final boolean refresh;

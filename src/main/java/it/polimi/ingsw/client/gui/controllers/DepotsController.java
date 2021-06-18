@@ -15,6 +15,9 @@ import javafx.scene.input.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles methods relative to fxml Depots file
+ */
 public class DepotsController extends GenericController {
 
     private List<Shelf> shelves;

@@ -5,6 +5,9 @@ import it.polimi.ingsw.server.model.cards.requirement.Requirement;
 
 import java.util.List;
 
+/**
+ * Handles methods relative to the leader card
+ */
 public class LeaderCard extends Card {
 
     private final int VP;

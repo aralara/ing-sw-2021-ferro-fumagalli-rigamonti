@@ -7,6 +7,9 @@ import it.polimi.ingsw.utils.messages.server.update.PlayerAbilityMarblesMessage;
 import java.beans.PropertyChangeEvent;
 import java.util.List;
 
+/**
+ * TODO: fare javadoc
+ */
 public class AbilityMarblesChangeListener extends ModelChangeListener {
 
     public AbilityMarblesChangeListener(VirtualView virtualView) {

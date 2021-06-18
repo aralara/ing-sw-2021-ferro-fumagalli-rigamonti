@@ -1,11 +1,13 @@
 package it.polimi.ingsw.server.model.games;
 
 import it.polimi.ingsw.server.model.boards.PlayerBoard;
-import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.utils.TurnStatus;
 
 import java.util.*;
 
+/**
+ * Handles methods relative to the multiplayer game
+ */
 public class MultiGame extends Game {
 
     private boolean lastTurn;

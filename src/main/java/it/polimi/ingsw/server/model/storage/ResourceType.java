@@ -4,6 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Types that a resource could have
+ */
 public enum ResourceType {
     COIN,
     SHIELD,

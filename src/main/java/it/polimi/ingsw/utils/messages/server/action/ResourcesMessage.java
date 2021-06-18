@@ -5,6 +5,9 @@ import it.polimi.ingsw.utils.messages.Message;
 
 import java.util.List;
 
+/**
+ * TODO: fare javadoc
+ */
 public abstract class ResourcesMessage implements Message {
 
     private final List<Resource> resources;

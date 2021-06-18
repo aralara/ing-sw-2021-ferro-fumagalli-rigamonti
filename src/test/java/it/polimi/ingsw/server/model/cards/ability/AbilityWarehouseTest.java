@@ -1,12 +1,14 @@
 package it.polimi.ingsw.server.model.cards.ability;
 
 import it.polimi.ingsw.server.model.boards.PlayerBoard;
-import it.polimi.ingsw.server.model.games.MultiGame;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests methods of AbilityWarehouse class
+ */
 public class AbilityWarehouseTest {
 
     /**

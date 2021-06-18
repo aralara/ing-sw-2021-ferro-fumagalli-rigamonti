@@ -7,6 +7,9 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests methods of Strongbox class
+ */
 public class StrongboxTest{
 
     /**

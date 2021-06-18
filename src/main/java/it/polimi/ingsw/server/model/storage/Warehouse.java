@@ -7,6 +7,9 @@ import it.polimi.ingsw.utils.listeners.server.PlayerListened;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles methods relative to the warehouse
+ */
 public class Warehouse extends PlayerListened implements Storage {
 
     private List<Shelf> shelves;

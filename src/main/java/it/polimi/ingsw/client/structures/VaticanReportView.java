@@ -4,12 +4,18 @@ import it.polimi.ingsw.server.model.faith.VaticanReport;
 
 import java.io.Serializable;
 
+/**
+ * Handles VaticanReport client methods
+ */
 public class VaticanReportView implements Serializable {
 
     private final int min, max;
     private final int popeValue;
 
-
+    /**
+     * Constructor with parameter
+     * @param vaticanReport VaticanReport which parameters are to be set
+     */
     public VaticanReportView(VaticanReport vaticanReport) {
         this.min = vaticanReport.getMin();
         this.max = vaticanReport.getMax();

@@ -8,6 +8,9 @@ import java.io.Serializable;
 
 import static it.polimi.ingsw.utils.Constants.FAITH_TOTAL_VATICAN_REPORTS;
 
+/**
+ * TODO: fare javadoc
+ */
 public class FaithBoardView extends Listened implements Serializable {
 
     private int faith;

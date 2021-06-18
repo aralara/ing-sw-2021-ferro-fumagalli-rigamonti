@@ -7,6 +7,9 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests methods of Warehouse class
+ */
 public class WarehouseTest{
 
     /**

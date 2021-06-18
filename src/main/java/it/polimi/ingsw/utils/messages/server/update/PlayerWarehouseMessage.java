@@ -6,6 +6,9 @@ import it.polimi.ingsw.server.model.storage.Shelf;
 
 import java.util.List;
 
+/**
+ * TODO: fare javadoc
+ */
 public class PlayerWarehouseMessage implements ServerUpdateMessage {
 
     private final List<Shelf> shelves;

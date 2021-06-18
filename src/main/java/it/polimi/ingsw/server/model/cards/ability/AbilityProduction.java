@@ -4,6 +4,9 @@ import it.polimi.ingsw.server.model.boards.PlayerBoard;
 import it.polimi.ingsw.server.model.storage.Production;
 import it.polimi.ingsw.utils.listeners.Listeners;
 
+/**
+ * Handles methods relative to the production ability
+ */
 public class AbilityProduction implements SpecialAbility {
 
     private final Production production;

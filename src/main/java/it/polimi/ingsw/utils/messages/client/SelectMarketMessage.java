@@ -10,6 +10,9 @@ import it.polimi.ingsw.utils.messages.server.action.ResourcesMarketMessage;
 
 import java.util.List;
 
+/**
+ * TODO: fare javadoc
+ */
 public class SelectMarketMessage extends ClientActionMessage {
 
     private final int row, column;

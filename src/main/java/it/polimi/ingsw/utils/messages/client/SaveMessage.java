@@ -4,6 +4,9 @@ import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 
+/**
+ * TODO: fare javadoc
+ */
 public class SaveMessage extends ClientActionMessage {
 
     public SaveMessage() { }

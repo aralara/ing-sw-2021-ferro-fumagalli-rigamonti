@@ -10,6 +10,9 @@ import it.polimi.ingsw.utils.messages.HiddenMessage;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * TODO: fare javadoc
+ */
 public class PlayerBoardSetupMessage implements HiddenMessage, ServerUpdateMessage {
 
     private final PlayerBoardView playerBoard;

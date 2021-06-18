@@ -6,6 +6,9 @@ import it.polimi.ingsw.utils.listeners.server.PlayerListened;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles methods relative to the strongbox
+ */
 public class Strongbox extends PlayerListened implements Storage {
 
     private final List<Resource> resources;

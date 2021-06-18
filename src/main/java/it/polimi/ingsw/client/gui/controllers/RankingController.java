@@ -5,6 +5,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 
+/**
+ * Handles methods relative to fxml Ranking file
+ */
 public class RankingController extends GenericController {
 
     @FXML private Label names_label, scores_label, pt_label;

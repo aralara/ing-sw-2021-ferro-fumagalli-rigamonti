@@ -6,6 +6,9 @@ import it.polimi.ingsw.utils.messages.server.update.MarketMessage;
 
 import java.beans.PropertyChangeEvent;
 
+/**
+ * TODO: fare javadoc
+ */
 public class MarketChangeListener extends ModelChangeListener {
 
     public MarketChangeListener(VirtualView virtualView) {

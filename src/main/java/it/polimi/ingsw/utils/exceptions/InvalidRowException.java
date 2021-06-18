@@ -1,5 +1,8 @@
 package it.polimi.ingsw.utils.exceptions;
 
+/**
+ * Exception thrown when a row has an impossible value
+ */
 public class InvalidRowException extends Exception{
 
     @Override

@@ -6,6 +6,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Defines an interface to handle common parts of all storages
+ */
 public interface Storage extends Serializable {
 
     /**

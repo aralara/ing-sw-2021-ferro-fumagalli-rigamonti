@@ -18,6 +18,9 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * TODO: fare javadoc
+ */
 public class Server {
 
     public final static int SOCKET_PORT = 1919;

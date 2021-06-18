@@ -23,6 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Handles methods relative to fxml PlayerBoard file
+ */
 public class PlayerBoardController extends GenericController {
 
     private List<Shelf> warehouseShelves;
@@ -1229,7 +1232,7 @@ public class PlayerBoardController extends GenericController {
      * Updates labels of the strongbox
      * @param strongboxResources List of resources to update
      */
-    private void updateStrongbox(List<Resource> strongboxResources) { //TODO: da controllare... perchè lo fa su un altro thread?
+    private void updateStrongbox(List<Resource> strongboxResources) {
         resetStrongbox();
         for (Resource resource : strongboxResources){
             if(resource.getResourceType() == ResourceType.COIN){

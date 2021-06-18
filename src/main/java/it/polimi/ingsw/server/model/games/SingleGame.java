@@ -14,6 +14,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Handles methods relative to the single game
+ */
 public class SingleGame extends Game {
 
     private LorenzoBoard lorenzoBoard;

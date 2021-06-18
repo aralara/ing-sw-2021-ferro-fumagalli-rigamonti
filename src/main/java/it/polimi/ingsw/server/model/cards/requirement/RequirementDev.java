@@ -3,7 +3,9 @@ package it.polimi.ingsw.server.model.cards.requirement;
 import it.polimi.ingsw.server.model.boards.PlayerBoard;
 import it.polimi.ingsw.server.model.cards.card.CardColors;
 
-
+/**
+ * Handles methods relative to the development requirement
+ */
 public class RequirementDev implements Requirement {
 
     private final CardColors color;

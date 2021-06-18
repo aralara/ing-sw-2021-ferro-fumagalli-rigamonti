@@ -9,6 +9,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * TODO: fare javadoc
+ */
 public class StrongboxView extends Listened implements Serializable {
 
     private List<Resource> resources;

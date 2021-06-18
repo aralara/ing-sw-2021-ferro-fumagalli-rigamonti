@@ -12,6 +12,9 @@ import javafx.scene.control.Label;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles methods relative to fxml ResourceChoiceMenu file
+ */
 public class WildcardResolverController extends GenericController {
 
     private List<Resource> resources;
@@ -267,14 +270,14 @@ public class WildcardResolverController extends GenericController {
                         .filter((r -> r.getResourceType() == ResourceType.WILDCARD)).map(Resource::getQuantity)
                         .reduce(0, Integer::sum));
                 setChooseResources_label("Resolve produced resources for the " +
-                        productionsToResolveTypes.get(productionIndexToResolve)); //TODO: cambiare
+                        productionsToResolveTypes.get(productionIndexToResolve));
             }
             else {
                 setTotalResources(productionsToResolve.get(productionIndexToResolve).getConsumed().stream()
                         .filter((r -> r.getResourceType() == ResourceType.WILDCARD)).map(Resource::getQuantity)
                         .reduce(0, Integer::sum));
                 setChooseResources_label("Resolve consumed resources for the " +
-                        productionsToResolveTypes.get(productionIndexToResolve)); //TODO: cambiare
+                        productionsToResolveTypes.get(productionIndexToResolve));
             }
         }
         else {

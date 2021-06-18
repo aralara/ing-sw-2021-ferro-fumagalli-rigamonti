@@ -4,6 +4,9 @@ import it.polimi.ingsw.server.model.boards.PlayerBoard;
 
 import java.io.Serializable;
 
+/**
+ * Defines an interface to handle common parts of all requirements
+ */
 public interface Requirement extends Serializable {
 
     /**

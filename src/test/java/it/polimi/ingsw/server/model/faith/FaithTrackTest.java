@@ -6,6 +6,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests methods of FaithTrack class
+ */
 public class FaithTrackTest {
 
     /**

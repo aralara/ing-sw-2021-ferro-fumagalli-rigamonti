@@ -17,6 +17,9 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * TODO: fare javadoc
+ */
 public abstract class ClientController {
     private String nickname;
     private int numberOfPlayers;

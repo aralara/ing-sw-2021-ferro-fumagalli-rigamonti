@@ -5,9 +5,11 @@ import it.polimi.ingsw.server.model.boards.LorenzoBoard;
 import it.polimi.ingsw.server.model.games.SingleGame;
 import org.junit.Test;
 
-
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Tests methods of LorenzoFaith class TODO: fare javadoc
+ */
 public class LorenzoFaithTest {
 
     @Test

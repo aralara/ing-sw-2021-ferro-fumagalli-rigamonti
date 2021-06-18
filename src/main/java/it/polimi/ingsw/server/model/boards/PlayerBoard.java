@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Handles methods to update the playerboard
+ */
 public class PlayerBoard extends PlayerListened implements Serializable {
 
     private final Player player;

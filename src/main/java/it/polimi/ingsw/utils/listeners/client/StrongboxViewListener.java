@@ -4,6 +4,9 @@ import it.polimi.ingsw.client.gui.controllers.PlayerBoardController;
 
 import java.beans.PropertyChangeEvent;
 
+/**
+ * TODO: fare javadoc
+ */
 public class StrongboxViewListener extends PlayerBoardViewChangeListener {
 
     public StrongboxViewListener(PlayerBoardController playerBoardController) {

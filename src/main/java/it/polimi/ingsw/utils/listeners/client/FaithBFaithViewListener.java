@@ -2,6 +2,9 @@ package it.polimi.ingsw.utils.listeners.client;
 
 import it.polimi.ingsw.client.gui.controllers.PlayerBoardController;
 
+/**
+ * TODO: fare javadoc
+ */
 import java.beans.PropertyChangeEvent;
 
 public class FaithBFaithViewListener extends PlayerBoardViewChangeListener {

@@ -18,6 +18,9 @@ import java.util.List;
 import static it.polimi.ingsw.utils.Constants.MARKET_COLUMN_SIZE;
 import static it.polimi.ingsw.utils.Constants.MARKET_ROW_SIZE;
 
+/**
+ * Handles methods relative to fxml MarketBoard file
+ */
 public class MarketBoardController extends GenericController {
 
     private List<ImageView> marblePositionList;

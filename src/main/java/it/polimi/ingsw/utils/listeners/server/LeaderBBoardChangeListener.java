@@ -6,6 +6,9 @@ import it.polimi.ingsw.utils.messages.server.update.PlayerLeaderBBoardMessage;
 
 import java.beans.PropertyChangeEvent;
 
+/**
+ * TODO: fare javadoc
+ */
 public class LeaderBBoardChangeListener extends ModelChangeListener {
 
     public LeaderBBoardChangeListener(VirtualView virtualView) {

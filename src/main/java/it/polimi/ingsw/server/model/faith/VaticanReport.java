@@ -2,6 +2,9 @@ package it.polimi.ingsw.server.model.faith;
 
 import java.io.Serializable;
 
+/**
+ * Handles methods relative to the vatican report
+ */
 public class VaticanReport implements Serializable {
 
     private final int min, max;

@@ -4,6 +4,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests methods of VaticanReport class
+ */
 public class VaticanReportTest {
 
     /**

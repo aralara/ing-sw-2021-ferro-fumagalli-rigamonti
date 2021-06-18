@@ -8,6 +8,9 @@ import java.text.Collator;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * TODO: fare javadoc
+ */
 public class GameLibrary {
 
     public static final String LIBRARY_PATH = "./saves/";

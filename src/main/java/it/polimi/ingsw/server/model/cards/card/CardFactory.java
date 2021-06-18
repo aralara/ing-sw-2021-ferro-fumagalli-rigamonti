@@ -14,6 +14,9 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Loads cards from file
+ */
 public class CardFactory {
 
     private static CardFactory cardFactory;

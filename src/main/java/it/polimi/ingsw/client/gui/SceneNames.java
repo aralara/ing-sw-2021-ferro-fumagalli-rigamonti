@@ -1,5 +1,8 @@
 package it.polimi.ingsw.client.gui;
 
+/**
+ * Names of loaded fxml file
+ */
 public enum SceneNames {
     LOADING("/fxml/Loading.fxml"),
     CONNECTION_MENU("/fxml/ConnectionMenu.fxml"),

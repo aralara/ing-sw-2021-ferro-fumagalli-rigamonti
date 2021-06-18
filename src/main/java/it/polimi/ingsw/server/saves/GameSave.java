@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.StringTokenizer;
 
+/**
+ * TODO: fare javadoc
+ */
 public class GameSave implements Serializable {
 
     private final List<String> players;

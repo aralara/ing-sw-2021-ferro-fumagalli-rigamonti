@@ -2,8 +2,6 @@ package it.polimi.ingsw.server.model.cards.card;
 
 import it.polimi.ingsw.server.model.FileNames;
 import it.polimi.ingsw.server.model.boards.LorenzoBoard;
-import it.polimi.ingsw.server.model.boards.Player;
-import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.server.model.cards.deck.DevelopmentDeck;
 import it.polimi.ingsw.server.model.games.SingleGame;
 import org.junit.Test;
@@ -13,6 +11,9 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests methods of LorenzoDev class TODO: fare javadoc
+ */
 public class LorenzoDevTest {
 
     @Test

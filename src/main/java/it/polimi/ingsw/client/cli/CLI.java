@@ -20,6 +20,9 @@ import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.stream.Collectors;
 
+/**
+ * Handles client command line interface version
+ */
 public class CLI extends ClientController {
 
     private boolean idle;

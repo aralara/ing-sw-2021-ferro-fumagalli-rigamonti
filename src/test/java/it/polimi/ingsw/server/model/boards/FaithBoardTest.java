@@ -11,6 +11,9 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests methods of FaithBoard class
+ */
 public class FaithBoardTest {
 
     /**

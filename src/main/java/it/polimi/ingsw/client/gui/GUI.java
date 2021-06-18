@@ -24,7 +24,9 @@ import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.stream.Collectors;
 
-
+/**
+ * Handles client graphical user interface version
+ */
 public class GUI extends ClientController {
 
     private final GUIApplication guiApplication;
@@ -273,7 +275,6 @@ public class GUI extends ClientController {
                     getController(SceneNames.PLAYER_BOARD)).setIsPlayerTurn(false));
         }
         if(resumeGame) { //to resume a game
-            //TODO: listeners?
             resumeGame=false;
             callPlatformRunLater(() -> ((PlayerBoardController) guiApplication.
                     getController(SceneNames.PLAYER_BOARD)).setIsPlayerTurn(isPlayerTurn()));

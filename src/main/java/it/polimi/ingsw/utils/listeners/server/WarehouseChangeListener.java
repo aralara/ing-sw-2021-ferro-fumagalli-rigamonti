@@ -7,6 +7,9 @@ import it.polimi.ingsw.utils.messages.server.update.PlayerWarehouseMessage;
 import java.beans.PropertyChangeEvent;
 import java.util.List;
 
+/**
+ * TODO: fare javadoc
+ */
 public class WarehouseChangeListener extends ModelChangeListener {
 
     public WarehouseChangeListener(VirtualView virtualView) {

@@ -4,6 +4,9 @@ import it.polimi.ingsw.server.model.storage.*;
 
 import java.util.List;
 
+/**
+ * Handles methods relative to the development card
+ */
 public class DevelopmentCard extends Card {
 
     private final int VP;

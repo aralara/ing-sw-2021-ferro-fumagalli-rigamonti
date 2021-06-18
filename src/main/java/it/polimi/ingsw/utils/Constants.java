@@ -1,5 +1,8 @@
 package it.polimi.ingsw.utils;
 
+/**
+ * TODO: fare javadoc
+ */
 public enum Constants {
 
     MIN_LOBBY_SIZE(1),

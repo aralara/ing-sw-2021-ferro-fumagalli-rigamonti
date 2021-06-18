@@ -1,5 +1,8 @@
 package it.polimi.ingsw.client.cli;
 
+/**
+ * TODO: fare javadoc
+ */
 public class MenuOption {
 
     private final String title;

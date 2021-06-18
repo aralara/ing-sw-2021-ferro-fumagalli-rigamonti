@@ -8,6 +8,9 @@ import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * TODO: fare javadoc
+ */
 public class ShelvesConfigurationMessage extends ClientActionMessage {
 
     private final List<Shelf> shelves;

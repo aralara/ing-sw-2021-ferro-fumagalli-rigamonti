@@ -2,6 +2,9 @@ package it.polimi.ingsw.utils;
 
 import java.util.Arrays;
 
+/**
+ * TODO: fare javadoc
+ */
 public enum TurnStatus {
 
     INVALID(0),

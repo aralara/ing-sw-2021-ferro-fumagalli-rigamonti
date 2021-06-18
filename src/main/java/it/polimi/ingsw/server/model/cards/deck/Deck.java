@@ -6,6 +6,9 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.IntStream;
 
+/**
+ * Handles methods relative to the deck
+ */
 public class Deck implements Iterable<Card>, Serializable {
 
     private final List<Card> cards;

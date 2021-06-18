@@ -7,6 +7,9 @@ import it.polimi.ingsw.server.model.storage.Storage;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles methods relative to the resource requirement
+ */
 public class RequirementRes implements Requirement {
 
     private final Resource resource;

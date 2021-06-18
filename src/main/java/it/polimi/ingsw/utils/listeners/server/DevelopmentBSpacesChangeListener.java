@@ -7,6 +7,9 @@ import it.polimi.ingsw.utils.messages.server.update.PlayerDevelopmentBSpacesMess
 import java.beans.PropertyChangeEvent;
 import java.util.List;
 
+/**
+ * TODO: fare javadoc
+ */
 public class DevelopmentBSpacesChangeListener extends ModelChangeListener {
 
     public DevelopmentBSpacesChangeListener(VirtualView virtualView) {

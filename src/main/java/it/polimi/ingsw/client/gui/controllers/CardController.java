@@ -5,6 +5,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 
+/**
+ * Handles methods relative to fxml Card file
+ */
 public class CardController extends GenericController{
 
     @FXML private ImageView cardToPlace_imageView;

@@ -4,6 +4,9 @@ import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.utils.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
 
+/**
+ * TODO: fare javadoc
+ */
 public class PlayerLeaderBBoardMessage implements ServerUpdateMessage {
 
     private final Deck board;

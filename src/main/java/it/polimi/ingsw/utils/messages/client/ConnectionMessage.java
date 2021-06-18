@@ -2,6 +2,9 @@ package it.polimi.ingsw.utils.messages.client;
 
 import it.polimi.ingsw.client.ClientController;
 
+/**
+ * TODO: fare javadoc
+ */
 public class ConnectionMessage extends ClientSetupMessage {
 
     private final String nickname;

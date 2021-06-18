@@ -1,5 +1,8 @@
 package it.polimi.ingsw.utils.listeners.server;
 
+/**
+ * TODO: fare javadoc
+ */
 public class PlayerProperty {
 
     private final String nickname;

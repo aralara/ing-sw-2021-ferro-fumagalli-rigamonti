@@ -5,6 +5,9 @@ import it.polimi.ingsw.utils.messages.server.update.PlayerFaithBFaithMessage;
 
 import java.beans.PropertyChangeEvent;
 
+/**
+ * TODO: fare javadoc
+ */
 public class FaithBFaithListener extends ModelChangeListener {
 
     public FaithBFaithListener(VirtualView virtualView) {

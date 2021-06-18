@@ -8,6 +8,9 @@ import it.polimi.ingsw.utils.listeners.server.PlayerListened;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Handles methods to update the leader board
+ */
 public class LeaderBoard extends PlayerListened implements Serializable {
 
     private final Deck hand;

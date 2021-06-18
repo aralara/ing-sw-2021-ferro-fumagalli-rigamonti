@@ -9,6 +9,9 @@ import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 import it.polimi.ingsw.utils.messages.server.action.GameSavesMessage;
 
+/**
+ * TODO: fare javadoc
+ */
 public class SaveInteractionMessage extends ClientActionMessage {
 
     private final GameSave save;

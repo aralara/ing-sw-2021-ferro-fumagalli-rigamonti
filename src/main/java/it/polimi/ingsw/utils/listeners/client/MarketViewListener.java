@@ -6,6 +6,9 @@ import it.polimi.ingsw.client.structures.MarketView;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ * TODO: fare javadoc
+ */
 public class MarketViewListener implements PropertyChangeListener {
 
     private final MarketBoardController marketBoardController;

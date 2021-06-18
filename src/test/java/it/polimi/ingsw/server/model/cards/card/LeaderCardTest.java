@@ -1,7 +1,6 @@
 package it.polimi.ingsw.server.model.cards.card;
 
 import it.polimi.ingsw.server.model.cards.ability.AbilityDiscount;
-import it.polimi.ingsw.server.model.cards.ability.SpecialAbility;
 import it.polimi.ingsw.server.model.cards.requirement.*;
 import it.polimi.ingsw.server.model.storage.*;
 
@@ -11,6 +10,9 @@ import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+/**
+ * Tests methods of LeaderCard class TODO: fare javadoc
+ */
 public class LeaderCardTest {
 
     private static final int VP = 9;

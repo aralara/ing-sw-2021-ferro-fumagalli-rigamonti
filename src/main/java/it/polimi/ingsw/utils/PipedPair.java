@@ -2,6 +2,9 @@ package it.polimi.ingsw.utils;
 
 import java.io.*;
 
+/**
+ * TODO: fare javadoc
+ */
 public class PipedPair {
 
     private final PipedOutputStream pipeOut;

@@ -13,6 +13,9 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+/**
+ * Tests methods of DevelopmentBoard class
+ */
 public class DevelopmentBoardTest {
 
     /**

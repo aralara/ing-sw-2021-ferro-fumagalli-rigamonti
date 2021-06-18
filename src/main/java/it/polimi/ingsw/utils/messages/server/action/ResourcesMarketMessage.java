@@ -6,6 +6,9 @@ import it.polimi.ingsw.server.model.storage.ResourceType;
 
 import java.util.List;
 
+/**
+ * TODO: fare javadoc
+ */
 public class ResourcesMarketMessage extends ResourcesMessage implements ServerActionMessage {
 
     public List<ResourceType> availableAbilities;
