@@ -10,7 +10,7 @@ import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 import it.polimi.ingsw.utils.messages.server.action.GameSavesMessage;
 
 /**
- * TODO: fare javadoc
+ * Client message that operates on a saved game
  */
 public class SaveInteractionMessage extends ClientActionMessage {
 

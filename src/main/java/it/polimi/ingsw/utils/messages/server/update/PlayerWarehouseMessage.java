@@ -7,7 +7,7 @@ import it.polimi.ingsw.server.model.storage.Shelf;
 import java.util.List;
 
 /**
- * TODO: fare javadoc
+ * Server update message for the player's warehouse
  */
 public class PlayerWarehouseMessage implements ServerUpdateMessage {
 

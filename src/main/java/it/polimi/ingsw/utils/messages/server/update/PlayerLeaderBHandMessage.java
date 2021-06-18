@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO: fare javadoc
+ * Server update message for the player's leaderboard hand
  */
 public class PlayerLeaderBHandMessage implements HiddenMessage, ServerUpdateMessage {
 

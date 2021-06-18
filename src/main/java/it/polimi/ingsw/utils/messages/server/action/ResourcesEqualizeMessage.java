@@ -7,7 +7,7 @@ import it.polimi.ingsw.utils.messages.client.ConfirmReadyMessage;
 import java.util.List;
 
 /**
- * TODO: fare javadoc
+ * Server message that notifies the client that he needs to choose some resources at the start of the game
  */
 public class ResourcesEqualizeMessage extends ResourcesMessage implements ServerActionMessage {
 

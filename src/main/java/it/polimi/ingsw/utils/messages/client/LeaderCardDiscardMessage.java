@@ -8,7 +8,7 @@ import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 import java.util.List;
 
 /**
- * TODO: fare javadoc
+ * Client message that discards leader cards from the player's hand
  */
 public class LeaderCardDiscardMessage extends LeaderCardMessageClient {
 

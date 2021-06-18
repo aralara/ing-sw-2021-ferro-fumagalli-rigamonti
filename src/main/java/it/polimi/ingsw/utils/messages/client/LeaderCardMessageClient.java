@@ -5,7 +5,7 @@ import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import java.util.List;
 
 /**
- * TODO: fare javadoc
+ * Generic client action message that contains a list of leaders
  */
 public abstract class LeaderCardMessageClient extends ClientActionMessage {
 

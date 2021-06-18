@@ -5,7 +5,7 @@ import it.polimi.ingsw.client.structures.MarketView;
 import it.polimi.ingsw.server.model.market.*;
 
 /**
- * TODO: fare javadoc
+ * Server update message for the game's market
  */
 public class MarketMessage implements ServerUpdateMessage {
 

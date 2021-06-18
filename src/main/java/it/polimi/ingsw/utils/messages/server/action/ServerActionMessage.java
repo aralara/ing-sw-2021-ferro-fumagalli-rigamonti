@@ -4,7 +4,7 @@ import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.utils.messages.Message;
 
 /**
- * TODO: fare javadoc
+ * Generic server message that represents an action
  */
 public interface ServerActionMessage extends Message {
     void doAction(ClientController client);

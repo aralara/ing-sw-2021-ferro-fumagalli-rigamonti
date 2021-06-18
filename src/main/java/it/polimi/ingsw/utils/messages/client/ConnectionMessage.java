@@ -3,7 +3,7 @@ package it.polimi.ingsw.utils.messages.client;
 import it.polimi.ingsw.client.ClientController;
 
 /**
- * TODO: fare javadoc
+ * Client message that establishes a connection to the server
  */
 public class ConnectionMessage extends ClientSetupMessage {
 

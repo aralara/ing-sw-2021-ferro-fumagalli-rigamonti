@@ -7,7 +7,7 @@ import it.polimi.ingsw.server.model.storage.ResourceType;
 import java.util.List;
 
 /**
- * TODO: fare javadoc
+ * Server update message for the player's discount ability
  */
 public class PlayerAbilityDiscountsMessage implements ServerUpdateMessage {
 

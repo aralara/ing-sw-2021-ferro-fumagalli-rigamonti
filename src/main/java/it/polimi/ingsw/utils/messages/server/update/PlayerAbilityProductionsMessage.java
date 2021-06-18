@@ -7,7 +7,7 @@ import it.polimi.ingsw.server.model.storage.Production;
 import java.util.List;
 
 /**
- * TODO: fare javadoc
+ * Server update message for the player's production ability
  */
 public class PlayerAbilityProductionsMessage implements ServerUpdateMessage {
 

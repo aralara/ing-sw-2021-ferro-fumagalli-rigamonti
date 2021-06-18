@@ -7,7 +7,7 @@ import it.polimi.ingsw.server.model.cards.deck.Deck;
 import java.util.List;
 
 /**
- * TODO: fare javadoc
+ * Server update message for the player's development spaces
  */
 public class PlayerDevelopmentBSpacesMessage implements ServerUpdateMessage {
 

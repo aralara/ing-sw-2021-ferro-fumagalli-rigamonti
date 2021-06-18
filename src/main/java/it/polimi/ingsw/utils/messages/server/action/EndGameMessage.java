@@ -6,7 +6,7 @@ import it.polimi.ingsw.server.model.boards.Player;
 import java.util.List;
 
 /**
- * TODO: fare javadoc
+ * Server message that notifies the client of the game's end
  */
 public class EndGameMessage implements ServerActionMessage {
 

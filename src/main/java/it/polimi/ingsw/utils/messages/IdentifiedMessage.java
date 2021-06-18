@@ -3,7 +3,7 @@ package it.polimi.ingsw.utils.messages;
 import java.util.UUID;
 
 /**
- * TODO: fare javadoc
+ * Generic message that needs to be tracked and/or associated to an ACK message
  */
 public class IdentifiedMessage implements Message {
 

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server;
 
+import it.polimi.ingsw.client.cli.GraphicalCLI;
 import it.polimi.ingsw.server.controller.GameHandler;
 import it.polimi.ingsw.server.saves.GameLibrary;
 import it.polimi.ingsw.server.view.VirtualView;
@@ -45,6 +46,9 @@ public class Server {
      * @param args Arguments
      */
     public static void main(String[] args) {
+
+        GraphicalCLI.printlnString("Master of Renaissance: Server version");
+
         Server server = new Server();
 
         try {
@@ -52,7 +56,6 @@ public class Server {
             server.running = true;
             System.out.println("Server started");
         } catch (IOException e) {
-            System.out.println("Error! Cannot open server socket");
             System.exit(1);
             return;
         }

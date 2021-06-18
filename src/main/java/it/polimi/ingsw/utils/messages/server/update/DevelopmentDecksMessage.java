@@ -7,7 +7,7 @@ import it.polimi.ingsw.server.model.cards.deck.DevelopmentDeck;
 import java.util.List;
 
 /**
- * TODO: fare javadoc
+ * Server update message for the game's development decks
  */
 public class DevelopmentDecksMessage implements ServerUpdateMessage {
 

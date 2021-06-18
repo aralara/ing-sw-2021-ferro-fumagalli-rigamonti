@@ -5,7 +5,7 @@ import it.polimi.ingsw.utils.exceptions.NotExistingNicknameException;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
 
 /**
- * TODO: fare javadoc
+ * Server update message for the player's leaderboard board
  */
 public class PlayerLeaderBBoardMessage implements ServerUpdateMessage {
 

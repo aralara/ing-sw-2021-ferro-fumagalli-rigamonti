@@ -11,7 +11,7 @@ import it.polimi.ingsw.utils.messages.server.action.ResourcesMarketMessage;
 import java.util.List;
 
 /**
- * TODO: fare javadoc
+ * Client message that selects a marble position to take resources from the market
  */
 public class SelectMarketMessage extends ClientActionMessage {
 

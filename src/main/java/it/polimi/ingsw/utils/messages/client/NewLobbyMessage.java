@@ -3,7 +3,7 @@ package it.polimi.ingsw.utils.messages.client;
 import it.polimi.ingsw.client.ClientController;
 
 /**
- * TODO: fare javadoc
+ * Client message that chooses a size for a new lobby
  */
 public class NewLobbyMessage extends ClientSetupMessage {
 

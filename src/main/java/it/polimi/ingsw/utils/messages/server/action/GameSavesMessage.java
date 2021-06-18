@@ -6,7 +6,7 @@ import it.polimi.ingsw.server.saves.GameSave;
 import java.util.List;
 
 /**
- * TODO: fare javadoc
+ * Server message that offers the available saved games to the client
  */
 public class GameSavesMessage implements ServerActionMessage {
 

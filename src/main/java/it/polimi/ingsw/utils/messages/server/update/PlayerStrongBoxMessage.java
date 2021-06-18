@@ -7,7 +7,7 @@ import it.polimi.ingsw.server.model.storage.Resource;
 import java.util.List;
 
 /**
- * TODO: fare javadoc
+ * Server update message for the player's strongbox
  */
 public class PlayerStrongBoxMessage implements ServerUpdateMessage {
 

@@ -6,9 +6,9 @@ import it.polimi.ingsw.utils.messages.Message;
 import java.util.List;
 
 /**
- * TODO: fare javadoc
+ * Generic server message that contains a list of resources
  */
-public abstract class ResourcesMessage implements Message {
+public abstract class ResourcesMessage implements Message { //TODO: ha senso estenderlo al di fuori dei messaggi di azione e del server?
 
     private final List<Resource> resources;
 

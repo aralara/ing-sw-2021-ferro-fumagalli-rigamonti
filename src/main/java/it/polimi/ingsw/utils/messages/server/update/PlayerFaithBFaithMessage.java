@@ -4,7 +4,7 @@ import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.utils.exceptions.NotExistingNicknameException;
 
 /**
- * TODO: fare javadoc
+ * Server update message for the player's faith
  */
 public class PlayerFaithBFaithMessage implements ServerUpdateMessage {
 

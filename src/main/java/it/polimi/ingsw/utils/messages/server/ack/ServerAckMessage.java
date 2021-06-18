@@ -7,7 +7,7 @@ import it.polimi.ingsw.utils.messages.client.ClientMessage;
 import java.util.UUID;
 
 /**
- * TODO: fare javadoc
+ * Server message that serves as an ACK or NACK to a client message
  */
 public class ServerAckMessage extends AckMessage {
 

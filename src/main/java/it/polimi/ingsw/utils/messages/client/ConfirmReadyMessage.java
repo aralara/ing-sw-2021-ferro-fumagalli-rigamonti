@@ -6,7 +6,7 @@ import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 
 /**
- * TODO: fare javadoc
+ * Client message that notifies the server when the player is ready
  */
 public class ConfirmReadyMessage extends ClientActionMessage {
 

@@ -3,7 +3,7 @@ package it.polimi.ingsw.utils.messages.server.update;
 import it.polimi.ingsw.client.ClientController;
 
 /**
- * TODO: fare javadoc
+ * Server update message for Lorenzo's faith
  */
 public class LorenzoFaithMessage implements ServerUpdateMessage {
 

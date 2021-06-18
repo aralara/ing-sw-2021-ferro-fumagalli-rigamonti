@@ -7,7 +7,7 @@ import it.polimi.ingsw.server.model.storage.ResourceType;
 import java.util.List;
 
 /**
- * TODO: fare javadoc
+ * Server message that gives to the player the resources he selected from the market
  */
 public class ResourcesMarketMessage extends ResourcesMessage implements ServerActionMessage {
 

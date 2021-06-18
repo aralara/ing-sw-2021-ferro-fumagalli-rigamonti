@@ -5,7 +5,7 @@ import it.polimi.ingsw.client.structures.FaithTrackView;
 import it.polimi.ingsw.server.model.faith.*;
 
 /**
- * TODO: fare javadoc
+ * Server setup message for the game's faith track
  */
 public class FaithTrackMessage implements ServerUpdateMessage {
 

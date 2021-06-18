@@ -3,7 +3,7 @@ package it.polimi.ingsw.utils.messages;
 import java.util.UUID;
 
 /**
- * TODO: fare javadoc
+ * Generic acknowledgment message
  */
 public class AckMessage extends IdentifiedMessage {
 

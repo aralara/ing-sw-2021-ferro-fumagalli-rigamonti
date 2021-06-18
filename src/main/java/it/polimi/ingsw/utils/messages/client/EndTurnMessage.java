@@ -11,7 +11,7 @@ import it.polimi.ingsw.utils.messages.server.action.LastRoundMessage;
 import it.polimi.ingsw.utils.messages.server.action.StartTurnMessage;
 
 /**
- * TODO: fare javadoc
+ * Client message that ends a turn
  */
 public class EndTurnMessage extends ClientActionMessage {
 

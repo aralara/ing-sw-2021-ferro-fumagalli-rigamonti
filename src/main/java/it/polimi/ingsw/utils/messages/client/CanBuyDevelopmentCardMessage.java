@@ -6,7 +6,7 @@ import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 
 /**
- * TODO: fare javadoc
+ * Client message that checks if it is possible to buy a development card
  */
 public class CanBuyDevelopmentCardMessage extends ClientActionMessage {
 

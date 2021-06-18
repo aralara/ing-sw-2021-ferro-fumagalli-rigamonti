@@ -9,7 +9,7 @@ import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 import java.util.List;
 
 /**
- * TODO: fare javadoc
+ * Client message that identifies the resources' locations in order to buy a development card
  */
 public class RequestResourcesDevMessage extends CanBuyDevelopmentCardMessage {
 

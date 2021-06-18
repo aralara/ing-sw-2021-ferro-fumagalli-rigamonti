@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO: fare javadoc
+ * Client message that rearranges the shelves' configuration for the player's warehouse
  */
 public class ShelvesConfigurationMessage extends ClientActionMessage {
 

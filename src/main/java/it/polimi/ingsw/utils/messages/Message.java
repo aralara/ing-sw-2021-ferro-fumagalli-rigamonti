@@ -3,7 +3,6 @@ package it.polimi.ingsw.utils.messages;
 import java.io.Serializable;
 
 /**
- * TODO: fare javadoc
+ * Generic message
  */
-public interface Message extends Serializable {
-}
+public interface Message extends Serializable { }

@@ -4,7 +4,7 @@ import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.server.model.cards.card.LorenzoCard;
 
 /**
- * TODO: fare javadoc
+ * Server message that notifies the player of which card Lorenzo pulled from his deck
  */
 public class LorenzoCardMessage implements ServerActionMessage {
 

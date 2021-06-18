@@ -5,7 +5,7 @@ import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 
 /**
- * TODO: fare javadoc
+ * Client message that tries to save the current game
  */
 public class SaveMessage extends ClientActionMessage {
 

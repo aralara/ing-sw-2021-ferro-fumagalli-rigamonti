@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO: fare javadoc
+ * Server setup message for all of the players' playerboards
  */
 public class PlayerBoardSetupMessage implements HiddenMessage, ServerUpdateMessage {
 

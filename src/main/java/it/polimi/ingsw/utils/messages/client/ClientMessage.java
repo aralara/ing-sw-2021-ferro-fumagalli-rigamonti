@@ -4,7 +4,7 @@ import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.utils.messages.IdentifiedMessage;
 
 /**
- * TODO: fare javadoc
+ * Generic client message
  */
 public abstract class ClientMessage extends IdentifiedMessage {
 

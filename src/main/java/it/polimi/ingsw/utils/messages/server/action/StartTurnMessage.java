@@ -3,7 +3,7 @@ package it.polimi.ingsw.utils.messages.server.action;
 import it.polimi.ingsw.client.ClientController;
 
 /**
- * TODO: fare javadoc
+ * Server message that notifies the player when it's the turn of a particular player
  */
 public class StartTurnMessage implements ServerActionMessage {
 
@@ -14,10 +14,6 @@ public class StartTurnMessage implements ServerActionMessage {
         this.playingNickname = playingNickname;
     }
 
-
-    public String getPlayingNickname() {
-        return playingNickname;
-    }
 
     @Override
     public void doAction(ClientController client) {

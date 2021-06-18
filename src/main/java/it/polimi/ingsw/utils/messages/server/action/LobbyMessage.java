@@ -3,7 +3,7 @@ package it.polimi.ingsw.utils.messages.server.action;
 import it.polimi.ingsw.client.ClientController;
 
 /**
- * TODO: fare javadoc
+ * Server message that gives information to the player about the lobby size
  */
 public class LobbyMessage implements ServerActionMessage {
 

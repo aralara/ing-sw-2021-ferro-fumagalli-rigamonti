@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO: fare javadoc
+ * Client message that activates productions
  */
 public class CanActivateProductionsMessage extends ClientActionMessage {
 
