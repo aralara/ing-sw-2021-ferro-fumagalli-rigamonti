@@ -13,16 +13,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * TODO: fare javadoc
+ * Controller that handles the game's flow by calling the macro-methods of the model
  */
 public class Controller {
 
-    private final int playerNumber;
     private final Game game;
 
 
     public Controller(int playerNumber) {
-        this.playerNumber = playerNumber;
         if(playerNumber == 1)
             game = new SingleGame();
         else
@@ -31,7 +29,6 @@ public class Controller {
 
     public Controller(Game game) {
         this.game = game;
-        playerNumber = game.getPlayerNumber();
     }
 
 

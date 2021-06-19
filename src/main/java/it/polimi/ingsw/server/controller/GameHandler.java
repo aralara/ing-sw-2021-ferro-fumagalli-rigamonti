@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
- * TODO: fare javadoc
+ * Class that handles messages, connection and the setup/end of the game
  */
 public class GameHandler implements Runnable {
 
