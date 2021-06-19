@@ -8,10 +8,13 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Tests methods of LorenzoFaith class TODO: fare javadoc
+ * Tests methods of LorenzoFaith class
  */
 public class LorenzoFaithTest {
 
+    /**
+     * Tests Lorenzo card activation
+     */
     @Test
     public void testActivateLorenzo() {
         SingleGame game = new SingleGame();
@@ -19,7 +22,7 @@ public class LorenzoFaithTest {
         lorenzoBoard.initLorenzoDeck(FileNames.LORENZO_DEV_FILE.value(), FileNames.LORENZO_FAITH_FILE.value());
         LorenzoFaith lorenzoFaith = new LorenzoFaith(1, true, 1);
         assertEquals("Lorenzo gains 1 faith and shuffles his deck\n",
-                lorenzoFaith.toString());;
+                lorenzoFaith.toString());
         assertEquals(0, lorenzoBoard.getFaith());
         lorenzoFaith.activateLorenzo(lorenzoBoard);
         assertEquals(1, lorenzoBoard.getFaith());

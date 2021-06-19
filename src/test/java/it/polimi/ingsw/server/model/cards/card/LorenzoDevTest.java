@@ -12,10 +12,13 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 /**
- * Tests methods of LorenzoDev class TODO: fare javadoc
+ * Tests methods of LorenzoDev class
  */
 public class LorenzoDevTest {
 
+    /**
+     * Tests a Lorenzo card activation
+     */
     @Test
     public void testActivateLorenzo() {
         SingleGame game = new SingleGame();

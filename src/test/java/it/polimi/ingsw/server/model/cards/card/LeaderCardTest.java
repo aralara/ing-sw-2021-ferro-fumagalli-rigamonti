@@ -11,7 +11,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Tests methods of LeaderCard class TODO: fare javadoc
+ * Tests methods of LeaderCard class
  */
 public class LeaderCardTest {
 
@@ -38,6 +38,9 @@ public class LeaderCardTest {
             ability
     );
 
+    /**
+     * Tests getters for a leader card
+     */
     @Test
     public void testGetters(){
         assertEquals(VP, leadCard.getVP());
@@ -45,6 +48,9 @@ public class LeaderCardTest {
         assertEquals(ability, leadCard.getAbility());
     }
 
+    /**
+     * Tests method that turn a leader card into a String
+     */
     @Test
     public void testToString(){
         LeaderCard leaderCard = new LeaderCard();

@@ -2,7 +2,7 @@ package it.polimi.ingsw.server.model.cards.deck;
 
 import org.junit.Test;
 /**
- * Tests methods of DevelopmentDeck class TODO: fare javadoc
+ * Tests methods of DevelopmentDeck class TODO: fare javadoc e test
  */
 public class DevelopmentDeckTest {
 

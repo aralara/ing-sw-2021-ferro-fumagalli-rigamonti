@@ -12,7 +12,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Tests methods of Deck class TODO: fare javadoc
+ * Tests methods of Deck class
  */
 public class DeckTest {
 
@@ -31,6 +31,11 @@ public class DeckTest {
         return myEnum.getEnumConstants()[index];
     }
 
+    /**
+     * Create a list of  random development cards
+     * @param n number of cards to be created
+     * @return Returns a list of cards created
+     */
     private List<DevelopmentCard> createRandomDevelopmentCards(int n) {
         Random rand = new Random();
         List<DevelopmentCard> l =  new ArrayList<>();
@@ -60,7 +65,9 @@ public class DeckTest {
         return l;
     }
 
-    //TODO: Test solo con DevelopmentCard
+    /**
+     * Tests methods that checks if a deck is empty
+     */
     @Test
     public void testIsEmpty() {
         Deck d0 = new Deck();
@@ -72,6 +79,9 @@ public class DeckTest {
         assertFalse(d2.isEmpty());
     }
 
+    /**
+     * Tests getters for a card
+     */
     @Test
     public void testGet() {
         List<DevelopmentCard> dCards = createRandomDevelopmentCards(10);
@@ -85,6 +95,9 @@ public class DeckTest {
         }
     }
 
+    /**
+     * Tests methods that get a card's index
+     */
     @Test
     public void testIndexOf() {
         List<DevelopmentCard> dCards = createRandomDevelopmentCards(10);
@@ -94,6 +107,9 @@ public class DeckTest {
             assertEquals(deck.get(deck.indexOf(deck.get(i))), deck.get(i));
     }
 
+    /**
+     * Tests methods that gets cards from a deck
+     */
     @Test
     public void testGetCards() {
         List<DevelopmentCard> dCards = createRandomDevelopmentCards(10);
@@ -104,6 +120,9 @@ public class DeckTest {
             assertEquals(dCards.get(i), cards.get(i));
     }
 
+    /**
+     * Tests a method that extract a card from a deck
+     */
     @Test
     public void testExtract() {
         List<DevelopmentCard> dCards = createRandomDevelopmentCards(4);
@@ -124,6 +143,9 @@ public class DeckTest {
         assertEquals(dCards.get(3), extracted.get(0));
     }
 
+    /**
+     * Tests a method that add a card on the top of a deck
+     */
     @Test
     public void testAddOnTop() {
         List<DevelopmentCard> cards = createRandomDevelopmentCards(2);
@@ -143,6 +165,9 @@ public class DeckTest {
         assertEquals(added, fromDeck2);
     }
 
+    /**
+     * Tests a method that adds a ard to a deck
+     */
     @Test
     public void testAdd() {
         List<DevelopmentCard> cards = createRandomDevelopmentCards(2);
@@ -162,6 +187,9 @@ public class DeckTest {
         assertEquals(added, fromDeck2);
     }
 
+    /**
+     * Tests a methods that returns the size of a deck
+     */
     @Test
     public void testSize() {
         Deck deck0 = new Deck();
@@ -171,6 +199,9 @@ public class DeckTest {
         assertEquals(deck1.size(), 10);
     }
 
+    /**
+     * Test for the iterator
+     */
     @Test
     public void testIterator() {
         int i = 0;

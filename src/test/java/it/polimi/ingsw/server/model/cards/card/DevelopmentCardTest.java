@@ -9,7 +9,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Tests methods of DevelopmentCard class TODO: fare javadoc
+ * Tests methods of DevelopmentCard class
  */
 public class DevelopmentCardTest {
 
@@ -42,6 +42,9 @@ public class DevelopmentCardTest {
             cost
     );
 
+    /**
+     * Tests getters for a development card
+     */
     @Test
     public void testGetters() {
         assertEquals(VP, devCard.getVP());
@@ -51,6 +54,9 @@ public class DevelopmentCardTest {
         assertEquals(cost, devCard.getCost());
     }
 
+    /**
+     * Tests methods that turn a development card into a String
+     */
     @Test
     public void testToString(){
         DevelopmentCard developmentCard = new DevelopmentCard();
