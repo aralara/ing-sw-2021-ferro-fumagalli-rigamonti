@@ -24,6 +24,15 @@ public class Warehouse extends PlayerListened implements Storage {
             shelves.add(new Shelf(i + 1));
     }
 
+    /**
+     * Warehouse constructor from a list of shelves
+     */
+    public Warehouse(List<Shelf> shelves) {
+        this.shelves = new ArrayList<>();
+        for(Shelf shelf : shelves)
+            this.shelves.add(shelf.makeClone());
+    }
+
 
     /**
      * Checks if a configuration of shelves is valid in order to be added to a warehouse
@@ -110,6 +119,39 @@ public class Warehouse extends PlayerListened implements Storage {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Returns a list of resources containing the difference between the warehouse and a list of shelves
+     * @param addedResources List of resources containing the new resources
+     * @return Returns a list of resources, returns null if the list would contain negative values
+     */
+    public List<Resource> getAddedResources(List<Resource> addedResources) {
+        List<Resource> originalResources = getList();
+        List<Resource> difference = new ArrayList<>();
+
+        if(!originalResources.stream().allMatch(or -> or.getQuantity() == 0 || addedResources.stream().anyMatch(ar ->
+                ar.getResourceType() == or.getResourceType() && ar.getQuantity() >= or.getQuantity())))
+            return null;
+
+        for(Resource ar : addedResources) {
+            boolean resolved = false;
+            for(Resource or : originalResources) {
+                if (ar.getResourceType() == or.getResourceType()) {
+                    resolved = true;
+                    int resDiff = ar.getQuantity() - or.getQuantity();
+                    if(resDiff > 0) {
+                        difference.add(new Resource(ar.getResourceType(), resDiff));
+                        break;
+                    }
+                    else if(resDiff < 0)
+                        return null;
+                }
+            }
+            if(!resolved)   // If a new type of resource has been added, it's calculated separately
+                difference.add(new Resource(ar.getResourceType(), ar.getQuantity()));
+        }
+        return difference;
     }
 
     @Override

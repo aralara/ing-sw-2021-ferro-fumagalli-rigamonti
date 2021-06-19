@@ -54,10 +54,11 @@ public interface Storage extends Serializable {
      * @param model Model list
      * @param modeled List that needs to be checked
      * @param possibleWildcards Possible wildcards that blank resources can be turned into
+     * @param allowEmptyWildcards Flag that determines if a wildcard in the model list can result into nothing inside the modeled list
      * @return Returns true if modeled can be obtained from model, false otherwise
      */
     static boolean checkListModeled(List<Resource> model, List<Resource> modeled,
-                                           List<ResourceType> possibleWildcards) {
+                                           List<ResourceType> possibleWildcards, boolean allowEmptyWildcards) {
         List<Resource> c_model = new ArrayList<>();
         List<Resource> c_modeled = new ArrayList<>();
         model.forEach(r -> c_model.add(r.makeClone()));
@@ -71,10 +72,10 @@ public interface Storage extends Serializable {
             // Subtracts all of the non-wildcard generated resources from the modeled list
             for(Resource r : c_model)
                 if (r.getResourceType() != ResourceType.WILDCARD) {
-                    Resource modeled_resource = c_modeled.stream()
+                    Resource modeledResource = c_modeled.stream()
                             .filter(r2 -> r.getResourceType() == r2.getResourceType()).findFirst().orElseThrow();
-                    if (r.getQuantity() >= modeled_resource.getQuantity())
-                        modeled_resource.setQuantity(modeled_resource.getQuantity() - r.getQuantity());
+                    if (r.getQuantity() <= modeledResource.getQuantity())
+                        modeledResource.setQuantity(modeledResource.getQuantity() - r.getQuantity());
                     else
                         return false;
                 }
@@ -82,12 +83,19 @@ public interface Storage extends Serializable {
             for(Resource r : c_model)
                 if (r.getResourceType() == ResourceType.WILDCARD)
                     while(r.getQuantity() > 0) {
-                        Resource modeled_resource = c_modeled.stream()
+                        Optional<Resource> modeledResourceOpt = c_modeled.stream()
                                 .filter(r2 -> r2.getQuantity() > 0 && possibleWildcards
-                                        .stream().anyMatch(rt -> rt == r2.getResourceType())).findFirst().orElseThrow();
-                        modeled_resource.setQuantity(modeled_resource.getQuantity() - 1);
-                        r.setQuantity(r.getQuantity() - 1);
+                                        .stream().anyMatch(rt -> rt == r2.getResourceType())).findFirst();
+
+                        if(allowEmptyWildcards && modeledResourceOpt.isEmpty())
+                            break;
+                        else {
+                            Resource modeledResource = modeledResourceOpt.orElseThrow();
+                            modeledResource.setQuantity(modeledResource.getQuantity() - 1);
+                            r.setQuantity(r.getQuantity() - 1);
+                        }
                     }
+
             // Checks if the modeled list has any excess resources
             if(c_modeled.stream().anyMatch(r -> r.getQuantity() > 0))
                 return false;

@@ -117,10 +117,10 @@ public abstract class Game implements Serializable {
     public boolean discardLeaders(int player, List<LeaderCard> leaderCards, boolean setup) {
         PlayerBoard playerBoard = playerBoards.get(player);
         List<Card> playerHand = playerBoard.getLeaderBoard().getHand().getCards();
-        if((setup && playerHand.size() != Constants.INITIAL_LEADER_CARDS.value()) ||                        //Checks if the discardLeaders is called during setup
-                (setup && leaderCards.size() != 2) ||                                                       //Checks (assuming setup) if the player discarded 2 cards
-                !leaderCards.stream().allMatch(c -> playerHand.stream().anyMatch(lc -> lc.equals(c))) ||    //Checks if the discarded cards are in the player's hand
-                !leaderCards.stream().allMatch(new HashSet<>()::add)                                        //Checks if the player wants to discard the same card
+        if((setup && playerHand.size() != Constants.INITIAL_LEADER_CARDS.value()) ||                        // Checks if the discardLeaders is called during setup
+                (setup && leaderCards.size() != 2) ||                                                       // Checks (assuming setup) if the player discarded 2 cards
+                !leaderCards.stream().allMatch(c -> playerHand.stream().anyMatch(lc -> lc.equals(c))) ||    // Checks if the discarded cards are in the player's hand
+                !leaderCards.stream().allMatch(new HashSet<>()::add)                                        // Checks if the player wants to discard the same card
         )
             return false;
         for(LeaderCard leaderCard : leaderCards) {
@@ -165,15 +165,27 @@ public abstract class Game implements Serializable {
      * @param extra List of resources to be discarded and faith to be added
      * @return Returns true if the resources are added correctly, false otherwise
      */
-    public boolean addResourcesToWarehouse(int player, List<Shelf> shelves, List<Resource> extra) { //TODO: controllare che il giocatore possa aggiungerle dato lo stato corrente (dopo aver preso dal market o dopo aver equalizzato)
+    public boolean addResourcesToWarehouse(int player, List<Shelf> shelves, List<Resource> extra) { //TODO: controllare che il giocatore possa aggiungerle dato lo stato corrente (dopo aver equalizzato)
         PlayerBoard playerboard = playerBoards.get(player);
-        boolean success = playerboard.getWarehouse().changeConfiguration(shelves);
-        if(extra.size() > 0 && success) {
+        List<Resource> addedResources = new Warehouse(shelves).getList();
+        extra.forEach(r -> addedResources.add(r.makeClone()));
+        List<Resource> resourceDiff =
+                playerboard.getWarehouse().getAddedResources(Storage.mergeResourceList(addedResources));
+
+        if((market.getLastTook() != null && !Storage.checkListModeled(market.getLastTook(),resourceDiff,
+                playerboard.getAbilityMarbles(), true)) ||                                  // If the player took resources from the market, checks if the marbles could have generated the added resources
+                !playerboard.getWarehouse().changeConfiguration(shelves))                                   // Changes the warehouse configuration if it's possible
+            return false;
+
+        if(market.getLastTook() != null)
+            market.resetLastTook();
+
+        if (extra.size() > 0) {
             playerboard.getFaithBoard().takeFaithFromResources(extra);
             addFaithAll(player, Storage.getTotalQuantity(extra));
         }
         checkFaith();
-        return success;
+        return true;
     }
 
     /**
@@ -253,11 +265,11 @@ public abstract class Game implements Serializable {
         List<Resource> cost = Storage.calculateDiscount(card.getCost(), playerBoard.getAbilityDiscounts());
         requests.forEach(rr -> totalRequests.addAll(rr.getList()));
         if(!playerBoard.isTurnPlayed()) {
-            if (canBuyDevCard(player, card, space) &&                                                       //Basic checks
-                    Storage.checkContainedResources(Storage.mergeResourceList(cost), totalRequests) &&      //Checks if the resources in the requests can buy the card
+            if (canBuyDevCard(player, card, space) &&                                                       // Basic checks
+                    Storage.checkContainedResources(Storage.mergeResourceList(cost), totalRequests) &&      // Checks if the resources in the requests can buy the card
                     developmentDecks.stream()
-                            .anyMatch(dd -> !dd.getDeck().isEmpty() && dd.getDeck().get(0).equals(card)) && //Checks if the selected card can be taken from the decks
-                    playerBoard.buyDevCard(card, space, requests)                                           //Buys development card if the player has enough resources
+                            .anyMatch(dd -> !dd.getDeck().isEmpty() && dd.getDeck().get(0).equals(card)) && // Checks if the selected card can be taken from the decks
+                    playerBoard.buyDevCard(card, space, requests)                                           // Buys development card if the player has enough resources
             ) {
                 playerBoard.setTurnPlayed(true);
                 return removeDevCard(card.getColor(), card.getLevel());

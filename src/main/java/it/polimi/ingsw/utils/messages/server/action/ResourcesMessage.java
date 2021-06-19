@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Generic server message that contains a list of resources
  */
-public abstract class ResourcesMessage implements Message { //TODO: ha senso estenderlo al di fuori dei messaggi di azione e del server?
+public abstract class ResourcesMessage implements Message {
 
     private final List<Resource> resources;
 

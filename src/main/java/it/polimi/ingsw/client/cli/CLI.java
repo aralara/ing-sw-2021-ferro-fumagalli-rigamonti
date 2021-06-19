@@ -271,24 +271,23 @@ public class CLI extends ClientController {
         List<Resource> plainResources = resources.stream()
                 .filter(r -> r.getResourceType() != ResourceType.WILDCARD).collect(Collectors.toList());
         int     index,
-                marblesLeft = (int) resources.stream()
-                        .filter(r -> r.getResourceType() == ResourceType.WILDCARD).count();
+                marblesLeft = resources.stream().filter(r -> r.getResourceType() == ResourceType.WILDCARD)
+                        .mapToInt(Resource::getQuantity).sum();
 
         while (marblesLeft > 0 && availableAbilities.size() > 0) {
 
             GraphicalCLI.printlnString("You can choose a resource from the following types ( "
-                    + marblesLeft + " wildcards left ):");
+                    + marblesLeft + " wildcard(s) left ):");
 
             GraphicalCLI.printNumberedList(availableAbilities, rt -> GraphicalCLI.printString(rt.name()));
 
             do {
-                GraphicalCLI.printString("\nPlease choose a valid resource type for the wildcard:");
+                GraphicalCLI.printString("\nChoose a resource type for the wildcard: ");
                 index = GraphicalCLI.getNextInt() - 1;
             } while(0 > index || index > availableAbilities.size());
 
             plainResources.add(new Resource(availableAbilities.get(index), 1));
 
-            availableAbilities.remove(index);
             marblesLeft--;
         }
         placeResourcesOnShelves(plainResources);

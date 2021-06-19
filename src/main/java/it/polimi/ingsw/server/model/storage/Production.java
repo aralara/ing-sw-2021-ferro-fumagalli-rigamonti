@@ -70,8 +70,10 @@ public class Production implements Serializable {
      * @return True if this production could have modeled the other, false otherwise
      */
     public boolean canModel(Production p) {
-        return Storage.checkListModeled(this.getConsumed(), p.getConsumed(), ResourceType.getRealValues()) &&
-                Storage.checkListModeled(this.getProduced(), p.getProduced(), ResourceType.getRealValues());
+        return Storage.checkListModeled(this.getConsumed(), p.getConsumed(),
+                        ResourceType.getRealValues(), false) &&
+                Storage.checkListModeled(this.getProduced(), p.getProduced(),
+                        ResourceType.getRealValues(), false);
     }
 
     /**
