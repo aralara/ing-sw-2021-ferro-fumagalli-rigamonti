@@ -768,4 +768,34 @@ public class GUI extends ClientController {
         attachListeners();  // Since it's the last setup message to arrive, listeners are added to the GUI components
         //TODO: temporaneo direi, magari no eh
     }
+
+    @Override
+    public void destroy() {
+        startNewGame();
+        super.destroy();
+    }
+
+    /**
+     * Goes back to the first scene to start a new game
+     */
+    public void startNewGame(){
+        callPlatformRunLater(() -> guiApplication.closeSecondStage());
+        callPlatformRunLater(() -> guiApplication.closeCardStage());
+        callPlatformRunLater(() -> guiApplication.closePopUpStage());
+        SetupController sc =((SetupController)guiApplication.getController(SceneNames.LOADING));
+        callPlatformRunLater(() -> sc.showLoadingBar(false));
+        callPlatformRunLater(() -> guiApplication.changeConnectionMenuStatus());
+        callPlatformRunLater(() -> ((SetupController)guiApplication.getController(SceneNames.CONNECTION_MENU)).
+                getIpAddress_field().setText(""));
+        callPlatformRunLater(() -> ((SetupController)guiApplication.getController(SceneNames.CONNECTION_MENU)).
+                getPortNumber_field().setText(""));
+        callPlatformRunLater(() -> ((SetupController)guiApplication.getController(SceneNames.CONNECTION_MENU)).
+                getConnection_pane().requestFocus());
+        callPlatformRunLater(() -> guiApplication.changeNicknameMenuStatus());
+        callPlatformRunLater(() -> ((SetupController)guiApplication.getController(SceneNames.NICKNAME_MENU)).
+                getNickname_field().setText(""));
+        callPlatformRunLater(() -> ((SetupController)guiApplication.getController(SceneNames.NICKNAME_MENU)).
+                getNickname_label().requestFocus());
+        callPlatformRunLater(() -> guiApplication.setActiveScene(SceneNames.LOADING)); //TODO: ripristinare socket
+    }
 }

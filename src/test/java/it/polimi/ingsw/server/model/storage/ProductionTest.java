@@ -97,4 +97,18 @@ public class ProductionTest{
         assertEquals(2,temp.getProduced().get(1).getQuantity());
         assertEquals(ResourceType.FAITH,temp.getProduced().get(1).getResourceType());
     }
+
+    /**
+     * Tests if a production could have modeled another one
+     */
+    @Test
+    public void testCanModel(){
+        Production mainProd, checkProd;
+        mainProd = new Production(new ArrayList<>(List.of(new Resource(ResourceType.WILDCARD,2))),
+                new ArrayList<>(List.of(new Resource(ResourceType.SHIELD,1))));
+        checkProd = new Production(new ArrayList<>(List.of(new Resource(ResourceType.COIN,2))),
+                new ArrayList<>(List.of(new Resource(ResourceType.SHIELD,1))));
+        assertTrue(mainProd.canModel(checkProd));
+        assertFalse(checkProd.canModel(mainProd));
+    }
 }
