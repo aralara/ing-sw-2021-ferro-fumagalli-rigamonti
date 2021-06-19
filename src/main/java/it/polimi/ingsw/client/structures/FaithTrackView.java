@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO: fare javadoc
+ * Handles faithTrack client methods
  */
 public class FaithTrackView implements Serializable {
 
@@ -16,11 +16,10 @@ public class FaithTrackView implements Serializable {
     private final List<FaithSpace> faithSpaces;
 
 
-    public FaithTrackView() {
-        this.vaticanReports = new ArrayList<>();
-        this.faithSpaces = new ArrayList<>();
-    }
-
+    /**
+     * FaithTrackView constructor with parameters
+     * @param faithTrack FaithTrack to set
+     */
     public FaithTrackView(FaithTrack faithTrack) {
         this.vaticanReports = new ArrayList<>();
         faithTrack.getVaticanReports().forEach(vr -> vaticanReports.add(new VaticanReportView(vr)));

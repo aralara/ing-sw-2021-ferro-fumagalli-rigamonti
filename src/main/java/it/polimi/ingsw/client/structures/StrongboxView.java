@@ -6,20 +6,19 @@ import it.polimi.ingsw.utils.listeners.Listened;
 import it.polimi.ingsw.utils.listeners.Listeners;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO: fare javadoc
+ * Handles strongbox client methods
  */
 public class StrongboxView extends Listened implements Serializable {
 
     private List<Resource> resources;
 
-    public StrongboxView() {
-        this.resources = new ArrayList<>();
-    }
-
+    /**
+     * StrongboxView constructor with parameters
+     * @param strongbox Strongbox to set
+     */
     public StrongboxView(Strongbox strongbox) {
         this.resources = strongbox.getList();
     }

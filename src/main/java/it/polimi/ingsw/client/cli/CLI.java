@@ -443,7 +443,6 @@ public class CLI extends ClientController {
     public void placeResourcesOnShelves(List<Resource> resources){
         List<Shelf> shelves;
         List<Resource> toDiscard = new ArrayList<>();
-        Shelf selectedShelf;
         Resource resourceToPlace;
         boolean rearranged = false, freeSlots = false;
         int level;
@@ -485,14 +484,7 @@ public class CLI extends ClientController {
                         level = GraphicalCLI.askWhichShelf(resourceToPlace, shelves.size(), true);
                         rearranged = true;
                         if (level > 0) {
-                            selectedShelf = shelves.get(level - 1);
-                            if (selectedShelf.getResourceType().equals(ResourceType.WILDCARD)) //empty shelf
-                                emptyShelfManagement(shelves, toPlace, selectedShelf, resourceToPlace);
-                            else if (selectedShelf.getResourceType().equals(resourceToPlace.getResourceType())) //shelf with the same resource type
-                                sameResTypeShelfManagement(shelves, toPlace, selectedShelf, resourceToPlace);
-                            else if (!selectedShelf.isLeader()) //shelf with different resource type
-                                differentResTypeShelfManagement(shelves, toPlace, selectedShelf, resourceToPlace);
-                            else GraphicalCLI.printlnString("You can't place this resource here");
+                            chooseShelfAction(shelves, resourceToPlace, level, toPlace);
                         } else if (level == 0) {
                             toDiscard.add(new Resource(resourceToPlace.getResourceType(), resourceToPlace.getQuantity()));
                             GraphicalCLI.printlnString("Resource discarded");
@@ -679,7 +671,6 @@ public class CLI extends ClientController {
             shelves = warehouse.getShelvesClone();
             List<Shelf> temporaryWarehouseShelves;
             List<Resource> resources = new ArrayList<>();
-            Shelf selectedShelf;
             Resource resourceToPlace;
             int level;
             for (Shelf shelf : shelves) {
@@ -704,14 +695,7 @@ public class CLI extends ClientController {
                     firstTurn = false;
 
                 if(level>0) {
-                    selectedShelf = shelves.get(level - 1);
-                    if (selectedShelf.getResourceType().equals(ResourceType.WILDCARD)) //empty shelf
-                        emptyShelfManagement(shelves, toPlace, selectedShelf, resourceToPlace);
-                    else if (selectedShelf.getResourceType().equals(resourceToPlace.getResourceType())) //shelf with the same resource type
-                        sameResTypeShelfManagement(shelves, toPlace, selectedShelf, resourceToPlace);
-                    else if(!selectedShelf.isLeader()) //shelf with different resource type
-                        differentResTypeShelfManagement(shelves, toPlace, selectedShelf, resourceToPlace);
-                    else GraphicalCLI.printlnString("You can't place this resource here");
+                    chooseShelfAction(shelves, resourceToPlace, level, toPlace);
                 }
                 else if(level<0) {
                     restoreConfiguration(new WarehouseView(temporaryWarehouseShelves), shelves, resources, toPlace,
@@ -722,6 +706,18 @@ public class CLI extends ClientController {
             e.printStackTrace();
         }
         return shelves;
+    }
+
+    private void chooseShelfAction(List<Shelf> shelves, Resource resourceToPlace, int level, List<Resource> toPlace) {
+        Shelf selectedShelf;
+        selectedShelf = shelves.get(level - 1);
+        if (selectedShelf.getResourceType().equals(ResourceType.WILDCARD)) //empty shelf
+            emptyShelfManagement(shelves, toPlace, selectedShelf, resourceToPlace);
+        else if (selectedShelf.getResourceType().equals(resourceToPlace.getResourceType())) //shelf with the same resource type
+            sameResTypeShelfManagement(shelves, toPlace, selectedShelf, resourceToPlace);
+        else if(!selectedShelf.isLeader()) //shelf with different resource type
+            differentResTypeShelfManagement(shelves, toPlace, selectedShelf, resourceToPlace);
+        else GraphicalCLI.printlnString("You can't place this resource here");
     }
 
     /**

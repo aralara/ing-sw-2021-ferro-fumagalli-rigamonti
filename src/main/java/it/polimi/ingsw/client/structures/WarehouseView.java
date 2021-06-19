@@ -12,23 +12,25 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * TODO: fare javadoc
+ * Handles warehouse client methods
  */
 public class WarehouseView extends Listened implements Serializable {
 
     private List<Shelf> shelves;
 
 
-    public WarehouseView() {
-        this.shelves = new ArrayList<>();
-        for(int i = 0; i < Constants.BASE_WAREHOUSE_SHELVES.value(); i++)
-            shelves.add(new Shelf(i + 1));
-    }
-
+    /**
+     * WarehouseView constructor with parameters
+     * @param warehouse Warehouse to set
+     */
     public WarehouseView(Warehouse warehouse) {
         this.shelves = warehouse.getShelves();
     }
 
+    /**
+     * WarehouseView constructor with parameters
+     * @param shelves Shelves to set
+     */
     public WarehouseView(List<Shelf> shelves) { //TODO: sistemare chiamate a questo metodo nella CLI (preferibilmente toglierle)
         this.shelves = shelves;
     }

@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.stream.Collectors;
 
 /**
- * TODO: fare javadoc
+ * Handles leaderBoard client methods
  */
 public class LeaderBoardView extends Listened implements Serializable {
 
@@ -18,11 +18,10 @@ public class LeaderBoardView extends Listened implements Serializable {
     private Deck board;
 
 
-    public LeaderBoardView() {
-        this.hand = new Deck();
-        this.board = new Deck();
-    }
-
+    /**
+     * LeaderBoardView constructor with parameters
+     * @param leaderBoard LeaderBoard to set
+     */
     public LeaderBoardView(LeaderBoard leaderBoard) {
         this.hand = leaderBoard.getHand();
         this.board = leaderBoard.getBoard();

@@ -10,16 +10,16 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * TODO: fare javadoc
+ * Handles developmentDecks client methods
  */
 public class DevelopmentDecksView extends Listened implements Serializable {
 
     private final List<DevelopmentDeckView> decks;
 
-    public DevelopmentDecksView() {
-        this.decks = new ArrayList<>();
-    }
-
+    /**
+     * DevelopmentBoardView constructor with parameters
+     * @param decks Decks to set
+     */
     public DevelopmentDecksView(List<DevelopmentDeck> decks) {
         this.decks = new ArrayList<>();
         decks.forEach(d -> this.decks.add(new DevelopmentDeckView(d)));
