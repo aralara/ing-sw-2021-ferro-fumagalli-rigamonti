@@ -153,7 +153,8 @@ public class GUIApplication extends Application {
      * Closes the popUp stage
      */
     public void closePopUpStage(){
-        popUpStage.hide();
+        if(popUpStage!=null)
+            popUpStage.hide();
     }
 
     /**
@@ -180,7 +181,8 @@ public class GUIApplication extends Application {
      * Closes the second stage
      */
     public void closeSecondStage(){
-        secondStage.hide();
+        if(secondStage!=null)
+            secondStage.hide();
     }
 
     /**
@@ -220,7 +222,8 @@ public class GUIApplication extends Application {
      * Closes the card stage
      */
     public void closeCardStage(){
-        cardStage.hide();
+        if(cardStage!=null)
+            cardStage.hide();
     }
 
     /**

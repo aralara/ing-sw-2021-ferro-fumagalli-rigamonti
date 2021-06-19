@@ -91,6 +91,6 @@ public class LorenzoBoardTest {
         SingleGame game = new SingleGame();
         LorenzoBoard lorenzoBoard = new LorenzoBoard(game);
         lorenzoBoard.initLorenzoDeck(FileNames.LORENZO_DEV_FILE.value(), FileNames.LORENZO_FAITH_FILE.value());
-        assertEquals("Lorenzo il Magnifico", lorenzoBoard.getPlayer().toString());
+        assertEquals("Lorenzo il Magnifico", lorenzoBoard.getPlayer().getNickname());
     }
 }

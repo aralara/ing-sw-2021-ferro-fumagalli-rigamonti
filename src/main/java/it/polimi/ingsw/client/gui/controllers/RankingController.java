@@ -48,24 +48,9 @@ public class RankingController extends GenericController {
     }
 
     /**
-     * Goes back to the first scene to start a new game
+     * Calls startNewGame GUI method
      */
     public void startNewGame() {
-        SetupController sc =((SetupController)getGUIApplication().getController(SceneNames.LOADING));
-        getGUI().setNumberOfPlayers(1);
-        sc.showLoadingBar(false);
-        getGUIApplication().changeConnectionMenuStatus();
-        ((SetupController)getGUIApplication().getController(SceneNames.CONNECTION_MENU)).
-                getIpAddress_field().setText("");
-        ((SetupController)getGUIApplication().getController(SceneNames.CONNECTION_MENU)).
-                getPortNumber_field().setText("");
-        ((SetupController)getGUIApplication().getController(SceneNames.CONNECTION_MENU)).
-                getConnection_pane().requestFocus();
-        getGUIApplication().changeNicknameMenuStatus();
-        ((SetupController)getGUIApplication().getController(SceneNames.NICKNAME_MENU)).
-                getNickname_field().setText("");
-        ((SetupController)getGUIApplication().getController(SceneNames.NICKNAME_MENU)).
-                getNickname_label().requestFocus();
-        getGUIApplication().setActiveScene(SceneNames.LOADING); //TODO: ripristinare socket
+        getGUI().startNewGame();
     }
 }
