@@ -9,7 +9,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * TODO: fare javadoc
+ * Library that handles loading saves, updating saves and accessing saves
  */
 public class GameLibrary {
 

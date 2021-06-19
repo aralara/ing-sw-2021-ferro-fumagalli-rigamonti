@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO: fare javadoc
+ * Server class that handles lobbies and new client connections
  */
 public class Server {
 

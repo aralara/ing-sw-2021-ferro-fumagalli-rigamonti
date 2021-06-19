@@ -11,7 +11,7 @@ import java.util.Objects;
 import java.util.StringTokenizer;
 
 /**
- * TODO: fare javadoc
+ * Save class that represents a game saved on a file
  */
 public class GameSave implements Serializable {
 
@@ -21,14 +21,6 @@ public class GameSave implements Serializable {
     private boolean loaded;
     private Game game;
 
-    /**
-     * TODO: fare
-     */
-    public GameSave() {
-        players = null;
-        id = -1;
-        fileName = "";
-    }
 
     /**
      * GameSave constructor that uses the name of a file to extract its attributes

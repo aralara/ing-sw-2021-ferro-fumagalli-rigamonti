@@ -11,7 +11,7 @@ import java.net.Socket;
 import java.util.concurrent.TimeUnit;
 
 /**
- * TODO: fare javadoc
+ * Class that represents a server side view and communicates with the client
  */
 public class VirtualView implements Runnable {
 

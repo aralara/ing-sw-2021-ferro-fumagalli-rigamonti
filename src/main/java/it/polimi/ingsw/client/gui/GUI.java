@@ -197,12 +197,12 @@ public class GUI extends ClientController {
      * @param action Interaction with the save
      */
     public void sendSaveInteractionMessage(String fileName, SaveInteractions action) {
-        if(action==SaveInteractions.NO_ACTION) {
+        if(action == SaveInteractions.NO_ACTION) {
             getMessageHandler().sendClientMessage(new SaveInteractionMessage(null, SaveInteractions.NO_ACTION));
         }
         else {
             resumeGame = true;
-            GameSave gameSave = new GameSave();
+            GameSave gameSave = null;
             for(GameSave save : gameSaves)
                 if(save.getFileName().equals(fileName)) {
                     gameSave = save;
