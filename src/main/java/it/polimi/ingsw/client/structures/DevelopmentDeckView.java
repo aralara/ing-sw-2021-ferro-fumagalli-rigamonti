@@ -9,7 +9,7 @@ import it.polimi.ingsw.utils.listeners.Listeners;
 import java.io.Serializable;
 
 /**
- * TODO: fare javadoc
+ * Handles developmentDeck client methods
  */
 public class DevelopmentDeckView extends Listened implements Serializable {
 
@@ -18,10 +18,10 @@ public class DevelopmentDeckView extends Listened implements Serializable {
     private int deckLevel;
 
 
-    public DevelopmentDeckView() {
-        this.deck = new Deck();
-    }
-
+    /**
+     * DevelopmentDeckView constructor with parameters
+     * @param deck Deck to set
+     */
     public DevelopmentDeckView(DevelopmentDeck deck) {
         this.deck = deck.getDeck();
         this.deckColor = deck.getDeckColor();

@@ -6,10 +6,8 @@ import it.polimi.ingsw.utils.listeners.Listeners;
 
 import java.io.Serializable;
 
-import static it.polimi.ingsw.utils.Constants.FAITH_TOTAL_VATICAN_REPORTS;
-
 /**
- * TODO: fare javadoc
+ * Handles faithBoard client methods
  */
 public class FaithBoardView extends Listened implements Serializable {
 
@@ -17,11 +15,10 @@ public class FaithBoardView extends Listened implements Serializable {
     private boolean[] popeProgression;
 
 
-    public FaithBoardView() {
-        this.faith = 0;
-        this.popeProgression = new boolean[FAITH_TOTAL_VATICAN_REPORTS.value()];
-    }
-
+    /**
+     * FaithBoardView constructor with parameters
+     * @param faithBoard FaithBoard to set
+     */
     public FaithBoardView(FaithBoard faithBoard) {
         this.faith = faithBoard.getFaith();
         this.popeProgression = faithBoard.getPopeProgression();

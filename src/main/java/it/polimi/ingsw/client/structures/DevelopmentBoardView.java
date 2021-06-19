@@ -3,29 +3,25 @@ package it.polimi.ingsw.client.structures;
 import it.polimi.ingsw.server.model.boards.DevelopmentBoard;
 import it.polimi.ingsw.server.model.cards.card.Card;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
-import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.listeners.Listened;
 import it.polimi.ingsw.utils.listeners.Listeners;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * TODO: fare javadoc
+ * Handles developmentBoard client methods
  */
 public class DevelopmentBoardView extends Listened implements Serializable {
 
     private List<Deck> spaces;
 
 
-    public DevelopmentBoardView() {
-        this.spaces = new ArrayList<>();
-        for(int i = 0; i < Constants.BASE_DEVELOPMENT_SPACES.value(); i++)
-            spaces.add(new Deck());
-    }
-
+    /**
+     * DevelopmentBoardView constructor with parameters
+     * @param developmentBoard DevelopmentBoard to set
+     */
     public DevelopmentBoardView(DevelopmentBoard developmentBoard) {
         this.spaces = developmentBoard.getSpaces();
     }

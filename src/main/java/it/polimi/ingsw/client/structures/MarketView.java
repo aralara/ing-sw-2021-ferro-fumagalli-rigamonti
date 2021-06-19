@@ -7,11 +7,8 @@ import it.polimi.ingsw.utils.listeners.Listeners;
 
 import java.io.Serializable;
 
-import static it.polimi.ingsw.utils.Constants.MARKET_COLUMN_SIZE;
-import static it.polimi.ingsw.utils.Constants.MARKET_ROW_SIZE;
-
 /**
- * TODO: fare javadoc
+ * Handles market client methods
  */
 public class MarketView extends Listened implements Serializable {
 
@@ -19,11 +16,10 @@ public class MarketView extends Listened implements Serializable {
     private Marble floatingMarble;
 
 
-    public MarketView(){
-        this.marbleMatrix = new Marble[MARKET_ROW_SIZE.value()][MARKET_COLUMN_SIZE.value()];
-        this.floatingMarble = null;
-    }
-
+    /**
+     * MarketView constructor with parameters
+     * @param market Market to set
+     */
     public MarketView(Market market) {
         this.marbleMatrix = market.getMarbleMatrix();
         this.floatingMarble = market.getFloatingMarble();
