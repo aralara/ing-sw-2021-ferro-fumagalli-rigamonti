@@ -97,6 +97,9 @@ public class StorageTest{
         discount.add(ResourceType.COIN);
         assertEquals(Storage.calculateDiscount(resources,discount).get(0).getQuantity(),1);
         assertEquals(Storage.calculateDiscount(resources,discount).get(0).getResourceType(),ResourceType.COIN);
+        resources.clear();
+        resources.add(new Resource(ResourceType.STONE,0));
+        assertEquals(Storage.calculateDiscount(resources,discount).size(),0);
     }
 
     /**
@@ -164,6 +167,11 @@ public class StorageTest{
 
         possibleWildcards.add(ResourceType.COIN);
         assertTrue(Storage.checkListModeled(model, modeled, possibleWildcards));
+        assertFalse(Storage.checkListModeled(modeled, model, possibleWildcards));
+
+        model.clear();
+        model.add(new Resource(ResourceType.COIN, 2));
+        assertFalse(Storage.checkListModeled(model, modeled, possibleWildcards));
         assertFalse(Storage.checkListModeled(modeled, model, possibleWildcards));
     }
 }
