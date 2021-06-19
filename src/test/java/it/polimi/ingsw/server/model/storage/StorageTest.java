@@ -137,4 +137,33 @@ public class StorageTest{
         assertEquals(Storage.getTotalQuantity(resources1),6);
         assertEquals(Storage.getTotalQuantity(resources2),4);
     }
+
+    /**
+     * Tests if a list of resources can be obtained from another using wildcards
+     */
+    @Test
+    public void testCheckListModeled(){
+        List<Resource> model = new ArrayList<>(), modeled = new ArrayList<>();
+        List<ResourceType> possibleWildcards = new ArrayList<>();
+
+        model.add(new Resource(ResourceType.WILDCARD, 2));
+
+        modeled.add(new Resource(ResourceType.COIN, 1));
+        modeled.add(new Resource(ResourceType.SHIELD, 1));
+
+        assertFalse(Storage.checkListModeled(model, modeled, possibleWildcards));
+        assertFalse(Storage.checkListModeled(modeled, model, possibleWildcards));
+
+        possibleWildcards.add(ResourceType.SERVANT);
+        assertFalse(Storage.checkListModeled(model, modeled, possibleWildcards));
+        assertFalse(Storage.checkListModeled(modeled, model, possibleWildcards));
+
+        possibleWildcards.add(ResourceType.SHIELD);
+        assertFalse(Storage.checkListModeled(model, modeled, possibleWildcards));
+        assertFalse(Storage.checkListModeled(modeled, model, possibleWildcards));
+
+        possibleWildcards.add(ResourceType.COIN);
+        assertTrue(Storage.checkListModeled(model, modeled, possibleWildcards));
+        assertFalse(Storage.checkListModeled(modeled, model, possibleWildcards));
+    }
 }
