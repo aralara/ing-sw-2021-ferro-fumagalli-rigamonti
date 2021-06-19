@@ -4,7 +4,7 @@ import it.polimi.ingsw.client.gui.SceneNames;
 import it.polimi.ingsw.server.saves.SaveInteractions;
 import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
 import javafx.collections.FXCollections;
-import javafx.fxml.FXML;;
+import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -151,7 +151,7 @@ public class SetupController extends GenericController {
             showAlert(Alert.AlertType.ERROR, "Error", "Missing field!",
                     "The port number field is empty, please fill it");
         }
-        if(!ipAddress_field.getText().matches("[0-9.]*")) {
+        else if(!ipAddress_field.getText().matches("[0-9.]*")) {
             showAlert(Alert.AlertType.ERROR, "Error", "Invalid field!",
                     "The IP address field is invalid, please complete it correctly");
         }
