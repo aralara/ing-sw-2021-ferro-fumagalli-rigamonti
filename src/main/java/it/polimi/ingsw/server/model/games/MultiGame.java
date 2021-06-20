@@ -36,8 +36,7 @@ public class MultiGame extends Game {
             checkFaith();
             //Checks if the game is ending (if it's the last round)
             if (checkEndGame()) {
-                if (lastTurn)
-                    actionToDo = TurnStatus.LOAD_TURN_LAST_ROUND.value();
+                actionToDo = TurnStatus.LOAD_TURN_LAST_ROUND.value();
                 lastTurn = true;
             }
             //Checks if the game has ended
