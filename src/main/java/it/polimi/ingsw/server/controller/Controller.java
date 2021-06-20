@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Controller that handles the game's flow by calling the macro-methods of the model
+ * Handles the game's flow by calling the macro-methods of the model TODO: fare javadoc
  */
 public class Controller {
 

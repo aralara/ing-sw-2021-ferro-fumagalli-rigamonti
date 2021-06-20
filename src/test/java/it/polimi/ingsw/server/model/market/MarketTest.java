@@ -75,6 +75,10 @@ public class MarketTest {
             resources = market.chooseCoordinates(-1, 0);
             assertFalse(resources.isEmpty());
             assertTrue(resources.size() > 0 && resources.size() <= 3);
+
+            assertNotNull(market.getLastTook());
+            market.resetLastTook();
+            assertNull(market.getLastTook());
         }
         catch (InvalidRowException | InvalidColumnException e){
             e.printStackTrace();

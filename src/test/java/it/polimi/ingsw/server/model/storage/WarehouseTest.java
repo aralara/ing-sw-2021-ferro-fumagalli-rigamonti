@@ -17,7 +17,6 @@ public class WarehouseTest{
      */
     @Test
     public void testValidate() {
-
         List<Shelf> temp2 = new ArrayList<>(List.of(new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,false),
                 new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,2),2,false)));
         assertFalse(Warehouse.validate(temp2));
@@ -45,8 +44,6 @@ public class WarehouseTest{
         assertTrue(Warehouse.validate(temp));
         temp.add(new Shelf(ResourceType.STONE,new Resource(ResourceType.STONE,1),2,true));
         assertFalse(Warehouse.validate(temp));
-
-
     }
 
     /**
@@ -178,5 +175,50 @@ public class WarehouseTest{
         assertTrue(wh.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN,1))),true));
 
         assertTrue(wh.removeResources(new ArrayList<>(List.of(new Resource(ResourceType.COIN,5)))));
+    }
+
+    /**
+     * Tests if the returned list of resources containing the difference
+     * between the warehouse and a list of shelves are correct
+     */
+    @Test
+    public void testGetAddedResources(){
+        List<Shelf> shelves = new ArrayList<>();
+        List<Resource> resources = new ArrayList<>();
+        shelves.add(new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,1),1,false));
+        shelves.add(new Shelf(ResourceType.SHIELD,new Resource(ResourceType.SHIELD,2),2,false));
+        shelves.add(new Shelf(ResourceType.STONE,new Resource(ResourceType.STONE,1),3,false));
+        Warehouse warehouse = new Warehouse(shelves);
+        assertNull(warehouse.getAddedResources(resources));
+
+        shelves.clear();
+        shelves.add(new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,0),1,false));
+        warehouse = new Warehouse(shelves);
+        resources.add(new Resource(ResourceType.COIN,-1));
+        assertNull(warehouse.getAddedResources(resources));
+
+        shelves.clear();
+        shelves.add(new Shelf(ResourceType.COIN,new Resource(ResourceType.COIN,1),1,false));
+        shelves.add(new Shelf(ResourceType.SHIELD,new Resource(ResourceType.SHIELD,2),2,false));
+        shelves.add(new Shelf(ResourceType.STONE,new Resource(ResourceType.STONE,1),3,false));
+        warehouse = new Warehouse(shelves);
+        resources.clear();
+        resources.add(new Resource(ResourceType.COIN,1));
+        resources.add(new Resource(ResourceType.SHIELD,3));
+        resources.add(new Resource(ResourceType.STONE,1));
+        assertEquals(1, warehouse.getAddedResources(resources).size());
+        assertEquals(ResourceType.SHIELD, warehouse.getAddedResources(resources).get(0).getResourceType());
+        assertEquals(1, warehouse.getAddedResources(resources).get(0).getQuantity());
+
+        resources.clear();
+        resources.add(new Resource(ResourceType.COIN,1));
+        resources.add(new Resource(ResourceType.SHIELD,2));
+        resources.add(new Resource(ResourceType.STONE,1));
+        assertEquals(new ArrayList<>(), warehouse.getAddedResources(resources));
+
+        resources.add(new Resource(ResourceType.SERVANT,2));
+        assertEquals(1, warehouse.getAddedResources(resources).size());
+        assertEquals(ResourceType.SERVANT, warehouse.getAddedResources(resources).get(0).getResourceType());
+        assertEquals(2, warehouse.getAddedResources(resources).get(0).getQuantity());
     }
 }

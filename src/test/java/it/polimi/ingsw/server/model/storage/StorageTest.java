@@ -176,5 +176,11 @@ public class StorageTest{
         assertFalse(Storage.checkListModeled(model, modeled, possibleWildcards, true));
         modeled.clear();
         assertTrue(Storage.checkListModeled(model, modeled, possibleWildcards, true));
+
+        model.clear();
+        model.add(new Resource(ResourceType.SHIELD, 3));
+        modeled.clear();
+        modeled.add(new Resource(ResourceType.SHIELD, 2));
+        assertFalse(Storage.checkListModeled(model, modeled, possibleWildcards, true));
     }
 }
