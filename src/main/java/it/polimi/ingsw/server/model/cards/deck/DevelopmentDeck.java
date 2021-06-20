@@ -64,6 +64,7 @@ public class DevelopmentDeck extends Listened implements Serializable {
      * Extracts the first card from the DevelopmentDeck
      * @return Returns the first card
      */
+    @SuppressWarnings("UnusedReturnValue")
     public DevelopmentCard removeFirst() {
         DevelopmentCard removed = (DevelopmentCard) deck.extract(new int[]{0}).get(0);
         fireUpdate(Listeners.GAME_DEV_DECK.value(), this);

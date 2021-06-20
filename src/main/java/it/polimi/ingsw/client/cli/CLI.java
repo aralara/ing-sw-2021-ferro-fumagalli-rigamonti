@@ -1036,6 +1036,7 @@ public class CLI extends ClientController {
     /**
      * Initializes the menu options for the "player" and "opponents" possible turns
      */
+    @SuppressWarnings("ArraysAsListWithZeroOrOneArgument")
     private void initMenus() {
         playerTurnMenu = new ArrayList<>();
         opponentTurnMenu = new ArrayList<>();

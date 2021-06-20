@@ -221,7 +221,7 @@ public class GraphicalCLI {
                     indexes.stream().anyMatch(index -> index < 0 || index >= list.size()));                 //Indexes are part of the list
             return indexes.stream().map(list::get).collect(Collectors.toList());
         }
-        return null;
+        return new ArrayList<>();
     }
 
     /**
@@ -361,6 +361,7 @@ public class GraphicalCLI {
      * Prints a leader board
      * @param leaderBoard Leader board to be printed
      */
+    @SuppressWarnings("unchecked")
     public static void printLeaderBoard(LeaderBoardView leaderBoard){
         if(!leaderBoard.getBoard().getCards().isEmpty()){
             printNumberedList((List<LeaderCard>)(List<?>)leaderBoard.getBoard().getCards(),
@@ -374,6 +375,7 @@ public class GraphicalCLI {
      * Prints a leader card hand
      * @param leaderBoard Leader hand to be printed
      */
+    @SuppressWarnings("unchecked")
     public static void printLeaderHand(LeaderBoardView leaderBoard){
         if(!leaderBoard.getHand().getCards().isEmpty()) {printlnString("");
             printNumberedList((List<LeaderCard>) (List<?>) leaderBoard.getHand().getCards(),
@@ -473,7 +475,7 @@ public class GraphicalCLI {
                 printString(i + ":");
             }
             printString(" ");
-            for(int j = 0; j < i; j++) {
+            for(int j = 0; j < i; j++) {    //TODO:risolvere warning
                 if ((warehouseView.getShelves().stream().anyMatch(x -> x.getLevel() == finalI && !x.isLeader())) &&
                         (warehouseView.getShelves().stream().filter(x -> x.getLevel() == finalI && !x.isLeader())
                                 .findFirst().get().getResources().getQuantity()>j)) {

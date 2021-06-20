@@ -6,9 +6,6 @@ import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
@@ -174,7 +171,7 @@ public class SetupController extends GenericController {
 
     /**
      * Calls connect method if ENTER key is pressed
-     * @param keyEvent
+     * @param keyEvent  //TODO: javadoc
      */
     public void keyConnect(KeyEvent keyEvent) {
         if (keyEvent.getCode().equals(KeyCode.ENTER)) {
@@ -216,7 +213,7 @@ public class SetupController extends GenericController {
 
     /**
      * Calls sendNickname method if ENTER key is pressed
-     * @param keyEvent
+     * @param keyEvent  //TODO: javadoc
      */
     public void keyNickname(KeyEvent keyEvent) {
         if (keyEvent.getCode().equals(KeyCode.ENTER)) {

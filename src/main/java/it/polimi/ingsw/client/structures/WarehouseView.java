@@ -2,12 +2,10 @@ package it.polimi.ingsw.client.structures;
 
 import it.polimi.ingsw.server.model.storage.Shelf;
 import it.polimi.ingsw.server.model.storage.Warehouse;
-import it.polimi.ingsw.utils.Constants;
 import it.polimi.ingsw.utils.listeners.Listened;
 import it.polimi.ingsw.utils.listeners.Listeners;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

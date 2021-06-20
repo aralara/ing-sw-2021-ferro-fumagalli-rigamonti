@@ -13,7 +13,7 @@ public class MasterOfRenaissance {
 
     /**
      * Lets the user choose which version of Master of Renaissance start
-     * @param args
+     * @param args Unused command line arguments
      */
     public static void main(String[] args){
 

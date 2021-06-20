@@ -17,9 +17,6 @@ import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 import it.polimi.ingsw.utils.messages.server.action.ServerActionMessage;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
-import javafx.scene.image.Image;
-import javafx.scene.layout.Region;
-import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -522,7 +519,7 @@ public class GUI extends ClientController {
     /**
      * Controls and adds faith to discarded resources' list if present
      * @param resources
-     * @return
+     * @return  //TODO: javadoc
      */
     private boolean checkFaithResource(List<Resource> resources){
         int faithQuantity=0;

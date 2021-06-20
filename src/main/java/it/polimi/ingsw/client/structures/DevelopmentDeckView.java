@@ -14,8 +14,8 @@ import java.io.Serializable;
 public class DevelopmentDeckView extends Listened implements Serializable {
 
     private Deck deck;
-    private CardColors deckColor;
-    private int deckLevel;
+    private final CardColors deckColor;
+    private final int deckLevel;
 
 
     /**

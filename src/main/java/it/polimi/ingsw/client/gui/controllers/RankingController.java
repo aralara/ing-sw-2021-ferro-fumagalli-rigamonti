@@ -1,6 +1,5 @@
 package it.polimi.ingsw.client.gui.controllers;
 
-import it.polimi.ingsw.client.gui.SceneNames;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;

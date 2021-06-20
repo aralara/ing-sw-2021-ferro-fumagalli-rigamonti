@@ -3,7 +3,6 @@ package it.polimi.ingsw.client.gui;
 import it.polimi.ingsw.client.gui.controllers.GenericController;
 import it.polimi.ingsw.client.gui.controllers.SetupController;
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;

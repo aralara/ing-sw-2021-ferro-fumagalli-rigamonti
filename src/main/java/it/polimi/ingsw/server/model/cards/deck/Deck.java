@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.model.cards.deck;
 
 import it.polimi.ingsw.server.model.cards.card.Card;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.*;
@@ -103,6 +104,7 @@ public class Deck implements Iterable<Card>, Serializable {
     }
 
     @Override
+    @NotNull
     public Iterator<Card> iterator() {
         return cards.iterator();
     }
