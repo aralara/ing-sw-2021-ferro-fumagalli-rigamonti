@@ -46,11 +46,4 @@ public class RankingController extends GenericController {
                 "Thank you for having played Master of Renaissance!", "");
         System.exit(0);
     }
-
-    /**
-     * Calls startNewGame GUI method
-     */
-    public void startNewGame() {
-        getGUI().startNewGame();
-    }
 }

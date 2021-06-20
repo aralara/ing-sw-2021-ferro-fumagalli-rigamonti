@@ -17,6 +17,9 @@ import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 import it.polimi.ingsw.utils.messages.server.action.ServerActionMessage;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Region;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -771,31 +774,10 @@ public class GUI extends ClientController {
 
     @Override
     public void destroy() {
-        startNewGame();
+        callPlatformRunLater(guiApplication::closeSecondStage);
+        callPlatformRunLater(guiApplication::closeCardStage);
+        callPlatformRunLater(guiApplication::closePopUpStage);
         super.destroy();
-    }
-
-    /**
-     * Goes back to the first scene to start a new game
-     */
-    public void startNewGame(){
-        callPlatformRunLater(() -> guiApplication.closeSecondStage());
-        callPlatformRunLater(() -> guiApplication.closeCardStage());
-        callPlatformRunLater(() -> guiApplication.closePopUpStage());
-        SetupController sc =((SetupController)guiApplication.getController(SceneNames.LOADING));
-        callPlatformRunLater(() -> sc.showLoadingBar(false));
-        callPlatformRunLater(() -> guiApplication.changeConnectionMenuStatus());
-        callPlatformRunLater(() -> ((SetupController)guiApplication.getController(SceneNames.CONNECTION_MENU)).
-                getIpAddress_field().setText(""));
-        callPlatformRunLater(() -> ((SetupController)guiApplication.getController(SceneNames.CONNECTION_MENU)).
-                getPortNumber_field().setText(""));
-        callPlatformRunLater(() -> ((SetupController)guiApplication.getController(SceneNames.CONNECTION_MENU)).
-                getConnection_pane().requestFocus());
-        callPlatformRunLater(() -> guiApplication.changeNicknameMenuStatus());
-        callPlatformRunLater(() -> ((SetupController)guiApplication.getController(SceneNames.NICKNAME_MENU)).
-                getNickname_field().setText(""));
-        callPlatformRunLater(() -> ((SetupController)guiApplication.getController(SceneNames.NICKNAME_MENU)).
-                getNickname_label().requestFocus());
-        callPlatformRunLater(() -> guiApplication.setActiveScene(SceneNames.LOADING)); //TODO: ripristinare socket
+        callPlatformRunLater(() -> guiApplication.setActiveScene(SceneNames.ERROR));
     }
 }

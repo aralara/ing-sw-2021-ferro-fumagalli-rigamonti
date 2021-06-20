@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="202.0" prefWidth="369.0" styleClass="errorPanel" stylesheets="@../css/error.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.client.gui.controllers.ErrorController">
+   <children>
+      <Label layoutX="33.0" layoutY="44.0" text="A disconnection has occurred: game ends" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="24.0" />
+         </font>
+      </Label>
+      <Button focusTraversable="false" layoutX="151.0" layoutY="110.0" mnemonicParsing="false" onAction="#quit" text="Quit" textFill="#1d60cc">
+         <font>
+            <Font name="Pristina" size="24.0" />
+         </font>
+      </Button>
+   </children>
+</Pane>

@@ -3,16 +3,14 @@ package it.polimi.ingsw.client.gui;
 import it.polimi.ingsw.client.gui.controllers.GenericController;
 import it.polimi.ingsw.client.gui.controllers.SetupController;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
-import javafx.stage.Modality;
-import javafx.stage.Screen;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import javafx.stage.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -52,6 +50,7 @@ public class GUIApplication extends Application {
         setupStage(stage);
         setup();
         setActiveScene(SceneNames.LOADING);
+        stage.setOnCloseRequest(we -> System.exit(0));
     }
 
     /**
@@ -112,7 +111,7 @@ public class GUIApplication extends Application {
             stage.setScene(scenesInformation.get(getSceneIndex(sceneName)).getScene());
             if (sceneName.equals(SceneNames.PLAYER_BOARD) || sceneName.equals(SceneNames.LOADING) ||
                     sceneName.equals(SceneNames.CONNECTION_MENU) || sceneName.equals(SceneNames.RANKING) ||
-                    sceneName.equals(SceneNames.NICKNAME_MENU) &&
+                    sceneName.equals(SceneNames.ERROR) || sceneName.equals(SceneNames.NICKNAME_MENU) &&
                     ((SetupController)getController(SceneNames.NICKNAME_MENU)).getIsLocal())
                 stage.centerOnScreen();
             stage.show();
