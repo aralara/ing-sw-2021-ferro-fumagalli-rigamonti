@@ -154,24 +154,27 @@ public class StorageTest{
         modeled.add(new Resource(ResourceType.COIN, 1));
         modeled.add(new Resource(ResourceType.SHIELD, 1));
 
-        assertFalse(Storage.checkListModeled(model, modeled, possibleWildcards));
-        assertFalse(Storage.checkListModeled(modeled, model, possibleWildcards));
+        assertFalse(Storage.checkListModeled(model, modeled, possibleWildcards, false));
+        assertFalse(Storage.checkListModeled(modeled, model, possibleWildcards, false));
 
         possibleWildcards.add(ResourceType.SERVANT);
-        assertFalse(Storage.checkListModeled(model, modeled, possibleWildcards));
-        assertFalse(Storage.checkListModeled(modeled, model, possibleWildcards));
+        assertFalse(Storage.checkListModeled(model, modeled, possibleWildcards, false));
+        assertFalse(Storage.checkListModeled(modeled, model, possibleWildcards, false));
 
         possibleWildcards.add(ResourceType.SHIELD);
-        assertFalse(Storage.checkListModeled(model, modeled, possibleWildcards));
-        assertFalse(Storage.checkListModeled(modeled, model, possibleWildcards));
+        assertFalse(Storage.checkListModeled(model, modeled, possibleWildcards, false));
+        assertFalse(Storage.checkListModeled(modeled, model, possibleWildcards, false));
 
         possibleWildcards.add(ResourceType.COIN);
-        assertTrue(Storage.checkListModeled(model, modeled, possibleWildcards));
-        assertFalse(Storage.checkListModeled(modeled, model, possibleWildcards));
+        assertTrue(Storage.checkListModeled(model, modeled, possibleWildcards, false));
+        assertFalse(Storage.checkListModeled(modeled, model, possibleWildcards, false));
 
         model.clear();
-        model.add(new Resource(ResourceType.COIN, 2));
-        assertFalse(Storage.checkListModeled(model, modeled, possibleWildcards));
-        assertFalse(Storage.checkListModeled(modeled, model, possibleWildcards));
+        model.add(new Resource(ResourceType.WILDCARD, 1));
+        modeled.clear();
+        modeled.add(new Resource(ResourceType.SHIELD, 2));
+        assertFalse(Storage.checkListModeled(model, modeled, possibleWildcards, true));
+        modeled.clear();
+        assertTrue(Storage.checkListModeled(model, modeled, possibleWildcards, true));
     }
 }
