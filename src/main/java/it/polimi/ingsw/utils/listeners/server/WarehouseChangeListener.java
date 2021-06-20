@@ -8,10 +8,14 @@ import java.beans.PropertyChangeEvent;
 import java.util.List;
 
 /**
- * TODO: fare javadoc
+ * Listener for the warehouse in a PlayerBoard
  */
 public class WarehouseChangeListener extends ModelChangeListener {
 
+    /**
+     * Constructor for the listener
+     * @param virtualView Associated VirtualView
+     */
     public WarehouseChangeListener(VirtualView virtualView) {
         super(virtualView);
     }

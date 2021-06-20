@@ -79,4 +79,17 @@ public class DevelopmentCardTest {
                         "\t           > 1 FAITH\n",
                 developmentCard.toString());
     }
+
+    /**
+     * Tests hashcode and equals comparisons
+     */
+    @Test
+    public void testHashCodeAndEquals() {
+        DevelopmentCard developmentCard1 = new DevelopmentCard(0, VP, color, level, production, cost);
+        DevelopmentCard developmentCard2 = new DevelopmentCard(1, VP, color, level, production, cost);
+        assertEquals(devCard, developmentCard1);
+        assertEquals(devCard.hashCode(), developmentCard1.hashCode());
+        assertNotEquals(devCard, developmentCard2);
+        assertNotEquals(devCard.hashCode(), developmentCard2.hashCode());
+    }
 }

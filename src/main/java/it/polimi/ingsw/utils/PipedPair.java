@@ -3,7 +3,7 @@ package it.polimi.ingsw.utils;
 import java.io.*;
 
 /**
- * TODO: fare javadoc
+ * Pair of piped streams in order to establish a piped connection between two threads
  */
 public class PipedPair {
 

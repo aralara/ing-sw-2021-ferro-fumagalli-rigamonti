@@ -7,10 +7,14 @@ import it.polimi.ingsw.utils.messages.server.update.PlayerLeaderBHandMessage;
 import java.beans.PropertyChangeEvent;
 
 /**
- * TODO: fare javadoc
+ * Listener for the leader board's hand in a PlayerBoard
  */
 public class LeaderBHandChangeListener extends ModelChangeListener {
 
+    /**
+     * Constructor for the listener
+     * @param virtualView Associated VirtualView
+     */
     public LeaderBHandChangeListener(VirtualView virtualView) {
         super(virtualView);
     }

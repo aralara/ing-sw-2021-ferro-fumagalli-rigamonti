@@ -6,10 +6,14 @@ import it.polimi.ingsw.utils.messages.server.update.PlayerFaithBPopeMessage;
 import java.beans.PropertyChangeEvent;
 
 /**
- * TODO: fare javadoc
+ * Listener for the faith board's pope spaces in a PlayerBoard
  */
 public class FaithBPopeChangeListener extends ModelChangeListener {
 
+    /**
+     * Constructor for the listener
+     * @param virtualView Associated VirtualView
+     */
     public FaithBPopeChangeListener(VirtualView virtualView) {
         super(virtualView);
     }

@@ -5,12 +5,16 @@ import it.polimi.ingsw.client.gui.controllers.PlayerBoardController;
 import java.beans.PropertyChangeListener;
 
 /**
- * TODO: fare javadoc
+ * Generic listener for a PlayerBoardView attribute
  */
 public abstract class PlayerBoardViewChangeListener implements PropertyChangeListener {
 
     private final PlayerBoardController playerBoardController;
 
+    /**
+     * Constructor for the listener
+     * @param playerBoardController Associated GUI Controller
+     */
     public PlayerBoardViewChangeListener(PlayerBoardController playerBoardController) {
         this.playerBoardController = playerBoardController;
     }

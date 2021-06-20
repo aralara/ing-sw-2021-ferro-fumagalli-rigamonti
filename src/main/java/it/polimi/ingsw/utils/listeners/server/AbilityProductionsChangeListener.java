@@ -8,10 +8,14 @@ import java.beans.PropertyChangeEvent;
 import java.util.List;
 
 /**
- * TODO: fare javadoc
+ * Listener for the ability productions in a PlayerBoard
  */
 public class AbilityProductionsChangeListener extends ModelChangeListener {
 
+    /**
+     * Constructor for the listener
+     * @param virtualView Associated VirtualView
+     */
     public AbilityProductionsChangeListener(VirtualView virtualView) {
         super(virtualView);
     }

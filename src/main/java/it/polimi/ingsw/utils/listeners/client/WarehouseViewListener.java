@@ -5,16 +5,19 @@ import it.polimi.ingsw.client.gui.controllers.PlayerBoardController;
 import java.beans.PropertyChangeEvent;
 
 /**
- * TODO: fare javadoc
+ * Listener for the warehouse in a PlayerBoardView
  */
 public class WarehouseViewListener extends PlayerBoardViewChangeListener {
 
+    /**
+     * Constructor for the listener
+     * @param playerBoardController Associated GUI Controller
+     */
     public WarehouseViewListener(PlayerBoardController playerBoardController) {
         super(playerBoardController);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void propertyChange(PropertyChangeEvent evt) {
         getPlayerBoardController().showWarehouse();
     }

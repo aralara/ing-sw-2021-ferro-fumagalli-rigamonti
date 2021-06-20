@@ -1,7 +1,7 @@
 package it.polimi.ingsw.utils.listeners;
 
 /**
- * TODO: fare javadoc
+ * Enum containing all the listened properties
  */
 public enum Listeners {
     GAME_DEV_DECK("developmentDeckListener"),
@@ -21,10 +21,18 @@ public enum Listeners {
 
     private final String value;
 
+    /**
+     * Enum constructor
+     * @param value String value
+     */
     Listeners(final String value) {
         this.value = value;
     }
 
+    /**
+     * Getter for value attribute
+     * @return Returns value
+     */
     public String value() {
         return value;
     }

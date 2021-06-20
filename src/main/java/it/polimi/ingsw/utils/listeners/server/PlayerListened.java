@@ -3,7 +3,7 @@ package it.polimi.ingsw.utils.listeners.server;
 import it.polimi.ingsw.utils.listeners.Listened;
 
 /**
- * TODO: fare javadoc
+ * Listened class for a PlayerBoard object
  */
 public abstract class PlayerListened extends Listened {
 

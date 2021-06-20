@@ -7,16 +7,21 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 /**
- * TODO: fare javadoc
+ * Listener for the market actions in a MarketView
  */
 public class MarketViewListener implements PropertyChangeListener {
 
     private final MarketBoardController marketBoardController;
 
+    /**
+     * Constructor for the listener
+     * @param marketBoardController Associated GUI Controller
+     */
     public MarketViewListener(MarketBoardController marketBoardController) {
         this.marketBoardController = marketBoardController;
     }
 
+    @Override
     public void propertyChange(PropertyChangeEvent evt) {
         marketBoardController.showMarket((MarketView) evt.getNewValue());
     }

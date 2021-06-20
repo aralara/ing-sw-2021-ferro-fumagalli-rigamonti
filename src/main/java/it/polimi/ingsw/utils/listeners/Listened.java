@@ -4,7 +4,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 /**
- * TODO: fare javadoc
+ * Generic listened class for a model object
  */
 public abstract class Listened {
 

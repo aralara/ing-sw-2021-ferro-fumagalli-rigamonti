@@ -1,7 +1,7 @@
 package it.polimi.ingsw.utils;
 
 /**
- * TODO: fare javadoc
+ * General integer constants used by the game
  */
 public enum Constants {
 
@@ -17,10 +17,18 @@ public enum Constants {
 
     private final int value;
 
+    /**
+     * Enum constructor
+     * @param value Integer value
+     */
     Constants(final int value) {
         this.value = value;
     }
 
+    /**
+     * Getter for value attribute
+     * @return Returns value
+     */
     public int value() {
         return value;
     }

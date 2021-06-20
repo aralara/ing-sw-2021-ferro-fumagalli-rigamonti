@@ -7,10 +7,14 @@ import it.polimi.ingsw.utils.messages.server.update.PlayerLeaderBBoardMessage;
 import java.beans.PropertyChangeEvent;
 
 /**
- * TODO: fare javadoc
+ * Listener for the leader board's board in a PlayerBoard
  */
 public class LeaderBBoardChangeListener extends ModelChangeListener {
 
+    /**
+     * Constructor for the listener
+     * @param virtualView Associated VirtualView
+     */
     public LeaderBBoardChangeListener(VirtualView virtualView) {
         super(virtualView);
     }

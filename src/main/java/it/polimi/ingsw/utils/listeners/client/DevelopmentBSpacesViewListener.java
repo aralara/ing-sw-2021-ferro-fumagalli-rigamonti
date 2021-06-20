@@ -5,16 +5,19 @@ import it.polimi.ingsw.client.gui.controllers.PlayerBoardController;
 import java.beans.PropertyChangeEvent;
 
 /**
- * TODO: fare javadoc
+ * Listener for the development boards spaces in a PlayerBoardView
  */
 public class DevelopmentBSpacesViewListener extends PlayerBoardViewChangeListener {
 
+    /**
+     * Constructor for the listener
+     * @param playerBoardController Associated GUI Controller
+     */
     public DevelopmentBSpacesViewListener(PlayerBoardController playerBoardController) {
         super(playerBoardController);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void propertyChange(PropertyChangeEvent evt) {
         getPlayerBoardController().showDevelopmentBSpaces();
     }

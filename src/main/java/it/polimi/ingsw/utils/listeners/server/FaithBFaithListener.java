@@ -6,10 +6,14 @@ import it.polimi.ingsw.utils.messages.server.update.PlayerFaithBFaithMessage;
 import java.beans.PropertyChangeEvent;
 
 /**
- * TODO: fare javadoc
+ * Listener for the faith board's faith in a PlayerBoard
  */
 public class FaithBFaithListener extends ModelChangeListener {
 
+    /**
+     * Constructor for the listener
+     * @param virtualView Associated VirtualView
+     */
     public FaithBFaithListener(VirtualView virtualView) {
         super(virtualView);
     }

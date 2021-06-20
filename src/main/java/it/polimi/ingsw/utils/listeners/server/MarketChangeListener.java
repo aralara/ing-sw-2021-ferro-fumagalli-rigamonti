@@ -7,10 +7,14 @@ import it.polimi.ingsw.utils.messages.server.update.MarketMessage;
 import java.beans.PropertyChangeEvent;
 
 /**
- * TODO: fare javadoc
+ * Listener for the market in a Game
  */
 public class MarketChangeListener extends ModelChangeListener {
 
+    /**
+     * Constructor for the listener
+     * @param virtualView Associated VirtualView
+     */
     public MarketChangeListener(VirtualView virtualView) {
         super(virtualView);
     }

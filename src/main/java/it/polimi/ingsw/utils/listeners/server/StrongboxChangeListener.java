@@ -8,10 +8,14 @@ import java.beans.PropertyChangeEvent;
 import java.util.List;
 
 /**
- * TODO: fare javadoc
+ * Listener for the strongbox in a PlayerBoard
  */
 public class StrongboxChangeListener extends ModelChangeListener {
 
+    /**
+     * Constructor for the listener
+     * @param virtualView Associated VirtualView
+     */
     public StrongboxChangeListener(VirtualView virtualView) {
         super(virtualView);
     }

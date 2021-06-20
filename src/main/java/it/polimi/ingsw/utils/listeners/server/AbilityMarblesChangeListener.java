@@ -8,10 +8,14 @@ import java.beans.PropertyChangeEvent;
 import java.util.List;
 
 /**
- * TODO: fare javadoc
+ * Listener for the ability marbles in a PlayerBoard
  */
 public class AbilityMarblesChangeListener extends ModelChangeListener {
 
+    /**
+     * Constructor for the listener
+     * @param virtualView Associated VirtualView
+     */
     public AbilityMarblesChangeListener(VirtualView virtualView) {
         super(virtualView);
     }

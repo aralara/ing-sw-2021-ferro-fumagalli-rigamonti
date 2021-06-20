@@ -8,10 +8,14 @@ import java.beans.PropertyChangeEvent;
 import java.util.List;
 
 /**
- * TODO: fare javadoc
+ * Listener for the development deck's spaces in a PlayerBoard
  */
 public class DevelopmentBSpacesChangeListener extends ModelChangeListener {
 
+    /**
+     * Constructor for the listener
+     * @param virtualView Associated VirtualView
+     */
     public DevelopmentBSpacesChangeListener(VirtualView virtualView) {
         super(virtualView);
     }

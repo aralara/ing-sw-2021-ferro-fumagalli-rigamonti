@@ -6,10 +6,14 @@ import it.polimi.ingsw.utils.messages.server.update.LorenzoFaithMessage;
 import java.beans.PropertyChangeEvent;
 
 /**
- * TODO: fare javadoc
+ * Listener for Lorenzo's faith
  */
 public class LorenzoFaithChangeListener extends ModelChangeListener {
 
+    /**
+     * Constructor for the listener
+     * @param virtualView Associated VirtualView
+     */
     public LorenzoFaithChangeListener(VirtualView virtualView) {
         super(virtualView);
     }
