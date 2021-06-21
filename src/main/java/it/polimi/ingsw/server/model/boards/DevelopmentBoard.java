@@ -72,8 +72,12 @@ public class DevelopmentBoard extends PlayerListened implements Serializable {
      * @return Returns true if the card can be added, false otherwise
      */
     public boolean checkDevCardAddable(DevelopmentCard card, int space) {
-        Deck deck = spaces.get(space);
-
+        Deck deck;
+        try {
+            deck = spaces.get(space);
+        } catch(IndexOutOfBoundsException e) {
+            return false;
+        }
         return (card.getLevel() == 1 && deck.isEmpty()) ||
                 (!deck.isEmpty() &&
                         card.getLevel() - 1 == ((DevelopmentCard) deck.get(0)).getLevel());

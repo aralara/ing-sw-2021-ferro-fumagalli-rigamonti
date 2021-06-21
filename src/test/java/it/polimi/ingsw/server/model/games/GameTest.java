@@ -2,19 +2,23 @@ package it.polimi.ingsw.server.model.games;
 
 import it.polimi.ingsw.server.model.boards.PlayerBoard;
 import it.polimi.ingsw.server.model.cards.card.Card;
+import it.polimi.ingsw.server.model.cards.card.CardColors;
+import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
-import it.polimi.ingsw.server.model.storage.Resource;
-import it.polimi.ingsw.server.model.storage.ResourceType;
+import it.polimi.ingsw.server.model.cards.deck.DevelopmentDeck;
+import it.polimi.ingsw.server.model.storage.*;
+import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.TurnStatus;
 import org.junit.Test;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.junit.Assert.*;
 
 /**
- * Tests methods of Game class TODO: fare javadoc
+ * Tests methods of Game class
  */
 public class GameTest {
 
@@ -152,7 +156,30 @@ public class GameTest {
      */
     @Test
     public void testGetFromMarket() {
-        //TODO
+        MultiGame game = new MultiGame();
+        List<String> players = new ArrayList<>();
+        int playerID;
+        players.add("user1");
+        players.add("user2");
+        game.initGame(players);
+
+        // Try to take resource before and after the action for the turn
+        assertEquals(TurnStatus.INVALID.value(), game.loadNextTurn());
+        playerID = updatePlayer(game);
+
+        assertFalse(getPlayerboard(game, playerID).isTurnPlayed());
+
+        List<Resource> marketResources1 = game.getFromMarket(playerID, 1, -1);
+
+        assertTrue(getPlayerboard(game, playerID).isTurnPlayed());
+        assertNotNull(marketResources1);
+        assertEquals(marketResources1.stream().mapToInt(Resource::getQuantity).sum(), 4);
+
+        getPlayerboard(game, playerID).setTurnPlayed(true);
+        List<Resource> marketResources2 = game.getFromMarket(playerID, 1, -1);
+
+        assertTrue(getPlayerboard(game, playerID).isTurnPlayed());
+        assertNull(marketResources2);
     }
 
     /**
@@ -160,15 +187,85 @@ public class GameTest {
      */
     @Test
     public void testRemoveDevCard() {
-        //TODO
-    }
+        // The test is unrealistic since the method would never be called in a MultiGame
+        // but works for the sake of testing the method
+        MultiGame game = new MultiGame();
+        List<String> players = new ArrayList<>();
+        boolean success;
+        players.add("user1");
+        players.add("user2");
+        game.initGame(players);
 
-    /**
-     * Tests if a development card can be bought
-     */
-    @Test
-    public void testCanBuyDevCard() {
-        //TODO
+        DevelopmentDeck developmentDeck1 = game.getDevelopmentDecks().stream().filter(dd ->
+                dd.getDeckColor() == CardColors.PURPLE && dd.getDeckLevel() == 1).findFirst().orElse(null);
+        DevelopmentDeck developmentDeck2 = game.getDevelopmentDecks().stream().filter(dd ->
+                dd.getDeckColor() == CardColors.PURPLE && dd.getDeckLevel() == 2).findFirst().orElse(null);
+        DevelopmentDeck developmentDeck3 = game.getDevelopmentDecks().stream().filter(dd ->
+                dd.getDeckColor() == CardColors.PURPLE && dd.getDeckLevel() == 3).findFirst().orElse(null);
+
+        assertNotNull(developmentDeck1);
+        assertNotNull(developmentDeck2);
+        assertNotNull(developmentDeck3);
+
+        DevelopmentCard firstCard1 = (DevelopmentCard)developmentDeck1.getDeck().get(0);
+        DevelopmentCard firstCard2 = (DevelopmentCard)developmentDeck2.getDeck().get(0);
+        DevelopmentCard firstCard3 = (DevelopmentCard)developmentDeck3.getDeck().get(0);
+
+        assertEquals(developmentDeck1.getDeck().size(), 4);
+        assertEquals(developmentDeck2.getDeck().size(), 4);
+        assertEquals(developmentDeck3.getDeck().size(), 4);
+
+        success = game.removeDevCard(CardColors.PURPLE, 1);
+
+        assertTrue(success);
+        assertTrue(developmentDeck1.getDeck().getCards().stream().noneMatch(c -> c.equals(firstCard1)));
+        assertEquals(developmentDeck1.getDeck().size(), 3);
+        assertEquals(developmentDeck2.getDeck().size(), 4);
+        assertEquals(developmentDeck3.getDeck().size(), 4);
+
+        game.removeDevCard(CardColors.PURPLE, 0);
+        game.removeDevCard(CardColors.PURPLE, 0);
+        game.removeDevCard(CardColors.PURPLE, 0);
+
+        assertTrue(developmentDeck1.getDeck().isEmpty());
+        assertEquals(developmentDeck2.getDeck().size(), 4);
+        assertEquals(developmentDeck3.getDeck().size(), 4);
+
+        success = game.removeDevCard(CardColors.PURPLE, 0);
+
+        assertTrue(success);
+        assertTrue(developmentDeck2.getDeck().getCards().stream().noneMatch(c -> c.equals(firstCard2)));
+        assertTrue(developmentDeck1.getDeck().isEmpty());
+        assertEquals(developmentDeck2.getDeck().size(), 3);
+        assertEquals(developmentDeck3.getDeck().size(), 4);
+
+        game.removeDevCard(CardColors.PURPLE, 2);
+        game.removeDevCard(CardColors.PURPLE, 2);
+        game.removeDevCard(CardColors.PURPLE, 2);
+
+        assertTrue(developmentDeck1.getDeck().isEmpty());
+        assertTrue(developmentDeck2.getDeck().isEmpty());
+        assertEquals(developmentDeck3.getDeck().size(), 4);
+
+        success = game.removeDevCard(CardColors.PURPLE, 0);
+
+        assertTrue(success);
+        assertTrue(developmentDeck3.getDeck().getCards().stream().noneMatch(c -> c.equals(firstCard3)));
+        assertTrue(developmentDeck1.getDeck().isEmpty());
+        assertTrue(developmentDeck2.getDeck().isEmpty());
+        assertEquals(developmentDeck3.getDeck().size(), 3);
+
+        game.removeDevCard(CardColors.PURPLE, 3);
+        game.removeDevCard(CardColors.PURPLE, 3);
+        game.removeDevCard(CardColors.PURPLE, 3);
+
+        assertTrue(developmentDeck1.getDeck().isEmpty());
+        assertTrue(developmentDeck2.getDeck().isEmpty());
+        assertTrue(developmentDeck3.getDeck().isEmpty());
+
+        success = game.removeDevCard(CardColors.PURPLE, 1) || game.removeDevCard(CardColors.PURPLE, 2) ||
+                game.removeDevCard(CardColors.PURPLE, 3) || game.removeDevCard(CardColors.PURPLE, 0);
+        assertFalse(success);
     }
 
     /**
@@ -176,15 +273,76 @@ public class GameTest {
      */
     @Test
     public void testBuyDevCard() {
-        //TODO
-    }
+        MultiGame game = new MultiGame();
+        List<String> players = new ArrayList<>();
+        int playerID;
+        boolean success;
+        players.add("user1");
+        players.add("user2");
+        game.initGame(players);
 
-    /**
-     * Tests if a productions can be activated
-     */
-    @Test
-    public void testCanActivateProductions() {
-        //TODO
+        DevelopmentDeck developmentDeck = game.getDevelopmentDecks().stream().filter(dd ->
+                dd.getDeckColor() == CardColors.PURPLE && dd.getDeckLevel() == 1).findFirst().orElse(null);
+
+        assertNotNull(developmentDeck);
+        assertEquals(TurnStatus.INVALID.value(), game.loadNextTurn());
+        playerID = updatePlayer(game);
+
+        DevelopmentCard card1 = (DevelopmentCard) developmentDeck.getDeck().getCards().get(0);
+        DevelopmentCard card2 = (DevelopmentCard) developmentDeck.getDeck().getCards().get(1);
+
+        // Trying to buy a card without resources
+        success = game.buyDevCard(playerID, card1, 1,
+                List.of(new RequestResources(card1.getCost(), StorageType.STRONGBOX)));
+
+        assertFalse(success);
+
+        getPlayerboard(game, playerID).getStrongbox().addResources(
+                List.of(new Resource(ResourceType.SHIELD, 100),
+                        new Resource(ResourceType.COIN, 100),
+                        new Resource(ResourceType.SERVANT, 100),
+                        new Resource(ResourceType.STONE, 100)));
+
+        // Trying to buy a card with resources but wrong requests
+        success = game.buyDevCard(playerID, card1, 1,
+                List.of(new RequestResources(card1.getCost(), StorageType.WAREHOUSE)));
+        success |= game.buyDevCard(playerID, card1, 1,
+                List.of(new RequestResources(new ArrayList<>(), StorageType.STRONGBOX)));
+
+        assertFalse(success);
+
+        // Trying to buy a card that cannot be taken
+        success = game.buyDevCard(playerID, card2, 1,
+                List.of(new RequestResources(card2.getCost(), StorageType.STRONGBOX)));
+
+        assertFalse(success);
+
+        // Buying the card
+        success = game.buyDevCard(playerID, card1, 1,
+                List.of(new RequestResources(card1.getCost(), StorageType.STRONGBOX)));
+
+        assertTrue(success);
+
+        assertEquals(TurnStatus.LOAD_TURN_NORMAL.value(), game.loadNextTurn());
+        playerID = updatePlayer(game);
+        getPlayerboard(game, playerID).setTurnPlayed(true);
+
+        assertEquals(TurnStatus.LOAD_TURN_NORMAL.value(), game.loadNextTurn());
+        playerID = updatePlayer(game);
+
+        // Trying to put the second card in the wrong place
+        success = game.buyDevCard(playerID, card2, 1,
+                List.of(new RequestResources(card2.getCost(), StorageType.STRONGBOX)));
+        success |= game.buyDevCard(playerID, card2, 5,
+                List.of(new RequestResources(card2.getCost(), StorageType.STRONGBOX)));
+
+        assertFalse(success);
+
+        // Buying the second card
+        success = game.buyDevCard(playerID, card2, 2,
+                List.of(new RequestResources(card2.getCost(), StorageType.STRONGBOX)));
+
+        assertTrue(success);
     }
 
     /**
@@ -192,7 +350,73 @@ public class GameTest {
      */
     @Test
     public void testActivateProductions() {
-        //TODO
+        MultiGame game = new MultiGame();
+        List<String> players = new ArrayList<>();
+        int playerID;
+        boolean success;
+        players.add("user1");
+        players.add("user2");
+        game.initGame(players);
+
+        assertEquals(TurnStatus.INVALID.value(), game.loadNextTurn());
+        playerID = updatePlayer(game);
+
+        List<Resource> basicProductionConsumed = new ArrayList<>();
+        basicProductionConsumed.add(new Resource(ResourceType.SERVANT, 2));
+        List<Resource> basicProductionProduced  = new ArrayList<>();
+        basicProductionProduced.add(new Resource(ResourceType.STONE, 1));
+        Production basicProduction = new Production(basicProductionConsumed, basicProductionProduced);
+
+        // Trying to activate a production without resources
+        success = game.activateProductions(playerID, List.of(basicProduction), List.of(
+                new RequestResources(basicProductionConsumed, StorageType.STRONGBOX)),
+                basicProductionConsumed, basicProductionProduced);
+
+        assertFalse(success);
+
+        getPlayerboard(game, playerID).getStrongbox().addResources(
+                List.of(new Resource(ResourceType.SHIELD, 100),
+                        new Resource(ResourceType.COIN, 100),
+                        new Resource(ResourceType.SERVANT, 100),
+                        new Resource(ResourceType.STONE, 100)));
+
+        // Trying to activate a production with resources but wrong requests
+        success = game.activateProductions(playerID, List.of(basicProduction), List.of(
+                new RequestResources(basicProductionConsumed, StorageType.WAREHOUSE)),
+                basicProductionConsumed, basicProductionProduced);
+        success |= game.activateProductions(playerID, List.of(basicProduction), List.of(
+                new RequestResources(new ArrayList<>(), StorageType.STRONGBOX)),
+                basicProductionConsumed, basicProductionProduced);
+
+        assertFalse(success);
+
+        // Trying to activate a production not available to the player
+        List<Resource> pConsumed = new ArrayList<>();
+        pConsumed.add(new Resource(ResourceType.COIN, 1));
+        List<Resource> pProduced = new ArrayList<>();
+        pProduced.add(new Resource(ResourceType.SHIELD, 1));
+        Production p = new Production(pConsumed, pProduced);
+
+        success = game.activateProductions(playerID, List.of(basicProduction, p), List.of(
+                new RequestResources(basicProductionConsumed, StorageType.STRONGBOX)),
+                Stream.concat(basicProductionConsumed.stream(), pConsumed.stream()).collect(Collectors.toList()),
+                Stream.concat(basicProductionProduced.stream(), pProduced.stream()).collect(Collectors.toList()));
+
+        assertFalse(success);
+
+        // Trying to activate a production with wrong specification/wildcards
+        success = game.activateProductions(playerID, List.of(basicProduction), List.of(
+                new RequestResources(new ArrayList<>(), StorageType.STRONGBOX)),
+                pConsumed, pProduced);
+
+        assertFalse(success);
+
+        // Activating the production
+        success = game.activateProductions(playerID, List.of(basicProduction), List.of(
+                new RequestResources(basicProductionConsumed, StorageType.STRONGBOX)),
+                basicProductionConsumed, basicProductionProduced);
+
+        assertTrue(success);
     }
 
     /**
@@ -208,85 +432,54 @@ public class GameTest {
      */
     @Test
     public void testAddListeners() {
+        MultiGame game = new MultiGame();
+        List<String> players = new ArrayList<>();
+        players.add("user1");
+        players.add("user2");
+        game.initGame(players);
+
+        List<VirtualView> virtualViews = new ArrayList<>();
+        players.forEach(p -> virtualViews.add(new VirtualView(null, null, null, p)));
+        game.addListeners(virtualViews);
+
+        for(DevelopmentDeck dDeck : game.getDevelopmentDecks())
+            assertTrue(dDeck.hasListeners());
+
+        assertTrue(game.getMarket().hasListeners());
+
+        for(PlayerBoard pBoard : game.getPlayerBoards()) {
+            assertTrue(pBoard.hasListeners());
+            assertTrue(pBoard.getDevelopmentBoard().hasListeners());
+            assertTrue(pBoard.getFaithBoard().hasListeners());
+            assertTrue(pBoard.getLeaderBoard().hasListeners());
+            assertTrue(pBoard.getStrongbox().hasListeners());
+            assertTrue(pBoard.getWarehouse().hasListeners());
+        }
     }
 
-    //TODO: TEST CON COVERAGE MA SENZA TEST
-
-    @Test
-    public void testInitGame() {
-    }
-
-    @Test
-    public void testInitPlayerBoards() {
-    }
-
-    @Test
-    public void testInitMarket() {
-    }
-
-    @Test
-    public void testInitDevelopment() {
-    }
-
-    @Test
-    public void testInitFaithTrack() {
-    }
-
-    @Test
-    public void testInitLeaders() {
-    }
-
-    @Test
-    public void testCheckFaith() {
-    }
-
-    @Test
-    public void testCheckEndGame() {
-    }
-
-    @Test
-    public void testRandomizeStartingPlayer() {
-    }
-
-    @Test
-    public void testCalculateFinalPositions() {
-    }
-
-    //TODO: TEST PER SETTER E GETTER
-
-    @Test
-    public void testGetPlayerIndexOf() {
-    }
-
-    @Test
-    public void testGetEndPlayerList() {
-    }
-
-    @Test
-    public void testGetPlayerBoards() {
-    }
-
-    @Test
-    public void testGetMarket() {
-    }
-
-    @Test
-    public void testGetDevelopmentDecks() {
-    }
-
-    @Test
-    public void testGetFaithTrack() {
-    }
 
     @Test
     public void testIsFinished() {
-    }
+        MultiGame game = new MultiGame();
+        List<String> players = new ArrayList<>();
+        int playerID;
+        players.add("user1");
+        players.add("user2");
+        game.initGame(players);
 
-    @Test
-    public void testSerFinished() {
-    }
+        assertFalse(game.isFinished());
 
-    @Test
-    public void testGetPlayerNumber() {
+        assertEquals(TurnStatus.INVALID.value(), game.loadNextTurn());
+        playerID = updatePlayer(game);
+        game.getPlayerBoards().get(game.getPlayerIndexOf(game.getPlayingNickname())).getFaithBoard().addFaith(25);
+        getPlayerboard(game, playerID).setTurnPlayed(true);
+
+        assertEquals(TurnStatus.LOAD_TURN_LAST_ROUND.value(), game.loadNextTurn());
+        playerID = updatePlayer(game);
+        getPlayerboard(game, playerID).setTurnPlayed(true);
+
+        assertEquals(TurnStatus.LOAD_TURN_END_GAME.value(), game.loadNextTurn());
+
+        assertTrue(game.isFinished());
     }
 }

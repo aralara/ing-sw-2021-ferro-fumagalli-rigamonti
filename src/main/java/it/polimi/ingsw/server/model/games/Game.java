@@ -228,7 +228,7 @@ public abstract class Game implements Serializable {
         if(level == 0)
             deck = deckStream.min(Comparator.comparingInt(DevelopmentDeck::getDeckLevel));
         else
-            deck =  deckStream.filter(d -> d.getDeckLevel() == level).findFirst();
+            deck = deckStream.filter(d -> d.getDeckLevel() == level).findFirst();
         if(deck.isEmpty())
             return false;
         deck.get().removeFirst();
@@ -266,7 +266,7 @@ public abstract class Game implements Serializable {
         requests.forEach(rr -> totalRequests.addAll(rr.getList()));
         if(!playerBoard.isTurnPlayed()) {
             if (canBuyDevCard(player, card, space) &&                                                       // Basic checks
-                    Storage.checkContainedResources(Storage.mergeResourceList(cost), totalRequests) &&      // Checks if the resources in the requests can buy the card
+                    Storage.checkContainedResources(totalRequests, Storage.mergeResourceList(cost)) &&      // Checks if the resources in the requests can buy the card
                     developmentDecks.stream()
                             .anyMatch(dd -> !dd.getDeck().isEmpty() && dd.getDeck().get(0).equals(card)) && // Checks if the selected card can be taken from the decks
                     playerBoard.buyDevCard(card, space, requests)                                           // Buys development card if the player has enough resources
@@ -303,6 +303,7 @@ public abstract class Game implements Serializable {
                                        List<Resource> consumed, List<Resource> produced) {
         PlayerBoard playerBoard = playerBoards.get(player);
         List<Resource> totalRequests = new ArrayList<>();
+        requests.forEach(req -> req.getList().forEach(r -> totalRequests.add(r.makeClone())));
         List<Production> allProductions = new ArrayList<>();    //TODO: ci ho perso un'ora di vita ma non ho idea di cosa sia successo, se uso il costruttore parametrizzato dell'arraylist, quando chiamo l'iteratore su productions, il metodo next dell'iteratore comincia a modificare productions azzerando i valori!!!!!!!!!!!!!!!!??????????????????????????
         playerBoard.createProductionStock().forEach(p -> allProductions.add(p.makeClone()));
         List<Resource> mergedConsumed = Storage.mergeResourceList(consumed);     //TODO: temporaneo, da togiere con una nuova implementazione di MergeResourceList
@@ -320,8 +321,8 @@ public abstract class Game implements Serializable {
         }
 
         if(!playerBoard.isTurnPlayed()) {
-            if(canActivateProductions(player, mergedConsumed) &&                                                  // Basic checks
-                    Storage.checkContainedResources(mergedConsumed, totalRequests) &&  // Checks if the resources in the requests can activate the production
+            if(canActivateProductions(player, mergedConsumed) &&                                            // Basic checks
+                    Storage.checkContainedResources(totalRequests, mergedConsumed) &&                       // Checks if the resources in the requests can activate the production
                     matchingProductions &&                                                                  // Checks if the productions can be activated given all the possible productions for the player
                     playerBoard.canTakeFromStorages(requests)                                               // Activates productions if the player has enough resources
             ) {
