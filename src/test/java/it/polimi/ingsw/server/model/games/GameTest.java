@@ -1,11 +1,15 @@
 package it.polimi.ingsw.server.model.games;
 
 import it.polimi.ingsw.server.model.boards.PlayerBoard;
+import it.polimi.ingsw.server.model.cards.ability.AbilityDiscount;
 import it.polimi.ingsw.server.model.cards.card.Card;
 import it.polimi.ingsw.server.model.cards.card.CardColors;
 import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
+import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.server.model.cards.deck.DevelopmentDeck;
+import it.polimi.ingsw.server.model.cards.requirement.Requirement;
+import it.polimi.ingsw.server.model.cards.requirement.RequirementRes;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.TurnStatus;
@@ -424,7 +428,41 @@ public class GameTest {
      */
     @Test
     public void testPlayLeaderCard() {
-        //TODO
+        MultiGame game = new MultiGame();
+        List<String> players = new ArrayList<>();
+        int playerID;
+        boolean success;
+        players.add("user1");
+        players.add("user2");
+        game.initGame(players);
+
+        assertEquals(TurnStatus.INVALID.value(), game.loadNextTurn());
+        playerID = updatePlayer(game);
+
+        Deck playerHand = getPlayerboard(game, playerID).getLeaderBoard().getHand();
+
+        // Try to play a card without the requirements
+        LeaderCard handCard = (LeaderCard) playerHand.getCards().get(0);
+        success = game.playLeaderCard(playerID, handCard);
+
+        assertFalse(success);
+
+        getPlayerboard(game, playerID).getStrongbox()
+                .addResources(List.of(new Resource(ResourceType.SERVANT, 1)));
+
+        // Tries to play a card that isn't in the player's hand
+        LeaderCard newCard = new LeaderCard(999, 1,
+                List.of(new RequirementRes(new Resource(ResourceType.SERVANT, 1))),
+                new AbilityDiscount(ResourceType.SERVANT));
+        success = game.playLeaderCard(playerID, newCard);
+
+        assertFalse(success);
+
+        // Plays the card
+        playerHand.getCards().add(newCard);
+        success = game.playLeaderCard(playerID, newCard);
+
+        assertTrue(success);
     }
 
     /**

@@ -342,7 +342,12 @@ public abstract class Game implements Serializable {
      * @return Returns true if the card is played, false otherwise
      */
     public boolean playLeaderCard(int player, LeaderCard card) {
-        return playerBoards.get(player).playLeaderCard(card);
+        PlayerBoard playerBoard = playerBoards.get(player);
+        List<Card> playerHand = playerBoard.getLeaderBoard().getHand().getCards();
+        if(playerHand.stream().anyMatch(lc -> lc.equals(card)))                     // Checks if the card is in the player's hand
+            return playerBoard.playLeaderCard(card);                                // Plays the card if the requirements are met
+        else
+            return false;
     }
 
     /**
