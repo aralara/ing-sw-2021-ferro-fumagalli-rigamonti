@@ -1,13 +1,15 @@
 package it.polimi.ingsw.server.model.games;
 
+import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.TurnStatus;
 import org.junit.Test;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests methods of SingleGame class
@@ -45,5 +47,45 @@ public class SingleGameTest {
         game.getDevelopmentDecks().get(8).getDeck().getCards().clear();
         assertEquals(TurnStatus.LOAD_TURN_END_GAME.value(), game.loadNextTurn());
         assertEquals(2, game.getEndPlayerList().get(0).getFinalPosition());
+    }
+
+    /**
+     * Tests if the listeners are correctly added
+     */
+    @Test
+    public void testAddListeners() {
+        SingleGame game = new SingleGame();
+        List<String> players = new ArrayList<>();
+        players.add("user");
+        game.initGame(players);
+
+        List<VirtualView> virtualViews = new ArrayList<>();
+        players.forEach(p -> virtualViews.add(new VirtualView(null, null, null, p)));
+        game.addListeners(virtualViews);
+
+        assertTrue(game.getLorenzoBoard().hasListeners());
+    }
+
+    /**
+     * Tests if the getter returns the correct nickname
+     */
+    @Test
+    public void testGetPlayingNickname() {
+        SingleGame game = new SingleGame();
+        List<String> players = new ArrayList<>();
+        players.add("user");
+        game.initGame(players);
+
+        assertEquals("user", game.getPlayingNickname());
+
+        try {
+            Class<?> gameClass = game.getClass();
+            Field isLorenzoTurn = gameClass.getDeclaredField("isLorenzoTurn");
+            isLorenzoTurn.setAccessible(true);
+            isLorenzoTurn.setBoolean(game, true);
+            assertEquals("Lorenzo il Magnifico", game.getPlayingNickname());
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            fail();
+        }
     }
 }

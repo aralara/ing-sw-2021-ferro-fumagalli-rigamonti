@@ -8,7 +8,6 @@ import it.polimi.ingsw.server.model.cards.card.DevelopmentCard;
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.model.cards.deck.Deck;
 import it.polimi.ingsw.server.model.cards.deck.DevelopmentDeck;
-import it.polimi.ingsw.server.model.cards.requirement.Requirement;
 import it.polimi.ingsw.server.model.cards.requirement.RequirementRes;
 import it.polimi.ingsw.server.model.storage.*;
 import it.polimi.ingsw.server.view.VirtualView;
@@ -36,12 +35,12 @@ public class GameTest {
     }
 
     /**
-     * Returns a PlayerBoard from the game given its index
+     * Helper method that returns a PlayerBoard from the game given its index
      * @param game Referenced game
      * @param n Index of the PlayerBoard
      * @return Returns the corresponding PlayerBoard object
      */
-    private PlayerBoard getPlayerboard(Game game, int n) {
+    private PlayerBoard getPlayerBoard(Game game, int n) {
         return game.getPlayerBoards().get(n);
     }
 
@@ -63,50 +62,50 @@ public class GameTest {
         assertEquals(TurnStatus.INVALID.value(), game.loadNextTurn());
         playerID = updatePlayer(game);
 
-        assertEquals(getPlayerboard(game, playerID).getLeaderBoard().getHand().size(), 4);
-        assertTrue(getPlayerboard(game, playerID).getLeaderBoard().getBoard().isEmpty());
+        assertEquals(getPlayerBoard(game, playerID).getLeaderBoard().getHand().size(), 4);
+        assertTrue(getPlayerBoard(game, playerID).getLeaderBoard().getBoard().isEmpty());
 
         discardValue = game.discardLeaders(playerID,
-                (List<LeaderCard>)(List<? extends Card>) getPlayerboard(game, playerID).getLeaderBoard().getHand()
+                (List<LeaderCard>)(List<? extends Card>) getPlayerBoard(game, playerID).getLeaderBoard().getHand()
                         .getCards().stream().limit(2).collect(Collectors.toList()),
                 true);
-        getPlayerboard(game, playerID).setTurnPlayed(true);
+        getPlayerBoard(game, playerID).setTurnPlayed(true);
 
-        assertEquals(getPlayerboard(game, playerID).getLeaderBoard().getHand().size(), 2);
-        assertEquals(getPlayerboard(game, playerID).getFaithBoard().getFaith(), 0);
-        assertTrue(getPlayerboard(game, playerID).getLeaderBoard().getBoard().isEmpty());
+        assertEquals(getPlayerBoard(game, playerID).getLeaderBoard().getHand().size(), 2);
+        assertEquals(getPlayerBoard(game, playerID).getFaithBoard().getFaith(), 0);
+        assertTrue(getPlayerBoard(game, playerID).getLeaderBoard().getBoard().isEmpty());
         assertTrue(discardValue);
 
         assertEquals(TurnStatus.LOAD_TURN_NORMAL.value(), game.loadNextTurn());
         playerID = updatePlayer(game);
-        getPlayerboard(game, playerID).setTurnPlayed(true);
+        getPlayerBoard(game, playerID).setTurnPlayed(true);
 
         // Discards a single leader card
         assertEquals(TurnStatus.LOAD_TURN_NORMAL.value(), game.loadNextTurn());
         playerID = updatePlayer(game);
         discardValue = game.discardLeaders(playerID,
-                List.of((LeaderCard)getPlayerboard(game, playerID).getLeaderBoard().getHand().get(0)), false);
-        getPlayerboard(game, playerID).setTurnPlayed(true);
+                List.of((LeaderCard) getPlayerBoard(game, playerID).getLeaderBoard().getHand().get(0)), false);
+        getPlayerBoard(game, playerID).setTurnPlayed(true);
 
-        assertEquals(getPlayerboard(game, playerID).getLeaderBoard().getHand().size(), 1);
-        assertEquals(getPlayerboard(game, playerID).getFaithBoard().getFaith(), 1);
-        assertTrue(getPlayerboard(game, playerID).getLeaderBoard().getBoard().isEmpty());
+        assertEquals(getPlayerBoard(game, playerID).getLeaderBoard().getHand().size(), 1);
+        assertEquals(getPlayerBoard(game, playerID).getFaithBoard().getFaith(), 1);
+        assertTrue(getPlayerBoard(game, playerID).getLeaderBoard().getBoard().isEmpty());
         assertTrue(discardValue);
 
         assertEquals(TurnStatus.LOAD_TURN_NORMAL.value(), game.loadNextTurn());
         playerID = updatePlayer(game);
-        getPlayerboard(game, playerID).setTurnPlayed(true);
+        getPlayerBoard(game, playerID).setTurnPlayed(true);
 
         // Try to discard a card in "setup" while the game isn't in setup
         assertEquals(TurnStatus.LOAD_TURN_NORMAL.value(), game.loadNextTurn());
         playerID = updatePlayer(game);
         discardValue = game.discardLeaders(playerID,
-                List.of((LeaderCard)getPlayerboard(game, playerID).getLeaderBoard().getHand().get(0)), true);
-        getPlayerboard(game, playerID).setTurnPlayed(true);
+                List.of((LeaderCard) getPlayerBoard(game, playerID).getLeaderBoard().getHand().get(0)), true);
+        getPlayerBoard(game, playerID).setTurnPlayed(true);
 
-        assertEquals(getPlayerboard(game, playerID).getLeaderBoard().getHand().size(), 1);
-        assertEquals(getPlayerboard(game, playerID).getFaithBoard().getFaith(), 1);
-        assertTrue(getPlayerboard(game, playerID).getLeaderBoard().getBoard().isEmpty());
+        assertEquals(getPlayerBoard(game, playerID).getLeaderBoard().getHand().size(), 1);
+        assertEquals(getPlayerBoard(game, playerID).getFaithBoard().getFaith(), 1);
+        assertTrue(getPlayerBoard(game, playerID).getLeaderBoard().getBoard().isEmpty());
         assertFalse(discardValue);
     }
 
@@ -171,18 +170,18 @@ public class GameTest {
         assertEquals(TurnStatus.INVALID.value(), game.loadNextTurn());
         playerID = updatePlayer(game);
 
-        assertFalse(getPlayerboard(game, playerID).isTurnPlayed());
+        assertFalse(getPlayerBoard(game, playerID).isTurnPlayed());
 
         List<Resource> marketResources1 = game.getFromMarket(playerID, 1, -1);
 
-        assertTrue(getPlayerboard(game, playerID).isTurnPlayed());
+        assertTrue(getPlayerBoard(game, playerID).isTurnPlayed());
         assertNotNull(marketResources1);
         assertEquals(marketResources1.stream().mapToInt(Resource::getQuantity).sum(), 4);
 
-        getPlayerboard(game, playerID).setTurnPlayed(true);
+        getPlayerBoard(game, playerID).setTurnPlayed(true);
         List<Resource> marketResources2 = game.getFromMarket(playerID, 1, -1);
 
-        assertTrue(getPlayerboard(game, playerID).isTurnPlayed());
+        assertTrue(getPlayerBoard(game, playerID).isTurnPlayed());
         assertNull(marketResources2);
     }
 
@@ -301,7 +300,7 @@ public class GameTest {
 
         assertFalse(success);
 
-        getPlayerboard(game, playerID).getStrongbox().addResources(
+        getPlayerBoard(game, playerID).getStrongbox().addResources(
                 List.of(new Resource(ResourceType.SHIELD, 100),
                         new Resource(ResourceType.COIN, 100),
                         new Resource(ResourceType.SERVANT, 100),
@@ -329,7 +328,7 @@ public class GameTest {
 
         assertEquals(TurnStatus.LOAD_TURN_NORMAL.value(), game.loadNextTurn());
         playerID = updatePlayer(game);
-        getPlayerboard(game, playerID).setTurnPlayed(true);
+        getPlayerBoard(game, playerID).setTurnPlayed(true);
 
         assertEquals(TurnStatus.LOAD_TURN_NORMAL.value(), game.loadNextTurn());
         playerID = updatePlayer(game);
@@ -378,7 +377,7 @@ public class GameTest {
 
         assertFalse(success);
 
-        getPlayerboard(game, playerID).getStrongbox().addResources(
+        getPlayerBoard(game, playerID).getStrongbox().addResources(
                 List.of(new Resource(ResourceType.SHIELD, 100),
                         new Resource(ResourceType.COIN, 100),
                         new Resource(ResourceType.SERVANT, 100),
@@ -439,7 +438,7 @@ public class GameTest {
         assertEquals(TurnStatus.INVALID.value(), game.loadNextTurn());
         playerID = updatePlayer(game);
 
-        Deck playerHand = getPlayerboard(game, playerID).getLeaderBoard().getHand();
+        Deck playerHand = getPlayerBoard(game, playerID).getLeaderBoard().getHand();
 
         // Try to play a card without the requirements
         LeaderCard handCard = (LeaderCard) playerHand.getCards().get(0);
@@ -447,7 +446,7 @@ public class GameTest {
 
         assertFalse(success);
 
-        getPlayerboard(game, playerID).getStrongbox()
+        getPlayerBoard(game, playerID).getStrongbox()
                 .addResources(List.of(new Resource(ResourceType.SERVANT, 1)));
 
         // Tries to play a card that isn't in the player's hand
@@ -510,11 +509,11 @@ public class GameTest {
         assertEquals(TurnStatus.INVALID.value(), game.loadNextTurn());
         playerID = updatePlayer(game);
         game.getPlayerBoards().get(game.getPlayerIndexOf(game.getPlayingNickname())).getFaithBoard().addFaith(25);
-        getPlayerboard(game, playerID).setTurnPlayed(true);
+        getPlayerBoard(game, playerID).setTurnPlayed(true);
 
         assertEquals(TurnStatus.LOAD_TURN_LAST_ROUND.value(), game.loadNextTurn());
         playerID = updatePlayer(game);
-        getPlayerboard(game, playerID).setTurnPlayed(true);
+        getPlayerBoard(game, playerID).setTurnPlayed(true);
 
         assertEquals(TurnStatus.LOAD_TURN_END_GAME.value(), game.loadNextTurn());
 
