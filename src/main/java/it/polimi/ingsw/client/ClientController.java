@@ -78,7 +78,7 @@ public abstract class ClientController {
 
     public abstract void notifyLastRound();
 
-    public abstract void notifyEndGame(List<Player> players);
+    public abstract void notifyEndGame(List<Player> players, boolean disconnection);
 
     public abstract void selectDevDecks();
 

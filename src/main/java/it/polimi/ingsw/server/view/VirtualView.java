@@ -62,7 +62,7 @@ public class VirtualView implements Runnable {
         } catch (IOException e) {
             if(client != null)
                 System.out.println("client " + client.getInetAddress() + " connection dropped");
-            stop(true);
+            stop(true, false);
         }
     }
 
@@ -106,12 +106,12 @@ public class VirtualView implements Runnable {
 
     /**
      * Interrupts the connection, closing the streams and propagating the message accordingly to the propagate parameter
-     * @param propagate If true calls the stop method on the GameHandler, if false sends a message to the client
-     *                  communicating the disconnection
+     * @param propagate If true calls the stop method on the GameHandler
+     * @param sendMessage If true sends a message to the client, notifying them of the disconnection
      */
-    public void stop(boolean propagate) {
+    public void stop(boolean propagate, boolean sendMessage) {
         if(active) {
-            if(!propagate)
+            if(!sendMessage)
                 sendMessage(new PlayerDisconnectedMessage());
             active = false;
             try {
@@ -126,7 +126,7 @@ public class VirtualView implements Runnable {
             }
         }
         if(propagate)
-            getGameHandler().stop();
+            getGameHandler().stop(sendMessage);
     }
 
     /**

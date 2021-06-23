@@ -334,18 +334,22 @@ public class GUI extends ClientController {
     }
 
     @Override
-    public void notifyEndGame(List<Player> players) {
+    public void notifyEndGame(List<Player> players, boolean disconnection) {
         callPlatformRunLater(() -> guiApplication.getController(SceneNames.PLAYER_BOARD).showAlert(Alert.AlertType.INFORMATION,
                 "Notification", "The game has ended!", ""));
-        RankingController rc = (RankingController) guiApplication.getController(SceneNames.RANKING);
-        List<Player> playerRanking = players.stream().sorted(Comparator.comparingInt(
-                Player::getFinalPosition)).collect(Collectors.toList());
-        for (Player player : playerRanking) {
-            rc.setNames_label(player.getNickname());
-            // Lorenzo doesn't have a VP score, therefore the ranking board will display "-" in its place
-            rc.setScores_label(player.getTotalVP() >= 0 ? Integer.toString(player.getTotalVP()) : "-");
+        if(!disconnection) {
+            RankingController rc = (RankingController) guiApplication.getController(SceneNames.RANKING);
+            List<Player> playerRanking = players.stream().sorted(Comparator.comparingInt(
+                    Player::getFinalPosition)).collect(Collectors.toList());
+            for (Player player : playerRanking) {
+                rc.setNames_label(player.getNickname());
+                // Lorenzo doesn't have a VP score, therefore the ranking board will display "-" in its place
+                rc.setScores_label(player.getTotalVP() >= 0 ? Integer.toString(player.getTotalVP()) : "-");
+            }
+            callPlatformRunLater(() -> guiApplication.setActiveScene(SceneNames.RANKING));
         }
-        callPlatformRunLater(() -> guiApplication.setActiveScene(SceneNames.RANKING));
+        else
+            callPlatformRunLater(() -> guiApplication.setActiveScene(SceneNames.ERROR));
     }
 
     @Override
@@ -775,6 +779,5 @@ public class GUI extends ClientController {
         callPlatformRunLater(guiApplication::closeCardStage);
         callPlatformRunLater(guiApplication::closePopUpStage);
         super.destroy();
-        callPlatformRunLater(() -> guiApplication.setActiveScene(SceneNames.ERROR));
     }
 }

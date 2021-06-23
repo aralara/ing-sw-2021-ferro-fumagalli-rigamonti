@@ -24,7 +24,7 @@ public class EndGameMessage implements ServerActionMessage {
 
     @Override
     public void doAction(ClientController client) {
-        client.notifyEndGame(players);
+        client.notifyEndGame(players, false);
         client.destroy();
     }
 }

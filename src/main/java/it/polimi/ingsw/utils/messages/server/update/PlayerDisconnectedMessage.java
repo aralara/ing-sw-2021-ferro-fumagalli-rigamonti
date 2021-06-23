@@ -9,7 +9,7 @@ public class PlayerDisconnectedMessage implements ServerUpdateMessage {
 
     @Override
     public void doUpdate(ClientController client) {
-        client.ackNotification("A disconnection has occurred: game ends", false);
+        client.notifyEndGame(null, true);
         client.destroy();
     }
 }

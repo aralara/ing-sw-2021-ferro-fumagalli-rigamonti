@@ -74,7 +74,7 @@ public class GameHandler implements Runnable {
             sizeSetup.set(size);
             if(game.isFinished()) {     // In case the loaded game has already ended, displays the results to all the players and stops the game
                 sendAll(new EndGameMessage(game.getEndPlayerList()));
-                stop();
+                stop(false);
             }
             else {
                 updateClients(game);
@@ -207,12 +207,13 @@ public class GameHandler implements Runnable {
 
     /**
      * Interrupts the game, sends a non-propagating stop message to all of the players and tries to save the game
+     * @param sendMessage If true sends a message to all the clients, notifying them of the disconnection
      */
-    public void stop() {
+    public void stop(boolean sendMessage) {
         if(active) {
             active = false;
             for (VirtualView virtualView : clientsVirtualView)
-                virtualView.stop(false);
+                virtualView.stop(false, sendMessage);
             if(!saveGame(null)) {
                 try {
                     GameLibrary.getInstance().deleteSave(save);

@@ -126,14 +126,13 @@ public class MessageHandler implements Runnable {
     public void stop() {
         if(active.getAndSet(false)) {
             try {
-                updateQueue.put(new PlayerDisconnectedMessage());
                 if (server != null && !server.isClosed())
                     server.close();
                 if (input != null)
                     input.close();
                 if (output != null)
                     output.close();
-            } catch (InterruptedException | IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
