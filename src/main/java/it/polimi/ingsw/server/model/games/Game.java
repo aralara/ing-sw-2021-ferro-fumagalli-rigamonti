@@ -322,6 +322,7 @@ public abstract class Game implements Serializable {
         PlayerBoard playerBoard = playerBoards.get(player);
         List<Resource> totalRequests = new ArrayList<>();
         requests.forEach(req -> req.getList().forEach(r -> totalRequests.add(r.makeClone())));
+        Storage.mergeResourceList(totalRequests);
         List<Production> allProductions = new ArrayList<>();    //TODO: ci ho perso un'ora di vita ma non ho idea di cosa sia successo, se uso il costruttore parametrizzato dell'arraylist, quando chiamo l'iteratore su productions, il metodo next dell'iteratore comincia a modificare productions azzerando i valori!!!!!!!!!!!!!!!!??????????????????????????
         playerBoard.createProductionStock().forEach(p -> allProductions.add(p.makeClone()));
         List<Resource> mergedConsumed = Storage.mergeResourceList(consumed);     //TODO: temporaneo, da togiere con una nuova implementazione di MergeResourceList
