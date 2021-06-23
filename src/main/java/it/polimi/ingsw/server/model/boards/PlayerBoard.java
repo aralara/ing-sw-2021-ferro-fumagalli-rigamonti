@@ -32,6 +32,8 @@ public class PlayerBoard extends PlayerListened implements Serializable {
     private final List<ResourceType> activeAbilityMarbles;
     private final List<ResourceType> activeAbilityDiscounts;
 
+    private List<Resource> equalizedResources;
+
 
     /**
      * PlayerBoard constructor that, given the nickname of its player, initializes all of its components
@@ -50,6 +52,7 @@ public class PlayerBoard extends PlayerListened implements Serializable {
         this.activeAbilityProductions = new ArrayList<>();
         this.activeAbilityMarbles = new ArrayList<>();
         this.activeAbilityDiscounts = new ArrayList<>();
+        this.equalizedResources = new ArrayList<>();
 /*
         this.basicProduction = new Production(
                 new ArrayList<>(List.of(new Resource(ResourceType.WILDCARD,1))),
@@ -292,5 +295,28 @@ public class PlayerBoard extends PlayerListened implements Serializable {
      */
     public List<ResourceType> getAbilityDiscounts() {
         return activeAbilityDiscounts;
+    }
+
+    /**
+     * Gets the equalizedResources attribute
+     * @return Returns equalizedResources value
+     */
+    public List<Resource> getEqualizedResources() {
+        return equalizedResources;
+    }
+
+    /**
+     * Sets the equalizedResources attribute
+     * @param equalizedResources New equalizedResources value
+     */
+    public void setEqualizedResources(List<Resource> equalizedResources) {
+        this.equalizedResources = equalizedResources;
+    }
+
+    /**
+     * Resets the equalizedResources attribute
+     */
+    public void resetEqualizedResources() {
+        this.equalizedResources = new ArrayList<>();
     }
 }

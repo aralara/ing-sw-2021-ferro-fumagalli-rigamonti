@@ -97,7 +97,7 @@ public class Market extends Listened implements Serializable {
         }
 
         Storage.aggregateResources(marbleResources);
-        lastTook = marbleResources;
+        setLastTook(marbleResources);
 
         moveFloatingMarble(row, column);
         fireUpdate(Listeners.GAME_MARKET.value(), this);
@@ -128,13 +128,6 @@ public class Market extends Listened implements Serializable {
             marbleMatrix[MARKET_ROW_SIZE.value() - 1][column] = floatingMarble;
         }
         floatingMarble = newFloatingMarble;
-    }
-
-    /**
-     * Resets at null the lastTook attribute
-     */
-    public void resetLastTook() {
-        lastTook = null;
     }
 
     /**
@@ -169,5 +162,20 @@ public class Market extends Listened implements Serializable {
      */
     public List<Resource> getLastTook() {
         return lastTook;
+    }
+
+    /**
+     * Sets the lastTook attribute
+     * @param lastTook New lastTook value
+     */
+    public void setLastTook(List<Resource> lastTook) {
+        this.lastTook = lastTook;
+    }
+
+    /**
+     * Resets at null the lastTook attribute
+     */
+    public void resetLastTook() {
+        lastTook = null;
     }
 }

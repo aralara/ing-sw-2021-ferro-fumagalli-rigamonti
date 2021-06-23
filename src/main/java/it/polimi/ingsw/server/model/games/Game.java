@@ -138,7 +138,7 @@ public abstract class Game implements Serializable {
      * if the game is single player, it will return an empty map
      * @return Returns a map of lists of resources using the nickname of the player as a key
      */
-    public Map<String, List<Resource>> getResourcesToEqualize() {    //TODO: hardcoded resources
+    public Map<String, List<Resource>> getResourcesToEqualize() {
         Map<String, List<Resource>> equalizeRes = new HashMap<>();
         List<List<Resource>> resources = new ArrayList<>();
         //Resources for the 1st player
@@ -153,8 +153,10 @@ public abstract class Game implements Serializable {
         resources.add(Arrays.asList(
                 new Resource(ResourceType.WILDCARD, 2),
                 new Resource(ResourceType.FAITH, 1)));
-        for(int i = 0; i < getPlayerNumber(); i++)
+        for(int i = 0; i < getPlayerNumber(); i++) {
             equalizeRes.put(getPlayerBoards().get(i).getPlayer().getNickname(), resources.get(i));
+            getPlayerBoards().get(i).setEqualizedResources(resources.get(i));
+        }
         return equalizeRes;
     }
 
@@ -165,20 +167,30 @@ public abstract class Game implements Serializable {
      * @param extra List of resources to be discarded and faith to be added
      * @return Returns true if the resources are added correctly, false otherwise
      */
-    public boolean addResourcesToWarehouse(int player, List<Shelf> shelves, List<Resource> extra) { //TODO: controllare che il giocatore possa aggiungerle dato lo stato corrente (dopo aver equalizzato)
+    public boolean addResourcesToWarehouse(int player, List<Shelf> shelves, List<Resource> extra) {
         PlayerBoard playerboard = playerBoards.get(player);
         List<Resource> addedResources = new Warehouse(shelves).getList();
         extra.forEach(r -> addedResources.add(r.makeClone()));
         List<Resource> resourceDiff =
                 playerboard.getWarehouse().getAddedResources(Storage.mergeResourceList(addedResources));
 
-        if((market.getLastTook() != null && !Storage.checkListModeled(market.getLastTook(),resourceDiff,
-                playerboard.getAbilityMarbles(), true)) ||                                  // If the player took resources from the market, checks if the marbles could have generated the added resources
-                !playerboard.getWarehouse().changeConfiguration(shelves))                                   // Changes the warehouse configuration if it's possible
+        if(     (market.getLastTook() != null && !Storage.checkListModeled(market.getLastTook(),resourceDiff,
+                        playerboard.getAbilityMarbles(), true)) ||                              // If the player took resources from the market, checks if the marbles could have generated the added resources
+                (!playerboard.getEqualizedResources().isEmpty() && !Storage.checkListModeled(
+                        playerboard.getEqualizedResources(), resourceDiff, ResourceType.getRealValues(),
+                        false)) ||                                                              // If the player is equalizing resources, checks if the equalization list could have generated the added resources
+                (market.getLastTook() == null && playerboard.getEqualizedResources().isEmpty() &&
+                        (!Storage.checkContainedResources(playerboard.getWarehouse().getList(),
+                                new Warehouse(shelves).getList()) ||
+                        !Storage.checkContainedResources(new Warehouse(shelves).getList(),
+                                playerboard.getWarehouse().getList()) || !extra.isEmpty())) ||                  // If the player is trying to rearrange the warehouse, checks if the resources remain the same
+                !playerboard.getWarehouse().changeConfiguration(shelves))                                       // Changes the warehouse configuration if it's possible
             return false;
 
         if(market.getLastTook() != null)
             market.resetLastTook();
+        if(!playerboard.getEqualizedResources().isEmpty())
+            playerboard.resetEqualizedResources();
 
         if (extra.size() > 0) {
             playerboard.getFaithBoard().takeFaithFromResources(extra);

@@ -151,7 +151,81 @@ public class GameTest {
      */
     @Test
     public void testAddResourcesToWarehouse() {
-        //TODO
+        MultiGame game = new MultiGame();
+        List<String> players = new ArrayList<>();
+        int playerID;
+        boolean success;
+        players.add("user1");
+        players.add("user2");
+        game.initGame(players);
+        game.getResourcesToEqualize();
+
+        List<Shelf> testShelves1 = List.of(
+                new Shelf(ResourceType.COIN, new Resource(ResourceType.COIN, 1), 1, false),
+                new Shelf(2),
+                new Shelf(3));
+
+        List<Shelf> testShelves2 = List.of(
+                new Shelf(ResourceType.SERVANT, new Resource(ResourceType.SERVANT, 1), 1, false),
+                new Shelf(2),
+                new Shelf(3));
+
+        List<Shelf> testShelves3 = List.of(
+                new Shelf(ResourceType.SERVANT, new Resource(ResourceType.SERVANT, 1), 1, false),
+                new Shelf(ResourceType.STONE, new Resource(ResourceType.STONE, 2), 2, false),
+                new Shelf(3));
+
+        List<Shelf> testShelves4 = List.of(
+                new Shelf(1),
+                new Shelf(ResourceType.SERVANT, new Resource(ResourceType.SERVANT, 1), 2, false),
+                new Shelf(3));
+
+        assertEquals(TurnStatus.INVALID.value(), game.loadNextTurn());
+        playerID = updatePlayer(game);
+
+        // Trying to add resources without equalizing
+        success = game.addResourcesToWarehouse(playerID, testShelves1, new ArrayList<>());
+
+        assertFalse(success);
+
+        getPlayerBoard(game, playerID).setTurnPlayed(true);
+        assertEquals(TurnStatus.LOAD_TURN_NORMAL.value(), game.loadNextTurn());
+        playerID = updatePlayer(game);
+
+        // Adding resources while equalizing
+        success = game.addResourcesToWarehouse(playerID, testShelves1, new ArrayList<>());
+
+        assertTrue(success);
+
+        getPlayerBoard(game, playerID).setTurnPlayed(true);
+        assertEquals(TurnStatus.LOAD_TURN_NORMAL.value(), game.loadNextTurn());
+        playerID = updatePlayer(game);
+
+        List<Resource> extraList = new ArrayList<>();
+        extraList.add(new Resource(ResourceType.FAITH, 1));
+
+        // Trying to add resources without having taken them from the market
+        success = game.addResourcesToWarehouse(playerID, testShelves2, extraList);
+
+        assertFalse(success);
+
+        // Adding resources having taken them from the market
+        game.getMarket().setLastTook(List.of(
+                new Resource(ResourceType.SERVANT, 1),
+                new Resource(ResourceType.FAITH, 1)));
+        success = game.addResourcesToWarehouse(playerID, testShelves2, extraList);
+
+        assertTrue(success);
+
+        // Trying to add resources when rearranging the warehouse
+        success = game.addResourcesToWarehouse(playerID, testShelves3, new ArrayList<>());
+
+        assertFalse(success);
+
+        // Rearranging the warehouse
+        success = game.addResourcesToWarehouse(playerID, testShelves4, new ArrayList<>());
+
+        assertTrue(success);
     }
 
     /**
