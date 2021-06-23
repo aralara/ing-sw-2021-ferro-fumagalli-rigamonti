@@ -263,10 +263,16 @@ public abstract class Game implements Serializable {
         PlayerBoard playerBoard = playerBoards.get(player);
         List<Resource> totalRequests = new ArrayList<>();
         List<Resource> cost = Storage.calculateDiscount(card.getCost(), playerBoard.getAbilityDiscounts());
-        requests.forEach(rr -> totalRequests.addAll(rr.getList()));
+
+        for(RequestResources rr : requests){
+            for(Resource res : rr.getList()){
+                totalRequests.add(res.makeClone());
+            }
+        }
+
         if(!playerBoard.isTurnPlayed()) {
             if (canBuyDevCard(player, card, space) &&                                                       // Basic checks
-                    Storage.checkContainedResources(totalRequests, Storage.mergeResourceList(cost)) &&      // Checks if the resources in the requests can buy the card
+                    Storage.checkContainedResources(Storage.mergeResourceList(totalRequests), Storage.mergeResourceList(cost)) &&      // Checks if the resources in the requests can buy the card
                     developmentDecks.stream()
                             .anyMatch(dd -> !dd.getDeck().isEmpty() && dd.getDeck().get(0).equals(card)) && // Checks if the selected card can be taken from the decks
                     playerBoard.buyDevCard(card, space, requests)                                           // Buys development card if the player has enough resources
