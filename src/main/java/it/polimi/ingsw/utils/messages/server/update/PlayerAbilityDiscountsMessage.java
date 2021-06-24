@@ -15,6 +15,11 @@ public class PlayerAbilityDiscountsMessage implements ServerUpdateMessage {
     private final String nickname;
 
 
+    /**
+     * Constructor for a PlayerAbilityDiscountsMessage given a list of discounts and a nickname
+     * @param discounts List of ResourceTypes containing the player's available discounts
+     * @param nickname Nickname of the player
+     */
     public PlayerAbilityDiscountsMessage(List<ResourceType> discounts, String nickname) {
         this.discounts = discounts;
         this.nickname = nickname;

@@ -10,6 +10,9 @@ import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
  */
 public class ConfirmReadyMessage extends ClientActionMessage {
 
+    /**
+     * Default constructor for ConfirmReadyMessage
+     */
     public ConfirmReadyMessage() { }
 
 

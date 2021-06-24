@@ -11,9 +11,14 @@ import java.util.List;
  */
 public class ResourcesEqualizeMessage extends ResourcesMessage implements ServerActionMessage {
 
+    /**
+     * Constructor for a ResourcesEqualizeMessage given a list of resources
+     * @param resources List of resources that will equalize a single player
+     */
     public ResourcesEqualizeMessage(List<Resource> resources) {
         super(resources);
     }
+
 
     @Override
     public void doAction(ClientController client) {

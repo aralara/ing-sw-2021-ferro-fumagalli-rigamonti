@@ -13,6 +13,10 @@ public class GameSavesMessage implements ServerActionMessage {
     private final List<GameSave> saves;
 
 
+    /**
+     * Constructor for GameSavesMessage given a list of saves
+     * @param saves List of saves proposed to the player
+     */
     public GameSavesMessage(List<GameSave> saves) {
         this.saves = saves;
     }

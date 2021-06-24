@@ -10,6 +10,10 @@ public class NewPlayerMessage implements ServerActionMessage {
     private final String playerNickname;
 
 
+    /**
+     * Constructor for a NewPlayerMessage given a nickname
+     * @param playerNickname The new player's nickname
+     */
     public NewPlayerMessage(String playerNickname) {
         this.playerNickname = playerNickname;
     }

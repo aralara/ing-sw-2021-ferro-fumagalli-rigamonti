@@ -14,6 +14,10 @@ public class DevelopmentDecksMessage implements ServerUpdateMessage {
     private final DevelopmentDecksView developmentDecks;
 
 
+    /**
+     * Constructor for a DevelopmentDecksMessage given a list of development decks
+     * @param developmentDecks development decks contained in the DevelopmentDecksMessage
+     */
     public DevelopmentDecksMessage(List<DevelopmentDeck> developmentDecks) {
         this.developmentDecks = new DevelopmentDecksView(developmentDecks);
     }

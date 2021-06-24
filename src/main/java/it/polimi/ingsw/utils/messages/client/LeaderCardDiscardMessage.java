@@ -15,10 +15,20 @@ public class LeaderCardDiscardMessage extends LeaderCardMessageClient {
     private final boolean setup;
 
 
+    /**
+     * Constructor for a LeaderCardDiscardMessage given the discarded LeaderCards
+     * @param leaderCards LeaderCards that need to be discarded
+     */
     public LeaderCardDiscardMessage(List<LeaderCard> leaderCards) {
         super(leaderCards);
         this.setup = false;
     }
+
+    /**
+     * Constructor for a LeaderCardDiscardMessage given the discarded LeaderCards and a setup flag
+     * @param leaderCards LeaderCards that need to be discarded
+     * @param setup Flag that indicates if the cards are discarded during setup
+     */
     public LeaderCardDiscardMessage(List<LeaderCard> leaderCards, boolean setup) {
         super(leaderCards);
         this.setup = setup;

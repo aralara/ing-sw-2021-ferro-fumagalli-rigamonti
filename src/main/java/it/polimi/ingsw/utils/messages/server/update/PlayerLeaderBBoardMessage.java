@@ -13,6 +13,11 @@ public class PlayerLeaderBBoardMessage implements ServerUpdateMessage {
     private final String nickname;
 
 
+    /**
+     * Constructor for a PlayerLeaderBBoardMessage given the leaderboard and a nickname
+     * @param board Player's leader board
+     * @param nickname Nickname of the player
+     */
     public PlayerLeaderBBoardMessage(Deck board, String nickname) {
         this.board = board;
         this.nickname = nickname;

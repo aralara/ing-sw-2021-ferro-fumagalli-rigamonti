@@ -16,21 +16,37 @@ public class CanActivateProductionsMessage extends ClientActionMessage {
     private final List<Production> productions;
 
 
+    /**
+     * Constructor for the message from a list of productions
+     * @param productions List of productions to activate
+     */
     public CanActivateProductionsMessage(List<Production> productions) {
         this.productions = productions;
     }
 
 
+    /**
+     * Gets the productions attribute
+     * @return Returns the value of productions
+     */
     public List<Production> getProductions() {
         return productions;
     }
 
+    /**
+     * Gets all the consumed resources by all the productions
+     * @return Return a list containing the resources
+     */
     public List<Resource> getConsumed() {
         List<Resource> consumed = new ArrayList<>();
         productions.stream().map(Production::getConsumed).forEach(l -> l.forEach(r -> consumed.add(r.makeClone())));
         return consumed;
     }
 
+    /**
+     * Gets all the consumed produced by all the productions
+     * @return Return a list containing the resources
+     */
     public List<Resource> getProduced() {
         List<Resource> produced = new ArrayList<>();
         productions.stream().map(Production::getProduced).forEach(l -> l.forEach(r -> produced.add(r.makeClone())));

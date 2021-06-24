@@ -10,6 +10,10 @@ public class NewLobbyMessage extends ClientSetupMessage {
     private final int lobbySize;
 
 
+    /**
+     * Constructor for a NewLobbyMessage given a new lobbySize
+     * @param lobbySize Size of the lobby that will be created
+     */
     public NewLobbyMessage(int lobbySize) {
         this.lobbySize = lobbySize;
     }

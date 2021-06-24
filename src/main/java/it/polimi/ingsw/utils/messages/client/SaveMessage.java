@@ -9,6 +9,9 @@ import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
  */
 public class SaveMessage extends ClientActionMessage {
 
+    /**
+     * Default constructor for a SaveMessage
+     */
     public SaveMessage() { }
 
 

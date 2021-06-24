@@ -13,7 +13,13 @@ public class ResourcesMarketMessage extends ResourcesMessage implements ServerAc
 
     public List<ResourceType> availableAbilities;
 
-    public ResourcesMarketMessage(List<Resource> resources, List<ResourceType> availableAbilities) {
+
+    /**
+     * Constructor for a ResourcesMarketMessage given a list of resources and available abilities
+     * @param resources Resources that were picked from the market
+     * @param availableAbilities Available abilities to the player in order to pick WILDCARD marbles
+     */
+    public ResourcesMarketMessage(List<Resource> resources, List<ResourceType> availableAbilities) {    //TODO: availableAbilities da togliere?
         super(resources);
         this.availableAbilities = availableAbilities;
     }

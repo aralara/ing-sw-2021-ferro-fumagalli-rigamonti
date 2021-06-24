@@ -15,6 +15,9 @@ import it.polimi.ingsw.utils.messages.server.action.StartTurnMessage;
  */
 public class EndTurnMessage extends ClientActionMessage {
 
+    /**
+     * Default constructor for EndTurnMessage
+     */
     public EndTurnMessage() { }
 
 
