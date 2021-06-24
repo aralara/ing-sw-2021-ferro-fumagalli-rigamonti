@@ -26,8 +26,9 @@ public class VirtualView implements Runnable {
 
     /**
      * VirtualView constructor given the player's nickname, input and output streams
-     * @param out Object output stream
-     * @param in Object input stream
+     *
+     * @param out      Object output stream
+     * @param in       Object input stream
      * @param nickname Nickname of the player
      */
     public VirtualView(ObjectOutputStream out, ObjectInputStream in, String nickname) {
@@ -40,9 +41,10 @@ public class VirtualView implements Runnable {
 
     /**
      * VirtualView constructor given the player's nickname, client's socket, input and output streams
-     * @param client Socket of the client
-     * @param out Object output stream
-     * @param in Object input stream
+     *
+     * @param client   Socket of the client
+     * @param out      Object output stream
+     * @param in       Object input stream
      * @param nickname Nickname of the player
      */
     public VirtualView(Socket client, ObjectOutputStream out, ObjectInputStream in, String nickname) {
@@ -60,7 +62,7 @@ public class VirtualView implements Runnable {
         try {
             handleClientConnection();
         } catch (IOException e) {
-            if(client != null)
+            if (client != null)
                 System.out.println("client " + client.getInetAddress() + " connection dropped");
             stop(true, false);
         }
@@ -68,6 +70,7 @@ public class VirtualView implements Runnable {
 
     /**
      * Waits for a message to arrive and handles it
+     *
      * @throws IOException Throws an IOException if there is an error during the input read action
      */
     private void handleClientConnection() throws IOException {
@@ -85,19 +88,22 @@ public class VirtualView implements Runnable {
     /**
      * Sends a message to the client
      * @param message Message that will be sent
+     * @return Returns true if the message was sent successfully, false otherwise
      */
-    public void sendMessage(Message message) {
-        try{
+    public boolean sendMessage(Message message) {
+        try {
             output.writeObject(message);
             output.reset();
             output.flush();
-        }catch(IOException e){
-            e.printStackTrace();
+            return true;
+        } catch (IOException e) {
+            return false;
         }
     }
 
     /**
      * Calls the GameHandler to elaborate a received message
+     *
      * @param message The received message
      */
     public void onMessageReceived(Message message) {
@@ -106,12 +112,13 @@ public class VirtualView implements Runnable {
 
     /**
      * Interrupts the connection, closing the streams and propagating the message accordingly to the propagate parameter
-     * @param propagate If true calls the stop method on the GameHandler
+     *
+     * @param propagate   If true calls the stop method on the GameHandler
      * @param sendMessage If true sends a message to the client, notifying them of the disconnection
      */
     public void stop(boolean propagate, boolean sendMessage) {
-        if(active) {
-            if(sendMessage)
+        if (active) {
+            if (sendMessage)
                 sendMessage(new EndGameMessage(null, true));
             active = false;
             try {
@@ -125,12 +132,13 @@ public class VirtualView implements Runnable {
                 System.out.println("Fatal Error! Unable to close socket");
             }
         }
-        if(propagate)
-            getGameHandler().stop(sendMessage);
+        if (propagate)
+            getGameHandler().stop(true);
     }
 
     /**
      * Gets the nickname attribute
+     *
      * @return Returns nickname value
      */
     public String getNickname() {
@@ -139,6 +147,7 @@ public class VirtualView implements Runnable {
 
     /**
      * Sets the nickname attribute
+     *
      * @param nickname New attribute value
      */
     public void setNickname(String nickname) {
@@ -147,6 +156,7 @@ public class VirtualView implements Runnable {
 
     /**
      * Gets the gameHandler attribute
+     *
      * @return Returns gameHandler value
      */
     public GameHandler getGameHandler() {
@@ -155,6 +165,7 @@ public class VirtualView implements Runnable {
 
     /**
      * Sets the gameHandler attribute
+     *
      * @param gameHandler New attribute value
      */
     public void setGameHandler(GameHandler gameHandler) {

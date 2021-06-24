@@ -154,21 +154,25 @@ public class GameHandler implements Runnable {
     /**
      * Adds a player to the game
      * @param view VirtualView of the player that needs to be added
+     * @return Returns true if all the player is added correctly, false otherwise
      */
-    public void add(VirtualView view) {
+    public boolean add(VirtualView view) {
         view.setGameHandler(this);
         clientsVirtualView.add(view);
         new Thread(view).start();
-        sendAll(new NewPlayerMessage(view.getNickname()));
+        return sendAll(new NewPlayerMessage(view.getNickname()));
     }
 
     /**
      * Sends a message to all the players
      * @param message Message that needs to be sent
+     * @return Returns true if all the messages are sent correctly, false otherwise
      */
-    public void sendAll(Message message) {
+    public boolean sendAll(Message message) {
+        boolean success = true;
         for (VirtualView virtualView : clientsVirtualView)
-            virtualView.sendMessage(message);
+            success &= virtualView.sendMessage(message);
+        return success;
     }
 
     /**

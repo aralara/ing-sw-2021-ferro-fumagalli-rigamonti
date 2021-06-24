@@ -9,6 +9,7 @@ import it.polimi.ingsw.utils.messages.client.ClientSetupMessage;
 import it.polimi.ingsw.utils.messages.client.ConnectionMessage;
 import it.polimi.ingsw.utils.messages.client.NewLobbyMessage;
 import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
+import it.polimi.ingsw.utils.messages.server.action.EndGameMessage;
 import it.polimi.ingsw.utils.messages.server.action.LobbyMessage;
 
 import java.io.IOException;
@@ -114,7 +115,12 @@ public class Server {
                 gameList.add(waitingGame);
             }
 
-            waitingGame.add(new VirtualView(client, output, input, nickname));
+            if(waitingGame.isActive())
+                waitingGame.add(new VirtualView(client, output, input, nickname));
+            else {
+                output.writeObject(new EndGameMessage(null, true));
+                waitingGame = null;
+            }
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Client disconnected during setup");
         }
