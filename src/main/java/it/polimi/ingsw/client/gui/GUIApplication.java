@@ -144,6 +144,7 @@ public class GUIApplication extends Application {
         popUpStage.setY(y);
 
         popUpStage.initStyle(StageStyle.UNDECORATED);
+        popUpStage.setOnCloseRequest(we -> System.exit(0));
         popUpStage.show();
     }
 
@@ -172,6 +173,7 @@ public class GUIApplication extends Application {
         secondStage.centerOnScreen();
 
         secondStage.initStyle(StageStyle.UNDECORATED);
+        secondStage.setOnCloseRequest(we -> System.exit(0));
         secondStage.show();
     }
 
@@ -213,6 +215,7 @@ public class GUIApplication extends Application {
         cardStage.setY(y);
 
         cardStage.initStyle(StageStyle.UNDECORATED);
+        cardStage.setOnCloseRequest(we -> System.exit(0));
         cardStage.show();
     }
 
