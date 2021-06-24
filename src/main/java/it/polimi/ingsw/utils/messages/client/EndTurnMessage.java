@@ -33,7 +33,7 @@ public class EndTurnMessage extends ClientActionMessage {
                 gameHandler.sendAll(new StartTurnMessage(controller.getPlayingNickname()));
                 break;
             case LOAD_TURN_END_GAME:
-                gameHandler.sendAll(new EndGameMessage(controller.getGame().getEndPlayerList()));
+                gameHandler.sendAll(new EndGameMessage(controller.getGame().getEndPlayerList(), false));
                 break;
             case INVALID:
                 success = false;

@@ -5,8 +5,8 @@ import it.polimi.ingsw.utils.PipedPair;
 import it.polimi.ingsw.utils.messages.Message;
 import it.polimi.ingsw.utils.messages.client.ClientMessage;
 import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
+import it.polimi.ingsw.utils.messages.server.action.EndGameMessage;
 import it.polimi.ingsw.utils.messages.server.action.ServerActionMessage;
-import it.polimi.ingsw.utils.messages.server.update.PlayerDisconnectedMessage;
 import it.polimi.ingsw.utils.messages.server.update.ServerUpdateMessage;
 
 import java.io.*;
@@ -49,9 +49,9 @@ public class MessageHandler implements Runnable {
             try {
                 managePackets();
             } catch(IOException | ClassNotFoundException | InterruptedException e) {
-                stop();
+                actionQueue.offer(new EndGameMessage(null, true));
             } catch(UnknownMessageException e) {
-                e.printStackTrace();    //TODO: errore?
+                e.printStackTrace();
             }
     }
 
@@ -106,7 +106,7 @@ public class MessageHandler implements Runnable {
             output.flush();
         }
         catch(IOException e) {
-            stop();
+            actionQueue.offer(new EndGameMessage(null, true));
         }
     }
 

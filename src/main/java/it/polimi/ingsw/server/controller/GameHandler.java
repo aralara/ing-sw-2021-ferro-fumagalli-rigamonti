@@ -73,7 +73,7 @@ public class GameHandler implements Runnable {
             controller.initSavedGame(clientsVirtualView);
             sizeSetup.set(size);
             if(game.isFinished()) {     // In case the loaded game has already ended, displays the results to all the players and stops the game
-                sendAll(new EndGameMessage(game.getEndPlayerList()));
+                sendAll(new EndGameMessage(game.getEndPlayerList(), false));
                 stop(false);
             }
             else {

@@ -2,7 +2,7 @@ package it.polimi.ingsw.server.view;
 
 import it.polimi.ingsw.server.controller.GameHandler;
 import it.polimi.ingsw.utils.messages.Message;
-import it.polimi.ingsw.utils.messages.server.update.PlayerDisconnectedMessage;
+import it.polimi.ingsw.utils.messages.server.action.EndGameMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -111,8 +111,8 @@ public class VirtualView implements Runnable {
      */
     public void stop(boolean propagate, boolean sendMessage) {
         if(active) {
-            if(!sendMessage)
-                sendMessage(new PlayerDisconnectedMessage());
+            if(sendMessage)
+                sendMessage(new EndGameMessage(null, true));
             active = false;
             try {
                 if (client != null && !client.isClosed()) {
