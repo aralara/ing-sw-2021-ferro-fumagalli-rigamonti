@@ -59,7 +59,7 @@ public class FaithBoard extends PlayerListened implements Serializable {
      */
     public void takeFaithFromResources(List<Resource> resources) {
         Predicate<Resource> isFaith = r -> r.getResourceType() == ResourceType.FAITH;
-        addFaith(resources.stream().filter(isFaith).map(Resource::getQuantity).findFirst().orElse(0));
+        addFaith(resources.stream().filter(isFaith).map(Resource::getQuantity).reduce(0, Integer::sum)); 
         resources.removeIf(isFaith);
     }
 
