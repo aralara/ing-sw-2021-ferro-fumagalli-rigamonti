@@ -11,14 +11,14 @@ public class LorenzoCardMessage implements ServerActionMessage {
     private final LorenzoCard lorenzoCard;
 
 
+    /**
+     * Constructor for a LorenzoCardMessage given a LorenzoCard
+     * @param lorenzoCard LorenzoCard picked by Lorenzo
+     */
     public LorenzoCardMessage(LorenzoCard lorenzoCard) {
         this.lorenzoCard = lorenzoCard;
     }
 
-
-    public LorenzoCard getLorenzoCard() {
-        return lorenzoCard;
-    }
 
     @Override
     public void doAction(ClientController client) {

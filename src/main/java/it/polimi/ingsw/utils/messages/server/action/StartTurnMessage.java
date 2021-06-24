@@ -10,6 +10,10 @@ public class StartTurnMessage implements ServerActionMessage {
     private final String playingNickname;
 
 
+    /**
+     * Constructor for a StartTurnMessage given a nickname
+     * @param playingNickname Nickname of the player starting their turn
+     */
     public StartTurnMessage(String playingNickname) {
         this.playingNickname = playingNickname;
     }

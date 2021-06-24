@@ -18,6 +18,11 @@ public class PlayerLeaderBHandMessage implements HiddenMessage, ServerUpdateMess
     private final String nickname;
 
 
+    /**
+     * Constructor for a PlayerLeaderBHandMessage given the leader hand and a nickname
+     * @param hand Player's leader hand
+     * @param nickname Nickname of the player
+     */
     public PlayerLeaderBHandMessage(Deck hand, String nickname) {
         this.hand = hand;
         this.nickname = nickname;

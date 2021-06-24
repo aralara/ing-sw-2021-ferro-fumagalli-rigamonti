@@ -15,6 +15,11 @@ public class PlayerStrongBoxMessage implements ServerUpdateMessage {
     private final String nickname;
 
 
+    /**
+     * Constructor for a PlayerStrongBoxMessage given a list of resources and a nickname
+     * @param resources Player's resources contained in the StrongBox
+     * @param nickname Nickname of the player
+     */
     public PlayerStrongBoxMessage(List<Resource> resources, String nickname) {
         this.resources = resources;
         this.nickname = nickname;

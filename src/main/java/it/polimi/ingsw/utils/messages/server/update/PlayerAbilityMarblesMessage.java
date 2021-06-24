@@ -15,6 +15,11 @@ public class PlayerAbilityMarblesMessage implements ServerUpdateMessage {
     private final String nickname;
 
 
+    /**
+     * Constructor for a PlayerAbilityMarblesMessage given a list of marbles and a nickname
+     * @param marbles List of ResourceTypes containing the player's available marble substitutions
+     * @param nickname Nickname of the player
+     */
     public PlayerAbilityMarblesMessage(List<ResourceType> marbles, String nickname) {
         this.marbles = marbles;
         this.nickname = nickname;

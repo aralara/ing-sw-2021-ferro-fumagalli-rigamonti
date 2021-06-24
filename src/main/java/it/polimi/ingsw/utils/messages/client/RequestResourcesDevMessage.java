@@ -16,6 +16,12 @@ public class RequestResourcesDevMessage extends CanBuyDevelopmentCardMessage {
     private final List<RequestResources> requestResources;
 
 
+    /**
+     * Constructor for a new RequestResourcesDevMessage given the information to buy a card
+     * @param developmentCard DevelopmentCard to buy
+     * @param space Space to place the DevelopmentCard onto
+     * @param requestResources Resources to buy the DevelopmentCard with
+     */
     public RequestResourcesDevMessage(DevelopmentCard developmentCard, int space, List<RequestResources> requestResources) {
         super(developmentCard, space);
         this.requestResources = requestResources;

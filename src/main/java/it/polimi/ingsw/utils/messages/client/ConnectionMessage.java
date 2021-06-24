@@ -10,6 +10,10 @@ public class ConnectionMessage extends ClientSetupMessage {
     private final String nickname;
 
 
+    /**
+     * Constructor for a ConnectionMessage given a client
+     * @param nickname Nickname of the player controlling the client
+     */
     public ConnectionMessage(String nickname) {
         this.nickname = nickname;
     }

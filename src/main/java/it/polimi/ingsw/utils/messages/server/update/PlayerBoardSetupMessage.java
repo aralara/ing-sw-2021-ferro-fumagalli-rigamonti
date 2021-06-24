@@ -19,10 +19,15 @@ public class PlayerBoardSetupMessage implements HiddenMessage, ServerUpdateMessa
     private final boolean turnPlayed;
 
 
+    /**
+     * Constructor for a PlayerBoardSetupMessage given a playerBoard
+     * @param playerBoard PlayerBoard contained in the PlayerBoardSetupMessage
+     */
     public PlayerBoardSetupMessage(PlayerBoard playerBoard) {
         this.playerBoard = new PlayerBoardView(playerBoard);
         this.turnPlayed = playerBoard.isTurnPlayed();
     }
+
 
     @Override
     public void hide() {

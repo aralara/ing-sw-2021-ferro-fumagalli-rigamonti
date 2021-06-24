@@ -14,16 +14,29 @@ public class CanBuyDevelopmentCardMessage extends ClientActionMessage {
     private final int space;
 
 
+    /**
+     * Constructor for the message from a development card and its space
+     * @param developmentCard Development card to buy
+     * @param space Position of the card
+     */
     public CanBuyDevelopmentCardMessage(DevelopmentCard developmentCard, int space) {
         this.developmentCard = developmentCard;
         this.space = space;
     }
 
 
+    /**
+     * Gets the developmentCard attribute
+     * @return Returns the value of developmentCard
+     */
     public DevelopmentCard getDevelopmentCard() {
         return developmentCard;
     }
 
+    /**
+     * Gets the space attribute
+     * @return Returns the value of space
+     */
     public int getSpace() {
         return space;
     }

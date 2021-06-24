@@ -12,6 +12,10 @@ import java.util.List;
  */
 public class LeaderCardPlayMessage extends LeaderCardMessageClient {
 
+    /**
+     * Constructor for a LeaderCardPlayMessage given a list of LeaderCards
+     * @param leaderCards List of LeaderCards that need to be played
+     */
     public LeaderCardPlayMessage(List<LeaderCard> leaderCards) {
         super(leaderCards);
     }

@@ -12,6 +12,10 @@ public class FaithTrackMessage implements ServerUpdateMessage {
     private final FaithTrackView faithTrack;
 
 
+    /**
+     * Constructor for a FaithTrackMessage given a faith track
+     * @param faithTrack FaithTrack contained in the FaithTrackMessage
+     */
     public FaithTrackMessage(FaithTrack faithTrack) {
         this.faithTrack = new FaithTrackView(faithTrack);
     }

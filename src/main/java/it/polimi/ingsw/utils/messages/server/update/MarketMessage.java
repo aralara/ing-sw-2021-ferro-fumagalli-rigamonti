@@ -12,9 +12,14 @@ public class MarketMessage implements ServerUpdateMessage {
     private final MarketView market;
 
 
+    /**
+     * Constructor for a MarketMessage given a market
+     * @param market Market contained in the MarketMessage
+     */
     public MarketMessage(Market market) {
         this.market = new MarketView(market);
     }
+
 
     @Override
     public void doUpdate(ClientController client) {

@@ -12,11 +12,19 @@ public abstract class LeaderCardMessageClient extends ClientActionMessage {
     private final List<LeaderCard> leaderCards;
 
 
+    /**
+     * Constructor for a generic message that contains a list of LeaderCards
+     * @param leaderCards List of LeaderCards contained in the message
+     */
     public LeaderCardMessageClient(List<LeaderCard> leaderCards) {
         this.leaderCards = leaderCards;
     }
 
 
+    /**
+     * Gets the leaderCards attribute
+     * @return Returns leaderCards value
+     */
     public List<LeaderCard> getLeaderCards() {
         return leaderCards;
     }

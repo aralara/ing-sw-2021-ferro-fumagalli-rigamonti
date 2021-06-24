@@ -18,12 +18,23 @@ public class ShelvesConfigurationMessage extends ClientActionMessage {
     private final List<Resource> extra;
 
 
+    /**
+     * Constructor for a ShelvesConfigurationMessage given a list of shelves
+     * @param shelves Shelves that will reconfigure the warehouse
+     */
     public ShelvesConfigurationMessage(List<Shelf> shelves) {
         this.shelves = shelves;
         this.placed = new ArrayList<>();
         this.extra = new ArrayList<>();
     }
 
+    /**
+     * Constructor for a ShelvesConfigurationMessage given a list of shelves and various information in case some
+     * resources need to be added
+     * @param shelves Shelves that will reconfigure the warehouse
+     * @param placed Added resources
+     * @param extra Extra resources containing faith and discarded resources
+     */
     public ShelvesConfigurationMessage(List<Shelf> shelves, List<Resource> placed, List<Resource> extra) {
         this.shelves = shelves;
         this.placed = placed;

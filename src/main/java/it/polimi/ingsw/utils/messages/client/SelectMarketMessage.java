@@ -18,6 +18,11 @@ public class SelectMarketMessage extends ClientActionMessage {
     private final int row, column;
 
 
+    /**
+     * Constructor for a SelectMarketMessage given the coordinates of the selection
+     * @param row Row coordinate for the market selection
+     * @param column Column coordinate for the market selection
+     */
     public SelectMarketMessage(int row, int column) {
         this.row = row;
         this.column = column;

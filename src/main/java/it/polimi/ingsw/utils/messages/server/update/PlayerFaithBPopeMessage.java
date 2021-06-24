@@ -13,6 +13,11 @@ public class PlayerFaithBPopeMessage implements ServerUpdateMessage {
     private final String nickname;
 
 
+    /**
+     * Constructor for a PlayerFaithBPopeMessage given the popeProgression and a nickname
+     * @param popeProgression Player's pope progression
+     * @param nickname Nickname of the player
+     */
     public PlayerFaithBPopeMessage(boolean[] popeProgression, String nickname) {
         this.popeProgression = new boolean[FAITH_TOTAL_VATICAN_REPORTS.value()];
         System.arraycopy(popeProgression, 0, this.popeProgression, 0, FAITH_TOTAL_VATICAN_REPORTS.value());

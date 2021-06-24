@@ -15,6 +15,11 @@ public class PlayerDevelopmentBSpacesMessage implements ServerUpdateMessage {
     private final String nickname;
 
 
+    /**
+     * Constructor for a PlayerDevelopmentBSpacesMessage given the spaces and a nickname
+     * @param spaces List of decks representing the spaces on a player's development board
+     * @param nickname Nickname of the player
+     */
     public PlayerDevelopmentBSpacesMessage(List<Deck> spaces, String nickname) {
         this.spaces = spaces;
         this.nickname = nickname;

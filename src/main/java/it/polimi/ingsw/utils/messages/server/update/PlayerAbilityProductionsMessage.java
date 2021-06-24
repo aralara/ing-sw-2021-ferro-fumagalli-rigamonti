@@ -15,6 +15,11 @@ public class PlayerAbilityProductionsMessage implements ServerUpdateMessage {
     private final String nickname;
 
 
+    /**
+     * Constructor for a PlayerAbilityProductionsMessage given a list of productions and a nickname
+     * @param productions List of Productions containing the player's available extra productions
+     * @param nickname Nickname of the player
+     */
     public PlayerAbilityProductionsMessage(List<Production> productions, String nickname) {
         this.productions = productions;
         this.nickname = nickname;

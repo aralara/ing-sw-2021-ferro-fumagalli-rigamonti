@@ -15,6 +15,11 @@ public class RequestResourcesProdMessage extends CanActivateProductionsMessage {
     private final List<RequestResources> requestResources;
 
 
+    /**
+     * Constructor for a new RequestResourcesProdMessage given the information to activate a list of productions
+     * @param productions Productions to activate
+     * @param requestResources Resources to activate the productions with
+     */
     public RequestResourcesProdMessage(List<Production> productions, List<RequestResources> requestResources) {
         super(productions);
         this.requestResources = requestResources;

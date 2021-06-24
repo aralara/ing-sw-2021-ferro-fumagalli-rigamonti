@@ -18,6 +18,11 @@ public class SaveInteractionMessage extends ClientActionMessage {
     private final SaveInteractions interaction;
 
 
+    /**
+     * Constructor for a SaveInteractionMessage give the save and an interaction
+     * @param save Save subject of the interaction
+     * @param interaction Interaction that will be applied to the save
+     */
     public SaveInteractionMessage(GameSave save, SaveInteractions interaction) {
         this.save = save;
         this.interaction = interaction;
