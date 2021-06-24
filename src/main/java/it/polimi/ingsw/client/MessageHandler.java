@@ -50,6 +50,7 @@ public class MessageHandler implements Runnable {
                 managePackets();
             } catch(IOException | ClassNotFoundException | InterruptedException e) {
                 actionQueue.offer(new EndGameMessage(null, true));
+                stop();
             } catch(UnknownMessageException e) {
                 e.printStackTrace();
             }
@@ -107,6 +108,7 @@ public class MessageHandler implements Runnable {
         }
         catch(IOException e) {
             actionQueue.offer(new EndGameMessage(null, true));
+            stop();
         }
     }
 

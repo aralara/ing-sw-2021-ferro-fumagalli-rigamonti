@@ -16,12 +16,9 @@ public class Client {
     public static void main(String[] args) {
         if(args[0].equals("1")) {
             GraphicalCLI.printlnString("Master of Renaissance: CLI version");
-            do {
-                CLI cli = new CLI();
-                cli.setup();
-                cli.run();
-                GraphicalCLI.printString("Do you want to play again? ");
-            } while(GraphicalCLI.isAnswerYes());
+            CLI cli = new CLI();
+            cli.setup();
+            cli.run();
             System.exit(0);
         }
         else if(args[0].equals("2")) {

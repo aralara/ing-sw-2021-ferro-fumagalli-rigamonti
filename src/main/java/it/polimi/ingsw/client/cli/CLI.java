@@ -101,20 +101,21 @@ public class CLI extends ClientController {
         setAlive(true);
 
         while(isAlive()) {
-            if (confirmationList.size() != 0 && updateQueue.isEmpty()) {
-                try {
-                    ServerAckMessage ack = responseQueue.take();    //TODO: interruzione durante la ripetizione????
-                    confirmationList.remove(confirmationList.stream().filter(ack::compareTo).findFirst().orElseThrow());
-                    ack.activateResponse(this);
-                    displayMenu = true;
-                } catch(InterruptedException e) {
-                    e.printStackTrace();
-                }
+            if (actionQueue.size() > 0 && updateQueue.isEmpty()) {
+                actionQueue.poll().doAction(this);
+                displayMenu = true;
             }
             else {
-                if (actionQueue.size() > 0 && updateQueue.isEmpty()) {
-                    actionQueue.poll().doAction(this);
-                    displayMenu = true;
+                if (confirmationList.size() > 0 && updateQueue.isEmpty()) {
+                    try {
+                        ServerAckMessage ack = responseQueue.take();
+                        confirmationList
+                                .remove(confirmationList.stream().filter(ack::compareTo).findFirst().orElseThrow());
+                        ack.activateResponse(this);
+                        displayMenu = true;
+                    } catch(InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
                 else if(idle) {
                     if (displayMenu) {
