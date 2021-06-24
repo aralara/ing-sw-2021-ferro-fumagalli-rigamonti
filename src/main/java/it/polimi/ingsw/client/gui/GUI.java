@@ -522,8 +522,8 @@ public class GUI extends ClientController {
 
     /**
      * Controls and adds faith to discarded resources' list if present
-     * @param resources
-     * @return  //TODO: javadoc
+     * @param resources List of resources to check
+     * @return Returns true if the faith is contained in the given list of resources
      */
     private boolean checkFaithResource(List<Resource> resources){
         int faithQuantity=0;

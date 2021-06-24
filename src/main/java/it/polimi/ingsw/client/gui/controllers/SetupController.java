@@ -171,7 +171,7 @@ public class SetupController extends GenericController {
 
     /**
      * Calls connect method if ENTER key is pressed
-     * @param keyEvent  //TODO: javadoc
+     * @param keyEvent Key event
      */
     public void keyConnect(KeyEvent keyEvent) {
         if (keyEvent.getCode().equals(KeyCode.ENTER)) {
@@ -213,7 +213,7 @@ public class SetupController extends GenericController {
 
     /**
      * Calls sendNickname method if ENTER key is pressed
-     * @param keyEvent  //TODO: javadoc
+     * @param keyEvent Key event
      */
     public void keyNickname(KeyEvent keyEvent) {
         if (keyEvent.getCode().equals(KeyCode.ENTER)) {
