@@ -32,4 +32,17 @@ public class LorenzoFaithTest {
         lorenzoFaith.activateLorenzo(lorenzoBoard);
         assertEquals(3, lorenzoBoard.getFaith());
     }
+
+    /**
+     * Tests a LorenzoFaith getters
+     */
+    @SuppressWarnings("ConstantConditions")
+    @Test
+    public void testGetters() {
+        boolean refresh = true;
+        int amount = 9;
+        LorenzoFaith card = new LorenzoFaith(1, refresh, amount);
+        assertEquals(card.isRefresh(), refresh);
+        assertEquals(card.getAmount(), amount);
+    }
 }

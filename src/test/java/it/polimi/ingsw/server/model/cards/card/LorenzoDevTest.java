@@ -44,4 +44,16 @@ public class LorenzoDevTest {
             if(deck.getDeckColor()!=CardColors.GREEN)
                 assertEquals(4, deck.getDeck().size());
     }
+
+    /**
+     * Tests a LorenzoDev getters
+     */
+    @Test
+    public void testGetters() {
+        CardColors color = CardColors.PURPLE;
+        int quantity = 9;
+        LorenzoDev card = new LorenzoDev(1, color, quantity);
+        assertEquals(card.getColor(), color);
+        assertEquals(card.getQuantity(), quantity);
+    }
 }
