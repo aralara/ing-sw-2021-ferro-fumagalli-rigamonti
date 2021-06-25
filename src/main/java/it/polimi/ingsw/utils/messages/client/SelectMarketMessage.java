@@ -34,7 +34,7 @@ public class SelectMarketMessage extends ClientActionMessage {
         Controller controller = view.getGameHandler().getController();
         List<Resource> resources = controller.getFromMarket(view.getNickname(), row, column);
         List<ResourceType> availableResources = controller.getPlayerBoard(view.getNickname()).getAbilityMarbles();
-        view.sendMessage(new ServerAckMessage(getUuid(), true));    //TODO: controlli server side
+        view.sendMessage(new ServerAckMessage(getUuid(), true));
         view.sendMessage(new ResourcesMarketMessage(resources, availableResources));
     }
 

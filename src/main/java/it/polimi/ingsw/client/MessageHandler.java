@@ -17,7 +17,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * TODO: fare javadoc
+ * Handles the messages received and sent by a client
  */
 public class MessageHandler implements Runnable {
 
@@ -34,6 +34,9 @@ public class MessageHandler implements Runnable {
     private final AtomicBoolean active;
 
 
+    /**
+     * Constructor for the message handler
+     */
     public MessageHandler() {
         this.actionQueue = new LinkedBlockingQueue<>();
         this.updateQueue = new LinkedBlockingQueue<>();
@@ -56,6 +59,12 @@ public class MessageHandler implements Runnable {
             }
     }
 
+    /**
+     * Connects remotely to a server
+     * @param address IP address of the server
+     * @param port Port of the server
+     * @return Returns true if the connection was successful, false otherwise
+     */
     public boolean connect(String address, int port) {
         try {
             server = new Socket(address, port);
@@ -73,6 +82,11 @@ public class MessageHandler implements Runnable {
         return true;
     }
 
+    /**
+     * Connects locally to a simulated server
+     * @param pipedPair Pair of piped streams used to establish a local connection
+     * @return Returns true if the connection was successful, false otherwise
+     */
     public boolean connect(PipedPair pipedPair) {
         try {
             output = new ObjectOutputStream(pipedPair.getPipeOut());
@@ -84,6 +98,15 @@ public class MessageHandler implements Runnable {
         return true;
     }
 
+    /**
+     * Receives a packet from the server and handles it accordingly to its contents
+     * @throws IOException Throws an IOException if there was a problem reading the stream
+     * @throws ClassNotFoundException Throws an ClassNotFoundException if there was a problem
+     *                                instantiating the packet object
+     * @throws InterruptedException Throws an InterruptedException if there was a problem in placing
+     *                              the packet in a queue
+     * @throws UnknownMessageException Throws an UnknownMessageException if the packet wasn't recognized
+     */
     private void managePackets()
             throws IOException, ClassNotFoundException, InterruptedException, UnknownMessageException {
 
@@ -100,7 +123,11 @@ public class MessageHandler implements Runnable {
                 throw new UnknownMessageException();
     }
 
-    public void sendMessage(Message message) {
+    /**
+     * Sends a message to the server
+     * @param message Message to send
+     */
+    private void sendMessage(Message message) {
         try{
             output.writeObject(message);
             output.reset();
@@ -112,11 +139,22 @@ public class MessageHandler implements Runnable {
         }
     }
 
+    /**
+     * Sends a message to the server and puts it in a confirmation list while waiting for an ACK
+     * @param message Message to send
+     */
     public void sendClientMessage(ClientMessage message) {
         confirmationList.add(message);
         sendMessage(message);
     }
 
+    /**
+     * Matches an ACK with its corresponding original message and puts in its dedicated queue
+     * @param message ACK message received
+     * @throws UnknownMessageException  Throws an UnknownMessageException if the packet wasn't recognized
+     * @throws InterruptedException Throws an InterruptedException if there was a problem in placing
+     *                              the packet in a queue
+     */
     private void handleACKMessage(ServerAckMessage message) throws UnknownMessageException, InterruptedException {
         ClientMessage clientMessage = confirmationList.stream()
                 .filter(message::compareTo)
@@ -125,6 +163,9 @@ public class MessageHandler implements Runnable {
         responseQueue.put(message);
     }
 
+    /**
+     * Stops the packet reception loop and closes the connection to the server
+     */
     public void stop() {
         if(active.getAndSet(false)) {
             try {
@@ -140,18 +181,34 @@ public class MessageHandler implements Runnable {
         }
     }
 
+    /**
+     * Gets the actionQueue attribute
+     * @return Returns actionQueue value
+     */
     public LinkedBlockingQueue<ServerActionMessage> getActionQueue() {
         return actionQueue;
     }
 
+    /**
+     * Gets the updateQueue attribute
+     * @return Returns updateQueue value
+     */
     public LinkedBlockingQueue<ServerUpdateMessage> getUpdateQueue() {
         return updateQueue;
     }
 
+    /**
+     * Gets the responseQueue attribute
+     * @return Returns responseQueue value
+     */
     public LinkedBlockingQueue<ServerAckMessage> getResponseQueue() {
         return responseQueue;
     }
 
+    /**
+     * Gets the confirmationList attribute
+     * @return Returns confirmationList value
+     */
     public List<ClientMessage> getConfirmationList() {
         return confirmationList;
     }

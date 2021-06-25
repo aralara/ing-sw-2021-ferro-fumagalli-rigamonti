@@ -15,7 +15,7 @@ public abstract class Card implements Serializable {
 
     @Override
     @SuppressWarnings("RedundantIfStatement")
-    public boolean equals(Object obj) {                   //TODO: rendere gli ID unici
+    public boolean equals(Object obj) {
         if(obj == null || this.getClass() != obj.getClass()) return false;
         final Card card = (Card) obj;
         if(this.ID != card.ID) return false;

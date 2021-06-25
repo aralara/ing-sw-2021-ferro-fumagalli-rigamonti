@@ -5,7 +5,7 @@ import it.polimi.ingsw.utils.messages.server.update.ServerUpdateMessage;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- * TODO: fare javadoc
+ * Handles the asynchronous reception of update messages associated with a client
  */
 public class UpdateMessageReader implements Runnable {
 
@@ -14,6 +14,11 @@ public class UpdateMessageReader implements Runnable {
     private boolean active;
 
 
+    /**
+     * Constructor for an UpdateMessageReader given a client and its update queue
+     * @param client Client that needs updates
+     * @param updateQueue Queue of messages sent to the specific client
+     */
     public UpdateMessageReader(ClientController client, LinkedBlockingQueue<ServerUpdateMessage> updateQueue) {
         this.client = client;
         this.updateQueue = updateQueue;
@@ -35,6 +40,9 @@ public class UpdateMessageReader implements Runnable {
         }
     }
 
+    /**
+     * Stops the update loop and interrupts the current thread
+     */
     public void stop() {
         active = false;
         Thread.currentThread().interrupt();

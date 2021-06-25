@@ -29,7 +29,7 @@ public class WarehouseView extends Listened implements Serializable {
      * WarehouseView constructor with parameters
      * @param shelves Shelves to set
      */
-    public WarehouseView(List<Shelf> shelves) { //TODO: sistemare chiamate a questo metodo nella CLI (preferibilmente toglierle)
+    public WarehouseView(List<Shelf> shelves) {
         this.shelves = shelves;
     }
 

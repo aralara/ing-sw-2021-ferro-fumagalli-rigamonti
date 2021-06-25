@@ -495,7 +495,7 @@ public class GraphicalCLI {
      * @param warehouseView Warehouse to be printed
      * @param showLevel True if levels need to be shown, false otherwise
      */
-    public static void printExtraShelfLeader(WarehouseView warehouseView, boolean showLevel){  //TODO: va testato in game quando attiviamo delle leader card con abilità warehouse
+    public static void printExtraShelfLeader(WarehouseView warehouseView, boolean showLevel){
         int level = 2;
         String color;
         int specialWarehouse = (int)warehouseView.getShelves().stream().filter(Shelf::isLeader).count();

@@ -452,7 +452,7 @@ public class CLI extends ClientController {
         int level;
         try{
             List<Resource> toPlace = getResourcesOneByOne(resources);
-            moveFaith(toDiscard, toPlace);
+            moveFaith(toPlace, toDiscard);
             WarehouseView warehouse = getLocalPlayerBoard().getWarehouse();
             shelves = warehouse.getShelvesClone();
             GraphicalCLI.printWarehouseConfiguration(warehouse, true);
@@ -600,7 +600,7 @@ public class CLI extends ClientController {
      * @return The chosen leader card
      */
     @SuppressWarnings("unchecked")
-    private List<LeaderCard> chooseLeaderCard() { //TODO: mettere nella GraphicalCLI
+    private List<LeaderCard> chooseLeaderCard() {
         try {
             List<LeaderCard> hand = (List<LeaderCard>)(List<? extends Card>)
                     getLocalPlayerBoard().getLeaderBoard().getHand().getCards();
@@ -652,12 +652,12 @@ public class CLI extends ClientController {
 
     /**
      * Moves all the Faith resources from a source list to destination list
-     * @param dest List where the resources will be added to
      * @param src List from which the resources will be taken from
+     * @param dest List where the resources will be added to
      */
-    public void moveFaith(List<Resource> dest, List<Resource> src) {        //TODO: refactor con streams
-        for(int i = 0; i < src.size(); i++)                                 //TODO: da spostare (magari nello storage) in maniera che tutti possano usarlo
-            if(src.get(i).getResourceType().equals(ResourceType.FAITH)) {   //TODO: invertire l'ordine dei paramteri, prima src, poi dest
+    private void moveFaith(List<Resource> src, List<Resource> dest) {    //TODO: da spostare (magari nello storage) in maniera che tutti possano usarlo
+        for(int i = 0; i < src.size(); i++)
+            if(src.get(i).getResourceType().equals(ResourceType.FAITH)) {
                 dest.add(src.get(i));
                 src.remove(i);
                 break;
@@ -918,7 +918,7 @@ public class CLI extends ClientController {
         toPlace.addAll(getResourcesOneByOne(resources));
         if(canDiscard) {
             toDiscard.clear();
-            moveFaith(toDiscard, toPlace);
+            moveFaith(toPlace, toDiscard);
         }
         GraphicalCLI.printlnString("Warehouse restored");
     }
@@ -941,7 +941,7 @@ public class CLI extends ClientController {
             if(choice.matches("[BGPYbgpy][1-3]")) {
                 String color = choice.substring(0, 1).toUpperCase();
                 level = Integer.parseInt(choice.substring(1, 2));
-                switch (color) {    //TODO: soluzione carina B)
+                switch (color) {
                     case "B":
                         color = CardColors.BLUE.name();
                         break;
@@ -980,6 +980,7 @@ public class CLI extends ClientController {
      * @param productions List of production to be solved
      * @return Returns the list of productions with their wildcards solved
      */
+    @SuppressWarnings("DuplicatedCode")
     public List<Production> resolveProductionWildcards(List<Production> productions) {
         List<Production> resolvedProductions = new ArrayList<>();
         for(Production production : productions) {
@@ -1003,7 +1004,7 @@ public class CLI extends ClientController {
                 if(consumedWildcards.size() > 0) {
                     GraphicalCLI.printString(GraphicalCLI.YELLOW_BRIGHT);
                     GraphicalCLI.printlnString("\nChoose resource types for the consumed wildcards:\n");
-                    GraphicalCLI.printString(GraphicalCLI.RESET);   //TODO: sistemare duplicazione
+                    GraphicalCLI.printString(GraphicalCLI.RESET);
                     final List<Resource> finalConsumedWildcards = consumedWildcards;
                     GraphicalCLI.objectOptionSelector(ResourceType.getRealValues(),
                             rt -> GraphicalCLI.printlnString(rt.toString()),

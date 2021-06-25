@@ -69,8 +69,8 @@ public class GameLibrary {
      */
     public GameSave createSave(Game game) throws LibraryNotLoadedException {
         checkLoad();
-        List<String> players = game.getPlayerBoards().stream()  //TODO: utilizzo Collator (java.text) per ordinare i nomi
-                .map(pb -> pb.getPlayer().getNickname()).sorted(Collator.getInstance()).collect(Collectors.toList());
+        List<String> players = game.getPlayerBoards().stream()
+                .map(pb -> pb.getPlayer().getNickname()).sorted(Comparator.naturalOrder()).collect(Collectors.toList());
         int id = getNextId(players);
         GameSave save = new GameSave(players, id, game);
         saves.add(save);

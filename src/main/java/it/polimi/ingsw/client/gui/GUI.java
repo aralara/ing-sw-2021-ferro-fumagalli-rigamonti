@@ -55,7 +55,8 @@ public class GUI extends ClientController {
     }
 
     /**
-     * TODO: RIGA fai il javadoc c':
+     * Attaches listeners to the client structures in order to notify the GUI controllers when
+     * an action of interest occurs
      */
     public void attachListeners() {
         PlayerBoardController playerBoardController = (PlayerBoardController) guiApplication
@@ -770,7 +771,6 @@ public class GUI extends ClientController {
     public void setFaithTrack(FaithTrackView faithTrack) {
         super.setFaithTrack(faithTrack);
         attachListeners();  // Since it's the last setup message to arrive, listeners are added to the GUI components
-        //TODO: temporaneo direi, magari no eh
     }
 
     @Override
