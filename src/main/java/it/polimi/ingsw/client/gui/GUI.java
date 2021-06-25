@@ -322,9 +322,9 @@ public class GUI extends ClientController {
 
     @Override
     public void notifyLorenzoCard(LorenzoCard lorenzoCard) {
-        callPlatformRunLater(() -> guiApplication.getController(SceneNames.PLAYER_BOARD).showAlert(Alert.AlertType.INFORMATION,
-                "It's Lorenzo's turn", "Lorenzo pulls a card from his deck", lorenzoCard.toString()+
-                "\nNow you can play your actions"));
+        callPlatformRunLater(() -> guiApplication.getController(SceneNames.PLAYER_BOARD).showLorenzoAlert(
+                "It's Lorenzo's turn", "Lorenzo pulls a card from his deck", lorenzoCard.toString() +
+                        "\nNow you can play your actions", lorenzoCard.getID()));
     }
 
     @Override
@@ -577,7 +577,7 @@ public class GUI extends ClientController {
      * Controls which type of resources are to place and calls methods accordingly
      * If there are resources, updates resources to place and shows them on the playerBoard
      * If there is only faith, adds it to the discarded resources and send a message to the server
-     * @param resources
+     * @param resources //TODO
      */
     public void controlResourcesToPlace(List<Resource> resources, boolean showAlert){
         resourcesToPlace.clear();

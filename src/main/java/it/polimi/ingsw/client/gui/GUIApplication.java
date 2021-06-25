@@ -25,7 +25,7 @@ public class GUIApplication extends Application {
     private List<SceneInformation> scenesInformation;
 
     private Stage stage, secondStage, cardStage, popUpStage;
-    private Alert alert;
+    private Alert alert, lorenzoAlert;
 
     /**
      * Calls the lunch method
@@ -60,6 +60,9 @@ public class GUIApplication extends Application {
         Image image = new Image(getClass().getResourceAsStream("/imgs/icon_inkwell.png"));
         alert = new Alert(Alert.AlertType.NONE);
         ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(image);
+        Image lorenzoImage = new Image(getClass().getResourceAsStream("/imgs/lorenzo/icon_lorenzo.png"));
+        lorenzoAlert = new Alert(Alert.AlertType.INFORMATION);
+        ((Stage)lorenzoAlert.getDialogPane().getScene().getWindow()).getIcons().add(lorenzoImage);
 
         stage.setTitle("Master of Renaissance");
         stage.setResizable(false);
@@ -222,7 +225,7 @@ public class GUIApplication extends Application {
     /**
      * Closes the card stage
      */
-    public void closeCardStage(){
+    public void closeCardStage() {
         if(cardStage!=null)
             cardStage.hide();
     }
@@ -233,6 +236,14 @@ public class GUIApplication extends Application {
      */
     public Alert getAlert() {
         return alert;
+    }
+
+    /**
+     * Gets the lorenzoAlert attribute
+     * @return Returns lorenzoAlert
+     */
+    public Alert getLorenzoAlert() {
+        return lorenzoAlert;
     }
 
     /**
