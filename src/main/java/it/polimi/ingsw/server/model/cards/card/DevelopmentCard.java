@@ -46,6 +46,19 @@ public class DevelopmentCard extends Card {
         this.cost = cost;
     }
 
+    /**
+     * Copy constructor for a DevelopmentCard card
+     * @param developmentCard DevelopmentCard to copy
+     */
+    public DevelopmentCard(DevelopmentCard developmentCard) {
+        setID(developmentCard.getID());
+        this.VP = developmentCard.VP;
+        this.color = developmentCard.color;
+        this.level = developmentCard.level;
+        this.production = developmentCard.production;
+        this.cost = developmentCard.cost;
+    }
+
 
     @Override
     public String toString() {

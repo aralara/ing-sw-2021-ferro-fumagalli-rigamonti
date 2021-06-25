@@ -23,6 +23,16 @@ public class LorenzoFaith extends LorenzoCard {
         this.amount = amount;
     }
 
+    /**
+     * Copy constructor for a LorenzoFaith card
+     * @param lorenzoFaith LorenzoFaith to copy
+     */
+    public LorenzoFaith(LorenzoFaith lorenzoFaith) {
+        setID(lorenzoFaith.getID());
+        this.refresh = lorenzoFaith.refresh;
+        this.amount = lorenzoFaith.amount;
+    }
+
 
     @Override
     public String toString(){

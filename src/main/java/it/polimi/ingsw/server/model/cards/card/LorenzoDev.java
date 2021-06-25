@@ -23,6 +23,16 @@ public class LorenzoDev extends LorenzoCard {
         this.quantity = quantity;
     }
 
+    /**
+     * Copy constructor for a LorenzoDev card
+     * @param lorenzoDev LorenzoDev to copy
+     */
+    public LorenzoDev(LorenzoDev lorenzoDev) {
+        setID(lorenzoDev.getID());
+        this.color = lorenzoDev.color;
+        this.quantity = lorenzoDev.quantity;
+    }
+
 
     @Override
     public String toString() {

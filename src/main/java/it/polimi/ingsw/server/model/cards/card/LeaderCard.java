@@ -39,6 +39,17 @@ public class LeaderCard extends Card {
         this.ability = ability;
     }
 
+    /**
+     * Copy constructor for a LeaderCard card
+     * @param leaderCard LeaderCard to copy
+     */
+    public LeaderCard(LeaderCard leaderCard) {
+        setID(leaderCard.getID());
+        this.VP = leaderCard.VP;
+        this.requirements = leaderCard.requirements;
+        this.ability = leaderCard.ability;
+    }
+
 
     @Override
     public String toString(){

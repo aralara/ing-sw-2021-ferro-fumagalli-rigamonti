@@ -42,20 +42,15 @@ public class CardFactory {
      * @return Returns a list containing all the development cards
      */
     public List<DevelopmentCard> loadDevelopmentCardsFromFile(String fileName){
-        int i=1;
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().create();
         List<DevelopmentCard> developmentCardList = new ArrayList<>();
 
         try {
             DevelopmentCard[] jsonDevelopmentCard;
             JsonReader reader = new JsonReader(new FileReader(fileName));
             jsonDevelopmentCard = gson.fromJson(reader, DevelopmentCard[].class);
-
-            for (DevelopmentCard developmentCard : jsonDevelopmentCard) {
-                developmentCardList.add(new DevelopmentCard(i,developmentCard.getVP(), developmentCard.getColor(),
-                        developmentCard.getLevel(), developmentCard.getProduction(), developmentCard.getCost()));
-                i++;
-            }
+            for (DevelopmentCard developmentCard : jsonDevelopmentCard)
+                developmentCardList.add(new DevelopmentCard(developmentCard));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -68,7 +63,6 @@ public class CardFactory {
      * @return Returns a list containing all the leader cards
      */
     public List<LeaderCard> loadLeaderCardsFromFile(String fileName) {
-        int i = 1;
         RuntimeTypeAdapterFactory<Requirement> requirementAdapterFactory
                 = RuntimeTypeAdapterFactory.of(Requirement.class, "RequirementType");
         RuntimeTypeAdapterFactory<SpecialAbility> abilityAdapterFactory
@@ -92,11 +86,8 @@ public class CardFactory {
             LeaderCard[] jsonLeaderCard;
             JsonReader reader = new JsonReader(new FileReader(fileName));
             jsonLeaderCard = gson.fromJson(reader, LeaderCard[].class);
-
-            for (LeaderCard leaderCard : jsonLeaderCard) {
-                leadList.add(new LeaderCard(i, leaderCard.getVP(), leaderCard.getRequirements(), leaderCard.getAbility()));
-                i++;
-            }
+            for (LeaderCard leaderCard : jsonLeaderCard)
+                leadList.add(new LeaderCard(leaderCard));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -110,7 +101,6 @@ public class CardFactory {
      * @return Returns a list containing all the LorenzoDev cards
      */
     public List<LorenzoDev> loadLorenzoDevCardsFromFile(String fileName) {
-        int i = 1;
         Gson gson = new Gson();
         List<LorenzoDev> lorenzoDevDeck = new ArrayList<>();
 
@@ -118,11 +108,8 @@ public class CardFactory {
             LorenzoDev[] jsonLorenzoDevs;
             JsonReader reader = new JsonReader(new FileReader(fileName));
             jsonLorenzoDevs = gson.fromJson(reader, LorenzoDev[].class);
-
-            for (LorenzoDev lorenzoDev : jsonLorenzoDevs) {
-                lorenzoDevDeck.add(new LorenzoDev(i, lorenzoDev.getColor(), lorenzoDev.getQuantity()));
-                i++;
-            }
+            for (LorenzoDev lorenzoDev : jsonLorenzoDevs)
+                lorenzoDevDeck.add(new LorenzoDev(lorenzoDev));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -135,7 +122,6 @@ public class CardFactory {
      * @return Returns a list containing all the LorenzoFaith cards
      */
     public List<LorenzoFaith> loadLorenzoFaithCardsFromFile(String fileName) {
-        int i = 1;
         Gson gson = new Gson();
         List<LorenzoFaith> lorenzoFaithDeck = new ArrayList<>();
 
@@ -143,11 +129,8 @@ public class CardFactory {
             LorenzoFaith[] jsonLorenzoFaiths;
             JsonReader reader = new JsonReader(new FileReader(fileName));
             jsonLorenzoFaiths = gson.fromJson(reader, LorenzoFaith[].class);
-
-            for (LorenzoFaith lorenzoFaith : jsonLorenzoFaiths) {
-                lorenzoFaithDeck.add(new LorenzoFaith(i, lorenzoFaith.isRefresh(), lorenzoFaith.getAmount()));
-                i++;
-            }
+            for (LorenzoFaith lorenzoFaith : jsonLorenzoFaiths)
+                lorenzoFaithDeck.add(new LorenzoFaith(lorenzoFaith));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
