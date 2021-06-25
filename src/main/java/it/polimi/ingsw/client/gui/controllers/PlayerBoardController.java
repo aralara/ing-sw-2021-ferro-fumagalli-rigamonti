@@ -156,24 +156,25 @@ public class PlayerBoardController extends GenericController {
             warehouseShelves.clear();
         resetResLabels();
         getGUI().updateResourcesToPlace();
+        rearrangingWarehouse = false;
         showWarehouse();
         confirm_button.setVisible(false);
         restoreWarehouse_button.setVisible(false);
         rearrangeWarehouse_button.setDisable(false);
         showResToPlace(isResToPlaceAction);
         ((MarketBoardController)getGUIApplication().getController(SceneNames.MARKET_BOARD))
-                .disableMarketAction(mainActionPlayed);
+                .disableMarketAction(!isPlayerTurn || mainActionPlayed);
         ((DecksBoardController)getGUIApplication().getController(SceneNames.DECKS_BOARD))
-                .disableBuyCardAction(mainActionPlayed);
-        activateProductions_button.setDisable(mainActionPlayed);
+                .disableBuyCardAction(!isPlayerTurn || mainActionPlayed);
+        activateProductions_button.setDisable(!isPlayerTurn ||
+                mainActionPlayed);
         if(!isResToPlaceAction)
             showCheckBoxes();
         viewOpponents_button.setDisable(isResToPlaceAction);
-        activateLeaderCard_button.setDisable(isResToPlaceAction);
-        discardLeaderCard_button.setDisable(isResToPlaceAction);
+        activateLeaderCard_button.setDisable(!isPlayerTurn || isResToPlaceAction);
+        discardLeaderCard_button.setDisable(!isPlayerTurn || isResToPlaceAction);
         endTurn_button.setDisable(!mainActionPlayed || isResToPlaceAction);
         save_button.setDisable(!mainActionPlayed || isResToPlaceAction);
-        rearrangingWarehouse = false;
     }
 
     /**
@@ -984,6 +985,7 @@ public class PlayerBoardController extends GenericController {
             toDiscard = new ArrayList<>();
         if(warehouseShelves==null)
             warehouseShelves = getGUI().getWarehouseShelvesCopy();
+        rearrangingWarehouse = false;
         if(getGUI().sendShelvesConfigurationMessage(warehouseShelves,toDiscard)){
             if(isPlayerTurn)
                 enableButtons();
@@ -1006,7 +1008,6 @@ public class PlayerBoardController extends GenericController {
                     "The warehouse will be restored and you'll be asked to place all the resources again");
             restoreWarehouse();
         }
-        rearrangingWarehouse = false;
     }
 
     /**
@@ -1157,7 +1158,7 @@ public class PlayerBoardController extends GenericController {
      * Shows imageViews of the leaders in the hand to be shown
      */
     public void showLeaderBHand(){
-        if(!showingOpponent) {
+        if(!showingOpponent && getGUI().getLeaderHand().size()<=2) {
             try {
                 updateLeaderBHand(getGUI().getLocalPlayerBoard().getLeaderBoard().getHand());
             } catch (NotExistingNicknameException e) {
