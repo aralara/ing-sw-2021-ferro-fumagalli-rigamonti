@@ -73,9 +73,10 @@ public class PlayerBoardController extends GenericController {
     public void setIsPlayerTurn(boolean isPlayerTurn){
         this.isPlayerTurn=isPlayerTurn;
         mainActionPlayed=false;
-        if(!isPlayerTurn || getGUI().getLeaderHand().size()>=3){ //disable buttons even when the initial phase has not ended yet
+        if(!isPlayerTurn|| rearrangingWarehouse ||
+                getGUI().getLeaderHand().size()>=3 ){ //disable buttons even when the initial phase has not ended yet
             disableButtons();
-            viewOpponents_button.setDisable(false);
+            viewOpponents_button.setDisable(rearrangingWarehouse);
         }
         else if(!isResToPlaceAction) {
             enableButtons();
@@ -964,14 +965,14 @@ public class PlayerBoardController extends GenericController {
      */
     public void enableButtons(){
         ((MarketBoardController) getGUIApplication().getController(SceneNames.MARKET_BOARD))
-                .disableMarketAction(mainActionPlayed);
+                .disableMarketAction(!isPlayerTurn || mainActionPlayed);
         ((DecksBoardController) getGUIApplication().getController(SceneNames.DECKS_BOARD))
-                .disableBuyCardAction(mainActionPlayed);
-        activateProductions_button.setDisable(mainActionPlayed);
-        endTurn_button.setDisable(!mainActionPlayed);
-        save_button.setDisable(!mainActionPlayed);
-        activateLeaderCard_button.setDisable(false);
-        discardLeaderCard_button.setDisable(false);
+                .disableBuyCardAction(!isPlayerTurn || mainActionPlayed);
+        activateProductions_button.setDisable(!isPlayerTurn || mainActionPlayed);
+        endTurn_button.setDisable(!isPlayerTurn || !mainActionPlayed);
+        save_button.setDisable(!isPlayerTurn || !mainActionPlayed);
+        activateLeaderCard_button.setDisable(!isPlayerTurn);
+        discardLeaderCard_button.setDisable(!isPlayerTurn);
         rearrangeWarehouse_button.setDisable(false);
         viewOpponents_button.setDisable(false);
         showCheckBoxes();
@@ -1976,6 +1977,7 @@ public class PlayerBoardController extends GenericController {
             updateLeaderBHand(pbv.getLeaderBoard().getHand());
             updateLeaderBBoard(pbv.getLeaderBoard().getBoard());
             updateWarehouse(pbv.getWarehouse().getShelves());
+            enableButtons();
         } catch (NotExistingNicknameException e) {
             e.printStackTrace();
         }
