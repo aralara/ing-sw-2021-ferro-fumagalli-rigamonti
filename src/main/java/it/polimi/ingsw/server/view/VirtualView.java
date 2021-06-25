@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.view;
 
+import it.polimi.ingsw.client.cli.GraphicalCLI;
 import it.polimi.ingsw.server.controller.GameHandler;
 import it.polimi.ingsw.utils.messages.Message;
 import it.polimi.ingsw.utils.messages.server.action.EndGameMessage;
@@ -63,7 +64,8 @@ public class VirtualView implements Runnable {
             handleClientConnection();
         } catch (IOException e) {
             if (client != null)
-                System.out.println("client " + client.getInetAddress() + " connection dropped");
+                GraphicalCLI.printlnString("Client " + client.getInetAddress() + ":" +
+                        client.getLocalPort() + ":" + client.getPort() + " connection dropped");
             stop(true, false);
         }
     }
@@ -129,7 +131,7 @@ public class VirtualView implements Runnable {
                     client.close();
                 }
             } catch (IOException | InterruptedException e) {
-                System.out.println("Fatal Error! Unable to close socket");
+                GraphicalCLI.printlnString("Fatal Error! Unable to close socket");
             }
         }
         if (propagate)

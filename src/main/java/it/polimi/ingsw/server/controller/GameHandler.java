@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller;
 
+import it.polimi.ingsw.client.cli.GraphicalCLI;
 import it.polimi.ingsw.server.model.games.SingleGame;
 import it.polimi.ingsw.utils.exceptions.LibraryNotLoadedException;
 import it.polimi.ingsw.utils.exceptions.NotExistingNicknameException;
@@ -184,7 +185,7 @@ public class GameHandler implements Runnable {
         if (message instanceof ClientActionMessage) {
             ((ClientActionMessage) message).doAction(view);
         } else {
-            System.out.println("Can't handle message");
+            GraphicalCLI.printlnString("Can't handle message");
         }
     }
 
@@ -195,15 +196,14 @@ public class GameHandler implements Runnable {
      * @return Returns true if the game has been saved successfully, false otherwise
      */
     public boolean saveGame(String nickname) {
-        if((nickname == null ||                                                     // If there is no nickname specified the save request is always accepted
-                (controller.getPlayingNickname().equals(nickname) &&
-                        controller.getPlayerBoard(nickname).isTurnPlayed())) &&     // If there is a nickname specified, the player must have already played their action and it must be their turn
-                sizeSetup.get() == size) {                                          // It's not possible to save a game during the setup phase
+        if(controller.getPlayingNickname().equals(nickname) &&
+                controller.getPlayerBoard(nickname).isTurnPlayed() &&       // The player must have already played their action and it must be their turn
+                sizeSetup.get() == size) {                                  // It's not possible to save a game during the setup phase
             try {
                 save.save();
                 return true;
             } catch (IOException e) {
-                System.out.println("Unable to save game");
+                GraphicalCLI.printlnString("Unable to save game");
             }
         }
         return false;
@@ -218,13 +218,6 @@ public class GameHandler implements Runnable {
             active = false;
             for (VirtualView virtualView : clientsVirtualView)
                 virtualView.stop(false, sendMessage);
-            if(!saveGame(null)) {
-                try {
-                    GameLibrary.getInstance().deleteSave(save);
-                } catch (LibraryNotLoadedException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
 

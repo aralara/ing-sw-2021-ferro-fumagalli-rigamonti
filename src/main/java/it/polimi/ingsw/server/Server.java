@@ -55,7 +55,7 @@ public class Server {
         try {
             server.socket = new ServerSocket(SOCKET_PORT);
             server.running = true;
-            System.out.println("Server started");
+            GraphicalCLI.printlnString("Server started");
         } catch (IOException e) {
             System.exit(1);
             return;
@@ -67,7 +67,7 @@ public class Server {
                 server.handleNewConnection(client);
             }
         } catch (IOException e) {
-            System.out.println("Error! Connection dropped");
+            GraphicalCLI.printlnString("Error! Connection dropped");
         }
     }
 
@@ -122,7 +122,7 @@ public class Server {
                 waitingGame = null;
             }
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Client disconnected during setup");
+            GraphicalCLI.printlnString("Client disconnected during setup");
         }
 
         if (waitingGame != null && waitingGame.isFull()) {

@@ -27,6 +27,6 @@ public class Client {
             System.exit(0);
         }
         else
-            System.out.println("Error in the choice of the game modality occurred!");
+            GraphicalCLI.printlnString("Client version not supported");
     }
 }
