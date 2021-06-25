@@ -35,8 +35,8 @@ public class PlayerBoardController extends GenericController {
     private List<ImageView> spaces, faithSpaces;
     private ResourceType resToPlace;
     private boolean isResToPlaceAction=false, mainActionPlayed=false, warehouseIsDisabled=false;
-    private boolean isFirstLeaderProduction = false, isSecondLeaderProduction = false,
-            isFirstLeaderShelf = false, isSecondLeaderShelf = false;
+    private boolean isFirstLeaderProduction = false, isSecondLeaderProduction = false, isFirstLeaderShelf = false,
+            isSecondLeaderShelf = false, showingOpponent = false, rearrangingWarehouse = false;
 
     @FXML private Label player_label,
             coinStrongbox_label, servantStrongbox_label, shieldStrongbox_label, stoneStrongbox_label,
@@ -173,6 +173,7 @@ public class PlayerBoardController extends GenericController {
         discardLeaderCard_button.setDisable(isResToPlaceAction);
         endTurn_button.setDisable(!mainActionPlayed || isResToPlaceAction);
         save_button.setDisable(!mainActionPlayed || isResToPlaceAction);
+        rearrangingWarehouse = false;
     }
 
     /**
@@ -244,6 +245,7 @@ public class PlayerBoardController extends GenericController {
             restoreWarehouse_button.setVisible(true);
             confirm_button.setVisible(false);
             showResToPlace(true);
+            rearrangingWarehouse = true;
         }
     }
 
@@ -271,10 +273,11 @@ public class PlayerBoardController extends GenericController {
         }
         hideLeaderHand();
         hideCheckBoxes();
+        showingOpponent = true;
     }
 
     /**
-     * Saves the game
+     * Sends a message to the server to save the game
      */
     public void save() {
         getGUI().getMessageHandler().sendClientMessage(new SaveMessage());
@@ -1003,6 +1006,7 @@ public class PlayerBoardController extends GenericController {
                     "The warehouse will be restored and you'll be asked to place all the resources again");
             restoreWarehouse();
         }
+        rearrangingWarehouse = false;
     }
 
     /**
@@ -1042,7 +1046,8 @@ public class PlayerBoardController extends GenericController {
      * Shows local player's development board's cards
      */
     public void showDevelopmentBSpaces() {
-        updateDevelopmentBSpaces(getGUI().getDevelopmentBoard());
+        if(!showingOpponent)
+            updateDevelopmentBSpaces(getGUI().getDevelopmentBoard());
     }
 
     /**
@@ -1062,10 +1067,12 @@ public class PlayerBoardController extends GenericController {
      * Shows local player's faith level
      */
     public void showFaithBoard(){
-        try {
-            updateFaithBoard(getGUI().getLocalPlayerBoard().getFaithBoard().getFaith(), false);
-        }catch(NotExistingNicknameException e){
-            e.printStackTrace();
+        if(!showingOpponent) {
+            try {
+                updateFaithBoard(getGUI().getLocalPlayerBoard().getFaithBoard().getFaith(), false);
+            } catch (NotExistingNicknameException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -1104,10 +1111,12 @@ public class PlayerBoardController extends GenericController {
      * Shows local player's Pope progression tiles
      */
     public void showFaithBPope() {
-        try {
-            updateFaithBPope(getGUI().getLocalPlayerBoard().getFaithBoard().getPopeProgression());
-        }catch(NotExistingNicknameException e){
-            e.printStackTrace();
+        if(!showingOpponent) {
+            try {
+                updateFaithBPope(getGUI().getLocalPlayerBoard().getFaithBoard().getPopeProgression());
+            } catch (NotExistingNicknameException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -1148,10 +1157,12 @@ public class PlayerBoardController extends GenericController {
      * Shows imageViews of the leaders in the hand to be shown
      */
     public void showLeaderBHand(){
-        try {
-            updateLeaderBHand(getGUI().getLocalPlayerBoard().getLeaderBoard().getHand());
-        } catch (NotExistingNicknameException e) {
-            e.printStackTrace();
+        if(!showingOpponent) {
+            try {
+                updateLeaderBHand(getGUI().getLocalPlayerBoard().getLeaderBoard().getHand());
+            } catch (NotExistingNicknameException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -1192,10 +1203,12 @@ public class PlayerBoardController extends GenericController {
      * Shows imageViews of the leaders on the board to be shown
      */
     public void showLeaderBBoard(){
-        try {
-            updateLeaderBBoard(getGUI().getLocalPlayerBoard().getLeaderBoard().getBoard());
-        } catch (NotExistingNicknameException e) {
-            e.printStackTrace();
+        if(!showingOpponent) {
+            try {
+                updateLeaderBBoard(getGUI().getLocalPlayerBoard().getLeaderBoard().getBoard());
+            } catch (NotExistingNicknameException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -1251,7 +1264,8 @@ public class PlayerBoardController extends GenericController {
      * Shows local player's strongbox
      */
     public void showStrongbox() {
-        updateStrongbox(getGUI().getStrongboxResources());
+        if(!showingOpponent)
+            updateStrongbox(getGUI().getStrongboxResources());
     }
 
     /**
@@ -1412,7 +1426,8 @@ public class PlayerBoardController extends GenericController {
      * Shows local player's warehouse
      */
     public void showWarehouse() {
-        updateWarehouse(getGUI().getWarehouseShelvesCopy());
+        if(isPlayerTurn || !showingOpponent && !rearrangingWarehouse)
+            updateWarehouse(getGUI().getWarehouseShelvesCopy());
     }
 
     /**
@@ -1963,6 +1978,7 @@ public class PlayerBoardController extends GenericController {
         } catch (NotExistingNicknameException e) {
             e.printStackTrace();
         }
+        showingOpponent = false;
     }
 
     /**
