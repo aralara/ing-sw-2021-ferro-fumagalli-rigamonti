@@ -579,7 +579,7 @@ public class GUI extends ClientController {
      * Controls which type of resources are to place and calls methods accordingly
      * If there are resources, updates resources to place and shows them on the playerBoard
      * If there is only faith, adds it to the discarded resources and send a message to the server
-     * @param resources //TODO
+     * @param resources Resources to be placed
      */
     public void controlResourcesToPlace(List<Resource> resources, boolean showAlert){
         resourcesToPlace.clear();

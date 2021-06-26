@@ -182,7 +182,7 @@ public class Controller {
      * @param cards LeaderCards to be played
      * @return Returns true if the cards are played, false otherwise
      */
-    public boolean playLeaderCard(String player, List<LeaderCard> cards) { //TODO: da controllare
+    public boolean playLeaderCard(String player, List<LeaderCard> cards) {
         for(LeaderCard card : cards)
             if(!game.playLeaderCard(game.getPlayerIndexOf(player), card))
                 return false;
