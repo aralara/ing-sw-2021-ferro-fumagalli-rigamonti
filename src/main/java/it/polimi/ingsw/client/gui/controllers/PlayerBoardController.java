@@ -158,7 +158,7 @@ public class PlayerBoardController extends GenericController {
         resetResLabels();
         getGUI().updateResourcesToPlace();
         rearrangingWarehouse = false;
-        showWarehouse();
+        updateWarehouse(getGUI().getWarehouseShelvesCopy());
         confirm_button.setVisible(false);
         restoreWarehouse_button.setVisible(false);
         rearrangeWarehouse_button.setDisable(false);
@@ -1428,7 +1428,7 @@ public class PlayerBoardController extends GenericController {
      * Shows local player's warehouse
      */
     public void showWarehouse() {
-        if(isPlayerTurn || !showingOpponent && !rearrangingWarehouse)
+        if(!isResToPlaceAction && !showingOpponent && !rearrangingWarehouse)
             updateWarehouse(getGUI().getWarehouseShelvesCopy());
     }
 
