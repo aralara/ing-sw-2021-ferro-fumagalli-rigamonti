@@ -30,7 +30,7 @@ public class SaveInteractionMessage extends ClientActionMessage {
 
 
     @Override
-    public void doAction(VirtualView view) {
+    public void doAction(VirtualView view) {    //TODO: sicurezza?
         try {
             switch (interaction) {
                 case DELETE_SAVE:

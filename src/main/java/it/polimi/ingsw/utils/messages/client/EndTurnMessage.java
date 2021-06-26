@@ -22,7 +22,7 @@ public class EndTurnMessage extends ClientActionMessage {
 
 
     @Override
-    public void doAction(VirtualView view) {
+    public void doAction(VirtualView view) {    //TODO: sicurezza?
         GameHandler gameHandler = view.getGameHandler();
         Controller controller = gameHandler.getController();
         TurnStatus ts = TurnStatus.getStatus(controller.loadNextTurn());

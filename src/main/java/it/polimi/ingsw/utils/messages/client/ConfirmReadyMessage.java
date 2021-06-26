@@ -17,7 +17,7 @@ public class ConfirmReadyMessage extends ClientActionMessage {
 
 
     @Override
-    public void doAction(VirtualView view) {
+    public void doAction(VirtualView view) {    //TODO: sicurezza?
         GameHandler gameHandler = view.getGameHandler();
         boolean success = view.getGameHandler().playerFinishedSetup();
         view.sendMessage(new ServerAckMessage(getUuid(), success));

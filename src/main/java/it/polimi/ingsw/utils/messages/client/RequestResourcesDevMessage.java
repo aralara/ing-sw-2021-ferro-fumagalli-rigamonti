@@ -29,7 +29,7 @@ public class RequestResourcesDevMessage extends CanBuyDevelopmentCardMessage {
 
 
     @Override
-    public void doAction(VirtualView view) {
+    public void doAction(VirtualView view) {    //TODO: sicurezza?
         boolean success = view.getGameHandler().getController()
                 .buyDevCard(view.getNickname(), getDevelopmentCard(), getSpace(), requestResources);
         view.sendMessage(new ServerAckMessage(getUuid(), success));

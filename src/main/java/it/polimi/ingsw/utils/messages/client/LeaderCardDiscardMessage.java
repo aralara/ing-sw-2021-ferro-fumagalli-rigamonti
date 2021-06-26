@@ -36,7 +36,7 @@ public class LeaderCardDiscardMessage extends LeaderCardMessageClient {
 
 
     @Override
-    public void doAction(VirtualView view) {
+    public void doAction(VirtualView view) {    //TODO: sicurezza?
         boolean success = view.getGameHandler().getController()
                 .discardLeaders(view.getNickname(), getLeaderCards(), setup);
         view.sendMessage(new ServerAckMessage(getUuid(), success));

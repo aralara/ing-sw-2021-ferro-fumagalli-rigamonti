@@ -30,7 +30,7 @@ public class SelectMarketMessage extends ClientActionMessage {
 
 
     @Override
-    public void doAction(VirtualView view) {
+    public void doAction(VirtualView view) {    //TODO: sicurezza?
         Controller controller = view.getGameHandler().getController();
         List<Resource> resources = controller.getFromMarket(view.getNickname(), row, column);
         List<ResourceType> availableResources = controller.getPlayerBoard(view.getNickname()).getAbilityMarbles();

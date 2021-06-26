@@ -43,7 +43,7 @@ public class ShelvesConfigurationMessage extends ClientActionMessage {
 
 
     @Override
-    public void doAction(VirtualView view) {
+    public void doAction(VirtualView view) {    //TODO: sicurezza?
         boolean success = view.getGameHandler().getController()
                 .addResourcesToWarehouse(view.getNickname(), shelves, extra);
         view.sendMessage(new ServerAckMessage(getUuid(), success));
