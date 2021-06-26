@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -27,7 +28,7 @@ import java.util.stream.Collectors;
  */
 public class GameHandler implements Runnable {
 
-    private boolean active;
+    private final AtomicBoolean active;
     private final int size;
     private final AtomicInteger sizeSetup;
     private final List<VirtualView> clientsVirtualView;
@@ -39,7 +40,7 @@ public class GameHandler implements Runnable {
      * @param size Size of the game that will be created
      */
     public GameHandler(int size) {
-        this.active = true;
+        this.active = new AtomicBoolean(true);
         this.size = size;
         this.sizeSetup = new AtomicInteger(0);
         clientsVirtualView = new ArrayList<>();
@@ -214,8 +215,7 @@ public class GameHandler implements Runnable {
      * @param sendMessage If true sends a message to all the clients, notifying them of the disconnection
      */
     public void stop(boolean sendMessage) {
-        if(active) {
-            active = false;
+        if(active.getAndSet(false)) {
             if(save != null && !save.isSaved())    // Deletes the save in case the game hasn't been saved or loaded from a save
                 try {
                     GameLibrary.getInstance().deleteSave(save);
@@ -259,7 +259,7 @@ public class GameHandler implements Runnable {
      * @return Returns active value
      */
     public boolean isActive() {
-        return active;
+        return active.get();
     }
 
     /**
