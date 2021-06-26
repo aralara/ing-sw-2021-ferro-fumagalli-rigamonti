@@ -51,7 +51,7 @@ public class GUI extends ClientController {
         resourcesToEqualize = new ArrayList<>();
         resourcesToPlace = new ArrayList<>();
         resourcesToDiscard = new ArrayList<>();
-        resumeGame = false;
+        resumeGame = true;
     }
 
     /**
@@ -202,7 +202,7 @@ public class GUI extends ClientController {
             getMessageHandler().sendClientMessage(new SaveInteractionMessage(null, SaveInteractions.NO_ACTION));
         }
         else {
-            resumeGame = true;
+            //resumeGame = true;
             GameSave gameSave = null;
             for(GameSave save : gameSaves)
                 if(save.getFileName().equals(fileName)) {
@@ -225,6 +225,7 @@ public class GUI extends ClientController {
 
     @Override
     public void askLeaderDiscard() {
+        resumeGame=false;
         try {
             List<Integer> listID = new ArrayList<>();
             for(Card card : getLocalPlayerBoard().getLeaderBoard().getHand())
