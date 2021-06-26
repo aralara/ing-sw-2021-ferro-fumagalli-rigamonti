@@ -18,7 +18,7 @@ public class GameSave implements Serializable {
     private final List<String> players;
     private final int id;
     private final String fileName;
-    private boolean loaded;
+    private boolean loaded, saved;
     private Game game;
 
 
@@ -42,6 +42,7 @@ public class GameSave implements Serializable {
         this.id = id;
         this.fileName = fileName;
         this.loaded = false;
+        this.saved = true;
         this.game = null;
     }
 
@@ -59,6 +60,7 @@ public class GameSave implements Serializable {
                 .concat(GameLibrary.NAME_SEPARATOR + id)
                 .concat(GameLibrary.FILE_EXTENSION);
         this.loaded = true;
+        this.saved = false;
         this.game = game;
     }
 
@@ -74,6 +76,7 @@ public class GameSave implements Serializable {
             output.writeObject(game);
             output.flush();
             output.close();
+            saved = true;
         }
     }
 
@@ -83,22 +86,27 @@ public class GameSave implements Serializable {
      * @throws ClassNotFoundException Throws a ClassNotFoundException if the game can't be serialized
      */
     public void load() throws IOException, ClassNotFoundException {
-        ObjectInputStream input = new ObjectInputStream(new FileInputStream(GameLibrary.LIBRARY_PATH + fileName));
-        if(players.size() == 1)
-            game = (SingleGame) input.readObject();
-        else
-            game = (MultiGame) input.readObject();
-        input.close();
-        loaded = true;
+        if(saved) {
+            ObjectInputStream input = new ObjectInputStream(new FileInputStream(GameLibrary.LIBRARY_PATH + fileName));
+            if (players.size() == 1)
+                game = (SingleGame) input.readObject();
+            else
+                game = (MultiGame) input.readObject();
+            input.close();
+            loaded = true;
+        }
     }
 
     /**
      * Deletes the referenced file
-     * @return Returns true if the file is successfully deleted, false otherwise
+     * @return Returns true if the file is successfully deleted or not existing, false otherwise
      */
     public boolean delete() {
-        File file = new File(GameLibrary.LIBRARY_PATH + fileName);
-        return file.delete();
+        if(saved) {
+            File file = new File(GameLibrary.LIBRARY_PATH + fileName);
+            return file.delete();
+        }
+        return true;
     }
 
     /**
@@ -139,6 +147,14 @@ public class GameSave implements Serializable {
      */
     public boolean isLoaded() {
         return loaded;
+    }
+
+    /**
+     * Gets the saved attribute
+     * @return Returns saved value
+     */
+    public boolean isSaved() {
+        return saved;
     }
 
     /**

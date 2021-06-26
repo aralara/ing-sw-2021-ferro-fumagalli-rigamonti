@@ -216,6 +216,12 @@ public class GameHandler implements Runnable {
     public void stop(boolean sendMessage) {
         if(active) {
             active = false;
+            if(save != null && !save.isSaved())    // Deletes the save in case the game hasn't been saved or loaded from a save
+                try {
+                    GameLibrary.getInstance().deleteSave(save);
+                } catch(LibraryNotLoadedException e) {
+                    e.printStackTrace();
+                }
             for (VirtualView virtualView : clientsVirtualView)
                 virtualView.stop(false, sendMessage);
         }
