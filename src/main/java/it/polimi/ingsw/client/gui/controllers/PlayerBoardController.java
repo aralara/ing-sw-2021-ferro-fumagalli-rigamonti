@@ -1295,7 +1295,7 @@ public class PlayerBoardController extends GenericController {
                         if(shelf.getResourceType() != ResourceType.WILDCARD) {
                             resType = shelf.getResourceType().toString()+".png";
                             shelfResL1_1_imageView.setImage(new Image(
-                                    getClass().getResourceAsStream(resPath+resType)));
+                                    getClass().getResourceAsStream(resPath+resType.toLowerCase())));
                         }
                         else
                             shelfResL1_1_imageView.setImage(null);
@@ -1303,7 +1303,7 @@ public class PlayerBoardController extends GenericController {
                     case(2):
                         if(shelf.getResourceType() != ResourceType.WILDCARD) {
                             resType = shelf.getResourceType().toString()+".png";
-                            image = new Image(getClass().getResourceAsStream(resPath+resType));
+                            image = new Image(getClass().getResourceAsStream(resPath+resType.toLowerCase()));
                             if(shelf.getResources().getQuantity()==1){
                                 shelfResL2_1_imageView.setImage(image);
                                 shelfResL2_2_imageView.setImage(null);
@@ -1321,7 +1321,7 @@ public class PlayerBoardController extends GenericController {
                     case(3):
                         if(shelf.getResourceType() != ResourceType.WILDCARD) {
                             resType = shelf.getResourceType().toString()+".png";
-                            image = new Image(getClass().getResourceAsStream(resPath+resType));
+                            image = new Image(getClass().getResourceAsStream(resPath+resType.toLowerCase()));
                             if(shelf.getResources().getQuantity()==1){
                                 shelfResL3_1_imageView.setImage(image);
                                 shelfResL3_2_imageView.setImage(null);
@@ -1349,7 +1349,7 @@ public class PlayerBoardController extends GenericController {
             }
             else { //leader
                 resType = shelf.getResourceType().toString()+".png";
-                image = new Image(getClass().getResourceAsStream(resPath+resType));
+                image = new Image(getClass().getResourceAsStream(resPath+resType.toLowerCase()));
                 if(isFirstLeaderShelf && !isSecondLeaderShelf){
                     if(shelf.getResources().getQuantity()==1){
                         shelfLeader1_1_imageView.setImage(image);
@@ -2016,7 +2016,7 @@ public class PlayerBoardController extends GenericController {
      */
     private void setOpponentLeaderShelf(ResourceType resourceType, List<Shelf> shelves, int leaderPosition){
         for(Shelf shelf : shelves){
-            Image image = new Image(getClass().getResourceAsStream("/imgs/res/"+ resourceType + ".png"));
+            Image image = new Image(getClass().getResourceAsStream("/imgs/res/" + resourceType.toString().toLowerCase() + ".png"));
             if(shelf.isLeader() && shelf.getResourceType()==resourceType){
                 if(leaderPosition==1) {
                     if (shelf.getResources().getQuantity() >= 1)

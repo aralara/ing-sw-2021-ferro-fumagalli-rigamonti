@@ -10,6 +10,7 @@ import it.polimi.ingsw.utils.listeners.Listeners;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.*;
 
@@ -44,19 +45,15 @@ public class Market extends Listened implements Serializable {
         Gson gson = new Gson();
         Stack<Marble> buffer = new Stack<>();
 
-        try {
-            Marble[] marbles;
-            JsonReader reader = new JsonReader(new FileReader(fileName));
-            marbles = gson.fromJson(reader, Marble[].class);
+        Marble[] marbles;
+        JsonReader reader = new JsonReader(new InputStreamReader(this.getClass().getResourceAsStream(fileName)));
+        marbles = gson.fromJson(reader, Marble[].class);
 
-            for (Marble marble : marbles) {
-                buffer.add(new Marble(marble.getColor(), marble.getResourceType()));
-            }
-
-            randomizeMarbles(buffer);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        for (Marble marble : marbles) {
+            buffer.add(new Marble(marble.getColor(), marble.getResourceType()));
         }
+
+        randomizeMarbles(buffer);
     }
 
     /**

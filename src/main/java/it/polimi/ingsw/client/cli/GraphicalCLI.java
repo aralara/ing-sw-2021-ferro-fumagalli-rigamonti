@@ -8,7 +8,6 @@ import it.polimi.ingsw.server.model.storage.Resource;
 import it.polimi.ingsw.server.model.storage.ResourceType;
 import it.polimi.ingsw.server.model.storage.Shelf;
 import it.polimi.ingsw.server.saves.GameLibrary;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -179,7 +178,6 @@ public class GraphicalCLI {
      *                for no limit)
      * @return Returns the objects chosen by the user
      */
-    @NotNull
     public static <T> List<T> objectOptionSelector(List<T> list, Consumer<T> printObject,
                                       Runnable printMessage,
                                       Runnable printInput, Runnable printOnlyOption,

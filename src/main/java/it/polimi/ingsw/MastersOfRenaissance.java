@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * The main class of Master of Renaissance
  */
-public class MasterOfRenaissance {
+public class MastersOfRenaissance {
 
     /**
      * Lets the user choose which version of Master of Renaissance start

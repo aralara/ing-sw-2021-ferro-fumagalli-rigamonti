@@ -352,7 +352,8 @@ public class DepotsController extends GenericController {
                 case(0):
                     if(shelf.getResourceType() != ResourceType.WILDCARD) {
                         resType = shelf.getResourceType().toString()+".png";
-                        whShelf1_1_imageView.setImage(new Image(getClass().getResourceAsStream(resPath+resType)));
+                        whShelf1_1_imageView.setImage(new Image(getClass()
+                                .getResourceAsStream(resPath+resType.toLowerCase())));
                     }
                     else
                         whShelf1_1_imageView.setImage(null);
@@ -360,7 +361,7 @@ public class DepotsController extends GenericController {
                 case(1):
                     if(shelf.getResourceType() != ResourceType.WILDCARD) {
                         resType = shelf.getResourceType().toString()+".png";
-                        image = new Image(getClass().getResourceAsStream(resPath+resType));
+                        image = new Image(getClass().getResourceAsStream(resPath+resType.toLowerCase()));
                         if(shelf.getResources().getQuantity()==1){
                             whShelf2_1_imageView.setImage(image);
                             whShelf2_2_imageView.setImage(null);
@@ -378,7 +379,7 @@ public class DepotsController extends GenericController {
                 case(2):
                     if(shelf.getResourceType() != ResourceType.WILDCARD) {
                         resType = shelf.getResourceType().toString()+".png";
-                        image = new Image(getClass().getResourceAsStream(resPath+resType));
+                        image = new Image(getClass().getResourceAsStream(resPath+resType.toLowerCase()));
                         if(shelf.getResources().getQuantity()==1){
                             whShelf3_1_imageView.setImage(image);
                             whShelf3_2_imageView.setImage(null);
@@ -404,7 +405,7 @@ public class DepotsController extends GenericController {
                 case(3):
                     if(shelf.getResourceType() != ResourceType.WILDCARD) {
                         resType = shelf.getResourceType().toString()+".png";
-                        image = new Image(getClass().getResourceAsStream(resPath+resType));
+                        image = new Image(getClass().getResourceAsStream(resPath+resType.toLowerCase()));
                         if(shelf.getResources().getQuantity()==1){
                             leaderShelf1_1_imageView.setImage(image);
                             leaderShelf1_2_imageView.setImage(null);

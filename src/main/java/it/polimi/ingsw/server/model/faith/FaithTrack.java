@@ -6,6 +6,7 @@ import it.polimi.ingsw.utils.exceptions.NotExistingLastReportTriggeredException;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,17 +47,13 @@ public class FaithTrack implements Serializable {
      */
     private void loadVaticanReports(String fileName){
         Gson gson = new Gson();
-        try {
-            VaticanReport[] jsonReports;
-            JsonReader reader = new JsonReader(new FileReader(fileName));
-            jsonReports = gson.fromJson(reader, VaticanReport[].class);
+        VaticanReport[] jsonReports;
+        JsonReader reader = new JsonReader(new InputStreamReader(this.getClass().getResourceAsStream(fileName)));
+        jsonReports = gson.fromJson(reader, VaticanReport[].class);
 
-            for (VaticanReport vaticanReport : jsonReports) {
-                this.vaticanReports.add(new VaticanReport(vaticanReport.getMin(), vaticanReport.getMax(),
-                        vaticanReport.getPopeValue()));
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        for (VaticanReport vaticanReport : jsonReports) {
+            this.vaticanReports.add(new VaticanReport(vaticanReport.getMin(), vaticanReport.getMax(),
+                    vaticanReport.getPopeValue()));
         }
     }
 
@@ -66,16 +63,12 @@ public class FaithTrack implements Serializable {
      */
     private void loadFaithSpaces(String fileName){
         Gson gson = new Gson();
-        try {
-            FaithSpace[] jsonSpaces;
-            JsonReader reader = new JsonReader(new FileReader(fileName));
-            jsonSpaces = gson.fromJson(reader, FaithSpace[].class);
+        FaithSpace[] jsonSpaces;
+        JsonReader reader = new JsonReader(new InputStreamReader(this.getClass().getResourceAsStream(fileName)));
+        jsonSpaces = gson.fromJson(reader, FaithSpace[].class);
 
-            for (FaithSpace faithSpace : jsonSpaces) {
-                this.faithSpaces.add(new FaithSpace(faithSpace.getVP(), faithSpace.getPosition()));
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        for (FaithSpace faithSpace : jsonSpaces) {
+            this.faithSpaces.add(new FaithSpace(faithSpace.getVP(), faithSpace.getPosition()));
         }
     }
 
