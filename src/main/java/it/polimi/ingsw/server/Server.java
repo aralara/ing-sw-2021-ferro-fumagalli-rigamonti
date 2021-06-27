@@ -98,10 +98,12 @@ public class Server {
             if(waitingGame != null) {
                 output.writeObject(new LobbyMessage(waitingGame.getSize(), waitingGame.getAllNicknames().size()));
                 output.reset();
+                output.flush();
             }
             else {
                 output.writeObject(new LobbyMessage(0, 0));
                 output.reset();
+                output.flush();
 
                 success = false;
                 while(!success) {
@@ -119,6 +121,8 @@ public class Server {
                 waitingGame.add(new VirtualView(client, output, input, nickname));
             else {
                 output.writeObject(new EndGameMessage(null, true));
+                output.reset();
+                output.flush();
                 waitingGame = null;
             }
         } catch (IOException | ClassNotFoundException e) {
@@ -169,6 +173,7 @@ public class Server {
         ServerAckMessage ack = new ServerAckMessage(message, success);
         output.writeObject(ack);
         output.reset();
+        output.flush();
     }
 
     /**

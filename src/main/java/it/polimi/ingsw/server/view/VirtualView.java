@@ -127,7 +127,6 @@ public class VirtualView implements Runnable {
                 }
             } catch (IOException | InterruptedException e) {
                 GraphicalCLI.printlnString("Fatal Error! Unable to close socket");
-                e.printStackTrace();
             }
         }
         if (propagate)
