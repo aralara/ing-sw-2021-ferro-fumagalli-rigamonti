@@ -141,7 +141,7 @@ public class Server {
      * @return Returns true if the nickname is valid, false otherwise
      */
     public boolean checkValidNickname(String nickname) {
-        if(nickname.matches(GameLibrary.NONVALID_REGEX))
+        if(nickname.matches(GameLibrary.NON_VALID_REGEX))
             return false;
         for (GameHandler gameHandler : gameList) {
             if(gameHandler.isActive()) {

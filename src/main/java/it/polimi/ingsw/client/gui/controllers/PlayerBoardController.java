@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 /**
  * Handles methods relative to fxml PlayerBoard file
  */
+@SuppressWarnings("DuplicatedCode")
 public class PlayerBoardController extends GenericController {
 
     private List<Shelf> warehouseShelves;
@@ -289,7 +290,7 @@ public class PlayerBoardController extends GenericController {
      * Shows the opponent's board
      * @param next True to show next player, false to show previous player in the list of opponents
      */
-    private void viewOpponent(boolean next){//false x precedente
+    private void viewOpponent(boolean next){
         String currentPlayer = player_label.getText();
         leftArrow_button.setDisable(false);
         rightArrow_button.setDisable(false);
@@ -891,7 +892,7 @@ public class PlayerBoardController extends GenericController {
                 return space2L2_imageView;
             if (level == 3)
                 return space2L3_imageView;
-        }else if (space == 2) {
+        } else if (space == 2) {
             if (level == 1)
                 return space3L1_imageView;
             if (level == 2)
@@ -899,7 +900,7 @@ public class PlayerBoardController extends GenericController {
             if (level == 3)
                 return space3L3_imageView;
         }
-        return null;
+        return space1L1_imageView;
     }
 
     /**
@@ -1670,7 +1671,7 @@ public class PlayerBoardController extends GenericController {
     /**
      * Gets the shelf with the same resource's type of the resource given by parameter
      * @param shelves List of shelves where get the shelf from
-     * @param resourceType Resourc's type
+     * @param resourceType Resource's type
      * @return Returns the selected shelf, if present
      */
     private Shelf getShelfWithSameResource(List<Shelf> shelves, ResourceType resourceType){
@@ -1678,7 +1679,7 @@ public class PlayerBoardController extends GenericController {
             if(!shelf.isLeader() && shelf.getResourceType().equals(resourceType))
                 return shelf;
         }
-        return null;
+        return new Shelf();
     }
 
     /**

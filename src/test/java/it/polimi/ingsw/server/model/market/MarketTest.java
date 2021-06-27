@@ -41,6 +41,7 @@ public class MarketTest {
     /**
      * Tests the chosen coordinates return a list of resources
      */
+    @SuppressWarnings("ConstantConditions")
     @Test
     public void testChooseCoordinates() {
         Market market = new Market();

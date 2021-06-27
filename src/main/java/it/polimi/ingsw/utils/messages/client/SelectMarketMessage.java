@@ -3,7 +3,6 @@ package it.polimi.ingsw.utils.messages.client;
 import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.model.storage.Resource;
-import it.polimi.ingsw.server.model.storage.ResourceType;
 import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
 import it.polimi.ingsw.utils.messages.server.action.ResourcesMarketMessage;
@@ -33,9 +32,8 @@ public class SelectMarketMessage extends ClientActionMessage {
     public void doAction(VirtualView view) {    //TODO: sicurezza?
         Controller controller = view.getGameHandler().getController();
         List<Resource> resources = controller.getFromMarket(view.getNickname(), row, column);
-        List<ResourceType> availableResources = controller.getPlayerBoard(view.getNickname()).getAbilityMarbles();
         view.sendMessage(new ServerAckMessage(getUuid(), true));
-        view.sendMessage(new ResourcesMarketMessage(resources, availableResources));
+        view.sendMessage(new ResourcesMarketMessage(resources));
     }
 
     @Override

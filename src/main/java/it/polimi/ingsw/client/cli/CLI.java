@@ -3,7 +3,6 @@ package it.polimi.ingsw.client.cli;
 import it.polimi.ingsw.client.ClientController;
 import it.polimi.ingsw.client.structures.*;
 import it.polimi.ingsw.utils.exceptions.NotExistingNicknameException;
-import it.polimi.ingsw.server.Server;
 import it.polimi.ingsw.server.model.boards.Player;
 import it.polimi.ingsw.server.model.cards.card.*;
 import it.polimi.ingsw.server.model.storage.*;
@@ -77,7 +76,6 @@ public class CLI extends ClientController {
             GraphicalCLI.printString("Insert the port of the server: ");
             int port = GraphicalCLI.getNextInt();
             GraphicalCLI.printlnString("Connecting...");
-            if(port <= 0) port = Server.SOCKET_PORT;    //TODO: temporaneo per testare
             success = getMessageHandler().connect(ip, port);
             if (success)
                 GraphicalCLI.printlnString("Connected");
@@ -268,31 +266,36 @@ public class CLI extends ClientController {
     }
 
     @Override
-    public void addMarketResources(List<Resource> resources, List<ResourceType> availableAbilities) {
-        List<Resource> plainResources = resources.stream()
-                .filter(r -> r.getResourceType() != ResourceType.WILDCARD).collect(Collectors.toList());
-        int     index,
-                marblesLeft = resources.stream().filter(r -> r.getResourceType() == ResourceType.WILDCARD)
-                        .mapToInt(Resource::getQuantity).sum();
+    public void addMarketResources(List<Resource> resources) {
+        try {
+            List<ResourceType> availableAbilities = getLocalPlayerBoard().getActiveAbilityMarbles();
+            List<Resource> plainResources = resources.stream()
+                    .filter(r -> r.getResourceType() != ResourceType.WILDCARD).collect(Collectors.toList());
+            int     index,
+                    marblesLeft = resources.stream().filter(r -> r.getResourceType() == ResourceType.WILDCARD)
+                            .mapToInt(Resource::getQuantity).sum();
 
-        while (marblesLeft > 0 && availableAbilities.size() > 0) {
+            while (marblesLeft > 0 && availableAbilities.size() > 0) {
 
-            GraphicalCLI.printlnString("You can choose a resource from the following types ( "
-                    + marblesLeft + " wildcard(s) left ):");
+                GraphicalCLI.printlnString("You can choose a resource from the following types ( "
+                        + marblesLeft + " wildcard(s) left ):");
 
-            GraphicalCLI.printNumberedList(availableAbilities, rt -> GraphicalCLI.printString(rt.name()));
+                GraphicalCLI.printNumberedList(availableAbilities, rt -> GraphicalCLI.printString(rt.name()));
 
-            do {
-                GraphicalCLI.printString("\nChoose a resource type for the wildcard: ");
-                index = GraphicalCLI.getNextInt() - 1;
-            } while(0 > index || index > availableAbilities.size());
+                do {
+                    GraphicalCLI.printString("\nChoose a resource type for the wildcard: ");
+                    index = GraphicalCLI.getNextInt() - 1;
+                } while(0 > index || index > availableAbilities.size());
 
-            plainResources.add(new Resource(availableAbilities.get(index), 1));
+                plainResources.add(new Resource(availableAbilities.get(index), 1));
 
-            marblesLeft--;
+                marblesLeft--;
+            }
+            placeResourcesOnShelves(plainResources);
+            idle = true;
+        } catch (NotExistingNicknameException e) {
+            e.printStackTrace();
         }
-        placeResourcesOnShelves(plainResources);
-        idle = true;
     }
 
     @Override
@@ -655,7 +658,7 @@ public class CLI extends ClientController {
      * @param src List from which the resources will be taken from
      * @param dest List where the resources will be added to
      */
-    private void moveFaith(List<Resource> src, List<Resource> dest) {    //TODO: da spostare (magari nello storage) in maniera che tutti possano usarlo
+    private void moveFaith(List<Resource> src, List<Resource> dest) {
         for(int i = 0; i < src.size(); i++)
             if(src.get(i).getResourceType().equals(ResourceType.FAITH)) {
                 dest.add(src.get(i));
@@ -729,7 +732,7 @@ public class CLI extends ClientController {
      * @param resources List of resources to be split
      * @return Returns the list of resources
      */
-    private List<Resource> getResourcesOneByOne(List<Resource> resources) {     //TODO: da spostare (magari nello storage) in maniera che tutti possano usarlo
+    private List<Resource> getResourcesOneByOne(List<Resource> resources) {
         List<Resource> resourcesOneByOne = new ArrayList<>();
         for(Resource resource : resources){
             for(int i=0; i<resource.getQuantity(); i++){
@@ -849,7 +852,7 @@ public class CLI extends ClientController {
      * @param shelf Shelf where the resource will be placed
      * @param resource Resource to be placed
      */
-    private void placeResource(Shelf shelf, Resource resource) {                //TODO: da spostare (magari nello shelf) in maniera che tutti possano usarlo
+    private void placeResource(Shelf shelf, Resource resource) {
         if(shelf.getResourceType().equals(resource.getResourceType())){ //shelf with the same resource type
             shelf.getResources().setQuantity(shelf.getResources().getQuantity() +
                     resource.getQuantity());
@@ -867,7 +870,7 @@ public class CLI extends ClientController {
      * @param resourceType ResourceType to be found
      * @return Returns a shelf with the specific resourceType
      */
-    private Shelf getShelfWithSameResource(List<Shelf> shelves, ResourceType resourceType) {     //TODO: da spostare (magari nello shelf) in maniera che tutti possano usarlo
+    private Shelf getShelfWithSameResource(List<Shelf> shelves, ResourceType resourceType) {
         for(Shelf shelf : shelves){
             if(!shelf.isLeader() && shelf.getResourceType().equals(resourceType))
                 return shelf;
@@ -893,7 +896,7 @@ public class CLI extends ClientController {
      * Reset a shelf
      * @param shelf Shelf to be reset
      */
-    private void resetShelf(Shelf shelf) {          //TODO: da spostare (magari nello shelf) in maniera che tutti possano usarlo
+    private void resetShelf(Shelf shelf) {
         if(!shelf.isLeader()) {
             shelf.setResourceType(ResourceType.WILDCARD);
             shelf.getResources().setResourceType(ResourceType.WILDCARD);

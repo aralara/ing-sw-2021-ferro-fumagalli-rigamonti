@@ -59,7 +59,6 @@ public class PlayerBoardTest {
         res1.add(new Resource(ResourceType.STONE, 1));
         Production production = new Production(res1, res2);
         res2.add(new Resource(ResourceType.SERVANT, 1));
-        DevelopmentCard dc = new DevelopmentCard();
         try {
             pb.getDevelopmentBoard().addDevCard(new DevelopmentCard(
                     0, 2, CardColors.BLUE, 1, production, res2),0);
@@ -82,7 +81,6 @@ public class PlayerBoardTest {
         res1.add(new Resource(ResourceType.STONE, 1));
         Production production = new Production(res1, res2);
         res2.add(new Resource(ResourceType.SERVANT, 1));
-        DevelopmentCard dc = new DevelopmentCard();
         try {
             pb.getDevelopmentBoard().addDevCard(new DevelopmentCard(
                     0, 2, CardColors.BLUE, 1, production, res2),0);
@@ -154,7 +152,6 @@ public class PlayerBoardTest {
         res1.add(new Resource(ResourceType.STONE, 1));
         Production production = new Production(res1, res2);
         res2.add(new Resource(ResourceType.SERVANT, 1));
-        DevelopmentCard dc = new DevelopmentCard();
         try {
             pb.getDevelopmentBoard().addDevCard(new DevelopmentCard(
                     0, 2, CardColors.BLUE, 1, production, res2),0);

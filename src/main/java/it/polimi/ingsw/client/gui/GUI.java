@@ -289,36 +289,41 @@ public class GUI extends ClientController {
     }
 
     @Override
-    public void addMarketResources(List<Resource> resources, List<ResourceType> availableAbilities) {
-        int countWildcard = 0;
-        for(Resource resource : resources)
-            if(resource.getResourceType()==ResourceType.WILDCARD)
-                countWildcard += resource.getQuantity();
-        if(countWildcard==0)
-            controlResourcesToPlace(resources, true);
-        else if(availableAbilities!=null && availableAbilities.size()>1){
-            int finalCountWildcard = countWildcard;
-            callPlatformRunLater(() -> ((WildcardResolverController) guiApplication.
-                    getController(SceneNames.RESOURCE_CHOICE_MENU)).
-                    setChooseResources_label("Choose " + finalCountWildcard +" resources to resolve white marbles"));
-            callPlatformRunLater(() -> ((WildcardResolverController) guiApplication.
-                    getController(SceneNames.RESOURCE_CHOICE_MENU)).setTotalResources(finalCountWildcard));
-            callPlatformRunLater(() -> ((WildcardResolverController) guiApplication.
-                    getController(SceneNames.RESOURCE_CHOICE_MENU)).setIsFirstPhase(false));
-            callPlatformRunLater(() -> ((WildcardResolverController) guiApplication.
-                    getController(SceneNames.RESOURCE_CHOICE_MENU)).setIsMarbleAction(true, resources));
-            callPlatformRunLater(() -> ((WildcardResolverController) guiApplication.
-                    getController(SceneNames.RESOURCE_CHOICE_MENU)).enableButtons(availableAbilities));
-            callPlatformRunLater(() -> guiApplication.setActiveScene(SceneNames.RESOURCE_CHOICE_MENU));
-        } else {
-            if (availableAbilities != null && availableAbilities.size() == 1) {
-                for (Resource resource : resources) {
-                    if (resource.getResourceType() == ResourceType.WILDCARD) {
-                        resource.setResourceType(availableAbilities.get(0));
+    public void addMarketResources(List<Resource> resources) {
+        try {
+            List<ResourceType> availableAbilities = getLocalPlayerBoard().getActiveAbilityMarbles();
+            int countWildcard = 0;
+            for(Resource resource : resources)
+                if(resource.getResourceType()==ResourceType.WILDCARD)
+                    countWildcard += resource.getQuantity();
+            if(countWildcard==0)
+                controlResourcesToPlace(resources, true);
+            else if(availableAbilities!=null && availableAbilities.size()>1){
+                int finalCountWildcard = countWildcard;
+                callPlatformRunLater(() -> ((WildcardResolverController) guiApplication.
+                        getController(SceneNames.RESOURCE_CHOICE_MENU)).
+                        setChooseResources_label("Choose " + finalCountWildcard +" resources to resolve white marbles"));
+                callPlatformRunLater(() -> ((WildcardResolverController) guiApplication.
+                        getController(SceneNames.RESOURCE_CHOICE_MENU)).setTotalResources(finalCountWildcard));
+                callPlatformRunLater(() -> ((WildcardResolverController) guiApplication.
+                        getController(SceneNames.RESOURCE_CHOICE_MENU)).setIsFirstPhase(false));
+                callPlatformRunLater(() -> ((WildcardResolverController) guiApplication.
+                        getController(SceneNames.RESOURCE_CHOICE_MENU)).setIsMarbleAction(true, resources));
+                callPlatformRunLater(() -> ((WildcardResolverController) guiApplication.
+                        getController(SceneNames.RESOURCE_CHOICE_MENU)).enableButtons(availableAbilities));
+                callPlatformRunLater(() -> guiApplication.setActiveScene(SceneNames.RESOURCE_CHOICE_MENU));
+            } else {
+                if (availableAbilities != null && availableAbilities.size() == 1) {
+                    for (Resource resource : resources) {
+                        if (resource.getResourceType() == ResourceType.WILDCARD) {
+                            resource.setResourceType(availableAbilities.get(0));
+                        }
                     }
                 }
+                controlResourcesToPlace(resources, true);
             }
-            controlResourcesToPlace(resources, true);
+        } catch (NotExistingNicknameException e) {
+            e.printStackTrace();
         }
     }
 
@@ -391,14 +396,14 @@ public class GUI extends ClientController {
         } catch(NotExistingNicknameException e) {
             e.printStackTrace();
         }
-        chooseStorages(realCost, 1);    //TODO: 1 e 2 possono diventare degli enum
+        chooseStorages(realCost, 1);
     }
 
     @Override
     public void chooseProductionStorages(List<Production> productionsToActivate, List<Resource> consumed) {
         callPlatformRunLater(() -> ((DepotsController)guiApplication.getController(SceneNames.DEPOTS))
                 .setProductionsToActivate(productionsToActivate));
-        chooseStorages(consumed, 2);    //TODO: 1 e 2 possono diventare degli enum
+        chooseStorages(consumed, 2);
     }
 
     /**
@@ -541,7 +546,7 @@ public class GUI extends ClientController {
     }
 
     /**
-     * Gets a copy of the local playerboard's warehouse
+     * Gets a copy of the local playerBoard's warehouse
      * @return Returns the copy of the warehouse
      */
     public List<Shelf> getWarehouseShelvesCopy(){

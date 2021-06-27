@@ -28,7 +28,6 @@ public class GraphicalCLI {
 
     public static final String BLACK_BRIGHT = "\033[0;90m";  // BLACK
     public static final String RED_BRIGHT = "\033[0;91m";    // RED
-    public static final String GREEN_BRIGHT = "\033[0;92m";  // GREEN
     public static final String YELLOW_BRIGHT = "\033[0;93m"; // YELLOW
     public static final String BLUE_BRIGHT = "\033[0;94m";   // BLUE
     public static final String CYAN_BRIGHT = "\033[0;96m";   // CYAN
@@ -90,7 +89,7 @@ public class GraphicalCLI {
         do {
             printString("Insert your nickname: ");
             nickname = getNextLine();
-            success = !nickname.matches(GameLibrary.NONVALID_REGEX);
+            success = !nickname.matches(GameLibrary.NON_VALID_REGEX);
             if(!success)
                 printlnString("The selected nickname contains unsupported characters");
         } while(!success);
@@ -316,7 +315,7 @@ public class GraphicalCLI {
      * @param resourceType Resource type corresponding to a color
      * @return The chosen color
      */
-    private static String chooseColor(ResourceType resourceType){  //TODO: sostituire con un enum
+    private static String chooseColor(ResourceType resourceType){
         if(resourceType == ResourceType.SHIELD){
             return BLUE_BRIGHT;
         }else if(resourceType == ResourceType.STONE){
@@ -451,7 +450,7 @@ public class GraphicalCLI {
      * @param faith Space that need to be checked (corresponding to a certain amount of faith)
      * @return True if the space is a vatican report, false otherwise
      */
-    private static boolean isVaticanReport(FaithTrackView faithTrack, int faith){  //TODO: spostare nel faithTrackView, qui non ha molto senso
+    private static boolean isVaticanReport(FaithTrackView faithTrack, int faith){
         for(int i = 0; i<faithTrack.getVaticanReports().size();i++){
             if(faith >= faithTrack.getVaticanReports().get(i).getMin() && faith <= faithTrack.getVaticanReports().get(i).getMax()){
                 return true;
@@ -475,12 +474,12 @@ public class GraphicalCLI {
                 printString(i + ":");
             }
             printString(" ");
-            for(int j = 0; j < i; j++) {    //TODO:risolvere warning
+            for(int j = 0; j < i; j++) {
                 if ((warehouseView.getShelves().stream().anyMatch(x -> x.getLevel() == finalI && !x.isLeader())) &&
                         (warehouseView.getShelves().stream().filter(x -> x.getLevel() == finalI && !x.isLeader())
-                                .findFirst().get().getResources().getQuantity()>j)) {
+                                .findFirst().orElse(new Shelf()).getResources().getQuantity()>j)) {
                     color = chooseColor(warehouseView.getShelves().stream().filter(x -> x.getLevel() == finalI)
-                            .findFirst().get().getResourceType());
+                            .findFirst().orElse(new Shelf()).getResourceType());
                     printString("[ " + color + "■" + color + RESET + " ]");
                 } else {
                     printString("[ x ]");

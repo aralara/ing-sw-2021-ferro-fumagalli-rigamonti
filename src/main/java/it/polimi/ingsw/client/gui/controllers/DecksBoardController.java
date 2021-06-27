@@ -183,6 +183,7 @@ public class DecksBoardController extends GenericController {
     /**
      * Loads development decks' imageViews in the decks list
      */
+    @SuppressWarnings("DuplicatedCode")
     private void fillList(){
         decks = new ArrayList<>();
         decks.add(deckG1_imageView);

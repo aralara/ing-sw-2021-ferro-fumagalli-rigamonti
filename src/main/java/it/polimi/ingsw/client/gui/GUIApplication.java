@@ -3,7 +3,6 @@ package it.polimi.ingsw.client.gui;
 import it.polimi.ingsw.client.gui.controllers.GenericController;
 import it.polimi.ingsw.client.gui.controllers.SetupController;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
@@ -51,16 +50,6 @@ public class GUIApplication extends Application {
         setup();
         setActiveScene(SceneNames.LOADING);
         stage.setOnCloseRequest(we -> System.exit(0));
-        //TODO test
-        /*
-        ((SetupController)getController(SceneNames.LOADING)).playOnline();
-        ((SetupController)getController(SceneNames.CONNECTION_MENU)).getIpAddress_field().setText("127.0.0.1");
-        ((SetupController)getController(SceneNames.CONNECTION_MENU)).getPortNumber_field().setText("1919");
-        ((SetupController)getController(SceneNames.CONNECTION_MENU)).connect();
-        ((SetupController)getController(SceneNames.NICKNAME_MENU)).getNickname_field().setText("AUTO_TEST" + (int)Math.floor(Math.random()*10000));
-        ((SetupController)getController(SceneNames.NICKNAME_MENU)).sendNickname();
-        //((SetupController)getController(SceneNames.GAME_MODE_MENU)).choose1Players();
-        */
     }
 
     /**
@@ -174,6 +163,7 @@ public class GUIApplication extends Application {
      * Creates and shows a new second stage over the main one
      * @param scene Scene to load and show
      */
+    @SuppressWarnings("DuplicatedCode")
     private void openSecondStage(Scene scene){
         secondStage = new Stage();
         Image image = new Image(getClass().getResourceAsStream("/imgs/icon_inkwell.png"));
@@ -203,6 +193,7 @@ public class GUIApplication extends Application {
      * Creates and shows a new card stage over the main one
      * @param scene Scene to load and show
      */
+    @SuppressWarnings("DuplicatedCode")
     private void openCardStage(Scene scene){
         double x;
         double y;

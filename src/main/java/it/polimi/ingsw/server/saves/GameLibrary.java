@@ -4,7 +4,6 @@ import it.polimi.ingsw.utils.exceptions.LibraryNotLoadedException;
 import it.polimi.ingsw.server.model.games.Game;
 
 import java.io.File;
-import java.text.Collator;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -16,7 +15,7 @@ public class GameLibrary {
     public static final String LIBRARY_PATH = "./saves/";
     public static final String NAME_SEPARATOR = "-";
     public static final String FILE_EXTENSION = ".mor";
-    public static final String NONVALID_REGEX = "(.*[<>:/\\\\|?*-]+.*)|(^$)";
+    public static final String NON_VALID_REGEX = "(.*[<>:/\\\\|?*-]+.*)|(^$)";
 
     private static GameLibrary instance = null;
 

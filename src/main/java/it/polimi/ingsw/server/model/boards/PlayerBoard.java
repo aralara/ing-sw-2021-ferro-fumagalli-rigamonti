@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Handles methods to update the playerboard
+ * Handles methods to update the playerBoard
  */
 public class PlayerBoard extends PlayerListened implements Serializable {
 
@@ -151,8 +151,8 @@ public class PlayerBoard extends PlayerListened implements Serializable {
      * Takes the resources from the Storages specified by the RequestResources if all the requests are valid
      * @param requests List of requests containing resource quantity and location for the spent resources
      */
-    private void takeFromStorages(List<RequestResources> requests) {  //TODO: se prendo da LEADER?
-        for(RequestResources request : requests) {                      //TODO: idea per trasformare i RequestResources in strategy
+    private void takeFromStorages(List<RequestResources> requests) {
+        for(RequestResources request : requests) {
             if (request.getStorageType() == StorageType.STRONGBOX)
                 strongbox.removeResources(request.getList());
             else if (request.getStorageType() == StorageType.LEADER)

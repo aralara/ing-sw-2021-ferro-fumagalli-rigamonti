@@ -127,6 +127,7 @@ public class WildcardResolverController extends GenericController {
      * @param resourceType Resource's type
      * @return Returns resource's quantity
      */
+    @SuppressWarnings("DuplicatedCode")
     private int getQuantity(ResourceType resourceType) {
         if (resourceType == ResourceType.COIN) {
             return Integer.parseInt(coin_label.getText().substring(2));
@@ -145,6 +146,7 @@ public class WildcardResolverController extends GenericController {
      * @param resourceType Resource's type
      * @param quantity Resource's quantity
      */
+    @SuppressWarnings("DuplicatedCode")
     private void setQuantity(ResourceType resourceType, int quantity){
         if(resourceType == ResourceType.COIN) {
             coin_label.setText("x " + quantity);

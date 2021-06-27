@@ -115,9 +115,8 @@ public abstract class ClientController {
     /**
      * Makes the player add the resources chosen from the market
      * @param resources List of chosen resources
-     * @param availableAbilities List of available marble abilities
      */
-    public abstract void addMarketResources(List<Resource> resources, List<ResourceType> availableAbilities);
+    public abstract void addMarketResources(List<Resource> resources);
 
     /**
      * Notifies the player that Lorenzo has pulled a new card (in a single player game)

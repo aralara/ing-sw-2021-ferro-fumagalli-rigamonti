@@ -49,10 +49,12 @@ public class DevelopmentBoardTest {
         for(Production production : gotProductions){
             for(Resource resourceCons : production.getConsumed()){
                 checked = false;
-                for (Resource resCons1 : consumed1) {
-                    if (resourceCons.getResourceType() == resCons1.getResourceType()
-                            && resourceCons.getQuantity() == resCons1.getQuantity())
+                for(Resource resCons1 : consumed1) {
+                    if(resourceCons.getResourceType() == resCons1.getResourceType()
+                            && resourceCons.getQuantity() == resCons1.getQuantity()) {
                         checked = true;
+                        break;
+                    }
                 }
                 assertTrue(checked);
             }
@@ -60,8 +62,10 @@ public class DevelopmentBoardTest {
                 checked = false;
                 for (Resource resProd1 : produced1) {
                     if (resourceProd.getResourceType() == resProd1.getResourceType()
-                            && resourceProd.getQuantity() == resProd1.getQuantity())
+                            && resourceProd.getQuantity() == resProd1.getQuantity()) {
                         checked = true;
+                        break;
+                    }
                 }
                 assertTrue(checked);
             }
@@ -90,8 +94,10 @@ public class DevelopmentBoardTest {
                 checked = false;
                 for (Resource resCons1 : consumed1) {
                     if (resourceCons.getResourceType() == resCons1.getResourceType()
-                            && resourceCons.getQuantity() == resCons1.getQuantity())
+                            && resourceCons.getQuantity() == resCons1.getQuantity()) {
                         checked = true;
+                        break;
+                    }
                 }
                 assertFalse(checked);
             }
@@ -99,8 +105,10 @@ public class DevelopmentBoardTest {
                 checked = false;
                 for (Resource resProd1 : produced1) {
                     if (resourceProd.getResourceType() == resProd1.getResourceType()
-                            && resourceProd.getQuantity() == resProd1.getQuantity())
+                            && resourceProd.getQuantity() == resProd1.getQuantity()) {
                         checked = true;
+                        break;
+                    }
                 }
                 assertFalse(checked);
             }
@@ -108,8 +116,10 @@ public class DevelopmentBoardTest {
                 checked = false;
                 for (Resource resCons2 : consumed2) {
                     if (resourceCons.getResourceType() == resCons2.getResourceType()
-                            && resourceCons.getQuantity() == resCons2.getQuantity())
+                            && resourceCons.getQuantity() == resCons2.getQuantity()) {
                         checked = true;
+                        break;
+                    }
                 }
                 assertTrue(checked);
             }
@@ -117,8 +127,10 @@ public class DevelopmentBoardTest {
                 checked = false;
                 for (Resource resProd2 : produced2) {
                     if (resourceProd.getResourceType() == resProd2.getResourceType()
-                            && resourceProd.getQuantity() == resProd2.getQuantity())
+                            && resourceProd.getQuantity() == resProd2.getQuantity()) {
                         checked = true;
+                        break;
+                    }
                 }
                 assertTrue(checked);
             }

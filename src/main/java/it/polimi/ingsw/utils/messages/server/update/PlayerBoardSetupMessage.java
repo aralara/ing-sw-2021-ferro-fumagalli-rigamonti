@@ -40,7 +40,7 @@ public class PlayerBoardSetupMessage implements HiddenMessage, ServerUpdateMessa
     public void doUpdate(ClientController client) {
         client.getPlayerBoards().add(playerBoard);
 
-        if(client.getNickname().equals(playerBoard.getNickname()))   //TODO: probabilmente si potrebbe migliorare
+        if(client.getNickname().equals(playerBoard.getNickname()))
             client.setMainActionPlayed(turnPlayed);
     }
 }

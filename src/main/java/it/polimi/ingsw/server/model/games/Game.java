@@ -95,7 +95,7 @@ public abstract class Game implements Serializable {
      * Loads leader cards from their file utilizing CardFactory and sends 4 random cards to each player
      */
     private void initLeaders() {
-        int[] first4 = new int[]{0, 1, 2, 3};   //TODO: Si potrebbe migliorare
+        int[] first4 = new int[]{0, 1, 2, 3};
         Deck leadCardDeck =
                 new Deck(CardFactory.getInstance().loadLeaderCardsFromFile(FileNames.LEADER_CARD_FILE.value()));
         leadCardDeck.shuffle();
@@ -325,7 +325,7 @@ public abstract class Game implements Serializable {
         Storage.mergeResourceList(totalRequests);
         List<Production> allProductions = new ArrayList<>();
         playerBoard.createProductionStock().forEach(p -> allProductions.add(p.makeClone()));
-        List<Resource> mergedConsumed = Storage.mergeResourceList(consumed);     //TODO: temporaneo, da togiere con una nuova implementazione di MergeResourceList
+        List<Resource> mergedConsumed = Storage.mergeResourceList(consumed);
 
         // Calculates if the activated productions can be modeled from the productions available to the player
         boolean matchingProductions = true;

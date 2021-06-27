@@ -334,6 +334,7 @@ public class MarketBoardController extends GenericController {
     /**
      * Loads marbles' imageViews in the marblePosition list
      */
+    @SuppressWarnings("DuplicatedCode")
     private void fillList(){
         marblePositionList = new ArrayList<>();
         marblePositionList.add(marbleR0C4_imageView);

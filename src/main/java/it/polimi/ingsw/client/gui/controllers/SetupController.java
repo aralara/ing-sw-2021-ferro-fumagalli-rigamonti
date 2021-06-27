@@ -110,14 +110,6 @@ public class SetupController extends GenericController {
     }
 
     /**
-     * Gets the connection_pane attribute
-     * @return Returns connection_pane
-     */
-    public Pane getConnection_pane() {
-        return connection_pane;
-    }
-
-    /**
      * Shows the ConnectionMenu scene
      */
     public void playOnline() {

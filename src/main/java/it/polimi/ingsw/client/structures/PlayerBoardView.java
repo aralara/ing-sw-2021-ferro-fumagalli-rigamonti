@@ -19,7 +19,7 @@ public class PlayerBoardView implements Serializable {
     private final WarehouseView warehouse;
     private final StrongboxView strongbox;
     private boolean inkwell;
-    private Production basicProduction;
+    private final Production basicProduction;
 
     private List<Production> activeAbilityProductions;
     private List<ResourceType> activeAbilityMarbles;
@@ -27,7 +27,7 @@ public class PlayerBoardView implements Serializable {
 
     /**
      * Constructor with parameter
-     * @param playerBoard Playerboard which parameters are to be set
+     * @param playerBoard PlayerBoard which parameters are to be set
      */
     public PlayerBoardView(PlayerBoard playerBoard) {
         this.nickname = playerBoard.getPlayer().getNickname();

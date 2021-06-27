@@ -116,10 +116,12 @@ public class FaithBoardTest {
         resources.add(new Resource(ResourceType.COIN, 1));
         faithBoard.takeFaithFromResources(resources);
         assertEquals(1, faithBoard.getFaith());
-        boolean faith=false;
+        boolean faith = false;
         for(Resource resource : resources)
-            if(resource.getResourceType()==ResourceType.FAITH)
-                faith=true;
+            if(resource.getResourceType()==ResourceType.FAITH) {
+                faith = true;
+                break;
+            }
         assertFalse(faith);
         assertEquals(2, resources.size());
     }

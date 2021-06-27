@@ -18,6 +18,7 @@ import java.util.List;
 /**
  * Handles methods relative to fxml Depots file
  */
+@SuppressWarnings("DuplicatedCode")
 public class DepotsController extends GenericController {
 
     private List<Shelf> shelves;
