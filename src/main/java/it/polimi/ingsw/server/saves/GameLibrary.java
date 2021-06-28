@@ -99,7 +99,8 @@ public class GameLibrary {
      */
     public List<GameSave> getSaves(List<String> players) throws LibraryNotLoadedException {
         checkLoad();
-        return saves.stream().filter(s -> s.samePlayers(players)).collect(Collectors.toList());
+        List<String> orderedPlayers = players.stream().sorted(Comparator.naturalOrder()).collect(Collectors.toList());
+        return saves.stream().filter(s -> s.samePlayers(orderedPlayers)).collect(Collectors.toList());
     }
 
     /**
@@ -110,7 +111,8 @@ public class GameLibrary {
      */
     public boolean checkSave(List<String> players) throws LibraryNotLoadedException {
         checkLoad();
-        return saves.stream().anyMatch(s -> s.samePlayers(players));
+        List<String> orderedPlayers = players.stream().sorted(Comparator.naturalOrder()).collect(Collectors.toList());
+        return saves.stream().anyMatch(s -> s.samePlayers(orderedPlayers));
     }
 
     /**
@@ -121,7 +123,9 @@ public class GameLibrary {
      */
     public List<Integer> getIds(List<String> players) throws LibraryNotLoadedException {
         checkLoad();
-        return saves.stream().filter(s -> s.samePlayers(players)).map(GameSave::getId).collect(Collectors.toList());
+        List<String> orderedPlayers = players.stream().sorted(Comparator.naturalOrder()).collect(Collectors.toList());
+        return saves.stream().filter(s -> s.samePlayers(orderedPlayers))
+                .map(GameSave::getId).collect(Collectors.toList());
     }
 
     /**
@@ -132,7 +136,9 @@ public class GameLibrary {
      */
     public int getNextId(List<String> players) throws LibraryNotLoadedException {
         checkLoad();
-        return saves.stream().filter(s -> s.samePlayers(players)).mapToInt(GameSave::getId).max().orElse(-1) + 1;
+        List<String> orderedPlayers = players.stream().sorted(Comparator.naturalOrder()).collect(Collectors.toList());
+        return saves.stream().filter(s -> s.samePlayers(orderedPlayers))
+                .mapToInt(GameSave::getId).max().orElse(-1) + 1;
     }
 
     /**
