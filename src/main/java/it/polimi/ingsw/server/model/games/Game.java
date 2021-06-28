@@ -139,7 +139,7 @@ public abstract class Game implements Serializable {
      * @return Returns a map of lists of resources using the nickname of the player as a key
      */
     public Map<String, List<Resource>> getResourcesToEqualize() {
-        Map<String, List<Resource>> equalizeRes = new HashMap<>();
+        Map<String, List<Resource>> equalizeRes =  Collections.synchronizedMap(new HashMap<>());
         List<List<Resource>> resources = new ArrayList<>();
         //Resources for the 1st player
         resources.add(new ArrayList<>());
