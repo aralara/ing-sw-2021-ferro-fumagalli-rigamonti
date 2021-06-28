@@ -185,15 +185,14 @@ public class SetupController extends GenericController {
         }
         else{
             getGUIApplication().changeNicknameMenuStatus();
+            getGUI().setNickname(nickname_field.getText());
+            ((PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD)).
+                    setPlayer_label(nickname_field.getText());
             if(!isLocal) {
                 getGUI().getMessageHandler().sendClientMessage(new ConnectionMessage(nickname_field.getText()));
-                getGUI().setNickname(nickname_field.getText());
-                ((PlayerBoardController)getGUIApplication().getController(SceneNames.PLAYER_BOARD)).
-                        setPlayer_label(nickname_field.getText());
             }
             else {
                 getGUIApplication().setActiveScene(SceneNames.LOADING);
-                getGUIApplication().getGUI().setNickname(nickname_field.getText());
                 try {
                     getGUIApplication().getGUI().localSetup();
                 } catch (IOException e) {
