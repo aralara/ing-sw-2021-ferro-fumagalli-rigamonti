@@ -22,25 +22,28 @@ public class EndTurnMessage extends ClientActionMessage {
 
 
     @Override
-    public void doAction(VirtualView view) {    //TODO: sicurezza?
+    public void doAction(VirtualView view) {
         GameHandler gameHandler = view.getGameHandler();
         Controller controller = gameHandler.getController();
-        TurnStatus ts = TurnStatus.getStatus(controller.loadNextTurn());
-        boolean success = true;
-        switch(ts) {
-            case LOAD_TURN_NORMAL:
-                gameHandler.sendAll(new StartTurnMessage(controller.getPlayingNickname()));
-                break;
-            case LOAD_TURN_LAST_ROUND:
-                gameHandler.sendAll(new LastRoundMessage());
-                gameHandler.sendAll(new StartTurnMessage(controller.getPlayingNickname()));
-                break;
-            case LOAD_TURN_END_GAME:
-                gameHandler.sendAll(new EndGameMessage(controller.getGame().getEndPlayerList(), false));
-                break;
-            case INVALID:
-                success = false;
-                break;
+        boolean success = false;
+        if(controller.checkTurnPlayer(view.getNickname())) {
+            TurnStatus ts = TurnStatus.getStatus(controller.loadNextTurn());
+            success = true;
+            switch (ts) {
+                case LOAD_TURN_NORMAL:
+                    gameHandler.sendAll(new StartTurnMessage(controller.getPlayingNickname()));
+                    break;
+                case LOAD_TURN_LAST_ROUND:
+                    gameHandler.sendAll(new LastRoundMessage());
+                    gameHandler.sendAll(new StartTurnMessage(controller.getPlayingNickname()));
+                    break;
+                case LOAD_TURN_END_GAME:
+                    gameHandler.sendAll(new EndGameMessage(controller.getGame().getEndPlayerList(), false));
+                    break;
+                case INVALID:
+                    success = false;
+                    break;
+            }
         }
         view.sendMessage(new ServerAckMessage(getUuid(), success));
     }

@@ -199,7 +199,7 @@ public class GameHandler implements Runnable {
     public boolean saveGame(String nickname) {
         if(controller.getPlayingNickname().equals(nickname) &&
                 controller.getPlayerBoard(nickname).isTurnPlayed() &&       // The player must have already played their action and it must be their turn
-                sizeSetup.get() == size) {                                  // It's not possible to save a game during the setup phase
+                sizeSetup.get() >= size) {                                  // It's not possible to save a game during the setup phase
             try {
                 save.save();
                 return true;
@@ -268,6 +268,14 @@ public class GameHandler implements Runnable {
      */
     public int getSize() {
         return size;
+    }
+
+    /**
+     * Gets the sizeSetup attribute
+     * @return Returns sizeSetup value
+     */
+    public int getSizeSetup() {
+        return sizeSetup.get();
     }
 
     /**

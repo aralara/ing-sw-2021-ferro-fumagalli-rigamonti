@@ -30,24 +30,28 @@ public class SaveInteractionMessage extends ClientActionMessage {
 
 
     @Override
-    public void doAction(VirtualView view) {    //TODO: sicurezza?
+    public void doAction(VirtualView view) {
         try {
-            switch (interaction) {
-                case DELETE_SAVE:
-                    GameLibrary gameLibrary = GameLibrary.getInstance();
-                    boolean success = gameLibrary.deleteSave(save);
-                    view.sendMessage(new ServerAckMessage(getUuid(), success));
-                    view.sendMessage(
-                            new GameSavesMessage(gameLibrary.getSaves(view.getGameHandler().getAllNicknames())));
-                    break;
-                case OPEN_SAVE:
-                    view.sendMessage(new ServerAckMessage(getUuid(), true));
-                    view.getGameHandler().startFromSave(save);
-                    break;
-                case NO_ACTION:
-                    view.sendMessage(new ServerAckMessage(getUuid(), true));
-                    view.getGameHandler().startNewGame();
+            if(view.getGameHandler().getSizeSetup() < view.getGameHandler().getSize()) {
+                switch (interaction) {
+                    case DELETE_SAVE:
+                        GameLibrary gameLibrary = GameLibrary.getInstance();
+                        boolean success = gameLibrary.deleteSave(save);
+                        view.sendMessage(new ServerAckMessage(getUuid(), success));
+                        view.sendMessage(
+                                new GameSavesMessage(gameLibrary.getSaves(view.getGameHandler().getAllNicknames())));
+                        break;
+                    case OPEN_SAVE:
+                        view.sendMessage(new ServerAckMessage(getUuid(), true));
+                        view.getGameHandler().startFromSave(save);
+                        break;
+                    case NO_ACTION:
+                        view.sendMessage(new ServerAckMessage(getUuid(), true));
+                        view.getGameHandler().startNewGame();
+                }
             }
+            else
+                view.sendMessage(new ServerAckMessage(getUuid(), false));
         } catch(LibraryNotLoadedException e) {
             view.sendMessage(new ServerAckMessage(getUuid(), false));
         }

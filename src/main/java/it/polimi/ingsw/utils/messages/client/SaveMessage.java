@@ -16,7 +16,7 @@ public class SaveMessage extends ClientActionMessage {
 
 
     @Override
-    public void doAction(VirtualView view) {    //TODO: sicurezza?
+    public void doAction(VirtualView view) {
         boolean success = view.getGameHandler().saveGame(view.getNickname());
         view.sendMessage(new ServerAckMessage(getUuid(), success));
     }

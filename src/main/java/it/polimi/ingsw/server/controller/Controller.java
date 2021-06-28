@@ -188,4 +188,13 @@ public class Controller {
                 return false;
         return true;
     }
+
+    /**
+     * Checks if it's the turn of a given player
+     * @param nickname Nickname of the player
+     * @return Returns true if it's the turn of the player, false otherwise
+     */
+    public boolean checkTurnPlayer(String nickname) {
+        return game.getPlayingNickname().equals(nickname);
+    }
 }

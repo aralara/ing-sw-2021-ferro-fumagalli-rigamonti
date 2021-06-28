@@ -17,12 +17,16 @@ public class ConfirmReadyMessage extends ClientActionMessage {
 
 
     @Override
-    public void doAction(VirtualView view) {    //TODO: sicurezza?
+    public void doAction(VirtualView view) {
         GameHandler gameHandler = view.getGameHandler();
-        boolean success = view.getGameHandler().playerFinishedSetup();
-        view.sendMessage(new ServerAckMessage(getUuid(), success));
-        if(success)
-            gameHandler.resumeGame();
+        if(gameHandler.getSizeSetup() < gameHandler.getSize()) {
+            boolean success = gameHandler.playerFinishedSetup();
+            view.sendMessage(new ServerAckMessage(getUuid(), success));
+            if (success)
+                gameHandler.resumeGame();
+        }
+        else
+            view.sendMessage(new ServerAckMessage(getUuid(), true));
     }
 
     @Override

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.utils.messages.client;
 
 import it.polimi.ingsw.client.ClientController;
+import it.polimi.ingsw.server.controller.Controller;
 import it.polimi.ingsw.server.model.cards.card.LeaderCard;
 import it.polimi.ingsw.server.view.VirtualView;
 import it.polimi.ingsw.utils.messages.server.ack.ServerAckMessage;
@@ -23,12 +24,15 @@ public class LeaderCardPlayMessage extends LeaderCardMessageClient {
 
     @Override
     public void doAction(VirtualView view) {
-        boolean success = view.getGameHandler().getController().playLeaderCard(view.getNickname(), getLeaderCards());
+        Controller controller = view.getGameHandler().getController();
+        boolean success = false;
+        if(controller.checkTurnPlayer(view.getNickname()))
+            success = view.getGameHandler().getController().playLeaderCard(view.getNickname(), getLeaderCards());
         view.sendMessage(new ServerAckMessage(getUuid(), success));
     }
 
     @Override
-    public void doACKResponseAction(ClientController client) {  //TODO: sicurezza?
+    public void doACKResponseAction(ClientController client) {
         client.ackNotification("Leader played successfully", false);
     }
 

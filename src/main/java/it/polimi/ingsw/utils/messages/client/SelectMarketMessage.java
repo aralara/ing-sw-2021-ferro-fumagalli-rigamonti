@@ -29,11 +29,16 @@ public class SelectMarketMessage extends ClientActionMessage {
 
 
     @Override
-    public void doAction(VirtualView view) {    //TODO: sicurezza?
+    public void doAction(VirtualView view) {
         Controller controller = view.getGameHandler().getController();
-        List<Resource> resources = controller.getFromMarket(view.getNickname(), row, column);
-        view.sendMessage(new ServerAckMessage(getUuid(), true));
-        view.sendMessage(new ResourcesMarketMessage(resources));
+        if(controller.checkTurnPlayer(view.getNickname())) {
+            List<Resource> resources = controller.getFromMarket(view.getNickname(), row, column);
+            view.sendMessage(new ServerAckMessage(getUuid(), true));
+            view.sendMessage(new ResourcesMarketMessage(resources));
+        }
+        else
+            view.sendMessage(new ServerAckMessage(getUuid(), false));
+
     }
 
     @Override
