@@ -304,7 +304,7 @@ public class SetupController extends GenericController {
      * Enables buttons when an item is selected from the comboBox
      */
     public void fileSelected() {
-        if(!files_comboBox.getValue().equals("")){
+        if(files_comboBox.getValue()!=null && !files_comboBox.getValue().equals("")){
             load_button.setDisable(false);
             delete_button.setDisable(false);
         }
