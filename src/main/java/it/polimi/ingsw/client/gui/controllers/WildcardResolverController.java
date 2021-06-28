@@ -243,7 +243,6 @@ public class WildcardResolverController extends GenericController {
         pbc.enableButtons();
         pbc.setWarehouseIsDisabled(false);
         pbc.enableOpponents();
-        getGUIApplication().setActiveScene(SceneNames.PLAYER_BOARD);
     }
 
     /**
