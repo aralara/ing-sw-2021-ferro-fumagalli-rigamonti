@@ -139,7 +139,7 @@ public abstract class Game implements Serializable {
      * @return Returns a map of lists of resources using the nickname of the player as a key
      */
     public Map<String, List<Resource>> getResourcesToEqualize() {
-        Map<String, List<Resource>> equalizeRes = new HashMap<>();
+        Map<String, List<Resource>> equalizeRes =  Collections.synchronizedMap(new HashMap<>());
         List<List<Resource>> resources = new ArrayList<>();
         //Resources for the 1st player
         resources.add(new ArrayList<>());
@@ -174,17 +174,19 @@ public abstract class Game implements Serializable {
         List<Resource> resourceDiff =
                 playerboard.getWarehouse().getAddedResources(Storage.mergeResourceList(addedResources));
 
-        if(     (market.getLastTook() != null && !Storage.checkListModeled(market.getLastTook(),resourceDiff,
-                        playerboard.getAbilityMarbles(), true)) ||                              // If the player took resources from the market, checks if the marbles could have generated the added resources
+        if(     (market.getLastTook() != null && (!Storage.checkListModeled(market.getLastTook(),resourceDiff,
+                        playerboard.getAbilityMarbles(), true) ||
+                        !getPlayerBoards().get(player).getPlayer().getNickname().equals(getPlayingNickname()))) ||  // If the player took resources from the market, checks if the marbles could have generated the added resources
                 (!playerboard.getEqualizedResources().isEmpty() && !Storage.checkListModeled(
                         playerboard.getEqualizedResources(), resourceDiff, ResourceType.getRealValues(),
-                        false)) ||                                                              // If the player is equalizing resources, checks if the equalization list could have generated the added resources
+                        false)) ||                                                                  // If the player is equalizing resources, checks if the equalization list could have generated the added resources
                 (market.getLastTook() == null && playerboard.getEqualizedResources().isEmpty() &&
                         (!Storage.checkContainedResources(playerboard.getWarehouse().getList(),
                                 new Warehouse(shelves).getList()) ||
                         !Storage.checkContainedResources(new Warehouse(shelves).getList(),
-                                playerboard.getWarehouse().getList()) || !extra.isEmpty())) ||                  // If the player is trying to rearrange the warehouse, checks if the resources remain the same
-                !playerboard.getWarehouse().changeConfiguration(shelves))                                       // Changes the warehouse configuration if it's possible
+                                playerboard.getWarehouse().getList()) || !extra.isEmpty() ||
+                        !getPlayerBoards().get(player).getPlayer().getNickname().equals(getPlayingNickname()))) ||  // If the player is trying to rearrange the warehouse, checks if the resources remain the same
+                !playerboard.getWarehouse().changeConfiguration(shelves))                                           // Changes the warehouse configuration if it's possible
             return false;
 
         if(market.getLastTook() != null)

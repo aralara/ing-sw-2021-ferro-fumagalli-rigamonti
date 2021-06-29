@@ -4,7 +4,6 @@ import it.polimi.ingsw.client.gui.controllers.GenericController;
 import it.polimi.ingsw.client.gui.controllers.SetupController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -124,18 +123,8 @@ public class GUIApplication extends Application {
      * Creates and shows a new popUp stage over the main one
      * @param scene Scene to load and show
      */
+    @SuppressWarnings("DuplicatedCode")
     private void openPopUpStage(Scene scene){
-        double x;
-        double y;
-        if(popUpStage==null){
-            Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
-            x = bounds.getMinX() + (bounds.getWidth() - scene.getWidth()) * 0.25;
-            y = bounds.getMinY() + (bounds.getHeight() - scene.getHeight()) * 0.25;
-        }
-        else{
-            x = popUpStage.getX();
-            y = popUpStage.getY();
-        }
         popUpStage = new Stage();
         Image image = new Image(getClass().getResourceAsStream("/imgs/icon_inkwell.png"));
         popUpStage.setTitle("Master of Renaissance");
@@ -143,12 +132,12 @@ public class GUIApplication extends Application {
         popUpStage.getIcons().add(image);
         popUpStage.setScene(scene);
 
-        popUpStage.setX(x);
-        popUpStage.setY(y);
-
         popUpStage.initStyle(StageStyle.UNDECORATED);
         popUpStage.setOnCloseRequest(we -> System.exit(0));
         popUpStage.show();
+
+        popUpStage.setX(stage.getX() + (stage.getWidth() - scene.getWidth()) * 0.5);
+        popUpStage.setY(stage.getY() + (stage.getHeight() - scene.getHeight()) * 0.5);
     }
 
     /**
@@ -179,6 +168,9 @@ public class GUIApplication extends Application {
         secondStage.initStyle(StageStyle.UNDECORATED);
         secondStage.setOnCloseRequest(we -> System.exit(0));
         secondStage.show();
+
+        secondStage.setX(stage.getX() + (stage.getWidth() - scene.getWidth()) * 0.5);
+        secondStage.setY(stage.getY() + (stage.getHeight() - scene.getHeight()) * 0.5);
     }
 
     /**
@@ -195,17 +187,6 @@ public class GUIApplication extends Application {
      */
     @SuppressWarnings("DuplicatedCode")
     private void openCardStage(Scene scene){
-        double x;
-        double y;
-        if(cardStage==null){
-            Rectangle2D bounds = Screen.getPrimary().getVisualBounds();
-            x = bounds.getMinX() + (bounds.getWidth() - scene.getWidth()) * 0.705;
-            y = bounds.getMinY() + (bounds.getHeight() - scene.getHeight()) * 0.25;
-        }
-        else{
-            x = cardStage.getX();
-            y = cardStage.getY();
-        }
         cardStage = new Stage();
         Image image = new Image(getClass().getResourceAsStream("/imgs/icon_inkwell.png"));
         cardStage.setTitle("Master of Renaissance");
@@ -216,12 +197,12 @@ public class GUIApplication extends Application {
         cardStage.initModality(Modality.WINDOW_MODAL);
         cardStage.initOwner(this.stage);
 
-        cardStage.setX(x);
-        cardStage.setY(y);
-
         cardStage.initStyle(StageStyle.UNDECORATED);
         cardStage.setOnCloseRequest(we -> System.exit(0));
         cardStage.show();
+
+        cardStage.setX(stage.getX() + (stage.getWidth() - scene.getWidth()) * 0.935);
+        cardStage.setY(stage.getY() + (stage.getHeight() - scene.getHeight()) * 0.7);
     }
 
     /**

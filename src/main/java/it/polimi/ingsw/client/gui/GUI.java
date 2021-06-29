@@ -35,7 +35,7 @@ public class GUI extends ClientController {
     private List<Resource> resourcesToDiscard;
     private List<GameSave> gameSaves;
     private int waitingPlayers;
-    private boolean resumeGame;
+    private boolean resumeGame, equalizeAction;
 
     /**
      * GUI constructor with parameters
@@ -52,6 +52,7 @@ public class GUI extends ClientController {
         resourcesToPlace = new ArrayList<>();
         resourcesToDiscard = new ArrayList<>();
         resumeGame = true;
+        equalizeAction = false;
     }
 
     /**
@@ -487,6 +488,7 @@ public class GUI extends ClientController {
                 size += resource.getQuantity();
         String title;
         if(size > 0) {
+            equalizeAction = true;
             if(size > 1) {
                 title = "Choose two resources to take";
             }
@@ -504,9 +506,11 @@ public class GUI extends ClientController {
                     getController(SceneNames.RESOURCE_CHOICE_MENU)).setIsMarbleAction(false, null));
             callPlatformRunLater(() -> guiApplication.setActiveScene(SceneNames.RESOURCE_CHOICE_MENU));
         }
-        else
+        else {//first player with no resources to equalize
+            getMessageHandler().sendClientMessage(new ConfirmReadyMessage());
             callPlatformRunLater(() -> ((PlayerBoardController) guiApplication.
                     getController(SceneNames.PLAYER_BOARD)).enableButtons());
+        }
     }
 
     /**
@@ -524,6 +528,10 @@ public class GUI extends ClientController {
                 shelves, resourcesToPlace, resourcesToDiscard));
         resourcesToPlace.clear();
         resourcesToDiscard.clear();
+        if(equalizeAction){
+            equalizeAction = false;
+            getMessageHandler().sendClientMessage(new ConfirmReadyMessage());
+        }
         return true;
     }
 

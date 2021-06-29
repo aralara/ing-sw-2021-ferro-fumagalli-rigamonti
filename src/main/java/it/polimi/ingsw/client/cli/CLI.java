@@ -248,6 +248,7 @@ public class CLI extends ClientController {
             GraphicalCLI.printlnString("Now place the resources on the shelves:");
             placeResourcesOnShelves(newResources);
         }
+        getMessageHandler().sendClientMessage(new ConfirmReadyMessage());
         idle = true;
     }
 

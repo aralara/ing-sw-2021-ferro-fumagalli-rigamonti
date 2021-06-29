@@ -23,6 +23,5 @@ public class ResourcesEqualizeMessage extends ResourcesMessage implements Server
     @Override
     public void doAction(ClientController client) {
         client.askResourceEqualize(getResources());
-        client.getMessageHandler().sendClientMessage(new ConfirmReadyMessage());
     }
 }
