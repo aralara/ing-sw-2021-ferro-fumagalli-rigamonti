@@ -183,10 +183,11 @@ public class Controller {
      * @return Returns true if the cards are played, false otherwise
      */
     public boolean playLeaderCard(String player, List<LeaderCard> cards) {
+        boolean success = false;
         for(LeaderCard card : cards)
-            if(!game.playLeaderCard(game.getPlayerIndexOf(player), card))
-                return false;
-        return true;
+            if(game.playLeaderCard(game.getPlayerIndexOf(player), card))
+                success = true;
+        return success;
     }
 
     /**
