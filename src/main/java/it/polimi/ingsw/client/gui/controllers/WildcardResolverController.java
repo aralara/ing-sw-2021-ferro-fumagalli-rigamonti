@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class WildcardResolverController extends GenericController {
 
-    private List<Resource> resources;
+    private List<Resource> resources, resourcesToResolve;
     private List<Production> productionsToResolve;
     private List<String> productionsToResolveTypes;
     private boolean isFirstPhase=false, isProducedAction=false, isMarbleAction=false;
@@ -43,6 +43,15 @@ public class WildcardResolverController extends GenericController {
      */
     public void setIsMarbleAction(boolean value, List<Resource> resourcesToResolve){
         isMarbleAction=value;
+        this.resourcesToResolve = resourcesToResolve;
+        checkMarbleAction();
+    }
+
+    /**
+     * Checks if the current action is resolving marble wildcards and in this case stores in the resources list
+     * the marbles with an already defined type
+     */
+    private void checkMarbleAction(){
         if(isMarbleAction) {
             resources = new ArrayList<>();
             for (Resource resource : resourcesToResolve)
@@ -225,6 +234,7 @@ public class WildcardResolverController extends GenericController {
      */
     public void restore() {
         resources=null;
+        checkMarbleAction();
         setQuantity(ResourceType.COIN, 0);
         setQuantity(ResourceType.SERVANT, 0);
         setQuantity(ResourceType.SHIELD, 0);
