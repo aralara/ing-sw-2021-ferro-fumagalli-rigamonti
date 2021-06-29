@@ -9,6 +9,8 @@ import it.polimi.ingsw.server.model.storage.ResourceType;
 import it.polimi.ingsw.server.model.storage.Shelf;
 import it.polimi.ingsw.server.saves.GameLibrary;
 
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -23,24 +25,25 @@ public class GraphicalCLI {
 
     private static final String CHOICE_DELIMITERS = " ,.:;-_/\\";
 
-    public static final String RESET = "\033[0m";  // Text Reset
+    static final String RESET = "\033[0m";  // Text Reset
 
-    public static final String BLACK_BRIGHT = "\033[0;90m";  // BLACK
-    public static final String RED_BRIGHT = "\033[0;91m";    // RED
-    public static final String YELLOW_BRIGHT = "\033[0;93m"; // YELLOW
-    public static final String BLUE_BRIGHT = "\033[0;94m";   // BLUE
-    public static final String CYAN_BRIGHT = "\033[0;96m";   // CYAN
-    public static final String PURPLE_BRIGHT = "\033[0;95m"; // PURPLE
-    public static final String WHITE_BRIGHT = "\033[0;97m";  // WHITE
+    static final String BLACK_BRIGHT = "\033[0;90m";  // BLACK
+    static final String RED_BRIGHT = "\033[0;91m";    // RED
+    static final String YELLOW_BRIGHT = "\033[0;93m"; // YELLOW
+    static final String BLUE_BRIGHT = "\033[0;94m";   // BLUE
+    static final String CYAN_BRIGHT = "\033[0;96m";   // CYAN
+    static final String PURPLE_BRIGHT = "\033[0;95m"; // PURPLE
+    static final String WHITE_BRIGHT = "\033[0;97m";  // WHITE
 
-    private static final Scanner scanner = new Scanner(System.in);
+    private static PrintStream out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
+    private static Scanner scanner = new Scanner(System.in);
 
     /**
      * Prints a string passed as a parameter to the standard output
      * @param toPrint String to be printed
      */
     public static void printString(String toPrint) {
-        System.out.print(toPrint);
+        out.print(toPrint);
     }
 
     /**
@@ -48,14 +51,14 @@ public class GraphicalCLI {
      * @param toPrint String to be printed
      */
     public static void printlnString(String toPrint) {
-        System.out.println(toPrint);
+        out.println(toPrint);
     }
 
     /**
      * Reads an int from the standard input, utilizing a blocking scanner
      * @return The integer entered by the user
      */
-    public static int getNextInt() {
+    static int getNextInt() {
         int value = -1;
         boolean valid;
         do {
@@ -74,7 +77,7 @@ public class GraphicalCLI {
      * Reads a line from the standard input, utilizing a blocking scanner
      * @return The line read by the scanner
      */
-    public static String getNextLine() {
+    static String getNextLine() {
         return scanner.nextLine();
     }
 
@@ -82,7 +85,7 @@ public class GraphicalCLI {
      * Asks the user for their nickname and returns it
      * @return Returns a string containing the user's nickname
      */
-    public static String askNickname() {
+    static String askNickname() {
         String nickname;
         boolean success;
         do {
@@ -99,7 +102,7 @@ public class GraphicalCLI {
      * Asks the user if he wants to go back and choose another action
      * @return The user's answer
      */
-    public static boolean askGoBack() {
+    static boolean askGoBack() {
         printString("Do you want to go back and choose another action?" +
                 "\nIf you want to, insert YES: ");
         return isAnswerYes();
@@ -109,7 +112,7 @@ public class GraphicalCLI {
      * Checks if the user inserts yes or y
      * @return true if the answer is yes, false otherwise
      */
-    public static boolean isAnswerYes() {
+    static boolean isAnswerYes() {
         return getNextLine().matches("(?i)(^y(?:es)?$)|(^$)");
     }
 
@@ -120,7 +123,7 @@ public class GraphicalCLI {
      * @param canDiscard True if the user can discard the resource, false otherwise
      * @return The shelf chosen by the user
      */
-    public static int askWhichShelf(Resource resource, int numberOfShelves, boolean canDiscard) {
+    static int askWhichShelf(Resource resource, int numberOfShelves, boolean canDiscard) {
         int level;
         printString("Where do you want to place " + resource.getResourceType()
                 + (canDiscard ? "? (0 to discard it, " : "? (") + "-1 to restore warehouse): ");
@@ -140,7 +143,7 @@ public class GraphicalCLI {
      * @param adjustP1 If true, all the values that the users sees or enters are counted with a + 1
      * @return Returns the integer chosen by the user
      */
-    public static int integerSelector(Integer lowerLimit, Integer upperLimit, String message, boolean adjustP1) {
+    static int integerSelector(Integer lowerLimit, Integer upperLimit, String message, boolean adjustP1) {
         int choice;
         boolean isLow = lowerLimit != null, isUpp = upperLimit != null;
         Integer adjLow = isLow ? (adjustP1 ? lowerLimit + 1 : lowerLimit) : null;
@@ -245,7 +248,7 @@ public class GraphicalCLI {
      * @param printConsumer Consumer function that is called to visualize a single object
      * @param <T> Type of the objects
      */
-    public static <T> void printNumberedList(List<T> list, Consumer<T> printConsumer) {
+    static <T> void printNumberedList(List<T> list, Consumer<T> printConsumer) {
         list.stream().collect(HashMap<Integer, T>::new,
                 (m, elem) -> m.put(m.size() + 1, elem),
                 (m1, m2) -> {}).forEach((n, elem) -> {
@@ -258,7 +261,7 @@ public class GraphicalCLI {
      * Prints a list of resources using the symbol (■)
      * @param resources Resources to be printed
      */
-    public static void printGraphicalResources(List<Resource> resources){
+    static void printGraphicalResources(List<Resource> resources){
         String color;
         for(Resource res : resources){
             color = chooseColor(res.getResourceType());
@@ -271,7 +274,7 @@ public class GraphicalCLI {
      * Prints a resource with its corresponding text
      * @param resource Resource to be printed
      */
-    public static void printResource(Resource resource){
+    static void printResource(Resource resource){
         printString(resource.getQuantity() + " " + resource.getResourceType());
     }
 
@@ -279,7 +282,7 @@ public class GraphicalCLI {
      * Prints a list of resources
      * @param resources List of resources to be printed
      */
-    public static void printResources(List<Resource> resources){
+    static void printResources(List<Resource> resources){
         boolean first = true;
         for(Resource res : resources){
             printString(first ? "" : ", ");
@@ -292,7 +295,7 @@ public class GraphicalCLI {
      * Prints the market object
      * @param market Market to be printed
      */
-    public static void printMarket(MarketView market){
+    static void printMarket(MarketView market){
         printlnString("\nThe market:");
         String color;
         for(int i= 0; i<MARKET_ROW_SIZE.value();i++){
@@ -334,7 +337,7 @@ public class GraphicalCLI {
      * Prints a leader card
      * @param leaderCard Leader card to be printed
      */
-    public static void printLeaderCard(LeaderCard leaderCard){
+    static void printLeaderCard(LeaderCard leaderCard){
         printString(leaderCard.toString());
     }
 
@@ -342,7 +345,7 @@ public class GraphicalCLI {
      * Prints a development card
      * @param developmentCard Development card to be printed
      */
-    public static void printDevelopmentCard(DevelopmentCard developmentCard){
+    private static void printDevelopmentCard(DevelopmentCard developmentCard){
         printString(developmentCard.toString());
     }
 
@@ -350,7 +353,7 @@ public class GraphicalCLI {
      * Prints a Lorenzo Card
      * @param lorenzoCard Lorenzo card to be printed
      */
-    public static void printLorenzoCard(LorenzoCard lorenzoCard){
+    static void printLorenzoCard(LorenzoCard lorenzoCard){
         printString(lorenzoCard.toString());
     }
 
@@ -359,7 +362,7 @@ public class GraphicalCLI {
      * @param leaderBoard Leader board to be printed
      */
     @SuppressWarnings("unchecked")
-    public static void printLeaderBoard(LeaderBoardView leaderBoard){
+    private static void printLeaderBoard(LeaderBoardView leaderBoard){
         if(!leaderBoard.getBoard().getCards().isEmpty()){
             printNumberedList((List<LeaderCard>)(List<?>)leaderBoard.getBoard().getCards(),
                     GraphicalCLI::printLeaderCard);
@@ -373,7 +376,7 @@ public class GraphicalCLI {
      * @param leaderBoard Leader hand to be printed
      */
     @SuppressWarnings("unchecked")
-    public static void printLeaderHand(LeaderBoardView leaderBoard){
+    private static void printLeaderHand(LeaderBoardView leaderBoard){
         if(!leaderBoard.getHand().getCards().isEmpty()) {printlnString("");
             printNumberedList((List<LeaderCard>) (List<?>) leaderBoard.getHand().getCards(),
                     GraphicalCLI::printLeaderCard);
@@ -386,7 +389,7 @@ public class GraphicalCLI {
      * Prints the first development card for each development deck
      * @param developmentDecks List of development decks to be printed
      */
-    public static void printDevelopmentDeckTop(List<DevelopmentDeckView> developmentDecks) {
+    static void printDevelopmentDeckTop(List<DevelopmentDeckView> developmentDecks) {
         printlnString("The development decks:");
         List<DevelopmentCard> developmentCards =  new ArrayList<>();
         for(DevelopmentDeckView temp : developmentDecks){
@@ -400,7 +403,7 @@ public class GraphicalCLI {
      * Prints a production
      * @param production Production to be printed
      */
-    public static void printProduction(Production production){
+    static void printProduction(Production production){
         printString(production.toString());
     }
 
@@ -409,7 +412,7 @@ public class GraphicalCLI {
      * @param player Player board to be printed
      * @param faithTrack FaithTrack information to contextualize the faith board
      */
-    public static void printFaithBoard(PlayerBoardView player, FaithTrackView faithTrack){
+    private static void printFaithBoard(PlayerBoardView player, FaithTrackView faithTrack){
         printFaithTrack(player.getFaithBoard().getFaith(), faithTrack);
         printlnString("\t > Faith level is " + player.getFaithBoard().getFaith());
         for(int i=0;i<player.getFaithBoard().getPopeProgression().length;i++){
@@ -462,7 +465,7 @@ public class GraphicalCLI {
      * @param warehouseView Warehouse to be printed
      * @param showLevel True if levels need to be shown, false otherwise
      */
-    public static void printWarehouse(WarehouseView warehouseView, boolean showLevel){
+    private static void printWarehouse(WarehouseView warehouseView, boolean showLevel){
         String color;
         int i;
         printlnString("Warehouse:");
@@ -492,7 +495,7 @@ public class GraphicalCLI {
      * @param warehouseView Warehouse to be printed
      * @param showLevel True if levels need to be shown, false otherwise
      */
-    public static void printExtraShelfLeader(WarehouseView warehouseView, boolean showLevel){
+    private static void printExtraShelfLeader(WarehouseView warehouseView, boolean showLevel){
         int level = 2;
         String color;
         int specialWarehouse = (int)warehouseView.getShelves().stream().filter(Shelf::isLeader).count();
@@ -519,7 +522,7 @@ public class GraphicalCLI {
      * Prints a strongbox object
      * @param strongboxView Strongbox to be printed
      */
-    public static void printStrongbox(StrongboxView strongboxView){
+    static void printStrongbox(StrongboxView strongboxView){
         String color;
         printlnString("\nStrongbox: ");
         if(strongboxView.getResources().size() > 0) {
@@ -540,7 +543,7 @@ public class GraphicalCLI {
     /**
      * Prints a list of all the different available storages
      */
-    public static void printChooseStorage(){
+    static void printChooseStorage(){
         printlnString("\nChoose the storage where remove the resource from:");
         printlnString("•1) Warehouse");
         printlnString("•2) Special Warehouse");
@@ -552,7 +555,7 @@ public class GraphicalCLI {
      * @param warehouseView Warehouse to be printed
      * @param showLevel True if levels need to be shown, false otherwise
      */
-    public static void printWarehouseConfiguration(WarehouseView warehouseView, boolean showLevel){
+    static void printWarehouseConfiguration(WarehouseView warehouseView, boolean showLevel){
         printWarehouse(warehouseView, showLevel);
         printExtraShelfLeader(warehouseView, showLevel);
     }
@@ -562,7 +565,7 @@ public class GraphicalCLI {
      * @param playerBoardView PlayerBoard that contains all the information
      * @param faithTrackView FaithTrack information
      */
-    public static void printPlayer(PlayerBoardView playerBoardView,FaithTrackView faithTrackView){
+    static void printPlayer(PlayerBoardView playerBoardView, FaithTrackView faithTrackView){
         printlnString("\n" + playerBoardView.getNickname() + "'s board:");
         printFaithBoard(playerBoardView, faithTrackView);
         printWarehouseConfiguration(playerBoardView.getWarehouse(), false);
@@ -579,7 +582,7 @@ public class GraphicalCLI {
      * @param faith Lorenzo's faith level
      * @param faithTrack FaithTrack information
      */
-    public static void printLorenzo(int faith, FaithTrackView faithTrack){
+    static void printLorenzo(int faith, FaithTrackView faithTrack){
         printFaithTrack(faith, faithTrack);
         printlnString("\t > Lorenzo il Magnifico's faith level is " + faith);
     }
@@ -588,7 +591,7 @@ public class GraphicalCLI {
      * Prints a development board object
      * @param developmentBoard Development board to be printed
      */
-    public static void printDevelopmentBoard(DevelopmentBoardView developmentBoard){
+    private static void printDevelopmentBoard(DevelopmentBoardView developmentBoard){
         printlnString("Development spaces:");
         List<Deck> spaces = developmentBoard.getSpaces();
         for(int i=0; i<spaces.size();i++){
