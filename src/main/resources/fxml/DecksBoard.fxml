@@ -19,7 +19,7 @@
         <ImageView fx:id="deckB1_imageView" fitHeight="172.0" fitWidth="114.0" layoutX="199.0" layoutY="483.0" onMouseClicked="#clickedB1" pickOnBounds="true" preserveRatio="true" />
         <ImageView fx:id="deckY1_imageView" fitHeight="172.0" fitWidth="114.0" layoutX="348.0" layoutY="483.0" onMouseClicked="#clickedY1" pickOnBounds="true" preserveRatio="true" />
         <ImageView fx:id="deckP1_imageView" fitHeight="172.0" fitWidth="114.0" layoutX="497.0" layoutY="483.0" onMouseClicked="#clickedP1" pickOnBounds="true" preserveRatio="true" />
-      <Button focusTraversable="false" layoutX="910.0" layoutY="8.0" mnemonicParsing="false" onAction="#goBack" prefHeight="26.0" prefWidth="71.0" text="Go back" textFill="#1d60cc">
+      <Button styleClass="buttonSize16" focusTraversable="false" layoutX="910.0" layoutY="8.0" mnemonicParsing="false" onAction="#goBack" prefHeight="26.0" prefWidth="71.0" text="Go back" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="16.0" />
          </font>

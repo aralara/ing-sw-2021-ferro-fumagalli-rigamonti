@@ -2,3 +2,8 @@
     -fx-background-image: url("../imgs/bkgs/bkg_market.png");
     -fx-background-size: stretch;
 }
+
+.button {
+    -fx-font-family: "Pristina";
+    -fx-font-size: 16px;
+}

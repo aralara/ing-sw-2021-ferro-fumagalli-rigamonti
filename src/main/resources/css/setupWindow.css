@@ -6,3 +6,31 @@
     -fx-background-image: url("../imgs/bkgs/bkg_large.png");
     -fx-background-size: stretch;
 }
+
+@font-face {
+    src: url("../font/pristina.ttf");
+}
+
+.label {
+    -fx-font-family: "Pristina";
+}
+
+.button {
+    -fx-font-family: "Pristina";
+    -fx-font-size: 24px;
+}
+
+.buttonSize18 {
+    -fx-font-family: "Pristina";
+    -fx-font-size: 18px;
+}
+
+.buttonSize16 {
+    -fx-font-family: "Pristina";
+    -fx-font-size: 16px;
+}
+
+.text-field {
+    -fx-font-family: "Pristina";
+    -fx-font-size: 18px;
+}

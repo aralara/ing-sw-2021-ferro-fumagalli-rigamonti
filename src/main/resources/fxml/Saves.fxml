@@ -11,7 +11,7 @@
             <Font name="Pristina" size="24.0" />
          </font>
       </Label>
-      <Button focusTraversable="false" layoutX="324.0" layoutY="14.0" mnemonicParsing="false" onAction="#skip" prefHeight="23.0" prefWidth="62.0" text="Skip" textFill="#1d60cc">
+      <Button styleClass="buttonSize16" focusTraversable="false" layoutX="324.0" layoutY="14.0" mnemonicParsing="false" onAction="#skip" prefHeight="23.0" prefWidth="62.0" text="Skip" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="16.0" />
          </font>

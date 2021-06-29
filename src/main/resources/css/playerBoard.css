@@ -20,3 +20,16 @@
     -fx-background-image: url("../imgs/icon_save.png");
     -fx-background-size: stretch;
 }
+
+@font-face {
+    src: url("../font/pristina.ttf");
+}
+
+.label {
+    -fx-font-family: "Pristina";
+}
+
+.button {
+    -fx-font-family: "Pristina";
+    -fx-font-size: 18px;
+}

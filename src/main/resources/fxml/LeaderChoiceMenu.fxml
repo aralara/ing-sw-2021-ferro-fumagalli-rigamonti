@@ -13,25 +13,25 @@
             </font>
         </Label>
       <ImageView fx:id="leader1_imageView" fitHeight="256.0" fitWidth="170.0" layoutX="21.0" layoutY="88.0" pickOnBounds="true" preserveRatio="true" />
-      <Button fx:id="discard1_button" focusTraversable="false" layoutX="71.0" layoutY="362.0" mnemonicParsing="false" onAction="#discard1" text="Discard" textFill="#1d60cc">
+      <Button styleClass="buttonSize18" fx:id="discard1_button" focusTraversable="false" layoutX="71.0" layoutY="362.0" mnemonicParsing="false" onAction="#discard1" text="Discard" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="18.0" />
          </font>
       </Button>
       <ImageView fx:id="leader2_imageView" fitHeight="256.0" fitWidth="170.0" layoutX="203.0" layoutY="88.0" pickOnBounds="true" preserveRatio="true" />
-      <Button fx:id="discard2_button" focusTraversable="false" layoutX="253.0" layoutY="362.0" mnemonicParsing="false" onAction="#discard2" text="Discard" textFill="#1d60cc">
+      <Button styleClass="buttonSize18" fx:id="discard2_button" focusTraversable="false" layoutX="253.0" layoutY="362.0" mnemonicParsing="false" onAction="#discard2" text="Discard" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="18.0" />
          </font>
       </Button>
       <ImageView fx:id="leader3_imageView" fitHeight="256.0" fitWidth="170.0" layoutX="386.0" layoutY="88.0" pickOnBounds="true" preserveRatio="true" />
-      <Button fx:id="discard3_button" focusTraversable="false" layoutX="436.0" layoutY="362.0" mnemonicParsing="false" onAction="#discard3" text="Discard" textFill="#1d60cc">
+      <Button styleClass="buttonSize18" fx:id="discard3_button" focusTraversable="false" layoutX="436.0" layoutY="362.0" mnemonicParsing="false" onAction="#discard3" text="Discard" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="18.0" />
          </font>
       </Button>
       <ImageView fx:id="leader4_imageView" fitHeight="256.0" fitWidth="170.0" layoutX="568.0" layoutY="88.0" pickOnBounds="true" preserveRatio="true" />
-      <Button fx:id="discard4_button" focusTraversable="false" layoutX="618.0" layoutY="362.0" mnemonicParsing="false" onAction="#discard4" text="Discard" textFill="#1d60cc">
+      <Button styleClass="buttonSize18" fx:id="discard4_button" focusTraversable="false" layoutX="618.0" layoutY="362.0" mnemonicParsing="false" onAction="#discard4" text="Discard" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="18.0" />
          </font>

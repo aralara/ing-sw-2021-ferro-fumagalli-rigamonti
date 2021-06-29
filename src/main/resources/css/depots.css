@@ -6,3 +6,12 @@
 .resToTakeLabel {
     -fx-background-color: rgb(223,223,202);
 }
+
+.label {
+    -fx-font-family: "Pristina";
+}
+
+.button {
+    -fx-font-family: "Pristina";
+    -fx-font-size: 24px;
+}

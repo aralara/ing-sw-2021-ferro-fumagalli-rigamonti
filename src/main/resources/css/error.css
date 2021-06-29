@@ -2,3 +2,12 @@
     -fx-background-image: url("../imgs/bkgs/bkg_large.png");
     -fx-background-size: stretch;
 }
+
+.label {
+    -fx-font-family: "Pristina";
+}
+
+.button {
+    -fx-font-family: "Pristina";
+    -fx-font-size: 24px;
+}

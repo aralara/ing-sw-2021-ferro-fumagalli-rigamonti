@@ -2,3 +2,15 @@
     -fx-background-image: url("../imgs/bkgs/bkg_setup_dark.png");
     -fx-background-size: stretch;
 }
+
+@font-face {
+    src: url("../font/pristina.ttf");
+}
+
+.label {
+    -fx-font-family: "Pristina";
+}
+
+.button {
+    -fx-font-family: "Pristina";
+}
