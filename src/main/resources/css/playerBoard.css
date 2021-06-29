@@ -21,10 +21,6 @@
     -fx-background-size: stretch;
 }
 
-@font-face {
-    src: url("../font/pristina.ttf");
-}
-
 .label {
     -fx-font-family: "Pristina";
 }

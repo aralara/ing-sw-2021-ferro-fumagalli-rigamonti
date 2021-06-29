@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
+import javafx.scene.text.Font;
 import javafx.stage.*;
 
 import java.io.IOException;
@@ -56,6 +57,8 @@ public class GUIApplication extends Application {
      * @param stage Stage to set up
      */
     private void setupStage(Stage stage) {
+        Font.loadFont(this.getClass().getResource("/font/pristina.ttf").toExternalForm(), 10);
+
         Image image = new Image(getClass().getResourceAsStream("/imgs/icon_inkwell.png"));
         alert = new Alert(Alert.AlertType.NONE);
         ((Stage)alert.getDialogPane().getScene().getWindow()).getIcons().add(image);
