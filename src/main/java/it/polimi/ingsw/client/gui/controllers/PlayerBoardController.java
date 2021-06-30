@@ -985,7 +985,7 @@ public class PlayerBoardController extends GenericController {
     public void confirm() {
         if(toDiscard==null)
             toDiscard = new ArrayList<>();
-        if(warehouseShelves==null)
+        if(warehouseShelves==null || warehouseShelves.isEmpty())
             warehouseShelves = getGUI().getWarehouseShelvesCopy();
         rearrangingWarehouse = false;
         if(getGUI().sendShelvesConfigurationMessage(warehouseShelves,toDiscard)){
