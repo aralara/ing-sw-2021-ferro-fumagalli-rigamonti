@@ -35,8 +35,8 @@ public class GraphicalCLI {
     static final String PURPLE_BRIGHT = "\033[0;95m"; // PURPLE
     static final String WHITE_BRIGHT = "\033[0;97m";  // WHITE
 
-    private static PrintStream out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
-    private static Scanner scanner = new Scanner(System.in);
+    private final static PrintStream out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
+    private final static Scanner scanner = new Scanner(System.in);
 
     /**
      * Prints a string passed as a parameter to the standard output
@@ -58,7 +58,7 @@ public class GraphicalCLI {
      * Reads an int from the standard input, utilizing a blocking scanner
      * @return The integer entered by the user
      */
-    static int getNextInt() {
+    public static int getNextInt() {
         int value = -1;
         boolean valid;
         do {

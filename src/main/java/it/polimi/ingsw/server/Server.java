@@ -50,13 +50,19 @@ public class Server {
 
         GraphicalCLI.printlnString("Master of Renaissance: Server version");
 
+        GraphicalCLI.printString("Select a port for the Server socket (0 for default port): ");
+        int port = GraphicalCLI.getNextInt();
+        if(port <= 0)
+            port = SOCKET_PORT;
+
         Server server = new Server();
 
         try {
-            server.socket = new ServerSocket(SOCKET_PORT);
+            server.socket = new ServerSocket(port);
             server.running = true;
-            GraphicalCLI.printlnString("Server started");
+            GraphicalCLI.printlnString("Server started on port " + port);
         } catch (IOException e) {
+            GraphicalCLI.printlnString("Unable to start Server");
             System.exit(1);
             return;
         }
