@@ -21,7 +21,7 @@
             <Font name="Pristina" size="24.0" />
          </font>
       </Label>
-        <Button fx:id="coin_button" focusTraversable="false" layoutX="112.0" layoutY="200.0" mnemonicParsing="false" onAction="#takeCoin" text="Take" textFill="#1d60cc">
+        <Button styleClass="buttonSize18" fx:id="coin_button" focusTraversable="false" layoutX="112.0" layoutY="200.0" mnemonicParsing="false" onAction="#takeCoin" text="Take" textFill="#1d60cc">
             <font>
                 <Font name="Pristina" size="18.0" />
             </font>
@@ -36,7 +36,7 @@
             <Font name="Pristina" size="24.0" />
          </font>
       </Label>
-        <Button fx:id="servant_button" focusTraversable="false" layoutX="274.0" layoutY="200.0" mnemonicParsing="false" onAction="#takeServant" text="Take" textFill="#1d60cc">
+        <Button styleClass="buttonSize18"  fx:id="servant_button" focusTraversable="false" layoutX="274.0" layoutY="200.0" mnemonicParsing="false" onAction="#takeServant" text="Take" textFill="#1d60cc">
             <font>
                 <Font name="Pristina" size="18.0" />
             </font>
@@ -51,7 +51,7 @@
             <Font name="Pristina" size="24.0" />
          </font>
       </Label>
-        <Button fx:id="shield_button" focusTraversable="false" layoutX="430.0" layoutY="200.0" mnemonicParsing="false" onAction="#takeShield" text="Take" textFill="#1d60cc">
+        <Button styleClass="buttonSize18"  fx:id="shield_button" focusTraversable="false" layoutX="430.0" layoutY="200.0" mnemonicParsing="false" onAction="#takeShield" text="Take" textFill="#1d60cc">
             <font>
                 <Font name="Pristina" size="18.0" />
             </font>
@@ -66,22 +66,22 @@
             <Font name="Pristina" size="24.0" />
          </font>
       </Label>
-        <Button fx:id="stone_button" focusTraversable="false" layoutX="574.0" layoutY="200.0" mnemonicParsing="false" onAction="#takeStone" text="Take" textFill="#1d60cc">
+        <Button styleClass="buttonSize18"  fx:id="stone_button" focusTraversable="false" layoutX="574.0" layoutY="200.0" mnemonicParsing="false" onAction="#takeStone" text="Take" textFill="#1d60cc">
             <font>
                 <Font name="Pristina" size="18.0" />
             </font>
         </Button>
-      <Button fx:id="confirm_button" disable="true" focusTraversable="false" layoutX="281.0" layoutY="285.0" mnemonicParsing="false" onAction="#confirm" text="Confirm" textFill="#1d60cc">
+      <Button styleClass="buttonSize18"  fx:id="confirm_button" disable="true" focusTraversable="false" layoutX="281.0" layoutY="285.0" mnemonicParsing="false" onAction="#confirm" text="Confirm" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="18.0" />
          </font>
       </Button>
-      <Button fx:id="restore_button" disable="true" focusTraversable="false" layoutX="413.0" layoutY="285.0" mnemonicParsing="false" onAction="#restore" text="Restore" textFill="#1d60cc">
+      <Button styleClass="buttonSize18"  fx:id="restore_button" disable="true" focusTraversable="false" layoutX="413.0" layoutY="285.0" mnemonicParsing="false" onAction="#restore" text="Restore" textFill="#1d60cc">
          <font>
             <Font name="Pristina" size="18.0" />
          </font>
       </Button>
-      <Button fx:id="goBack_button" focusTraversable="false" layoutX="688.0" layoutY="5.0" mnemonicParsing="false" onAction="#goBack" prefHeight="39.0" prefWidth="68.0" text="Go back" textFill="#1d60cc" visible="false">
+      <Button styleClass="buttonSize16"  fx:id="goBack_button" focusTraversable="false" layoutX="688.0" layoutY="5.0" mnemonicParsing="false" onAction="#goBack" prefHeight="39.0" prefWidth="68.0" text="Go back" textFill="#1d60cc" visible="false">
          <font>
             <Font name="Pristina" size="16.0" />
          </font>
