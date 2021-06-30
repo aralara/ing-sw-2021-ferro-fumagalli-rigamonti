@@ -56,6 +56,14 @@
 
 ## Utilized Software
 
+* [Draw.io - Diagrams.net](https://app.diagrams.net/): UML and sequence diagrams.
+
+* [IntelliJ](https://www.jetbrains.com/idea/): Main IDE for project development.
+
+* [JavaFX](https://openjfx.io/): Windows application design.
+
+* [Maven](https://maven.apache.org/): Package and dependency management.
+
 ## License
 
 [**Masters of Renaissance**](https://craniointernational.com/products/masters-of-renaissance/) is property of [_Cranio Creations_] and all of the copyrighted graphical assets used in this project were supplied by [**Politecnico di Milano**] in collaboration with their rights' holders.
