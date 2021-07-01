@@ -479,7 +479,7 @@ public class CLI extends ClientController {
                         GraphicalCLI.printString("Do you want to rearrange the warehouse? ");
                         rearranged = GraphicalCLI.isAnswerYes();
                         if(rearranged){
-                            shelves = warehouse.getShelvesClone();
+                            shelves = new WarehouseView(rearrangeWarehouse()).getShelvesClone();
                         }
                     }
                     while (!toPlace.isEmpty()) {
